@@ -45,6 +45,10 @@ _AUTO_UPDATE_INTERVAL = int(os.environ.get("PREDIKTA_AUTOUPDATE_SEC", 30 * 60)) 
 _auto_update_state = {"last_run": None, "last_status": "idle", "running": False}
 
 def _auto_update_loop():
+    # Laisse le serveur démarrer et passer le health-check avant de lancer
+    # le premier scraping (évite les pics mémoire au boot sur les plans
+    # gratuits / contraints en RAM).
+    time.sleep(int(os.environ.get("PREDIKTA_AUTOUPDATE_DELAY_SEC", 120)))
     while True:
         try:
             _auto_update_state["running"] = True
