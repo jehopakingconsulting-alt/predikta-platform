@@ -250,6 +250,26 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
     cfg = STATES[state_code]
     print(f"  [{state_code}] {cfg['name']} — fetching {n_months} months...")
     draws = fetch_months(state_code, cfg["slug"], n_months)
+
+    # Merge extra official-source draws (Morning/Day/Night) when available —
+    # lotterypost.com only republishes Midday/Evening for most states.
+    try:
+        import extra_scraper
+        extra = extra_scraper.fetch_extra(state_code)
+        if extra:
+            seen = {f"{d['date']}_{d['tod']}" for d in draws}
+            added = 0
+            for d in extra:
+                key = f"{d['date']}_{d['tod']}"
+                if key not in seen:
+                    draws.append(d)
+                    seen.add(key)
+                    added += 1
+            if added:
+                print(f"  [{state_code}] +{added} extra draws (Matin/Jour/Nuit) from official source")
+    except Exception as e:
+        print(f"  [{state_code}] extra-source merge skipped: {e}")
+
     print(f"  [{state_code}] {len(draws)} draws fetched")
     return draws
 
