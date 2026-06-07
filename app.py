@@ -53,6 +53,7 @@ def _auto_update_loop():
         try:
             _auto_update_state["running"] = True
             scrape_all(n_months=1)   # rafraîchissement léger périodique (1 mois glissant)
+            _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
         except Exception as e:
@@ -298,6 +299,12 @@ def api_contact():
 # API — ANALYZER
 # ═══════════════════════════════════════════════════════════
 
+# Cache léger des analyses ML (coûteuses : ~20-25s) — évite de recalculer
+# le même rapport à chaque clic. Invalidé automatiquement après quelques
+# minutes ou dès qu'un nouveau scraping change les données.
+_REPORT_CACHE = {}
+_REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 10 * 60))  # 10 min
+
 @app.route("/api/report")
 def api_report():
     state      = request.args.get("state", "NY").upper()
@@ -305,6 +312,12 @@ def api_report():
 
     if state not in STATES:
         return jsonify({"error": f"Unknown state: {state}"}), 400
+
+    cache_key = (state, tod_filter)
+    cached = _REPORT_CACHE.get(cache_key)
+    now = time.time()
+    if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
+        return jsonify(cached["data"])
 
     draws = load_csv(state)
     if not draws:
@@ -321,6 +334,9 @@ def api_report():
     result["tod_filter"]  = tod_filter
     result["dpd"]         = STATES[state].get("dpd", 2)
     result["schedule"]    = DRAW_SCHEDULE.get(state, [])
+    result["cached"]      = False
+
+    _REPORT_CACHE[cache_key] = {"ts": now, "data": {**result, "cached": True}}
     return jsonify(result)
 
 
@@ -336,10 +352,14 @@ def api_scrape():
         draws = fetch_state(state, n_months=months)
         if draws:
             total = save_csv(state, draws)
+            for k in list(_REPORT_CACHE):
+                if k[0] == state:
+                    _REPORT_CACHE.pop(k, None)
             return jsonify({"message": f"{len(draws)} draws fetched · {total} total saved for {state}"})
         return jsonify({"message": f"No data found for {state}"})
 
     scrape_all(n_months=months)
+    _REPORT_CACHE.clear()
     return jsonify({"message": "Scraping complete for all states"})
 
 
