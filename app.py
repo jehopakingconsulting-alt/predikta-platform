@@ -105,7 +105,7 @@ DRAW_SCHEDULE = {
     "OH": [{"tod":"Midday","time":"12:29 PM ET"}, {"tod":"Evening","time":"7:29 PM ET"}],
     "PA": [{"tod":"Midday","time":"1:35 PM ET"},  {"tod":"Evening","time":"6:59 PM ET"}],
     "NJ": [{"tod":"Midday","time":"12:59 PM ET"}, {"tod":"Evening","time":"10:57 PM ET"}],
-    "IL": [{"tod":"Midday","time":"12:40 PM CT"}, {"tod":"Evening","time":"9:22 PM CT"}],
+    "IL": [{"tod":"Midday","time":"12:40 PM CT"}, {"tod":"Evening","time":"9:20 PM CT"}],
     "NC": [{"tod":"Midday","time":"3:00 PM ET"},  {"tod":"Evening","time":"11:22 PM ET"}],
     "VA": [{"tod":"Midday","time":"1:59 PM ET"},  {"tod":"Evening","time":"11:00 PM ET"}],
     "MI": [{"tod":"Midday","time":"12:59 PM ET"}, {"tod":"Evening","time":"7:29 PM ET"}],
