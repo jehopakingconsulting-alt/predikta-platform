@@ -476,6 +476,8 @@ async function loadData(forceScra=false){
 function renderStateResults(data, container){
   const state = data.state;
   const games  = data.games;
+  const schedMap = {};
+  (data.schedule || []).forEach(s => { schedMap[s.tod] = s.time; });
 
   if(!games || !games.length){
     container.innerHTML = `<div class="state-block">
@@ -503,7 +505,7 @@ function renderStateResults(data, container){
     ? `<span class="state-today-tag">🟢 Aujourd'hui</span>`
     : `<span class="state-yesterday-tag">⏰ ${dateStr}</span>`;
 
-  function gameSection(title, gameList){
+  function gameSection(title, gameList, schedMap){
     if(!gameList.length) return '';
     const rows = gameList.map(game=>{
       const draws = game.draws || [];
@@ -516,7 +518,7 @@ function renderStateResults(data, container){
       return draws.map(draw=>`
         <div class="game-row">
           <div class="game-label">${game.icon||''} ${game.label}</div>
-          ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${draw.tod}</span>` : ''}
+          ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${draw.tod}${schedMap && schedMap[draw.tod] ? ` · ${schedMap[draw.tod]}` : ''}</span>` : ''}
           <div class="balls-wrap">${renderDrawBalls(draw, game.game_type)}</div>
         </div>`
       ).join('');
@@ -536,8 +538,8 @@ function renderStateResults(data, container){
         <a class="analyze-link" href="/?state=${state}">⚡ Analyser →</a>
       </div>
       <div class="games-list">
-        ${gameSection('🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)', pickGames)}
-        ${jackpotGames.length ? gameSection('🌟 Jackpots & Jeux Multi-Boules', jackpotGames) : ''}
+        ${gameSection('🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)', pickGames, schedMap)}
+        ${jackpotGames.length ? gameSection('🌟 Jackpots & Jeux Multi-Boules', jackpotGames, schedMap) : ''}
       </div>
     </div>
     <div style="text-align:center;padding:14px;font-size:.72rem;color:var(--muted2)">

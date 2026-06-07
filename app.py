@@ -566,6 +566,7 @@ def api_games_today(state_code):
         "games": results,
         "total_games": len(STATE_GAMES.get(state_code, [])),
         "has_data": len(results) > 0,
+        "schedule": DRAW_SCHEDULE.get(state_code, []),
     })
 
 @app.route("/api/games/all-states/today")
