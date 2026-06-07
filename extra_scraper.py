@@ -70,9 +70,11 @@ def fetch_tx_official():
 
 
 # ── Registry of states with an official 4-draws/day source ────────────────
-EXTRA_SOURCES = {
-    "TX": fetch_tx_official,
-}
+# NOTE: TX is intentionally NOT listed here — once we fixed the TOD parser
+# (lotterypost.com reuses CSS classes for Morning/Day & Evening/Night, the
+# label TEXT distinguishes them), lotterypost itself returns all 4 official
+# Texas draws cleanly, so a second source would only add noise/duplicates.
+EXTRA_SOURCES = {}
 
 
 def fetch_extra(state_code: str):
