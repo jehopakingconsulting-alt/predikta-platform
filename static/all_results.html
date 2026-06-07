@@ -222,11 +222,38 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
     <button class="state-tab" data-state="NJ" onclick="selectState('NJ',this)">🌊 New Jersey</button>
     <button class="state-tab" data-state="IL" onclick="selectState('IL',this)">🏙️ Illinois</button>
     <button class="state-tab" data-state="OH" onclick="selectState('OH',this)">🌻 Ohio</button>
-    <button class="state-tab" data-state="NC" onclick="selectState('NC',this)">🌲 N.Carolina</button>
+    <button class="state-tab" data-state="NC" onclick="selectState('NC',this)">🌲 N. Carolina</button>
     <button class="state-tab" data-state="VA" onclick="selectState('VA',this)">🦅 Virginia</button>
-    <button class="state-tab" data-state="MA" onclick="selectState('MA',this)">🦞 Massachu.</button>
+    <button class="state-tab" data-state="MA" onclick="selectState('MA',this)">🦞 Massachusetts</button>
     <button class="state-tab" data-state="MI" onclick="selectState('MI',this)">🚗 Michigan</button>
     <button class="state-tab" data-state="MD" onclick="selectState('MD',this)">🦀 Maryland</button>
+    <button class="state-tab" data-state="TN" onclick="selectState('TN',this)">🎸 Tennessee</button>
+    <button class="state-tab" data-state="SC" onclick="selectState('SC',this)">🌴 S. Carolina</button>
+    <button class="state-tab" data-state="CT" onclick="selectState('CT',this)">⚓ Connecticut</button>
+    <button class="state-tab" data-state="IN" onclick="selectState('IN',this)">🏁 Indiana</button>
+    <button class="state-tab" data-state="KY" onclick="selectState('KY',this)">🐎 Kentucky</button>
+    <button class="state-tab" data-state="MO" onclick="selectState('MO',this)">⛵ Missouri</button>
+    <button class="state-tab" data-state="AZ" onclick="selectState('AZ',this)">🌵 Arizona</button>
+    <button class="state-tab" data-state="CO" onclick="selectState('CO',this)">🏔️ Colorado</button>
+    <button class="state-tab" data-state="LA" onclick="selectState('LA',this)">🎷 Louisiana</button>
+    <button class="state-tab" data-state="MS" onclick="selectState('MS',this)">🎶 Mississippi</button>
+    <button class="state-tab" data-state="AR" onclick="selectState('AR',this)">💎 Arkansas</button>
+    <button class="state-tab" data-state="IA" onclick="selectState('IA',this)">🌽 Iowa</button>
+    <button class="state-tab" data-state="KS" onclick="selectState('KS',this)">🌾 Kansas</button>
+    <button class="state-tab" data-state="OK" onclick="selectState('OK',this)">🛢️ Oklahoma</button>
+    <button class="state-tab" data-state="DE" onclick="selectState('DE',this)">🦆 Delaware</button>
+    <button class="state-tab" data-state="NM" onclick="selectState('NM',this)">🌶️ New Mexico</button>
+    <button class="state-tab" data-state="WV" onclick="selectState('WV',this)">⛰️ W. Virginia</button>
+    <button class="state-tab" data-state="DC" onclick="selectState('DC',this)">🏛️ Washington DC</button>
+    <button class="state-tab" data-state="WI" onclick="selectState('WI',this)">🧀 Wisconsin</button>
+    <button class="state-tab" data-state="MN" onclick="selectState('MN',this)">🌨️ Minnesota</button>
+    <button class="state-tab" data-state="NE" onclick="selectState('NE',this)">🌾 Nebraska</button>
+    <button class="state-tab" data-state="NH" onclick="selectState('NH',this)">🏔️ New Hampshire</button>
+    <button class="state-tab" data-state="VT" onclick="selectState('VT',this)">🍁 Vermont</button>
+    <button class="state-tab" data-state="ME" onclick="selectState('ME',this)">🦞 Maine</button>
+    <button class="state-tab" data-state="WA" onclick="selectState('WA',this)">🌧️ Washington</button>
+    <button class="state-tab" data-state="ID" onclick="selectState('ID',this)">🥔 Idaho</button>
+    <button class="state-tab" data-state="PR" onclick="selectState('PR',this)">🌺 Puerto Rico</button>
   </div>
   <button class="scrape-btn" onclick="loadData(true)" id="scrapeBtn">🔄 Charger données</button>
   <span id="ctrl-status"></span>
@@ -312,8 +339,8 @@ let currentState = 'NY';
 let currentDate  = new Date().toISOString().split('T')[0];
 const TODAY = new Date().toISOString().split('T')[0];
 
-const STATE_FLAGS = {NY:'🗽',GA:'🍑',TX:'⭐',FL:'🌴',CA:'☀️',PA:'🔔',NJ:'🌊',IL:'🏙️',OH:'🌻',NC:'🌲',VA:'🦅',MA:'🦞',MI:'🚗',MD:'🦀'};
-const STATE_NAMES = {NY:'New York',GA:'Georgia',TX:'Texas',FL:'Florida',CA:'California',PA:'Pennsylvania',NJ:'New Jersey',IL:'Illinois',OH:'Ohio',NC:'North Carolina',VA:'Virginia',MA:'Massachusetts',MI:'Michigan',MD:'Maryland'};
+const STATE_FLAGS = {AR:'💎',AZ:'🌵',CA:'☀️',CO:'🏔️',CT:'⚓',DC:'🏛️',DE:'🦆',FL:'🌴',GA:'🍑',IA:'🌽',ID:'🥔',IL:'🏙️',IN:'🏁',KS:'🌾',KY:'🐎',LA:'🎷',MA:'🦞',MD:'🦀',ME:'🦞',MI:'🚗',MN:'🌨️',MO:'⛵',MS:'🎶',NC:'🌲',NE:'🌾',NH:'🏔️',NJ:'🌊',NM:'🌶️',NY:'🗽',OH:'🌻',OK:'🛢️',PA:'🔔',PR:'🌺',SC:'🌴',TN:'🎸',TX:'⭐',VA:'🦅',VT:'🍁',WA:'🌧️',WI:'🧀',WV:'⛰️'};
+const STATE_NAMES = {NY:'New York',GA:'Georgia',TX:'Texas',FL:'Florida',CA:'California',PA:'Pennsylvania',NJ:'New Jersey',IL:'Illinois',OH:'Ohio',NC:'N. Carolina',VA:'Virginia',MA:'Massachusetts',MI:'Michigan',MD:'Maryland',TN:'Tennessee',SC:'S. Carolina',CT:'Connecticut',IN:'Indiana',KY:'Kentucky',MO:'Missouri',AZ:'Arizona',CO:'Colorado',LA:'Louisiana',MS:'Mississippi',AR:'Arkansas',IA:'Iowa',KS:'Kansas',OK:'Oklahoma',DE:'Delaware',NM:'New Mexico',WV:'W. Virginia',DC:'Washington DC',WI:'Wisconsin',MN:'Minnesota',NE:'Nebraska',NH:'New Hampshire',VT:'Vermont',ME:'Maine',WA:'Washington',ID:'Idaho',PR:'Puerto Rico'};
 
 const BALL_COLORS = [
   '#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66',

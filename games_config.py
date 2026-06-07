@@ -169,6 +169,37 @@ STATE_GAMES = {
         {"slug": "megamillions",         "label": "Mega Millions",          "type": "multi5p1", "dpd": 1},
         {"slug": "powerball",            "label": "Powerball",              "type": "multi5p1", "dpd": 1},
     ],
+
+    # ── États supplémentaires (jeu quotidien principal Pick3/Cash3) ────────
+    # Ajoutés pour que TOUS les États suivis par PREDIKTA apparaissent sur
+    # la page "Tous les Résultats", pas seulement les 14 États vedettes.
+    "AR": [{"slug": "cash3", "label": "Cash 3", "type": "pick3", "dpd": 2}],
+    "AZ": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "CO": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "CT": [{"slug": "play3", "label": "Play 3", "type": "pick3", "dpd": 2}],
+    "DC": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "DE": [{"slug": "play3", "label": "Play 3", "type": "pick3", "dpd": 2}],
+    "IA": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "ID": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "IN": [{"slug": "daily3", "label": "Daily 3", "type": "pick3", "dpd": 2}],
+    "KS": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "KY": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "LA": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "ME": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "MN": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "MO": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "MS": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "NE": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "NH": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "NM": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "OK": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "PR": [{"slug": "pega3", "label": "Pega 3", "type": "pick3", "dpd": 1}],
+    "SC": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "TN": [{"slug": "cash3", "label": "Cash 3", "type": "pick3", "dpd": 2}],
+    "VT": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "WA": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],
+    "WI": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 2}],
+    "WV": [{"slug": "daily3", "label": "Daily 3", "type": "pick3", "dpd": 2}],
 }
 
 # Shared national games (all states that participate)
