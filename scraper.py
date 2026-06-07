@@ -107,15 +107,17 @@ def parse_draws(html: str) -> list[dict]:
             tod_i = drawing.find("i", class_=re.compile(r"TOD"))
             tod = "Evening"
             if tod_i:
-                classes = " ".join(tod_i.get("class", []))
-                if "mid" in classes.lower():
+                classes = " ".join(tod_i.get("class", [])).lower()
+                if "mid" in classes:
                     tod = "Midday"
-                elif "morn" in classes.lower():
+                elif "morn" in classes:
                     tod = "Morning"
-                elif "day" in classes.lower() and "mid" not in classes.lower():
-                    tod = "Day"
-                elif "nite" in classes.lower() or "night" in classes.lower():
+                elif "eve" in classes:
+                    tod = "Evening"
+                elif "nite" in classes or "night" in classes:
                     tod = "Night"
+                elif "day" in classes:
+                    tod = "Day"
 
             # Main numbers: take ONLY the first ul.resultsnums (ignore Fireball)
             first_ul = drawing.select_one("ul.resultsnums")

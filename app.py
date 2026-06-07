@@ -370,8 +370,14 @@ def api_scrape():
 @app.route("/api/states")
 def api_states():
     result = {}
+    # Ordre d'affichage logique pour les créneaux de tirage
+    _TOD_ORDER = {"Morning": 0, "Midday": 1, "Day": 2, "Evening": 3, "Night": 4}
     for code, cfg in STATES.items():
         draws = load_csv(code)
+        # Tirages réellement disponibles pour cet État (Matin/Midi/Soir/Nuit
+        # selon les données réelles — optimisé et à jour par État)
+        tods = sorted({d.get("tod","") for d in draws if d.get("tod")},
+                      key=lambda t: _TOD_ORDER.get(t, 99))
         result[code] = {
             "name":      cfg["name"],
             "slug":      cfg["slug"],
@@ -380,6 +386,7 @@ def api_states():
             "last_draw": draws[0] if draws else None,
             "flag":      STATE_FLAGS.get(code, "🎰"),
             "schedule":  DRAW_SCHEDULE.get(code, []),
+            "tods":      tods,
         }
     return jsonify(result)
 

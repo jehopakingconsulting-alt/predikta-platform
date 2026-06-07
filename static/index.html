@@ -1579,8 +1579,47 @@ function selectStateAndAnalyze(code){
   }
 }
 
+// ── Créneaux de tirage dynamiques par État (Matin/Midi/Soir/Nuit) ─────────
+// Optimisé : on n'affiche que les créneaux RÉELLEMENT disponibles pour
+// l'État sélectionné (basé sur les données scrapées), pour éviter tout
+// message d'erreur "aucun tirage". S'adapte automatiquement État par État.
+const TOD_LABELS = {
+  Morning: '🌅 Matin', Midday: '☀️ Midi', Day: '🌤️ Jour',
+  Evening: '🌆 Soir',  Night:  '🌙 Nuit',
+};
+let _statesMeta = null;
+
+async function fetchStatesMeta(){
+  if(_statesMeta) return _statesMeta;
+  try{
+    const r = await fetch('/api/states');
+    _statesMeta = await r.json();
+  } catch(e){ _statesMeta = {}; }
+  return _statesMeta;
+}
+
+async function populateTodOptions(stateCode){
+  const todSel = document.getElementById('todSelect');
+  if(!todSel) return;
+  const meta = await fetchStatesMeta();
+  const tods = (meta[stateCode] && meta[stateCode].tods) || [];
+  const prev = todSel.value;
+  todSel.innerHTML = '<option value="all">Tous tirages</option>' +
+    tods.map(t => `<option value="${t}">${TOD_LABELS[t] || t}</option>`).join('');
+  // Conserve la sélection précédente si toujours valide, sinon "Tous tirages"
+  todSel.value = (prev === 'all' || tods.includes(prev)) ? prev : 'all';
+}
+
+document.getElementById('stateSelect')?.addEventListener('change', (e)=>{
+  populateTodOptions(e.target.value);
+});
+
 // Auto-load widget on page load
-window.addEventListener('load', ()=>{ loadTodayWidget(); });
+window.addEventListener('load', ()=>{
+  loadTodayWidget();
+  const sel = document.getElementById('stateSelect');
+  if(sel) populateTodOptions(sel.value);
+});
 
 // ── Last Draw ──
 function renderLastDraw(d){
