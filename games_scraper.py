@@ -57,12 +57,23 @@ def parse_game_results(html: str, game_type: str) -> list[dict]:
             if not current_date:
                 continue
 
-            # TOD
+            # TOD — lotterypost reuses the same CSS class (e.g. "TODeve") for
+            # both Evening AND Night; the real distinction is the text label
+            # next to the icon. Read the label first, fall back to class.
             tod_i = drawing.find("i", class_=re.compile(r"TOD"))
             tod = "Evening"
             if tod_i:
-                cls = " ".join(tod_i.get("class", []))
-                tod = "Midday" if "mid" in cls.lower() else "Morning" if "morn" in cls.lower() else "Evening"
+                label_txt = ""
+                tod_box = tod_i.find_parent(class_=re.compile(r"\bTOD\b"))
+                if tod_box:
+                    label_txt = tod_box.get_text(strip=True).lower()
+                cls = " ".join(tod_i.get("class", [])).lower()
+                hay = label_txt or cls
+                if "mid" in hay: tod = "Midday"
+                elif "morn" in hay: tod = "Morning"
+                elif "nite" in hay or "night" in hay: tod = "Night"
+                elif "eve" in hay: tod = "Evening"
+                elif "day" in hay: tod = "Day"
 
             # All number groups in this drawing
             num_rows = drawing.select("div.resultsnumsrow")

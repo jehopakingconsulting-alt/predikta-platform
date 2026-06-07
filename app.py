@@ -98,7 +98,7 @@ def api_autoupdate_status():
 # ── Draw schedule ─────────────────────────────────────────────────────────
 DRAW_SCHEDULE = {
     "NY": [{"tod":"Midday","time":"2:30 PM ET"},  {"tod":"Evening","time":"10:30 PM ET"}],
-    "GA": [{"tod":"Midday","time":"12:29 PM ET"}, {"tod":"Evening","time":"6:59 PM ET"}],
+    "GA": [{"tod":"Midday","time":"12:29 PM ET"}, {"tod":"Evening","time":"6:59 PM ET"}, {"tod":"Night","time":"11:34 PM ET"}],
     "TX": [{"tod":"Morning","time":"10:12 AM CT"}, {"tod":"Day","time":"12:27 PM CT"}, {"tod":"Evening","time":"5:59 PM CT"}, {"tod":"Night","time":"10:12 PM CT"}],
     "FL": [{"tod":"Midday","time":"1:30 PM ET"},  {"tod":"Evening","time":"9:45 PM ET"}],
     "CA": [{"tod":"Midday","time":"1:00 PM PT"},  {"tod":"Evening","time":"6:30 PM PT"}],

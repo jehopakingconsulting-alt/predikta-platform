@@ -37,7 +37,7 @@ HEADERS = {
 STATES = {
     # ── Tier 1 — High volume states ──────────────────────────────────────
     "NY": {"slug": "numbers",        "name": "New York Numbers",        "dpd": 2},
-    "GA": {"slug": "cash3",          "name": "Georgia Cash 3",          "dpd": 2},
+    "GA": {"slug": "cash3",          "name": "Georgia Cash 3",          "dpd": 3},
     "TX": {"slug": "pick3",          "name": "Texas Pick 3",            "dpd": 4},
     "FL": {"slug": "pick3",          "name": "Florida Pick 3",          "dpd": 2},
     "CA": {"slug": "daily3",         "name": "California Daily 3",      "dpd": 2},
@@ -103,20 +103,28 @@ def parse_draws(html: str) -> list[dict]:
             if not current_date:
                 continue
 
-            # Time of day
+            # Time of day — lotterypost reuses the SAME CSS class (e.g. "TODeve")
+            # for both Evening and Night draws; the real distinction is the
+            # text label next to the icon (e.g. "<i class=TODeve></i><br/>Night").
+            # So: read the label text FIRST, fall back to the class only if empty.
             tod_i = drawing.find("i", class_=re.compile(r"TOD"))
             tod = "Evening"
             if tod_i:
+                label_txt = ""
+                tod_box = tod_i.find_parent(class_=re.compile(r"\bTOD\b"))
+                if tod_box:
+                    label_txt = tod_box.get_text(strip=True).lower()
                 classes = " ".join(tod_i.get("class", [])).lower()
-                if "mid" in classes:
+                hay = label_txt or classes
+                if "mid" in hay:
                     tod = "Midday"
-                elif "morn" in classes:
+                elif "morn" in hay:
                     tod = "Morning"
-                elif "eve" in classes:
-                    tod = "Evening"
-                elif "nite" in classes or "night" in classes:
+                elif "nite" in hay or "night" in hay:
                     tod = "Night"
-                elif "day" in classes:
+                elif "eve" in hay:
+                    tod = "Evening"
+                elif "day" in hay:
                     tod = "Day"
 
             # Main numbers: take ONLY the first ul.resultsnums (ignore Fireball)
