@@ -1602,10 +1602,13 @@ async function populateTodOptions(stateCode){
   const todSel = document.getElementById('todSelect');
   if(!todSel) return;
   const meta = await fetchStatesMeta();
-  const tods = (meta[stateCode] && meta[stateCode].tods) || [];
+  const stMeta = meta[stateCode] || {};
+  const tods = stMeta.tods || [];
+  const sched = {};
+  (stMeta.schedule || []).forEach(s => { sched[s.tod] = s.time; });
   const prev = todSel.value;
   todSel.innerHTML = '<option value="all">Tous tirages</option>' +
-    tods.map(t => `<option value="${t}">${TOD_LABELS[t] || t}</option>`).join('');
+    tods.map(t => `<option value="${t}">${TOD_LABELS[t] || t}${sched[t] ? ' — ' + sched[t] : ''}</option>`).join('');
   // Conserve la sélection précédente si toujours valide, sinon "Tous tirages"
   todSel.value = (prev === 'all' || tods.includes(prev)) ? prev : 'all';
 }
