@@ -1507,6 +1507,10 @@ function updateSidebar(d){
 const BC_TODAY = ['#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66','#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'];
 function bc2(n){ return BC_TODAY[parseInt(n)%10]; }
 
+// États les plus suivis / consultés — affichés en priorité (jusqu'à 11),
+// le 12e emplacement ouvre "+ Autres" → page Tous Résultats (toujours à jour).
+const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA'];
+
 async function loadTodayWidget(){
   const widget = document.getElementById('todayResultsWidget');
   if(!widget) return;
@@ -1515,10 +1519,16 @@ async function loadTodayWidget(){
     const data = await r.json();
     const today = new Date().toISOString().split('T')[0];
 
-    // Filter states with today's OR yesterday's results, prioritize today
+    // Filter states with today's OR yesterday's results, prioritize the
+    // most-consulted states (NY, FL, GA, TX, NJ, TN...) then "today" status
+    const prioRank = c => { const i = PRIORITY_STATES.indexOf(c); return i === -1 ? 999 : i; };
     const entries = Object.entries(data)
       .filter(([,v]) => v.has_data && (v.is_today || v.is_yesterday))
-      .sort(([,a],[,b]) => (b.is_today?1:0) - (a.is_today?1:0));
+      .sort(([ca,a],[cb,b]) => {
+        const pa = prioRank(ca), pb = prioRank(cb);
+        if(pa !== pb) return pa - pb;
+        return (b.is_today?1:0) - (a.is_today?1:0);
+      });
 
     if(!entries.length){
       widget.innerHTML = `<div style="text-align:center;font-size:.72rem;color:var(--muted2);padding:8px 0">
@@ -1528,7 +1538,8 @@ async function loadTodayWidget(){
       return;
     }
 
-    const html = entries.slice(0,6).map(([code, v]) => {
+    const SHOWN = 11;
+    const html = entries.slice(0,SHOWN).map(([code, v]) => {
       const isToday = v.is_today;
       const latestDraw = v.latest[v.latest.length-1] || v.latest[0];
       if(!latestDraw) return '';
@@ -1556,12 +1567,22 @@ async function loadTodayWidget(){
     }).join('');
 
     const todayCount = entries.filter(([,v])=>v.is_today).length;
+    const remaining = entries.length - SHOWN;
+    const othersRow = remaining > 0 ? `
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer"
+        onclick="window.location.href='/all-results'" title="Voir tous les autres États — données à jour automatiquement">
+        <span style="font-size:1rem;flex-shrink:0">🌎</span>
+        <span style="font-size:.72rem;font-weight:800;color:var(--accent);flex:1">+ ${remaining} autres États</span>
+        <span style="font-size:.6rem;padding:2px 8px;border-radius:8px;flex-shrink:0;
+          background:rgba(79,110,255,.12);color:var(--accent);border:1px solid rgba(79,110,255,.3)">Voir tout →</span>
+      </div>` : '';
+
     widget.innerHTML = `
       <div style="font-size:.65rem;color:var(--muted2);margin-bottom:6px">
         ${todayCount} état(s) avec résultats d'aujourd'hui · Clic = Analyser
       </div>
       ${html}
-      ${entries.length > 6 ? `<div style="text-align:center;margin-top:6px;font-size:.65rem;color:var(--muted2)">+${entries.length-6} autres sur <a href="/results" style="color:var(--accent)">la page Résultats</a></div>` : ''}
+      ${othersRow}
     `;
   } catch(e){
     widget.innerHTML = `<div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:4px">
