@@ -53,6 +53,20 @@ def _auto_update_loop():
         try:
             _auto_update_state["running"] = True
             scrape_all(n_months=1)   # rafraîchissement léger périodique (1 mois glissant)
+
+            # Rafraîchit aussi les données "Tous résultats" (/all-results) pour
+            # chaque État du registre multi-jeux — sinon elles restent figées.
+            try:
+                from games_config import STATE_GAMES
+                from games_scraper import fetch_all_games_for_state
+                for st_code in STATE_GAMES.keys():
+                    try:
+                        fetch_all_games_for_state(st_code, n_months=1)
+                    except Exception as ge:
+                        print(f"  [auto-update][games:{st_code}] error: {ge}")
+            except Exception as e:
+                print(f"  [auto-update][games] skipped: {e}")
+
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"

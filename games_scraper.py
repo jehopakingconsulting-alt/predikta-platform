@@ -155,7 +155,14 @@ def save_game_results(state: str, game: dict, draws: list[dict]):
     existing = {}
     if os.path.exists(path):
         with open(path, encoding='utf-8') as f:
-            existing = json.load(f)
+            raw = json.load(f)
+            # Older files were saved as a plain list — normalize to a dict keyed
+            # by date_tod so merging/dedup works consistently.
+            if isinstance(raw, list):
+                for d in raw:
+                    existing[f"{d.get('date','')}_{d.get('tod','')}"] = d
+            elif isinstance(raw, dict):
+                existing = raw
 
     for d in draws:
         key = f"{d['date']}_{d['tod']}"
@@ -192,9 +199,9 @@ def fetch_all_games_for_state(state: str, n_months: int = 2) -> dict:
         draws = fetch_game(state, game, n_months)
         if draws:
             total = save_game_results(state, game, draws)
-            print(f"    → {len(draws)} new · {total} total")
+            print(f"    -> {len(draws)} new / {total} total")
         else:
-            print(f"    → No data (game may not exist or requires login)")
+            print(f"    -> No data (game may not exist or requires login)")
         results[game["slug"]] = draws
         time.sleep(0.6)
 
