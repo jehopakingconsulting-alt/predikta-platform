@@ -122,7 +122,7 @@ DRAW_SCHEDULE = {
     "LA": [{"tod":"Evening","time":"9:59 PM CT"}],
     "MS": [{"tod":"Midday","time":"12:29 PM CT"}, {"tod":"Evening","time":"7:29 PM CT"}],
     "AR": [{"tod":"Midday","time":"12:59 PM CT"}, {"tod":"Evening","time":"6:59 PM CT"}],
-    "IA": [{"tod":"Midday","time":"12:40 PM CT"}, {"tod":"Evening","time":"9:20 PM CT"}],
+    "IA": [{"tod":"Midday","time":"12:20 PM CT"}, {"tod":"Evening","time":"10:00 PM CT"}],
     "KS": [{"tod":"Midday","time":"12:40 PM CT"}, {"tod":"Evening","time":"9:20 PM CT"}],
     "OK": [{"tod":"Evening","time":"9:00 PM CT"}],
     "DE": [{"tod":"Day","time":"1:58 PM ET"},  {"tod":"Night","time":"7:57 PM ET"}],
