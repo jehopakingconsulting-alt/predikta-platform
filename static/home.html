@@ -341,6 +341,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 const BC = ['#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66','#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'];
 function bc(n){ return BC[parseInt(n)%10]; }
 
+// États les plus suivis — priorité d'affichage (jusqu'à 11), 12e = "+ Autres"
+const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA'];
+function fmtDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso+'T12:00:00');
+  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+}
+
 document.getElementById('snapDate').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
 
 async function loadSnap(){
@@ -349,23 +357,34 @@ async function loadSnap(){
   try{
     const r = await fetch('/api/results/latest');
     const data = await r.json();
-    const entries = Object.entries(data).filter(([,v])=>v.has_data&&(v.is_today||v.is_yesterday));
+    const prioRank = c => { const i = PRIORITY_STATES.indexOf(c); return i===-1?999:i; };
+    const entries = Object.entries(data)
+      .filter(([,v])=>v.has_data&&(v.is_today||v.is_yesterday))
+      .sort(([ca,a],[cb,b])=>{
+        const pa=prioRank(ca), pb=prioRank(cb);
+        if(pa!==pb) return pa-pb;
+        return (b.is_today?1:0)-(a.is_today?1:0);
+      });
     if(!entries.length){
       grid.innerHTML = '<div style="font-size:.75rem;color:var(--muted2)">Aucun résultat disponible. <a href="/all-results" style="color:var(--accent)">Charger →</a></div>';
       return;
     }
-    grid.innerHTML = entries.slice(0,8).map(([code,v])=>{
+    const SHOWN = 11;
+    grid.innerHTML = entries.slice(0,SHOWN).map(([code,v])=>{
       const d = v.latest[v.latest.length-1]||v.latest[0];
       if(!d) return '';
       const balls = [d.d1,d.d2,d.d3].map(n=>`<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`).join('');
       const todTag = v.is_today?'<span style="color:var(--green);font-size:.56rem">🟢 Auj.</span>':'<span style="color:var(--gold);font-size:.56rem">⏰ Hier</span>';
+      const sched = (v.schedule||[]).find(s=>s.tod===d.tod);
+      const timeStr = sched ? sched.time : '';
       return `<div class="snap-card" onclick="window.location='/all-results'">
         <div class="snap-state">${v.flag} ${code} ${todTag}</div>
         <div class="snap-balls">${balls}</div>
-        <div class="snap-tod">${d.tod||''} · ${v.name.split(' ').slice(-2).join(' ')}</div>
+        <div class="snap-tod">${d.tod||''}${timeStr?' · '+timeStr:''}</div>
+        <div class="snap-tod" style="opacity:.7">${fmtDate(d.date)} · ${v.name.split(' ').slice(-2).join(' ')}</div>
       </div>`;
     }).join('')
-    + (entries.length>8?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">+${entries.length-8} autres →</div></div>`:'');
+    + (entries.length>SHOWN?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">+${entries.length-SHOWN} autres →</div></div>`:'');
   }catch(e){
     grid.innerHTML = `<a href="/all-results" class="snap-load-btn">Voir tous les résultats →</a>`;
   }
