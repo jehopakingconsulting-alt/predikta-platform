@@ -138,7 +138,7 @@ DRAW_SCHEDULE = {
     "ME": [{"tod":"Evening","time":"7:57 PM ET"}],
     "WA": [{"tod":"Evening","time":"8:00 PM PT"}],
     "OR": [{"tod":"Evening","time":"10:00 PM PT"}],
-    "ID": [{"tod":"Evening","time":"8:00 PM MT"}],
+    "ID": [{"tod":"Day","time":"1:59 PM MT"}, {"tod":"Night","time":"7:59 PM MT"}],
     "AL": [{"tod":"Midday","time":"12:29 PM CT"}, {"tod":"Evening","time":"6:59 PM CT"}],
     "PR": [{"tod":"Evening","time":"9:00 PM AT"}],
 }
