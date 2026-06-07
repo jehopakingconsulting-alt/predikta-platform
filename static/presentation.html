@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA — Présentation Complète</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+<script src="/nav.js"></script>
+<style>
+:root{
+  --bg:#04040f;--card:#0b0b22;--card2:#0e0e2a;--border:#1a1a45;--border2:#252560;
+  --accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--gold2:#ff9900;
+  --green:#22e87a;--red:#ff3d2e;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 10%,rgba(79,110,255,.09) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 80%,rgba(136,85,255,.08) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 60% at 50% 50%,rgba(255,215,0,.03) 0%,transparent 60%)}
+
+/* ═══════════════════════════════════════
+   HERO / COVER
+   ═══════════════════════════════════════ */
+.cover{
+  position:relative;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:80px 24px;overflow:hidden;z-index:5;
+}
+.cover::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg,rgba(79,110,255,.05) 60deg,transparent 120deg,
+    rgba(136,85,255,.05) 180deg,transparent 240deg,rgba(255,215,0,.02) 300deg,transparent 360deg);
+  animation:cspin 30s linear infinite;
+}
+@keyframes cspin{to{transform:rotate(360deg)}}
+
+.cover-logo{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  margin-bottom:28px;position:relative;z-index:2;
+}
+.cover-logo-svg{width:72px;height:72px;filter:drop-shadow(0 0 20px rgba(79,110,255,.5))}
+.cover-logo-text{}
+.cover-name{
+  font-family:'Orbitron',monospace;font-size:clamp(2rem,8vw,4rem);font-weight:900;letter-spacing:4px;
+  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;line-height:1;
+}
+.cover-sub{font-size:clamp(.8rem,2vw,1rem);color:var(--muted2);letter-spacing:3px;margin-top:6px;display:block}
+
+.cover h1{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1rem,3vw,1.5rem);font-weight:700;color:var(--muted2);
+  margin-bottom:20px;position:relative;z-index:2;letter-spacing:2px;
+}
+.cover-tagline{
+  font-size:clamp(1rem,3vw,1.6rem);color:var(--text);font-weight:300;
+  max-width:700px;line-height:1.6;margin-bottom:36px;position:relative;z-index:2;
+}
+.cover-tagline strong{color:var(--gold);font-weight:800}
+
+.cover-stats{
+  display:flex;gap:32px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:40px;position:relative;z-index:2;
+}
+.cstat{text-align:center}
+.cstat-num{
+  font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
+}
+.cstat-label{font-size:.7rem;color:var(--muted2);margin-top:3px;letter-spacing:1px;text-transform:uppercase}
+
+.cover-badges{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  position:relative;z-index:2;
+}
+.cbadge{
+  padding:6px 18px;border-radius:20px;font-size:.75rem;font-weight:700;letter-spacing:.5px;
+}
+.cb1{background:rgba(79,110,255,.2);border:1px solid rgba(79,110,255,.5);color:#88aaff}
+.cb2{background:rgba(136,85,255,.2);border:1px solid rgba(136,85,255,.5);color:#bb88ff}
+.cb3{background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold)}
+.cb4{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:var(--green)}
+.cb5{background:rgba(255,61,46,.15);border:1px solid rgba(255,61,46,.4);color:#ff8877}
+
+.scroll-hint{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;
+  animation:bounce 2s ease-in-out infinite;z-index:2;
+}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-8px)}}
+
+/* ═══════════════════════════════════════
+   SECTION STRUCTURE
+   ═══════════════════════════════════════ */
+.pres-section{
+  position:relative;z-index:5;
+  max-width:1200px;margin:0 auto;padding:70px 28px;
+}
+.pres-section.full-bleed{max-width:100%;padding:70px 0}
+.section-header{text-align:center;margin-bottom:50px}
+.section-number{
+  display:inline-block;font-family:'Orbitron',monospace;font-size:.65rem;font-weight:700;
+  letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:8px;
+}
+.section-title{
+  font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,2rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+}
+.section-desc{font-size:.9rem;color:var(--muted2);max-width:600px;margin:0 auto;line-height:1.8}
+
+/* Divider */
+.divider{
+  height:1px;max-width:1200px;margin:0 auto;
+  background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  position:relative;z-index:5;
+}
+
+/* ═══════════════════════════════════════
+   SERVICE PAGES SHOWCASE
+   ═══════════════════════════════════════ */
+.pages-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.page-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s;
+  text-decoration:none;display:block;
+}
+.page-card:hover{transform:translateY(-6px);box-shadow:0 16px 50px rgba(79,110,255,.25);border-color:var(--accent)}
+.page-card-header{
+  padding:22px 20px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.pc-icon{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+}
+.pc-title{font-size:.88rem;font-weight:800;color:var(--text);margin-bottom:2px}
+.pc-url{font-size:.62rem;color:var(--muted);font-family:monospace}
+.page-card-body{padding:16px 20px}
+.pc-desc{font-size:.76rem;color:var(--muted2);line-height:1.7;margin-bottom:12px}
+.pc-features{display:flex;flex-direction:column;gap:4px}
+.pc-feat{font-size:.7rem;color:var(--muted2);display:flex;align-items:center;gap:6px}
+.pc-feat::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   ALGORITHM SHOWCASE
+   ═══════════════════════════════════════ */
+.models-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.model-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;text-align:center;position:relative;overflow:hidden;
+}
+.model-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.mc-icon{font-size:2rem;margin-bottom:10px;display:block}
+.mc-name{font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.mc-desc{font-size:.65rem;color:var(--muted2);line-height:1.6}
+.mc-badge{
+  display:inline-block;padding:2px 8px;border-radius:6px;
+  font-size:.58rem;font-weight:700;margin-top:8px;
+}
+
+/* ═══════════════════════════════════════
+   LANGUAGES SHOWCASE
+   ═══════════════════════════════════════ */
+.lang-showcase{
+  display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+}
+.lang-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px 24px;text-align:center;min-width:160px;
+  transition:transform .2s,border-color .2s;cursor:default;
+}
+.lang-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.lang-flag{font-size:2.5rem;margin-bottom:8px;display:block}
+.lang-name{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.lang-native{font-size:.7rem;color:var(--muted2);margin-bottom:8px}
+.lang-sample{font-size:.68rem;color:var(--accent);font-style:italic;line-height:1.5}
+
+/* ═══════════════════════════════════════
+   STATES MAP (text-based)
+   ═══════════════════════════════════════ */
+.states-showcase{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.state-pill{
+  padding:6px 14px;border-radius:20px;font-size:.72rem;font-weight:600;
+  border:1px solid var(--border2);background:rgba(255,255,255,.03);color:var(--muted2);
+  transition:all .2s;cursor:default;
+}
+.state-pill:hover{border-color:var(--accent);color:var(--text);background:rgba(79,110,255,.1)}
+.state-pill.tier1{border-color:rgba(79,110,255,.4);color:#88aaff;background:rgba(79,110,255,.08)}
+
+/* ═══════════════════════════════════════
+   MONETISATION
+   ═══════════════════════════════════════ */
+.pricing-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pricing-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px 18px;position:relative;overflow:hidden;
+}
+.pricing-card.featured{
+  background:linear-gradient(180deg,rgba(79,110,255,.1),var(--card));
+  border-color:var(--accent);
+}
+.pricing-card.featured::before{
+  content:'⭐ POPULAIRE';position:absolute;top:0;left:0;right:0;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  padding:4px;text-align:center;font-size:.58rem;font-weight:800;color:#fff;letter-spacing:1px;
+}
+.pricing-card.featured{padding-top:30px}
+.plan-name{font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;color:var(--muted2);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+.plan-price{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:900;
+  background:linear-gradient(135deg,var(--text),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.plan-price.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text}
+.plan-period{font-size:.65rem;color:var(--muted2);margin-bottom:14px}
+.plan-feats{display:flex;flex-direction:column;gap:5px;font-size:.7rem;color:var(--muted2)}
+.plan-feat{display:flex;gap:6px;align-items:flex-start}
+.plan-feat.ok::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.plan-feat.no{opacity:.4}
+.plan-feat.no::before{content:'✗';color:var(--red);flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   REVENUE STREAMS
+   ═══════════════════════════════════════ */
+.revenue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rev-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;
+}
+.rev-icon{font-size:1.8rem;margin-bottom:10px}
+.rev-title{font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.rev-desc{font-size:.72rem;color:var(--muted2);line-height:1.6;margin-bottom:10px}
+.rev-amount{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
+  background:linear-gradient(135deg,var(--green),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ═══════════════════════════════════════
+   TECH STACK
+   ═══════════════════════════════════════ */
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.tech-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:16px;display:flex;align-items:center;gap:10px;
+}
+.tech-icon{font-size:1.6rem;flex-shrink:0}
+.tech-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.tech-role{font-size:.62rem;color:var(--muted2)}
+
+/* ═══════════════════════════════════════
+   ROADMAP
+   ═══════════════════════════════════════ */
+.roadmap{display:flex;flex-direction:column;gap:0}
+.road-item{
+  display:flex;gap:20px;align-items:flex-start;
+  padding:20px 0;border-bottom:1px solid var(--border);
+}
+.road-item:last-child{border-bottom:none}
+.road-phase{
+  flex-shrink:0;width:100px;text-align:center;
+  padding:6px 10px;border-radius:10px;font-size:.68rem;font-weight:800;
+}
+.phase-done{background:rgba(34,232,122,.15);color:var(--green);border:1px solid rgba(34,232,122,.3)}
+.phase-next{background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.3)}
+.phase-future{background:rgba(79,110,255,.1);color:#88aaff;border:1px solid rgba(79,110,255,.2)}
+.road-content{}
+.road-title{font-size:.84rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.road-items-list{display:flex;flex-wrap:wrap;gap:6px}
+.road-tag{padding:3px 10px;border-radius:6px;font-size:.65rem;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted2)}
+
+/* ═══════════════════════════════════════
+   CTA FINAL
+   ═══════════════════════════════════════ */
+.final-cta{
+  text-align:center;padding:80px 24px;
+  background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08),rgba(255,215,0,.04));
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  position:relative;z-index:5;
+}
+.final-cta h2{
+  font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:14px;
+}
+.final-cta p{font-size:.9rem;color:var(--muted2);max-width:560px;margin:0 auto 30px;line-height:1.7}
+.cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.cta-btn-primary{
+  padding:14px 32px;border-radius:12px;font-size:.9rem;font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 6px 24px rgba(79,110,255,.4);transition:all .25s;
+}
+.cta-btn-primary:hover{box-shadow:0 8px 32px rgba(79,110,255,.6);transform:translateY(-2px)}
+.cta-btn-secondary{
+  padding:14px 32px;border-radius:12px;font-size:.9rem;font-weight:700;
+  background:transparent;color:var(--text);border:1px solid var(--border2);
+  cursor:pointer;text-decoration:none;transition:all .25s;
+}
+.cta-btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .pages-grid,.models-grid,.pricing-cards,.tech-grid{grid-template-columns:repeat(2,1fr)}
+  .revenue-grid{grid-template-columns:1fr}
+}
+@media(max-width:580px){
+  .pages-grid,.models-grid,.pricing-cards,.tech-grid{grid-template-columns:1fr}
+  .cover-stats{gap:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ COVER ═══════ -->
+<section class="cover">
+  <div class="cover-logo">
+    <svg class="cover-logo-svg" viewBox="0 0 48 48" fill="none">
+      <defs>
+        <linearGradient id="clg1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#4f6eff"/>
+          <stop offset="50%" stop-color="#8855ff"/>
+          <stop offset="100%" stop-color="#ffd700"/>
+        </linearGradient>
+        <linearGradient id="clg2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#ffd700"/>
+          <stop offset="100%" stop-color="#ff9900"/>
+        </linearGradient>
+        <filter id="cglow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <circle cx="24" cy="24" r="22" stroke="url(#clg1)" stroke-width="1.5" fill="none" opacity=".6"/>
+      <circle cx="24" cy="24" r="15" stroke="url(#clg1)" stroke-width="1" fill="none" opacity=".4"/>
+      <circle cx="24" cy="24" r="8" fill="url(#clg1)" filter="url(#cglow)" opacity=".95"/>
+      <line x1="24" y1="2" x2="24" y2="9" stroke="url(#clg1)" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="24" y1="39" x2="24" y2="46" stroke="url(#clg1)" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="2" y1="24" x2="9" y2="24" stroke="url(#clg1)" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="39" y1="24" x2="46" y2="24" stroke="url(#clg1)" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="24" cy="5" r="2" fill="#4f6eff"/><circle cx="43" cy="24" r="2" fill="#8855ff"/>
+      <circle cx="24" cy="43" r="2" fill="#ffd700"/><circle cx="5" cy="24" r="2" fill="#4f6eff"/>
+      <path d="M24 19l1.5 3h3l-2.5 1.8 1 2.9-3-1.8-3 1.8 1-2.9-2.5-1.8h3z" fill="url(#clg2)" filter="url(#cglow)"/>
+    </svg>
+    <div class="cover-logo-text">
+      <span class="cover-name">PREDIKTA</span>
+      <span class="cover-sub">AI · WORLD LOTTERY & BUSINESS INTELLIGENCE</span>
+    </div>
+  </div>
+
+  <h1>Présentation Officielle de la Plateforme</h1>
+
+  <p class="cover-tagline">
+    La première plateforme mondiale combinant <strong>prédictions de loterie avancées</strong>
+    et <strong>analyse complète de projets d'entreprise</strong> —
+    en 5 langues, pour 44 États américains et le monde entier.
+  </p>
+
+  <div class="cover-stats">
+    <div class="cstat"><span class="cstat-num">7</span><span class="cstat-label">Algorithmes</span></div>
+    <div class="cstat"><span class="cstat-num">44</span><span class="cstat-label">États US</span></div>
+    <div class="cstat"><span class="cstat-num">5</span><span class="cstat-label">Langues</span></div>
+    <div class="cstat"><span class="cstat-num">12</span><span class="cstat-label">Pages</span></div>
+    <div class="cstat"><span class="cstat-num">50K</span><span class="cstat-label">Simulations</span></div>
+    <div class="cstat"><span class="cstat-num">25+</span><span class="cstat-label">Pays couverts</span></div>
+  </div>
+
+  <div class="cover-badges">
+    <span class="cbadge cb1">🤖 XGBoost · Random Forest · GBM</span>
+    <span class="cbadge cb2">〰 Fourier · Markov 1/2/3</span>
+    <span class="cbadge cb3">🎲 Monte Carlo 50 000 sim.</span>
+    <span class="cbadge cb4">🌍 FR · EN · ES · PT · HT</span>
+    <span class="cbadge cb5">📱 PWA Installable</span>
+  </div>
+
+  <div class="scroll-hint">↓ Défiler pour explorer</div>
+</section>
+
+<!-- ═══════ SECTION 1 : PAGES & SERVICES ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">01 — Services & Pages</div>
+    <div class="section-title">6 Services Intégrés</div>
+    <p class="section-desc">Une plateforme unifiée, une navigation cohérente sur toutes les pages, accessible depuis n'importe quel appareil.</p>
+  </div>
+  <div class="pages-grid">
+
+    <a href="/" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#1a1a40,#2a2a60)">🏠</div>
+        <div><div class="pc-title">Accueil — Hub Central</div><div class="pc-url">predikta.io/</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Page d'entrée principale. Accès direct à tous les services, résultats du jour en temps réel, statistiques globales et liens affiliés.</p>
+        <div class="pc-features">
+          <div class="pc-feat">Snapshot résultats du jour (auto-chargé)</div>
+          <div class="pc-feat">Cards de tous les services</div>
+          <div class="pc-feat">Bannières affiliées avec UTM</div>
+          <div class="pc-feat">Plan PRO mis en avant</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="/analyze" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#1a2a4a,#2a3a7a)">⚡</div>
+        <div><div class="pc-title">Analyseur IA Loterie</div><div class="pc-url">predikta.io/analyze</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Cœur de la plateforme loterie. 7 algorithmes en temps réel, rapport complet avec 12 sections d'analyse, prédictions consensus pondérées.</p>
+        <div class="pc-features">
+          <div class="pc-feat">Score consensus top 10 combinaisons</div>
+          <div class="pc-feat">Graphiques fréquences, sommes, Markov</div>
+          <div class="pc-feat">44 États · Filtre TOD · 1–5 ans historique</div>
+          <div class="pc-feat">Partage WhatsApp / Twitter · Favoris ⭐</div>
+          <div class="pc-feat">Widget résultats du jour dans la sidebar</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="/results" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#0a2a18,#1a4a28)">🎱</div>
+        <div><div class="pc-title">Hub Résultats · 44 États</div><div class="pc-url">predikta.io/results</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Vue d'ensemble de tous les États américains avec leurs derniers tirages Pick3/Cash3. Recherche instantanée, filtres régionaux, historique.</p>
+        <div class="pc-features">
+          <div class="pc-feat">Grille 44 États · Badges Aujourd'hui/Hier</div>
+          <div class="pc-feat">Recherche live par nom d'État</div>
+          <div class="pc-feat">Filtre : Sud / Nord-Est / Données dispo</div>
+          <div class="pc-feat">Panneau détail avec navigation mois/mois</div>
+          <div class="pc-feat">Partage résultat · Ticker Live automatique</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="/all-results" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#2a1a0a,#4a2a0a)">🏆</div>
+        <div><div class="pc-title">Tous les Résultats</div><div class="pc-url">predikta.io/all-results</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Résultats complets de TOUS les jeux par État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Comme LotteryPost — en mieux.</p>
+        <div class="pc-features">
+          <div class="pc-feat">14 États · Tous jeux (Pick2→Powerball)</div>
+          <div class="pc-feat">Navigation ← Jour par jour →</div>
+          <div class="pc-feat">Boules colorées par type de jeu</div>
+          <div class="pc-feat">Jackpots nationaux en sidebar</div>
+          <div class="pc-feat">Chargement automatique à la demande</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="/bizai" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#1a0a2a,#2a1a4a)">🚀</div>
+        <div><div class="pc-title">Business Intelligence</div><div class="pc-url">predikta.io/bizai</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Analyse complète de projet d'entreprise en 4 étapes / 5 minutes. Rapport 12 sections pour entrepreneurs, PME, startups.</p>
+        <div class="pc-features">
+          <div class="pc-feat">Wizard 4 étapes guidé</div>
+          <div class="pc-feat">Score viabilité · Analyse marché · Audience</div>
+          <div class="pc-feat">11 canaux marketing scorés</div>
+          <div class="pc-feat">Ciblage 25 pays · Plan 30-60-90 jours</div>
+          <div class="pc-feat">4 projets exemples pré-chargés</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="/pro" class="page-card">
+      <div class="page-card-header">
+        <div class="pc-icon" style="background:linear-gradient(135deg,#2a2a0a,#4a4a0a)">👑</div>
+        <div><div class="pc-title">Plans PRO & ELITE</div><div class="pc-url">predikta.io/pro</div></div>
+      </div>
+      <div class="page-card-body">
+        <p class="pc-desc">Page de souscription avec comparaison 3 plans, calculateur mensuel/annuel, témoignages, FAQ et offre d'essai 7 jours.</p>
+        <div class="pc-features">
+          <div class="pc-feat">FREE · PRO $4.99 · ELITE $9.99</div>
+          <div class="pc-feat">Bascule Mensuel / Annuel (-40%)</div>
+          <div class="pc-feat">Tableau comparatif 15 critères</div>
+          <div class="pc-feat">3 témoignages clients</div>
+          <div class="pc-feat">FAQ intégré · Intégration Stripe prête</div>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════ SECTION 2 : LANGUES ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">02 — Multilingue</div>
+    <div class="section-title">5 Langues · Traduction Instantanée</div>
+    <p class="section-desc">Chaque page se traduit en un clic. La langue sélectionnée est mémorisée et appliquée sur toute la plateforme, y compris le menu, le footer et les notifications.</p>
+  </div>
+  <div class="lang-showcase">
+    <div class="lang-card">
+      <span class="lang-flag">🇫🇷</span>
+      <div class="lang-name">Français</div>
+      <div class="lang-native">Français</div>
+      <div class="lang-sample">"Prédictions par<br>Analyse Prédictive"</div>
+    </div>
+    <div class="lang-card">
+      <span class="lang-flag">🇺🇸</span>
+      <div class="lang-name">English</div>
+      <div class="lang-native">English</div>
+      <div class="lang-sample">"Artificial Intelligence<br>Predictions"</div>
+    </div>
+    <div class="lang-card">
+      <span class="lang-flag">🇪🇸</span>
+      <div class="lang-name">Español</div>
+      <div class="lang-native">Español</div>
+      <div class="lang-sample">"Predicciones por<br>Inteligencia Artificial"</div>
+    </div>
+    <div class="lang-card">
+      <span class="lang-flag">🇧🇷</span>
+      <div class="lang-name">Português</div>
+      <div class="lang-native">Português</div>
+      <div class="lang-sample">"Previsões por<br>Inteligência Artificial"</div>
+    </div>
+    <div class="lang-card">
+      <span class="lang-flag">🇭🇹</span>
+      <div class="lang-name">Kreyòl Ayisyen</div>
+      <div class="lang-native">Haitian Creole</div>
+      <div class="lang-sample">"Prediksyon pa<br>Entèlijans Atifisyèl"</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:24px;font-size:.78rem;color:var(--muted2)">
+    Le sélecteur de langue est visible en permanence dans la barre de navigation et le menu mobile · Détection automatique de la langue du navigateur
+  </div>
+</section>
+
+<!-- ═══════ SECTION 3 : NAVIGATION ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">03 — Navigation Unifiée</div>
+    <div class="section-title">Menu Universel · nav.js</div>
+    <p class="section-desc">Un seul fichier nav.js injecté automatiquement sur toutes les 12 pages. Cohérence totale de l'expérience utilisateur.</p>
+  </div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:900px;margin:0 auto">
+    <!-- Nav mockup -->
+    <div style="background:#060616;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="font-family:Orbitron,monospace;font-size:.85rem;font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-right:12px;border-right:1px solid #1a1a45;padding-right:14px">PREDIKTA</div>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;background:#4f6eff;color:#fff;font-weight:700">🏠 Accueil</span>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;color:#7888bb;border:1px solid transparent">⚡ Analyser</span>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;color:#7888bb">🎱 Résultats</span>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;color:#7888bb">🏆 Tous Résultats</span>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;color:#7888bb">🚀 Business Intelligence</span>
+      <span style="font-size:.72rem;padding:5px 10px;border-radius:7px;color:#7888bb">👑 PRO</span>
+      <div style="margin-left:auto;display:flex;gap:4px">
+        <span style="font-size:.62rem;padding:3px 7px;border-radius:4px;background:#4f6eff;color:#fff;font-weight:700">FR</span>
+        <span style="font-size:.62rem;padding:3px 7px;border-radius:4px;border:1px solid #1a1a45;color:#4d5a8a">EN</span>
+        <span style="font-size:.62rem;padding:3px 7px;border-radius:4px;border:1px solid #1a1a45;color:#4d5a8a">ES</span>
+        <span style="font-size:.62rem;padding:3px 7px;border-radius:4px;border:1px solid #1a1a45;color:#4d5a8a">PT</span>
+        <span style="font-size:.62rem;padding:3px 7px;border-radius:4px;border:1px solid #1a1a45;color:#4d5a8a">HT</span>
+        <span style="font-size:.7rem;padding:3px 7px;border:1px solid #1a1a45;border-radius:4px;color:#e8eeff">☀️</span>
+      </div>
+    </div>
+    <div style="padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.74rem;color:var(--muted2)">
+      <div>✅ Logo = lien HOME en permanence</div>
+      <div>✅ Sélecteur langue visible partout</div>
+      <div>✅ Toggle Dark/Light mode</div>
+      <div>✅ Menu mobile hamburger complet</div>
+      <div>✅ Page active surlignée automatiquement</div>
+      <div>✅ Footer 4 colonnes sur toutes les pages</div>
+      <div>✅ Back-to-top automatique</div>
+      <div>✅ Liens affiliés avec UTM tracking</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 4 : MOTEURS IA ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">04 — Analyse Prédictive</div>
+    <div class="section-title">7 Modèles · 1 Consensus</div>
+    <p class="section-desc">Chaque prédiction est le résultat d'un vote pondéré entre 7 algorithmes indépendants. Plus robuste qu'un modèle unique.</p>
+  </div>
+  <div class="models-grid">
+    <div class="model-card" style="border-color:rgba(79,110,255,.4)">
+      <div class="model-card::before" style="background:linear-gradient(90deg,#4f6eff,#8855ff)"></div>
+      <span class="mc-icon">🌲</span>
+      <div class="mc-name">Random Forest</div>
+      <div class="mc-desc">200 arbres de décision · Feature importance · Résistant au surapprentissage</div>
+      <span class="mc-badge" style="background:rgba(79,110,255,.2);color:#88aaff;border:1px solid rgba(79,110,255,.3)">Poids: 35%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(255,215,0,.3)">
+      <span class="mc-icon">⚡</span>
+      <div class="mc-name">XGBoost</div>
+      <div class="mc-desc">Gradient boosting extrême · 150 estimateurs · Meilleur classifieur tabulaire</div>
+      <span class="mc-badge" style="background:rgba(255,215,0,.15);color:var(--gold);border:1px solid rgba(255,215,0,.3)">Poids: 35%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(136,85,255,.3)">
+      <span class="mc-icon">📈</span>
+      <div class="mc-name">Gradient Boosting</div>
+      <div class="mc-desc">GBM sklearn · Learning rate 0.05 · Profondeur 4 · Ensemble avec XGBoost</div>
+      <span class="mc-badge" style="background:rgba(136,85,255,.15);color:#bb88ff;border:1px solid rgba(136,85,255,.3)">Poids: 30%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(34,232,122,.3)">
+      <span class="mc-icon">🔗</span>
+      <div class="mc-name">Markov Ordres 1/2/3</div>
+      <div class="mc-desc">Transitions entre tirages · Lissage de Laplace · 3 ordres combinés</div>
+      <span class="mc-badge" style="background:rgba(34,232,122,.15);color:var(--green);border:1px solid rgba(34,232,122,.3)">Markov 30%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(255,100,50,.3)">
+      <span class="mc-icon">🎲</span>
+      <div class="mc-name">Monte Carlo</div>
+      <div class="mc-desc">50 000 simulations · Distribution empirique · Convergence statistique garantie</div>
+      <span class="mc-badge" style="background:rgba(255,100,50,.15);color:#ff9966;border:1px solid rgba(255,100,50,.3)">Poids: 20%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(79,200,255,.3)">
+      <span class="mc-icon">〰</span>
+      <div class="mc-name">Analyse de Fourier</div>
+      <div class="mc-desc">FFT sur séquences · Détection de cycles cachés · Période dominante par position</div>
+      <span class="mc-badge" style="background:rgba(79,200,255,.12);color:#88ddff;border:1px solid rgba(79,200,255,.25)">Cycles: 10%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(255,215,0,.2)">
+      <span class="mc-icon">⏱</span>
+      <div class="mc-name">Gap Analysis</div>
+      <div class="mc-desc">Écarts entre apparitions · Probabilité de retard · Score "en retard" par chiffre</div>
+      <span class="mc-badge" style="background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.2)">Gap: 5%</span>
+    </div>
+    <div class="model-card" style="border-color:rgba(79,110,255,.6);background:rgba(79,110,255,.05)">
+      <span class="mc-icon">🏆</span>
+      <div class="mc-name">Consensus Ensemble</div>
+      <div class="mc-desc">Vote pondéré de tous les modèles · Score normalisé · Top 10 combinaisons finales</div>
+      <span class="mc-badge" style="background:linear-gradient(90deg,rgba(79,110,255,.3),rgba(255,215,0,.2));color:#fff;border:none;font-weight:900">RÉSULTAT FINAL</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 5 : ÉTATS US ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">05 — Couverture Géographique</div>
+    <div class="section-title">44 États US + Puerto Rico</div>
+    <p class="section-desc">Pick3, Cash3, Daily3, Play3 et tous les autres jeux — données historiques depuis 1972 pour certains États.</p>
+  </div>
+  <div class="states-showcase">
+    <div class="state-pill tier1">🗽 New York</div>
+    <div class="state-pill tier1">🍑 Georgia</div>
+    <div class="state-pill tier1">⭐ Texas</div>
+    <div class="state-pill tier1">🌴 Florida</div>
+    <div class="state-pill tier1">☀️ California</div>
+    <div class="state-pill tier1">🔔 Pennsylvania</div>
+    <div class="state-pill tier1">🌊 New Jersey</div>
+    <div class="state-pill tier1">🏙️ Illinois</div>
+    <div class="state-pill tier1">🌻 Ohio</div>
+    <div class="state-pill tier1">🌲 N. Carolina</div>
+    <div class="state-pill tier1">🦅 Virginia</div>
+    <div class="state-pill tier1">🚗 Michigan</div>
+    <div class="state-pill">🎸 Tennessee</div>
+    <div class="state-pill">🌴 S. Carolina</div>
+    <div class="state-pill">⚓ Connecticut</div>
+    <div class="state-pill">🦀 Maryland</div>
+    <div class="state-pill">🦞 Massachusetts</div>
+    <div class="state-pill">🏁 Indiana</div>
+    <div class="state-pill">🐎 Kentucky</div>
+    <div class="state-pill">⛵ Missouri</div>
+    <div class="state-pill">🌵 Arizona</div>
+    <div class="state-pill">🏔️ Colorado</div>
+    <div class="state-pill">🎷 Louisiana</div>
+    <div class="state-pill">🎶 Mississippi</div>
+    <div class="state-pill">💎 Arkansas</div>
+    <div class="state-pill">🌽 Iowa</div>
+    <div class="state-pill">🌾 Kansas</div>
+    <div class="state-pill">🛢️ Oklahoma</div>
+    <div class="state-pill">🦆 Delaware</div>
+    <div class="state-pill">⛵ Rhode Island</div>
+    <div class="state-pill">🌶️ New Mexico</div>
+    <div class="state-pill">⛰️ West Virginia</div>
+    <div class="state-pill">🏛️ Washington DC</div>
+    <div class="state-pill">🧀 Wisconsin</div>
+    <div class="state-pill">🌨️ Minnesota</div>
+    <div class="state-pill">🌾 Nebraska</div>
+    <div class="state-pill">🏔️ New Hampshire</div>
+    <div class="state-pill">🍁 Vermont</div>
+    <div class="state-pill">🦞 Maine</div>
+    <div class="state-pill">🌧️ Washington</div>
+    <div class="state-pill">🌲 Oregon</div>
+    <div class="state-pill">🥔 Idaho</div>
+    <div class="state-pill">🏈 Alabama</div>
+    <div class="state-pill">🌺 Puerto Rico</div>
+  </div>
+  <div style="text-align:center;margin-top:20px;font-size:.74rem;color:var(--muted2)">
+    🔵 Tier 1 — Données chargées · ⚪ Tier 2/3 — Configuration prête, scraping à la demande
+  </div>
+</section>
+
+<!-- ═══════ SECTION 6 : MONETISATION ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">06 — Monétisation</div>
+    <div class="section-title">4 Sources de Revenus</div>
+    <p class="section-desc">Un modèle économique diversifié pour une rentabilité rapide et croissante.</p>
+  </div>
+
+  <div class="pricing-cards" style="margin-bottom:40px">
+    <div class="pricing-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">Toujours gratuit · Volume</div>
+      <div class="plan-feats">
+        <div class="plan-feat ok">Prédictions Pick3 illimitées</div>
+        <div class="plan-feat ok">44 États disponibles</div>
+        <div class="plan-feat ok">30 jours d'historique</div>
+        <div class="plan-feat ok">Résultats du jour</div>
+        <div class="plan-feat no">Alertes email</div>
+        <div class="plan-feat no">Business Intelligence</div>
+        <div class="plan-feat no">Export PDF</div>
+      </div>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-name">PRO</div>
+      <div class="plan-price">$4.99</div>
+      <div class="plan-period">par mois · 7 jours gratuits</div>
+      <div class="plan-feats">
+        <div class="plan-feat ok">Tout le FREE inclus</div>
+        <div class="plan-feat ok">ML XGBoost + Random Forest</div>
+        <div class="plan-feat ok">12 mois d'historique</div>
+        <div class="plan-feat ok">Alertes email quotidiennes</div>
+        <div class="plan-feat ok">Business Intelligence (5 analyses)</div>
+        <div class="plan-feat ok">Export CSV</div>
+        <div class="plan-feat no">API Access</div>
+      </div>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Elite</div>
+      <div class="plan-price">$9.99</div>
+      <div class="plan-period">par mois · 7 jours gratuits</div>
+      <div class="plan-feats">
+        <div class="plan-feat ok">Tout PRO inclus</div>
+        <div class="plan-feat ok">5 ans d'historique</div>
+        <div class="plan-feat ok">Business Intelligence illimité</div>
+        <div class="plan-feat ok">API Access (2000 req/jour)</div>
+        <div class="plan-feat ok">Alertes SMS</div>
+        <div class="plan-feat ok">Export PDF</div>
+        <div class="plan-feat ok">Support prioritaire 24h</div>
+      </div>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Business</div>
+      <div class="plan-price gold">$29–199</div>
+      <div class="plan-period">par mois · Business Intelligence seul</div>
+      <div class="plan-feats">
+        <div class="plan-feat ok">Starter: 5 analyses/mois</div>
+        <div class="plan-feat ok">Pro: 20 analyses + API</div>
+        <div class="plan-feat ok">Agency: Illimité + White-label</div>
+        <div class="plan-feat ok">Export PDF professionnel</div>
+        <div class="plan-feat ok">Support dédié</div>
+        <div class="plan-feat ok">25 pays couverts</div>
+        <div class="plan-feat ok">12 sections par rapport</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="revenue-grid">
+    <div class="rev-card">
+      <div class="rev-icon">👑</div>
+      <div class="rev-title">Abonnements SaaS</div>
+      <div class="rev-desc">Revenus récurrents mensuels prévisibles. FREE → PRO → ELITE. Modèle freemium éprouvé.</div>
+      <div class="rev-amount">$4.99 – $199/mois</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">🤝</div>
+      <div class="rev-title">Affiliations (UTM)</div>
+      <div class="rev-desc">TheLotter · LotteryPro · Jackpot.com. Commissions sur chaque achat via nos liens trackés.</div>
+      <div class="rev-amount">$5 – $50/conversion</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">📣</div>
+      <div class="rev-title">Publicité Display</div>
+      <div class="rev-desc">Emplacements publicitaires stratégiques (leaderboard, sidebar, inline). Google AdSense prêt.</div>
+      <div class="rev-amount">$2 – $15 CPM</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 7 : TECH STACK ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">07 — Stack Technique</div>
+    <div class="section-title">Technologies Modernes</div>
+    <p class="section-desc">Architecture légère, rapide et déployable sur n'importe quel hébergeur en quelques minutes.</p>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-icon">🐍</div><div><div class="tech-name">Python 3.14</div><div class="tech-role">Backend · Algorithmes</div></div></div>
+    <div class="tech-card"><div class="tech-icon">⚗️</div><div><div class="tech-name">Flask 3.x</div><div class="tech-role">Serveur Web · API REST</div></div></div>
+    <div class="tech-card"><div class="tech-icon">🤖</div><div><div class="tech-name">scikit-learn</div><div class="tech-role">Random Forest · GBM · ML</div></div></div>
+    <div class="tech-card"><div class="tech-icon">⚡</div><div><div class="tech-name">XGBoost 3.x</div><div class="tech-role">Gradient Boosting avancé</div></div></div>
+    <div class="tech-card"><div class="tech-icon">🔢</div><div><div class="tech-name">NumPy · SciPy</div><div class="tech-role">Calculs · FFT · Statistiques</div></div></div>
+    <div class="tech-card"><div class="tech-icon">📊</div><div><div class="tech-name">Chart.js 4.x</div><div class="tech-role">Graphiques interactifs</div></div></div>
+    <div class="tech-card"><div class="tech-icon">📱</div><div><div class="tech-name">PWA + Service Worker</div><div class="tech-role">Installable · Offline</div></div></div>
+    <div class="tech-card"><div class="tech-icon">🌐</div><div><div class="tech-name">HTML5 · CSS3 · ES2024</div><div class="tech-role">Interface · Animations</div></div></div>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 8 : PAGES LÉGALES ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">08 — Conformité Légale</div>
+    <div class="section-title">5 Pages Légales Complètes</div>
+    <p class="section-desc">Conformité RGPD, CCPA et FTC. Toutes les pages légales nécessaires au lancement officiel.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;max-width:800px;margin:0 auto">
+    <a href="/about" style="text-decoration:none"><div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='#4f6eff'" onmouseout="this.style.borderColor='#1a1a45'">
+      <div style="font-size:1.6rem;margin-bottom:8px">ℹ️</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:4px">À Propos</div>
+      <div style="font-size:.62rem;color:var(--muted2)">Mission · Stack · Équipe</div>
+    </div></a>
+    <a href="/faq" style="text-decoration:none"><div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='#4f6eff'" onmouseout="this.style.borderColor='#1a1a45'">
+      <div style="font-size:1.6rem;margin-bottom:8px">❓</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:4px">FAQ</div>
+      <div style="font-size:.62rem;color:var(--muted2)">12 questions · Recherche</div>
+    </div></a>
+    <a href="/contact" style="text-decoration:none"><div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='#4f6eff'" onmouseout="this.style.borderColor='#1a1a45'">
+      <div style="font-size:1.6rem;margin-bottom:8px">✉️</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:4px">Contact</div>
+      <div style="font-size:.62rem;color:var(--muted2)">Formulaire · Newsletter</div>
+    </div></a>
+    <a href="/privacy" style="text-decoration:none"><div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='#4f6eff'" onmouseout="this.style.borderColor='#1a1a45'">
+      <div style="font-size:1.6rem;margin-bottom:8px">🔒</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:4px">Confidentialité</div>
+      <div style="font-size:.62rem;color:var(--muted2)">RGPD · CCPA · Cookies</div>
+    </div></a>
+    <a href="/terms" style="text-decoration:none"><div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;transition:border-color .2s" onmouseover="this.style.borderColor='#4f6eff'" onmouseout="this.style.borderColor='#1a1a45'">
+      <div style="font-size:1.6rem;margin-bottom:8px">📄</div>
+      <div style="font-size:.74rem;font-weight:700;color:var(--text);margin-bottom:4px">CGU</div>
+      <div style="font-size:.62rem;color:var(--muted2)">Conditions · Affiliés</div>
+    </div></a>
+  </div>
+</section>
+
+<!-- ═══════ SECTION 9 : ROADMAP ═══════ -->
+<div class="divider"></div>
+<section class="pres-section">
+  <div class="section-header">
+    <div class="section-number">09 — Roadmap</div>
+    <div class="section-title">Fait · En cours · À venir</div>
+  </div>
+  <div class="roadmap" style="max-width:800px;margin:0 auto">
+    <div class="road-item">
+      <div class="road-phase phase-done">✅ FAIT</div>
+      <div class="road-content">
+        <div class="road-title">Plateforme complète v2.0</div>
+        <div class="road-items-list">
+          <span class="road-tag">7 algorithmes</span><span class="road-tag">44 États</span>
+          <span class="road-tag">12 pages</span><span class="road-tag">5 langues</span>
+          <span class="road-tag">PWA</span><span class="road-tag">SEO</span>
+          <span class="road-tag">Business Intelligence</span><span class="road-tag">Tous jeux</span>
+          <span class="road-tag">Légal complet</span><span class="road-tag">Affiliés UTM</span>
+        </div>
+      </div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase phase-next">🔜 NEXT</div>
+      <div class="road-content">
+        <div class="road-title">Déploiement & Monétisation</div>
+        <div class="road-items-list">
+          <span class="road-tag">predikta.io (domaine)</span>
+          <span class="road-tag">Railway/VPS hosting</span>
+          <span class="road-tag">Stripe paiements</span>
+          <span class="road-tag">Mailchimp newsletter</span>
+          <span class="road-tag">Google Analytics (ID réel)</span>
+          <span class="road-tag">Affiliés (comptes réels)</span>
+          <span class="road-tag">Vidéos PREDIKTA TV</span>
+        </div>
+      </div>
+    </div>
+    <div class="road-item">
+      <div class="road-phase phase-future">🔮 V3.0</div>
+      <div class="road-content">
+        <div class="road-title">Croissance & Expansion</div>
+        <div class="road-items-list">
+          <span class="road-tag">App iOS / Android native</span>
+          <span class="road-tag">Push notifications</span>
+          <span class="road-tag">Programme referral</span>
+          <span class="road-tag">Powerball / Mega Millions analyse</span>
+          <span class="road-tag">Jackpots internationaux</span>
+          <span class="road-tag">API publique v1</span>
+          <span class="road-tag">Dashboard admin</span>
+          <span class="road-tag">Système de compte utilisateur</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CTA FINAL ═══════ -->
+<div class="final-cta">
+  <h2>PREDIKTA est prêt.</h2>
+  <p>La plateforme est complète, testée et opérationnelle. Prochaine étape : acquérir le domaine, déployer et lancer la campagne marketing.</p>
+  <div class="cta-buttons">
+    <a href="/" class="cta-btn-primary">🏠 Accueil</a>
+    <a href="/analyze" class="cta-btn-primary" style="background:linear-gradient(135deg,#22cc88,#4f6eff)">⚡ Analyser</a>
+    <a href="/all-results" class="cta-btn-primary" style="background:linear-gradient(135deg,#ff9900,#ffd700);color:#000">🏆 Résultats</a>
+    <a href="/bizai" class="cta-btn-primary" style="background:linear-gradient(135deg,#8855ff,#4f6eff)">🚀 Business Intelligence</a>
+    <a href="/pro" class="cta-btn-secondary">👑 Plans PRO →</a>
+  </div>
+  <div style="margin-top:20px;font-size:.7rem;color:var(--muted2)">
+    predikta.io · 44 États · 5 Langues · 7 Algorithmes · 100% prêt au déploiement
+  </div>
+</div>
+
+</body>
+</html>

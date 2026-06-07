@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="PREDIKTA — Prédictions de loterie par analyse prédictive. Pick3, Cash3, 44 états US. XGBoost, Markov, Monte Carlo, Fourier."/>
+<meta name="keywords" content="loterie, lottery, prediction, pick3, cash3, new york, georgia, texas, florida, analyse prédictive, AI"/>
+<meta property="og:title" content="PREDIKTA — World Lottery Analytics"/>
+<meta property="og:description" content="Prédictions Pick3 par IA · 44 états · Markov · Monte Carlo · Fourier · XGBoost"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="/manifest.json"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="PREDIKTA"/>
+<meta name="twitter:description" content="Prédictions de loterie par analyse prédictive"/>
+<meta name="theme-color" content="#4f6eff"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="canonical" href="http://localhost:5000/"/>
+<title>PREDIKTA — Prédictions Loterie par Analyse Prédictive</title>
+<!-- Google Analytics 4 (remplacez G-XXXXXXXXXX par votre ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+  function trackEvent(action, category, label){
+    gtag('event', action, { event_category: category, event_label: label });
+  }
+</script>
+<!-- PWA Service Worker -->
+<script>
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════════════════════
+   PREDIKTA — Global Stylesheet
+   ════════════════════════════════════════════════ */
+:root{
+  --bg:#04040f;
+  --bg2:#07071a;
+  --card:#0b0b22;
+  --card2:#0e0e2a;
+  --border:#1a1a45;
+  --border2:#252560;
+  --accent:#4f6eff;
+  --accent2:#8855ff;
+  --gold:#ffd700;
+  --gold2:#ffaa00;
+  --hot:#ff3d2e;
+  --cold:#2e8cff;
+  --green:#22e87a;
+  --text:#e8eeff;
+  --muted:#4d5a8a;
+  --muted2:#7888bb;
+  --glass:rgba(255,255,255,.03);
+  --glass2:rgba(255,255,255,.06);
+  --shadow:0 8px 40px rgba(0,0,50,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── Animated background ── */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(79,110,255,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 80% 70%, rgba(136,85,255,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 50% 50%, rgba(255,215,0,.03) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── Glassmorphism card ── */
+.glass{
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+
+/* ═══════════════════════════
+   BANNIÈRE TICKER (haut)
+   ═══════════════════════════ */
+.ticker-bar{
+  width:100%;height:36px;overflow:hidden;position:relative;z-index:10;
+  background:#060616;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+}
+.ticker-label{
+  flex-shrink:0;padding:0 14px;
+  font-size:.62rem;font-weight:800;letter-spacing:1.5px;color:#fff;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  height:100%;display:flex;align-items:center;white-space:nowrap;
+}
+.ticker-track{
+  flex:1;overflow:hidden;position:relative;cursor:pointer;
+}
+.ticker-slides{
+  display:flex;transition:transform .6s ease-in-out;
+}
+.ticker-slide{
+  flex-shrink:0;width:100%;height:36px;
+  display:flex;align-items:center;gap:12px;padding:0 18px;
+  font-size:.78rem;color:var(--text);white-space:nowrap;
+}
+.ticker-slide .t-icon{font-size:1rem}
+.ticker-slide .t-name{font-weight:700;color:var(--gold)}
+.ticker-slide .t-desc{color:var(--muted2)}
+.ticker-slide .t-cta{
+  margin-left:auto;padding:3px 12px;border-radius:6px;font-size:.65rem;font-weight:700;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;
+  flex-shrink:0;
+}
+.ticker-dots{
+  display:flex;gap:5px;padding:0 14px;flex-shrink:0;
+}
+.tdot{
+  width:6px;height:6px;border-radius:50%;background:var(--border2);
+  cursor:pointer;transition:background .2s;
+}
+.tdot.active{background:var(--accent)}
+
+/* ═══════════════════════════
+   LEADERBOARD BANNER (728×90)
+   ═══════════════════════════ */
+.leaderboard-wrap{
+  width:100%;background:#06061a;
+  border-bottom:1px solid var(--border);
+  padding:12px 28px;
+  display:flex;justify-content:center;
+  position:relative;z-index:5;
+}
+.leaderboard-inner{
+  width:100%;max-width:900px;
+  border:1px solid var(--border2);border-radius:12px;overflow:hidden;
+  display:flex;align-items:center;
+  background:linear-gradient(90deg,#090920,#0e0e2a,#090920);
+  position:relative;
+}
+.lb-pub-tag{
+  position:absolute;top:4px;right:8px;
+  font-size:.55rem;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;
+}
+.lb-left{
+  width:72px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+  background:linear-gradient(135deg,rgba(79,110,255,.15),rgba(136,85,255,.1));
+  height:72px;border-right:1px solid var(--border);
+}
+.lb-body{flex:1;padding:0 20px}
+.lb-title{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.lb-desc{font-size:.72rem;color:var(--muted2)}
+.lb-right{padding:0 20px;flex-shrink:0}
+.lb-btn{
+  display:block;padding:10px 22px;border-radius:10px;font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  border:none;cursor:pointer;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(79,110,255,.35);transition:opacity .2s;
+}
+.lb-btn:hover{opacity:.85}
+
+/* Étiquette "Publicité" universelle */
+.ad-badge{
+  font-size:.55rem;font-weight:700;padding:1px 6px;
+  border-radius:3px;background:rgba(255,102,0,.8);color:#fff;
+  letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;
+}
+
+/* ═══════════════════════════
+   SIDEBAR — structure propre
+   ═══════════════════════════ */
+.sb-section-label{
+  font-size:.58rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:2px;
+  padding:6px 0 8px;border-top:1px solid var(--border);
+  margin-top:4px;
+}
+.sb-section-label:first-child{border-top:none;margin-top:0}
+
+/* Affiliate card compact (sidebar) */
+.affil-compact{
+  border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  background:var(--card);transition:border-color .3s,box-shadow .3s;
+  text-decoration:none;display:block;cursor:pointer;
+}
+.affil-compact:hover{border-color:var(--accent);box-shadow:0 0 16px rgba(79,110,255,.18)}
+.affil-compact-inner{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+}
+.affil-compact-icon{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+}
+.affil-compact-body{flex:1;min-width:0}
+.affil-compact-title{font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.affil-compact-desc{font-size:.65rem;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.affil-compact-cta{
+  font-size:.65rem;font-weight:700;color:var(--accent);flex-shrink:0;padding-left:6px;
+}
+
+/* Newsletter block */
+.newsletter-block{
+  background:linear-gradient(135deg,#0a0a22,#13133a);
+  border:1px solid var(--border2);border-radius:12px;padding:16px;
+}
+.nl-icon{font-size:1.4rem;margin-bottom:6px}
+.nl-title{font-size:.8rem;font-weight:700;color:var(--gold);margin-bottom:4px}
+.nl-desc{font-size:.65rem;color:var(--muted2);line-height:1.5;margin-bottom:10px}
+.nl-input{
+  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border2);
+  background:#0c0c28;color:var(--text);font-size:.72rem;margin-bottom:8px;outline:none;
+}
+.nl-input:focus{border-color:var(--accent)}
+.nl-btn{
+  width:100%;padding:8px;border-radius:8px;font-size:.73rem;font-weight:700;
+  background:linear-gradient(135deg,#ff6600,#ff9900);color:#fff;
+  border:none;cursor:pointer;transition:opacity .2s;
+}
+.nl-btn:hover{opacity:.85}
+.nl-note{font-size:.58rem;color:var(--muted);margin-top:6px;text-align:center}
+
+/* ═══════════════════════════
+   PRÉ-FOOTER SPONSORS GRID
+   ═══════════════════════════ */
+.sponsors-section{
+  background:#050514;border-top:1px solid var(--border);
+  padding:24px 28px;position:relative;z-index:5;
+}
+.sponsors-label{
+  text-align:center;font-size:.6rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;
+}
+.sponsors-grid{
+  max-width:1000px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+}
+.sponsor-card{
+  border:1px solid var(--border);border-radius:12px;
+  background:var(--card);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color .3s,transform .2s;cursor:pointer;
+  text-decoration:none;
+}
+.sponsor-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.sponsor-card-head{
+  height:60px;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;border-bottom:1px solid var(--border);
+}
+.sponsor-card-body{padding:12px}
+.sponsor-card-name{font-size:.8rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.sponsor-card-desc{font-size:.65rem;color:var(--muted2);line-height:1.4;margin-bottom:8px}
+.sponsor-card-btn{
+  width:100%;padding:7px;border-radius:7px;font-size:.68rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  border:none;cursor:pointer;
+}
+@media(max-width:600px){
+  .sponsors-grid{grid-template-columns:1fr}
+  .leaderboard-inner{flex-direction:column;text-align:center}
+  .lb-left{width:100%;height:48px;border-right:none;border-bottom:1px solid var(--border)}
+  .lb-right{padding:12px}
+}
+
+/* ═══════════════════════════
+   HEADER
+   ═══════════════════════════ */
+header{
+  position:relative;z-index:10;
+  background:linear-gradient(180deg,rgba(4,4,20,.98),rgba(7,7,26,.95));
+  border-bottom:1px solid var(--border);
+  padding:0 28px;
+}
+.header-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;flex-wrap:wrap;gap:12px;
+}
+
+/* Logo */
+.logo-wrap{display:flex;align-items:center;gap:14px;text-decoration:none}
+.logo-svg{width:48px;height:48px;flex-shrink:0}
+.logo-text{}
+.logo-name{
+  font-family:'Orbitron',monospace;
+  font-size:1.5rem;font-weight:900;letter-spacing:3px;
+  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1;
+}
+.logo-tag{font-size:.65rem;color:var(--muted2);letter-spacing:2px;margin-top:3px}
+
+/* Nav */
+.header-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* Language switcher */
+.lang-switcher{display:flex;gap:4px;align-items:center}
+.lang-btn{
+  padding:5px 10px;border-radius:6px;font-size:.72rem;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);background:transparent;
+  color:var(--muted2);transition:all .2s;letter-spacing:.5px;
+}
+.lang-btn.active,.lang-btn:hover{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+
+/* ═══════════════════════════
+   HERO STRIP
+   ═══════════════════════════ */
+.hero{
+  position:relative;z-index:5;
+  background:linear-gradient(135deg,#06061a,#0a0a28,#07071f);
+  border-bottom:1px solid var(--border);
+  padding:28px;text-align:center;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg,rgba(79,110,255,.04) 60deg,transparent 120deg,
+    rgba(136,85,255,.04) 180deg,transparent 240deg,
+    rgba(255,215,0,.02) 300deg,transparent 360deg);
+  animation:spin 20s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero h1{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:2;letter-spacing:2px;
+}
+.hero-sub{
+  font-size:.85rem;color:var(--muted2);margin-top:8px;
+  position:relative;z-index:2;letter-spacing:1px;
+}
+.hero-badges{
+  display:flex;justify-content:center;gap:8px;margin-top:14px;
+  flex-wrap:wrap;position:relative;z-index:2;
+}
+.hero-badge{
+  padding:4px 14px;border-radius:20px;font-size:.7rem;font-weight:600;
+  letter-spacing:.5px;
+}
+.hb-ai{background:rgba(79,110,255,.2);border:1px solid rgba(79,110,255,.5);color:#88aaff}
+.hb-mc{background:rgba(136,85,255,.2);border:1px solid rgba(136,85,255,.5);color:#bb88ff}
+.hb-ml{background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:#ffd700}
+.hb-live{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:#44ff99;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ═══════════════════════════
+   CONTROLS
+   ═══════════════════════════ */
+.controls-bar{
+  position:relative;z-index:5;
+  background:rgba(7,7,26,.95);
+  border-bottom:1px solid var(--border);
+  padding:14px 28px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  max-width:100%;
+}
+.controls-bar select,.controls-bar button{
+  padding:10px 18px;border-radius:10px;
+  border:1px solid var(--border2);
+  font-family:'Inter',sans-serif;
+  font-size:.88rem;cursor:pointer;
+  transition:all .25s;
+}
+.controls-bar select{
+  background:#0c0c28;color:var(--text);
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235566aa'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:32px;
+}
+.btn-analyze{
+  background:linear-gradient(135deg,#2a3acc,#4f6eff);
+  color:#fff;font-weight:700;border:none;
+  box-shadow:0 4px 20px rgba(79,110,255,.35);
+}
+.btn-analyze:hover{background:linear-gradient(135deg,#3a4aee,#6688ff);box-shadow:0 6px 28px rgba(79,110,255,.5)}
+.btn-scrape{
+  background:linear-gradient(135deg,#0a2218,#1a4a30);
+  color:#44ff99;font-weight:600;border-color:#226633;
+}
+.btn-scrape:hover{background:linear-gradient(135deg,#123028,#226040)}
+#status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
+
+/* ═══════════════════════════
+   VIDEO PLAYER 4K
+   ═══════════════════════════ */
+.video-section{
+  position:relative;z-index:5;
+  padding:24px 28px;
+  background:linear-gradient(180deg,rgba(6,6,22,.98),rgba(8,8,26,.95));
+  border-bottom:1px solid var(--border);
+}
+.video-container{
+  max-width:960px;margin:0 auto;
+}
+.video-title-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;flex-wrap:wrap;gap:8px;
+}
+.video-title{
+  font-family:'Orbitron',monospace;font-size:.9rem;
+  color:var(--gold);letter-spacing:1px;
+}
+.quality-badges{display:flex;gap:6px}
+.qbadge{
+  padding:3px 10px;border-radius:6px;font-size:.65rem;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.qbadge.active,.qbadge:hover{background:var(--accent);color:#fff}
+.qbadge:not(.active){background:var(--glass2);border:1px solid var(--border2);color:var(--muted2)}
+
+.player-wrap{
+  position:relative;background:#000;border-radius:14px;overflow:hidden;
+  border:1px solid var(--border2);
+  box-shadow:0 0 60px rgba(79,110,255,.15);
+  aspect-ratio:16/9;
+}
+.player-wrap video{width:100%;height:100%;display:block;object-fit:cover}
+
+/* Custom controls overlay */
+.player-controls{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,20,.95));
+  padding:30px 16px 14px;
+  transform:translateY(100%);transition:transform .3s;
+}
+.player-wrap:hover .player-controls{transform:translateY(0)}
+.progress-wrap{
+  width:100%;height:4px;background:rgba(255,255,255,.2);
+  border-radius:2px;cursor:pointer;margin-bottom:10px;position:relative;
+}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;width:0%;transition:width .1s}
+.ctrl-row{display:flex;align-items:center;gap:12px}
+.ctrl-btn{
+  background:none;border:none;color:#fff;cursor:pointer;
+  font-size:1rem;padding:4px;opacity:.85;transition:opacity .2s;
+}
+.ctrl-btn:hover{opacity:1}
+.ctrl-time{font-size:.72rem;color:rgba(255,255,255,.7);flex:1}
+.vol-wrap{display:flex;align-items:center;gap:6px}
+.vol-slider{
+  width:70px;height:3px;appearance:none;background:rgba(255,255,255,.3);
+  border-radius:2px;cursor:pointer;accent-color:var(--accent);
+}
+.player-placeholder{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#080818,#0e0e28);
+  color:var(--muted2);gap:16px;
+}
+.player-placeholder .play-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;cursor:pointer;
+  box-shadow:0 0 40px rgba(79,110,255,.4);
+  transition:transform .2s;
+}
+.player-placeholder .play-icon:hover{transform:scale(1.1)}
+.now-playing{font-size:.75rem;color:var(--muted2);letter-spacing:1px}
+.video-playlist{
+  margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;
+}
+.playlist-item{
+  padding:6px 14px;border-radius:8px;font-size:.75rem;cursor:pointer;
+  background:var(--glass2);border:1px solid var(--border);color:var(--muted2);
+  transition:all .2s;
+}
+.playlist-item:hover,.playlist-item.active{
+  background:rgba(79,110,255,.2);border-color:var(--accent);color:var(--text);
+}
+
+/* ═══════════════════════════
+   MAIN LAYOUT
+   ═══════════════════════════ */
+.main-layout{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:0;
+  max-width:1400px;
+  margin:0 auto;
+  position:relative;z-index:5;
+}
+.main-content{padding:22px 22px 22px 28px}
+.sidebar{
+  padding:22px 28px 22px 0;
+  display:flex;flex-direction:column;gap:16px;
+}
+
+/* ═══════════════════════════
+   CARDS
+   ═══════════════════════════ */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:.4;
+}
+.card-title{
+  font-size:.7rem;font-weight:700;color:var(--muted2);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title .ct-icon{
+  width:22px;height:22px;border-radius:6px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;flex-shrink:0;
+}
+
+/* ═══════════════════════════
+   AFFILIATE SIDEBAR
+   ═══════════════════════════ */
+.affil-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;cursor:pointer;
+  transition:all .3s;text-decoration:none;display:block;
+}
+.affil-card:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(79,110,255,.2)}
+.affil-img{
+  width:100%;height:120px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+}
+.affil-body{padding:12px}
+.affil-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.affil-desc{font-size:.7rem;color:var(--muted2);line-height:1.5}
+.affil-cta{
+  display:block;margin-top:10px;padding:8px 0;text-align:center;
+  border-radius:8px;font-size:.75rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;cursor:pointer;transition:opacity .2s;
+}
+.affil-cta:hover{opacity:.85}
+.affil-tag{
+  display:inline-block;padding:2px 8px;border-radius:10px;
+  font-size:.6rem;font-weight:700;background:#ff6600;color:#fff;
+  margin-bottom:6px;
+}
+
+/* Sidebar mini banner */
+.sidebar-banner{
+  background:linear-gradient(135deg,#0a0a22,#14143a);
+  border:1px solid var(--border2);border-radius:12px;
+  padding:14px;text-align:center;
+}
+.sb-title{font-size:.7rem;color:var(--gold);font-weight:700;margin-bottom:8px;letter-spacing:1px}
+.sb-desc{font-size:.65rem;color:var(--muted2);margin-bottom:10px;line-height:1.5}
+.sb-btn{
+  display:block;padding:8px;border-radius:8px;font-size:.72rem;font-weight:700;
+  background:linear-gradient(135deg,#ff6600,#ff9900);color:#fff;
+  text-align:center;cursor:pointer;border:none;width:100%;
+}
+
+/* ═══════════════════════════
+   LAST DRAW
+   ═══════════════════════════ */
+.last-draw-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ball{
+  width:60px;height:60px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.9rem;font-weight:900;
+  box-shadow:0 0 24px var(--ball-glow,rgba(79,110,255,.5));
+  animation:ballFloat 3s ease-in-out infinite;
+}
+@keyframes ballFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.ball:nth-child(2){animation-delay:.3s}
+.ball:nth-child(3){animation-delay:.6s}
+.draw-info{flex:1}
+.draw-date{font-size:.85rem;color:var(--muted2);margin-bottom:4px}
+.draw-meta-tags{display:flex;gap:8px;flex-wrap:wrap}
+.meta-chip{
+  padding:3px 10px;border-radius:8px;font-size:.72rem;
+  background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);
+}
+
+/* ═══════════════════════════
+   CONSENSUS PREDICTIONS
+   ═══════════════════════════ */
+.consensus-row{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+@media(max-width:900px){.consensus-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.consensus-row{grid-template-columns:repeat(2,1fr)}}
+.pred-card{
+  flex:1;min-width:0;max-width:100%;
+  background:linear-gradient(135deg,rgba(10,10,34,.9),rgba(16,16,48,.9));
+  border:1px solid var(--border2);border-radius:14px;
+  padding:14px;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;cursor:default;
+}
+.pred-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(79,110,255,.3)}
+.pred-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.pred-card:nth-child(1)::after{background:linear-gradient(90deg,#ffd700,#ff9900)}
+.pred-card:nth-child(2)::after{background:linear-gradient(90deg,#c0c0c0,#888)}
+.pred-card:nth-child(3)::after{background:linear-gradient(90deg,#cd7f32,#a05020)}
+.pred-card:nth-child(n+4)::after{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.pred-rank{font-size:.65rem;color:var(--muted2);margin-bottom:8px;letter-spacing:.5px}
+.pred-balls{display:flex;gap:5px;margin-bottom:8px}
+.pred-ball{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:800;border:2px solid;
+}
+.pred-combo{font-size:.95rem;font-weight:700;letter-spacing:4px;color:#fff;margin-bottom:6px}
+.pred-conf-label{font-size:.68rem;margin-bottom:6px}
+.conf-5{color:#22ff88}
+.conf-4{color:#88ff44}
+.conf-3{color:#ffdd22}
+.conf-2{color:#ff9922}
+.conf-1{color:#ff4444}
+.pred-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.1)}
+.pred-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.pred-score{font-size:.62rem;color:var(--muted);margin-top:5px}
+
+/* ═══════════════════════════
+   TABS
+   ═══════════════════════════ */
+.tabs-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px}
+.tab{
+  padding:7px 14px;border-radius:8px;font-size:.75rem;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);
+  background:transparent;color:var(--muted2);transition:all .2s;
+}
+.tab:hover{border-color:var(--accent);color:var(--text)}
+.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.section{display:none}.section.active{display:block}
+
+/* ═══════════════════════════
+   HOT / COLD GRID
+   ═══════════════════════════ */
+.digit-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.digit-cell{
+  border-radius:10px;padding:10px 4px;text-align:center;
+  font-size:1rem;font-weight:700;transition:transform .2s;cursor:default;
+}
+.digit-cell:hover{transform:scale(1.08)}
+.digit-cell small{display:block;font-size:.58rem;font-weight:400;margin-top:2px}
+.HOT{background:rgba(255,61,46,.15);color:#ff5544;border:1px solid rgba(255,61,46,.4)}
+.COLD{background:rgba(46,140,255,.12);color:#4499ff;border:1px solid rgba(46,140,255,.35)}
+.NEUTRAL{background:var(--glass2);color:#8899cc;border:1px solid var(--border)}
+
+/* ═══════════════════════════
+   GAP BARS
+   ═══════════════════════════ */
+.gap-list{display:flex;flex-direction:column;gap:8px}
+.gap-row{display:flex;align-items:center;gap:10px;font-size:.78rem}
+.gap-digit{width:18px;font-weight:700;color:var(--text);text-align:right}
+.gap-wrap{flex:1;background:rgba(255,255,255,.06);border-radius:4px;height:12px;overflow:hidden;position:relative}
+.gap-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.gap-fill.overdue{background:linear-gradient(90deg,#cc1100,#ff3322)}
+.gap-fill.ontime{background:linear-gradient(90deg,#1133bb,#3366ff)}
+.gap-info{width:175px;font-size:.68rem;color:var(--muted2)}
+.gap-info .overdue-tag{color:#ff4422;font-weight:700}
+.gap-prob{
+  font-size:.62rem;padding:1px 7px;border-radius:8px;
+  font-weight:700;margin-left:4px;
+}
+.prob-high{background:rgba(255,50,30,.2);color:#ff6644}
+.prob-med{background:rgba(255,180,0,.15);color:#ffcc44}
+.prob-low{background:rgba(50,100,255,.15);color:#6688ff}
+
+/* ═══════════════════════════
+   MARKOV MATRIX
+   ═══════════════════════════ */
+.markov-wrap{overflow-x:auto}
+.markov-tbl{border-collapse:collapse;font-size:.7rem;width:100%}
+.markov-tbl th,.markov-tbl td{padding:5px 6px;text-align:center;border:1px solid var(--border)}
+.markov-tbl th{background:#0c0c26;color:var(--muted2);font-weight:600}
+.cell-h{background:rgba(255,60,40,.18);color:#ff7755;font-weight:700}
+.cell-m{background:rgba(255,200,40,.1);color:#ffcc44}
+
+/* ═══════════════════════════
+   CHARTS
+   ═══════════════════════════ */
+.chart-wrap{position:relative;height:200px}
+
+/* ═══════════════════════════
+   DATA TABLE
+   ═══════════════════════════ */
+.data-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.data-table th,.data-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.data-table th{color:var(--muted2);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.5px}
+.data-table tr:last-child td{border-bottom:none}
+.combo-big{font-size:.95rem;font-weight:700;letter-spacing:3px;color:var(--gold)}
+.score-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.score-fill{height:100%;border-radius:3px}
+.fill-a{background:linear-gradient(90deg,#4f6eff,#8855ff)}
+.fill-b{background:linear-gradient(90deg,#22cc88,#4499ff)}
+.fill-c{background:linear-gradient(90deg,#ff8822,#ffdd22)}
+
+/* ═══════════════════════════
+   CHIPS
+   ═══════════════════════════ */
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  padding:5px 12px;border-radius:20px;font-size:.72rem;
+  background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);
+}
+.chip strong{color:var(--gold)}
+
+/* ═══════════════════════════
+   ENTROPY
+   ═══════════════════════════ */
+.ent-bars{display:flex;gap:14px;flex-wrap:wrap}
+.ent-item{flex:1;min-width:110px}
+.ent-label{font-size:.68rem;color:var(--muted2);margin-bottom:4px}
+.ent-bar-wrap{background:rgba(255,255,255,.06);border-radius:4px;height:8px;overflow:hidden}
+.ent-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.ent-val{font-size:.7rem;color:var(--text);margin-top:3px}
+
+/* ═══════════════════════════
+   FOURIER
+   ═══════════════════════════ */
+.fourier-grid{display:flex;gap:12px;flex-wrap:wrap}
+.fourier-item{
+  flex:1;min-width:120px;
+  background:#0a0a1e;border:1px solid var(--border);
+  border-radius:12px;padding:14px;
+}
+.fourier-pos{font-size:.65rem;color:var(--muted2);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.fourier-cycle{font-size:1.4rem;font-weight:700;color:#aa66ff}
+.fourier-sub{font-size:.65rem;color:var(--muted);margin-top:2px}
+.fourier-pred{font-size:.82rem;color:var(--gold);margin-top:8px;font-weight:600}
+
+/* ═══════════════════════════
+   FOOTER
+   ═══════════════════════════ */
+footer{
+  position:relative;z-index:5;
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:28px;text-align:center;
+}
+.footer-logo{
+  font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
+  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;
+}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:12px}
+.footer-links a{font-size:.72rem;color:var(--muted2);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{font-size:.65rem;color:var(--muted);letter-spacing:.5px}
+
+/* Inline mid-content banner */
+.inline-banner{
+  display:flex;align-items:center;gap:16px;
+  background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));
+  border:1px solid rgba(79,110,255,.3);
+  border-radius:12px;padding:14px 18px;margin-bottom:18px;
+  cursor:pointer;transition:all .3s;
+}
+.inline-banner:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(79,110,255,.15)}
+.ib-icon{font-size:2rem;flex-shrink:0}
+.ib-text{}
+.ib-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.ib-desc{font-size:.7rem;color:var(--muted2)}
+.ib-cta{
+  margin-left:auto;flex-shrink:0;
+  padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;cursor:pointer;white-space:nowrap;
+}
+
+/* Loading animation */
+.loading-wrap{
+  text-align:center;padding:60px 20px;
+}
+.loader{
+  width:48px;height:48px;border:3px solid var(--border2);
+  border-top-color:var(--accent);border-radius:50%;
+  animation:spin2 .8s linear infinite;margin:0 auto 16px;
+}
+@keyframes spin2{to{transform:rotate(360deg)}}
+
+/* Responsive */
+@media(max-width:900px){
+  .main-layout{grid-template-columns:1fr}
+  .sidebar{padding:0 28px 28px}
+  .digit-grid{grid-template-columns:repeat(5,1fr)}
+}
+@media(max-width:500px){
+  header .header-inner{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<!-- nav.js injecte le header, mobile menu, dark/light toggle, back-to-top automatiquement -->
+<script src="/nav.js"></script>
+
+<!-- ══ TICKER ROTATIF (1 annonce à la fois) ══ -->
+<div class="ticker-bar">
+  <div class="ticker-label">📢 PARTENAIRES</div>
+  <div class="ticker-track" id="tickerTrack" onclick="tickerNext()">
+    <div class="ticker-slides" id="tickerSlides">
+      <div class="ticker-slide">
+        <span class="t-icon">🎰</span>
+        <span class="t-name">TheLotter</span>
+        <span class="t-desc">— Jouez aux loteries mondiales officiellement depuis chez vous</span>
+        <span class="t-cta">Jouer →</span>
+      </div>
+      <div class="ticker-slide">
+        <span class="t-icon">📊</span>
+        <span class="t-name">LotteryPro Tools</span>
+        <span class="t-desc">— Outils premium d'analyse statistique pour maximiser vos gains</span>
+        <span class="t-cta">Essai gratuit →</span>
+      </div>
+      <div class="ticker-slide">
+        <span class="t-icon">🏆</span>
+        <span class="t-name">Jackpot.com</span>
+        <span class="t-desc">— Powerball · Mega Millions · EuroMillions en temps réel</span>
+        <span class="t-cta">Voir jackpots →</span>
+      </div>
+    </div>
+  </div>
+  <div class="ticker-dots" id="tickerDots">
+    <div class="tdot active" onclick="tickerGo(0)"></div>
+    <div class="tdot" onclick="tickerGo(1)"></div>
+    <div class="tdot" onclick="tickerGo(2)"></div>
+  </div>
+</div>
+
+<!-- header injecté par nav.js -->
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <h1 id="hero-title">Prédictions par Analyse Prédictive</h1>
+  <div class="hero-sub" id="hero-sub">Cash3 · Pick3 · New York · Georgia · Texas · Florida</div>
+  <div class="hero-badges">
+    <span class="hero-badge hb-ai">⚡ XGBoost + Random Forest</span>
+    <span class="hero-badge hb-mc">🎲 Monte Carlo 50K</span>
+    <span class="hero-badge hb-ml">〰 Fourier Cycles</span>
+    <span class="hero-badge hb-live" id="live-badge">● LIVE</span>
+  </div>
+</div>
+
+<!-- ══ LEADERBOARD BANNER (entre hero et contrôles) ══ -->
+<div class="leaderboard-wrap">
+  <div class="leaderboard-inner">
+    <span class="lb-pub-tag">Publicité</span>
+    <div class="lb-left">🎯</div>
+    <div class="lb-body">
+      <div class="lb-title">TheLotter — Achetez vos tickets officiels en ligne</div>
+      <div class="lb-desc">Participez au Powerball, Mega Millions, EuroMillions et +40 loteries mondiales · Sécurisé & officiel</div>
+    </div>
+    <div class="lb-right">
+      <button class="lb-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank');">Jouer Maintenant →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTROLS ══ -->
+<div class="controls-bar">
+  <select id="stateSelect">
+    <optgroup label="── Principaux ──">
+      <option value="NY">🗽 New York</option>
+      <option value="GA">🍑 Georgia</option>
+      <option value="TX">⭐ Texas</option>
+      <option value="FL">🌴 Florida</option>
+      <option value="CA">☀️ California</option>
+      <option value="PA">🔔 Pennsylvania</option>
+      <option value="NJ">🌊 New Jersey</option>
+      <option value="IL">🏙️ Illinois</option>
+      <option value="OH">🌻 Ohio</option>
+      <option value="NC">🌲 North Carolina</option>
+      <option value="VA">🦅 Virginia</option>
+      <option value="MI">🚗 Michigan</option>
+      <option value="TN">🎸 Tennessee</option>
+    </optgroup>
+    <optgroup label="── Autres États ──">
+      <option value="SC">🌴 South Carolina</option>
+      <option value="CT">⚓ Connecticut</option>
+      <option value="MD">🦀 Maryland</option>
+      <option value="MA">🦞 Massachusetts</option>
+      <option value="IN">🏁 Indiana</option>
+      <option value="KY">🐎 Kentucky</option>
+      <option value="MO">⛵ Missouri</option>
+      <option value="AZ">🌵 Arizona</option>
+      <option value="CO">🏔️ Colorado</option>
+      <option value="LA">🎷 Louisiana</option>
+      <option value="MS">🎶 Mississippi</option>
+      <option value="AR">💎 Arkansas</option>
+      <option value="IA">🌽 Iowa</option>
+      <option value="KS">🌾 Kansas</option>
+      <option value="OK">🛢️ Oklahoma</option>
+      <option value="DE">🦆 Delaware</option>
+      <option value="RI">⛵ Rhode Island</option>
+      <option value="NM">🌶️ New Mexico</option>
+      <option value="WV">⛰️ West Virginia</option>
+    </optgroup>
+  </select>
+  <select id="todSelect" style="min-width:110px">
+    <option value="all">Tous tirages</option>
+    <option value="Midday">Midi</option>
+    <option value="Evening">Soir</option>
+    <option value="Morning">Matin (TX)</option>
+    <option value="Night">Nuit (TX)</option>
+  </select>
+  <select id="monthsSelect" style="min-width:100px">
+    <option value="3">3 mois</option>
+    <option value="6">6 mois</option>
+    <option value="12" selected>12 mois</option>
+    <option value="24">24 mois</option>
+    <option value="36">3 ans</option>
+    <option value="60">5 ans</option>
+  </select>
+  <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
+  <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
+  <a href="/results" style="padding:10px 18px;border-radius:10px;font-size:.88rem;font-weight:700;
+    text-decoration:none;background:linear-gradient(135deg,rgba(34,232,122,.15),rgba(34,232,122,.08));
+    color:#22e87a;border:1px solid rgba(34,232,122,.4);white-space:nowrap;transition:all .2s;display:inline-flex;align-items:center;gap:6px"
+    onmouseover="this.style.background='rgba(34,232,122,.25)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(34,232,122,.15),rgba(34,232,122,.08))'">
+    🟢 Résultats du Jour
+  </a>
+  <span id="status"></span>
+</div>
+
+<!-- ══ VIDEO PLAYER 4K ══ -->
+<div class="video-section">
+  <div class="video-container">
+    <div class="video-title-row">
+      <div class="video-title" id="video-section-title">📺 PREDIKTA TV — Tutoriels & Analyses Live</div>
+      <div class="quality-badges">
+        <span class="qbadge active" onclick="setQuality(this,'4K')">4K</span>
+        <span class="qbadge" onclick="setQuality(this,'1080p')">1080p</span>
+        <span class="qbadge" onclick="setQuality(this,'720p')">720p</span>
+      </div>
+    </div>
+    <div class="player-wrap" id="playerWrap">
+      <!-- Placeholder (replace src with real video URLs) -->
+      <div class="player-placeholder" id="playerPlaceholder">
+        <div class="play-icon" onclick="playVideo()">▶</div>
+        <div class="now-playing" id="nowPlaying">Comment lire les prédictions PREDIKTA</div>
+        <div style="font-size:.7rem;color:var(--muted)">Cliquez pour lancer · Qualité 4K disponible</div>
+      </div>
+      <video id="mainVideo" style="display:none" controls playsinline>
+        <source src="" type="video/mp4"/>
+      </video>
+      <div class="player-controls" id="playerControls" style="display:none">
+        <div class="progress-wrap" onclick="seekVideo(event)">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="togglePlay()" id="playBtn">⏸</button>
+          <span class="ctrl-time" id="timeDisplay">0:00 / 0:00</span>
+          <div class="vol-wrap">
+            🔊 <input type="range" class="vol-slider" min="0" max="1" step=".05" value="1" oninput="setVolume(this.value)"/>
+          </div>
+          <button class="ctrl-btn" onclick="toggleFS()">⛶</button>
+        </div>
+      </div>
+    </div>
+    <div class="video-playlist" id="playlist">
+      <div class="playlist-item active" data-src="" id="nowPlaying" onclick="loadTrack(this)">🎬 Guide Prédictions</div>
+      <div class="playlist-item" data-src="" onclick="loadTrack(this)">📊 Analyse Markov</div>
+      <div class="playlist-item" data-src="" onclick="loadTrack(this)">🤖 IA Expliquée</div>
+      <div class="playlist-item" data-src="" onclick="loadTrack(this)">💰 Stratégies Gagnantes</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN LAYOUT ══ -->
+<div class="main-layout">
+
+  <!-- ── CONTENT ── -->
+  <div class="main-content" id="mainContent">
+    <div class="loading-wrap">
+      <div style="font-size:2.5rem;margin-bottom:12px">🎯</div>
+      <div style="color:var(--muted2);font-size:.9rem" id="welcome-msg">Sélectionnez un État et cliquez sur ⚡ Analyser</div>
+    </div>
+  </div>
+
+  <!-- ── SIDEBAR ── -->
+  <div class="sidebar" id="sidebar">
+
+    <!-- ① RÉSULTATS DU JOUR — Widget prioritaire -->
+    <div style="background:linear-gradient(135deg,rgba(34,232,122,.1),rgba(79,110,255,.08));border:1px solid rgba(34,232,122,.35);border-radius:14px;overflow:hidden;margin-bottom:0">
+      <div style="padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(34,232,122,.2)">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22e87a;display:inline-block;animation:livePulse 1.5s infinite"></span>
+          <span style="font-size:.7rem;font-weight:800;color:#22e87a;text-transform:uppercase;letter-spacing:1.5px">Résultats du Jour</span>
+        </div>
+        <a href="/results" style="font-size:.65rem;color:var(--accent);text-decoration:none;font-weight:700;padding:3px 10px;border:1px solid rgba(79,110,255,.3);border-radius:6px;transition:all .2s" onmouseover="this.style.background='rgba(79,110,255,.15)'" onmouseout="this.style.background='transparent'">Voir tous →</a>
+      </div>
+      <div id="todayResultsWidget" style="padding:10px 14px">
+        <div style="font-size:.72rem;color:var(--muted2);text-align:center;padding:8px 0">Chargement...</div>
+      </div>
+      <div style="padding:8px 14px 12px;border-top:1px solid rgba(34,232,122,.15)">
+        <a href="/results" style="display:block;text-align:center;padding:9px;border-radius:9px;font-size:.78rem;font-weight:700;background:linear-gradient(135deg,rgba(34,232,122,.2),rgba(79,110,255,.15));border:1px solid rgba(34,232,122,.3);color:#22e87a;text-decoration:none;transition:all .2s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+          🎱 Page Résultats Complète →
+        </a>
+      </div>
+    </div>
+
+    <!-- ① Statistiques État -->
+    <div class="sb-section-label">📍 Statistiques</div>
+    <div class="card" id="stateInfoCard" style="padding:14px;margin-bottom:0">
+      <div class="card-title"><span class="ct-icon">📍</span><span id="s-stats-title">Statistiques</span></div>
+      <div id="stateStats" style="font-size:.75rem;color:var(--muted2);line-height:1.9">
+        <div id="s-select-state">Sélectionnez un État</div>
+      </div>
+    </div>
+
+    <!-- ② Newsletter PREDIKTA PRO -->
+    <div class="sb-section-label">🎁 Offre Exclusive</div>
+    <div class="newsletter-block">
+      <div class="nl-icon">⚡</div>
+      <div class="nl-title">PREDIKTA PRO — Gratuit 7 jours</div>
+      <div class="nl-desc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour IA</div>
+      <input class="nl-input" type="email" placeholder="votre@email.com"/>
+      <button class="nl-btn" onclick="subscribeNewsletter()">S'abonner Gratuitement</button>
+      <div class="nl-note">Sans engagement · Résiliation en 1 clic</div>
+    </div>
+
+    <!-- ③ Partenaire #1 — compact -->
+    <div class="sb-section-label">💼 Partenaires</div>
+    <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+      <div class="affil-compact-inner">
+        <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0d0d2a,#1a1a44)">🏆</div>
+        <div class="affil-compact-body">
+          <div class="affil-compact-title">TheLotter Premium</div>
+          <div class="affil-compact-desc">Loteries mondiales officielles</div>
+        </div>
+        <div class="affil-compact-cta">Jouer →</div>
+      </div>
+      <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
+        <span class="ad-badge">AD</span>
+        <span style="font-size:.62rem;color:var(--muted2)">Sécurisé · Officiel · International</span>
+      </div>
+    </a>
+
+    <!-- ④ Partenaire #2 — compact -->
+    <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+      <div class="affil-compact-inner">
+        <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0a1a0a,#0a3020)">📊</div>
+        <div class="affil-compact-body">
+          <div class="affil-compact-title">LotteryPro Tools</div>
+          <div class="affil-compact-desc">Outils d'analyse statistique</div>
+        </div>
+        <div class="affil-compact-cta">Essai →</div>
+      </div>
+      <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
+        <span class="ad-badge">AD</span>
+        <span style="font-size:.62rem;color:var(--muted2)">Essai gratuit 14 jours</span>
+      </div>
+    </a>
+
+    <!-- ⑤ Partenaire #3 — compact -->
+    <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+      <div class="affil-compact-inner">
+        <div class="affil-compact-icon" style="background:linear-gradient(135deg,#1a0a0a,#300a0a)">🌍</div>
+        <div class="affil-compact-body">
+          <div class="affil-compact-title">Jackpot.com</div>
+          <div class="affil-compact-desc">Jackpots en temps réel</div>
+        </div>
+        <div class="affil-compact-cta">Voir →</div>
+      </div>
+      <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
+        <span class="ad-badge">AD</span>
+        <span style="font-size:.62rem;color:var(--muted2)">Powerball · Mega Millions</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══ GRILLE SPONSORS PRÉ-FOOTER ══ -->
+<div class="sponsors-section">
+  <div class="sponsors-label">Nos Partenaires · Publicité · Our Partners · Nuestros Socios</div>
+  <div class="sponsors-grid">
+
+    <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+      <div class="sponsor-card-head" style="background:linear-gradient(135deg,#0a0a22,#1a1a44)">🏆</div>
+      <div class="sponsor-card-body">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span class="ad-badge">AD</span>
+          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+        </div>
+        <div class="sponsor-card-name">TheLotter</div>
+        <div class="sponsor-card-desc">Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.</div>
+        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank');">Jouer Maintenant →</button>
+      </div>
+    </a>
+
+    <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+      <div class="sponsor-card-head" style="background:linear-gradient(135deg,#0a1a0a,#0a2a18)">💎</div>
+      <div class="sponsor-card-body">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span class="ad-badge">AD</span>
+          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+        </div>
+        <div class="sponsor-card-name">LotteryPro Tools</div>
+        <div class="sponsor-card-desc">Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.</div>
+        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.lotterypro,'_blank');">Essai Gratuit 14j →</button>
+      </div>
+    </a>
+
+    <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+      <div class="sponsor-card-head" style="background:linear-gradient(135deg,#1a0a0a,#2a1000)">🌍</div>
+      <div class="sponsor-card-body">
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+          <span class="ad-badge">AD</span>
+          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+        </div>
+        <div class="sponsor-card-name">Jackpot.com</div>
+        <div class="sponsor-card-desc">Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.</div>
+        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.jackpot,'_blank');">Voir les Jackpots →</button>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- footer injecté par nav.js -->
+
+<!-- ════════════════════════════════════
+     SCRIPTS
+     ════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════
+// TRANSLATIONS
+// ═══════════════════════════════════
+const T = {
+  fr:{
+    heroTitle:"Prédictions par Analyse Prédictive",
+    heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
+    btnAnalyze:"⚡ Analyser",btnScrape:"🔄 Scraper",
+    welcome:"Sélectionnez un État et cliquez sur ⚡ Analyser",
+    analyzing:"⚙️ Analyse multi-modèles en cours...",
+    scraping:"⏳ Scraping en cours...",
+    lastDraw:"Dernier Tirage",predictions:"🏆 Prédictions Consensus",
+    models:"📊 Comparaison des Modèles",hotcold:"🔥 Chaud / Froid",
+    gaps:"⏱ Analyse des Écarts",fourier:"〰 Cycles de Fourier",
+    entropy:"📐 Entropie & Biais",markov:"🔗 Matrice de Markov",
+    sums:"∑ Distribution des Sommes",parity:"⚖ Parité, Haut/Bas",
+    pairs:"👥 Paires Fréquentes",
+    mlActive:"✓ Actif",mlInactive:"Données insuffisantes",
+    statsTitle:"Statistiques",selectState:"Sélectionnez un État",
+    videoTitle:"📺 PREDIKTA TV — Tutoriels & Analyses Live",
+    today:"Aujourd'hui",totalDraws:"tirages analysés",
+    about:"À Propos",privacy:"Confidentialité",terms:"Conditions",
+    contact:"Contact",affil:"Affiliations",api:"API",
+    footer:"© 2026 PREDIKTA — Plateforme d'analyse statistique mondiale · Pour divertissement uniquement · Jouer responsable",
+    noData:"Aucune donnée. Cliquez sur 🔄 Scraper d'abord.",
+    confVH:"Très Élevée ★★★★★",confH:"Élevée ★★★★",confM:"Moyenne ★★★",confL:"Modérée ★★",confVL:"Faible ★",
+    overdue:"EN RETARD",normal:"normal",
+    pos:"Position",cycleLen:"tirages/cycle",predicted:"Prédit:",
+    uniform:"uniforme",
+    draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
+  },
+  en:{
+    heroTitle:"Advanced Algorithm Predictions",
+    heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
+    btnAnalyze:"⚡ Analyze",btnScrape:"🔄 Scrape Data",
+    welcome:"Select a State and click ⚡ Analyze",
+    analyzing:"⚙️ Running multi-model analysis...",
+    scraping:"⏳ Scraping in progress...",
+    lastDraw:"Last Draw",predictions:"🏆 Consensus Predictions",
+    models:"📊 Model Comparison",hotcold:"🔥 Hot / Cold Digits",
+    gaps:"⏱ Gap Analysis",fourier:"〰 Fourier Cycles",
+    entropy:"📐 Entropy & Bias",markov:"🔗 Markov Matrix",
+    sums:"∑ Sum Distribution",parity:"⚖ Parity, High/Low",
+    pairs:"👥 Frequent Pairs",
+    mlActive:"✓ Active",mlInactive:"Insufficient data",
+    statsTitle:"Statistics",selectState:"Select a State",
+    videoTitle:"📺 PREDIKTA TV — Tutorials & Live Analysis",
+    today:"Today",totalDraws:"draws analyzed",
+    about:"About",privacy:"Privacy",terms:"Terms",
+    contact:"Contact",affil:"Affiliates",api:"API",
+    footer:"© 2026 PREDIKTA — Global Statistical Analysis Platform · For entertainment only · Play responsibly",
+    noData:"No data. Click 🔄 Scrape first.",
+    confVH:"Very High ★★★★★",confH:"High ★★★★",confM:"Medium ★★★",confL:"Moderate ★★",confVL:"Low ★",
+    overdue:"OVERDUE",normal:"normal",
+    pos:"Position",cycleLen:"draws/cycle",predicted:"Predicted:",
+    uniform:"uniform",
+    draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
+  },
+  es:{
+    heroTitle:"Predicciones por Algoritmos Avanzados",
+    heroSub:"Cash3 · Pick3 · Nueva York · Georgia · Texas · Florida",
+    btnAnalyze:"⚡ Analizar",btnScrape:"🔄 Scrapear",
+    welcome:"Seleccione un Estado y haga clic en ⚡ Analizar",
+    analyzing:"⚙️ Análisis multi-modelo en progreso...",
+    scraping:"⏳ Scrapeando datos...",
+    lastDraw:"Último Sorteo",predictions:"🏆 Predicciones Consenso",
+    models:"📊 Comparación de Modelos",hotcold:"🔥 Dígitos Calientes / Fríos",
+    gaps:"⏱ Análisis de Brechas",fourier:"〰 Ciclos de Fourier",
+    entropy:"📐 Entropía y Sesgo",markov:"🔗 Matriz de Markov",
+    sums:"∑ Distribución de Sumas",parity:"⚖ Paridad, Alto/Bajo",
+    pairs:"👥 Pares Frecuentes",
+    mlActive:"✓ Activo",mlInactive:"Datos insuficientes",
+    statsTitle:"Estadísticas",selectState:"Seleccione un Estado",
+    videoTitle:"📺 PREDIKTA TV — Tutoriales y Análisis en Vivo",
+    today:"Hoy",totalDraws:"sorteos analizados",
+    about:"Acerca de",privacy:"Privacidad",terms:"Términos",
+    contact:"Contacto",affil:"Afiliados",api:"API",
+    footer:"© 2026 PREDIKTA — Plataforma global de análisis estadístico · Solo entretenimiento · Juegue responsablemente",
+    noData:"Sin datos. Haga clic en 🔄 Scrapear primero.",
+    confVH:"Muy Alta ★★★★★",confH:"Alta ★★★★",confM:"Media ★★★",confL:"Moderada ★★",confVL:"Baja ★",
+    overdue:"VENCIDA",normal:"normal",
+    pos:"Posición",cycleLen:"sorteos/ciclo",predicted:"Predicho:",
+    uniform:"uniforme",
+    draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
+  },
+  pt:{
+    heroTitle:"Previsões por Algoritmos Avançados",
+    heroSub:"Cash3 · Pick3 · Nova York · Geórgia · Texas · Flórida",
+    btnAnalyze:"⚡ Analisar",btnScrape:"🔄 Raspar Dados",
+    welcome:"Selecione um Estado e clique em ⚡ Analisar",
+    analyzing:"⚙️ Análise multi-modelo em andamento...",
+    scraping:"⏳ Raspando dados...",
+    lastDraw:"Último Sorteio",predictions:"🏆 Previsões Consenso",
+    models:"📊 Comparação de Modelos",hotcold:"🔥 Dígitos Quentes / Frios",
+    gaps:"⏱ Análise de Lacunas",fourier:"〰 Ciclos de Fourier",
+    entropy:"📐 Entropia & Viés",markov:"🔗 Matriz de Markov",
+    sums:"∑ Distribuição de Somas",parity:"⚖ Paridade, Alto/Baixo",
+    pairs:"👥 Pares Frequentes",
+    mlActive:"✓ Ativo",mlInactive:"Dados insuficientes",
+    statsTitle:"Estatísticas",selectState:"Selecione um Estado",
+    videoTitle:"📺 PREDIKTA TV — Tutoriais e Análises ao Vivo",
+    today:"Hoje",totalDraws:"sorteios analisados",
+    about:"Sobre",privacy:"Privacidade",terms:"Termos",
+    contact:"Contato",affil:"Afiliados",api:"API",
+    footer:"© 2026 PREDIKTA — Plataforma global de análise estatística · Apenas entretenimento · Jogue com responsabilidade",
+    noData:"Sem dados. Clique em 🔄 Raspar primeiro.",
+    confVH:"Muito Alta ★★★★★",confH:"Alta ★★★★",confM:"Média ★★★",confL:"Moderada ★★",confVL:"Baixa ★",
+    overdue:"EM ATRASO",normal:"normal",
+    pos:"Posição",cycleLen:"sorteios/ciclo",predicted:"Previsto:",
+    uniform:"uniforme",
+    draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
+  },
+  ht:{
+    heroTitle:"Prediksyon pa Algoritm Avanse",
+    heroSub:"Cash3 · Pick3 · New York · Jòji · Teksas · Florid",
+    btnAnalyze:"⚡ Analize",btnScrape:"🔄 Chache Done",
+    welcome:"Chwazi yon Eta epi klike sou ⚡ Analize",
+    analyzing:"⚙️ Analiz ap mache...",
+    scraping:"⏳ Chache done...",
+    lastDraw:"Dènye Tiraj",predictions:"🏆 Prediksyon Konsansis",
+    models:"📊 Konparezon Modèl",hotcold:"🔥 Chif Cho / Frèt",
+    gaps:"⏱ Analiz Espas",fourier:"〰 Sik Fourier",
+    entropy:"📐 Entopi & Bya",markov:"🔗 Matris Markov",
+    sums:"∑ Distribisyon Sòm",parity:"⚖ Parite, Wo/Ba",
+    pairs:"👥 Pè Ki Komen",
+    mlActive:"✓ Aktif",mlInactive:"Done pa ase",
+    statsTitle:"Estatistik",selectState:"Chwazi yon Eta",
+    videoTitle:"📺 PREDIKTA TV — Tutoryo & Analiz Live",
+    today:"Jodi a",totalDraws:"tiraj analize",
+    about:"Sou",privacy:"Konfidansyalite",terms:"Tèm",
+    contact:"Kontak",affil:"Afilye",api:"API",
+    footer:"© 2026 PREDIKTA — Platfòm analiz mondyal · Pou amizman sèlman · Jwe responsab",
+    noData:"Pa gen done. Klike sou 🔄 Chache Done anvan.",
+    confVH:"Trè Wo ★★★★★",confH:"Wo ★★★★",confM:"Mwayen ★★★",confL:"Modere ★★",confVL:"Ba ★",
+    overdue:"AN RETA",normal:"nòmal",
+    pos:"Pozisyon",cycleLen:"tiraj/sik",predicted:"Predit:",
+    uniform:"inifòm",
+    draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
+  },
+};
+
+let LANG = 'fr';
+let currentCharts = {};
+
+function t(key){ return T[LANG][key] || T['fr'][key] || key; }
+
+function setLang(lang){
+  LANG = lang;
+  // Sync with nav.js global
+  if(window.saveLang) window.saveLang(lang);
+  document.documentElement.setAttribute('data-lang', lang);
+  // Update dynamic page text
+  const heroTitle = document.getElementById('hero-title');
+  const heroSub   = document.getElementById('hero-sub');
+  const btnAn     = document.getElementById('btn-analyze');
+  const btnSc     = document.getElementById('btn-scrape');
+  const vidTitle  = document.getElementById('video-section-title');
+  const statsLbl  = document.getElementById('s-stats-title');
+  if(heroTitle) heroTitle.textContent = t('heroTitle');
+  if(heroSub)   heroSub.textContent   = t('heroSub');
+  if(btnAn)     btnAn.textContent     = t('btnAnalyze');
+  if(btnSc)     btnSc.textContent     = t('btnScrape');
+  if(vidTitle)  vidTitle.textContent  = t('videoTitle');
+  if(statsLbl)  statsLbl.textContent  = t('statsTitle');
+  // Re-render if data exists
+  if(window._lastData) renderAll(window._lastData);
+}
+
+// ── Auto-detect language from nav.js on load ──────────────────────────────
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG;
+  if(navLang && navLang !== LANG && T[navLang]){
+    LANG = navLang;
+    setLang(LANG);
+  }
+});
+
+// ═══════════════════════════════════
+// TICKER ROTATIF
+// ═══════════════════════════════════
+let tickerIdx = 0;
+const TICKER_COUNT = 3;
+
+function tickerGo(i){
+  tickerIdx = i;
+  document.getElementById('tickerSlides').style.transform = `translateX(-${i*100}%)`;
+  document.querySelectorAll('.tdot').forEach((d,j)=>d.classList.toggle('active',j===i));
+}
+function tickerNext(){ tickerGo((tickerIdx+1)%TICKER_COUNT); }
+setInterval(tickerNext, 4000);
+
+// ═══════════════════════════════════
+// VIDEO PLAYER
+// ═══════════════════════════════════
+function playVideo(){
+  const ph = document.getElementById('playerPlaceholder');
+  const vid = document.getElementById('mainVideo');
+  ph.style.display = 'none';
+  vid.style.display = 'block';
+  vid.play();
+}
+function togglePlay(){
+  const vid = document.getElementById('mainVideo');
+  const btn = document.getElementById('playBtn');
+  if(vid.paused){ vid.play(); btn.textContent='⏸'; }
+  else { vid.pause(); btn.textContent='▶'; }
+}
+function toggleFS(){
+  const wrap = document.getElementById('playerWrap');
+  if(document.fullscreenElement) document.exitFullscreen();
+  else wrap.requestFullscreen();
+}
+function seekVideo(e){
+  const vid = document.getElementById('mainVideo');
+  const bar = e.currentTarget;
+  const pct = e.offsetX / bar.offsetWidth;
+  vid.currentTime = vid.duration * pct;
+}
+function setVolume(v){ document.getElementById('mainVideo').volume = parseFloat(v); }
+function setQuality(el, q){
+  document.querySelectorAll('.qbadge').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+function loadTrack(el){
+  document.querySelectorAll('.playlist-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('nowPlaying').textContent = el.textContent;
+}
+// Update progress bar
+setInterval(()=>{
+  const vid = document.getElementById('mainVideo');
+  if(!vid||vid.paused||!vid.duration) return;
+  const pct = vid.currentTime/vid.duration*100;
+  document.getElementById('progressFill').style.width = pct+'%';
+  const fmt = s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+  document.getElementById('timeDisplay').textContent = `${fmt(vid.currentTime)} / ${fmt(vid.duration)}`;
+}, 500);
+
+// ═══════════════════════════════════
+// API CALLS
+// ═══════════════════════════════════
+const status = document.getElementById('status');
+
+async function runScrape(){
+  const state  = document.getElementById('stateSelect').value;
+  const months = document.getElementById('monthsSelect').value;
+  status.textContent = t('scraping');
+  try{
+    const r = await fetch(`/api/scrape?state=${state}&months=${months}`);
+    const d = await r.json();
+    status.textContent = d.message || '';
+    setTimeout(()=>loadReport(), 800);
+  }catch(e){ status.textContent='Error'; }
+}
+
+async function loadReport(){
+  const state = document.getElementById('stateSelect').value;
+  const tod   = document.getElementById('todSelect').value;
+  status.textContent = t('analyzing');
+  document.getElementById('mainContent').innerHTML =
+    `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">${t('analyzing')}</div></div>`;
+  Object.values(currentCharts).forEach(c=>{ try{c.destroy()}catch(e){} });
+  currentCharts = {};
+  try{
+    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`);
+    const data = await r.json();
+    status.textContent = '';
+    if(data.error){
+      document.getElementById('mainContent').innerHTML =
+        `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">`+
+        `${data.error}<br><br>`+
+        `<button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">🔄 ${t('btnScrape')}</button></div>`;
+      return;
+    }
+    window._lastData = data;
+    renderAll(data);
+    updateSidebar(data);
+  }catch(e){ status.textContent='Error: '+e.message; }
+}
+
+// ═══════════════════════════════════
+// COLORS
+// ═══════════════════════════════════
+const BALL_COLORS = [
+  '#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66',
+  '#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'
+];
+const BALL_GLOWS = [
+  'rgba(255,68,68,.5)','rgba(255,119,34,.5)','rgba(255,204,34,.5)',
+  'rgba(136,204,34,.5)','rgba(34,204,102,.5)','rgba(34,204,187,.5)',
+  'rgba(34,136,255,.5)','rgba(119,68,255,.5)','rgba(204,68,255,.5)','rgba(255,68,170,.5)'
+];
+function bc(n){ return BALL_COLORS[parseInt(n)%10]; }
+function bg(n){ return BALL_GLOWS[parseInt(n)%10]; }
+
+function confClass(label){
+  if(!label) return 'conf-3';
+  if(label.includes('★★★★★'))return'conf-5';
+  if(label.includes('★★★★'))return'conf-4';
+  if(label.includes('★★★'))return'conf-3';
+  if(label.includes('★★'))return'conf-2';
+  return'conf-1';
+}
+
+// ═══════════════════════════════════
+// TABS
+// ═══════════════════════════════════
+function switchTab(el, id){
+  const parent = el.closest('.card');
+  parent.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  parent.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById(id);
+  if(target) target.classList.add('active');
+}
+
+// ═══════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════
+function renderAll(d){
+  const today = new Date().toLocaleDateString(
+    LANG==='en'?'en-US':LANG==='es'?'es-ES':LANG==='pt'?'pt-BR':LANG==='ht'?'fr-FR':'fr-FR',
+    {weekday:'long',year:'numeric',month:'long',day:'numeric'}
+  );
+  document.getElementById('mainContent').innerHTML = `
+    ${renderLastDraw(d)}
+    ${renderInlineBanner()}
+    ${renderConsensus(d, today)}
+    ${renderModelComparison(d)}
+    ${renderHotCold(d)}
+    ${renderGaps(d)}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:0">
+      ${renderFourier(d)}
+      ${renderEntropy(d)}
+    </div>
+    ${renderMarkov(d)}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:0">
+      ${renderSumSection(d)}
+      ${renderParityHiLo(d)}
+    </div>
+    ${renderPairs(d)}
+  `;
+  setTimeout(()=>{
+    drawFreqChart(d);
+    drawSumChart(d);
+  }, 80);
+}
+
+function updateSidebar(d){
+  const state = d.state_name||d.state;
+  const ld = d.last_draw;
+  const ml = d.ml_trained ? `<span style="color:#22dd66">${t('mlActive')}</span>` : `<span style="color:#ff8822">${t('mlInactive')}</span>`;
+  document.getElementById('stateStats').innerHTML = `
+    <div>📍 <strong>${state}</strong></div>
+    <div>📊 ${d.total_draws} ${t('totalDraws')}</div>
+    <div>📅 ${ld?ld.date:'—'}</div>
+    <div>🤖 ML: ${ml}</div>
+    <div>📅 ${t('today')}: ${new Date().toLocaleDateString()}</div>
+  `;
+}
+
+// ── Widget Résultats du Jour ──────────────────────────────────────────────
+const BC_TODAY = ['#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66','#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'];
+function bc2(n){ return BC_TODAY[parseInt(n)%10]; }
+
+async function loadTodayWidget(){
+  const widget = document.getElementById('todayResultsWidget');
+  if(!widget) return;
+  try{
+    const r = await fetch('/api/results/latest');
+    const data = await r.json();
+    const today = new Date().toISOString().split('T')[0];
+
+    // Filter states with today's OR yesterday's results, prioritize today
+    const entries = Object.entries(data)
+      .filter(([,v]) => v.has_data && (v.is_today || v.is_yesterday))
+      .sort(([,a],[,b]) => (b.is_today?1:0) - (a.is_today?1:0));
+
+    if(!entries.length){
+      widget.innerHTML = `<div style="text-align:center;font-size:.72rem;color:var(--muted2);padding:8px 0">
+        Aucun résultat chargé.<br>
+        <a href="/results" style="color:var(--accent)">Charger via la page Résultats →</a>
+      </div>`;
+      return;
+    }
+
+    const html = entries.slice(0,6).map(([code, v]) => {
+      const isToday = v.is_today;
+      const latestDraw = v.latest[v.latest.length-1] || v.latest[0];
+      if(!latestDraw) return '';
+
+      // Show last evening draw preferably
+      const draws = v.latest;
+      const eveningDraw = draws.find(d=>d.tod==='Evening') || draws[draws.length-1];
+      const d = eveningDraw || draws[0];
+
+      const balls = [d.d1,d.d2,d.d3].map(n=>
+        `<span style="display:inline-flex;align-items:center;justify-content:center;
+          width:26px;height:26px;border-radius:50%;font-size:.78rem;font-weight:800;
+          background:${bc2(n)}22;border:2px solid ${bc2(n)};color:${bc2(n)}">${n}</span>`
+      ).join('');
+
+      return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);cursor:pointer"
+        onclick="selectStateAndAnalyze('${code}')" title="Analyser ${v.name}">
+        <span style="font-size:1rem;flex-shrink:0">${v.flag}</span>
+        <span style="font-size:.7rem;font-weight:700;color:var(--text);width:28px;flex-shrink:0">${code}</span>
+        <div style="display:flex;gap:3px;flex:1">${balls}</div>
+        <span style="font-size:.58rem;padding:1px 6px;border-radius:6px;flex-shrink:0;
+          ${isToday?'background:rgba(34,232,122,.15);color:#22e87a;border:1px solid rgba(34,232,122,.3)':'background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.25)'}"
+        >${isToday?'Auj.':'Hier'}</span>
+      </div>`;
+    }).join('');
+
+    const todayCount = entries.filter(([,v])=>v.is_today).length;
+    widget.innerHTML = `
+      <div style="font-size:.65rem;color:var(--muted2);margin-bottom:6px">
+        ${todayCount} état(s) avec résultats d'aujourd'hui · Clic = Analyser
+      </div>
+      ${html}
+      ${entries.length > 6 ? `<div style="text-align:center;margin-top:6px;font-size:.65rem;color:var(--muted2)">+${entries.length-6} autres sur <a href="/results" style="color:var(--accent)">la page Résultats</a></div>` : ''}
+    `;
+  } catch(e){
+    widget.innerHTML = `<div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:4px">
+      <a href="/results" style="color:var(--accent)">Voir les résultats →</a>
+    </div>`;
+  }
+}
+
+function selectStateAndAnalyze(code){
+  const sel = document.getElementById('stateSelect');
+  if(sel){
+    sel.value = code;
+    loadReport();
+    window.scrollTo({top: document.getElementById('mainContent')?.offsetTop || 0, behavior:'smooth'});
+  }
+}
+
+// Auto-load widget on page load
+window.addEventListener('load', ()=>{ loadTodayWidget(); });
+
+// ── Last Draw ──
+function renderLastDraw(d){
+  if(!d.last_draw)return'';
+  const ld=d.last_draw;
+  const sumVal=parseInt(ld.d1)+parseInt(ld.d2)+parseInt(ld.d3);
+  const parity=[ld.d1,ld.d2,ld.d3].map(n=>parseInt(n)%2===0?'P':'I').join('');
+  const hi=[ld.d1,ld.d2,ld.d3].map(n=>parseInt(n)>=5?'H':'L').join('');
+  const balls=['d1','d2','d3'].map(k=>
+    `<div class="ball" style="background:linear-gradient(135deg,${bc(ld[k])}33,${bc(ld[k])}55);border:2px solid ${bc(ld[k])};--ball-glow:${bg(ld[k])};color:${bc(ld[k])}">${ld[k]}</div>`
+  ).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">🎱</span>${t('lastDraw')}</div>
+    <div class="last-draw-row">
+      ${balls}
+      <div class="draw-info">
+        <div class="draw-date">${ld.date}</div>
+        <div class="draw-meta-tags">
+          <span class="meta-chip">Σ = ${sumVal}</span>
+          <span class="meta-chip">${parity}</span>
+          <span class="meta-chip">${hi}</span>
+          <span class="meta-chip">${d.total_draws} ${t('totalDraws')}</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Inline Banner (entre Last Draw et Consensus) ──
+function renderInlineBanner(){
+  return`<div style="
+    display:flex;align-items:center;gap:14px;
+    background:linear-gradient(90deg,rgba(79,110,255,.07),rgba(136,85,255,.07));
+    border:1px solid rgba(79,110,255,.22);border-radius:12px;
+    padding:12px 18px;margin-bottom:18px;cursor:pointer;
+    transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(79,110,255,.5)'"
+    onmouseout="this.style.borderColor='rgba(79,110,255,.22)'" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank')">
+    <span style="font-size:1.6rem;flex-shrink:0">🎰</span>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:.8rem;font-weight:700;color:var(--text)">TheLotter — Tickets officiels en ligne</div>
+      <div style="font-size:.68rem;color:var(--muted2);margin-top:2px">Powerball · Mega Millions · EuroMillions · +40 loteries mondiales</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
+      <span style="font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Publicité</span>
+      <button style="padding:7px 16px;border-radius:8px;font-size:.72rem;font-weight:700;
+        background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer"
+        onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank')">Jouer →</button>
+    </div>
+  </div>`;
+}
+
+// ── Consensus ──
+function sharePrediction(state, combo, conf){
+  const text = `🎯 PREDIKTA — ${state}\n🔢 Combo: ${combo}\n📊 Confiance: ${conf}%\n🌐 predikta.ai`;
+  if(window.shareContent) window.shareContent(text);
+  else if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>showToast('📋 Copié !'));
+  if(typeof trackEvent==='function') trackEvent('share_prediction','engagement', state);
+}
+
+function copyCombo(combo){
+  navigator.clipboard?.writeText(combo).then(()=>showToast('📋 ' + combo + ' copié !'));
+}
+
+function showToast(msg){
+  let t = document.getElementById('predikta-toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'predikta-toast';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a2aaa;color:#fff;padding:10px 20px;border-radius:20px;font-size:.8rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(79,110,255,.5);transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>{ t.style.opacity='0'; }, 2200);
+}
+
+function renderConsensus(d, today){
+  if(!d.consensus||!d.consensus.length)return'';
+  const state = d.state || '';
+  const cards=d.consensus.map((s,i)=>{
+    const balls=s.digits.map(n=>
+      `<div class="pred-ball" style="background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`
+    ).join('');
+    const confLabel = getConfLabel(s.confidence_pct);
+    const isFav = window.PREDIKTA?.isFav(s.combo);
+    return`<div class="pred-card">
+      <div class="pred-rank" style="display:flex;align-items:center;justify-content:space-between">
+        <span>#${i+1} — ${['🥇','🥈','🥉','④','⑤','⑥','⑦','⑧','⑨','⑩'][i]||'#'+(i+1)}</span>
+        <span style="display:flex;gap:6px">
+          <button onclick="copyCombo('${s.combo}')" title="Copier" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted2);padding:0">📋</button>
+          <button onclick="toggleFavCombo('${s.combo}',this)" title="Favori" style="background:none;border:none;cursor:pointer;font-size:.85rem;padding:0">${isFav?'⭐':'☆'}</button>
+          <button onclick="sharePrediction('${state}','${s.combo}',${s.confidence_pct})" title="Partager" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted2);padding:0">📤</button>
+        </span>
+      </div>
+      <div class="pred-balls">${balls}</div>
+      <div class="pred-combo" onclick="copyCombo('${s.combo}')" style="cursor:pointer" title="Cliquer pour copier">${s.combo}</div>
+      <div class="pred-conf-label ${confClass(confLabel)}">${confLabel}</div>
+      <div class="pred-bar"><div class="pred-bar-fill" style="width:${s.confidence_pct}%"></div></div>
+      <div class="pred-score">${t('score')}: ${s.consensus_score} · ${s.confidence_pct}%</div>
+    </div>`;
+  }).join('');
+
+  // WhatsApp + Twitter share buttons
+  const shareText = encodeURIComponent(`🎯 PREDIKTA — Top prédiction ${state}: ${d.consensus[0]?.combo} (${d.consensus[0]?.confidence_pct}%)\npredikta.ai`);
+  const shareRow = `<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+    <button onclick="sharePrediction('${state}','${d.consensus[0]?.combo}',${d.consensus[0]?.confidence_pct})" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:#25d366;cursor:pointer">📱 WhatsApp</button>
+    <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(29,161,242,.15);border:1px solid rgba(29,161,242,.3);color:#1da1f2;text-decoration:none">𝕏 Twitter</a>
+    <button onclick="copyCombo('${d.consensus.map(s=>s.combo).slice(0,5).join(' | ')}')" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">📋 Copier le Top 5</button>
+  </div>`;
+
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">🏆</span>${t('predictions')} — ${today}</div>
+    <div class="consensus-row">${cards}</div>
+    ${shareRow}
+    <div style="margin-top:10px;font-size:.68rem;color:var(--muted);line-height:1.6">
+      🤖 XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
+    </div>
+  </div>`;
+}
+
+function toggleFavCombo(combo, btn){
+  const added = window.PREDIKTA?.toggleFav(combo);
+  btn.textContent = added ? '⭐' : '☆';
+  showToast(added ? '⭐ Ajouté aux favoris' : 'Retiré des favoris');
+}
+
+function getConfLabel(pct){
+  if(pct>=95)return t('confVH');
+  if(pct>=85)return t('confH');
+  if(pct>=70)return t('confM');
+  if(pct>=55)return t('confL');
+  return t('confVL');
+}
+
+// ── Model Comparison ──
+function renderModelComparison(d){
+  const sections=[
+    {key:'ml_predictions',label:`ML Ensemble (RF+XGB+GBM)`,fill:'fill-a',probKey:'ml_probability'},
+    {key:'markov_order1_top',label:`Markov Ordre 1`,fill:'fill-b',probKey:'score'},
+    {key:'markov_order2_top',label:`Markov Ordre 2`,fill:'fill-b',probKey:'score'},
+    {key:'monte_carlo_top',label:`Monte Carlo (50 000)`,fill:'fill-c',probKey:'mc_probability'},
+  ];
+  const tabs=sections.map((s,i)=>
+    `<div class="tab${i===0?' active':''}" onclick="switchTab(this,'mc-${i}')">${s.label}</div>`
+  ).join('');
+  const panels=sections.map((s,i)=>{
+    const list=d[s.key]||[];
+    const maxV=list.length?(list[0].ml_score||list[0].score||list[0].mc_probability||1):1;
+    const rows=list.slice(0,10).map((p,j)=>{
+      const rawV=p.ml_score||p.score||p.mc_probability||0;
+      const pct=maxV?rawV/maxV*100:0;
+      const pv=p[s.probKey]||0;
+      return`<tr>
+        <td class="rank-cell">#${j+1}</td>
+        <td><span class="combo-big">${p.combo}</span></td>
+        <td>${typeof pv==='number'?pv.toFixed(2):'—'}%</td>
+        <td><div class="score-bar"><div class="score-fill ${s.fill}" style="width:${pct}%"></div></div></td>
+      </tr>`;
+    }).join('');
+    return`<div id="mc-${i}" class="section${i===0?' active':''}">
+      <table class="data-table">
+        <thead><tr><th>${t('rank')}</th><th>${t('combo')}</th><th>${t('prob')}</th><th>${t('score')}</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">📊</span>${t('models')}</div>
+    <div class="tabs-row">${tabs}</div>${panels}
+  </div>`;
+}
+
+// ── Hot / Cold ──
+function renderHotCold(d){
+  const hc=d.hot_cold_30||{};
+  const tabs=['d1','d2','d3'].map((p,i)=>
+    `<div class="tab${i===0?' active':''}" onclick="switchTab(this,'hc-${p}')">${t('pos')} ${i+1}</div>`
+  ).join('');
+  const panels=['d1','d2','d3'].map((p,i)=>{
+    const posData=hc[p]||{};
+    const cells=Object.entries(posData).map(([digit,info])=>
+      `<div class="digit-cell ${info.status}">${digit}<small>${info.pct}%</small></div>`
+    ).join('');
+    return`<div id="hc-${p}" class="section${i===0?' active':''}">
+      <div class="digit-grid">${cells}</div>
+    </div>`;
+  }).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">🔥</span>${t('hotcold')} — 30 ${t('draw')}s</div>
+    <div class="tabs-row">${tabs}</div>${panels}
+    <div style="margin-top:10px;font-size:.65rem;color:var(--muted)">
+      🔴 Chaud · 🔵 Froid · ⚫ Neutre
+    </div>
+    <div class="chart-wrap" style="margin-top:14px;height:170px">
+      <canvas id="freqChart"></canvas>
+    </div>
+  </div>`;
+}
+
+function drawFreqChart(d){
+  const ctx=document.getElementById('freqChart');
+  if(!ctx||!d.hot_cold_30||!d.hot_cold_30['d1'])return;
+  const pos=d.hot_cold_30['d1'];
+  const labels=Object.keys(pos);
+  const data=labels.map(k=>pos[k].pct||0);
+  const colors=labels.map(k=>
+    pos[k].status==='HOT'?'rgba(255,80,60,.8)':
+    pos[k].status==='COLD'?'rgba(60,130,255,.8)':'rgba(120,140,200,.4)'
+  );
+  if(currentCharts.freq)currentCharts.freq.destroy();
+  currentCharts.freq=new Chart(ctx,{
+    type:'bar',
+    data:{labels,datasets:[{label:'%',data,backgroundColor:colors,borderRadius:5,borderSkipped:false}]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#5566aa'},grid:{color:'#111130'}},
+        y:{ticks:{color:'#5566aa'},grid:{color:'#111130'}}
+      }
+    }
+  });
+}
+
+// ── Gaps ──
+function renderGaps(d){
+  if(!d.gaps)return'';
+  const entries=Object.entries(d.gaps);
+  const maxG=Math.max(...entries.map(([,g])=>g.current_gap||0))||1;
+  const rows=entries.map(([digit,g])=>{
+    const pct=Math.round((g.current_gap||0)/maxG*100);
+    const cls=g.overdue?'overdue':'ontime';
+    const probClass=g.due_prob>=.8?'prob-high':g.due_prob>=.5?'prob-med':'prob-low';
+    const duePct=Math.round((g.due_prob||0)*100);
+    const overdueTag=g.overdue?`<span class="overdue-tag">⚠ ${t('overdue')}</span>`:'';
+    return`<div class="gap-row">
+      <div class="gap-digit">${digit}</div>
+      <div class="gap-wrap"><div class="gap-fill ${cls}" style="width:${pct}%"></div></div>
+      <div class="gap-info">
+        Écart: <strong>${g.current_gap}</strong> · Moy: ${g.avg_gap??'—'}
+        <span class="gap-prob ${probClass}">${duePct}%</span>
+        ${overdueTag}
+      </div>
+    </div>`;
+  }).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">⏱</span>${t('gaps')}</div>
+    <div class="gap-list">${rows}</div>
+  </div>`;
+}
+
+// ── Fourier ──
+function renderFourier(d){
+  if(!d.fourier)return'<div class="card"></div>';
+  const items=['d1','d2','d3'].map((pos,i)=>{
+    const f=d.fourier[pos]||{};
+    return`<div class="fourier-item">
+      <div class="fourier-pos">${t('pos')} ${i+1}</div>
+      <div class="fourier-cycle">${f.cycle_length??'—'}</div>
+      <div class="fourier-sub">${t('cycleLen')}</div>
+      <div class="fourier-pred">${t('predicted')} <strong>${f.predicted_digit??'—'}</strong></div>
+    </div>`;
+  }).join('');
+  return`<div class="card" style="margin-bottom:0">
+    <div class="card-title"><span class="ct-icon">〰</span>${t('fourier')}</div>
+    <div class="fourier-grid">${items}</div>
+  </div>`;
+}
+
+// ── Entropy ──
+function renderEntropy(d){
+  if(!d.entropy)return'<div class="card" style="margin-bottom:0"></div>';
+  const bars=['d1','d2','d3'].map((pos,i)=>{
+    const e=d.entropy[pos]||{};
+    const pct=Math.round(e.uniformity_pct||0);
+    return`<div class="ent-item">
+      <div class="ent-label">${t('pos')} ${i+1}</div>
+      <div class="ent-bar-wrap"><div class="ent-bar" style="width:${pct}%"></div></div>
+      <div class="ent-val">${e.uniformity_pct??'—'}% ${t('uniform')}</div>
+    </div>`;
+  }).join('');
+  const chi=d.chi_square||{};
+  const chiChips=['d1','d2','d3'].map((pos,i)=>
+    `<div class="chip">${t('pos')} ${i+1}: χ²=${(chi[pos]||{}).chi2??'—'}</div>`
+  ).join('');
+  return`<div class="card" style="margin-bottom:0">
+    <div class="card-title"><span class="ct-icon">📐</span>${t('entropy')}</div>
+    <div class="ent-bars">${bars}</div>
+    <div class="chips" style="margin-top:12px">${chiChips}</div>
+  </div>`;
+}
+
+// ── Markov ──
+function renderMarkov(d){
+  if(!d.markov_matrix_d1)return'';
+  const digits=['0','1','2','3','4','5','6','7','8','9'];
+  const header=`<tr><th>↓/→</th>${digits.map(x=>`<th>${x}</th>`).join('')}</tr>`;
+  const rows=digits.map(from=>{
+    const row=d.markov_matrix_d1[from]||{};
+    const cells=digits.map(to=>{
+      const v=row[to]||0;
+      const cls=v>=20?'cell-h':v>=12?'cell-m':'';
+      return`<td class="${cls}">${v?v+'%':''}</td>`;
+    }).join('');
+    return`<tr><th>${from}</th>${cells}</tr>`;
+  }).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">🔗</span>${t('markov')} — ${t('pos')} 1</div>
+    <div class="markov-wrap">
+      <table class="markov-tbl"><thead>${header}</thead><tbody>${rows}</tbody></table>
+    </div>
+    <div style="margin-top:8px;font-size:.65rem;color:var(--muted)">🔴 ≥20% · 🟡 ≥12%</div>
+  </div>`;
+}
+
+// ── Sum Section ──
+function renderSumSection(d){
+  const sa=d.sum_analysis||{};
+  return`<div class="card" style="margin-bottom:0">
+    <div class="card-title"><span class="ct-icon">∑</span>${t('sums')}</div>
+    <div class="chart-wrap" style="height:160px"><canvas id="sumChart"></canvas></div>
+    <div class="chips" style="margin-top:10px">
+      <div class="chip">Dernière Σ: <strong>${sa.last_sum??'—'}</strong></div>
+      <div class="chip">+ Fréquente: <strong>${sa.most_common_sum??'—'}</strong></div>
+      <div class="chip">En retard: <strong>${(sa.overdue_sums||[]).join(', ')||'—'}</strong></div>
+    </div>
+  </div>`;
+}
+
+function drawSumChart(d){
+  const ctx=document.getElementById('sumChart');
+  if(!ctx||!d.sum_analysis)return;
+  const dist=d.sum_analysis.distribution||{};
+  const labels=Object.keys(dist).sort((a,b)=>parseInt(a)-parseInt(b));
+  const data=labels.map(k=>dist[k].pct||0);
+  if(currentCharts.sum)currentCharts.sum.destroy();
+  currentCharts.sum=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'%',data,
+      borderColor:'#8855ff',backgroundColor:'rgba(136,85,255,.15)',
+      tension:.4,fill:true,pointRadius:2,borderWidth:2
+    }]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#5566aa',maxTicksLimit:14},grid:{color:'#111130'}},
+        y:{ticks:{color:'#5566aa'},grid:{color:'#111130'}}
+      }
+    }
+  });
+}
+
+// ── Parity / HiLo ──
+function renderParityHiLo(d){
+  const par=d.parity||{};
+  const hl=d.high_low||{};
+  const cons=d.consecutive||{};
+  const parChips=Object.entries(par).slice(0,8).map(([p,v])=>
+    `<div class="chip">${p}: <strong>${v.pct}%</strong></div>`).join('');
+  const hlChips=Object.entries(hl).slice(0,8).map(([p,v])=>
+    `<div class="chip">${p}: <strong>${v.pct}%</strong></div>`).join('');
+  return`<div class="card" style="margin-bottom:0">
+    <div class="card-title"><span class="ct-icon">⚖</span>${t('parity')}</div>
+    <div style="font-size:.68rem;color:var(--muted2);margin-bottom:6px">P=Pair · I=Impair</div>
+    <div class="chips">${parChips}</div>
+    <div style="font-size:.68rem;color:var(--muted2);margin:10px 0 6px">H=Haut(5-9) · L=Bas(0-4)</div>
+    <div class="chips">${hlChips}</div>
+    <div style="margin-top:10px">
+      <div class="chip">Consécutifs: <strong>${cons.consecutive_count??0}</strong> fois (${cons.pct??0}%)</div>
+    </div>
+  </div>`;
+}
+
+// ── Pairs ──
+function renderPairs(d){
+  if(!d.pairs)return'';
+  const chips=Object.entries(d.pairs).slice(0,15).map(([p,v])=>
+    `<div class="chip">${p} <strong>${v.pct}%</strong></div>`
+  ).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">👥</span>${t('pairs')}</div>
+    <div class="chips">${chips}</div>
+  </div>`;
+}
+</script>
+</body>
+</html>

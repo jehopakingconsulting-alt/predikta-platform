@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA Business Intelligence — Analyse Complète de Projet</title>
+<meta name="description" content="Analysez votre projet d'entreprise par algorithmes : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial."/>
+<link rel="manifest" href="/manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date()); gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});
+  function trackEvent(a,c,l){gtag('event',a,{event_category:c,event_label:l});}
+</script>
+<!-- PWA -->
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});</script>
+<script src="/nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#04040f;--card:#0b0b22;--border:#1a1a45;--border2:#252560;
+  --accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;
+  --red:#ff3d2e;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;
+  --glass:rgba(255,255,255,.03);--glass2:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 70% 50% at 20% 20%,rgba(79,110,255,.08) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 80% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.biz-hero{
+  position:relative;z-index:5;
+  background:linear-gradient(180deg,#060618,#0a0a20);
+  border-bottom:1px solid var(--border);
+  padding:40px 28px;text-align:center;overflow:hidden;
+}
+.biz-hero::before{content:'';position:absolute;top:-60%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg,rgba(79,110,255,.04) 60deg,transparent 120deg,
+    rgba(136,85,255,.04) 180deg,transparent 240deg,rgba(255,215,0,.02) 300deg,transparent 360deg);
+  animation:spin 25s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.biz-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;
+  background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-bottom:16px}
+.biz-hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:2;margin-bottom:12px}
+.biz-hero p{font-size:.88rem;color:var(--muted2);max-width:620px;margin:0 auto 20px;line-height:1.7;position:relative;z-index:2}
+.biz-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;position:relative;z-index:2}
+.biz-badge{padding:4px 14px;border-radius:20px;font-size:.7rem;font-weight:600;letter-spacing:.5px}
+.bb1{background:rgba(79,110,255,.2);border:1px solid rgba(79,110,255,.5);color:#88aaff}
+.bb2{background:rgba(136,85,255,.2);border:1px solid rgba(136,85,255,.5);color:#bb88ff}
+.bb3{background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold)}
+.bb4{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:#44ff99}
+
+/* ── Pricing strip ────────────────────────────────────────────── */
+.pricing-strip{
+  display:flex;gap:0;border-bottom:1px solid var(--border);
+  background:#060614;overflow-x:auto;
+}
+.price-pill{
+  flex:1;min-width:160px;padding:14px 18px;text-align:center;
+  border-right:1px solid var(--border);cursor:pointer;transition:background .2s;
+}
+.price-pill:last-child{border-right:none}
+.price-pill:hover{background:rgba(79,110,255,.08)}
+.price-pill.featured{background:rgba(79,110,255,.12)}
+.pp-name{font-size:.68rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.pp-price{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;color:var(--text)}
+.pp-price span{font-size:.65rem;font-weight:400;color:var(--muted2)}
+.pp-features{font-size:.62rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+/* ── Main layout ──────────────────────────────────────────────── */
+.biz-layout{display:grid;grid-template-columns:1fr 380px;gap:0;max-width:1400px;margin:0 auto;position:relative;z-index:5}
+.biz-main{padding:28px}
+.biz-side{padding:28px 28px 28px 0;display:flex;flex-direction:column;gap:16px}
+
+/* ── Wizard ───────────────────────────────────────────────────── */
+.wizard-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.wizard-card::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--gold))}
+.wizard-header{padding:18px 22px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.wizard-title{font-size:.85rem;font-weight:700;color:var(--text)}
+.wizard-step-info{font-size:.7rem;color:var(--muted2)}
+.step-progress{display:flex;gap:6px;margin-top:6px}
+.step-dot{width:24px;height:4px;border-radius:2px;background:var(--border2);transition:background .3s}
+.step-dot.done{background:var(--green)}
+.step-dot.active{background:var(--accent)}
+
+.wizard-body{padding:22px}
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* Form elements */
+.fg{margin-bottom:18px}
+.fg label{display:block;font-size:.72rem;font-weight:700;color:var(--muted2);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.fg label .hint{font-size:.62rem;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px}
+input[type=text],input[type=email],textarea,select{
+  width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);
+  background:#0c0c28;color:var(--text);font-size:.84rem;
+  font-family:'Inter',sans-serif;outline:none;transition:border-color .2s
+}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:80px}
+.chip-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip-opt{
+  padding:7px 14px;border-radius:20px;font-size:.76rem;font-weight:600;
+  cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted2);transition:all .2s
+}
+.chip-opt:hover{border-color:var(--accent);color:var(--text)}
+.chip-opt.selected{background:rgba(79,110,255,.2);border-color:var(--accent);color:var(--text)}
+.chip-opt.sel-gold{background:rgba(255,215,0,.15);border-color:var(--gold);color:var(--gold)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.char-count{font-size:.62rem;color:var(--muted);text-align:right;margin-top:4px}
+
+/* Wizard nav */
+.wizard-nav{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:space-between}
+.btn-next{padding:11px 24px;border-radius:10px;font-size:.84rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;transition:opacity .2s}
+.btn-next:hover{opacity:.85}
+.btn-prev{padding:11px 24px;border-radius:10px;font-size:.84rem;font-weight:600;
+  background:transparent;color:var(--muted2);border:1px solid var(--border2);cursor:pointer;transition:all .2s}
+.btn-prev:hover{color:var(--text);border-color:var(--accent)}
+.btn-analyze{padding:13px 32px;border-radius:10px;font-size:.9rem;font-weight:700;
+  background:linear-gradient(135deg,#ff9900,var(--gold));color:#000;border:none;cursor:pointer;
+  box-shadow:0 4px 20px rgba(255,215,0,.3);transition:all .2s}
+.btn-analyze:hover{box-shadow:0 6px 28px rgba(255,215,0,.5)}
+
+/* ── REPORT ───────────────────────────────────────────────────── */
+#reportSection{display:none}
+.report-header{
+  background:linear-gradient(135deg,#080820,#10103a);
+  border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;
+}
+.report-project{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.report-meta{font-size:.72rem;color:var(--muted2);margin-top:6px}
+.viability-row{display:flex;align-items:center;gap:20px;margin-top:18px;flex-wrap:wrap}
+.viability-gauge{position:relative;width:90px;height:90px}
+.viability-gauge canvas{display:block}
+.viability-score{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;text-align:center}
+.viability-info{}
+.viability-label{font-size:1rem;font-weight:700;margin-bottom:6px}
+.viability-tags{display:flex;flex-wrap:wrap;gap:6px}
+.vtag{padding:3px 10px;border-radius:8px;font-size:.68rem}
+.vtag-good{background:rgba(34,232,122,.15);color:var(--green);border:1px solid rgba(34,232,122,.3)}
+.vtag-warn{background:rgba(255,204,34,.15);color:#ffcc22;border:1px solid rgba(255,204,34,.3)}
+.vtag-bad{background:rgba(255,61,46,.15);color:#ff6655;border:1px solid rgba(255,61,46,.3)}
+
+/* Report sections */
+.report-section{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:16px;position:relative;overflow:hidden}
+.report-section::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.4}
+.rs-title{font-size:.72rem;font-weight:700;color:var(--muted2);text-transform:uppercase;
+  letter-spacing:2px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.rs-icon{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+
+/* Niche chips */
+.niche-chips{display:flex;flex-wrap:wrap;gap:8px}
+.niche-chip{padding:6px 14px;border-radius:20px;font-size:.76rem;font-weight:600;
+  background:rgba(79,110,255,.12);border:1px solid rgba(79,110,255,.3);color:#88aaff}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat-mini{background:#0a0a20;border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.stat-mini-val{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;color:var(--gold)}
+.stat-mini-lbl{font-size:.62rem;color:var(--muted2);margin-top:3px}
+
+/* Platform cards */
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.platform-card{background:#0a0a20;border:1px solid var(--border);border-radius:12px;padding:14px}
+.pc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pc-icon{font-size:1.2rem}
+.pc-name{font-size:.78rem;font-weight:700;color:var(--text)}
+.pc-score-bar{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin:6px 0}
+.pc-score-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.pc-detail{font-size:.65rem;color:var(--muted2);line-height:1.5}
+.pc-budget{font-size:.65rem;font-weight:700;color:var(--gold);margin-top:4px}
+.priority-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.6rem;font-weight:700;margin-bottom:6px}
+.p1{background:rgba(255,215,0,.2);color:var(--gold)}
+.p2{background:rgba(79,110,255,.2);color:#88aaff}
+.p3{background:rgba(136,85,255,.2);color:#bb88ff}
+
+/* Action plan */
+.plan-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+.plan-tab{padding:7px 16px;border-radius:8px;font-size:.75rem;font-weight:700;cursor:pointer;
+  border:1px solid var(--border);background:transparent;color:var(--muted2);transition:all .2s}
+.plan-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.plan-panel{display:none}
+.plan-panel.active{display:block}
+.plan-items{list-style:none;display:flex;flex-direction:column;gap:8px}
+.plan-item{display:flex;gap:10px;align-items:flex-start;font-size:.8rem;color:var(--muted2);
+  padding:8px 12px;background:#0a0a20;border:1px solid var(--border);border-radius:8px}
+.plan-num{color:var(--accent);font-weight:700;flex-shrink:0}
+
+/* Risk table */
+.risk-table{width:100%;border-collapse:collapse;font-size:.76rem}
+.risk-table th{padding:8px 12px;text-align:left;background:#0a0a20;color:var(--muted2);
+  font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+.risk-table td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--muted2)}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.62rem;font-weight:700}
+.risk-crit{background:rgba(255,61,46,.2);color:#ff6655}
+.risk-high{background:rgba(255,120,0,.2);color:#ff9944}
+.risk-med{background:rgba(255,204,34,.2);color:#ffcc22}
+.risk-low{background:rgba(34,232,122,.2);color:var(--green)}
+
+/* Geo cards */
+.geo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.geo-card{background:#0a0a20;border:1px solid var(--border);border-radius:10px;padding:12px}
+.geo-country{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.geo-stats{font-size:.67rem;color:var(--muted2);line-height:1.6}
+.geo-opp{font-size:.65rem;font-weight:700;margin-top:4px}
+.opp-high{color:var(--green)}.opp-med{color:var(--gold)}.opp-low{color:var(--muted2)}
+
+/* Budget chart */
+.budget-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.budget-label{font-size:.76rem;color:var(--muted2);width:160px;flex-shrink:0}
+.budget-bar-wrap{flex:1;background:rgba(255,255,255,.06);border-radius:4px;height:10px;overflow:hidden}
+.budget-bar-fill{height:100%;border-radius:4px}
+.budget-pct{font-size:.72rem;color:var(--gold);font-weight:700;width:35px;text-align:right;flex-shrink:0}
+
+/* Checklist */
+.checklist{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;gap:10px;align-items:center;font-size:.78rem;color:var(--muted2);
+  padding:8px 12px;background:#0a0a20;border-radius:8px;border:1px solid var(--border)}
+.check-icon{font-size:.9rem;flex-shrink:0}
+
+/* CTA sidebar */
+.side-cta{background:linear-gradient(135deg,rgba(79,110,255,.1),rgba(136,85,255,.1));
+  border:1px solid rgba(79,110,255,.25);border-radius:14px;padding:20px;text-align:center}
+.side-cta-title{font-size:.85rem;font-weight:700;color:var(--gold);margin-bottom:8px}
+.side-cta-desc{font-size:.72rem;color:var(--muted2);margin-bottom:14px;line-height:1.6}
+.side-cta-btn{display:block;padding:12px;border-radius:10px;font-size:.8rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;text-align:center;text-decoration:none}
+
+/* Persona */
+.persona-card{background:#0a0a20;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.persona-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.persona-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.persona-name{font-size:.8rem;font-weight:700;color:var(--text)}
+.persona-type{font-size:.65rem;color:var(--muted2)}
+.persona-body{font-size:.72rem;color:var(--muted2);line-height:1.6}
+.persona-channels{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.persona-channel{padding:2px 8px;border-radius:6px;font-size:.62rem;background:rgba(79,110,255,.12);border:1px solid rgba(79,110,255,.25);color:#88aaff}
+
+/* Print / Export */
+.export-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.export-btn{padding:9px 18px;border-radius:9px;font-size:.75rem;font-weight:700;cursor:pointer;
+  border:1px solid var(--border2);background:var(--glass2);color:var(--muted2);transition:all .2s}
+.export-btn:hover{border-color:var(--accent);color:var(--text)}
+
+/* Loading */
+.analysis-loading{text-align:center;padding:60px 20px;display:none}
+.analysis-loading .spinner{width:48px;height:48px;border:3px solid var(--border2);border-top-color:var(--accent);
+  border-radius:50%;animation:spin2 .7s linear infinite;margin:0 auto 16px}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.analysis-steps{display:flex;flex-direction:column;gap:8px;max-width:360px;margin:20px auto 0;text-align:left}
+.as-step{font-size:.78rem;color:var(--muted2);display:flex;align-items:center;gap:8px;
+  padding:8px 12px;background:#0a0a20;border:1px solid var(--border);border-radius:8px}
+.as-step.done{color:var(--green)}.as-step.active{color:var(--text)}
+
+/* Responsive */
+@media(max-width:900px){.biz-layout{grid-template-columns:1fr}.biz-side{padding:0 28px 28px}}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:1fr 1fr}.platform-grid{grid-template-columns:1fr}.geo-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="biz-hero">
+  <div class="biz-tag">🚀 PREDIKTA BUSINESS AI</div>
+  <h1>Analyse Complète de Projet<br>par Analyse Prédictive</h1>
+  <p>Répondez à 4 étapes en 5 minutes. Nos algorithmes génèrent un rapport de 12 sections : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial, plan 30-60-90 jours et plus.</p>
+  <div class="biz-badges">
+    <span class="biz-badge bb1">🎯 12 Sections d'Analyse</span>
+    <span class="biz-badge bb2">🌍 44 Pays Couverts</span>
+    <span class="biz-badge bb3">📊 11 Canaux Marketing</span>
+    <span class="biz-badge bb4">📅 Plan 30-60-90 Jours</span>
+  </div>
+</div>
+
+<!-- Pricing strip -->
+<div class="pricing-strip">
+  <div class="price-pill">
+    <div class="pp-name">Free</div>
+    <div class="pp-price">$0</div>
+    <div class="pp-features">1 analyse/mois · Rapport basique · 6 sections</div>
+  </div>
+  <div class="price-pill featured">
+    <div class="pp-name">⭐ Starter</div>
+    <div class="pp-price">$29<span>/mois</span></div>
+    <div class="pp-features">5 analyses · Rapport complet 12 sections · Export PDF</div>
+  </div>
+  <div class="price-pill">
+    <div class="pp-name">Pro Business</div>
+    <div class="pp-price">$79<span>/mois</span></div>
+    <div class="pp-features">20 analyses · Multi-projets · API · Suivi mensuel</div>
+  </div>
+  <div class="price-pill">
+    <div class="pp-name">Agency</div>
+    <div class="pp-price">$199<span>/mois</span></div>
+    <div class="pp-features">Illimité · White-label · Support dédié · Personnalisation</div>
+  </div>
+</div>
+
+<!-- Main layout -->
+<div class="biz-layout">
+
+  <!-- Main content -->
+  <div class="biz-main">
+
+    <!-- WIZARD -->
+    <div class="wizard-card" id="wizardSection">
+      <div class="wizard-header">
+        <div>
+          <div class="wizard-title">📋 Analysez votre projet</div>
+          <div class="step-progress" id="stepProgress">
+            <div class="step-dot active" id="sd0"></div>
+            <div class="step-dot" id="sd1"></div>
+            <div class="step-dot" id="sd2"></div>
+            <div class="step-dot" id="sd3"></div>
+          </div>
+        </div>
+        <div class="wizard-step-info" id="stepLabel">Étape 1 / 4 — Votre Projet</div>
+      </div>
+
+      <div class="wizard-body">
+
+        <!-- STEP 1 -->
+        <div class="step-panel active" id="step0">
+          <div class="fg">
+            <label>Nom du projet ou de l'entreprise</label>
+            <input type="text" id="f_project_name" placeholder="Ex: FoodBox Haïti, AppSanté, ConseilPro..." maxlength="80"/>
+          </div>
+          <div class="fg">
+            <label>Décrivez votre projet en 2–3 phrases <span class="hint">(optionnel mais recommandé)</span></label>
+            <textarea id="f_description" placeholder="Que faites-vous ? Pour qui ? Quel problème résolvez-vous ?" maxlength="500" oninput="document.getElementById('descCount').textContent=this.value.length+'/500'"></textarea>
+            <div class="char-count" id="descCount">0/500</div>
+          </div>
+          <div class="fg">
+            <label>Secteur d'activité</label>
+            <select id="f_industry">
+              <option value="">— Sélectionnez votre secteur —</option>
+              <option value="tech">Technologie / SaaS</option>
+              <option value="health">Santé / Bien-être</option>
+              <option value="education">Éducation / Formation</option>
+              <option value="food">Alimentation / Restauration</option>
+              <option value="retail">Commerce / Vente au détail</option>
+              <option value="finance">Finance / Fintech</option>
+              <option value="services">Services aux entreprises</option>
+              <option value="fashion">Mode / Vêtements</option>
+              <option value="real_estate">Immobilier</option>
+              <option value="travel">Voyage / Tourisme</option>
+              <option value="entertainment">Divertissement / Médias</option>
+              <option value="beauty">Beauté / Cosmétiques</option>
+              <option value="fitness">Sport / Fitness</option>
+              <option value="agriculture">Agriculture / Agritech</option>
+              <option value="construction">Construction / BTP</option>
+              <option value="logistics">Logistique / Transport</option>
+              <option value="consulting">Conseil / Consulting</option>
+              <option value="creative">Création / Design / Art</option>
+              <option value="social">Impact social / ONG</option>
+              <option value="other">Autre / Mixte</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="fg">
+              <label>Stade du projet</label>
+              <select id="f_stage">
+                <option value="idea">💡 Idée / Concept</option>
+                <option value="mvp">🛠 MVP en cours</option>
+                <option value="early">🚀 Lancé (early stage)</option>
+                <option value="growth">📈 En croissance</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Modèle commercial</label>
+              <select id="f_model">
+                <option value="B2C">B2C (Grand public)</option>
+                <option value="B2B">B2B (Entreprises)</option>
+                <option value="Both">Les deux</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-panel" id="step1">
+          <div class="fg">
+            <label>Type de produit / service</label>
+            <div class="chip-group" id="prodTypeGroup">
+              <button class="chip-opt" data-val="product" onclick="selectChip(this,'prodTypeGroup')">📦 Produit physique</button>
+              <button class="chip-opt" data-val="digital" onclick="selectChip(this,'prodTypeGroup')">💾 Produit digital</button>
+              <button class="chip-opt" data-val="saas" onclick="selectChip(this,'prodTypeGroup')">☁️ SaaS / Logiciel</button>
+              <button class="chip-opt" data-val="app" onclick="selectChip(this,'prodTypeGroup')">📱 Application mobile</button>
+              <button class="chip-opt" data-val="service" onclick="selectChip(this,'prodTypeGroup')">🤝 Service</button>
+              <button class="chip-opt" data-val="consulting" onclick="selectChip(this,'prodTypeGroup')">💼 Consulting</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Tranche de prix du produit / service</label>
+            <div class="chip-group" id="priceGroup">
+              <button class="chip-opt" data-val="free" onclick="selectChip(this,'priceGroup')">🆓 Gratuit</button>
+              <button class="chip-opt" data-val="low" onclick="selectChip(this,'priceGroup')">💲 $1–$30</button>
+              <button class="chip-opt" data-val="medium" onclick="selectChip(this,'priceGroup')">💲💲 $30–$200</button>
+              <button class="chip-opt" data-val="high" onclick="selectChip(this,'priceGroup')">💲💲💲 $200–$1000</button>
+              <button class="chip-opt" data-val="premium" onclick="selectChip(this,'priceGroup')">👑 $1000+</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Tranche d'âge de la cible <span class="hint">(plusieurs choix possibles)</span></label>
+            <div class="chip-group" id="ageGroup">
+              <button class="chip-opt" data-val="13-18" onclick="toggleChip(this,'ageGroup')">13–18 ans</button>
+              <button class="chip-opt" data-val="18-25" onclick="toggleChip(this,'ageGroup')">18–25 ans</button>
+              <button class="chip-opt" data-val="25-35" onclick="toggleChip(this,'ageGroup')">25–35 ans</button>
+              <button class="chip-opt" data-val="35-45" onclick="toggleChip(this,'ageGroup')">35–45 ans</button>
+              <button class="chip-opt" data-val="45-55" onclick="toggleChip(this,'ageGroup')">45–55 ans</button>
+              <button class="chip-opt" data-val="55+" onclick="toggleChip(this,'ageGroup')">55+ ans</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Votre proposition de valeur unique (USP) <span class="hint">En 1–2 phrases</span></label>
+            <textarea id="f_usp" placeholder="Ex: Nous aidons les PME haïtiennes à automatiser leur gestion en 24h sans compétence technique..." maxlength="300"></textarea>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-panel" id="step2">
+          <div class="fg">
+            <label>Zone géographique cible</label>
+            <div class="chip-group" id="geoScopeGroup">
+              <button class="chip-opt" data-val="local" onclick="selectChip(this,'geoScopeGroup')">📍 Locale (ville / région)</button>
+              <button class="chip-opt" data-val="national" onclick="selectChip(this,'geoScopeGroup')">🏳 Nationale (1 pays)</button>
+              <button class="chip-opt" data-val="international" onclick="selectChip(this,'geoScopeGroup')">🌍 Internationale</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Pays cibles <span class="hint">(plusieurs choix)</span></label>
+            <div class="chip-group" id="countriesGroup">
+              <button class="chip-opt" data-val="USA" onclick="toggleChip(this,'countriesGroup')">🇺🇸 USA</button>
+              <button class="chip-opt" data-val="Canada" onclick="toggleChip(this,'countriesGroup')">🇨🇦 Canada</button>
+              <button class="chip-opt" data-val="France" onclick="toggleChip(this,'countriesGroup')">🇫🇷 France</button>
+              <button class="chip-opt" data-val="Brésil" onclick="toggleChip(this,'countriesGroup')">🇧🇷 Brésil</button>
+              <button class="chip-opt" data-val="Mexique" onclick="toggleChip(this,'countriesGroup')">🇲🇽 Mexique</button>
+              <button class="chip-opt" data-val="Haïti" onclick="toggleChip(this,'countriesGroup')">🇭🇹 Haïti</button>
+              <button class="chip-opt" data-val="Caraïbes" onclick="toggleChip(this,'countriesGroup')">🌊 Caraïbes</button>
+              <button class="chip-opt" data-val="UK" onclick="toggleChip(this,'countriesGroup')">🇬🇧 UK</button>
+              <button class="chip-opt" data-val="Inde" onclick="toggleChip(this,'countriesGroup')">🇮🇳 Inde</button>
+              <button class="chip-opt" data-val="Afrique du Sud" onclick="toggleChip(this,'countriesGroup')">🇿🇦 Afrique du Sud</button>
+              <button class="chip-opt" data-val="Sénégal" onclick="toggleChip(this,'countriesGroup')">🇸🇳 Sénégal</button>
+              <button class="chip-opt" data-val="Maroc" onclick="toggleChip(this,'countriesGroup')">🇲🇦 Maroc</button>
+              <button class="chip-opt" data-val="Côte d'Ivoire" onclick="toggleChip(this,'countriesGroup')">🇨🇮 Côte d'Ivoire</button>
+              <button class="chip-opt" data-val="Australie" onclick="toggleChip(this,'countriesGroup')">🇦🇺 Australie</button>
+              <button class="chip-opt" data-val="Allemagne" onclick="toggleChip(this,'countriesGroup')">🇩🇪 Allemagne</button>
+              <button class="chip-opt" data-val="Espagne" onclick="toggleChip(this,'countriesGroup')">🇪🇸 Espagne</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Langues de communication <span class="hint">(plusieurs choix)</span></label>
+            <div class="chip-group" id="langGroup">
+              <button class="chip-opt" data-val="fr" onclick="toggleChip(this,'langGroup')">🇫🇷 Français</button>
+              <button class="chip-opt" data-val="en" onclick="toggleChip(this,'langGroup')">🇺🇸 English</button>
+              <button class="chip-opt" data-val="es" onclick="toggleChip(this,'langGroup')">🇪🇸 Español</button>
+              <button class="chip-opt" data-val="pt" onclick="toggleChip(this,'langGroup')">🇧🇷 Português</button>
+              <button class="chip-opt" data-val="ht" onclick="toggleChip(this,'langGroup')">🇭🇹 Kreyòl</button>
+              <button class="chip-opt" data-val="ar" onclick="toggleChip(this,'langGroup')">🇲🇦 العربية</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step-panel" id="step3">
+          <div class="form-row">
+            <div class="fg">
+              <label>Objectif principal du lancement</label>
+              <select id="f_goal">
+                <option value="sales">💰 Ventes / Revenus</option>
+                <option value="leads">📋 Génération de leads</option>
+                <option value="awareness">📣 Notoriété de marque</option>
+                <option value="downloads">📲 Téléchargements / Inscriptions</option>
+                <option value="community">👥 Communauté / Membres</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Timeline de lancement</label>
+              <select id="f_timeline">
+                <option value="1-3">🔥 1–3 mois</option>
+                <option value="3-6">⚡ 3–6 mois</option>
+                <option value="6-12" selected>📅 6–12 mois</option>
+                <option value="12+">🏗 12+ mois</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Budget mensuel marketing disponible</label>
+            <div class="chip-group" id="budgetGroup">
+              <button class="chip-opt" data-val="low" onclick="selectChip(this,'budgetGroup')">💸 Moins de $1 000</button>
+              <button class="chip-opt" data-val="mid" onclick="selectChip(this,'budgetGroup')">💰 $1 000–$5 000</button>
+              <button class="chip-opt" data-val="high" onclick="selectChip(this,'budgetGroup')">💎 $5 000–$20 000</button>
+              <button class="chip-opt sel-gold" data-val="premium" onclick="selectChip(this,'budgetGroup')">👑 $20 000+</button>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Principaux concurrents connus <span class="hint">(optionnel — séparez par virgule)</span></label>
+            <input type="text" id="f_competitors" placeholder="Ex: Jumia, Amazon, MonConcurrent.com..."/>
+          </div>
+          <div style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(79,110,255,.08));border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:14px;font-size:.78rem;color:var(--muted2);line-height:1.7;margin-top:4px">
+            🤖 <strong style="color:var(--gold)">Votre rapport de 12 sections sera généré en quelques secondes</strong> incluant : Score de viabilité · Analyse de marché · Audience cible · Concurrence · Recommandations produit · Stratégie de lancement · 11 canaux marketing scorés · Ciblage géographique · Allocation budget · Plan 30-60-90 jours · Analyse de risques
+          </div>
+        </div>
+
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn-prev" id="btnPrev" onclick="prevStep()" style="visibility:hidden">← Précédent</button>
+        <button class="btn-next" id="btnNext" onclick="nextStep()">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="analysis-loading" id="loadingSection">
+      <div class="spinner"></div>
+      <div style="font-family:'Orbitron',monospace;font-size:.9rem;color:var(--accent);margin-bottom:8px">Analyse en cours...</div>
+      <div style="font-size:.78rem;color:var(--muted2)">Nos algorithmes analyse votre projet en profondeur</div>
+      <div class="analysis-steps">
+        <div class="as-step active" id="als0">🔍 Analyse du secteur et du marché...</div>
+        <div class="as-step" id="als1">👥 Identification de l'audience cible...</div>
+        <div class="as-step" id="als2">📊 Scoring des canaux marketing...</div>
+        <div class="as-step" id="als3">🌍 Ciblage géographique...</div>
+        <div class="as-step" id="als4">📅 Construction du plan 30-60-90 jours...</div>
+        <div class="as-step" id="als5">⚠️ Analyse des risques...</div>
+        <div class="as-step" id="als6">✅ Finalisation du rapport...</div>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div id="reportSection">
+
+      <div class="export-row">
+        <button class="export-btn" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="export-btn" onclick="exportPDF()">📄 Export PDF</button>
+        <button class="export-btn" onclick="shareReport()">📤 Partager</button>
+        <button class="export-btn" onclick="resetWizard()">🔄 Nouvelle analyse</button>
+      </div>
+
+      <!-- Report header -->
+      <div class="report-header" id="reportHeader"></div>
+
+      <!-- 1. Market -->
+      <div class="report-section" id="repMarket"></div>
+
+      <!-- 2. Audience -->
+      <div class="report-section" id="repAudience"></div>
+
+      <!-- 3. Competition -->
+      <div class="report-section" id="repCompetition"></div>
+
+      <!-- 4. Product -->
+      <div class="report-section" id="repProduct"></div>
+
+      <!-- 5. Launch -->
+      <div class="report-section" id="repLaunch"></div>
+
+      <!-- 6. Channels -->
+      <div class="report-section" id="repChannels"></div>
+
+      <!-- 7. Geo -->
+      <div class="report-section" id="repGeo"></div>
+
+      <!-- 8. Budget -->
+      <div class="report-section" id="repBudget"></div>
+
+      <!-- 9. Risks -->
+      <div class="report-section" id="repRisks"></div>
+
+      <!-- 10. Action Plan -->
+      <div class="report-section" id="repPlan"></div>
+
+    </div>
+
+  </div><!-- /biz-main -->
+
+  <!-- Sidebar -->
+  <div class="biz-side">
+
+    <div class="side-cta">
+      <div class="side-cta-title">👑 Rapport PDF Complet</div>
+      <div class="side-cta-desc">Exportez votre analyse en PDF professionnel. Partagez-le avec vos partenaires, investisseurs ou votre équipe.</div>
+      <button class="side-cta-btn" onclick="exportPDF()">Exporter en PDF →</button>
+    </div>
+
+    <div class="side-cta" style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,100,0,.05));border-color:rgba(255,215,0,.2)">
+      <div class="side-cta-title" style="color:#ff9900">🤝 Consultation Stratégique</div>
+      <div class="side-cta-desc">30 minutes avec un expert PREDIKTA pour approfondir votre analyse et définir votre plan d'action personnalisé.</div>
+      <a href="/contact" class="side-cta-btn" style="background:linear-gradient(135deg,#ff9900,#ffd700);color:#000">Réserver une session →</a>
+    </div>
+
+    <div class="side-cta" style="background:linear-gradient(135deg,rgba(34,232,122,.05),rgba(79,110,255,.05));border-color:rgba(34,232,122,.2)">
+      <div class="side-cta-title" style="color:var(--green)">📧 Alertes Sectorielles</div>
+      <div class="side-cta-desc">Recevez chaque semaine les tendances de votre secteur, nouvelles niches et opportunités de marché.</div>
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <input style="flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.75rem;outline:none" type="email" id="bizEmail" placeholder="email@exemple.com"/>
+        <button onclick="subscribeBiz()" style="padding:8px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:linear-gradient(135deg,var(--green),#2266ff);color:#fff;border:none;cursor:pointer">OK</button>
+      </div>
+    </div>
+
+    <!-- Recently analyzed (placeholder) -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <div style="font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">💡 Exemples d'analyses</div>
+      <div id="examplesList">
+        <div style="font-size:.75rem;color:var(--muted2);line-height:2">
+          <div onclick="loadExample('food')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">🍔 Dark Kitchen Caraïbes → <span style="color:var(--accent)">Voir</span></div>
+          <div onclick="loadExample('tech')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">☁️ SaaS PME Haïti → <span style="color:var(--accent)">Voir</span></div>
+          <div onclick="loadExample('education')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">📚 E-learning Francophone → <span style="color:var(--accent)">Voir</span></div>
+          <div onclick="loadExample('fashion')" style="cursor:pointer;padding:4px 0">👗 Mode Durable B2C → <span style="color:var(--accent)">Voir</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /biz-layout -->
+
+<script>
+// ══════════════════════════════════════════════════
+// WIZARD STATE
+// ══════════════════════════════════════════════════
+let currentStep = 0;
+const TOTAL_STEPS = 4;
+const STEP_LABELS = [
+  'Étape 1 / 4 — Votre Projet',
+  'Étape 2 / 4 — Produit & Audience',
+  'Étape 3 / 4 — Géographie & Langues',
+  'Étape 4 / 4 — Budget & Objectifs',
+];
+
+function selectChip(el, groupId){
+  document.querySelectorAll(`#${groupId} .chip-opt`).forEach(b=>{
+    b.classList.remove('selected','sel-gold');
+  });
+  el.classList.add(el.classList.contains('sel-gold') ? 'sel-gold' : 'selected');
+}
+function toggleChip(el, groupId){
+  el.classList.toggle('selected');
+}
+function getSelected(groupId){
+  return [...document.querySelectorAll(`#${groupId} .chip-opt.selected, #${groupId} .chip-opt.sel-gold`)]
+    .map(b=>b.dataset.val);
+}
+function getSingle(groupId){
+  const el = document.querySelector(`#${groupId} .chip-opt.selected, #${groupId} .chip-opt.sel-gold`);
+  return el ? el.dataset.val : null;
+}
+
+function updateWizard(){
+  document.querySelectorAll('.step-panel').forEach((p,i)=>p.classList.toggle('active', i===currentStep));
+  document.getElementById('stepLabel').textContent = STEP_LABELS[currentStep];
+  for(let i=0;i<TOTAL_STEPS;i++){
+    const d = document.getElementById('sd'+i);
+    if(d){ d.className = 'step-dot' + (i<currentStep?' done':i===currentStep?' active':''); }
+  }
+  document.getElementById('btnPrev').style.visibility = currentStep===0?'hidden':'visible';
+  const nextBtn = document.getElementById('btnNext');
+  if(currentStep === TOTAL_STEPS-1){
+    nextBtn.textContent = '🚀 Lancer l\'analyse →';
+    nextBtn.className = 'btn-analyze';
+    nextBtn.onclick = runAnalysis;
+  } else {
+    nextBtn.textContent = 'Suivant →';
+    nextBtn.className = 'btn-next';
+    nextBtn.onclick = nextStep;
+  }
+}
+
+function nextStep(){
+  if(currentStep === 0){
+    const name = document.getElementById('f_project_name').value.trim();
+    const ind  = document.getElementById('f_industry').value;
+    if(!name){ alert('Veuillez entrer le nom de votre projet.'); return; }
+    if(!ind)  { alert('Veuillez sélectionner votre secteur d\'activité.'); return; }
+  }
+  if(currentStep < TOTAL_STEPS-1){ currentStep++; updateWizard(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+function prevStep(){
+  if(currentStep > 0){ currentStep--; updateWizard(); }
+}
+function resetWizard(){
+  currentStep = 0;
+  document.getElementById('wizardSection').style.display='block';
+  document.getElementById('loadingSection').style.display='none';
+  document.getElementById('reportSection').style.display='none';
+  updateWizard();
+}
+
+// ══════════════════════════════════════════════════
+// COLLECT FORM DATA
+// ══════════════════════════════════════════════════
+function collectData(){
+  const ages      = getSelected('ageGroup');
+  const countries = getSelected('countriesGroup');
+  const langs     = getSelected('langGroup');
+  const compsRaw  = document.getElementById('f_competitors').value;
+
+  return {
+    project_name:  document.getElementById('f_project_name').value.trim(),
+    description:   document.getElementById('f_description').value.trim(),
+    industry:      document.getElementById('f_industry').value || 'other',
+    stage:         document.getElementById('f_stage').value || 'idea',
+    model:         document.getElementById('f_model').value || 'B2C',
+    prod_type:     getSingle('prodTypeGroup') || 'service',
+    price_range:   getSingle('priceGroup') || 'medium',
+    target_ages:   ages.length ? ages : ['25-35'],
+    usp:           document.getElementById('f_usp').value.trim(),
+    geo_scope:     getSingle('geoScopeGroup') || 'national',
+    geo_countries: countries.length ? countries : ['USA'],
+    languages:     langs.length ? langs : ['fr'],
+    goal:          document.getElementById('f_goal').value || 'sales',
+    timeline:      document.getElementById('f_timeline').value || '6-12',
+    budget_tier:   getSingle('budgetGroup') || 'low',
+    competitors:   compsRaw ? compsRaw.split(',').map(c=>c.trim()).filter(Boolean) : [],
+  };
+}
+
+// ══════════════════════════════════════════════════
+// RUN ANALYSIS
+// ══════════════════════════════════════════════════
+async function runAnalysis(){
+  const data = collectData();
+
+  // Show loading
+  document.getElementById('wizardSection').style.display = 'none';
+  document.getElementById('loadingSection').style.display = 'block';
+  document.getElementById('reportSection').style.display  = 'none';
+
+  // Animate loading steps
+  const steps = document.querySelectorAll('.as-step');
+  let si = 0;
+  const interval = setInterval(()=>{
+    if(si > 0) steps[si-1].classList.remove('active');
+    if(si < steps.length){ steps[si].classList.add('active','done'); si++; }
+    else clearInterval(interval);
+  }, 400);
+
+  try {
+    const r = await fetch('/api/bizai/analyze', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data),
+    });
+    const json = await r.json();
+    clearInterval(interval);
+    setTimeout(()=>{
+      document.getElementById('loadingSection').style.display = 'none';
+      document.getElementById('reportSection').style.display  = 'block';
+      renderReport(json.report);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }, 800);
+  } catch(e){
+    clearInterval(interval);
+    document.getElementById('loadingSection').style.display = 'none';
+    document.getElementById('wizardSection').style.display  = 'block';
+    alert('Erreur lors de l\'analyse: ' + e.message);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// RENDER REPORT
+// ══════════════════════════════════════════════════
+const COLORS = ['#4f6eff','#8855ff','#22ccbb','#ff9900','#ff4488','#22dd66','#ff6644','#66aaff','#aa66ff','#ffcc22'];
+
+function renderReport(r){
+  // Header + Viability
+  document.getElementById('reportHeader').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <div>
+        <div class="report-project">${r.project_name}</div>
+        <div class="report-meta">${r.industry_label} · ${r.model} · Généré le ${r.generated_at}</div>
+      </div>
+    </div>
+    <div class="viability-row">
+      <div class="viability-gauge">
+        <canvas id="viabilityGauge" width="90" height="90"></canvas>
+        <div class="viability-score" style="color:${r.viability.color}">${r.viability.score}</div>
+      </div>
+      <div class="viability-info">
+        <div class="viability-label" style="color:${r.viability.color}">${r.viability.label}</div>
+        <div style="font-size:.72rem;color:var(--muted2);margin-bottom:6px">Score de viabilité global</div>
+        <div class="viability-tags">
+          ${r.viability.bonuses.map(b=>`<span class="vtag vtag-good">✓ ${b}</span>`).join('')}
+          ${r.viability.warnings.map(w=>`<span class="vtag vtag-warn">⚠ ${w}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  drawGauge(r.viability.score, r.viability.color);
+
+  // 1. Market
+  const m = r.market;
+  document.getElementById('repMarket').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">📈</span>Analyse de Marché & Opportunité</div>
+    <div class="stats-row" style="margin-bottom:16px">
+      <div class="stat-mini"><div class="stat-mini-val">${m.market_size}</div><div class="stat-mini-lbl">Taille du marché</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">${m.growth_rate}</div><div class="stat-mini-lbl">Croissance annuelle</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">${m.tam}</div><div class="stat-mini-lbl">Marché total (TAM)</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">${m.sam}</div><div class="stat-mini-lbl">Marché atteignable (SAM)</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <span style="padding:3px 10px;border-radius:8px;font-size:.7rem;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:var(--gold)">${m.trend}</span>
+      <span style="padding:3px 10px;border-radius:8px;font-size:.7rem;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted2)">Concurrence: ${m.competition}</span>
+    </div>
+    <div style="font-size:.75rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🎯 Niches à explorer</div>
+    <div class="niche-chips">${m.niches.map(n=>`<span class="niche-chip">${n}</span>`).join('')}</div>
+    <div style="margin-top:12px;font-size:.74rem;color:var(--muted2);background:#0a0a20;border:1px solid var(--border);border-radius:8px;padding:10px 14px">💡 ${m.sizing_hint}</div>
+  `;
+
+  // 2. Audience
+  const a = r.audience;
+  const personasHtml = a.personas.map(p=>`
+    <div class="persona-card">
+      <div class="persona-head">
+        <div class="persona-avatar">${p.type==='B2B'?'🏢':'👤'}</div>
+        <div><div class="persona-name">${p.name}</div><div class="persona-type">${p.type} · ${p.age}</div></div>
+      </div>
+      <div class="persona-body">
+        <div style="margin-bottom:6px">${p.behavior}</div>
+        <div style="font-weight:700;color:var(--muted2);font-size:.68rem;margin-bottom:4px">MOTIVATION :</div>
+        <div>${p.motivation}</div>
+        <div class="persona-channels">${(p.channels||[]).map(c=>`<span class="persona-channel">${c}</span>`).join('')}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('repAudience').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">👥</span>Audience Cible & Personas</div>
+    ${personasHtml}
+    <div style="margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🔥 Pain Points Clés</div>
+      <div class="chip-group">${a.pain_points.map(p=>`<span class="chip">${p}</span>`).join('')}</div>
+    </div>
+    <div style="margin-top:12px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">⚡ Déclencheurs d'Achat</div>
+      <div class="chip-group">${a.buying_triggers.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+    </div>
+    <div style="margin-top:12px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🔄 Rétention & Fidélisation</div>
+      <div class="chip-group">${a.retention_tips.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+    </div>
+  `;
+
+  // 3. Competition
+  const c = r.competition;
+  document.getElementById('repCompetition').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">⚔️</span>Paysage Concurrentiel</div>
+    <div class="form-row" style="margin-bottom:14px">
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Concurrents identifiés</div>
+        <div class="chip-group">${c.known_competitors.map(cc=>`<span class="chip">🏢 ${cc}</span>`).join('')}</div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Votre USP</div>
+        <div style="padding:10px 14px;background:#0a0a20;border:1px solid var(--border);border-radius:8px;font-size:.75rem;color:${c.usp_analysis.score>60?'var(--green)':'#ffcc22'}">
+          ${c.usp_analysis.feedback}
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🕳 Gaps du marché à exploiter</div>
+      <div class="chip-group">${c.market_gaps.map(g=>`<span class="niche-chip" style="background:rgba(34,232,122,.1);border-color:rgba(34,232,122,.3);color:var(--green)">${g}</span>`).join('')}</div>
+    </div>
+    <div>
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">💡 Idées de différentiation</div>
+      <div class="chip-group">${c.differentiation_ideas.map(d=>`<span class="chip">${d}</span>`).join('')}</div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);border-radius:8px;font-size:.74rem;color:var(--gold)">
+      🎯 Stratégie recommandée : ${c.strategy_hint}
+    </div>
+  `;
+
+  // 4. Product
+  const pr = r.product_recs;
+  document.getElementById('repProduct').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">🛠</span>Recommandations Produit / Service</div>
+    <div style="padding:12px 14px;background:#0a0a20;border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
+      <div style="font-size:.68rem;color:var(--muted2);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:1px">Positionnement recommandé</div>
+      <div style="font-size:.8rem;color:var(--text)">${pr.positioning}</div>
+    </div>
+    <div class="form-row">
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">💰 Stratégie de prix</div>
+        ${pr.pricing_recs.map(p=>`<div style="font-size:.76rem;color:var(--muted2);padding:5px 0;border-bottom:1px solid var(--border)">→ ${p}</div>`).join('')}
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🚀 Prochaines étapes MVP</div>
+        ${pr.mvp_steps.map(s=>`<div style="font-size:.76rem;color:var(--muted2);padding:5px 0;border-bottom:1px solid var(--border)">✓ ${s}</div>`).join('')}
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">📊 Métriques clés à suivre</div>
+      <div class="chip-group">${pr.key_metrics.map(m=>`<span class="chip">${m}</span>`).join('')}</div>
+    </div>
+  `;
+
+  // 5. Launch
+  const l = r.launch;
+  const phasesHtml = l.phases.map((ph,i)=>`
+    <div style="margin-bottom:12px;padding:14px;background:#0a0a20;border:1px solid var(--border);border-radius:10px;border-left:3px solid ${COLORS[i]}">
+      <div style="font-size:.78rem;font-weight:700;color:${COLORS[i]};margin-bottom:8px">${ph.phase}</div>
+      ${ph.actions.map(a=>`<div style="font-size:.74rem;color:var(--muted2);padding:3px 0">→ ${a}</div>`).join('')}
+      <div style="font-size:.68rem;color:var(--gold);margin-top:6px;font-weight:700">KPI : ${ph.kpi}</div>
+    </div>
+  `).join('');
+  document.getElementById('repLaunch').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">🚀</span>Stratégie de Lancement</div>
+    <div style="padding:10px 14px;background:rgba(79,110,255,.08);border:1px solid rgba(79,110,255,.25);border-radius:8px;font-size:.78rem;color:#88aaff;margin-bottom:14px">
+      🎯 Go-to-Market : ${l.go_to_market}
+    </div>
+    ${phasesHtml}
+    <div style="margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">✅ Checklist de lancement</div>
+      <div class="checklist">${l.launch_checklist.map(item=>`
+        <div class="check-item"><span class="check-icon">✅</span><span>${item.replace('✅ ','')}</span></div>
+      `).join('')}</div>
+    </div>
+  `;
+
+  // 6. Channels
+  const ch = r.channels;
+  const channelsHtml = ch.map((c,i)=>`
+    <div class="platform-card">
+      <div class="pc-head">
+        <span class="pc-icon">${c.icon}</span>
+        <span class="pc-name">${c.name}</span>
+      </div>
+      <div class="pc-score-bar"><div class="pc-score-fill" style="width:${c.score}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      <div class="pc-detail">
+        <div>👥 ${c.reach}</div>
+        <div>💰 CPC: ${c.cpc}</div>
+        <div>${c.strengths.join(' · ')}</div>
+      </div>
+      <div class="pc-budget">Min. recommandé: $${c.monthly_min}/mois</div>
+    </div>
+  `).join('');
+  const top3Html = r.platforms.map(p=>`
+    <div style="padding:12px 14px;background:#0a0a20;border:1px solid var(--border);border-radius:10px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span class="priority-badge ${p.priority.startsWith('#1')?'p1':p.priority.startsWith('#2')?'p2':'p3'}">${p.priority}</span>
+        <span style="font-size:.82rem;font-weight:700">${p.icon} ${p.name}</span>
+        <span style="margin-left:auto;font-size:.72rem;font-weight:700;color:var(--gold)">${p.budget_pct}% du budget</span>
+      </div>
+      <div style="font-size:.72rem;color:var(--muted2)">${p.strengths.join(' · ')}</div>
+    </div>
+  `).join('');
+  document.getElementById('repChannels').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">📡</span>Canaux Marketing — Scoring & Priorités</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">🥇 Top 3 Prioritaires pour votre projet</div>
+      ${top3Html}
+    </div>
+    <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Tous les canaux scorés</div>
+    <div class="platform-grid">${channelsHtml}</div>
+  `;
+
+  // 7. Geo
+  const g = r.geo;
+  const geoSection = (title, markets, color) => markets.length ? `
+    <div style="font-size:.72rem;font-weight:700;color:${color};margin:12px 0 8px;text-transform:uppercase;letter-spacing:1px">${title}</div>
+    <div class="geo-grid">${markets.map(m=>`
+      <div class="geo-card">
+        <div class="geo-country">${m.country}</div>
+        <div class="geo-stats">
+          👥 ${m.pop} · 🌐 ${m.internet} internet<br>
+          💰 PIB/hab: ${m.gdp_pc} · 🛒 ${m.ecommerce} e-com
+        </div>
+        <div class="geo-opp ${m.opportunity==='Très haute'||m.opportunity==='Haute'?'opp-high':m.opportunity==='Émergente'?'opp-med':'opp-low'}">
+          Opportunité: ${m.opportunity} · Risque: ${m.risk}
+        </div>
+      </div>
+    `).join('')}</div>
+  ` : '';
+  document.getElementById('repGeo').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">🌍</span>Ciblage Géographique & Expansion</div>
+    ${geoSection('🎯 Marchés Primaires', g.primary, 'var(--green)')}
+    ${geoSection('📈 Marchés Secondaires', g.secondary, 'var(--gold)')}
+    ${geoSection('🌱 Marchés Émergents', g.emerging, 'var(--muted2)')}
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(79,110,255,.06);border:1px solid rgba(79,110,255,.2);border-radius:8px;font-size:.74rem;color:#88aaff">
+      💡 ${g.expansion_tip}
+    </div>
+  `;
+
+  // 8. Budget
+  const b = r.budget;
+  const allItems = Object.entries(b.allocation);
+  const maxPct = Math.max(...allItems.map(([,v])=>v));
+  const barColors = ['fill-a','fill-b','fill-c'];
+  document.getElementById('repBudget').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">💰</span>Allocation Budget Marketing</div>
+    <div class="stats-row" style="margin-bottom:16px">
+      <div class="stat-mini"><div class="stat-mini-val">${b.monthly_budget}</div><div class="stat-mini-lbl">Budget mensuel</div></div>
+      <div class="stat-mini"><div class="stat-mini-val">${b.launch_budget}</div><div class="stat-mini-lbl">Budget lancement</div></div>
+    </div>
+    <div style="margin-bottom:16px">
+      ${allItems.map(([label,pct],i)=>`
+        <div class="budget-row">
+          <div class="budget-label">${label}</div>
+          <div class="budget-bar-wrap"><div class="budget-bar-fill" style="width:${pct/maxPct*100}%;background:${COLORS[i%COLORS.length]};height:100%;border-radius:4px"></div></div>
+          <div class="budget-pct">${pct}%</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="padding:10px 14px;background:rgba(34,232,122,.06);border:1px solid rgba(34,232,122,.2);border-radius:8px;font-size:.74rem;color:var(--green);margin-bottom:10px">
+      📈 ${b.roi_expectation}
+    </div>
+    <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">⚡ Quick Wins (impact rapide)</div>
+    <div class="chip-group">${b.quick_wins.map(q=>`<span class="chip" style="color:var(--green)">${q}</span>`).join('')}</div>
+  `;
+
+  // 9. Risks
+  const rk = r.risks;
+  const riskClass = lvl => ({Critique:'risk-crit',Élevé:'risk-high',Moyen:'risk-med',Faible:'risk-low'}[lvl]||'risk-med');
+  document.getElementById('repRisks').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">⚠️</span>Analyse des Risques & Mitigations</div>
+    <table class="risk-table">
+      <thead><tr><th>Niveau</th><th>Risque</th><th>Impact</th></tr></thead>
+      <tbody>${rk.risks.map(r=>`
+        <tr>
+          <td><span class="risk-badge ${riskClass(r.level)}">${r.level}</span></td>
+          <td>${r.risk}</td>
+          <td style="font-size:.72rem">${r.impact}</td>
+        </tr>
+      `).join('')}</tbody>
+    </table>
+    <div style="margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted2);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">🛡 Stratégies de mitigation</div>
+      ${rk.mitigations.map((m,i)=>`<div style="font-size:.76rem;color:var(--muted2);padding:6px 12px;background:#0a0a20;border:1px solid var(--border);border-radius:8px;margin-bottom:6px">→ ${m}</div>`).join('')}
+    </div>
+  `;
+
+  // 10. Action Plan
+  const ap = r.action_plan;
+  document.getElementById('repPlan').innerHTML = `
+    <div class="rs-title"><span class="rs-icon">📅</span>Plan d'Action 30 — 60 — 90 Jours</div>
+    <div style="padding:10px 14px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);border-radius:8px;font-size:.78rem;color:var(--gold);margin-bottom:14px;font-weight:700">
+      ⭐ North Star Metric : ${ap.north_star}
+    </div>
+    <div class="plan-tabs">
+      <button class="plan-tab active" onclick="switchPlanTab(this,'pt30')">📅 30 jours</button>
+      <button class="plan-tab" onclick="switchPlanTab(this,'pt60')">📅 60 jours</button>
+      <button class="plan-tab" onclick="switchPlanTab(this,'pt90')">📅 90 jours</button>
+    </div>
+    <div id="pt30" class="plan-panel active">
+      <ul class="plan-items">${ap.day30.map((a,i)=>`<li class="plan-item"><span class="plan-num">${i+1}.</span><span>${a}</span></li>`).join('')}</ul>
+    </div>
+    <div id="pt60" class="plan-panel">
+      <ul class="plan-items">${ap.day60.map((a,i)=>`<li class="plan-item"><span class="plan-num">${i+1}.</span><span>${a}</span></li>`).join('')}</ul>
+    </div>
+    <div id="pt90" class="plan-panel">
+      <ul class="plan-items">${ap.day90.map((a,i)=>`<li class="plan-item"><span class="plan-num">${i+1}.</span><span>${a}</span></li>`).join('')}</ul>
+    </div>
+    <div style="margin-top:16px;text-align:center;padding:20px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:12px">
+      <div style="font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:8px">Rapport complet généré par PREDIKTA Business Intelligence 🚀</div>
+      <div style="font-size:.76rem;color:var(--muted2);margin-bottom:14px">Passez à PREDIKTA PRO pour des analyses illimitées, PDF export et suivi mensuel</div>
+      <a href="/pro" style="padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none">Voir les Plans →</a>
+    </div>
+  `;
+}
+
+function switchPlanTab(el, id){
+  el.closest('.report-section').querySelectorAll('.plan-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  el.closest('.report-section').querySelectorAll('.plan-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function drawGauge(score, color){
+  const canvas = document.getElementById('viabilityGauge');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const r = 38, cx = 45, cy = 45;
+  ctx.clearRect(0,0,90,90);
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.strokeStyle='#1a1a45'; ctx.lineWidth=8; ctx.stroke();
+  const angle = (score/100)*Math.PI*2 - Math.PI/2;
+  ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,angle); ctx.strokeStyle=color; ctx.lineWidth=8; ctx.lineCap='round'; ctx.stroke();
+}
+
+// ══════════════════════════════════════════════════
+// EXAMPLES
+// ══════════════════════════════════════════════════
+const EXAMPLES = {
+  food:      {project_name:"Dark Kitchen Caraïbes",industry:"food",model:"B2C",stage:"idea",prod_type:"service",price_range:"low",target_ages:["18-25","25-35"],usp:"Livraison de plats créoles en 30 min à domicile dans les Caraïbes",geo_scope:"regional",geo_countries:["Haïti","Caraïbes"],languages:["ht","fr","en"],goal:"sales",timeline:"3-6",budget_tier:"low",competitors:["Uber Eats","local restaurants"],description:"Service de livraison de nourriture créole artisanale dans les îles des Caraïbes"},
+  tech:      {project_name:"SaaS PME Haïti",industry:"tech",model:"B2B",stage:"mvp",prod_type:"saas",price_range:"medium",target_ages:["25-35","35-45"],usp:"Logiciel de gestion tout-en-un pour PME haïtiennes, en français et créole, adapté aux réalités locales",geo_scope:"national",geo_countries:["Haïti"],languages:["ht","fr"],goal:"sales",timeline:"6-12",budget_tier:"mid",competitors:["Odoo","QuickBooks"],description:"SaaS de gestion comptable et RH pour les petites et moyennes entreprises haïtiennes"},
+  education: {project_name:"E-learning Francophone",industry:"education",model:"B2C",stage:"early",prod_type:"digital",price_range:"low",target_ages:["18-25","25-35"],usp:"Formation professionnelle en ligne en français avec certificats reconnus, accessible depuis l'Afrique et les Caraïbes",geo_scope:"international",geo_countries:["France","Sénégal","Côte d'Ivoire","Haïti","Maroc","Canada"],languages:["fr","ht"],goal:"downloads",timeline:"6-12",budget_tier:"mid",competitors:["Coursera","LinkedIn Learning","OpenClassrooms"],description:"Plateforme de formation en ligne en français pour les pays francophones"},
+  fashion:   {project_name:"Mode Durable B2C",industry:"fashion",model:"B2C",stage:"idea",prod_type:"product",price_range:"medium",target_ages:["25-35","35-45"],usp:"Vêtements éco-responsables fabriqués localement, avec traçabilité complète de la chaîne de production",geo_scope:"national",geo_countries:["France"],languages:["fr"],goal:"sales",timeline:"6-12",budget_tier:"mid",competitors:["Veja","Patagonia"],description:"Marque de mode durable et responsable ciblant les 25-45 ans conscients de l'impact environnemental"},
+};
+
+async function loadExample(type){
+  const data = EXAMPLES[type];
+  if(!data) return;
+  document.getElementById('wizardSection').style.display = 'none';
+  document.getElementById('loadingSection').style.display = 'block';
+  document.getElementById('reportSection').style.display  = 'none';
+  try{
+    const r = await fetch('/api/bizai/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const json = await r.json();
+    setTimeout(()=>{
+      document.getElementById('loadingSection').style.display='none';
+      document.getElementById('reportSection').style.display='block';
+      renderReport(json.report);
+      window.scrollTo({top:0,behavior:'smooth'});
+    },1000);
+  }catch(e){ alert('Erreur: '+e.message); resetWizard(); }
+}
+
+// ══════════════════════════════════════════════════
+// EXPORT & SHARE
+// ══════════════════════════════════════════════════
+function exportPDF(){ window.print(); }
+function shareReport(){
+  const text = 'Découvrez mon analyse de projet sur PREDIKTA 🚀';
+  if(navigator.share) navigator.share({title:'PREDIKTA Business Intelligence',text,url:window.location.href});
+  else navigator.clipboard?.writeText(window.location.href).then(()=>alert('Lien copié !'));
+}
+
+async function subscribeBiz(){
+  const email = document.getElementById('bizEmail').value;
+  if(!email) return;
+  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang=fr');
+  const d = await r.json();
+  alert(d.message || 'Merci !');
+}
+
+// Init
+updateWizard();
+</script>
+</body></html>

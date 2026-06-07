@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Page introuvable — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(79,110,255,.08) 0%,transparent 60%)}
+.error-code{font-family:'Orbitron',monospace;font-size:clamp(4rem,15vw,8rem);font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:16px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 20px rgba(79,110,255,.4))}50%{filter:drop-shadow(0 0 40px rgba(136,85,255,.6))}}
+.target{font-size:2.5rem;margin-bottom:20px;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1rem,3vw,1.4rem);font-weight:700;color:var(--text);margin-bottom:10px}
+p{font-size:.85rem;color:var(--muted2);max-width:420px;line-height:1.7;margin-bottom:30px}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{padding:12px 28px;border-radius:12px;font-size:.84rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all .25s;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 20px rgba(79,110,255,.35)}
+.btn-primary:hover{box-shadow:0 6px 28px rgba(79,110,255,.5)}
+.btn-secondary{background:transparent;color:var(--muted2);border:1px solid #1a1a45}
+.btn-secondary:hover{color:var(--text);border-color:var(--accent)}
+.links{display:flex;gap:20px;margin-top:32px;flex-wrap:wrap;justify-content:center}
+.link{font-size:.76rem;color:var(--muted2);text-decoration:none;padding:6px 14px;border:1px solid #1a1a45;border-radius:8px;transition:all .2s}
+.link:hover{color:var(--text);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="target">🎯</div>
+<div class="error-code">404</div>
+<h1>Cette page n'existe pas</h1>
+<p>Le tirage que vous cherchez n'est pas ici. La page a peut-être été déplacée, supprimée ou l'URL est incorrecte.</p>
+<div class="btn-row">
+  <a href="/" class="btn btn-primary">⚡ Retour à l'Analyseur</a>
+  <a href="/results" class="btn btn-secondary">🎱 Voir les Résultats</a>
+</div>
+<div class="links">
+  <a href="/" class="link">Accueil</a>
+  <a href="/results" class="link">Résultats</a>
+  <a href="/pro" class="link">PRO</a>
+  <a href="/faq" class="link">FAQ</a>
+  <a href="/contact" class="link">Contact</a>
+</div>
+</body></html>

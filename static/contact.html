@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 70% 30%,rgba(136,85,255,.07) 0%,transparent 60%)}
+.page{max-width:900px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:40px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+/* Form */
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px}
+.form-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:24px}
+.form-group{margin-bottom:18px}
+label{display:block;font-size:.72rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.84rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:120px}
+.submit-btn{width:100%;padding:13px;border-radius:10px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;transition:opacity .2s;margin-top:4px}
+.submit-btn:hover{opacity:.85}
+.success-msg{display:none;padding:14px;border-radius:10px;background:rgba(34,232,122,.1);border:1px solid rgba(34,232,122,.3);color:#22e87a;font-size:.8rem;margin-top:12px;text-align:center}
+/* Info panel */
+.info-panel{display:flex;flex-direction:column;gap:16px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.info-icon{font-size:1.6rem;margin-bottom:10px}
+.info-title{font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.info-text{font-size:.76rem;color:var(--muted2);line-height:1.7}
+.info-text a{color:var(--accent);text-decoration:none}
+.social-row{display:flex;gap:10px;margin-top:12px}
+.social-btn{padding:8px 16px;border-radius:8px;font-size:.72rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;text-decoration:none;transition:all .2s}
+.social-btn:hover{border-color:var(--accent);color:var(--text)}
+.newsletter-box{background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:14px;padding:20px}
+.nl-title{font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:6px}
+.nl-desc{font-size:.74rem;color:var(--muted2);margin-bottom:12px;line-height:1.6}
+.nl-row{display:flex;gap:8px}
+.nl-input{flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.8rem;outline:none}
+.nl-input:focus{border-color:var(--accent)}
+.nl-btn{padding:10px 16px;border-radius:8px;font-size:.76rem;font-weight:700;background:linear-gradient(135deg,#ff6600,#ff9900);color:#fff;border:none;cursor:pointer;white-space:nowrap}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Contactez-nous</h1>
+  <p class="subtitle">Une question, un bug, une suggestion ? Nous répondons sous 24h.</p>
+
+  <div class="grid">
+    <!-- Form -->
+    <div class="form-card">
+      <form onsubmit="sendContact(event)" id="contactForm">
+        <div class="form-group">
+          <label>Votre nom</label>
+          <input type="text" id="cName" placeholder="Jean Dupont" required/>
+        </div>
+        <div class="form-group">
+          <label>Adresse email</label>
+          <input type="email" id="cEmail" placeholder="jean@exemple.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Sujet</label>
+          <select id="cSubject">
+            <option value="bug">🐛 Signaler un bug</option>
+            <option value="feature">💡 Suggestion de fonctionnalité</option>
+            <option value="data">📊 Problème de données</option>
+            <option value="billing">💳 Question de facturation</option>
+            <option value="api">🔗 Accès API</option>
+            <option value="other">✉️ Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="cMessage" placeholder="Décrivez votre question ou problème en détail..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">Envoyer le message →</button>
+        <div class="success-msg" id="successMsg">✅ Message envoyé ! Nous vous répondrons sous 24h.</div>
+      </form>
+    </div>
+
+    <!-- Info -->
+    <div class="info-panel">
+      <div class="info-card">
+        <div class="info-icon">⚡</div>
+        <div class="info-title">Support Prioritaire</div>
+        <div class="info-text">Les membres <strong>ELITE</strong> bénéficient d'un support en moins de 2h. Les membres <strong>PRO</strong> reçoivent une réponse sous 12h. Le plan FREE est supporté sous 24–48h.</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🌍</div>
+        <div class="info-title">Support Multilingue</div>
+        <div class="info-text">Notre équipe répond en <strong>Français, Anglais, Espagnol, Portugais</strong> et <strong>Créole haïtien</strong>. Écrivez dans votre langue préférée.</div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🤝</div>
+        <div class="info-title">Partenariats & Affiliations</div>
+        <div class="info-text">Vous êtes une plateforme de loterie, un opérateur ou un influenceur ? Contactez-nous pour un partenariat d'affiliation. <a href="mailto:partners@predikta.ai">partners@predikta.ai</a></div>
+        <div class="social-row">
+          <a class="social-btn" href="#" onclick="return false">𝕏 Twitter</a>
+          <a class="social-btn" href="#" onclick="return false">📘 Facebook</a>
+          <a class="social-btn" href="#" onclick="return false">📸 Instagram</a>
+        </div>
+      </div>
+
+      <div class="newsletter-box">
+        <div class="nl-title">📧 Newsletter PREDIKTA</div>
+        <div class="nl-desc">Recevez les résultats et prédictions quotidiennes directement dans votre boîte mail.</div>
+        <div class="nl-row">
+          <input class="nl-input" type="email" id="nlEmail" placeholder="votre@email.com"/>
+          <button class="nl-btn" onclick="subscribeNewsletter()">S'abonner</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+async function sendContact(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = '⏳ Envoi en cours...';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/api/contact', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        name:    document.getElementById('cName').value,
+        email:   document.getElementById('cEmail').value,
+        subject: document.getElementById('cSubject').value,
+        message: document.getElementById('cMessage').value,
+      })
+    });
+    const d = await r.json();
+    if(d.success){
+      document.getElementById('successMsg').style.display = 'block';
+      document.getElementById('contactForm').reset();
+    }
+  } catch(err) {}
+  btn.textContent = 'Envoyer le message →';
+  btn.disabled = false;
+}
+async function subscribeNewsletter(){
+  const email = document.getElementById('nlEmail').value;
+  if(!email) return;
+  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang=fr');
+  const d = await r.json();
+  alert(d.message || 'Merci !');
+}
+</script>
+</body></html>

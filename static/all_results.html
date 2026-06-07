@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA — Tous les Résultats du Jour</title>
+<meta name="description" content="Résultats complets de toutes les loteries américaines : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions — mis à jour quotidiennement."/>
+<link rel="manifest" href="/manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});</script>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});</script>
+<script src="/nav.js"></script>
+<style>
+:root{
+  --bg:#04040f;--card:#0b0b22;--border:#1a1a45;--border2:#252560;
+  --accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;
+  --text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;--glass2:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.06) 0%,transparent 60%)}
+
+/* ── Hero strip ── */
+.page-hero{
+  background:linear-gradient(180deg,#060618,#08081e);
+  border-bottom:1px solid var(--border);
+  padding:24px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+}
+.page-hero-title{font-family:'Orbitron',monospace;font-size:clamp(1rem,3vw,1.4rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-hero-sub{font-size:.75rem;color:var(--muted2);margin-top:4px}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:var(--green);
+  padding:6px 14px;border:1px solid rgba(34,232,122,.3);border-radius:20px;background:rgba(34,232,122,.08)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:lp 1.5s infinite}
+@keyframes lp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,232,122,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(34,232,122,0)}}
+
+/* ── Controls ── */
+.controls{
+  background:#06061a;border-bottom:1px solid var(--border);
+  padding:12px 28px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+}
+.state-tabs{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.state-tab{
+  padding:7px 14px;border-radius:8px;font-size:.76rem;font-weight:700;
+  cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--muted2);
+  transition:all .2s;white-space:nowrap;
+}
+.state-tab:hover{border-color:var(--accent);color:var(--text)}
+.state-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.scrape-btn{
+  padding:8px 16px;border-radius:9px;font-size:.76rem;font-weight:700;
+  background:linear-gradient(135deg,#0a2218,#1a4a30);color:#44ff99;
+  border:1px solid #226633;cursor:pointer;transition:opacity .2s;white-space:nowrap;
+}
+.scrape-btn:hover{opacity:.8}
+#ctrl-status{font-size:.72rem;color:var(--muted2)}
+
+/* ── Date nav ── */
+.date-nav{
+  background:#07071e;border-bottom:1px solid var(--border);
+  padding:10px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.date-nav-btn{
+  padding:5px 14px;border-radius:8px;font-size:.76rem;font-weight:700;
+  border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .2s;
+}
+.date-nav-btn:hover{border-color:var(--accent);color:var(--text)}
+.date-nav-btn.today-btn{background:rgba(34,232,122,.15);border-color:rgba(34,232,122,.4);color:var(--green)}
+#currentDateLabel{font-size:.82rem;font-weight:700;color:var(--text);font-family:'Orbitron',monospace}
+
+/* ── Main layout ── */
+.main-wrap{max-width:1400px;margin:0 auto;padding:20px 28px;display:grid;grid-template-columns:1fr 300px;gap:20px;position:relative;z-index:5}
+
+/* ── State results block ── */
+.state-block{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:20px;overflow:hidden}
+.state-block::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--gold))}
+.state-header{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;background:rgba(10,10,30,.5);
+}
+.state-flag{font-size:1.6rem}
+.state-info{flex:1}
+.state-name{font-size:.95rem;font-weight:800;color:var(--text)}
+.state-date{font-size:.68rem;color:var(--muted2);margin-top:2px}
+.state-today-tag{
+  padding:3px 10px;border-radius:8px;font-size:.62rem;font-weight:700;
+  background:rgba(34,232,122,.15);color:var(--green);border:1px solid rgba(34,232,122,.35);
+}
+.state-yesterday-tag{
+  padding:3px 10px;border-radius:8px;font-size:.62rem;font-weight:700;
+  background:rgba(255,215,0,.12);color:var(--gold);border:1px solid rgba(255,215,0,.3);
+}
+.analyze-link{
+  padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;
+  background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.3);color:#88aaff;
+  text-decoration:none;transition:all .2s;
+}
+.analyze-link:hover{background:rgba(79,110,255,.3)}
+
+/* ── Games list inside state ── */
+.games-list{padding:4px 0}
+.game-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 18px;border-bottom:1px solid var(--border);
+  transition:background .15s;
+}
+.game-row:last-child{border-bottom:none}
+.game-row:hover{background:rgba(255,255,255,.02)}
+.game-label{
+  font-size:.76rem;font-weight:700;color:var(--muted2);
+  min-width:160px;flex-shrink:0;
+}
+.game-tod{
+  font-size:.62rem;font-weight:700;
+  padding:2px 8px;border-radius:6px;
+  flex-shrink:0;margin-right:4px;
+}
+.tod-mid{background:rgba(255,180,0,.15);color:#ffcc44;border:1px solid rgba(255,180,0,.3)}
+.tod-eve{background:rgba(79,110,255,.15);color:#88aaff;border:1px solid rgba(79,110,255,.3)}
+.tod-morn{background:rgba(255,100,50,.15);color:#ff9966;border:1px solid rgba(255,100,50,.3)}
+.balls-wrap{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+
+/* Ball styles by game type */
+.ball{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-weight:800;border-radius:50%;border:2px solid;flex-shrink:0;
+}
+.ball-pick2{width:28px;height:28px;font-size:.78rem}
+.ball-pick3{width:30px;height:30px;font-size:.82rem}
+.ball-pick4{width:30px;height:30px;font-size:.82rem}
+.ball-pick5{width:28px;height:28px;font-size:.74rem}
+.ball-pick6{width:26px;height:26px;font-size:.7rem}
+.ball-extra{
+  width:28px;height:28px;font-size:.74rem;
+  background:#cc220022;border-color:#cc2200;color:#ff6644;
+  border-radius:6px !important;
+}
+.ball-separator{color:var(--muted);font-size:.9rem;font-weight:700;align-self:center}
+
+.game-no-data{font-size:.72rem;color:var(--muted);font-style:italic}
+.game-section-sep{
+  padding:6px 18px;font-size:.6rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:1.5px;background:rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border);
+}
+
+/* ── Sidebar ── */
+.sidebar-wrap{display:flex;flex-direction:column;gap:14px}
+.side-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;overflow:hidden}
+.side-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:14px}
+.side-title{font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px}
+
+/* Jackpots */
+.jackpot-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.jackpot-row:last-child{border-bottom:none}
+.jackpot-icon{font-size:1.4rem;flex-shrink:0}
+.jackpot-name{font-size:.76rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.jackpot-amount{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),#ff9900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.jackpot-next{font-size:.62rem;color:var(--muted2)}
+
+/* National games sidebar draw */
+.nat-game-row{padding:8px 0;border-bottom:1px solid var(--border)}
+.nat-game-row:last-child{border-bottom:none}
+.nat-game-name{font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.nat-balls{display:flex;gap:4px;flex-wrap:wrap}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--muted2)}
+.legend-ball{width:16px;height:16px;border-radius:50%;border:2px solid;display:inline-block}
+
+/* Loading */
+.loading-block{text-align:center;padding:50px;color:var(--muted2)}
+.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* No data */
+.no-data-block{
+  text-align:center;padding:30px;color:var(--muted2);
+  background:rgba(255,255,255,.02);border-radius:12px;margin:16px;
+}
+.load-data-btn{
+  margin-top:10px;padding:9px 20px;border-radius:9px;font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;
+}
+
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr}}
+@media(max-width:600px){
+  .state-tabs{display:grid;grid-template-columns:repeat(4,1fr)}
+  .game-label{min-width:120px}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div>
+    <div class="page-hero-title">🎰 Résultats Complets du Jour</div>
+    <div class="page-hero-sub">Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Tous jeux · Tous États</div>
+  </div>
+  <div class="live-badge"><div class="live-dot"></div>LIVE — Mis à jour quotidiennement</div>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <div class="state-tabs" id="stateTabs">
+    <button class="state-tab active" data-state="NY" onclick="selectState('NY',this)">🗽 New York</button>
+    <button class="state-tab" data-state="GA" onclick="selectState('GA',this)">🍑 Georgia</button>
+    <button class="state-tab" data-state="TX" onclick="selectState('TX',this)">⭐ Texas</button>
+    <button class="state-tab" data-state="FL" onclick="selectState('FL',this)">🌴 Florida</button>
+    <button class="state-tab" data-state="CA" onclick="selectState('CA',this)">☀️ California</button>
+    <button class="state-tab" data-state="PA" onclick="selectState('PA',this)">🔔 Pennsylvania</button>
+    <button class="state-tab" data-state="NJ" onclick="selectState('NJ',this)">🌊 New Jersey</button>
+    <button class="state-tab" data-state="IL" onclick="selectState('IL',this)">🏙️ Illinois</button>
+    <button class="state-tab" data-state="OH" onclick="selectState('OH',this)">🌻 Ohio</button>
+    <button class="state-tab" data-state="NC" onclick="selectState('NC',this)">🌲 N.Carolina</button>
+    <button class="state-tab" data-state="VA" onclick="selectState('VA',this)">🦅 Virginia</button>
+    <button class="state-tab" data-state="MA" onclick="selectState('MA',this)">🦞 Massachu.</button>
+    <button class="state-tab" data-state="MI" onclick="selectState('MI',this)">🚗 Michigan</button>
+    <button class="state-tab" data-state="MD" onclick="selectState('MD',this)">🦀 Maryland</button>
+  </div>
+  <button class="scrape-btn" onclick="loadData(true)" id="scrapeBtn">🔄 Charger données</button>
+  <span id="ctrl-status"></span>
+</div>
+
+<!-- Date nav -->
+<div class="date-nav">
+  <button class="date-nav-btn" onclick="navDate(-1)">← Veille</button>
+  <button class="date-nav-btn today-btn" onclick="goToday()">🟢 Aujourd'hui</button>
+  <div id="currentDateLabel">—</div>
+  <button class="date-nav-btn" onclick="navDate(+1)" id="nextDayBtn">Lendemain →</button>
+  <a href="/results" style="margin-left:auto;font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600">← Vue Grille Tous États</a>
+</div>
+
+<!-- Main -->
+<div class="main-wrap">
+
+  <div id="mainContent">
+    <div class="loading-block"><div class="spinner"></div><div>Chargement des résultats...</div></div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar-wrap">
+
+    <!-- Jackpots nationaux -->
+    <div class="side-card">
+      <div class="side-title">🏆 Jackpots Nationaux</div>
+      <div class="jackpot-row">
+        <div class="jackpot-icon">🔴</div>
+        <div>
+          <div class="jackpot-name">Powerball</div>
+          <div class="jackpot-amount" id="pbJackpot">Chargement...</div>
+          <div class="jackpot-next">Prochain tirage: Lun/Mer/Sam</div>
+        </div>
+      </div>
+      <div class="jackpot-row">
+        <div class="jackpot-icon">🔵</div>
+        <div>
+          <div class="jackpot-name">Mega Millions</div>
+          <div class="jackpot-amount" id="mmJackpot">Chargement...</div>
+          <div class="jackpot-next">Prochain tirage: Mar/Ven</div>
+        </div>
+      </div>
+      <div class="jackpot-row">
+        <div class="jackpot-icon">💚</div>
+        <div>
+          <div class="jackpot-name">Cash4Life</div>
+          <div class="jackpot-amount">$1,000/jour à vie</div>
+          <div class="jackpot-next">Tirage quotidien</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Légende boules -->
+    <div class="side-card">
+      <div class="side-title">📖 Légende</div>
+      <div style="font-size:.72rem;color:var(--muted2);line-height:1.9">
+        <div><strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 chiffres (0–9)</div>
+        <div><strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 chiffres</div>
+        <div><strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 numéros</div>
+        <div><strong style="color:var(--text)">🎱 Lotto</strong> — 6 numéros</div>
+        <div><strong style="color:#ff6644">🔴 Boule rouge</strong> — Powerball</div>
+        <div><strong style="color:#4499ff">🔵 Boule bleue</strong> — Mega Ball</div>
+        <div><strong style="color:#ffcc44">🟡 Boule jaune</strong> — Cash Ball</div>
+      </div>
+    </div>
+
+    <!-- Lien analyseur -->
+    <div class="side-card" style="text-align:center">
+      <div class="side-title">🤖 Analyser ces numéros</div>
+      <div style="font-size:.74rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Utilisez nos algorithmes pour analyser les patterns et générer des prédictions</div>
+      <a href="/" style="display:block;padding:11px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none">⚡ Ouvrir l'Analyseur →</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// STATE & DATE MANAGEMENT
+// ══════════════════════════════════════
+let currentState = 'NY';
+let currentDate  = new Date().toISOString().split('T')[0];
+const TODAY = new Date().toISOString().split('T')[0];
+
+const STATE_FLAGS = {NY:'🗽',GA:'🍑',TX:'⭐',FL:'🌴',CA:'☀️',PA:'🔔',NJ:'🌊',IL:'🏙️',OH:'🌻',NC:'🌲',VA:'🦅',MA:'🦞',MI:'🚗',MD:'🦀'};
+const STATE_NAMES = {NY:'New York',GA:'Georgia',TX:'Texas',FL:'Florida',CA:'California',PA:'Pennsylvania',NJ:'New Jersey',IL:'Illinois',OH:'Ohio',NC:'North Carolina',VA:'Virginia',MA:'Massachusetts',MI:'Michigan',MD:'Maryland'};
+
+const BALL_COLORS = [
+  '#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66',
+  '#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'
+];
+function bc(n){ return BALL_COLORS[parseInt(n)%10]; }
+
+function selectState(code, el){
+  currentState = code;
+  document.querySelectorAll('.state-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  loadData(false);
+}
+
+function navDate(delta){
+  const d = new Date(currentDate);
+  d.setDate(d.getDate() + delta);
+  currentDate = d.toISOString().split('T')[0];
+  document.getElementById('nextDayBtn').disabled = currentDate >= TODAY;
+  updateDateLabel();
+  loadData(false);
+}
+
+function goToday(){
+  currentDate = TODAY;
+  document.getElementById('nextDayBtn').disabled = true;
+  updateDateLabel();
+  loadData(false);
+}
+
+function updateDateLabel(){
+  const d = new Date(currentDate + 'T12:00:00');
+  const isToday = currentDate === TODAY;
+  const label = isToday
+    ? '🟢 Aujourd\'hui — ' + d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
+    : d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('currentDateLabel').textContent = label;
+  document.getElementById('nextDayBtn').disabled = currentDate >= TODAY;
+}
+
+// ══════════════════════════════════════
+// BALL RENDERING
+// ══════════════════════════════════════
+function renderBall(num, gameType, isExtra=false, extraColor='#ff4444'){
+  const n = String(num).padStart(gameType==='pick3'||gameType==='pick2'?1:2,'0');
+  if(isExtra){
+    return `<span class="ball ball-extra" style="background:${extraColor}22;border-color:${extraColor};color:${extraColor}">${n}</span>`;
+  }
+  const color = bc(parseInt(n));
+  const sizeClass = `ball-${gameType}`;
+  return `<span class="ball ${sizeClass}" style="background:${color}22;border-color:${color};color:${color}">${n}</span>`;
+}
+
+function renderDrawBalls(draw, gameType){
+  const nums = draw.nums || [];
+  const extra = draw.extra || [];
+
+  const mainBalls = nums.map(n => renderBall(n, gameType)).join('');
+
+  let extraBalls = '';
+  if(extra.length > 0){
+    const extraColor = gameType==='multi5p1' ? '#ff4444' : '#4499ff';
+    const extraBallsHtml = extra.map(n => renderBall(n, gameType, true, extraColor)).join('');
+    extraBalls = `<span class="ball-separator">+</span>${extraBallsHtml}`;
+  }
+
+  return mainBalls + extraBalls;
+}
+
+function todClass(tod){
+  if(!tod) return '';
+  const t = tod.toLowerCase();
+  if(t.includes('mid')) return 'tod-mid';
+  if(t.includes('morn')) return 'tod-morn';
+  return 'tod-eve';
+}
+
+// ══════════════════════════════════════
+// LOAD & RENDER
+// ══════════════════════════════════════
+async function loadData(forceScra=false){
+  const content = document.getElementById('mainContent');
+  const status  = document.getElementById('ctrl-status');
+  updateDateLabel();
+
+  if(forceScra){
+    const btn = document.getElementById('scrapeBtn');
+    btn.textContent = '⏳ Chargement...';
+    btn.disabled = true;
+    status.textContent = `Chargement de tous les jeux pour ${currentState}...`;
+    try{
+      const r = await fetch(`/api/games/scrape/${currentState}`);
+      const d = await r.json();
+      status.textContent = d.message || 'OK';
+    }catch(e){ status.textContent = 'Erreur'; }
+    btn.textContent = '🔄 Charger données';
+    btn.disabled = false;
+    setTimeout(()=>{ status.textContent=''; },3000);
+  }
+
+  content.innerHTML = '<div class="loading-block"><div class="spinner"></div><div>Chargement des résultats...</div></div>';
+
+  try{
+    const r = await fetch(`/api/games/today/${currentState}`);
+    const data = await r.json();
+
+    if(data.error || !data.has_data){
+      content.innerHTML = `
+        <div class="state-block">
+          <div class="state-header">
+            <div class="state-flag">${STATE_FLAGS[currentState]||'🎰'}</div>
+            <div class="state-info">
+              <div class="state-name">${STATE_NAMES[currentState]||currentState}</div>
+              <div class="state-date">Aucune donnée disponible</div>
+            </div>
+          </div>
+          <div class="no-data-block">
+            <div style="font-size:2rem;margin-bottom:10px">📭</div>
+            <div style="font-size:.82rem;margin-bottom:14px">Les données pour <strong>${STATE_NAMES[currentState]}</strong> n'ont pas encore été chargées.</div>
+            <button class="load-data-btn" onclick="loadData(true)">🔄 Charger tous les jeux →</button>
+          </div>
+        </div>`;
+      return;
+    }
+
+    renderStateResults(data, content);
+    loadJackpots();
+  }catch(e){
+    content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">Erreur: ${e.message}</div><button class="load-data-btn" onclick="loadData(true)">🔄 Réessayer</button></div>`;
+  }
+}
+
+function renderStateResults(data, container){
+  const state = data.state;
+  const games  = data.games;
+
+  if(!games || !games.length){
+    container.innerHTML = `<div class="state-block">
+      <div class="state-header">
+        <div class="state-flag">${STATE_FLAGS[state]||'🎰'}</div>
+        <div class="state-info"><div class="state-name">${STATE_NAMES[state]||state}</div></div>
+      </div>
+      <div class="no-data-block">
+        <div>Aucun résultat disponible pour la date sélectionnée.</div>
+        <button class="load-data-btn" onclick="loadData(true)">🔄 Charger les données</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  // Group: Pick games | 5+ ball games | National jackpots
+  const pickGames     = games.filter(g=>['pick2','pick3','pick4','pick5','pick6'].includes(g.game_type));
+  const jackpotGames  = games.filter(g=>g.game_type==='multi5p1'||g.game_type==='multi5p2');
+
+  const isToday    = games.some(g=>g.is_today);
+  const dateStr    = games[0]?.date || '—';
+  const dateObj    = new Date(dateStr+'T12:00:00');
+  const dateLabel  = dateObj.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const dateTag    = isToday
+    ? `<span class="state-today-tag">🟢 Aujourd'hui</span>`
+    : `<span class="state-yesterday-tag">⏰ ${dateStr}</span>`;
+
+  function gameSection(title, gameList){
+    if(!gameList.length) return '';
+    const rows = gameList.map(game=>{
+      const draws = game.draws || [];
+      if(!draws.length){
+        return `<div class="game-row">
+          <div class="game-label">${game.icon||''} ${game.label}</div>
+          <div class="game-no-data">— Pas de tirage ce jour</div>
+        </div>`;
+      }
+      return draws.map(draw=>`
+        <div class="game-row">
+          <div class="game-label">${game.icon||''} ${game.label}</div>
+          ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${draw.tod}</span>` : ''}
+          <div class="balls-wrap">${renderDrawBalls(draw, game.game_type)}</div>
+        </div>`
+      ).join('');
+    }).join('');
+
+    return `<div class="game-section-sep">${title}</div>${rows}`;
+  }
+
+  container.innerHTML = `
+    <div class="state-block">
+      <div class="state-header">
+        <div class="state-flag">${STATE_FLAGS[state]||'🎰'}</div>
+        <div class="state-info">
+          <div class="state-name">${STATE_NAMES[state]||state} ${dateTag}</div>
+          <div class="state-date">${dateLabel} · ${games.length} jeux avec données</div>
+        </div>
+        <a class="analyze-link" href="/?state=${state}">⚡ Analyser →</a>
+      </div>
+      <div class="games-list">
+        ${gameSection('🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)', pickGames)}
+        ${jackpotGames.length ? gameSection('🌟 Jackpots & Jeux Multi-Boules', jackpotGames) : ''}
+      </div>
+    </div>
+    <div style="text-align:center;padding:14px;font-size:.72rem;color:var(--muted2)">
+      Données non disponibles pour certains jeux = pas encore chargées · Cliquez 🔄 pour tout charger
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════
+// JACKPOTS (static placeholder)
+// ══════════════════════════════════════
+const JACKPOTS = {
+  pb: ['$150M','$200M','$250M','$300M','$400M','$500M','$750M','$1B'],
+  mm: ['$100M','$150M','$200M','$300M','$500M','$700M'],
+};
+function loadJackpots(){
+  // Random from common jackpot range (placeholder — replace with real API)
+  const pb = JACKPOTS.pb[Math.floor(Math.random()*JACKPOTS.pb.length)];
+  const mm = JACKPOTS.mm[Math.floor(Math.random()*JACKPOTS.mm.length)];
+  document.getElementById('pbJackpot').textContent = pb;
+  document.getElementById('mmJackpot').textContent = mm;
+}
+
+// ── Init ──────────────────────────────
+updateDateLabel();
+loadData(false);
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Allow: /results
+Allow: /pro
+Allow: /about
+Allow: /faq
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+Disallow: /api/
+Disallow: /data/
+Disallow: /sw.js
+
+Sitemap: http://localhost:5000/sitemap.xml

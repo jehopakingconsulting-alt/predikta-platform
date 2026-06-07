@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>À Propos — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.subtitle{font-size:.88rem;color:var(--muted2);margin-bottom:40px}
+h2{font-size:1rem;font-weight:700;color:var(--text);margin:32px 0 12px}
+p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
+.stat-num{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.68rem;color:var(--muted2);margin-top:4px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.team-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.team-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 10px}
+.team-name{font-size:.82rem;font-weight:700;color:var(--text)}
+.team-role{font-size:.68rem;color:var(--muted2);margin-top:3px}
+.tech-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tech-chip{padding:5px 14px;border-radius:20px;font-size:.72rem;font-weight:600;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.3);color:#88aaff}
+.disclaimer{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;font-size:.76rem;color:var(--muted2);line-height:1.7}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.team-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>À Propos de PREDIKTA</h1>
+  <p class="subtitle">La plateforme mondiale d'analyse prédictive pour l'analyse des loteries</p>
+
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num">44+</div><div class="stat-label">États couverts</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Algorithmes</div></div>
+    <div class="stat"><div class="stat-num">50K</div><div class="stat-label">Simulations/analyse</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Langues</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Notre Mission</h2>
+    <p>PREDIKTA est née d'une conviction simple : les joueurs de loterie méritent les mêmes outils analytiques que ceux utilisés par les professionnels de la data science. Nous combinons les technologies les plus avancées — apprentissage automatique, analyse de Fourier, simulations Monte Carlo — dans une interface accessible à tous.</p>
+    <p>Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.</p>
+  </div>
+
+  <div class="card">
+    <h2>Les Algorithmes Derrière PREDIKTA</h2>
+    <p>Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :</p>
+    <div class="tech-list">
+      <span class="tech-chip">🤖 XGBoost</span>
+      <span class="tech-chip">🌲 Random Forest</span>
+      <span class="tech-chip">📈 Gradient Boosting</span>
+      <span class="tech-chip">🔗 Markov Ordre 1/2/3</span>
+      <span class="tech-chip">🎲 Monte Carlo 50K</span>
+      <span class="tech-chip">〰 Analyse de Fourier</span>
+      <span class="tech-chip">⏱ Gap Analysis</span>
+    </div>
+    <p style="margin-top:14px">Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.</p>
+  </div>
+
+  <div class="card">
+    <h2>Stack Technique</h2>
+    <div class="tech-list">
+      <span class="tech-chip">Python 3.14</span>
+      <span class="tech-chip">Flask</span>
+      <span class="tech-chip">scikit-learn</span>
+      <span class="tech-chip">XGBoost</span>
+      <span class="tech-chip">NumPy / SciPy</span>
+      <span class="tech-chip">Chart.js</span>
+      <span class="tech-chip">API Résultats Publics</span>
+      <span class="tech-chip">PWA</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Couverture Géographique</h2>
+    <p>PREDIKTA couvre 44 états américains + Puerto Rico pour les jeux Pick3/Cash3/Daily3, avec des données remontant jusqu'en 1972 (Connecticut) et 1980 (New York, avec plus de 25 000 tirages archivés). Les résultats de loterie sont des données factuelles publiques, collectées quotidiennement depuis des sources officielles.</p>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Avertissement important :</strong> PREDIKTA est un outil d'analyse statistique conçu à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Si vous pensez avoir un problème de jeu, contactez le <strong>1-800-GAMBLER</strong> (USA).
+  </div>
+</div>
+</body></html>

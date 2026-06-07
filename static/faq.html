@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FAQ — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 30% 30%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:800px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;margin-bottom:40px}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2)}
+.search-bar{width:100%;padding:12px 18px;border-radius:30px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.88rem;margin-bottom:32px;outline:none}
+.search-bar:focus{border-color:var(--accent)}
+.section-label{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin:28px 0 12px;padding-left:4px}
+.faq-item{border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;background:var(--card)}
+.faq-q{padding:16px 18px;font-size:.84rem;font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;user-select:none}
+.faq-q:hover{background:#0e0e2a}
+.faq-icon{font-size:1.2rem;color:var(--muted2);transition:transform .3s;flex-shrink:0}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
+.faq-a-inner{padding:0 18px 16px;font-size:.8rem;color:var(--muted2);line-height:1.8}
+.faq-item.open .faq-a{max-height:400px}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--accent)}
+.faq-a-inner a{color:var(--accent);text-decoration:none}
+.faq-a-inner a:hover{text-decoration:underline}
+.cta-box{margin-top:40px;text-align:center;padding:32px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:16px}
+.cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:16px}
+.cta-btn{padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#8855ff);color:#fff;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <h1>Questions Fréquentes</h1>
+    <p class="subtitle">Tout ce que vous devez savoir sur PREDIKTA</p>
+  </div>
+
+  <input class="search-bar" type="text" placeholder="🔍  Rechercher une question..." oninput="filterFaq(this.value)" id="faqSearch"/>
+
+  <div id="faqList">
+
+    <div class="section-label">Prédictions & Algorithmes</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Comment PREDIKTA génère-t-il ses prédictions ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Les prédictions sont-elles fiables ? Peut-on gagner ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. <strong>Elles n'augmentent pas mathématiquement vos chances de gagner</strong>, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Qu'est-ce que l'analyse de Fourier appliquée à la loterie ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Quelle différence entre Markov Ordre 1, 2 et 3 ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">
+        <strong>Ordre 1 :</strong> Prédit le prochain chiffre basé sur le dernier tirage uniquement.<br>
+        <strong>Ordre 2 :</strong> Prend en compte les 2 derniers tirages pour calculer la transition.<br>
+        <strong>Ordre 3 :</strong> Analyse 3 tirages consécutifs pour détecter des patterns plus longs.<br>
+        Les trois ordres sont combinés dans le score consensus final.
+      </div></div>
+    </div>
+
+    <div class="section-label">Données & Résultats</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">D'où viennent les données historiques ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Toutes les données proviennent de <strong>sources officielles publiques</strong> de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">À quelle fréquence les résultats sont-ils mis à jour ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton <strong>🔄 Mettre à jour</strong> d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Combien d'années d'historique sont disponibles ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.</div></div>
+    </div>
+
+    <div class="section-label">Plans & Facturation</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Comment fonctionne la période d'essai gratuite de 7 jours ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Puis-je annuler à tout moment ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui, l'annulation est possible à tout moment en un seul clic depuis votre tableau de bord. Si vous annulez avant la fin de la période de facturation, vous conservez l'accès jusqu'à la fin de la période payée.</div></div>
+    </div>
+
+    <div class="section-label">Technique</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">PREDIKTA fonctionne-t-il hors ligne ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui ! PREDIKTA est une Progressive Web App (PWA). Installez-la sur votre téléphone ou ordinateur via le menu de votre navigateur. Une fois installée, certaines fonctionnalités sont disponibles hors ligne grâce au service worker qui met en cache les données essentielles.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Comment installer PREDIKTA sur mon téléphone ? <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">
+        <strong>Android (Chrome) :</strong> Menu ⋮ → "Ajouter à l'écran d'accueil"<br>
+        <strong>iPhone (Safari) :</strong> Bouton Partager → "Sur l'écran d'accueil"<br>
+        L'app s'installe comme une application native, sans passer par l'App Store.
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="cta-box">
+    <p>Vous n'avez pas trouvé la réponse à votre question ?</p>
+    <a href="/contact" class="cta-btn">Contactez-nous →</a>
+  </div>
+</div>
+<script>
+function toggle(el){
+  el.closest('.faq-item').classList.toggle('open');
+}
+function filterFaq(q){
+  const query = q.toLowerCase();
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    const text = item.textContent.toLowerCase();
+    item.style.display = !query || text.includes(query) ? '' : 'none';
+  });
+  document.querySelectorAll('.section-label').forEach(lbl=>{
+    lbl.style.display = '';
+  });
+}
+</script>
+</body></html>

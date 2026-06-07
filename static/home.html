@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr" data-lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA — Accueil · Loterie & Analyse Prédictive</title>
+<meta name="description" content="PREDIKTA — Plateforme mondiale : prédictions loterie IA, résultats en direct 44 États, analyse Business complète."/>
+<link rel="manifest" href="/manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});</script>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});</script>
+<script src="/nav.js"></script>
+<style>
+:root{
+  --bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;
+  --gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 15%,rgba(79,110,255,.1) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 75%,rgba(136,85,255,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 50% at 50% 50%,rgba(255,215,0,.03) 0%,transparent 70%)}
+
+/* ── Hero ── */
+.hero{
+  position:relative;z-index:5;
+  text-align:center;padding:60px 24px 50px;overflow:hidden;
+  background:linear-gradient(180deg,#060618,#08081e,transparent);
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg,rgba(79,110,255,.04) 60deg,transparent 120deg,
+    rgba(136,85,255,.04) 180deg,transparent 240deg,rgba(255,215,0,.02) 300deg,transparent 360deg);
+  animation:spin 25s linear infinite;pointer-events:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-kicker{
+  display:inline-block;padding:4px 18px;border-radius:20px;font-size:.7rem;font-weight:700;
+  letter-spacing:2px;margin-bottom:18px;
+  background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:#88aaff;
+  position:relative;z-index:2;
+}
+.hero h1{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1.8rem,6vw,3rem);font-weight:900;
+  background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:2;line-height:1.15;margin-bottom:14px;
+}
+.hero-sub{
+  font-size:clamp(.85rem,2vw,1.05rem);color:var(--muted2);
+  max-width:600px;margin:0 auto 28px;line-height:1.7;
+  position:relative;z-index:2;
+}
+.hero-badges{
+  display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+  position:relative;z-index:2;margin-bottom:32px;
+}
+.hbadge{padding:4px 14px;border-radius:20px;font-size:.7rem;font-weight:600;letter-spacing:.5px}
+.hb1{background:rgba(79,110,255,.2);border:1px solid rgba(79,110,255,.5);color:#88aaff}
+.hb2{background:rgba(136,85,255,.2);border:1px solid rgba(136,85,255,.5);color:#bb88ff}
+.hb3{background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold)}
+.hb4{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* ── Services Grid ── */
+.section{max-width:1200px;margin:0 auto;padding:40px 24px;position:relative;z-index:5}
+.section-label{
+  text-align:center;font-size:.68rem;font-weight:800;color:var(--muted);
+  text-transform:uppercase;letter-spacing:3px;margin-bottom:28px;
+}
+.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:40px}
+
+.service-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:28px;cursor:pointer;
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+  text-decoration:none;display:block;position:relative;overflow:hidden;
+}
+.service-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 12px 40px rgba(79,110,255,.25)}
+.service-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  opacity:0;transition:opacity .25s;
+}
+.service-card:hover::before{opacity:1}
+.sc-lottery::before{background:linear-gradient(90deg,#4f6eff,#8855ff)}
+.sc-results::before{background:linear-gradient(90deg,#22e87a,#4f6eff)}
+.sc-allresults::before{background:linear-gradient(90deg,#ffd700,#ff9900)}
+.sc-bizai::before{background:linear-gradient(90deg,#8855ff,#4f6eff)}
+
+.sc-icon{font-size:2.8rem;margin-bottom:14px;display:block}
+.sc-title{
+  font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
+  color:var(--text);margin-bottom:8px;
+}
+.sc-desc{font-size:.8rem;color:var(--muted2);line-height:1.7;margin-bottom:14px}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.sc-tag{padding:3px 10px;border-radius:8px;font-size:.65rem;font-weight:600;
+  background:var(--glass2,rgba(255,255,255,.06));border:1px solid var(--border);color:var(--muted2)}
+.sc-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;border-radius:9px;font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  transition:opacity .2s;
+}
+.service-card:hover .sc-cta{opacity:.9}
+
+/* PRO card */
+.service-card.sc-pro{
+  background:linear-gradient(135deg,rgba(255,215,0,.07),rgba(79,110,255,.07));
+  border-color:rgba(255,215,0,.3);
+}
+.service-card.sc-pro:hover{border-color:var(--gold);box-shadow:0 12px 40px rgba(255,215,0,.2)}
+.service-card.sc-pro::before{background:linear-gradient(90deg,var(--gold),#ff9900)}
+
+/* ── Today's snapshot ── */
+.today-snap{
+  background:var(--card);border:1px solid rgba(34,232,122,.3);border-radius:16px;
+  padding:22px;margin-bottom:24px;
+}
+.today-snap-title{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.today-snap-label{font-size:.75rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1.5px}
+.today-snap-date{font-size:.7rem;color:var(--muted2);margin-left:auto}
+.snap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.snap-card{
+  background:#0a0a20;border:1px solid var(--border);border-radius:10px;padding:12px;
+  cursor:pointer;transition:border-color .2s;
+}
+.snap-card:hover{border-color:var(--accent)}
+.snap-state{font-size:.7rem;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.snap-balls{display:flex;gap:4px;flex-wrap:wrap}
+.sball{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;border:2px solid;
+}
+.snap-tod{font-size:.58rem;color:var(--muted2);margin-top:5px}
+.snap-load-btn{
+  display:block;text-align:center;padding:10px;border-radius:10px;
+  font-size:.78rem;font-weight:700;color:var(--muted2);
+  border:1px dashed var(--border);cursor:pointer;transition:all .2s;background:transparent;
+}
+.snap-load-btn:hover{border-color:var(--accent);color:var(--text)}
+
+/* ── Stats banner ── */
+.stats-banner{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  margin-bottom:40px;
+}
+.stat-item{
+  text-align:center;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px 10px;
+}
+.stat-num{
+  font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-lbl{font-size:.65rem;color:var(--muted2);margin-top:5px}
+
+/* ── Affiliate strip ── */
+.affil-strip{
+  display:flex;gap:12px;margin-bottom:40px;flex-wrap:wrap;
+}
+.affil-strip-card{
+  flex:1;min-width:180px;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:all .25s;text-decoration:none;
+}
+.affil-strip-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.asc-icon{font-size:1.6rem;flex-shrink:0}
+.asc-body{flex:1}
+.asc-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.asc-desc{font-size:.65rem;color:var(--muted2)}
+.asc-cta{font-size:.65rem;font-weight:700;color:var(--accent);flex-shrink:0}
+.ad-tag{font-size:.5rem;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(255,102,0,.8);color:#fff;margin-left:4px}
+
+@media(max-width:700px){
+  .services-grid{grid-template-columns:1fr}
+  .stats-banner{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:1.8rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-kicker">🌍 Plateforme Mondiale · Powered by Advanced Analytics</div>
+  <h1>PREDIKTA</h1>
+  <p class="hero-sub">Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues</p>
+  <div class="hero-badges">
+    <span class="hbadge hb1">🤖 7 Algorithmes</span>
+    <span class="hbadge hb2">🎲 Monte Carlo 50K</span>
+    <span class="hbadge hb3">🌍 44 États US</span>
+    <span class="hbadge hb4">● LIVE</span>
+  </div>
+</div>
+
+<div class="section">
+
+  <!-- Today's results snapshot -->
+  <div class="today-snap">
+    <div class="today-snap-title">
+      <div class="live-dot"></div>
+      <div class="today-snap-label">Résultats d'aujourd'hui</div>
+      <div class="today-snap-date" id="snapDate"></div>
+    </div>
+    <div class="snap-grid" id="snapGrid">
+      <button class="snap-load-btn" onclick="loadSnap()">🔄 Charger les résultats du jour</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-banner">
+    <div class="stat-item"><div class="stat-num">44+</div><div class="stat-lbl">États US couverts</div></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">Algorithmes actifs</div></div>
+    <div class="stat-item"><div class="stat-num">50K</div><div class="stat-lbl">Simulations/analyse</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Langues disponibles</div></div>
+  </div>
+
+  <!-- Services Grid -->
+  <div class="section-label">Choisissez votre service</div>
+  <div class="services-grid">
+
+    <a href="/" class="service-card sc-lottery">
+      <span class="sc-icon">⚡</span>
+      <div class="sc-title">Analyseur IA Loterie</div>
+      <p class="sc-desc">Prédictions Pick3/Cash3 par 7 algorithmes combinés : XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis et consensus pondéré.</p>
+      <div class="sc-tags">
+        <span class="sc-tag">Pick3 · Cash3</span>
+        <span class="sc-tag">Markov 1/2/3</span>
+        <span class="sc-tag">XGBoost</span>
+        <span class="sc-tag">Monte Carlo</span>
+      </div>
+      <div class="sc-cta">Analyser maintenant →</div>
+    </a>
+
+    <a href="/all-results" class="service-card sc-allresults">
+      <span class="sc-icon">🏆</span>
+      <div class="sc-title">Résultats Complets</div>
+      <p class="sc-desc">Tous les jeux de chaque État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigation jour par jour. Mise à jour quotidienne.</p>
+      <div class="sc-tags">
+        <span class="sc-tag">Pick2/3/4/5</span>
+        <span class="sc-tag">Lotto</span>
+        <span class="sc-tag">Powerball</span>
+        <span class="sc-tag">Mega Millions</span>
+      </div>
+      <div class="sc-cta">Voir les résultats →</div>
+    </a>
+
+    <a href="/results" class="service-card sc-results">
+      <span class="sc-icon">🎱</span>
+      <div class="sc-title">Hub Résultats · 44 États</div>
+      <p class="sc-desc">Vue d'ensemble de tous les états avec leurs derniers tirages. Recherche instantanée, filtres par région, historique jusqu'à 2 ans en arrière.</p>
+      <div class="sc-tags">
+        <span class="sc-tag">44 États</span>
+        <span class="sc-tag">Recherche live</span>
+        <span class="sc-tag">2 ans historique</span>
+        <span class="sc-tag">LIVE ticker</span>
+      </div>
+      <div class="sc-cta">Explorer les résultats →</div>
+    </a>
+
+    <a href="/bizai" class="service-card sc-bizai">
+      <span class="sc-icon">🚀</span>
+      <div class="sc-title">Business Intelligence · Analyse Projet</div>
+      <p class="sc-desc">Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.</p>
+      <div class="sc-tags">
+        <span class="sc-tag">20 Secteurs</span>
+        <span class="sc-tag">25 Pays</span>
+        <span class="sc-tag">12 Sections</span>
+        <span class="sc-tag">Plan 30-60-90j</span>
+      </div>
+      <div class="sc-cta">Analyser mon projet →</div>
+    </a>
+
+  </div>
+
+  <!-- PRO card full width -->
+  <a href="/pro" class="service-card sc-pro" style="margin-bottom:40px">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <span style="font-size:2.4rem">👑</span>
+      <div style="flex:1">
+        <div class="sc-title" style="color:var(--gold)">PREDIKTA PRO & ELITE — Débloquez tout</div>
+        <p class="sc-desc" style="margin-bottom:0">Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire</p>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)">
+          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:var(--gold)">$4.99</div>
+          <div style="font-size:.62rem;color:var(--muted2)">PRO / mois</div>
+        </div>
+        <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,150,0,.12);border:1px solid rgba(255,150,0,.3)">
+          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:#ff9900">$9.99</div>
+          <div style="font-size:.62rem;color:var(--muted2)">ELITE / mois</div>
+        </div>
+        <div class="sc-cta" style="align-self:center">7 jours gratuits →</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- Affiliates strip -->
+  <div class="section-label">Nos Partenaires</div>
+  <div class="affil-strip">
+    <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">🎰</div>
+      <div class="asc-body">
+        <div class="asc-name">TheLotter <span class="ad-tag">AD</span></div>
+        <div class="asc-desc">Loteries mondiales officielles</div>
+      </div>
+      <div class="asc-cta">Jouer →</div>
+    </a>
+    <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">📊</div>
+      <div class="asc-body">
+        <div class="asc-name">LotteryPro <span class="ad-tag">AD</span></div>
+        <div class="asc-desc">Outils d'analyse statistique</div>
+      </div>
+      <div class="asc-cta">Essai →</div>
+    </a>
+    <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">🏆</div>
+      <div class="asc-body">
+        <div class="asc-name">Jackpot.com <span class="ad-tag">AD</span></div>
+        <div class="asc-desc">Jackpots en temps réel</div>
+      </div>
+      <div class="asc-cta">Voir →</div>
+    </a>
+  </div>
+
+</div>
+
+<script>
+const BC = ['#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66','#22ccbb','#2288ff','#7744ff','#cc44ff','#ff44aa'];
+function bc(n){ return BC[parseInt(n)%10]; }
+
+document.getElementById('snapDate').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+
+async function loadSnap(){
+  const grid = document.getElementById('snapGrid');
+  grid.innerHTML = '<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px">Chargement...</div>';
+  try{
+    const r = await fetch('/api/results/latest');
+    const data = await r.json();
+    const entries = Object.entries(data).filter(([,v])=>v.has_data&&(v.is_today||v.is_yesterday));
+    if(!entries.length){
+      grid.innerHTML = '<div style="font-size:.75rem;color:var(--muted2)">Aucun résultat disponible. <a href="/all-results" style="color:var(--accent)">Charger →</a></div>';
+      return;
+    }
+    grid.innerHTML = entries.slice(0,8).map(([code,v])=>{
+      const d = v.latest[v.latest.length-1]||v.latest[0];
+      if(!d) return '';
+      const balls = [d.d1,d.d2,d.d3].map(n=>`<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`).join('');
+      const todTag = v.is_today?'<span style="color:var(--green);font-size:.56rem">🟢 Auj.</span>':'<span style="color:var(--gold);font-size:.56rem">⏰ Hier</span>';
+      return `<div class="snap-card" onclick="window.location='/all-results'">
+        <div class="snap-state">${v.flag} ${code} ${todTag}</div>
+        <div class="snap-balls">${balls}</div>
+        <div class="snap-tod">${d.tod||''} · ${v.name.split(' ').slice(-2).join(' ')}</div>
+      </div>`;
+    }).join('')
+    + (entries.length>8?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">+${entries.length-8} autres →</div></div>`:'');
+  }catch(e){
+    grid.innerHTML = `<a href="/all-results" class="snap-load-btn">Voir tous les résultats →</a>`;
+  }
+}
+
+// Auto-load snapshot
+loadSnap();
+</script>
+</body>
+</html>
