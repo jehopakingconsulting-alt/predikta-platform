@@ -72,7 +72,7 @@ STATES = {
     "WI": {"slug": "pick3",          "name": "Wisconsin Pick 3",        "dpd": 2},
     "MN": {"slug": "pick3",          "name": "Minnesota Pick 3",        "dpd": 1},
     "NE": {"slug": "pick3",          "name": "Nebraska Pick 3",         "dpd": 1},
-    "NH": {"slug": "pick3",          "name": "NH Pick 3",               "dpd": 1},
+    "NH": {"slug": "pick3",          "name": "NH Pick 3",               "dpd": 2},
     "VT": {"slug": "pick3",          "name": "VT Pick 3",               "dpd": 1},
     "ME": {"slug": "pick3",          "name": "ME Pick 3",               "dpd": 2},
     "WA": {"slug": "pick3",          "name": "Washington Pick 3",       "dpd": 1},

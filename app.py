@@ -133,7 +133,7 @@ DRAW_SCHEDULE = {
     "WI": [{"tod":"Midday","time":"1:00 PM CT"},  {"tod":"Evening","time":"9:00 PM CT"}],
     "MN": [{"tod":"Evening","time":"6:17 PM CT"}],
     "NE": [{"tod":"Evening","time":"9:00 PM CT"}],
-    "NH": [{"tod":"Evening","time":"7:57 PM ET"}],
+    "NH": [{"tod":"Day","time":"1:10 PM ET"}, {"tod":"Evening","time":"6:55 PM ET"}],
     "VT": [{"tod":"Evening","time":"7:57 PM ET"}],
     "ME": [{"tod":"Day","time":"1:10 PM ET"}, {"tod":"Evening","time":"6:55 PM ET"}],
     "WA": [{"tod":"Evening","time":"8:00 PM PT"}],
