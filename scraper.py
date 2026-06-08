@@ -77,7 +77,7 @@ STATES = {
     "ME": {"slug": "pick3",          "name": "ME Pick 3",               "dpd": 2},
     "WA": {"slug": "pick3",          "name": "Washington Pick 3",       "dpd": 1},
     "ID": {"slug": "pick3",          "name": "Idaho Pick 3",            "dpd": 2},
-    "PR": {"slug": "pega3",          "name": "Puerto Rico Pega 3",      "dpd": 1},
+    "PR": {"slug": "pega3",          "name": "Puerto Rico Pega 3",      "dpd": 2},
 }
 
 
@@ -120,11 +120,11 @@ def parse_draws(html: str) -> list[dict]:
                     tod = "Midday"
                 elif "morn" in hay:
                     tod = "Morning"
-                elif "nite" in hay or "night" in hay:
+                elif "nite" in hay or "night" in hay or "noche" in hay:
                     tod = "Night"
                 elif "eve" in hay:
                     tod = "Evening"
-                elif "day" in hay:
+                elif "day" in hay or "día" in hay or "dia" in hay:
                     tod = "Day"
 
             # Main numbers: take ONLY the first ul.resultsnums (ignore Fireball)
