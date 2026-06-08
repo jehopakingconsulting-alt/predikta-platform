@@ -34,34 +34,34 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 <body>
 <div class="page">
   <div class="hero">
-    <h1>Questions Fréquentes</h1>
-    <p class="subtitle">Tout ce que vous devez savoir sur PREDIKTA</p>
+    <h1 data-i18n="title">Questions Fréquentes</h1>
+    <p class="subtitle" data-i18n="subtitle">Tout ce que vous devez savoir sur PREDIKTA</p>
   </div>
 
-  <input class="search-bar" type="text" placeholder="🔍  Rechercher une question..." oninput="filterFaq(this.value)" id="faqSearch"/>
+  <input class="search-bar" type="text" data-i18n-attr="placeholder:searchPh" placeholder="🔍  Rechercher une question..." oninput="filterFaq(this.value)" id="faqSearch"/>
 
   <div id="faqList">
 
-    <div class="section-label">Prédictions & Algorithmes</div>
+    <div class="section-label" data-i18n="secAlgo">Prédictions & Algorithmes</div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Comment PREDIKTA génère-t-il ses prédictions ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q1">Comment PREDIKTA génère-t-il ses prédictions ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a1">PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Les prédictions sont-elles fiables ? Peut-on gagner ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. <strong>Elles n'augmentent pas mathématiquement vos chances de gagner</strong>, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q2">Les prédictions sont-elles fiables ? Peut-on gagner ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a2">Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. Elles n'augmentent pas mathématiquement vos chances de gagner, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Qu'est-ce que l'analyse de Fourier appliquée à la loterie ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q3">Qu'est-ce que l'analyse de Fourier appliquée à la loterie ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a3">L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Quelle différence entre Markov Ordre 1, 2 et 3 ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q4">Quelle différence entre Markov Ordre 1, 2 et 3 ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a4">
         <strong>Ordre 1 :</strong> Prédit le prochain chiffre basé sur le dernier tirage uniquement.<br>
         <strong>Ordre 2 :</strong> Prend en compte les 2 derniers tirages pour calculer la transition.<br>
         <strong>Ordre 3 :</strong> Analyse 3 tirages consécutifs pour détecter des patterns plus longs.<br>
@@ -69,45 +69,45 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
       </div></div>
     </div>
 
-    <div class="section-label">Données & Résultats</div>
+    <div class="section-label" data-i18n="secData">Données & Résultats</div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">D'où viennent les données historiques ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Toutes les données proviennent de <strong>sources officielles publiques</strong> de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q5">D'où viennent les données historiques ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a5">Toutes les données proviennent de sources officielles publiques de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">À quelle fréquence les résultats sont-ils mis à jour ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton <strong>🔄 Mettre à jour</strong> d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q6">À quelle fréquence les résultats sont-ils mis à jour ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a6">Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton 🔄 Mettre à jour d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Combien d'années d'historique sont disponibles ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q7">Combien d'années d'historique sont disponibles ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a7">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.</div></div>
     </div>
 
-    <div class="section-label">Plans & Facturation</div>
+    <div class="section-label" data-i18n="secBilling">Plans & Facturation</div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Comment fonctionne la période d'essai gratuite de 7 jours ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.</div></div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Puis-je annuler à tout moment ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui, l'annulation est possible à tout moment en un seul clic depuis votre tableau de bord. Si vous annulez avant la fin de la période de facturation, vous conservez l'accès jusqu'à la fin de la période payée.</div></div>
-    </div>
-
-    <div class="section-label">Technique</div>
-
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">PREDIKTA fonctionne-t-il hors ligne ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">Oui ! PREDIKTA est une Progressive Web App (PWA). Installez-la sur votre téléphone ou ordinateur via le menu de votre navigateur. Une fois installée, certaines fonctionnalités sont disponibles hors ligne grâce au service worker qui met en cache les données essentielles.</div></div>
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q8">Comment fonctionne la période d'essai gratuite de 7 jours ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a8">Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.</div></div>
     </div>
 
     <div class="faq-item">
-      <div class="faq-q" onclick="toggle(this)">Comment installer PREDIKTA sur mon téléphone ? <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q9">Puis-je annuler à tout moment ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a9">Oui, l'annulation est possible à tout moment en un seul clic depuis votre tableau de bord. Si vous annulez avant la fin de la période de facturation, vous conservez l'accès jusqu'à la fin de la période payée.</div></div>
+    </div>
+
+    <div class="section-label" data-i18n="secTech">Technique</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q10">PREDIKTA fonctionne-t-il hors ligne ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a10">Oui ! PREDIKTA est une Progressive Web App (PWA). Installez-la sur votre téléphone ou ordinateur via le menu de votre navigateur. Une fois installée, certaines fonctionnalités sont disponibles hors ligne grâce au service worker qui met en cache les données essentielles.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q11">Comment installer PREDIKTA sur mon téléphone ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a11">
         <strong>Android (Chrome) :</strong> Menu ⋮ → "Ajouter à l'écran d'accueil"<br>
         <strong>iPhone (Safari) :</strong> Bouton Partager → "Sur l'écran d'accueil"<br>
         L'app s'installe comme une application native, sans passer par l'App Store.
@@ -117,8 +117,8 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
   </div>
 
   <div class="cta-box">
-    <p>Vous n'avez pas trouvé la réponse à votre question ?</p>
-    <a href="/contact" class="cta-btn">Contactez-nous →</a>
+    <p data-i18n="ctaText">Vous n'avez pas trouvé la réponse à votre question ?</p>
+    <a href="/contact" class="cta-btn" data-i18n="ctaBtn">Contactez-nous →</a>
   </div>
 </div>
 <script>
@@ -135,5 +135,172 @@ function filterFaq(q){
     lbl.style.display = '';
   });
 }
+
+const T = {
+  fr:{
+    title:"Questions Fréquentes", subtitle:"Tout ce que vous devez savoir sur PREDIKTA",
+    searchPh:"🔍  Rechercher une question...",
+    secAlgo:"Prédictions & Algorithmes", secData:"Données & Résultats", secBilling:"Plans & Facturation", secTech:"Technique",
+    q1:"Comment PREDIKTA génère-t-il ses prédictions ?",
+    a1:"PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.",
+    q2:"Les prédictions sont-elles fiables ? Peut-on gagner ?",
+    a2:"Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. Elles n'augmentent pas mathématiquement vos chances de gagner, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.",
+    q3:"Qu'est-ce que l'analyse de Fourier appliquée à la loterie ?",
+    a3:"L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.",
+    q4:"Quelle différence entre Markov Ordre 1, 2 et 3 ?",
+    a4:'<strong>Ordre 1 :</strong> Prédit le prochain chiffre basé sur le dernier tirage uniquement.<br><strong>Ordre 2 :</strong> Prend en compte les 2 derniers tirages pour calculer la transition.<br><strong>Ordre 3 :</strong> Analyse 3 tirages consécutifs pour détecter des patterns plus longs.<br>Les trois ordres sont combinés dans le score consensus final.',
+    q5:"D'où viennent les données historiques ?",
+    a5:"Toutes les données proviennent de sources officielles publiques de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.",
+    q6:"À quelle fréquence les résultats sont-ils mis à jour ?",
+    a6:"Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton 🔄 Mettre à jour d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.",
+    q7:"Combien d'années d'historique sont disponibles ?",
+    a7:"Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.",
+    q8:"Comment fonctionne la période d'essai gratuite de 7 jours ?",
+    a8:"Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.",
+    q9:"Puis-je annuler à tout moment ?",
+    a9:"Oui, l'annulation est possible à tout moment en un seul clic depuis votre tableau de bord. Si vous annulez avant la fin de la période de facturation, vous conservez l'accès jusqu'à la fin de la période payée.",
+    q10:"PREDIKTA fonctionne-t-il hors ligne ?",
+    a10:"Oui ! PREDIKTA est une Progressive Web App (PWA). Installez-la sur votre téléphone ou ordinateur via le menu de votre navigateur. Une fois installée, certaines fonctionnalités sont disponibles hors ligne grâce au service worker qui met en cache les données essentielles.",
+    q11:"Comment installer PREDIKTA sur mon téléphone ?",
+    a11:'<strong>Android (Chrome) :</strong> Menu ⋮ → "Ajouter à l\\'écran d\\'accueil"<br><strong>iPhone (Safari) :</strong> Bouton Partager → "Sur l\\'écran d\\'accueil"<br>L\\'app s\\'installe comme une application native, sans passer par l\\'App Store.',
+    ctaText:"Vous n'avez pas trouvé la réponse à votre question ?", ctaBtn:"Contactez-nous →",
+  },
+  en:{
+    title:"Frequently Asked Questions", subtitle:"Everything you need to know about PREDIKTA",
+    searchPh:"🔍  Search a question...",
+    secAlgo:"Predictions & Algorithms", secData:"Data & Results", secBilling:"Plans & Billing", secTech:"Technical",
+    q1:"How does PREDIKTA generate its predictions?",
+    a1:"PREDIKTA combines 7 independent algorithms: Markov (orders 1, 2 and 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 simulations), Fourier Analysis and Gap Analysis. A consensus algorithm weighs each model and produces a final score. The combinations with the highest scores are presented as suggestions.",
+    q2:"Are the predictions reliable? Can you actually win?",
+    a2:"PREDIKTA's predictions are based on statistical analyses of historical data. They do not mathematically increase your chances of winning, since every lottery draw is a random, independent event. Our tool identifies past trends and patterns, but these trends do not predict the future with certainty. Use PREDIKTA as an analysis tool, not a guarantee of winnings.",
+    q3:"What is Fourier analysis applied to the lottery?",
+    a3:"Fourier analysis decomposes the sequence of draws into frequencies to detect possible hidden cycles. For example, if a digit returns every 11–12 sessions on average, Fourier can identify it. It's not a certainty, but an additional indicator in the multi-model consensus.",
+    q4:"What's the difference between Markov Order 1, 2 and 3?",
+    a4:'<strong>Order 1:</strong> Predicts the next digit based only on the last draw.<br><strong>Order 2:</strong> Takes the last 2 draws into account to compute the transition.<br><strong>Order 3:</strong> Analyzes 3 consecutive draws to detect longer patterns.<br>All three orders are combined in the final consensus score.',
+    q5:"Where does the historical data come from?",
+    a5:"All data comes from official public sources of US lottery results. Lottery results are public-domain factual information, collected and verified daily.",
+    q6:"How often are results updated?",
+    a6:"Results are updated daily. On the Results page, click a state's 🔄 Update button to fetch the latest draws. PRO users also receive automatic email alerts after every draw.",
+    q7:"How many years of history are available?",
+    a7:"It depends on the state and game. New York Numbers has data going back to 1980 (25,000+ draws). By default, PREDIKTA loads 12 months of history. With the ELITE plan, you can load up to 5 years of data for deeper analysis.",
+    q8:"How does the 7-day free trial work?",
+    a8:"You get access to all PRO or ELITE features for 7 days at no cost. No credit card is required for the trial. At the end of the period, you can choose to continue with a paid plan or stay on the FREE plan.",
+    q9:"Can I cancel at any time?",
+    a9:"Yes, cancellation is possible at any time with a single click from your dashboard. If you cancel before the end of the billing period, you keep access until the end of the paid period.",
+    q10:"Does PREDIKTA work offline?",
+    a10:"Yes! PREDIKTA is a Progressive Web App (PWA). Install it on your phone or computer via your browser menu. Once installed, some features are available offline thanks to the service worker that caches essential data.",
+    q11:"How do I install PREDIKTA on my phone?",
+    a11:'<strong>Android (Chrome):</strong> Menu ⋮ → "Add to Home screen"<br><strong>iPhone (Safari):</strong> Share button → "Add to Home Screen"<br>The app installs like a native app, without going through the App Store.',
+    ctaText:"Couldn't find the answer to your question?", ctaBtn:"Contact us →",
+  },
+  es:{
+    title:"Preguntas Frecuentes", subtitle:"Todo lo que necesita saber sobre PREDIKTA",
+    searchPh:"🔍  Buscar una pregunta...",
+    secAlgo:"Predicciones y Algoritmos", secData:"Datos y Resultados", secBilling:"Planes y Facturación", secTech:"Técnico",
+    q1:"¿Cómo genera PREDIKTA sus predicciones?",
+    a1:"PREDIKTA combina 7 algoritmos independientes: Markov (órdenes 1, 2 y 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 simulaciones), Análisis de Fourier y Gap Analysis. Un algoritmo de consenso pondera cada modelo y genera una puntuación final. Las combinaciones con las puntuaciones más altas se presentan como sugerencias.",
+    q2:"¿Son fiables las predicciones? ¿Se puede ganar?",
+    a2:"Las predicciones de PREDIKTA se basan en análisis estadísticos de datos históricos. No aumentan matemáticamente sus posibilidades de ganar, ya que cada sorteo de lotería es un evento aleatorio e independiente. Nuestra herramienta identifica tendencias y patrones pasados, pero estas tendencias no predicen el futuro con certeza. Use PREDIKTA como herramienta de análisis, no como garantía de ganancias.",
+    q3:"¿Qué es el análisis de Fourier aplicado a la lotería?",
+    a3:"El análisis de Fourier descompone la secuencia de sorteos en frecuencias para detectar posibles ciclos ocultos. Por ejemplo, si un dígito vuelve cada 11-12 sesiones en promedio, Fourier puede identificarlo. No es una certeza, sino un indicador adicional en el consenso multimodelo.",
+    q4:"¿Cuál es la diferencia entre Markov Orden 1, 2 y 3?",
+    a4:'<strong>Orden 1:</strong> Predice el próximo dígito basándose únicamente en el último sorteo.<br><strong>Orden 2:</strong> Tiene en cuenta los últimos 2 sorteos para calcular la transición.<br><strong>Orden 3:</strong> Analiza 3 sorteos consecutivos para detectar patrones más largos.<br>Los tres órdenes se combinan en la puntuación de consenso final.',
+    q5:"¿De dónde provienen los datos históricos?",
+    a5:"Todos los datos provienen de fuentes oficiales públicas de resultados de lotería de EE.UU. Los resultados de lotería son información factual de dominio público, recopilada y verificada diariamente.",
+    q6:"¿Con qué frecuencia se actualizan los resultados?",
+    a6:"Los resultados se actualizan diariamente. En la página de Resultados, haga clic en el botón 🔄 Actualizar de un estado para obtener los últimos sorteos. Los usuarios PRO también reciben alertas automáticas por correo después de cada sorteo.",
+    q7:"¿Cuántos años de historial están disponibles?",
+    a7:"Depende del estado y el juego. New York Numbers tiene datos desde 1980 (25,000+ sorteos). Por defecto, PREDIKTA carga 12 meses de historial. Con el plan ELITE, puede cargar hasta 5 años de datos para análisis más profundos.",
+    q8:"¿Cómo funciona la prueba gratuita de 7 días?",
+    a8:"Tiene acceso a todas las funciones PRO o ELITE durante 7 días sin costo. No se requiere tarjeta de crédito para la prueba. Al final del período, puede elegir continuar con un plan de pago o permanecer en el plan FREE.",
+    q9:"¿Puedo cancelar en cualquier momento?",
+    a9:"Sí, la cancelación es posible en cualquier momento con un solo clic desde su panel. Si cancela antes del final del período de facturación, conserva el acceso hasta el final del período pagado.",
+    q10:"¿Funciona PREDIKTA sin conexión?",
+    a10:"¡Sí! PREDIKTA es una Progressive Web App (PWA). Instálela en su teléfono u ordenador desde el menú de su navegador. Una vez instalada, algunas funciones están disponibles sin conexión gracias al service worker que almacena en caché los datos esenciales.",
+    q11:"¿Cómo instalo PREDIKTA en mi teléfono?",
+    a11:'<strong>Android (Chrome):</strong> Menú ⋮ → "Añadir a pantalla de inicio"<br><strong>iPhone (Safari):</strong> Botón Compartir → "Añadir a pantalla de inicio"<br>La app se instala como una aplicación nativa, sin pasar por la App Store.',
+    ctaText:"¿No encontró la respuesta a su pregunta?", ctaBtn:"Contáctenos →",
+  },
+  pt:{
+    title:"Perguntas Frequentes", subtitle:"Tudo o que você precisa saber sobre a PREDIKTA",
+    searchPh:"🔍  Pesquisar uma pergunta...",
+    secAlgo:"Previsões e Algoritmos", secData:"Dados e Resultados", secBilling:"Planos e Faturamento", secTech:"Técnico",
+    q1:"Como a PREDIKTA gera suas previsões?",
+    a1:"A PREDIKTA combina 7 algoritmos independentes: Markov (ordens 1, 2 e 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50.000 simulações), Análise de Fourier e Gap Analysis. Um algoritmo de consenso pondera cada modelo e gera uma pontuação final. As combinações com as pontuações mais altas são apresentadas como sugestões.",
+    q2:"As previsões são confiáveis? É possível ganhar?",
+    a2:"As previsões da PREDIKTA são baseadas em análises estatísticas de dados históricos. Elas não aumentam matematicamente suas chances de ganhar, pois cada sorteio de loteria é um evento aleatório e independente. Nossa ferramenta identifica tendências e padrões passados, mas essas tendências não preveem o futuro com certeza. Use a PREDIKTA como ferramenta de análise, não como garantia de ganhos.",
+    q3:"O que é a análise de Fourier aplicada à loteria?",
+    a3:"A análise de Fourier decompõe a sequência de sorteios em frequências para detectar possíveis ciclos ocultos. Por exemplo, se um dígito retorna a cada 11-12 sessões em média, Fourier pode identificá-lo. Não é uma certeza, mas um indicador adicional no consenso multimodelo.",
+    q4:"Qual a diferença entre Markov Ordem 1, 2 e 3?",
+    a4:'<strong>Ordem 1:</strong> Prevê o próximo dígito com base apenas no último sorteio.<br><strong>Ordem 2:</strong> Considera os últimos 2 sorteios para calcular a transição.<br><strong>Ordem 3:</strong> Analisa 3 sorteios consecutivos para detectar padrões mais longos.<br>As três ordens são combinadas na pontuação de consenso final.',
+    q5:"De onde vêm os dados históricos?",
+    a5:"Todos os dados vêm de fontes oficiais públicas de resultados de loterias dos EUA. Os resultados de loteria são informações factuais de domínio público, coletadas e verificadas diariamente.",
+    q6:"Com que frequência os resultados são atualizados?",
+    a6:"Os resultados são atualizados diariamente. Na página de Resultados, clique no botão 🔄 Atualizar de um estado para obter os últimos sorteios. Os usuários PRO também recebem alertas automáticos por e-mail após cada sorteio.",
+    q7:"Quantos anos de histórico estão disponíveis?",
+    a7:"Depende do estado e do jogo. O New York Numbers tem dados desde 1980 (25.000+ sorteios). Por padrão, a PREDIKTA carrega 12 meses de histórico. Com o plano ELITE, você pode carregar até 5 anos de dados para análises mais profundas.",
+    q8:"Como funciona o teste grátis de 7 dias?",
+    a8:"Você tem acesso a todos os recursos PRO ou ELITE por 7 dias sem custo. Nenhum cartão de crédito é necessário para o teste. No final do período, você pode optar por continuar com um plano pago ou permanecer no plano FREE.",
+    q9:"Posso cancelar a qualquer momento?",
+    a9:"Sim, o cancelamento é possível a qualquer momento com um único clique no seu painel. Se você cancelar antes do final do período de cobrança, mantém o acesso até o final do período pago.",
+    q10:"A PREDIKTA funciona offline?",
+    a10:"Sim! A PREDIKTA é um Progressive Web App (PWA). Instale-a no seu telefone ou computador através do menu do seu navegador. Uma vez instalada, alguns recursos ficam disponíveis offline graças ao service worker que armazena em cache os dados essenciais.",
+    q11:"Como instalo a PREDIKTA no meu telefone?",
+    a11:'<strong>Android (Chrome):</strong> Menu ⋮ → "Adicionar à tela inicial"<br><strong>iPhone (Safari):</strong> Botão Compartilhar → "Adicionar à Tela de Início"<br>O app se instala como um aplicativo nativo, sem passar pela App Store.',
+    ctaText:"Não encontrou a resposta para sua pergunta?", ctaBtn:"Fale conosco →",
+  },
+  ht:{
+    title:"Kesyon Moun Poze Souvan", subtitle:"Tout sa ou bezwen konnen sou PREDIKTA",
+    searchPh:"🔍  Chèche yon kesyon...",
+    secAlgo:"Prediksyon ak Algoritm", secData:"Done ak Rezilta", secBilling:"Plan ak Fakti", secTech:"Teknik",
+    q1:"Kijan PREDIKTA jenere prediksyon li yo?",
+    a1:"PREDIKTA konbine 7 algoritm endepandan: Markov (lòd 1, 2 ak 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 similasyon), Analiz Fourier ak Gap Analysis. Yon algoritm konsansis peze chak modèl epi jenere yon nòt final. Konbinezon ak pi gwo nòt yo prezante kòm sijesyon.",
+    q2:"Èske prediksyon yo fyab? Èske ou ka genyen?",
+    a2:"Prediksyon PREDIKTA yo baze sou analiz estatistik done istorik. Yo pa ogmante mate matikman chans ou pou genyen, paske chak tiraj lotri se yon evènman aleyatwa ak endepandan. Zouti nou an idantifye tandans ak modèl ki sot pase, men tandans sa yo pa predi avni a ak sètitid. Itilize PREDIKTA kòm yon zouti analiz, pa kòm yon garanti pou genyen.",
+    q3:"Kisa analiz Fourier aplike nan lotri a ye?",
+    a3:"Analiz Fourier dekonpoze sekans tiraj yo an frekans pou detekte posib sik kache. Pa egzanp, si yon chif retounen chak 11-12 sesyon an mwayèn, Fourier ka idantifye li. Sa pa yon sètitid, men yon endikatè anplis nan konsansis miltimodèl la.",
+    q4:"Ki diferans ant Markov Lòd 1, 2 ak 3?",
+    a4:'<strong>Lòd 1:</strong> Predi pwochen chif la baze sèlman sou dènye tiraj la.<br><strong>Lòd 2:</strong> Pran an kont 2 dènye tiraj yo pou kalkile tranzisyon an.<br><strong>Lòd 3:</strong> Analize 3 tiraj youn apre lòt pou detekte modèl ki pi long.<br>Twa lòd yo konbine nan nòt konsansis final la.',
+    q5:"Ki kote done istorik yo soti?",
+    a5:"Tout done yo soti nan sous ofisyèl piblik rezilta lotri ameriken. Rezilta lotri yo se enfòmasyon faktyèl nan domèn piblik, ranmase epi verifye chak jou.",
+    q6:"Ki frekans rezilta yo mete ajou?",
+    a6:"Rezilta yo mete ajou chak jou. Nan paj Rezilta a, klike sou bouton 🔄 Mete ajou pou yon eta pou jwenn dènye tiraj yo. Itilizatè PRO yo resevwa tou alèt imèl otomatik apre chak tiraj.",
+    q7:"Konbyen ane istwa ki disponib?",
+    a7:"Sa depann de eta ak jwèt la. New York Numbers gen done depi 1980 (25,000+ tiraj). Pa default, PREDIKTA chaje 12 mwa istwa. Ak abònman ELITE, ou ka chaje jiska 5 ane done pou analiz pi fon.",
+    q8:"Kijan peryòd esè gratis 7 jou a fonksyone?",
+    a8:"Ou gen aksè a tout fonksyonalite PRO oswa ELITE pandan 7 jou san frè. Pa gen kat bankè ki nesesè pou esè a. Nan fen peryòd la, ou ka chwazi kontinye ak yon plan peye oswa rete sou plan FREE la.",
+    q9:"Èske mwen ka anile nenpòt kilè?",
+    a9:"Wi, anilasyon posib nenpòt kilè ak yon sèl klik soti nan tablo bò ou. Si ou anile anvan fen peryòd fakti a, ou kenbe aksè jiska fen peryòd ou peye a.",
+    q10:"Èske PREDIKTA fonksyone san koneksyon entènèt?",
+    a10:"Wi! PREDIKTA se yon Progressive Web App (PWA). Enstale li sou telefòn oswa òdinatè ou atravè meni navigatè ou. Yon fwa li enstale, kèk fonksyonalite disponib san koneksyon gras ak service worker ki kenbe done esansyèl yo an memwa.",
+    q11:"Kijan pou m enstale PREDIKTA sou telefòn mwen?",
+    a11:'<strong>Android (Chrome):</strong> Meni ⋮ → "Ajoute nan ekran akèy"<br><strong>iPhone (Safari):</strong> Bouton Pataje → "Ajoute nan ekran Akèy"<br>App la enstale tankou yon aplikasyon natif, san pase pa App Store.',
+    ctaText:"Ou pa jwenn repons a kesyon ou an?", ctaBtn:"Kontakte nou →",
+  },
+};
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null){
+      if(/^a\d+$/.test(key)) el.innerHTML = dict[key];
+      else el.textContent = dict[key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-attr]').forEach(el=>{
+    el.getAttribute('data-i18n-attr').split(',').forEach(pair=>{
+      const [attr,key] = pair.split(':');
+      if(dict[key] != null) el.setAttribute(attr, dict[key]);
+    });
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
 </script>
 </body></html>
