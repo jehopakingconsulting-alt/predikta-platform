@@ -33,39 +33,39 @@ p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
 </head>
 <body>
 <div class="page">
-  <h1>À Propos de PREDIKTA</h1>
-  <p class="subtitle">La plateforme mondiale d'analyse prédictive pour l'analyse des loteries</p>
+  <h1 data-i18n="title">À Propos de PREDIKTA</h1>
+  <p class="subtitle" data-i18n="subtitle">La plateforme mondiale d'analyse prédictive pour l'analyse des loteries</p>
 
   <div class="stats-grid">
-    <div class="stat"><div class="stat-num">44+</div><div class="stat-label">États couverts</div></div>
-    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Algorithmes</div></div>
-    <div class="stat"><div class="stat-num">50K</div><div class="stat-label">Simulations/analyse</div></div>
-    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Langues</div></div>
+    <div class="stat"><div class="stat-num">44+</div><div class="stat-label" data-i18n="statStates">États couverts</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label" data-i18n="statAlgo">Algorithmes</div></div>
+    <div class="stat"><div class="stat-num">50K</div><div class="stat-label" data-i18n="statSim">Simulations/analyse</div></div>
+    <div class="stat"><div class="stat-num">5</div><div class="stat-label" data-i18n="statLang">Langues</div></div>
   </div>
 
   <div class="card">
-    <h2>Notre Mission</h2>
-    <p>PREDIKTA est née d'une conviction simple : les joueurs de loterie méritent les mêmes outils analytiques que ceux utilisés par les professionnels de la data science. Nous combinons les technologies les plus avancées — apprentissage automatique, analyse de Fourier, simulations Monte Carlo — dans une interface accessible à tous.</p>
-    <p>Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.</p>
+    <h2 data-i18n="missionTitle">Notre Mission</h2>
+    <p data-i18n="missionP1">PREDIKTA est née d'une conviction simple : les joueurs de loterie méritent les mêmes outils analytiques que ceux utilisés par les professionnels de la data science. Nous combinons les technologies les plus avancées — apprentissage automatique, analyse de Fourier, simulations Monte Carlo — dans une interface accessible à tous.</p>
+    <p data-i18n="missionP2">Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.</p>
   </div>
 
   <div class="card">
-    <h2>Les Algorithmes Derrière PREDIKTA</h2>
-    <p>Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :</p>
+    <h2 data-i18n="algoTitle">Les Algorithmes Derrière PREDIKTA</h2>
+    <p data-i18n="algoIntro">Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :</p>
     <div class="tech-list">
       <span class="tech-chip">🤖 XGBoost</span>
       <span class="tech-chip">🌲 Random Forest</span>
       <span class="tech-chip">📈 Gradient Boosting</span>
-      <span class="tech-chip">🔗 Markov Ordre 1/2/3</span>
+      <span class="tech-chip" data-i18n="markovChip">🔗 Markov Ordre 1/2/3</span>
       <span class="tech-chip">🎲 Monte Carlo 50K</span>
-      <span class="tech-chip">〰 Analyse de Fourier</span>
+      <span class="tech-chip" data-i18n="fourierChip">〰 Analyse de Fourier</span>
       <span class="tech-chip">⏱ Gap Analysis</span>
     </div>
-    <p style="margin-top:14px">Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.</p>
+    <p style="margin-top:14px" data-i18n="algoOutro">Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.</p>
   </div>
 
   <div class="card">
-    <h2>Stack Technique</h2>
+    <h2 data-i18n="stackTitle">Stack Technique</h2>
     <div class="tech-list">
       <span class="tech-chip">Python 3.14</span>
       <span class="tech-chip">Flask</span>
@@ -73,18 +73,127 @@ p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
       <span class="tech-chip">XGBoost</span>
       <span class="tech-chip">NumPy / SciPy</span>
       <span class="tech-chip">Chart.js</span>
-      <span class="tech-chip">API Résultats Publics</span>
+      <span class="tech-chip" data-i18n="publicApiChip">API Résultats Publics</span>
       <span class="tech-chip">PWA</span>
     </div>
   </div>
 
   <div class="card">
-    <h2>Couverture Géographique</h2>
-    <p>PREDIKTA couvre 44 états américains + Puerto Rico pour les jeux Pick3/Cash3/Daily3, avec des données remontant jusqu'en 1972 (Connecticut) et 1980 (New York, avec plus de 25 000 tirages archivés). Les résultats de loterie sont des données factuelles publiques, collectées quotidiennement depuis des sources officielles.</p>
+    <h2 data-i18n="coverageTitle">Couverture Géographique</h2>
+    <p data-i18n="coverageP">PREDIKTA couvre 44 états américains + Puerto Rico pour les jeux Pick3/Cash3/Daily3, avec des données remontant jusqu'en 1972 (Connecticut) et 1980 (New York, avec plus de 25 000 tirages archivés). Les résultats de loterie sont des données factuelles publiques, collectées quotidiennement depuis des sources officielles.</p>
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Avertissement important :</strong> PREDIKTA est un outil d'analyse statistique conçu à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Si vous pensez avoir un problème de jeu, contactez le <strong>1-800-GAMBLER</strong> (USA).
+    ⚠️ <strong data-i18n="disclaimerLabel">Avertissement important :</strong> <span data-i18n="disclaimerText">PREDIKTA est un outil d'analyse statistique conçu à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Si vous pensez avoir un problème de jeu, contactez le</span> <strong>1-800-GAMBLER</strong> <span data-i18n="disclaimerUSA">(USA)</span>.
   </div>
 </div>
+<script>
+const T = {
+  fr:{
+    title:"À Propos de PREDIKTA",
+    subtitle:"La plateforme mondiale d'analyse prédictive pour l'analyse des loteries",
+    statStates:"États couverts",statAlgo:"Algorithmes",statSim:"Simulations/analyse",statLang:"Langues",
+    missionTitle:"Notre Mission",
+    missionP1:"PREDIKTA est née d'une conviction simple : les joueurs de loterie méritent les mêmes outils analytiques que ceux utilisés par les professionnels de la data science. Nous combinons les technologies les plus avancées — apprentissage automatique, analyse de Fourier, simulations Monte Carlo — dans une interface accessible à tous.",
+    missionP2:"Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.",
+    algoTitle:"Les Algorithmes Derrière PREDIKTA",
+    algoIntro:"Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :",
+    markovChip:"🔗 Markov Ordre 1/2/3",fourierChip:"〰 Analyse de Fourier",
+    algoOutro:"Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.",
+    stackTitle:"Stack Technique",publicApiChip:"API Résultats Publics",
+    coverageTitle:"Couverture Géographique",
+    coverageP:"PREDIKTA couvre 44 états américains + Puerto Rico pour les jeux Pick3/Cash3/Daily3, avec des données remontant jusqu'en 1972 (Connecticut) et 1980 (New York, avec plus de 25 000 tirages archivés). Les résultats de loterie sont des données factuelles publiques, collectées quotidiennement depuis des sources officielles.",
+    disclaimerLabel:"Avertissement important :",
+    disclaimerText:"PREDIKTA est un outil d'analyse statistique conçu à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Si vous pensez avoir un problème de jeu, contactez le",
+    disclaimerUSA:"(USA)",
+  },
+  en:{
+    title:"About PREDIKTA",
+    subtitle:"The global predictive-analysis platform for lottery analysis",
+    statStates:"States covered",statAlgo:"Algorithms",statSim:"Simulations/analysis",statLang:"Languages",
+    missionTitle:"Our Mission",
+    missionP1:"PREDIKTA was born from a simple conviction: lottery players deserve the same analytical tools used by data-science professionals. We combine the most advanced technologies — machine learning, Fourier analysis, Monte Carlo simulations — into an interface accessible to everyone.",
+    missionP2:"Our platform analyzes decades of historical draws to identify statistical patterns, calculate probabilities and generate informed suggestions. All in real time, updated daily, available in 5 languages.",
+    algoTitle:"The Algorithms Behind PREDIKTA",
+    algoIntro:"Every prediction is the result of a consensus between 7 independent algorithms:",
+    markovChip:"🔗 Markov Order 1/2/3",fourierChip:"〰 Fourier Analysis",
+    algoOutro:"The final consensus score weighs each model according to its historical performance on the analyzed state, offering a more robust prediction than a single model.",
+    stackTitle:"Tech Stack",publicApiChip:"Public Results API",
+    coverageTitle:"Geographic Coverage",
+    coverageP:"PREDIKTA covers 44 US states + Puerto Rico for Pick3/Cash3/Daily3 games, with data going back to 1972 (Connecticut) and 1980 (New York, with over 25,000 archived draws). Lottery results are public factual data, collected daily from official sources.",
+    disclaimerLabel:"Important disclaimer:",
+    disclaimerText:"PREDIKTA is a statistical analysis tool designed for educational and entertainment purposes. Predictions do not guarantee any winnings. Every lottery draw is a random, independent event. Play responsibly and within your means. If you think you have a gambling problem, contact",
+    disclaimerUSA:"(USA)",
+  },
+  es:{
+    title:"Acerca de PREDIKTA",
+    subtitle:"La plataforma global de análisis predictivo para el análisis de loterías",
+    statStates:"Estados cubiertos",statAlgo:"Algoritmos",statSim:"Simulaciones/análisis",statLang:"Idiomas",
+    missionTitle:"Nuestra Misión",
+    missionP1:"PREDIKTA nació de una convicción simple: los jugadores de lotería merecen las mismas herramientas analíticas que usan los profesionales de la ciencia de datos. Combinamos las tecnologías más avanzadas — aprendizaje automático, análisis de Fourier, simulaciones Monte Carlo — en una interfaz accesible para todos.",
+    missionP2:"Nuestra plataforma analiza décadas de sorteos históricos para identificar patrones estadísticos, calcular probabilidades y generar sugerencias informadas. Todo en tiempo real, actualizado a diario, disponible en 5 idiomas.",
+    algoTitle:"Los Algoritmos Detrás de PREDIKTA",
+    algoIntro:"Cada predicción es el resultado de un consenso entre 7 algoritmos independientes:",
+    markovChip:"🔗 Markov Orden 1/2/3",fourierChip:"〰 Análisis de Fourier",
+    algoOutro:"La puntuación de consenso final pondera cada modelo según su rendimiento histórico en el estado analizado, ofreciendo una predicción más robusta que un solo modelo.",
+    stackTitle:"Stack Técnico",publicApiChip:"API de Resultados Públicos",
+    coverageTitle:"Cobertura Geográfica",
+    coverageP:"PREDIKTA cubre 44 estados de EE.UU. + Puerto Rico para los juegos Pick3/Cash3/Daily3, con datos que se remontan a 1972 (Connecticut) y 1980 (Nueva York, con más de 25,000 sorteos archivados). Los resultados de lotería son datos públicos factuales, recopilados diariamente de fuentes oficiales.",
+    disclaimerLabel:"Aviso importante:",
+    disclaimerText:"PREDIKTA es una herramienta de análisis estadístico diseñada con fines educativos y de entretenimiento. Las predicciones no garantizan ninguna ganancia. Cada sorteo de lotería es un evento aleatorio e independiente. Juegue de manera responsable y dentro de sus posibilidades. Si cree que tiene un problema de juego, contacte al",
+    disclaimerUSA:"(EE.UU.)",
+  },
+  pt:{
+    title:"Sobre a PREDIKTA",
+    subtitle:"A plataforma global de análise preditiva para análise de loterias",
+    statStates:"Estados cobertos",statAlgo:"Algoritmos",statSim:"Simulações/análise",statLang:"Idiomas",
+    missionTitle:"Nossa Missão",
+    missionP1:"A PREDIKTA nasceu de uma convicção simples: os jogadores de loteria merecem as mesmas ferramentas analíticas usadas por profissionais de ciência de dados. Combinamos as tecnologias mais avançadas — aprendizado de máquina, análise de Fourier, simulações Monte Carlo — em uma interface acessível a todos.",
+    missionP2:"Nossa plataforma analisa décadas de sorteios históricos para identificar padrões estatísticos, calcular probabilidades e gerar sugestões informadas. Tudo em tempo real, atualizado diariamente, disponível em 5 idiomas.",
+    algoTitle:"Os Algoritmos Por Trás da PREDIKTA",
+    algoIntro:"Cada previsão é o resultado de um consenso entre 7 algoritmos independentes:",
+    markovChip:"🔗 Markov Ordem 1/2/3",fourierChip:"〰 Análise de Fourier",
+    algoOutro:"A pontuação de consenso final pondera cada modelo de acordo com seu desempenho histórico no estado analisado, oferecendo uma previsão mais robusta do que um único modelo.",
+    stackTitle:"Stack Técnica",publicApiChip:"API de Resultados Públicos",
+    coverageTitle:"Cobertura Geográfica",
+    coverageP:"A PREDIKTA cobre 44 estados americanos + Porto Rico para os jogos Pick3/Cash3/Daily3, com dados que remontam a 1972 (Connecticut) e 1980 (Nova York, com mais de 25.000 sorteios arquivados). Os resultados de loteria são dados factuais públicos, coletados diariamente de fontes oficiais.",
+    disclaimerLabel:"Aviso importante:",
+    disclaimerText:"A PREDIKTA é uma ferramenta de análise estatística projetada para fins educacionais e de entretenimento. As previsões não garantem nenhum ganho. Cada sorteio de loteria é um evento aleatório e independente. Jogue de forma responsável e dentro de suas possibilidades. Se você acha que tem um problema com jogos de azar, entre em contato com",
+    disclaimerUSA:"(EUA)",
+  },
+  ht:{
+    title:"Konsènan PREDIKTA",
+    subtitle:"Platfòm global analiz prediktif pou analiz lotri",
+    statStates:"Eta kouvri",statAlgo:"Algoritm",statSim:"Similasyon/analiz",statLang:"Lang",
+    missionTitle:"Misyon Nou",
+    missionP1:"PREDIKTA te fèt ak yon konviksyon senp: jwè lotri merite menm zouti analitik pwofesyonèl syans done yo itilize. Nou konbine teknoloji ki pi avanse yo — aprantisaj machin, analiz Fourier, simulasyon Monte Carlo — nan yon entèfas tout moun ka aksede.",
+    missionP2:"Platfòm nou an analize dè dekad tiraj istorik pou idantifye modèl estatistik, kalkile pwobabilite epi jenere sijesyon enfòme. Tout sa an tan reyèl, mete ajou chak jou, disponib nan 5 lang.",
+    algoTitle:"Algoritm Dèyè PREDIKTA",
+    algoIntro:"Chak prediksyon se rezilta yon konsansis ant 7 algoritm endepandan:",
+    markovChip:"🔗 Markov Lòd 1/2/3",fourierChip:"〰 Analiz Fourier",
+    algoOutro:"Nòt konsansis final la peze chak modèl selon pèfòmans istorik li sou eta ki analize a, sa ki ofri yon prediksyon pi solid pase yon sèl modèl.",
+    stackTitle:"Pil Teknik",publicApiChip:"API Rezilta Piblik",
+    coverageTitle:"Kouvèti Jeyografik",
+    coverageP:"PREDIKTA kouvri 44 eta ameriken + Puerto Rico pou jwèt Pick3/Cash3/Daily3, ak done ki ranmonte jiska 1972 (Connecticut) ak 1980 (New York, ak plis pase 25,000 tiraj achive). Rezilta lotri yo se done faktyèl piblik, kolekte chak jou nan sous ofisyèl.",
+    disclaimerLabel:"Avètisman enpòtan:",
+    disclaimerText:"PREDIKTA se yon zouti analiz estatistik ki fèt pou rezon edikatif ak amizman. Prediksyon yo pa garanti okenn genyen. Chak tiraj lotri se yon evènman aleyatwa ak endepandan. Jwe yon fason responsab epi nan limit mwayen ou. Si ou panse ou gen yon pwoblèm jwèt aza, kontakte",
+    disclaimerUSA:"(USA)",
+  },
+};
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
 </body></html>
