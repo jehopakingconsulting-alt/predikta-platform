@@ -98,180 +98,326 @@ tbody tr:last-child td{border-bottom:none}
 
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-tag">PLANS & TARIFS</div>
-  <h1>Choisissez votre niveau<br>de prédiction</h1>
-  <p class="hero-sub">De gratuit à professionnel, PREDIKTA s'adapte à votre ambition. Toutes les prédictions sont basées sur des algorithmes réels.</p>
+  <div class="hero-tag" data-i18n="tag">PLANS & TARIFS</div>
+  <h1 data-i18n-html="h1">Choisissez votre niveau<br>de prédiction</h1>
+  <p class="hero-sub" data-i18n="heroSub">De gratuit à professionnel, PREDIKTA s'adapte à votre ambition. Toutes les prédictions sont basées sur des algorithmes réels.</p>
   <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">
     <div class="toggle-wrap">
-      <button class="toggle-btn active" id="btnMonthly" onclick="setBilling('monthly')">Mensuel</button>
-      <button class="toggle-btn" id="btnAnnual" onclick="setBilling('annual')">Annuel</button>
+      <button class="toggle-btn active" id="btnMonthly" onclick="setBilling('monthly')" data-i18n="monthly">Mensuel</button>
+      <button class="toggle-btn" id="btnAnnual" onclick="setBilling('annual')" data-i18n="annual">Annuel</button>
     </div>
-    <span class="save-badge">Économisez 40% 🎉</span>
+    <span class="save-badge" data-i18n="saveBadge">Économisez 40% 🎉</span>
   </div>
 </div>
 
 <!-- Plans -->
-<div class="plans">
-
-  <!-- FREE -->
-  <div class="plan">
-    <div class="plan-name">FREE</div>
-    <div class="plan-price">$0<span>/mo</span></div>
-    <div class="plan-period">Pour toujours gratuit</div>
-    <p class="plan-desc">Découvrez PREDIKTA sans engagement. Idéal pour commencer.</p>
-    <a href="/" class="plan-btn btn-free">Commencer Gratuitement</a>
-    <ul class="plan-features">
-      <li>4 états disponibles (NY, GA, TX, FL)</li>
-      <li>10 prédictions / jour</li>
-      <li>Analyse Markov + Monte Carlo</li>
-      <li>30 jours d'historique</li>
-      <li class="no">ML XGBoost / Random Forest</li>
-      <li class="no">Analyse de Fourier</li>
-      <li class="no">Alertes email quotidiennes</li>
-      <li class="no">Accès API</li>
-      <li class="no">Tous les états US (44)</li>
-    </ul>
-  </div>
-
-  <!-- PRO -->
-  <div class="plan featured">
-    <div class="popular-badge">⭐ Le Plus Populaire</div>
-    <div class="plan-name">PRO</div>
-    <div class="plan-price" id="proPrice">$4.99<span>/mo</span></div>
-    <div class="plan-period" id="proPeriod">Facturé mensuellement</div>
-    <p class="plan-desc">Pour les joueurs sérieux. Tous les algorithmes + alertes + historique complet.</p>
-    <button class="plan-btn btn-pro" onclick="subscribe('pro')">Démarrer PRO — 7 jours gratuits</button>
-    <ul class="plan-features">
-      <li>20 états disponibles</li>
-      <li>Prédictions illimitées</li>
-      <li>ML XGBoost + Random Forest + GBM</li>
-      <li>Analyse de Fourier (cycles)</li>
-      <li>12 mois d'historique</li>
-      <li>Alertes email quotidiennes</li>
-      <li>Tableau de bord personnalisé</li>
-      <li>Prédictions Pick3 + Pick4</li>
-      <li class="no">Accès API</li>
-      <li class="no">Tous les états US (44)</li>
-    </ul>
-  </div>
-
-  <!-- ELITE -->
-  <div class="plan">
-    <div class="plan-name">ELITE</div>
-    <div class="plan-price" id="elitePrice">$9.99<span>/mo</span></div>
-    <div class="plan-period" id="elitePeriod">Facturé mensuellement</div>
-    <p class="plan-desc">Accès total. Pour les professionnels et les développeurs.</p>
-    <button class="plan-btn btn-elite" onclick="subscribe('elite')">Démarrer ELITE — 7 jours gratuits</button>
-    <ul class="plan-features">
-      <li>Tous les états US (44) + Puerto Rico</li>
-      <li>Prédictions illimitées</li>
-      <li>Tous les algorithmes</li>
-      <li>5 ans d'historique</li>
-      <li>Alertes email + SMS</li>
-      <li>Accès API (1000 req/jour)</li>
-      <li>Export CSV / PDF</li>
-      <li>Support prioritaire 24h</li>
-      <li>Accès anticipé aux nouvelles fonctionnalités</li>
-    </ul>
-  </div>
-
-</div>
+<div class="plans" id="plansWrap"></div>
 
 <!-- Compare table -->
 <div class="compare">
-  <div class="compare-title">Comparaison détaillée des fonctionnalités</div>
+  <div class="compare-title" data-i18n="compareTitle">Comparaison détaillée des fonctionnalités</div>
   <table>
     <thead>
-      <tr><th style="text-align:left">Fonctionnalité</th><th>FREE</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">ELITE</th></tr>
+      <tr><th style="text-align:left" data-i18n="thFeature">Fonctionnalité</th><th>FREE</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">ELITE</th></tr>
     </thead>
-    <tbody>
-      <tr><td>États disponibles</td><td>4</td><td class="partial">20</td><td class="check">44+</td></tr>
-      <tr><td>Prédictions / jour</td><td>10</td><td class="check">Illimitées</td><td class="check">Illimitées</td></tr>
-      <tr><td>Markov Ordres 1/2/3</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Monte Carlo (50 000 sim.)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>ML — XGBoost / Random Forest</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Analyse de Fourier (cycles)</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Analyse des écarts (gaps)</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Historique des tirages</td><td>30 jours</td><td class="partial">12 mois</td><td class="check">5 ans</td></tr>
-      <tr><td>Alertes email quotidiennes</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Alertes SMS</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-      <tr><td>Accès API</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">1000 req/j</td></tr>
-      <tr><td>Export CSV / PDF</td><td class="cross">✗</td><td class="partial">CSV</td><td class="check">CSV + PDF</td></tr>
-      <tr><td>Pick3 + Pick4</td><td class="partial">Pick3</td><td class="check">✓</td><td class="check">✓</td></tr>
-      <tr><td>Powerball / Mega Millions</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-      <tr><td>Support</td><td>Communauté</td><td class="partial">Email</td><td class="check">Prioritaire 24h</td></tr>
-    </tbody>
+    <tbody id="compareBody"></tbody>
   </table>
 </div>
 
 <!-- Testimonials -->
-<div style="font-size:.75rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px">Ce que disent nos membres</div>
-<div class="testimonials">
-  <div class="tcard">
-    <div class="tcard-stars">★★★★★</div>
-    <p class="tcard-text">"PREDIKTA m'a aidé à analyser les patterns de Cash3 Georgia comme jamais auparavant. Les modèles ML sont vraiment précis."</p>
-    <div class="tcard-author">Marcus T.</div>
-    <div class="tcard-state">Georgia · Membre PRO</div>
-  </div>
-  <div class="tcard">
-    <div class="tcard-stars">★★★★★</div>
-    <p class="tcard-text">"J'utilise PREDIKTA ELITE depuis 3 mois. L'analyse de Fourier sur New York Numbers m'a surpris par sa précision."</p>
-    <div class="tcard-author">Jennifer W.</div>
-    <div class="tcard-state">New York · Membre ELITE</div>
-  </div>
-  <div class="tcard">
-    <div class="tcard-stars">★★★★☆</div>
-    <p class="tcard-text">"Meilleure plateforme d'analyse Pick3 que j'ai trouvée. Interface claire, données fiables, mises à jour quotidiennes."</p>
-    <div class="tcard-author">Carlos M.</div>
-    <div class="tcard-state">Texas · Membre PRO</div>
-  </div>
-</div>
+<div style="font-size:.75rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:2px;margin-bottom:20px" data-i18n="membersTitle">Ce que disent nos membres</div>
+<div class="testimonials" id="testiWrap"></div>
 
 <!-- FAQ -->
 <div class="faq-section">
-  <div class="faq-title">Questions fréquentes</div>
-  ${[
-    ["Les prédictions garantissent-elles des gains ?","Non. PREDIKTA fournit des analyses statistiques basées sur des données historiques. Chaque tirage de loterie est aléatoire et indépendant. Nos outils sont conçus pour l'analyse et le divertissement, pas pour garantir des gains."],
-    ["Comment fonctionne la période d'essai gratuite ?","Vous avez 7 jours complets pour tester PRO ou ELITE sans frais. Aucune carte bancaire requise pour l'essai. Annulation en un clic à tout moment."],
-    ["Puis-je changer de plan ?","Oui, vous pouvez passer de FREE à PRO, de PRO à ELITE, ou rétrograder à tout moment. Le changement est effectif immédiatement."],
-    ["Quelles loteries sont couvertes ?","Pick3, Cash3, Daily3, Play3 pour 44+ états américains et Puerto Rico. L'abonnement ELITE inclut aussi Pick4 et les jackpots Powerball/Mega Millions."],
-    ["L'accès API ELITE, comment ça marche ?","Vous recevez une clé API unique. Vous pouvez faire jusqu'à 1000 requêtes par jour pour récupérer prédictions et résultats en JSON."],
-  ].map(([q,a],i)=>`
-  <div class="faq-item" id="faq${i}">
-    <div class="faq-q" onclick="toggleFaq(${i})">${q}<span class="faq-icon">+</span></div>
-    <div class="faq-a">${a}</div>
-  </div>`).join('')}
+  <div class="faq-title" data-i18n="faqTitle">Questions fréquentes</div>
+  <div id="faqWrap"></div>
 </div>
 
 <!-- Bottom CTA -->
 <div class="bottom-cta">
-  <h2>Prêt à passer au niveau supérieur ?</h2>
-  <p>Rejoignez des milliers de joueurs qui utilisent PREDIKTA chaque jour pour analyser leurs numéros.</p>
+  <h2 data-i18n="ctaTitle">Prêt à passer au niveau supérieur ?</h2>
+  <p data-i18n="ctaP">Rejoignez des milliers de joueurs qui utilisent PREDIKTA chaque jour pour analyser leurs numéros.</p>
   <div class="bottom-cta-btns">
-    <button class="cta-btn-main" onclick="subscribe('pro')">Démarrer PRO — 7 jours gratuits</button>
-    <button class="cta-btn-sec" onclick="window.location='/'">Essayer gratuitement</button>
+    <button class="cta-btn-main" onclick="subscribe('pro')" data-i18n="ctaBtnPro">Démarrer PRO — 7 jours gratuits</button>
+    <button class="cta-btn-sec" onclick="window.location='/'" data-i18n="ctaBtnFree">Essayer gratuitement</button>
   </div>
-  <p style="font-size:.65rem;color:var(--muted);margin-top:14px">✓ Aucune carte requise · ✓ Annulation facile · ✓ Données sécurisées</p>
+  <p style="font-size:.65rem;color:var(--muted);margin-top:14px" data-i18n="ctaFooter">✓ Aucune carte requise · ✓ Annulation facile · ✓ Données sécurisées</p>
 </div>
 
 </div>
 
 <script>
 let billing = 'monthly';
+let curLang = 'fr';
 const PRICES = { pro:{monthly:'$4.99',annual:'$2.99'}, elite:{monthly:'$9.99',annual:'$5.99'} };
+
+const T = {
+ fr:{ tag:"PLANS & TARIFS", h1:"Choisissez votre niveau<br>de prédiction",
+  heroSub:"De gratuit à professionnel, PREDIKTA s'adapte à votre ambition. Toutes les prédictions sont basées sur des algorithmes réels.",
+  monthly:"Mensuel", annual:"Annuel", saveBadge:"Économisez 40% 🎉",
+  periodMonthly:"Facturé mensuellement", periodAnnual:"Facturé annuellement (économisez 40%)",
+  freeName:"FREE", freePeriod:"Pour toujours gratuit", freeDesc:"Découvrez PREDIKTA sans engagement. Idéal pour commencer.", freeBtn:"Commencer Gratuitement",
+  proName:"PRO", proBadge:"⭐ Le Plus Populaire", proDesc:"Pour les joueurs sérieux. Tous les algorithmes + alertes + historique complet.", proBtn:"Démarrer PRO — 7 jours gratuits",
+  eliteName:"ELITE", eliteDesc:"Accès total. Pour les professionnels et les développeurs.", eliteBtn:"Démarrer ELITE — 7 jours gratuits",
+  freeFeats:["4 états disponibles (NY, GA, TX, FL)","10 prédictions / jour","Analyse Markov + Monte Carlo","30 jours d'historique","#ML XGBoost / Random Forest","#Analyse de Fourier","#Alertes email quotidiennes","#Accès API","#Tous les états US (44)"],
+  proFeats:["20 états disponibles","Prédictions illimitées","ML XGBoost + Random Forest + GBM","Analyse de Fourier (cycles)","12 mois d'historique","Alertes email quotidiennes","Tableau de bord personnalisé","Prédictions Pick3 + Pick4","#Accès API","#Tous les états US (44)"],
+  eliteFeats:["Tous les états US (44) + Puerto Rico","Prédictions illimitées","Tous les algorithmes","5 ans d'historique","Alertes email + SMS","Accès API (1000 req/jour)","Export CSV / PDF","Support prioritaire 24h","Accès anticipé aux nouvelles fonctionnalités"],
+  compareTitle:"Comparaison détaillée des fonctionnalités", thFeature:"Fonctionnalité",
+  compareRows:[
+    ["États disponibles","4","20","44+"],["Prédictions / jour","10","Illimitées","Illimitées"],
+    ["Markov Ordres 1/2/3","✓","✓","✓"],["Monte Carlo (50 000 sim.)","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✗","✓","✓"],["Analyse de Fourier (cycles)","✗","✓","✓"],
+    ["Analyse des écarts (gaps)","✓","✓","✓"],["Historique des tirages","30 jours","12 mois","5 ans"],
+    ["Alertes email quotidiennes","✗","✓","✓"],["Alertes SMS","✗","✗","✓"],
+    ["Accès API","✗","✗","1000 req/j"],["Export CSV / PDF","✗","CSV","CSV + PDF"],
+    ["Pick3 + Pick4","Pick3","✓","✓"],["Powerball / Mega Millions","✗","✗","✓"],
+    ["Support","Communauté","Email","Prioritaire 24h"]],
+  membersTitle:"Ce que disent nos membres",
+  testimonials:[["★★★★★","\"PREDIKTA m'a aidé à analyser les patterns de Cash3 Georgia comme jamais auparavant. Les modèles ML sont vraiment précis.\"","Marcus T.","Georgia · Membre PRO"],
+    ["★★★★★","\"J'utilise PREDIKTA ELITE depuis 3 mois. L'analyse de Fourier sur New York Numbers m'a surpris par sa précision.\"","Jennifer W.","New York · Membre ELITE"],
+    ["★★★★☆","\"Meilleure plateforme d'analyse Pick3 que j'ai trouvée. Interface claire, données fiables, mises à jour quotidiennes.\"","Carlos M.","Texas · Membre PRO"]],
+  faqTitle:"Questions fréquentes",
+  faq:[["Les prédictions garantissent-elles des gains ?","Non. PREDIKTA fournit des analyses statistiques basées sur des données historiques. Chaque tirage de loterie est aléatoire et indépendant. Nos outils sont conçus pour l'analyse et le divertissement, pas pour garantir des gains."],
+    ["Comment fonctionne la période d'essai gratuite ?","Vous avez 7 jours complets pour tester PRO ou ELITE sans frais. Aucune carte bancaire requise pour l'essai. Annulation en un clic à tout moment."],
+    ["Puis-je changer de plan ?","Oui, vous pouvez passer de FREE à PRO, de PRO à ELITE, ou rétrograder à tout moment. Le changement est effectif immédiatement."],
+    ["Quelles loteries sont couvertes ?","Pick3, Cash3, Daily3, Play3 pour 44+ états américains et Puerto Rico. L'abonnement ELITE inclut aussi Pick4 et les jackpots Powerball/Mega Millions."],
+    ["L'accès API ELITE, comment ça marche ?","Vous recevez une clé API unique. Vous pouvez faire jusqu'à 1000 requêtes par jour pour récupérer prédictions et résultats en JSON."]],
+  ctaTitle:"Prêt à passer au niveau supérieur ?", ctaP:"Rejoignez des milliers de joueurs qui utilisent PREDIKTA chaque jour pour analyser leurs numéros.",
+  ctaBtnPro:"Démarrer PRO — 7 jours gratuits", ctaBtnFree:"Essayer gratuitement",
+  ctaFooter:"✓ Aucune carte requise · ✓ Annulation facile · ✓ Données sécurisées",
+  payAlert:"Système de paiement à intégrer (Stripe/PayPal).\nPlan sélectionné : ", billedSep:" · " },
+ en:{ tag:"PLANS & PRICING", h1:"Choose your level<br>of prediction",
+  heroSub:"From free to professional, PREDIKTA adapts to your ambition. All predictions are based on real algorithms.",
+  monthly:"Monthly", annual:"Annual", saveBadge:"Save 40% 🎉",
+  periodMonthly:"Billed monthly", periodAnnual:"Billed annually (save 40%)",
+  freeName:"FREE", freePeriod:"Free forever", freeDesc:"Discover PREDIKTA with no commitment. Ideal for getting started.", freeBtn:"Start for Free",
+  proName:"PRO", proBadge:"⭐ Most Popular", proDesc:"For serious players. All algorithms + alerts + full history.", proBtn:"Start PRO — 7-day free trial",
+  eliteName:"ELITE", eliteDesc:"Full access. For professionals and developers.", eliteBtn:"Start ELITE — 7-day free trial",
+  freeFeats:["4 states available (NY, GA, TX, FL)","10 predictions / day","Markov + Monte Carlo analysis","30-day history","#ML XGBoost / Random Forest","#Fourier analysis","#Daily email alerts","#API access","#All US states (44)"],
+  proFeats:["20 states available","Unlimited predictions","ML XGBoost + Random Forest + GBM","Fourier analysis (cycles)","12-month history","Daily email alerts","Personalized dashboard","Pick3 + Pick4 predictions","#API access","#All US states (44)"],
+  eliteFeats:["All US states (44) + Puerto Rico","Unlimited predictions","All algorithms","5-year history","Email + SMS alerts","API access (1000 req/day)","CSV / PDF export","24h priority support","Early access to new features"],
+  compareTitle:"Detailed feature comparison", thFeature:"Feature",
+  compareRows:[
+    ["Available states","4","20","44+"],["Predictions / day","10","Unlimited","Unlimited"],
+    ["Markov Orders 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✗","✓","✓"],["Fourier analysis (cycles)","✗","✓","✓"],
+    ["Gap analysis","✓","✓","✓"],["Draw history","30 days","12 months","5 years"],
+    ["Daily email alerts","✗","✓","✓"],["SMS alerts","✗","✗","✓"],
+    ["API access","✗","✗","1000 req/d"],["CSV / PDF export","✗","CSV","CSV + PDF"],
+    ["Pick3 + Pick4","Pick3","✓","✓"],["Powerball / Mega Millions","✗","✗","✓"],
+    ["Support","Community","Email","Priority 24h"]],
+  membersTitle:"What our members say",
+  testimonials:[["★★★★★","\"PREDIKTA helped me analyze Georgia Cash3 patterns like never before. The ML models are remarkably accurate.\"","Marcus T.","Georgia · PRO member"],
+    ["★★★★★","\"I've used PREDIKTA ELITE for 3 months. The Fourier analysis on New York Numbers surprised me with its accuracy.\"","Jennifer W.","New York · ELITE member"],
+    ["★★★★☆","\"Best Pick3 analysis platform I've found. Clean interface, reliable data, daily updates.\"","Carlos M.","Texas · PRO member"]],
+  faqTitle:"Frequently asked questions",
+  faq:[["Do predictions guarantee winnings?","No. PREDIKTA provides statistical analyses based on historical data. Every lottery draw is random and independent. Our tools are designed for analysis and entertainment, not to guarantee winnings."],
+    ["How does the free trial work?","You get 7 full days to test PRO or ELITE at no charge. No credit card required for the trial. One-click cancellation at any time."],
+    ["Can I change plans?","Yes, you can move from FREE to PRO, PRO to ELITE, or downgrade at any time. The change takes effect immediately."],
+    ["Which lotteries are covered?","Pick3, Cash3, Daily3, Play3 for 44+ US states and Puerto Rico. The ELITE plan also includes Pick4 and Powerball/Mega Millions jackpots."],
+    ["How does ELITE API access work?","You receive a unique API key. You can make up to 1000 requests per day to retrieve predictions and results in JSON."]],
+  ctaTitle:"Ready to level up?", ctaP:"Join thousands of players who use PREDIKTA every day to analyze their numbers.",
+  ctaBtnPro:"Start PRO — 7-day free trial", ctaBtnFree:"Try for free",
+  ctaFooter:"✓ No card required · ✓ Easy cancellation · ✓ Secure data",
+  payAlert:"Payment system to be integrated (Stripe/PayPal).\nSelected plan: ", billedSep:" · " },
+ es:{ tag:"PLANES Y PRECIOS", h1:"Elija su nivel<br>de predicción",
+  heroSub:"De gratis a profesional, PREDIKTA se adapta a su ambición. Todas las predicciones se basan en algoritmos reales.",
+  monthly:"Mensual", annual:"Anual", saveBadge:"Ahorre 40% 🎉",
+  periodMonthly:"Facturado mensualmente", periodAnnual:"Facturado anualmente (ahorre 40%)",
+  freeName:"FREE", freePeriod:"Gratis para siempre", freeDesc:"Descubra PREDIKTA sin compromiso. Ideal para empezar.", freeBtn:"Empezar gratis",
+  proName:"PRO", proBadge:"⭐ Lo Más Popular", proDesc:"Para jugadores serios. Todos los algoritmos + alertas + historial completo.", proBtn:"Empezar PRO — 7 días gratis",
+  eliteName:"ELITE", eliteDesc:"Acceso total. Para profesionales y desarrolladores.", eliteBtn:"Empezar ELITE — 7 días gratis",
+  freeFeats:["4 estados disponibles (NY, GA, TX, FL)","10 predicciones / día","Análisis Markov + Monte Carlo","30 días de historial","#ML XGBoost / Random Forest","#Análisis de Fourier","#Alertas diarias por email","#Acceso a la API","#Todos los estados de EE.UU. (44)"],
+  proFeats:["20 estados disponibles","Predicciones ilimitadas","ML XGBoost + Random Forest + GBM","Análisis de Fourier (ciclos)","12 meses de historial","Alertas diarias por email","Panel personalizado","Predicciones Pick3 + Pick4","#Acceso a la API","#Todos los estados de EE.UU. (44)"],
+  eliteFeats:["Todos los estados de EE.UU. (44) + Puerto Rico","Predicciones ilimitadas","Todos los algoritmos","5 años de historial","Alertas por email + SMS","Acceso API (1000 sol/día)","Exportar CSV / PDF","Soporte prioritario 24h","Acceso anticipado a nuevas funciones"],
+  compareTitle:"Comparación detallada de funciones", thFeature:"Función",
+  compareRows:[
+    ["Estados disponibles","4","20","44+"],["Predicciones / día","10","Ilimitadas","Ilimitadas"],
+    ["Markov Órdenes 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✗","✓","✓"],["Análisis de Fourier (ciclos)","✗","✓","✓"],
+    ["Análisis de brechas (gaps)","✓","✓","✓"],["Historial de sorteos","30 días","12 meses","5 años"],
+    ["Alertas diarias por email","✗","✓","✓"],["Alertas SMS","✗","✗","✓"],
+    ["Acceso API","✗","✗","1000 sol/d"],["Exportar CSV / PDF","✗","CSV","CSV + PDF"],
+    ["Pick3 + Pick4","Pick3","✓","✓"],["Powerball / Mega Millions","✗","✗","✓"],
+    ["Soporte","Comunidad","Email","Prioritario 24h"]],
+  membersTitle:"Lo que dicen nuestros miembros",
+  testimonials:[["★★★★★","\"PREDIKTA me ayudó a analizar los patrones de Cash3 Georgia como nunca antes. Los modelos de ML son realmente precisos.\"","Marcus T.","Georgia · Miembro PRO"],
+    ["★★★★★","\"Uso PREDIKTA ELITE desde hace 3 meses. El análisis de Fourier en New York Numbers me sorprendió por su precisión.\"","Jennifer W.","Nueva York · Miembro ELITE"],
+    ["★★★★☆","\"La mejor plataforma de análisis Pick3 que he encontrado. Interfaz clara, datos fiables, actualizaciones diarias.\"","Carlos M.","Texas · Miembro PRO"]],
+  faqTitle:"Preguntas frecuentes",
+  faq:[["¿Las predicciones garantizan ganancias?","No. PREDIKTA ofrece análisis estadísticos basados en datos históricos. Cada sorteo de lotería es aleatorio e independiente. Nuestras herramientas están diseñadas para análisis y entretenimiento, no para garantizar ganancias."],
+    ["¿Cómo funciona la prueba gratuita?","Tiene 7 días completos para probar PRO o ELITE sin costo. No se requiere tarjeta de crédito para la prueba. Cancelación con un clic en cualquier momento."],
+    ["¿Puedo cambiar de plan?","Sí, puede pasar de FREE a PRO, de PRO a ELITE, o bajar de categoría en cualquier momento. El cambio es efectivo de inmediato."],
+    ["¿Qué loterías están cubiertas?","Pick3, Cash3, Daily3, Play3 para 44+ estados de EE.UU. y Puerto Rico. El plan ELITE también incluye Pick4 y los jackpots Powerball/Mega Millions."],
+    ["¿Cómo funciona el acceso API de ELITE?","Recibe una clave API única. Puede hacer hasta 1000 solicitudes por día para obtener predicciones y resultados en JSON."]],
+  ctaTitle:"¿Listo para subir de nivel?", ctaP:"Únase a miles de jugadores que usan PREDIKTA cada día para analizar sus números.",
+  ctaBtnPro:"Empezar PRO — 7 días gratis", ctaBtnFree:"Probar gratis",
+  ctaFooter:"✓ No requiere tarjeta · ✓ Cancelación fácil · ✓ Datos seguros",
+  payAlert:"Sistema de pago por integrar (Stripe/PayPal).\nPlan seleccionado: ", billedSep:" · " },
+ pt:{ tag:"PLANOS E PREÇOS", h1:"Escolha seu nível<br>de previsão",
+  heroSub:"De grátis a profissional, a PREDIKTA se adapta à sua ambição. Todas as previsões são baseadas em algoritmos reais.",
+  monthly:"Mensal", annual:"Anual", saveBadge:"Economize 40% 🎉",
+  periodMonthly:"Cobrado mensalmente", periodAnnual:"Cobrado anualmente (economize 40%)",
+  freeName:"FREE", freePeriod:"Grátis para sempre", freeDesc:"Descubra a PREDIKTA sem compromisso. Ideal para começar.", freeBtn:"Começar Grátis",
+  proName:"PRO", proBadge:"⭐ Mais Popular", proDesc:"Para jogadores sérios. Todos os algoritmos + alertas + histórico completo.", proBtn:"Começar PRO — 7 dias grátis",
+  eliteName:"ELITE", eliteDesc:"Acesso total. Para profissionais e desenvolvedores.", eliteBtn:"Começar ELITE — 7 dias grátis",
+  freeFeats:["4 estados disponíveis (NY, GA, TX, FL)","10 previsões / dia","Análise Markov + Monte Carlo","30 dias de histórico","#ML XGBoost / Random Forest","#Análise de Fourier","#Alertas diários por e-mail","#Acesso à API","#Todos os estados dos EUA (44)"],
+  proFeats:["20 estados disponíveis","Previsões ilimitadas","ML XGBoost + Random Forest + GBM","Análise de Fourier (ciclos)","12 meses de histórico","Alertas diários por e-mail","Painel personalizado","Previsões Pick3 + Pick4","#Acesso à API","#Todos os estados dos EUA (44)"],
+  eliteFeats:["Todos os estados dos EUA (44) + Porto Rico","Previsões ilimitadas","Todos os algoritmos","5 anos de histórico","Alertas por e-mail + SMS","Acesso API (1000 req/dia)","Exportação CSV / PDF","Suporte prioritário 24h","Acesso antecipado a novos recursos"],
+  compareTitle:"Comparação detalhada de recursos", thFeature:"Recurso",
+  compareRows:[
+    ["Estados disponíveis","4","20","44+"],["Previsões / dia","10","Ilimitadas","Ilimitadas"],
+    ["Markov Ordens 1/2/3","✓","✓","✓"],["Monte Carlo (50.000 sim.)","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✗","✓","✓"],["Análise de Fourier (ciclos)","✗","✓","✓"],
+    ["Análise de lacunas (gaps)","✓","✓","✓"],["Histórico de sorteios","30 dias","12 meses","5 anos"],
+    ["Alertas diários por e-mail","✗","✓","✓"],["Alertas por SMS","✗","✗","✓"],
+    ["Acesso à API","✗","✗","1000 req/d"],["Exportação CSV / PDF","✗","CSV","CSV + PDF"],
+    ["Pick3 + Pick4","Pick3","✓","✓"],["Powerball / Mega Millions","✗","✗","✓"],
+    ["Suporte","Comunidade","E-mail","Prioritário 24h"]],
+  membersTitle:"O que nossos membros dizem",
+  testimonials:[["★★★★★","\"A PREDIKTA me ajudou a analisar os padrões do Cash3 Geórgia como nunca antes. Os modelos de ML são realmente precisos.\"","Marcus T.","Geórgia · Membro PRO"],
+    ["★★★★★","\"Uso a PREDIKTA ELITE há 3 meses. A análise de Fourier no New York Numbers me surpreendeu pela precisão.\"","Jennifer W.","Nova York · Membro ELITE"],
+    ["★★★★☆","\"Melhor plataforma de análise Pick3 que encontrei. Interface clara, dados confiáveis, atualizações diárias.\"","Carlos M.","Texas · Membro PRO"]],
+  faqTitle:"Perguntas frequentes",
+  faq:[["As previsões garantem ganhos?","Não. A PREDIKTA fornece análises estatísticas baseadas em dados históricos. Cada sorteio de loteria é aleatório e independente. Nossas ferramentas são feitas para análise e entretenimento, não para garantir ganhos."],
+    ["Como funciona o teste grátis?","Você tem 7 dias completos para testar PRO ou ELITE sem custo. Nenhum cartão de crédito é necessário para o teste. Cancelamento com um clique a qualquer momento."],
+    ["Posso mudar de plano?","Sim, você pode passar de FREE para PRO, de PRO para ELITE, ou rebaixar a qualquer momento. A mudança tem efeito imediato."],
+    ["Quais loterias são cobertas?","Pick3, Cash3, Daily3, Play3 para 44+ estados dos EUA e Porto Rico. O plano ELITE também inclui Pick4 e os jackpots Powerball/Mega Millions."],
+    ["Como funciona o acesso à API ELITE?","Você recebe uma chave de API exclusiva. Pode fazer até 1000 solicitações por dia para obter previsões e resultados em JSON."]],
+  ctaTitle:"Pronto para subir de nível?", ctaP:"Junte-se a milhares de jogadores que usam a PREDIKTA todos os dias para analisar seus números.",
+  ctaBtnPro:"Começar PRO — 7 dias grátis", ctaBtnFree:"Experimentar grátis",
+  ctaFooter:"✓ Nenhum cartão necessário · ✓ Cancelamento fácil · ✓ Dados seguros",
+  payAlert:"Sistema de pagamento a integrar (Stripe/PayPal).\nPlano selecionado: ", billedSep:" · " },
+ ht:{ tag:"PLAN AK PRI", h1:"Chwazi nivo<br>prediksyon ou",
+  heroSub:"Soti nan gratis rive nan pwofesyonèl, PREDIKTA adapte ak ambisyon ou. Tout prediksyon yo baze sou algoritm reyèl.",
+  monthly:"Chak mwa", annual:"Anyèl", saveBadge:"Ekonomize 40% 🎉",
+  periodMonthly:"Fakti chak mwa", periodAnnual:"Fakti chak ane (ekonomize 40%)",
+  freeName:"FREE", freePeriod:"Gratis pou tout tan", freeDesc:"Dekouvri PREDIKTA san angajman. Ideyal pou kòmanse.", freeBtn:"Kòmanse Gratis",
+  proName:"PRO", proBadge:"⭐ Pi Popilè a", proDesc:"Pou jwè serye yo. Tout algoritm + alèt + istwa konplè.", proBtn:"Kòmanse PRO — 7 jou gratis",
+  eliteName:"ELITE", eliteDesc:"Aksè total. Pou pwofesyonèl ak devlopè yo.", eliteBtn:"Kòmanse ELITE — 7 jou gratis",
+  freeFeats:["4 eta disponib (NY, GA, TX, FL)","10 prediksyon / jou","Analiz Markov + Monte Carlo","30 jou istwa","#ML XGBoost / Random Forest","#Analiz Fourier","#Alèt imèl chak jou","#Aksè API","#Tout eta Etazini (44)"],
+  proFeats:["20 eta disponib","Prediksyon san limit","ML XGBoost + Random Forest + GBM","Analiz Fourier (sik)","12 mwa istwa","Alèt imèl chak jou","Tablo bò pèsonalize","Prediksyon Pick3 + Pick4","#Aksè API","#Tout eta Etazini (44)"],
+  eliteFeats:["Tout eta Etazini (44) + Pòtoriko","Prediksyon san limit","Tout algoritm yo","5 ane istwa","Alèt imèl + SMS","Aksè API (1000 rekèt/jou)","Ekspòte CSV / PDF","Sipò priyoritè 24è","Aksè bonè a nouvo fonksyonalite"],
+  compareTitle:"Konparezon detaye fonksyonalite yo", thFeature:"Fonksyonalite",
+  compareRows:[
+    ["Eta disponib","4","20","44+"],["Prediksyon / jou","10","San limit","San limit"],
+    ["Markov Lòd 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✗","✓","✓"],["Analiz Fourier (sik)","✗","✓","✓"],
+    ["Analiz espas (gaps)","✓","✓","✓"],["Istwa tiraj yo","30 jou","12 mwa","5 ane"],
+    ["Alèt imèl chak jou","✗","✓","✓"],["Alèt SMS","✗","✗","✓"],
+    ["Aksè API","✗","✗","1000 rek/j"],["Ekspòte CSV / PDF","✗","CSV","CSV + PDF"],
+    ["Pick3 + Pick4","Pick3","✓","✓"],["Powerball / Mega Millions","✗","✗","✓"],
+    ["Sipò","Kominote","Imèl","Priyoritè 24è"]],
+  membersTitle:"Sa manm nou yo di",
+  testimonials:[["★★★★★","\"PREDIKTA ede m analize modèl Cash3 Georgia tankou jamè anvan. Modèl ML yo trè presi.\"","Marcus T.","Georgia · Manm PRO"],
+    ["★★★★★","\"Mwen itilize PREDIKTA ELITE depi 3 mwa. Analiz Fourier sou New York Numbers te siprann mwen ak presizyon li.\"","Jennifer W.","New York · Manm ELITE"],
+    ["★★★★☆","\"Pi bon platfòm analiz Pick3 mwen janm jwenn. Entèfas klè, done serye, mizajou chak jou.\"","Carlos M.","Texas · Manm PRO"]],
+  faqTitle:"Kesyon moun poze souvan",
+  faq:[["Èske prediksyon yo garanti genyen?","Non. PREDIKTA bay analiz estatistik ki baze sou done istorik. Chak tiraj lotri se aleyatwa ak endepandan. Zouti nou yo fèt pou analiz ak amizman, pa pou garanti genyen."],
+    ["Kijan esè gratis la fonksyone?","Ou gen 7 jou konplè pou eseye PRO oswa ELITE san frè. Pa gen kat kredi ki nesesè pou esè a. Anilasyon ak yon sèl klik nenpòt kilè."],
+    ["Èske mwen ka chanje plan?","Wi, ou ka pase soti nan FREE rive nan PRO, nan PRO rive nan ELITE, oswa desann nenpòt kilè. Chanjman an aplike imedyatman."],
+    ["Ki lotri ki kouvri?","Pick3, Cash3, Daily3, Play3 pou 44+ eta ameriken ak Pòtoriko. Plan ELITE la gen ladan tou Pick4 ak jackpot Powerball/Mega Millions."],
+    ["Kijan aksè API ELITE a fonksyone?","Ou resevwa yon kle API inik. Ou ka fè jiska 1000 rekèt pa jou pou jwenn prediksyon ak rezilta an JSON."]],
+  ctaTitle:"Pare pou monte yon nivo?", ctaP:"Rejwenn dè milye jwè ki itilize PREDIKTA chak jou pou analize nimewo yo.",
+  ctaBtnPro:"Kòmanse PRO — 7 jou gratis", ctaBtnFree:"Eseye gratis",
+  ctaFooter:"✓ Pa gen kat ki nesesè · ✓ Anilasyon fasil · ✓ Done sekirize",
+  payAlert:"Sistèm peman pou entegre (Stripe/PayPal).\nPlan chwazi: ", billedSep:" · " },
+};
+
+function renderPlans(dict){
+  const mk = (feats)=>feats.map(f=>{
+    const no = f.startsWith('#');
+    const txt = no ? f.slice(1) : f;
+    return `<li class="${no?'no':''}">${txt}</li>`;
+  }).join('');
+  document.getElementById('plansWrap').innerHTML = `
+  <div class="plan">
+    <div class="plan-name">${dict.freeName}</div>
+    <div class="plan-price">$0<span>/mo</span></div>
+    <div class="plan-period">${dict.freePeriod}</div>
+    <p class="plan-desc">${dict.freeDesc}</p>
+    <a href="/" class="plan-btn btn-free">${dict.freeBtn}</a>
+    <ul class="plan-features">${mk(dict.freeFeats)}</ul>
+  </div>
+  <div class="plan featured">
+    <div class="popular-badge">${dict.proBadge}</div>
+    <div class="plan-name">${dict.proName}</div>
+    <div class="plan-price" id="proPrice">${PRICES.pro[billing]}<span>/mo</span></div>
+    <div class="plan-period" id="proPeriod">${billing==='annual'?dict.periodAnnual:dict.periodMonthly}</div>
+    <p class="plan-desc">${dict.proDesc}</p>
+    <button class="plan-btn btn-pro" onclick="subscribe('pro')">${dict.proBtn}</button>
+    <ul class="plan-features">${mk(dict.proFeats)}</ul>
+  </div>
+  <div class="plan">
+    <div class="plan-name">${dict.eliteName}</div>
+    <div class="plan-price" id="elitePrice">${PRICES.elite[billing]}<span>/mo</span></div>
+    <div class="plan-period" id="elitePeriod">${billing==='annual'?dict.periodAnnual:dict.periodMonthly}</div>
+    <p class="plan-desc">${dict.eliteDesc}</p>
+    <button class="plan-btn btn-elite" onclick="subscribe('elite')">${dict.eliteBtn}</button>
+    <ul class="plan-features">${mk(dict.eliteFeats)}</ul>
+  </div>`;
+}
+function cls(v){ return v==='✓'?'check':(v==='✗'?'cross':'partial'); }
+function renderCompare(dict){
+  document.getElementById('compareBody').innerHTML = dict.compareRows.map(([f,a,b,c])=>
+    `<tr><td>${f}</td><td class="${/^\d/.test(a)?'':cls(a)}">${a}</td><td class="${/^\d/.test(b)&&b!=='Illimitées'&&!isNaN(parseInt(b))?'partial':cls(b)}">${b}</td><td class="${cls(c)==='partial'&&c.match(/^\d/)?'check':cls(c)}">${c}</td></tr>`
+  ).join('');
+}
+function renderTesti(dict){
+  document.getElementById('testiWrap').innerHTML = dict.testimonials.map(([stars,text,author,state])=>`
+  <div class="tcard">
+    <div class="tcard-stars">${stars}</div>
+    <p class="tcard-text">${text}</p>
+    <div class="tcard-author">${author}</div>
+    <div class="tcard-state">${state}</div>
+  </div>`).join('');
+}
+function renderFaq(dict){
+  document.getElementById('faqWrap').innerHTML = dict.faq.map(([q,a],i)=>`
+  <div class="faq-item" id="faq${i}">
+    <div class="faq-q" onclick="toggleFaq(${i})">${q}<span class="faq-icon">+</span></div>
+    <div class="faq-a">${a}</div>
+  </div>`).join('');
+}
+
+function applyLang(lang){
+  curLang = T[lang] ? lang : 'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  renderPlans(dict);
+  renderCompare(dict);
+  renderTesti(dict);
+  renderFaq(dict);
+  document.documentElement.setAttribute('lang', curLang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
 
 function setBilling(type){
   billing = type;
+  const dict = T[curLang];
   document.getElementById('btnMonthly').classList.toggle('active', type==='monthly');
   document.getElementById('btnAnnual').classList.toggle('active', type==='annual');
   document.getElementById('proPrice').innerHTML  = PRICES.pro[type]  + '<span>/mo</span>';
   document.getElementById('elitePrice').innerHTML= PRICES.elite[type]+'<span>/mo</span>';
-  document.getElementById('proPeriod').textContent  = type==='annual'?'Facturé annuellement (économisez 40%)':'Facturé mensuellement';
-  document.getElementById('elitePeriod').textContent= type==='annual'?'Facturé annuellement (économisez 40%)':'Facturé mensuellement';
+  document.getElementById('proPeriod').textContent  = type==='annual'?dict.periodAnnual:dict.periodMonthly;
+  document.getElementById('elitePeriod').textContent= type==='annual'?dict.periodAnnual:dict.periodMonthly;
 }
 
 function subscribe(plan){
-  alert('Système de paiement à intégrer (Stripe/PayPal).\nPlan sélectionné : ' + plan.toUpperCase() + ' · ' + billing);
+  const dict = T[curLang];
+  alert(dict.payAlert + plan.toUpperCase() + dict.billedSep + billing);
 }
 
 function toggleFaq(i){
