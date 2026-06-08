@@ -23,13 +23,20 @@ a:hover{text-decoration:underline}
 </head>
 <body>
 <div class="page">
-<h1>Politique de Confidentialité</h1>
-<p class="updated">Dernière mise à jour : 3 juin 2026</p>
+<h1 data-i18n="title">Politique de Confidentialité</h1>
+<p class="updated" data-i18n="updated">Dernière mise à jour : 3 juin 2026</p>
 
-<div class="highlight">
+<div class="highlight" data-i18n="highlight">
   <strong>Résumé :</strong> PREDIKTA collecte uniquement les données nécessaires à son fonctionnement. Nous ne vendons jamais vos données personnelles. Vous pouvez demander la suppression de vos données à tout moment.
 </div>
 
+<div id="body"></div>
+</div>
+<script>
+const T = {
+fr:{ title:"Politique de Confidentialité", updated:"Dernière mise à jour : 3 juin 2026",
+ highlight:'<strong>Résumé :</strong> PREDIKTA collecte uniquement les données nécessaires à son fonctionnement. Nous ne vendons jamais vos données personnelles. Vous pouvez demander la suppression de vos données à tout moment.',
+ body:`
 <h2>1. Données collectées</h2>
 <p>PREDIKTA collecte les données suivantes :</p>
 <ul>
@@ -39,7 +46,6 @@ a:hover{text-decoration:underline}
   <li><strong>Données d'usage anonymisées</strong> — pages visitées, état sélectionné (via Google Analytics si activé)</li>
 </ul>
 <p>Nous ne collectons <strong>aucune</strong> donnée de paiement directement. Les paiements sont traités par des partenaires certifiés (Stripe/PayPal).</p>
-
 <h2>2. Utilisation des données</h2>
 <p>Vos données sont utilisées pour :</p>
 <ul>
@@ -48,11 +54,9 @@ a:hover{text-decoration:underline}
   <li>Améliorer nos services via des analyses d'usage anonymisées</li>
   <li>Gérer votre abonnement PRO ou ELITE</li>
 </ul>
-
 <h2>3. Cookies et localStorage</h2>
 <p>PREDIKTA utilise le <strong>localStorage</strong> de votre navigateur pour stocker vos préférences (langue, thème, favoris). Aucune donnée personnelle n'est stockée dans les cookies.</p>
 <p>Si vous activez Google Analytics (désactivé par défaut), des cookies tiers peuvent être déposés conformément à la politique de Google.</p>
-
 <h2>4. Partage des données</h2>
 <p>Nous ne vendons, ne louons et ne partageons jamais vos données personnelles avec des tiers, sauf :</p>
 <ul>
@@ -60,10 +64,8 @@ a:hover{text-decoration:underline}
   <li>Pour respecter une obligation légale</li>
   <li>Avec nos prestataires de paiement (Stripe/PayPal) dans le cadre strict du traitement de votre abonnement</li>
 </ul>
-
 <h2>5. Liens d'affiliation</h2>
 <p>PREDIKTA affiche des liens d'affiliation vers des partenaires (TheLotter, LotteryPro, Jackpot.com). Si vous cliquez sur ces liens, ces partenaires peuvent déposer leurs propres cookies. Consultez leurs politiques de confidentialité respectives pour plus d'informations.</p>
-
 <h2>6. Vos droits</h2>
 <p>Conformément au RGPD et au CCPA, vous disposez des droits suivants :</p>
 <ul>
@@ -74,14 +76,218 @@ a:hover{text-decoration:underline}
   <li><strong>Droit à la portabilité</strong> — Recevoir vos données dans un format structuré</li>
 </ul>
 <p>Pour exercer ces droits, contactez-nous à <a href="/contact">notre page contact</a>.</p>
-
 <h2>7. Sécurité</h2>
 <p>Nous mettons en œuvre des mesures de sécurité adaptées : en-têtes HTTP de sécurité, validation des entrées, aucune donnée sensible stockée en clair. Nos serveurs utilisent HTTPS.</p>
-
 <h2>8. Modifications</h2>
 <p>Nous nous réservons le droit de modifier cette politique à tout moment. En cas de changement significatif, nous informerons les utilisateurs inscrits par email.</p>
-
 <h2>9. Contact</h2>
-<p>Pour toute question relative à notre politique de confidentialité : <a href="/contact">formulaire de contact</a> ou <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>
-</div>
+<p>Pour toute question relative à notre politique de confidentialité : <a href="/contact">formulaire de contact</a> ou <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>` },
+en:{ title:"Privacy Policy", updated:"Last updated: June 3, 2026",
+ highlight:'<strong>Summary:</strong> PREDIKTA only collects data necessary for its operation. We never sell your personal data. You can request deletion of your data at any time.',
+ body:`
+<h2>1. Data we collect</h2>
+<p>PREDIKTA collects the following data:</p>
+<ul>
+  <li><strong>Email address</strong> — only if you subscribe to the newsletter or create an account</li>
+  <li><strong>Local preferences</strong> — language, theme (stored in your browser via localStorage)</li>
+  <li><strong>Contact data</strong> — name, email, message if you use the contact form</li>
+  <li><strong>Anonymized usage data</strong> — pages visited, selected state (via Google Analytics if enabled)</li>
+</ul>
+<p>We do <strong>not</strong> collect any payment data directly. Payments are processed by certified partners (Stripe/PayPal).</p>
+<h2>2. How we use your data</h2>
+<p>Your data is used to:</p>
+<ul>
+  <li>Send the newsletters and result alerts you subscribed to</li>
+  <li>Respond to your support messages</li>
+  <li>Improve our services via anonymized usage analytics</li>
+  <li>Manage your PRO or ELITE subscription</li>
+</ul>
+<h2>3. Cookies and localStorage</h2>
+<p>PREDIKTA uses your browser's <strong>localStorage</strong> to store your preferences (language, theme, favorites). No personal data is stored in cookies.</p>
+<p>If you enable Google Analytics (disabled by default), third-party cookies may be set in accordance with Google's policy.</p>
+<h2>4. Data sharing</h2>
+<p>We never sell, rent or share your personal data with third parties, except:</p>
+<ul>
+  <li>With your explicit consent</li>
+  <li>To comply with a legal obligation</li>
+  <li>With our payment providers (Stripe/PayPal) strictly for processing your subscription</li>
+</ul>
+<h2>5. Affiliate links</h2>
+<p>PREDIKTA displays affiliate links to partners (TheLotter, LotteryPro, Jackpot.com). If you click these links, those partners may set their own cookies. Refer to their respective privacy policies for more information.</p>
+<h2>6. Your rights</h2>
+<p>In accordance with GDPR and CCPA, you have the following rights:</p>
+<ul>
+  <li><strong>Right of access</strong> — Request a copy of your data</li>
+  <li><strong>Right to rectification</strong> — Correct inaccurate data</li>
+  <li><strong>Right to erasure</strong> — Request deletion of your data</li>
+  <li><strong>Right to object</strong> — Object to the processing of your data</li>
+  <li><strong>Right to portability</strong> — Receive your data in a structured format</li>
+</ul>
+<p>To exercise these rights, contact us via <a href="/contact">our contact page</a>.</p>
+<h2>7. Security</h2>
+<p>We implement appropriate security measures: HTTP security headers, input validation, no sensitive data stored in plain text. Our servers use HTTPS.</p>
+<h2>8. Changes</h2>
+<p>We reserve the right to modify this policy at any time. In the event of a significant change, we will notify registered users by email.</p>
+<h2>9. Contact</h2>
+<p>For any question regarding our privacy policy: <a href="/contact">contact form</a> or <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>` },
+es:{ title:"Política de Privacidad", updated:"Última actualización: 3 de junio de 2026",
+ highlight:'<strong>Resumen:</strong> PREDIKTA solo recopila los datos necesarios para su funcionamiento. Nunca vendemos sus datos personales. Puede solicitar la eliminación de sus datos en cualquier momento.',
+ body:`
+<h2>1. Datos recopilados</h2>
+<p>PREDIKTA recopila los siguientes datos:</p>
+<ul>
+  <li><strong>Dirección de correo electrónico</strong> — solo si se suscribe al boletín o crea una cuenta</li>
+  <li><strong>Preferencias locales</strong> — idioma, tema (almacenados en su navegador mediante localStorage)</li>
+  <li><strong>Datos de contacto</strong> — nombre, correo, mensaje si usa el formulario de contacto</li>
+  <li><strong>Datos de uso anonimizados</strong> — páginas visitadas, estado seleccionado (vía Google Analytics si está activado)</li>
+</ul>
+<p>No recopilamos <strong>ningún</strong> dato de pago directamente. Los pagos son procesados por socios certificados (Stripe/PayPal).</p>
+<h2>2. Uso de los datos</h2>
+<p>Sus datos se utilizan para:</p>
+<ul>
+  <li>Enviar los boletines y alertas de resultados a los que se suscribió</li>
+  <li>Responder a sus mensajes de soporte</li>
+  <li>Mejorar nuestros servicios mediante análisis de uso anonimizados</li>
+  <li>Gestionar su suscripción PRO o ELITE</li>
+</ul>
+<h2>3. Cookies y localStorage</h2>
+<p>PREDIKTA utiliza el <strong>localStorage</strong> de su navegador para almacenar sus preferencias (idioma, tema, favoritos). Ningún dato personal se almacena en cookies.</p>
+<p>Si activa Google Analytics (desactivado por defecto), pueden establecerse cookies de terceros conforme a la política de Google.</p>
+<h2>4. Compartición de datos</h2>
+<p>Nunca vendemos, alquilamos ni compartimos sus datos personales con terceros, excepto:</p>
+<ul>
+  <li>Con su consentimiento explícito</li>
+  <li>Para cumplir con una obligación legal</li>
+  <li>Con nuestros proveedores de pago (Stripe/PayPal) estrictamente para procesar su suscripción</li>
+</ul>
+<h2>5. Enlaces de afiliados</h2>
+<p>PREDIKTA muestra enlaces de afiliados a socios (TheLotter, LotteryPro, Jackpot.com). Si hace clic en estos enlaces, dichos socios pueden establecer sus propias cookies. Consulte sus respectivas políticas de privacidad para más información.</p>
+<h2>6. Sus derechos</h2>
+<p>De conformidad con el RGPD y la CCPA, usted tiene los siguientes derechos:</p>
+<ul>
+  <li><strong>Derecho de acceso</strong> — Solicitar una copia de sus datos</li>
+  <li><strong>Derecho de rectificación</strong> — Corregir datos inexactos</li>
+  <li><strong>Derecho de supresión</strong> — Solicitar la eliminación de sus datos</li>
+  <li><strong>Derecho de oposición</strong> — Oponerse al tratamiento de sus datos</li>
+  <li><strong>Derecho a la portabilidad</strong> — Recibir sus datos en un formato estructurado</li>
+</ul>
+<p>Para ejercer estos derechos, contáctenos a través de <a href="/contact">nuestra página de contacto</a>.</p>
+<h2>7. Seguridad</h2>
+<p>Implementamos medidas de seguridad adecuadas: encabezados HTTP de seguridad, validación de entradas, ningún dato sensible almacenado en texto plano. Nuestros servidores usan HTTPS.</p>
+<h2>8. Modificaciones</h2>
+<p>Nos reservamos el derecho de modificar esta política en cualquier momento. En caso de cambio significativo, informaremos a los usuarios registrados por correo electrónico.</p>
+<h2>9. Contacto</h2>
+<p>Para cualquier pregunta relacionada con nuestra política de privacidad: <a href="/contact">formulario de contacto</a> o <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>` },
+pt:{ title:"Política de Privacidade", updated:"Última atualização: 3 de junho de 2026",
+ highlight:'<strong>Resumo:</strong> A PREDIKTA coleta apenas os dados necessários para seu funcionamento. Nunca vendemos seus dados pessoais. Você pode solicitar a exclusão dos seus dados a qualquer momento.',
+ body:`
+<h2>1. Dados coletados</h2>
+<p>A PREDIKTA coleta os seguintes dados:</p>
+<ul>
+  <li><strong>Endereço de e-mail</strong> — somente se você se inscrever na newsletter ou criar uma conta</li>
+  <li><strong>Preferências locais</strong> — idioma, tema (armazenados no seu navegador via localStorage)</li>
+  <li><strong>Dados de contato</strong> — nome, e-mail, mensagem se você usar o formulário de contato</li>
+  <li><strong>Dados de uso anonimizados</strong> — páginas visitadas, estado selecionado (via Google Analytics, se ativado)</li>
+</ul>
+<p>Não coletamos <strong>nenhum</strong> dado de pagamento diretamente. Os pagamentos são processados por parceiros certificados (Stripe/PayPal).</p>
+<h2>2. Uso dos dados</h2>
+<p>Seus dados são usados para:</p>
+<ul>
+  <li>Enviar as newsletters e alertas de resultados aos quais você se inscreveu</li>
+  <li>Responder às suas mensagens de suporte</li>
+  <li>Melhorar nossos serviços por meio de análises de uso anonimizadas</li>
+  <li>Gerenciar sua assinatura PRO ou ELITE</li>
+</ul>
+<h2>3. Cookies e localStorage</h2>
+<p>A PREDIKTA usa o <strong>localStorage</strong> do seu navegador para armazenar suas preferências (idioma, tema, favoritos). Nenhum dado pessoal é armazenado em cookies.</p>
+<p>Se você ativar o Google Analytics (desativado por padrão), cookies de terceiros podem ser definidos de acordo com a política do Google.</p>
+<h2>4. Compartilhamento de dados</h2>
+<p>Nunca vendemos, alugamos ou compartilhamos seus dados pessoais com terceiros, exceto:</p>
+<ul>
+  <li>Com o seu consentimento explícito</li>
+  <li>Para cumprir uma obrigação legal</li>
+  <li>Com nossos provedores de pagamento (Stripe/PayPal) estritamente para processar sua assinatura</li>
+</ul>
+<h2>5. Links de afiliados</h2>
+<p>A PREDIKTA exibe links de afiliados para parceiros (TheLotter, LotteryPro, Jackpot.com). Se você clicar nesses links, esses parceiros podem definir seus próprios cookies. Consulte suas respectivas políticas de privacidade para mais informações.</p>
+<h2>6. Seus direitos</h2>
+<p>De acordo com o RGPD e a CCPA, você tem os seguintes direitos:</p>
+<ul>
+  <li><strong>Direito de acesso</strong> — Solicitar uma cópia dos seus dados</li>
+  <li><strong>Direito de retificação</strong> — Corrigir dados imprecisos</li>
+  <li><strong>Direito ao apagamento</strong> — Solicitar a exclusão dos seus dados</li>
+  <li><strong>Direito de oposição</strong> — Opor-se ao tratamento dos seus dados</li>
+  <li><strong>Direito à portabilidade</strong> — Receber seus dados em formato estruturado</li>
+</ul>
+<p>Para exercer esses direitos, contate-nos pela <a href="/contact">nossa página de contato</a>.</p>
+<h2>7. Segurança</h2>
+<p>Implementamos medidas de segurança adequadas: cabeçalhos HTTP de segurança, validação de entradas, nenhum dado sensível armazenado em texto simples. Nossos servidores usam HTTPS.</p>
+<h2>8. Alterações</h2>
+<p>Reservamo-nos o direito de modificar esta política a qualquer momento. Em caso de mudança significativa, informaremos os usuários registrados por e-mail.</p>
+<h2>9. Contato</h2>
+<p>Para qualquer dúvida sobre nossa política de privacidade: <a href="/contact">formulário de contato</a> ou <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>` },
+ht:{ title:"Politik Konfidansyalite", updated:"Dènye mizajou: 3 jen 2026",
+ highlight:'<strong>Rezime:</strong> PREDIKTA kolekte sèlman done ki nesesè pou fonksyònman li. Nou pa janm vann done pèsonèl ou yo. Ou ka mande efase done ou yo nenpòt kilè.',
+ body:`
+<h2>1. Done nou kolekte</h2>
+<p>PREDIKTA kolekte done sa yo:</p>
+<ul>
+  <li><strong>Adrès imèl</strong> — sèlman si ou abone nan bilten an oswa kreye yon kont</li>
+  <li><strong>Preferans lokal</strong> — lang, tèm (estoke nan navigatè ou atravè localStorage)</li>
+  <li><strong>Done kontak</strong> — non, imèl, mesaj si ou itilize fòm kontak la</li>
+  <li><strong>Done itilizasyon anonim</strong> — paj vizite, eta chwazi (atravè Google Analytics si li aktive)</li>
+</ul>
+<p>Nou pa kolekte <strong>okenn</strong> done peman dirèkteman. Peman yo trete pa patnè sètifye (Stripe/PayPal).</p>
+<h2>2. Itilizasyon done yo</h2>
+<p>Done ou yo itilize pou:</p>
+<ul>
+  <li>Voye bilten ak alèt rezilta ou abone yo</li>
+  <li>Reponn mesaj sipò ou yo</li>
+  <li>Amelyore sèvis nou yo atravè analiz itilizasyon anonim</li>
+  <li>Jere abònman PRO oswa ELITE ou</li>
+</ul>
+<h2>3. Cookies ak localStorage</h2>
+<p>PREDIKTA itilize <strong>localStorage</strong> navigatè ou pou estoke preferans ou yo (lang, tèm, favori). Pa gen okenn done pèsonèl ki estoke nan cookies.</p>
+<p>Si ou aktive Google Analytics (dezaktive pa default), cookies tyès pati ka enstale dapre politik Google.</p>
+<h2>4. Pataje done</h2>
+<p>Nou pa janm vann, lwe oswa pataje done pèsonèl ou yo ak twazyèm pati, eksepte:</p>
+<ul>
+  <li>Avèk konsantman eksplisit ou</li>
+  <li>Pou respekte yon obligasyon legal</li>
+  <li>Avèk founisè peman nou yo (Stripe/PayPal) estriktteman pou trete abònman ou</li>
+</ul>
+<h2>5. Lyen afilyasyon</h2>
+<p>PREDIKTA montre lyen afilyasyon ak patnè (TheLotter, LotteryPro, Jackpot.com). Si ou klike sou lyen sa yo, patnè sa yo ka enstale pwòp cookies pa yo. Konsilte politik konfidansyalite respektif yo pou plis enfòmasyon.</p>
+<h2>6. Dwa ou yo</h2>
+<p>Dapre RGPD ak CCPA, ou gen dwa sa yo:</p>
+<ul>
+  <li><strong>Dwa pou jwenn aksè</strong> — Mande yon kopi done ou yo</li>
+  <li><strong>Dwa pou rektifye</strong> — Korije done ki pa kòrèk</li>
+  <li><strong>Dwa pou efase</strong> — Mande efase done ou yo</li>
+  <li><strong>Dwa pou opoze</strong> — Opoze a tretman done ou yo</li>
+  <li><strong>Dwa pou pòtabilite</strong> — Resevwa done ou yo nan yon fòma estriktire</li>
+</ul>
+<p>Pou egzèse dwa sa yo, kontakte nou atravè <a href="/contact">paj kontak nou an</a>.</p>
+<h2>7. Sekirite</h2>
+<p>Nou aplike mezi sekirite apwopriye: antèt sekirite HTTP, validasyon antre done, pa gen done sansib ki estoke an klè. Sèvè nou yo itilize HTTPS.</p>
+<h2>8. Chanjman</h2>
+<p>Nou rezève dwa pou modifye politik sa a nenpòt kilè. Si gen yon chanjman enpòtan, nou ap enfòme itilizatè enskri yo pa imèl.</p>
+<h2>9. Kontak</h2>
+<p>Pou nenpòt kesyon konsènan politik konfidansyalite nou an: <a href="/contact">fòm kontak</a> oswa <a href="mailto:privacy@predikta.ai">privacy@predikta.ai</a></p>` },
+};
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelector('[data-i18n="title"]').textContent = dict.title;
+  document.querySelector('[data-i18n="updated"]').textContent = dict.updated;
+  document.querySelector('[data-i18n="highlight"]').innerHTML = dict.highlight;
+  document.getElementById('body').innerHTML = dict.body;
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
 </body></html>
