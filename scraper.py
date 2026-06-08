@@ -66,7 +66,7 @@ STATES = {
     "OK": {"slug": "pick3",          "name": "Oklahoma Pick 3",         "dpd": 1},
     "DE": {"slug": "play3",          "name": "Delaware Play 3",         "dpd": 2},
     "NM": {"slug": "pick3",          "name": "New Mexico Pick 3",       "dpd": 2},
-    "WV": {"slug": "daily3",         "name": "West Virginia Daily 3",   "dpd": 2},
+    "WV": {"slug": "daily3",         "name": "West Virginia Daily 3",   "dpd": 1},
     # ── Tier 3 — Additional states (newly added) ──────────────────────────
     "DC": {"slug": "dc3",            "name": "DC Pick 3",               "dpd": 3},
     "WI": {"slug": "pick3",          "name": "Wisconsin Pick 3",        "dpd": 2},
