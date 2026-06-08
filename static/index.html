@@ -1183,7 +1183,7 @@ const T = {
     overdue:"EN RETARD",normal:"normal",
     pos:"Position",cycleLen:"tirages/cycle",predicted:"Prédit:",
     uniform:"uniforme",
-    draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
+    allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
   },
   en:{
     heroTitle:"Advanced Algorithm Predictions",
@@ -1210,7 +1210,7 @@ const T = {
     overdue:"OVERDUE",normal:"normal",
     pos:"Position",cycleLen:"draws/cycle",predicted:"Predicted:",
     uniform:"uniform",
-    draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
+    allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
   },
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
@@ -1237,7 +1237,7 @@ const T = {
     overdue:"VENCIDA",normal:"normal",
     pos:"Posición",cycleLen:"sorteos/ciclo",predicted:"Predicho:",
     uniform:"uniforme",
-    draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
+    allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
   },
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
@@ -1264,7 +1264,7 @@ const T = {
     overdue:"EM ATRASO",normal:"normal",
     pos:"Posição",cycleLen:"sorteios/ciclo",predicted:"Previsto:",
     uniform:"uniforme",
-    draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
+    allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
   },
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
@@ -1291,7 +1291,7 @@ const T = {
     overdue:"AN RETA",normal:"nòmal",
     pos:"Pozisyon",cycleLen:"tiraj/sik",predicted:"Predit:",
     uniform:"inifòm",
-    draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
+    allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
   },
 };
 
@@ -1640,7 +1640,7 @@ async function populateTodOptions(stateCode){
   const sched = {};
   (stMeta.schedule || []).forEach(s => { sched[s.tod] = s.time; });
   const prev = todSel.value;
-  todSel.innerHTML = '<option value="all">Tous tirages</option>' +
+  todSel.innerHTML = '<option value="all">' + t('allDraws') + '</option>' +
     tods.map(t => `<option value="${t}">${TOD_LABELS[t] || t}${sched[t] ? ' — ' + sched[t] : ''}</option>`).join('');
   // Conserve la sélection précédente si toujours valide, sinon "Tous tirages"
   todSel.value = (prev === 'all' || tods.includes(prev)) ? prev : 'all';
