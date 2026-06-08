@@ -68,7 +68,7 @@ STATES = {
     "NM": {"slug": "pick3",          "name": "New Mexico Pick 3",       "dpd": 2},
     "WV": {"slug": "daily3",         "name": "West Virginia Daily 3",   "dpd": 2},
     # ── Tier 3 — Additional states (newly added) ──────────────────────────
-    "DC": {"slug": "pick3",          "name": "DC Pick 3",               "dpd": 2},
+    "DC": {"slug": "dc3",            "name": "DC Pick 3",               "dpd": 3},
     "WI": {"slug": "pick3",          "name": "Wisconsin Pick 3",        "dpd": 2},
     "MN": {"slug": "pick3",          "name": "Minnesota Pick 3",        "dpd": 1},
     "NE": {"slug": "pick3",          "name": "Nebraska Pick 3",         "dpd": 1},
@@ -115,17 +115,28 @@ def parse_draws(html: str) -> list[dict]:
                 if tod_box:
                     label_txt = tod_box.get_text(strip=True).lower()
                 classes = " ".join(tod_i.get("class", [])).lower()
-                hay = label_txt or classes
-                if "mid" in hay:
-                    tod = "Midday"
-                elif "morn" in hay:
-                    tod = "Morning"
-                elif "nite" in hay or "night" in hay or "noche" in hay:
-                    tod = "Night"
-                elif "eve" in hay:
-                    tod = "Evening"
-                elif "day" in hay or "día" in hay or "dia" in hay:
-                    tod = "Day"
+                # If label is a clock time (e.g. "11:30pm"), classify by hour —
+                # more reliable than lotterypost's reused TOD CSS classes.
+                tmatch = re.search(r'(\d{1,2}):(\d{2})\s*(am|pm)', label_txt)
+                if tmatch:
+                    h = int(tmatch.group(1)) % 12
+                    if tmatch.group(3) == "pm": h += 12
+                    if h < 12: tod = "Morning"
+                    elif h < 17: tod = "Midday"
+                    elif h < 21: tod = "Evening"
+                    else: tod = "Night"
+                else:
+                    hay = label_txt or classes
+                    if "mid" in hay:
+                        tod = "Midday"
+                    elif "morn" in hay:
+                        tod = "Morning"
+                    elif "nite" in hay or "night" in hay or "noche" in hay:
+                        tod = "Night"
+                    elif "eve" in hay:
+                        tod = "Evening"
+                    elif "day" in hay or "día" in hay or "dia" in hay:
+                        tod = "Day"
 
             # Main numbers: take ONLY the first ul.resultsnums (ignore Fireball)
             first_ul = drawing.select_one("ul.resultsnums")

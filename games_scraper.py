@@ -68,12 +68,21 @@ def parse_game_results(html: str, game_type: str) -> list[dict]:
                 if tod_box:
                     label_txt = tod_box.get_text(strip=True).lower()
                 cls = " ".join(tod_i.get("class", [])).lower()
-                hay = label_txt or cls
-                if "mid" in hay: tod = "Midday"
-                elif "morn" in hay: tod = "Morning"
-                elif "nite" in hay or "night" in hay or "noche" in hay: tod = "Night"
-                elif "eve" in hay: tod = "Evening"
-                elif "day" in hay or "día" in hay or "dia" in hay: tod = "Day"
+                tmatch = re.search(r'(\d{1,2}):(\d{2})\s*(am|pm)', label_txt)
+                if tmatch:
+                    h = int(tmatch.group(1)) % 12
+                    if tmatch.group(3) == "pm": h += 12
+                    if h < 12: tod = "Morning"
+                    elif h < 17: tod = "Midday"
+                    elif h < 21: tod = "Evening"
+                    else: tod = "Night"
+                else:
+                    hay = label_txt or cls
+                    if "mid" in hay: tod = "Midday"
+                    elif "morn" in hay: tod = "Morning"
+                    elif "nite" in hay or "night" in hay or "noche" in hay: tod = "Night"
+                    elif "eve" in hay: tod = "Evening"
+                    elif "day" in hay or "día" in hay or "dia" in hay: tod = "Day"
 
             # All number groups in this drawing
             num_rows = drawing.select("div.resultsnumsrow")
