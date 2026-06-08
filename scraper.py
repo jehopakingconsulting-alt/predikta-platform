@@ -49,7 +49,7 @@ STATES = {
     "VA": {"slug": "pick3",          "name": "Virginia Pick 3",         "dpd": 2},
     "MI": {"slug": "pick3",          "name": "Michigan Pick 3",         "dpd": 2},
     # ── Tier 2 — Mid-size states ──────────────────────────────────────────
-    "TN": {"slug": "cash3",          "name": "Tennessee Cash 3",        "dpd": 2},
+    "TN": {"slug": "cash3",          "name": "Tennessee Cash 3",        "dpd": 3},
     "SC": {"slug": "pick3",          "name": "South Carolina Pick 3",   "dpd": 2},
     "CT": {"slug": "play3",          "name": "Connecticut Play 3",      "dpd": 2},
     "MD": {"slug": "pick3",          "name": "Maryland Pick 3",         "dpd": 2},
