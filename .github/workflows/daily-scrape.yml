@@ -1,0 +1,48 @@
+name: Daily Lottery Data Scrape
+
+on:
+  schedule:
+    # Tous les jours à 8h, 14h et 22h UTC (couvre Morning/Midday/Evening/Night US)
+    - cron: '0 8,14,22 * * *'
+  workflow_dispatch:   # Déclenchement manuel depuis GitHub
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 urllib3
+
+      - name: Run scraper (tous les états, 1 mois)
+        run: python scraper.py AR AZ CA CO CT DC DE FL GA IA ID IL IN KS KY LA MD ME MI MN MO MS NC NE NH NJ NM NY OH OK PA PR SC TN TX VA VT WA WI WV
+        env:
+          PYTHONUNBUFFERED: "1"
+        continue-on-error: true
+
+      - name: Check for data changes
+        id: changes
+        run: |
+          git diff --quiet data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit & push updated data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          NFILES=$(git diff --cached --name-only | wc -l)
+          git commit -m "data: auto-scrape $(date -u +%Y-%m-%d\ %H:%M\ UTC) · ${NFILES} states updated"
+          git push
