@@ -223,6 +223,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <!-- Hero -->
 <div class="hero">
+  <div class="hero-greeting" id="heroGreeting" style="font-size:.85rem;color:var(--muted2);margin-bottom:10px;position:relative;z-index:2"></div>
   <div class="hero-kicker" data-i18n="heroKicker">🌍 Plateforme Mondiale · Powered by Advanced Analytics</div>
   <h1>PREDIKTA</h1>
   <p class="hero-sub" data-i18n="heroSub">Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues</p>
@@ -459,7 +460,9 @@ const T = {
     aff3Desc:"Jackpots en temps réel",aff3Cta:"Voir →",
     loading:"Chargement...",noResults:"Aucun résultat disponible.",loadLink:"Charger →",
     today:"🟢 Auj.",yesterday:"⏰ Hier",moreOthers:n=>`+${n} autres →`,viewAll:"Voir tous les résultats →",
-    locale:"fr-FR"
+    locale:"fr-FR",
+    greetMorning:"Bonjour",greetAfternoon:"Bon après-midi",greetEvening:"Bonsoir",
+    tagline:"Bonne chance pour les tirages d'aujourd'hui !"
   },
   en:{
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
@@ -509,7 +512,9 @@ const T = {
     aff3Desc:"Real-time jackpots",aff3Cta:"View →",
     loading:"Loading...",noResults:"No results available.",loadLink:"Load →",
     today:"🟢 Today",yesterday:"⏰ Yesterday",moreOthers:n=>`+${n} more →`,viewAll:"View all results →",
-    locale:"en-US"
+    locale:"en-US",
+    greetMorning:"Good morning",greetAfternoon:"Good afternoon",greetEvening:"Good evening",
+    tagline:"Good luck with today's draws!"
   },
   es:{
     heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
@@ -559,7 +564,9 @@ const T = {
     aff3Desc:"Jackpots en tiempo real",aff3Cta:"Ver →",
     loading:"Cargando...",noResults:"No hay resultados disponibles.",loadLink:"Cargar →",
     today:"🟢 Hoy",yesterday:"⏰ Ayer",moreOthers:n=>`+${n} más →`,viewAll:"Ver todos los resultados →",
-    locale:"es-ES"
+    locale:"es-ES",
+    greetMorning:"Buenos días",greetAfternoon:"Buenas tardes",greetEvening:"Buenas noches",
+    tagline:"¡Buena suerte con los sorteos de hoy!"
   },
   pt:{
     heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
@@ -609,7 +616,9 @@ const T = {
     aff3Desc:"Jackpots em tempo real",aff3Cta:"Ver →",
     loading:"Carregando...",noResults:"Nenhum resultado disponível.",loadLink:"Carregar →",
     today:"🟢 Hoje",yesterday:"⏰ Ontem",moreOthers:n=>`+${n} outros →`,viewAll:"Ver todos os resultados →",
-    locale:"pt-BR"
+    locale:"pt-BR",
+    greetMorning:"Bom dia",greetAfternoon:"Boa tarde",greetEvening:"Boa noite",
+    tagline:"Boa sorte nos sorteios de hoje!"
   },
   ht:{
     heroKicker:"🌍 Platfòm Mondyal · Powered by Advanced Analytics",
@@ -659,7 +668,9 @@ const T = {
     aff3Desc:"Jackpot an tan reyèl",aff3Cta:"Wè →",
     loading:"Chajman...",noResults:"Pa gen rezilta disponib.",loadLink:"Chaje →",
     today:"🟢 Jodi a",yesterday:"⏰ Yè",moreOthers:n=>`+${n} lòt →`,viewAll:"Wè tout rezilta yo →",
-    locale:"fr-FR"
+    locale:"fr-FR",
+    greetMorning:"Bonjou",greetAfternoon:"Bon apremidi",greetEvening:"Bonswa",
+    tagline:"Bòn chans pou tiraj jodi a !"
   }
 };
 
@@ -680,10 +691,21 @@ function applyLang(lang){
   document.getElementById('snapDate').textContent = new Date().toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long'});
   loadSnap();
   if(_SNAP_DATA) loadDigitStats(_TOOL_STATE);
+  updateGreeting();
 }
 window.setLang = applyLang;
 
+function updateGreeting(){
+  const t = curT();
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? t.greetMorning : hour < 18 ? t.greetAfternoon : t.greetEvening;
+  const dateStr = new Date().toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long'});
+  const el = document.getElementById('heroGreeting');
+  if(el) el.textContent = `${greet} · ${dateStr} — ${t.tagline}`;
+}
+
 document.getElementById('snapDate').textContent = new Date().toLocaleDateString(curT().locale,{weekday:'long',day:'numeric',month:'long'});
+updateGreeting();
 
 // Cache local du dernier résultat /api/results/latest — évite de refaire
 // l'appel réseau à chaque changement de langue (l'affichage est juste

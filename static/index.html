@@ -372,6 +372,30 @@ header{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   max-width:100%;
 }
+
+/* ── Quick state tabs ── */
+.quick-states{
+  position:relative;z-index:5;
+  background:rgba(7,7,26,.7);
+  padding:10px 28px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+}
+.quick-states-label{
+  font-size:.65rem;font-weight:800;color:var(--muted2);
+  text-transform:uppercase;letter-spacing:1.5px;margin-right:4px;
+}
+.qs-btn{
+  padding:5px 12px;border-radius:20px;
+  border:1px solid var(--border2);background:#0c0c28;color:var(--text);
+  font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;
+  white-space:nowrap;
+}
+.qs-btn:hover{border-color:var(--accent);color:var(--accent)}
+.qs-btn.active{
+  background:linear-gradient(135deg,#2a3acc,#4f6eff);
+  border-color:transparent;color:#fff;
+}
 .controls-bar select,.controls-bar button{
   padding:10px 18px;border-radius:10px;
   border:1px solid var(--border2);
@@ -878,6 +902,12 @@ footer{
   </div>
 </div>
 
+<!-- ══ QUICK STATE TABS ══ -->
+<div class="quick-states">
+  <span class="quick-states-label" id="quickStatesLabel">États populaires</span>
+  <div id="quickStatesTabs" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+</div>
+
 <!-- ══ CONTROLS ══ -->
 <div class="controls-bar">
   <select id="stateSelect">
@@ -1184,6 +1214,7 @@ const T = {
     pos:"Position",cycleLen:"tirages/cycle",predicted:"Prédit:",
     uniform:"uniforme",
     allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
+    quickStates:"États populaires",
   },
   en:{
     heroTitle:"Advanced Algorithm Predictions",
@@ -1211,6 +1242,7 @@ const T = {
     pos:"Position",cycleLen:"draws/cycle",predicted:"Predicted:",
     uniform:"uniform",
     allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
+    quickStates:"Popular states",
   },
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
@@ -1238,6 +1270,7 @@ const T = {
     pos:"Posición",cycleLen:"sorteos/ciclo",predicted:"Predicho:",
     uniform:"uniforme",
     allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
+    quickStates:"Estados populares",
   },
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
@@ -1265,6 +1298,7 @@ const T = {
     pos:"Posição",cycleLen:"sorteios/ciclo",predicted:"Previsto:",
     uniform:"uniforme",
     allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
+    quickStates:"Estados populares",
   },
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
@@ -1292,6 +1326,7 @@ const T = {
     pos:"Pozisyon",cycleLen:"tiraj/sik",predicted:"Predit:",
     uniform:"inifòm",
     allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
+    quickStates:"Eta popilè",
   },
 };
 
@@ -1318,8 +1353,25 @@ function setLang(lang){
   if(btnSc)     btnSc.textContent     = t('btnScrape');
   if(vidTitle)  vidTitle.textContent  = t('videoTitle');
   if(statsLbl)  statsLbl.textContent  = t('statsTitle');
+  const qsLbl = document.getElementById('quickStatesLabel');
+  if(qsLbl) qsLbl.textContent = t('quickStates');
   // Re-render if data exists
   if(window._lastData) renderAll(window._lastData);
+}
+
+// ── Quick state tabs (États les plus consultés) ───────────────────────────
+const QUICK_STATE_FLAGS = {
+  NY:'🗽',FL:'🌴',GA:'🍑',TX:'⭐',NJ:'🌊',TN:'🎸',CA:'☀️',PA:'🔔',IL:'🏙️',OH:'🌻',VA:'🦅'
+};
+
+function renderQuickStates(){
+  const wrap = document.getElementById('quickStatesTabs');
+  if(!wrap) return;
+  const sel = document.getElementById('stateSelect');
+  const current = sel ? sel.value : '';
+  wrap.innerHTML = PRIORITY_STATES.map(code =>
+    `<button class="qs-btn${code===current?' active':''}" onclick="selectStateAndAnalyze('${code}')">${QUICK_STATE_FLAGS[code]||'🎰'} ${code}</button>`
+  ).join('');
 }
 
 // ── Auto-detect language from nav.js on load ──────────────────────────────
@@ -1608,6 +1660,7 @@ function selectStateAndAnalyze(code){
   if(sel){
     sel.value = code;
     loadReport();
+    renderQuickStates();
     window.scrollTo({top: document.getElementById('mainContent')?.offsetTop || 0, behavior:'smooth'});
   }
 }
@@ -1648,11 +1701,13 @@ async function populateTodOptions(stateCode){
 
 document.getElementById('stateSelect')?.addEventListener('change', (e)=>{
   populateTodOptions(e.target.value);
+  renderQuickStates();
 });
 
 // Auto-load widget on page load
 window.addEventListener('load', ()=>{
   loadTodayWidget();
+  renderQuickStates();
   const sel = document.getElementById('stateSelect');
   if(sel) populateTodOptions(sel.value);
 });
