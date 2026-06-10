@@ -448,25 +448,6 @@ def api_scrape():
     return jsonify({"message": "Scraping complete for all states"})
 
 
-# Endpoint de diagnostic temporaire — permet de vérifier depuis Render si
-# lotterypost.com répond normalement (statut, taille, début du HTML) afin
-# de diagnostiquer pourquoi l'auto-update échoue en production alors qu'il
-# fonctionne en local.
-@app.route("/api/debug/fetch")
-def api_debug_fetch():
-    url = request.args.get("url", f"{BASE_URL}/results/ny/numbers/past")
-    try:
-        html = fetch_url(url)
-        return jsonify({
-            "url": url,
-            "ok": html is not None,
-            "content_length": len(html) if html else 0,
-            "snippet": (html[:500] if html else None),
-        })
-    except Exception as e:
-        return jsonify({"url": url, "error": str(e), "error_type": type(e).__name__})
-
-
 # ═══════════════════════════════════════════════════════════
 # API — STATES LIST
 # ═══════════════════════════════════════════════════════════
