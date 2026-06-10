@@ -10,10 +10,11 @@ except ImportError:
     Compress = None
 import numpy as np
 import os, json, re, threading, time
+from collections import Counter
 from datetime import datetime, date, timedelta
 from scraper import (scrape_all, fetch_state, save_csv, load_csv,
                      STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
-from ml_engine import run_all_models
+from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
 from biz_engine import analyze_project, INDUSTRIES, PLATFORMS, COUNTRIES_DATA
 
 
@@ -559,6 +560,84 @@ def api_results_state(state_code):
         "flag": STATE_FLAGS.get(state_code,"🎰"),
         "schedule": DRAW_SCHEDULE.get(state_code,[]),
         "days": days, "total": len(draws),
+    })
+
+
+# ═══════════════════════════════════════════════════════════
+# API — QUICK TOOLS (instantanés, sans calcul ML)
+# ═══════════════════════════════════════════════════════════
+
+@app.route("/api/digit-stats/<state_code>")
+def api_digit_stats(state_code):
+    """Stats légères (sans ML) : chiffre le plus/moins sorti, hot/cold 30 tirages."""
+    state_code = state_code.upper()
+    if state_code not in STATES:
+        return jsonify({"error": f"Unknown state: {state_code}"}), 400
+
+    draws = load_csv(state_code)
+    if not draws:
+        return jsonify({"error": f"No data for {state_code}"}), 200
+
+    # Fréquence globale tous chiffres confondus (toutes positions)
+    overall = Counter()
+    for d in draws:
+        for pos in ["d1", "d2", "d3"]:
+            overall[int(d[pos])] += 1
+    total = sum(overall.values()) or 1
+    most_common = overall.most_common()
+    hottest = most_common[0]
+    coldest = most_common[-1]
+
+    return jsonify({
+        "state": state_code,
+        "state_name": STATES[state_code]["name"],
+        "total_draws": len(draws),
+        "hot_cold": hot_cold_stats(draws, window=30),
+        "gaps": digit_gap_analysis(draws),
+        "overall_frequency": {str(k): {"count": v, "pct": round(v/total*100, 2)} for k, v in overall.items()},
+        "hottest_digit": {"digit": hottest[0], "count": hottest[1], "pct": round(hottest[1]/total*100, 2)},
+        "coldest_digit": {"digit": coldest[0], "count": coldest[1], "pct": round(coldest[1]/total*100, 2)},
+        "last_draws": draws[:10],
+    })
+
+
+@app.route("/api/combo-check/<state_code>/<combo>")
+def api_combo_check(state_code, combo):
+    """Recherche d'une combinaison (ex: 452) dans l'historique d'un État."""
+    state_code = state_code.upper()
+    if state_code not in STATES:
+        return jsonify({"error": f"Unknown state: {state_code}"}), 400
+
+    if not re.match(r"^\d{2,4}$", combo):
+        return jsonify({"error": "Combo must be 2-4 digits"}), 400
+
+    draws = load_csv(state_code)
+    if not draws:
+        return jsonify({"error": f"No data for {state_code}"}), 200
+
+    digits = [int(c) for c in combo]
+    exact_matches, any_order_matches = [], []
+    sorted_digits = sorted(digits)
+
+    for i, d in enumerate(draws):
+        draw_digits = [int(d["d1"]), int(d["d2"]), int(d["d3"])][:len(digits)]
+        if draw_digits == digits:
+            exact_matches.append({**d, "draws_ago": i})
+        if sorted(draw_digits) == sorted_digits:
+            any_order_matches.append({**d, "draws_ago": i})
+
+    total = len(draws)
+    return jsonify({
+        "state": state_code,
+        "state_name": STATES[state_code]["name"],
+        "combo": combo,
+        "total_draws": total,
+        "exact_count": len(exact_matches),
+        "exact_pct": round(len(exact_matches)/total*100, 3) if total else 0,
+        "exact_last": exact_matches[0] if exact_matches else None,
+        "any_order_count": len(any_order_matches),
+        "any_order_pct": round(len(any_order_matches)/total*100, 3) if total else 0,
+        "any_order_last": any_order_matches[0] if any_order_matches else None,
     })
 
 
