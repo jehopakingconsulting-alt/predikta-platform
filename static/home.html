@@ -193,14 +193,14 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-kicker">🌍 Plateforme Mondiale · Powered by Advanced Analytics</div>
+  <div class="hero-kicker" data-i18n="heroKicker">🌍 Plateforme Mondiale · Powered by Advanced Analytics</div>
   <h1>PREDIKTA</h1>
-  <p class="hero-sub">Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues</p>
+  <p class="hero-sub" data-i18n="heroSub">Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues</p>
   <div class="hero-badges">
-    <span class="hbadge hb1">🤖 7 Algorithmes</span>
-    <span class="hbadge hb2">🎲 Monte Carlo 50K</span>
-    <span class="hbadge hb3">🌍 44 États US</span>
-    <span class="hbadge hb4">● LIVE</span>
+    <span class="hbadge hb1" data-i18n="hb1">🤖 7 Algorithmes</span>
+    <span class="hbadge hb2" data-i18n="hb2">🎲 Monte Carlo 50K</span>
+    <span class="hbadge hb3" data-i18n="hb3">🌍 44 États US</span>
+    <span class="hbadge hb4" data-i18n="hb4">● LIVE</span>
   </div>
 </div>
 
@@ -210,76 +210,76 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="today-snap">
     <div class="today-snap-title">
       <div class="live-dot"></div>
-      <div class="today-snap-label">Résultats d'aujourd'hui</div>
+      <div class="today-snap-label" data-i18n="snapLabel">Résultats d'aujourd'hui</div>
       <div class="today-snap-date" id="snapDate"></div>
     </div>
     <div class="snap-grid" id="snapGrid">
-      <button class="snap-load-btn" onclick="loadSnap()">🔄 Charger les résultats du jour</button>
+      <button class="snap-load-btn" onclick="loadSnap()" data-i18n="snapLoadBtn">🔄 Charger les résultats du jour</button>
     </div>
   </div>
 
   <!-- Stats -->
   <div class="stats-banner">
-    <div class="stat-item"><div class="stat-num">44+</div><div class="stat-lbl">États US couverts</div></div>
-    <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">Algorithmes actifs</div></div>
-    <div class="stat-item"><div class="stat-num">50K</div><div class="stat-lbl">Simulations/analyse</div></div>
-    <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Langues disponibles</div></div>
+    <div class="stat-item"><div class="stat-num">44+</div><div class="stat-lbl" data-i18n="stat1">États US couverts</div></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl" data-i18n="stat2">Algorithmes actifs</div></div>
+    <div class="stat-item"><div class="stat-num">50K</div><div class="stat-lbl" data-i18n="stat3">Simulations/analyse</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl" data-i18n="stat4">Langues disponibles</div></div>
   </div>
 
   <!-- Services Grid -->
-  <div class="section-label">Choisissez votre service</div>
+  <div class="section-label" data-i18n="sectionServices">Choisissez votre service</div>
   <div class="services-grid">
 
-    <a href="/" class="service-card sc-lottery">
+    <a href="/analyze" class="service-card sc-lottery">
       <span class="sc-icon">⚡</span>
-      <div class="sc-title">Analyseur IA Loterie</div>
-      <p class="sc-desc">Prédictions Pick3/Cash3 par 7 algorithmes combinés : XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis et consensus pondéré.</p>
+      <div class="sc-title" data-i18n="c1Title">Analyseur IA Loterie</div>
+      <p class="sc-desc" data-i18n="c1Desc">Prédictions Pick3/Cash3 par 7 algorithmes combinés : XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis et consensus pondéré.</p>
       <div class="sc-tags">
         <span class="sc-tag">Pick3 · Cash3</span>
         <span class="sc-tag">Markov 1/2/3</span>
         <span class="sc-tag">XGBoost</span>
         <span class="sc-tag">Monte Carlo</span>
       </div>
-      <div class="sc-cta">Analyser maintenant →</div>
+      <div class="sc-cta" data-i18n="c1Cta">Analyser maintenant →</div>
     </a>
 
     <a href="/all-results" class="service-card sc-allresults">
       <span class="sc-icon">🏆</span>
-      <div class="sc-title">Résultats Complets</div>
-      <p class="sc-desc">Tous les jeux de chaque État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigation jour par jour. Mise à jour quotidienne.</p>
+      <div class="sc-title" data-i18n="c2Title">Résultats Complets</div>
+      <p class="sc-desc" data-i18n="c2Desc">Tous les jeux de chaque État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigation jour par jour. Mise à jour quotidienne.</p>
       <div class="sc-tags">
         <span class="sc-tag">Pick2/3/4/5</span>
         <span class="sc-tag">Lotto</span>
         <span class="sc-tag">Powerball</span>
         <span class="sc-tag">Mega Millions</span>
       </div>
-      <div class="sc-cta">Voir les résultats →</div>
+      <div class="sc-cta" data-i18n="c2Cta">Voir les résultats →</div>
     </a>
 
     <a href="/results" class="service-card sc-results">
       <span class="sc-icon">🎱</span>
-      <div class="sc-title">Hub Résultats · 44 États</div>
-      <p class="sc-desc">Vue d'ensemble de tous les états avec leurs derniers tirages. Recherche instantanée, filtres par région, historique jusqu'à 2 ans en arrière.</p>
+      <div class="sc-title" data-i18n="c3Title">Hub Résultats · 44 États</div>
+      <p class="sc-desc" data-i18n="c3Desc">Vue d'ensemble de tous les états avec leurs derniers tirages. Recherche instantanée, filtres par région, historique jusqu'à 2 ans en arrière.</p>
       <div class="sc-tags">
-        <span class="sc-tag">44 États</span>
-        <span class="sc-tag">Recherche live</span>
-        <span class="sc-tag">2 ans historique</span>
+        <span class="sc-tag" data-i18n="c3Tag1">44 États</span>
+        <span class="sc-tag" data-i18n="c3Tag2">Recherche live</span>
+        <span class="sc-tag" data-i18n="c3Tag3">2 ans historique</span>
         <span class="sc-tag">LIVE ticker</span>
       </div>
-      <div class="sc-cta">Explorer les résultats →</div>
+      <div class="sc-cta" data-i18n="c3Cta">Explorer les résultats →</div>
     </a>
 
     <a href="/bizai" class="service-card sc-bizai">
       <span class="sc-icon">🚀</span>
-      <div class="sc-title">Business Intelligence · Analyse Projet</div>
-      <p class="sc-desc">Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.</p>
+      <div class="sc-title" data-i18n="c4Title">Business Intelligence · Analyse Projet</div>
+      <p class="sc-desc" data-i18n="c4Desc">Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.</p>
       <div class="sc-tags">
-        <span class="sc-tag">20 Secteurs</span>
-        <span class="sc-tag">25 Pays</span>
-        <span class="sc-tag">12 Sections</span>
-        <span class="sc-tag">Plan 30-60-90j</span>
+        <span class="sc-tag" data-i18n="c4Tag1">20 Secteurs</span>
+        <span class="sc-tag" data-i18n="c4Tag2">25 Pays</span>
+        <span class="sc-tag" data-i18n="c4Tag3">12 Sections</span>
+        <span class="sc-tag" data-i18n="c4Tag4">Plan 30-60-90j</span>
       </div>
-      <div class="sc-cta">Analyser mon projet →</div>
+      <div class="sc-cta" data-i18n="c4Cta">Analyser mon projet →</div>
     </a>
 
   </div>
@@ -289,49 +289,49 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
       <span style="font-size:2.4rem">👑</span>
       <div style="flex:1">
-        <div class="sc-title" style="color:var(--gold)">PREDIKTA PRO & ELITE — Débloquez tout</div>
-        <p class="sc-desc" style="margin-bottom:0">Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire</p>
+        <div class="sc-title" style="color:var(--gold)" data-i18n="proTitle">PREDIKTA PRO & ELITE — Débloquez tout</div>
+        <p class="sc-desc" style="margin-bottom:0" data-i18n="proDesc">Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
         <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)">
           <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:var(--gold)">$4.99</div>
-          <div style="font-size:.62rem;color:var(--muted2)">PRO / mois</div>
+          <div style="font-size:.62rem;color:var(--muted2)" data-i18n="proLbl">PRO / mois</div>
         </div>
         <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,150,0,.12);border:1px solid rgba(255,150,0,.3)">
           <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:#ff9900">$9.99</div>
-          <div style="font-size:.62rem;color:var(--muted2)">ELITE / mois</div>
+          <div style="font-size:.62rem;color:var(--muted2)" data-i18n="eliteLbl">ELITE / mois</div>
         </div>
-        <div class="sc-cta" style="align-self:center">7 jours gratuits →</div>
+        <div class="sc-cta" style="align-self:center" data-i18n="freeTrial">7 jours gratuits →</div>
       </div>
     </div>
   </a>
 
   <!-- Affiliates strip -->
-  <div class="section-label">Nos Partenaires</div>
+  <div class="section-label" data-i18n="sectionPartners">Nos Partenaires</div>
   <div class="affil-strip">
     <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
       <div class="asc-icon">🎰</div>
       <div class="asc-body">
         <div class="asc-name">TheLotter <span class="ad-tag">AD</span></div>
-        <div class="asc-desc">Loteries mondiales officielles</div>
+        <div class="asc-desc" data-i18n="aff1Desc">Loteries mondiales officielles</div>
       </div>
-      <div class="asc-cta">Jouer →</div>
+      <div class="asc-cta" data-i18n="aff1Cta">Jouer →</div>
     </a>
     <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
       <div class="asc-icon">📊</div>
       <div class="asc-body">
         <div class="asc-name">LotteryPro <span class="ad-tag">AD</span></div>
-        <div class="asc-desc">Outils d'analyse statistique</div>
+        <div class="asc-desc" data-i18n="aff2Desc">Outils d'analyse statistique</div>
       </div>
-      <div class="asc-cta">Essai →</div>
+      <div class="asc-cta" data-i18n="aff2Cta">Essai →</div>
     </a>
     <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=home" target="_blank" rel="noopener" class="affil-strip-card">
       <div class="asc-icon">🏆</div>
       <div class="asc-body">
         <div class="asc-name">Jackpot.com <span class="ad-tag">AD</span></div>
-        <div class="asc-desc">Jackpots en temps réel</div>
+        <div class="asc-desc" data-i18n="aff3Desc">Jackpots en temps réel</div>
       </div>
-      <div class="asc-cta">Voir →</div>
+      <div class="asc-cta" data-i18n="aff3Cta">Voir →</div>
     </a>
   </div>
 
@@ -343,17 +343,195 @@ function bc(n){ return BC[parseInt(n)%10]; }
 
 // États les plus suivis — priorité d'affichage (jusqu'à 11), 12e = "+ Autres"
 const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA'];
+
+const T = {
+  fr:{
+    heroKicker:"🌍 Plateforme Mondiale · Powered by Advanced Analytics",
+    heroSub:"Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
+    hb1:"🤖 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
+    snapLabel:"Résultats d'aujourd'hui",snapLoadBtn:"🔄 Charger les résultats du jour",
+    stat1:"États US couverts",stat2:"Algorithmes actifs",stat3:"Simulations/analyse",stat4:"Langues disponibles",
+    sectionServices:"Choisissez votre service",
+    c1Title:"Analyseur IA Loterie",
+    c1Desc:"Prédictions Pick3/Cash3 par 7 algorithmes combinés : XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis et consensus pondéré.",
+    c1Cta:"Analyser maintenant →",
+    c2Title:"Résultats Complets",
+    c2Desc:"Tous les jeux de chaque État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigation jour par jour. Mise à jour quotidienne.",
+    c2Cta:"Voir les résultats →",
+    c3Title:"Hub Résultats · 44 États",
+    c3Desc:"Vue d'ensemble de tous les états avec leurs derniers tirages. Recherche instantanée, filtres par région, historique jusqu'à 2 ans en arrière.",
+    c3Tag1:"44 États",c3Tag2:"Recherche live",c3Tag3:"2 ans historique",
+    c3Cta:"Explorer les résultats →",
+    c4Title:"Business Intelligence · Analyse Projet",
+    c4Desc:"Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.",
+    c4Tag1:"20 Secteurs",c4Tag2:"25 Pays",c4Tag3:"12 Sections",c4Tag4:"Plan 30-60-90j",
+    c4Cta:"Analyser mon projet →",
+    proTitle:"PREDIKTA PRO & ELITE — Débloquez tout",
+    proDesc:"Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire",
+    proLbl:"PRO / mois",eliteLbl:"ELITE / mois",freeTrial:"7 jours gratuits →",
+    sectionPartners:"Nos Partenaires",
+    aff1Desc:"Loteries mondiales officielles",aff1Cta:"Jouer →",
+    aff2Desc:"Outils d'analyse statistique",aff2Cta:"Essai →",
+    aff3Desc:"Jackpots en temps réel",aff3Cta:"Voir →",
+    loading:"Chargement...",noResults:"Aucun résultat disponible.",loadLink:"Charger →",
+    today:"🟢 Auj.",yesterday:"⏰ Hier",moreOthers:n=>`+${n} autres →`,viewAll:"Voir tous les résultats →",
+    locale:"fr-FR"
+  },
+  en:{
+    heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
+    heroSub:"Lottery & Predictive Analysis by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
+    hb1:"🤖 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
+    snapLabel:"Today's Results",snapLoadBtn:"🔄 Load today's results",
+    stat1:"US States covered",stat2:"Active algorithms",stat3:"Simulations/analysis",stat4:"Languages available",
+    sectionServices:"Choose your service",
+    c1Title:"AI Lottery Analyzer",
+    c1Desc:"Pick3/Cash3 predictions powered by 7 combined algorithms: XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis and weighted consensus.",
+    c1Cta:"Analyze now →",
+    c2Title:"Full Results",
+    c2Desc:"All games for every state: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Day-by-day navigation. Updated daily.",
+    c2Cta:"View results →",
+    c3Title:"Results Hub · 44 States",
+    c3Desc:"Overview of every state's latest draws. Instant search, regional filters, history up to 2 years back.",
+    c3Tag1:"44 States",c3Tag2:"Live search",c3Tag3:"2-year history",
+    c3Cta:"Explore results →",
+    c4Title:"Business Intelligence · Project Analysis",
+    c4Desc:"Analyze your business project in 5 minutes: niche, audience, 11 scored marketing channels, targeting for 25 countries, 30-60-90 day plan, risks.",
+    c4Tag1:"20 Sectors",c4Tag2:"25 Countries",c4Tag3:"12 Sections",c4Tag4:"30-60-90d Plan",
+    c4Cta:"Analyze my project →",
+    proTitle:"PREDIKTA PRO & ELITE — Unlock everything",
+    proDesc:"Unlimited predictions · All states · 5-year history · Email alerts · API Access · Unlimited Business Intelligence · PDF export · Priority support",
+    proLbl:"PRO / month",eliteLbl:"ELITE / month",freeTrial:"7-day free trial →",
+    sectionPartners:"Our Partners",
+    aff1Desc:"Official worldwide lotteries",aff1Cta:"Play →",
+    aff2Desc:"Statistical analysis tools",aff2Cta:"Try it →",
+    aff3Desc:"Real-time jackpots",aff3Cta:"View →",
+    loading:"Loading...",noResults:"No results available.",loadLink:"Load →",
+    today:"🟢 Today",yesterday:"⏰ Yesterday",moreOthers:n=>`+${n} more →`,viewAll:"View all results →",
+    locale:"en-US"
+  },
+  es:{
+    heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
+    heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
+    hb1:"🤖 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
+    snapLabel:"Resultados de hoy",snapLoadBtn:"🔄 Cargar resultados de hoy",
+    stat1:"Estados de EE.UU. cubiertos",stat2:"Algoritmos activos",stat3:"Simulaciones/análisis",stat4:"Idiomas disponibles",
+    sectionServices:"Elige tu servicio",
+    c1Title:"Analizador de Lotería con IA",
+    c1Desc:"Predicciones Pick3/Cash3 mediante 7 algoritmos combinados: XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis y consenso ponderado.",
+    c1Cta:"Analizar ahora →",
+    c2Title:"Resultados Completos",
+    c2Desc:"Todos los juegos de cada Estado: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navegación día a día. Actualización diaria.",
+    c2Cta:"Ver resultados →",
+    c3Title:"Centro de Resultados · 44 Estados",
+    c3Desc:"Vista general de todos los estados con sus últimos sorteos. Búsqueda instantánea, filtros por región, historial de hasta 2 años.",
+    c3Tag1:"44 Estados",c3Tag2:"Búsqueda en vivo",c3Tag3:"2 años de historial",
+    c3Cta:"Explorar resultados →",
+    c4Title:"Business Intelligence · Análisis de Proyecto",
+    c4Desc:"Analiza tu proyecto empresarial en 5 minutos: nicho, audiencia, 11 canales de marketing evaluados, segmentación en 25 países, plan 30-60-90 días, riesgos.",
+    c4Tag1:"20 Sectores",c4Tag2:"25 Países",c4Tag3:"12 Secciones",c4Tag4:"Plan 30-60-90d",
+    c4Cta:"Analizar mi proyecto →",
+    proTitle:"PREDIKTA PRO & ELITE — Desbloquea todo",
+    proDesc:"Predicciones ilimitadas · Todos los Estados · 5 años de historial · Alertas por email · Acceso API · Business Intelligence ilimitado · Exportación PDF · Soporte prioritario",
+    proLbl:"PRO / mes",eliteLbl:"ELITE / mes",freeTrial:"7 días gratis →",
+    sectionPartners:"Nuestros Socios",
+    aff1Desc:"Loterías mundiales oficiales",aff1Cta:"Jugar →",
+    aff2Desc:"Herramientas de análisis estadístico",aff2Cta:"Probar →",
+    aff3Desc:"Jackpots en tiempo real",aff3Cta:"Ver →",
+    loading:"Cargando...",noResults:"No hay resultados disponibles.",loadLink:"Cargar →",
+    today:"🟢 Hoy",yesterday:"⏰ Ayer",moreOthers:n=>`+${n} más →`,viewAll:"Ver todos los resultados →",
+    locale:"es-ES"
+  },
+  pt:{
+    heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
+    heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
+    hb1:"🤖 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
+    snapLabel:"Resultados de hoje",snapLoadBtn:"🔄 Carregar resultados de hoje",
+    stat1:"Estados dos EUA cobertos",stat2:"Algoritmos ativos",stat3:"Simulações/análise",stat4:"Idiomas disponíveis",
+    sectionServices:"Escolha seu serviço",
+    c1Title:"Analisador de Loteria com IA",
+    c1Desc:"Previsões Pick3/Cash3 com 7 algoritmos combinados: XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis e consenso ponderado.",
+    c1Cta:"Analisar agora →",
+    c2Title:"Resultados Completos",
+    c2Desc:"Todos os jogos de cada Estado: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navegação dia a dia. Atualização diária.",
+    c2Cta:"Ver resultados →",
+    c3Title:"Hub de Resultados · 44 Estados",
+    c3Desc:"Visão geral de todos os estados com seus últimos sorteios. Busca instantânea, filtros por região, histórico de até 2 anos.",
+    c3Tag1:"44 Estados",c3Tag2:"Busca ao vivo",c3Tag3:"2 anos de histórico",
+    c3Cta:"Explorar resultados →",
+    c4Title:"Business Intelligence · Análise de Projeto",
+    c4Desc:"Analise seu projeto de negócio em 5 minutos: nicho, público, 11 canais de marketing avaliados, segmentação em 25 países, plano 30-60-90 dias, riscos.",
+    c4Tag1:"20 Setores",c4Tag2:"25 Países",c4Tag3:"12 Seções",c4Tag4:"Plano 30-60-90d",
+    c4Cta:"Analisar meu projeto →",
+    proTitle:"PREDIKTA PRO & ELITE — Desbloqueie tudo",
+    proDesc:"Previsões ilimitadas · Todos os Estados · 5 anos de histórico · Alertas por email · Acesso à API · Business Intelligence ilimitado · Exportação PDF · Suporte prioritário",
+    proLbl:"PRO / mês",eliteLbl:"ELITE / mês",freeTrial:"7 dias grátis →",
+    sectionPartners:"Nossos Parceiros",
+    aff1Desc:"Loterias mundiais oficiais",aff1Cta:"Jogar →",
+    aff2Desc:"Ferramentas de análise estatística",aff2Cta:"Testar →",
+    aff3Desc:"Jackpots em tempo real",aff3Cta:"Ver →",
+    loading:"Carregando...",noResults:"Nenhum resultado disponível.",loadLink:"Carregar →",
+    today:"🟢 Hoje",yesterday:"⏰ Ontem",moreOthers:n=>`+${n} outros →`,viewAll:"Ver todos os resultados →",
+    locale:"pt-BR"
+  },
+  ht:{
+    heroKicker:"🌍 Platfòm Mondyal · Powered by Advanced Analytics",
+    heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
+    hb1:"🤖 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
+    snapLabel:"Rezilta jodi a",snapLoadBtn:"🔄 Chaje rezilta jodi a",
+    stat1:"Eta Ozetazini kouvri",stat2:"Algoritm aktif",stat3:"Similasyon/analiz",stat4:"Lang disponib",
+    sectionServices:"Chwazi sèvis ou",
+    c1Title:"Analizè Lotri AI",
+    c1Desc:"Prediksyon Pick3/Cash3 ak 7 algoritm konbine: XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis ak konsansis pondere.",
+    c1Cta:"Analize kounye a →",
+    c2Title:"Rezilta Konplè",
+    c2Desc:"Tout jwèt nan chak Eta: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigasyon chak jou. Mizajou chak jou.",
+    c2Cta:"Wè rezilta →",
+    c3Title:"Sant Rezilta · 44 Eta",
+    c3Desc:"Apèsi tout eta yo ak dènye tiraj yo. Rechèch enstantane, filtè pa rejyon, istwa jiska 2 an.",
+    c3Tag1:"44 Eta",c3Tag2:"Rechèch live",c3Tag3:"2 an istwa",
+    c3Cta:"Eksplore rezilta →",
+    c4Title:"Business Intelligence · Analiz Pwojè",
+    c4Desc:"Analize pwojè biznis ou nan 5 minit: nich, odyans, 11 kanal maketin evalye, sib nan 25 peyi, plan 30-60-90 jou, risk.",
+    c4Tag1:"20 Sektè",c4Tag2:"25 Peyi",c4Tag3:"12 Seksyon",c4Tag4:"Plan 30-60-90j",
+    c4Cta:"Analize pwojè mwen →",
+    proTitle:"PREDIKTA PRO & ELITE — Debloke tout",
+    proDesc:"Prediksyon san limit · Tout Eta · 5 an istwa · Alèt imèl · Aksè API · Business Intelligence san limit · Ekspòte PDF · Sipò pyoritè",
+    proLbl:"PRO / mwa",eliteLbl:"ELITE / mwa",freeTrial:"7 jou gratis →",
+    sectionPartners:"Patnè Nou Yo",
+    aff1Desc:"Lotri mondyal ofisyèl",aff1Cta:"Jwe →",
+    aff2Desc:"Zouti analiz estatistik",aff2Cta:"Eseye →",
+    aff3Desc:"Jackpot an tan reyèl",aff3Cta:"Wè →",
+    loading:"Chajman...",noResults:"Pa gen rezilta disponib.",loadLink:"Chaje →",
+    today:"🟢 Jodi a",yesterday:"⏰ Yè",moreOthers:n=>`+${n} lòt →`,viewAll:"Wè tout rezilta yo →",
+    locale:"fr-FR"
+  }
+};
+
+function curT(){ return T[window.PREDIKTA_LANG] || T.fr; }
+
 function fmtDate(iso){
   if(!iso) return '';
   const d = new Date(iso+'T12:00:00');
-  return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'});
+  return d.toLocaleDateString(curT().locale,{day:'2-digit',month:'short'});
 }
 
-document.getElementById('snapDate').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+function applyLang(lang){
+  const t = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(t[k]!==undefined && typeof t[k]==='string') el.textContent = t[k];
+  });
+  document.getElementById('snapDate').textContent = new Date().toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long'});
+  loadSnap();
+}
+window.setLang = applyLang;
+
+document.getElementById('snapDate').textContent = new Date().toLocaleDateString(curT().locale,{weekday:'long',day:'numeric',month:'long'});
 
 async function loadSnap(){
+  const t = curT();
   const grid = document.getElementById('snapGrid');
-  grid.innerHTML = '<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px">Chargement...</div>';
+  grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px">${t.loading}</div>`;
   try{
     const r = await fetch('/api/results/latest');
     const data = await r.json();
@@ -366,7 +544,7 @@ async function loadSnap(){
         return (b.is_today?1:0)-(a.is_today?1:0);
       });
     if(!entries.length){
-      grid.innerHTML = '<div style="font-size:.75rem;color:var(--muted2)">Aucun résultat disponible. <a href="/all-results" style="color:var(--accent)">Charger →</a></div>';
+      grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2)">${t.noResults} <a href="/all-results" style="color:var(--accent)">${t.loadLink}</a></div>`;
       return;
     }
     const SHOWN = 11;
@@ -374,7 +552,7 @@ async function loadSnap(){
       const d = v.latest[v.latest.length-1]||v.latest[0];
       if(!d) return '';
       const balls = [d.d1,d.d2,d.d3].map(n=>`<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`).join('');
-      const todTag = v.is_today?'<span style="color:var(--green);font-size:.56rem">🟢 Auj.</span>':'<span style="color:var(--gold);font-size:.56rem">⏰ Hier</span>';
+      const todTag = v.is_today?`<span style="color:var(--green);font-size:.56rem">${t.today}</span>`:`<span style="color:var(--gold);font-size:.56rem">${t.yesterday}</span>`;
       const sched = (v.schedule||[]).find(s=>s.tod===d.tod);
       const timeStr = sched ? sched.time : '';
       return `<div class="snap-card" onclick="window.location='/all-results'">
@@ -384,14 +562,14 @@ async function loadSnap(){
         <div class="snap-tod" style="opacity:.7">${fmtDate(d.date)} · ${v.name.split(' ').slice(-2).join(' ')}</div>
       </div>`;
     }).join('')
-    + (entries.length>SHOWN?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">+${entries.length-SHOWN} autres →</div></div>`:'');
+    + (entries.length>SHOWN?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">${t.moreOthers(entries.length-SHOWN)}</div></div>`:'');
   }catch(e){
-    grid.innerHTML = `<a href="/all-results" class="snap-load-btn">Voir tous les résultats →</a>`;
+    grid.innerHTML = `<a href="/all-results" class="snap-load-btn">${t.viewAll}</a>`;
   }
 }
 
-// Auto-load snapshot
-loadSnap();
+// Apply detected language then auto-load snapshot
+applyLang(window.PREDIKTA_LANG || 'fr');
 </script>
 </body>
 </html>
