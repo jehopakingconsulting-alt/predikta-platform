@@ -528,13 +528,22 @@ window.setLang = applyLang;
 
 document.getElementById('snapDate').textContent = new Date().toLocaleDateString(curT().locale,{weekday:'long',day:'numeric',month:'long'});
 
+// Cache local du dernier résultat /api/results/latest — évite de refaire
+// l'appel réseau à chaque changement de langue (l'affichage est juste
+// re-rendu avec les nouvelles chaînes traduites).
+let _SNAP_DATA = null;
+
 async function loadSnap(){
   const t = curT();
   const grid = document.getElementById('snapGrid');
   grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px">${t.loading}</div>`;
   try{
-    const r = await fetch('/api/results/latest');
-    const data = await r.json();
+    let data = _SNAP_DATA;
+    if(!data){
+      const r = await fetch('/api/results/latest');
+      data = await r.json();
+      _SNAP_DATA = data;
+    }
     const prioRank = c => { const i = PRIORITY_STATES.indexOf(c); return i===-1?999:i; };
     const entries = Object.entries(data)
       .filter(([,v])=>v.has_data&&(v.is_today||v.is_yesterday))

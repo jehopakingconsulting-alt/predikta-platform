@@ -247,12 +247,23 @@ def save_csv(state_code: str, draws: list[dict]):
     return len(existing)
 
 
+# In-memory cache for CSV reads, keyed by state code, invalidated by file
+# mtime. Avoids re-reading/re-parsing the same CSV on every API call
+# (e.g. /api/results/latest reads all 44 states on every page load).
+_CSV_CACHE: dict[str, tuple[float, list[dict]]] = {}
+
 def load_csv(state_code: str) -> list[dict]:
     path = os.path.join(DATA_DIR, f"{state_code.lower()}.csv")
     if not os.path.exists(path):
         return []
+    mtime = os.path.getmtime(path)
+    cached = _CSV_CACHE.get(state_code)
+    if cached and cached[0] == mtime:
+        return cached[1]
     with open(path, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    _CSV_CACHE[state_code] = (mtime, rows)
+    return rows
 
 
 # ── Public API ────────────────────────────────────────────────────────────

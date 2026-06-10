@@ -4,6 +4,10 @@ PREDIKTA — Flask Server  v2.0
 
 from flask import Flask, jsonify, request, send_from_directory, make_response
 from flask.json.provider import DefaultJSONProvider
+try:
+    from flask_compress import Compress
+except ImportError:
+    Compress = None
 import numpy as np
 import os, json, re, threading, time
 from datetime import datetime, date, timedelta
@@ -26,6 +30,18 @@ app = Flask(__name__, static_folder="static")
 app.json_provider_class = NumpyJSONProvider
 app.json = NumpyJSONProvider(app)
 
+# ── Compression (gzip/br) — réduit fortement le poids des pages HTML/JS
+# (index.html ~2000 lignes, nav.js ~900 lignes) et des réponses JSON
+# (/api/results/latest, /api/states, /api/report) → chargements plus rapides
+# notamment sur connexions mobiles.
+if Compress is not None:
+    app.config["COMPRESS_MIMETYPES"] = [
+        "text/html", "text/css", "text/javascript", "application/javascript",
+        "application/json", "application/xml", "image/svg+xml",
+    ]
+    app.config["COMPRESS_LEVEL"] = 6
+    Compress(app)
+
 # ── Security headers ──────────────────────────────────────────────────────
 @app.after_request
 def add_security_headers(response):
@@ -35,6 +51,13 @@ def add_security_headers(response):
     response.headers["Referrer-Policy"]          = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"]       = "geolocation=(), microphone=()"
     response.headers["Access-Control-Allow-Origin"] = "*"
+    # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
+    # cache court (5 min) pour limiter les requêtes répétées sans bloquer
+    # les déploiements de correctifs.
+    if request.path.startswith("/static/") or request.path in (
+        "/nav.js", "/manifest.json", "/sw.js", "/robots.txt", "/sitemap.xml"
+    ) or request.path.endswith((".js", ".css", ".png", ".jpg", ".svg", ".ico", ".woff2")):
+        response.headers["Cache-Control"] = "public, max-age=300"
     return response
 
 # ── Mise à jour automatique en arrière-plan ───────────────────────────────
@@ -68,6 +91,7 @@ def _auto_update_loop():
                 print(f"  [auto-update][games] skipped: {e}")
 
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
+            _LATEST_CACHE["data"] = None
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
         except Exception as e:
@@ -371,11 +395,13 @@ def api_scrape():
             for k in list(_REPORT_CACHE):
                 if k[0] == state:
                     _REPORT_CACHE.pop(k, None)
+            _LATEST_CACHE["data"] = None
             return jsonify({"message": f"{len(draws)} draws fetched · {total} total saved for {state}"})
         return jsonify({"message": f"No data found for {state}"})
 
     scrape_all(n_months=months)
     _REPORT_CACHE.clear()
+    _LATEST_CACHE["data"] = None
     return jsonify({"message": "Scraping complete for all states"})
 
 
@@ -411,8 +437,15 @@ def api_states():
 # API — RESULTS HUB
 # ═══════════════════════════════════════════════════════════
 
+_LATEST_CACHE = {"ts": 0, "data": None}
+_LATEST_CACHE_TTL = 60  # secondes — données rafraîchies au plus toutes les 60s
+
 @app.route("/api/results/latest")
 def api_results_latest():
+    now = time.time()
+    if _LATEST_CACHE["data"] is not None and (now - _LATEST_CACHE["ts"]) < _LATEST_CACHE_TTL:
+        return jsonify(_LATEST_CACHE["data"])
+
     today_str     = date.today().isoformat()
     yesterday_str = (date.today() - timedelta(days=1)).isoformat()
     result = {}
@@ -446,6 +479,8 @@ def api_results_latest():
             "has_data":    True,
         }
 
+    _LATEST_CACHE["ts"] = now
+    _LATEST_CACHE["data"] = result
     return jsonify(result)
 
 

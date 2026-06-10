@@ -1,6 +1,7 @@
 requests
 beautifulsoup4
 flask
+flask-compress
 pandas
 numpy
 scipy
