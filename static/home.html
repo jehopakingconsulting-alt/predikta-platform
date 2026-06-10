@@ -141,6 +141,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   font-size:.72rem;font-weight:800;border:2px solid;
 }
 .snap-tod{font-size:.58rem;color:var(--muted2);margin-top:5px}
+.snap-draw-row{margin-bottom:6px}
+.snap-draw-row:last-of-type{margin-bottom:2px}
 .snap-load-btn{
   display:block;text-align:center;padding:10px;border-radius:10px;
   font-size:.78rem;font-weight:700;color:var(--muted2);
@@ -861,17 +863,23 @@ async function loadSnap(){
     }
     const SHOWN = 11;
     grid.innerHTML = entries.slice(0,SHOWN).map(([code,v])=>{
-      const d = v.latest[v.latest.length-1]||v.latest[0];
-      if(!d) return '';
-      const balls = [d.d1,d.d2,d.d3].map(n=>`<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`).join('');
+      const draws = v.latest;
+      if(!draws || !draws.length) return '';
       const todTag = v.is_today?`<span style="color:var(--green);font-size:.56rem">${t.today}</span>`:`<span style="color:var(--gold);font-size:.56rem">${t.yesterday}</span>`;
-      const sched = (v.schedule||[]).find(s=>s.tod===d.tod);
-      const timeStr = sched ? sched.time : '';
+      const last = draws[draws.length-1];
+      const rows = draws.map(d=>{
+        const balls = [d.d1,d.d2,d.d3].map(n=>`<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)}">${n}</div>`).join('');
+        const sched = (v.schedule||[]).find(s=>s.tod===d.tod);
+        const timeStr = sched ? sched.time : '';
+        return `<div class="snap-draw-row">
+          <div class="snap-balls">${balls}</div>
+          <div class="snap-tod">${d.tod||''}${timeStr?' · '+timeStr:''}</div>
+        </div>`;
+      }).join('');
       return `<div class="snap-card" onclick="window.location='/all-results'">
         <div class="snap-state">${v.flag} ${code} ${todTag}</div>
-        <div class="snap-balls">${balls}</div>
-        <div class="snap-tod">${d.tod||''}${timeStr?' · '+timeStr:''}</div>
-        <div class="snap-tod" style="opacity:.7">${fmtDate(d.date)} · ${v.name.split(' ').slice(-2).join(' ')}</div>
+        ${rows}
+        <div class="snap-tod" style="opacity:.7">${fmtDate(last.date)} · ${v.name.split(' ').slice(-2).join(' ')}</div>
       </div>`;
     }).join('')
     + (entries.length>SHOWN?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">${t.moreOthers(entries.length-SHOWN)}</div></div>`:'');
