@@ -212,6 +212,33 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .asc-cta{font-size:.65rem;font-weight:700;color:var(--accent);flex-shrink:0}
 .ad-tag{font-size:.5rem;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(255,102,0,.8);color:#fff;margin-left:4px}
 
+/* ── Monthly raffle banner ── */
+.raffle-banner{
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,68,170,.10));
+  border:1px solid rgba(255,215,0,.35);border-radius:16px;
+  padding:20px 24px;margin-bottom:40px;position:relative;overflow:hidden;
+}
+.raffle-banner::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold),#ff44aa,var(--accent));
+}
+.raffle-icon{font-size:2.6rem;flex-shrink:0}
+.raffle-body{flex:1;min-width:200px}
+.raffle-title{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--gold);margin-bottom:6px}
+.raffle-desc{font-size:.78rem;color:var(--muted2);line-height:1.6}
+.raffle-side{display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0}
+.raffle-countdown{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;color:var(--text);white-space:nowrap}
+.raffle-countdown-lbl{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;text-align:center}
+.raffle-cta{
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+  padding:9px 20px;border-radius:9px;font-size:.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--gold),#ff9900);color:#1a1a1a;
+  text-decoration:none;transition:opacity .2s;
+}
+.raffle-cta:hover{opacity:.85}
+@media(max-width:700px){ .raffle-banner{flex-direction:column;text-align:center} .raffle-side{width:100%} }
+
 @media(max-width:700px){
   .services-grid{grid-template-columns:1fr}
   .stats-banner{grid-template-columns:repeat(2,1fr)}
@@ -255,6 +282,20 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl" data-i18n="stat2">Algorithmes actifs</div></div>
     <div class="stat-item"><div class="stat-num">50K</div><div class="stat-lbl" data-i18n="stat3">Simulations/analyse</div></div>
     <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl" data-i18n="stat4">Langues disponibles</div></div>
+  </div>
+
+  <!-- Monthly raffle banner -->
+  <div class="raffle-banner">
+    <div class="raffle-icon">🎁</div>
+    <div class="raffle-body">
+      <div class="raffle-title" data-i18n="raffleTitle">Tirage Cadeau du Mois</div>
+      <div class="raffle-desc" data-i18n="raffleDesc">Inscrivez-vous gratuitement et tentez de gagner 1 mois PREDIKTA PRO offert + des bonus exclusifs !</div>
+    </div>
+    <div class="raffle-side">
+      <div class="raffle-countdown" id="raffleCountdown">--j --h --m</div>
+      <div class="raffle-countdown-lbl" data-i18n="raffleEndsIn">Tirage dans</div>
+      <a href="/pro" class="raffle-cta" data-i18n="raffleCta">Participer →</a>
+    </div>
   </div>
 
   <!-- Outils Express -->
@@ -402,6 +443,35 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </a>
   </div>
 
+  <!-- Diaspora services strip -->
+  <div class="section-label" data-i18n="sectionDiaspora">Services pour la Diaspora</div>
+  <div class="affil-strip">
+    <a href="https://www.taptapsend.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=diaspora" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">💸</div>
+      <div class="asc-body">
+        <div class="asc-name">TapTap Send <span class="ad-tag">AD</span></div>
+        <div class="asc-desc" data-i18n="daff1Desc">Envoyez de l'argent en Haïti et ailleurs, rapide et sans frais cachés</div>
+      </div>
+      <div class="asc-cta" data-i18n="daff1Cta">Envoyer →</div>
+    </a>
+    <a href="https://www.ding.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=diaspora" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">📱</div>
+      <div class="asc-body">
+        <div class="asc-name">Ding <span class="ad-tag">AD</span></div>
+        <div class="asc-desc" data-i18n="daff2Desc">Rechargez le téléphone de vos proches en Haïti instantanément</div>
+      </div>
+      <div class="asc-cta" data-i18n="daff2Cta">Recharger →</div>
+    </a>
+    <a href="https://www.cheapoair.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=diaspora" target="_blank" rel="noopener" class="affil-strip-card">
+      <div class="asc-icon">✈️</div>
+      <div class="asc-body">
+        <div class="asc-name">CheapOair <span class="ad-tag">AD</span></div>
+        <div class="asc-desc" data-i18n="daff3Desc">Trouvez les meilleurs vols pas chers vers Haïti et les Caraïbes</div>
+      </div>
+      <div class="asc-cta" data-i18n="daff3Cta">Réserver →</div>
+    </a>
+  </div>
+
 </div>
 
 <script>
@@ -458,6 +528,13 @@ const T = {
     aff1Desc:"Loteries mondiales officielles",aff1Cta:"Jouer →",
     aff2Desc:"Outils d'analyse statistique",aff2Cta:"Essai →",
     aff3Desc:"Jackpots en temps réel",aff3Cta:"Voir →",
+    raffleTitle:"🎁 Tirage Cadeau du Mois",raffleDesc:"Inscrivez-vous gratuitement et tentez de gagner 1 mois PREDIKTA PRO offert + des bonus exclusifs !",
+    raffleCta:"Participer →",raffleEndsIn:"Tirage dans",
+    dAbbr:"j",hAbbr:"h",mAbbr:"m",
+    sectionDiaspora:"Services pour la Diaspora",
+    daff1Desc:"Envoyez de l'argent en Haïti et ailleurs, rapide et sans frais cachés",daff1Cta:"Envoyer →",
+    daff2Desc:"Rechargez le téléphone de vos proches en Haïti instantanément",daff2Cta:"Recharger →",
+    daff3Desc:"Trouvez les meilleurs vols pas chers vers Haïti et les Caraïbes",daff3Cta:"Réserver →",
     loading:"Chargement...",noResults:"Aucun résultat disponible.",loadLink:"Charger →",
     today:"🟢 Auj.",yesterday:"⏰ Hier",moreOthers:n=>`+${n} autres →`,viewAll:"Voir tous les résultats →",
     locale:"fr-FR",
@@ -510,6 +587,13 @@ const T = {
     aff1Desc:"Official worldwide lotteries",aff1Cta:"Play →",
     aff2Desc:"Statistical analysis tools",aff2Cta:"Try it →",
     aff3Desc:"Real-time jackpots",aff3Cta:"View →",
+    raffleTitle:"🎁 Monthly Giveaway",raffleDesc:"Sign up for free for a chance to win 1 month of PREDIKTA PRO + exclusive bonuses!",
+    raffleCta:"Enter now →",raffleEndsIn:"Drawing in",
+    dAbbr:"d",hAbbr:"h",mAbbr:"m",
+    sectionDiaspora:"Diaspora Services",
+    daff1Desc:"Send money to Haiti and beyond, fast with no hidden fees",daff1Cta:"Send →",
+    daff2Desc:"Top up your loved ones' phones in Haiti instantly",daff2Cta:"Top up →",
+    daff3Desc:"Find the best cheap flights to Haiti and the Caribbean",daff3Cta:"Book →",
     loading:"Loading...",noResults:"No results available.",loadLink:"Load →",
     today:"🟢 Today",yesterday:"⏰ Yesterday",moreOthers:n=>`+${n} more →`,viewAll:"View all results →",
     locale:"en-US",
@@ -562,6 +646,13 @@ const T = {
     aff1Desc:"Loterías mundiales oficiales",aff1Cta:"Jugar →",
     aff2Desc:"Herramientas de análisis estadístico",aff2Cta:"Probar →",
     aff3Desc:"Jackpots en tiempo real",aff3Cta:"Ver →",
+    raffleTitle:"🎁 Sorteo Mensual",raffleDesc:"¡Regístrate gratis y participa para ganar 1 mes de PREDIKTA PRO + bonos exclusivos!",
+    raffleCta:"Participar →",raffleEndsIn:"Sorteo en",
+    dAbbr:"d",hAbbr:"h",mAbbr:"m",
+    sectionDiaspora:"Servicios para la Diáspora",
+    daff1Desc:"Envía dinero a Haití y otros países, rápido y sin comisiones ocultas",daff1Cta:"Enviar →",
+    daff2Desc:"Recarga el teléfono de tus seres queridos en Haití al instante",daff2Cta:"Recargar →",
+    daff3Desc:"Encuentra los mejores vuelos baratos a Haití y el Caribe",daff3Cta:"Reservar →",
     loading:"Cargando...",noResults:"No hay resultados disponibles.",loadLink:"Cargar →",
     today:"🟢 Hoy",yesterday:"⏰ Ayer",moreOthers:n=>`+${n} más →`,viewAll:"Ver todos los resultados →",
     locale:"es-ES",
@@ -614,6 +705,13 @@ const T = {
     aff1Desc:"Loterias mundiais oficiais",aff1Cta:"Jogar →",
     aff2Desc:"Ferramentas de análise estatística",aff2Cta:"Testar →",
     aff3Desc:"Jackpots em tempo real",aff3Cta:"Ver →",
+    raffleTitle:"🎁 Sorteio Mensal",raffleDesc:"Cadastre-se grátis e concorra a 1 mês de PREDIKTA PRO + bônus exclusivos!",
+    raffleCta:"Participar →",raffleEndsIn:"Sorteio em",
+    dAbbr:"d",hAbbr:"h",mAbbr:"m",
+    sectionDiaspora:"Serviços para a Diáspora",
+    daff1Desc:"Envie dinheiro para o Haiti e outros países, rápido e sem taxas ocultas",daff1Cta:"Enviar →",
+    daff2Desc:"Recarregue o telefone de seus entes queridos no Haiti instantaneamente",daff2Cta:"Recarregar →",
+    daff3Desc:"Encontre as melhores passagens baratas para o Haiti e o Caribe",daff3Cta:"Reservar →",
     loading:"Carregando...",noResults:"Nenhum resultado disponível.",loadLink:"Carregar →",
     today:"🟢 Hoje",yesterday:"⏰ Ontem",moreOthers:n=>`+${n} outros →`,viewAll:"Ver todos os resultados →",
     locale:"pt-BR",
@@ -666,6 +764,13 @@ const T = {
     aff1Desc:"Lotri mondyal ofisyèl",aff1Cta:"Jwe →",
     aff2Desc:"Zouti analiz estatistik",aff2Cta:"Eseye →",
     aff3Desc:"Jackpot an tan reyèl",aff3Cta:"Wè →",
+    raffleTitle:"🎁 Tiraj Kado Chak Mwa",raffleDesc:"Enskri gratis epi patisipe pou genyen 1 mwa PREDIKTA PRO gratis + bonis eksklizif !",
+    raffleCta:"Patisipe →",raffleEndsIn:"Tiraj nan",
+    dAbbr:"j",hAbbr:"è",mAbbr:"min",
+    sectionDiaspora:"Sèvis pou Dyaspora",
+    daff1Desc:"Voye lajan an Ayiti ak lòt peyi, rapid san frè kache",daff1Cta:"Voye →",
+    daff2Desc:"Rechaje telefòn fanmi ou an Ayiti imedyatman",daff2Cta:"Rechaje →",
+    daff3Desc:"Jwenn pi bon vòl pa chè pou Ayiti ak Karayib",daff3Cta:"Rezève →",
     loading:"Chajman...",noResults:"Pa gen rezilta disponib.",loadLink:"Chaje →",
     today:"🟢 Jodi a",yesterday:"⏰ Yè",moreOthers:n=>`+${n} lòt →`,viewAll:"Wè tout rezilta yo →",
     locale:"fr-FR",
@@ -692,6 +797,7 @@ function applyLang(lang){
   loadSnap();
   if(_SNAP_DATA) loadDigitStats(_TOOL_STATE);
   updateGreeting();
+  updateRaffleCountdown();
 }
 window.setLang = applyLang;
 
@@ -706,6 +812,23 @@ function updateGreeting(){
 
 document.getElementById('snapDate').textContent = new Date().toLocaleDateString(curT().locale,{weekday:'long',day:'numeric',month:'long'});
 updateGreeting();
+
+// ── Compte à rebours du tirage cadeau mensuel (fin de mois, 23h59) ──
+function updateRaffleCountdown(){
+  const el = document.getElementById('raffleCountdown');
+  if(!el) return;
+  const now = new Date();
+  const end = new Date(now.getFullYear(), now.getMonth()+1, 1, 0, 0, 0);
+  let diff = end - now;
+  if(diff < 0) diff = 0;
+  const days = Math.floor(diff/86400000);
+  const hours = Math.floor((diff%86400000)/3600000);
+  const mins = Math.floor((diff%3600000)/60000);
+  const t = curT();
+  el.textContent = `${days}${t.dAbbr} ${hours}${t.hAbbr} ${mins}${t.mAbbr}`;
+}
+updateRaffleCountdown();
+setInterval(updateRaffleCountdown, 60000);
 
 // Cache local du dernier résultat /api/results/latest — évite de refaire
 // l'appel réseau à chaque changement de langue (l'affichage est juste
