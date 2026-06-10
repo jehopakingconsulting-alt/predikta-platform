@@ -92,6 +92,7 @@ def _auto_update_loop():
 
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _LATEST_CACHE["data"] = None
+            _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
         except Exception as e:
@@ -100,9 +101,20 @@ def _auto_update_loop():
             _auto_update_state["running"] = False
         time.sleep(_AUTO_UPDATE_INTERVAL)
 
+def _initial_warm_loop():
+    """Au démarrage, pré-calcule les rapports populaires dès que possible
+    (à partir des données déjà sur disque), sans attendre le 1er cycle de
+    scraping (qui démarre après PREDIKTA_AUTOUPDATE_DELAY_SEC)."""
+    time.sleep(5)  # laisse le serveur finir de démarrer / passer le health-check
+    try:
+        _warm_popular_reports()
+    except Exception as e:
+        print(f"  [warm-cache][initial] error: {e}")
+
 def start_auto_update():
     if os.environ.get("PREDIKTA_DISABLE_AUTOUPDATE") == "1":
         return
+    threading.Thread(target=_initial_warm_loop, daemon=True, name="predikta-warm-cache").start()
     t = threading.Thread(target=_auto_update_loop, daemon=True, name="predikta-auto-update")
     t.start()
 
@@ -345,6 +357,46 @@ def api_contact():
 _REPORT_CACHE = {}
 _REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 10 * 60))  # 10 min
 
+# États les plus consultés — pré-calculés en arrière-plan après chaque
+# scraping pour que le 1er clic utilisateur tombe déjà en cache (évite
+# l'attente de 15-25s sur les états les plus populaires).
+PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
+
+def _build_report(state: str, tod_filter: str = "all"):
+    """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data."""
+    draws = load_csv(state)
+    if not draws:
+        return None
+
+    if tod_filter != "all":
+        draws = [d for d in draws if d.get("tod","").lower() == tod_filter.lower()]
+        if not draws:
+            return None
+
+    result = run_all_models(draws)
+    result["state"]       = state
+    result["state_name"]  = STATES[state]["name"]
+    result["tod_filter"]  = tod_filter
+    result["dpd"]         = STATES[state].get("dpd", 2)
+    result["schedule"]    = DRAW_SCHEDULE.get(state, [])
+    result["cached"]      = False
+    return result
+
+def _warm_popular_reports():
+    """Pre-compute & cache the 'all' report for the most popular states."""
+    now = time.time()
+    for state in PRIORITY_STATES:
+        cache_key = (state, "all")
+        cached = _REPORT_CACHE.get(cache_key)
+        if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
+            continue
+        try:
+            result = _build_report(state, "all")
+            if result:
+                _REPORT_CACHE[cache_key] = {"ts": time.time(), "data": {**result, "cached": True}}
+        except Exception as e:
+            print(f"  [warm-cache][{state}] error: {e}")
+
 @app.route("/api/report")
 def api_report():
     state      = request.args.get("state", "NY").upper()
@@ -359,22 +411,12 @@ def api_report():
     if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
         return jsonify(cached["data"])
 
-    draws = load_csv(state)
-    if not draws:
+    if not load_csv(state):
         return jsonify({"error": f"No data for {state}. Click Scrape first."}), 200
 
-    if tod_filter != "all":
-        draws = [d for d in draws if d.get("tod","").lower() == tod_filter.lower()]
-        if not draws:
-            return jsonify({"error": f"No {tod_filter} draws for {state}."}), 200
-
-    result = run_all_models(draws)
-    result["state"]       = state
-    result["state_name"]  = STATES[state]["name"]
-    result["tod_filter"]  = tod_filter
-    result["dpd"]         = STATES[state].get("dpd", 2)
-    result["schedule"]    = DRAW_SCHEDULE.get(state, [])
-    result["cached"]      = False
+    result = _build_report(state, tod_filter)
+    if result is None:
+        return jsonify({"error": f"No {tod_filter} draws for {state}."}), 200
 
     _REPORT_CACHE[cache_key] = {"ts": now, "data": {**result, "cached": True}}
     return jsonify(result)

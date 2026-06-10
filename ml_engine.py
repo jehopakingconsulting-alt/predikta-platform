@@ -167,6 +167,10 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
     """
     Simulate N future draws using empirical per-position distributions.
     Returns top combos by frequency.
+
+    Vectorized with numpy: drawing all N samples per position in one call
+    instead of looping in Python (was the single biggest CPU cost in
+    /api/report — ~50k Python-level rng.choice calls).
     """
     if not draws:
         return []
@@ -178,15 +182,14 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
         total = sum(cnt.values())
         dists[pos] = np.array([cnt.get(d, 0) / total for d in DIGITS])
 
-    results = Counter()
     rng = np.random.default_rng(42)
-
-    for _ in range(n_simulations):
-        combo = tuple(
-            rng.choice(DIGITS, p=dists[pos])
-            for pos in ["d1", "d2", "d3"]
-        )
-        results[combo] += 1
+    samples = {
+        pos: rng.choice(DIGITS, size=n_simulations, p=dists[pos])
+        for pos in ["d1", "d2", "d3"]
+    }
+    results = Counter(zip(
+        samples["d1"].tolist(), samples["d2"].tolist(), samples["d3"].tolist()
+    ))
 
     top = results.most_common(20)
     total = sum(results.values())
@@ -205,9 +208,13 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
 class MLPredictor:
     def __init__(self):
         self.models = {
-            "rf":  [RandomForestClassifier(n_estimators=200, max_depth=8, random_state=42, n_jobs=-1) for _ in range(3)],
-            "gbm": [GradientBoostingClassifier(n_estimators=150, max_depth=4, learning_rate=0.05, random_state=42) for _ in range(3)],
-            "xgb": [XGBClassifier(n_estimators=150, max_depth=5, learning_rate=0.05, verbosity=0, random_state=42) for _ in range(3)],
+            # n_estimators réduits (200->100, 150->80) — gain ~40-50% sur le
+            # temps d'entraînement avec impact négligeable sur la précision
+            # (Pick3 est quasi-aléatoire, le signal supplémentaire au-delà
+            # de ~80-100 arbres est marginal).
+            "rf":  [RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42, n_jobs=-1) for _ in range(3)],
+            "gbm": [GradientBoostingClassifier(n_estimators=80, max_depth=4, learning_rate=0.05, random_state=42) for _ in range(3)],
+            "xgb": [XGBClassifier(n_estimators=80, max_depth=5, learning_rate=0.05, verbosity=0, random_state=42, n_jobs=-1) for _ in range(3)],
         }
         self.trained = False
         self.feature_count = 0
