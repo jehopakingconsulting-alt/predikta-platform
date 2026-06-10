@@ -14,6 +14,11 @@ import time
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
+try:
+    import cloudscraper
+except ImportError:
+    cloudscraper = None
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
@@ -160,11 +165,22 @@ def parse_draws(html: str) -> list[dict]:
 
 
 # ── HTTP Fetch ────────────────────────────────────────────────────────────
+# lotterypost.com est protégé par Cloudflare et renvoie une page de défi
+# JS ("Just a moment...", HTTP 403) aux IP de datacenters (ex: Render).
+# cloudscraper imite un navigateur et résout ce défi automatiquement —
+# on l'utilise en priorité, avec repli sur `requests` classique.
+_CLOUDSCRAPER = cloudscraper.create_scraper(
+    browser={"browser": "chrome", "platform": "windows", "mobile": False}
+) if cloudscraper else None
+
 
 def fetch_url(url: str) -> str | None:
     for attempt in range(3):
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+            if _CLOUDSCRAPER is not None:
+                resp = _CLOUDSCRAPER.get(url, timeout=30)
+            else:
+                resp = requests.get(url, headers=HEADERS, timeout=20, verify=False)
             if resp.status_code == 200:
                 return resp.text
             if resp.status_code == 404:
