@@ -32,21 +32,21 @@ PLAN_CONFIG = {
     "pro": {
         "label": "PRO",
         "price_usd": 9.99,
-        "trial_days": 1,
+        "trial_days": 3,
         "analyses_per_day": 1,
         "max_states": 4,
     },
     "vip": {
         "label": "VIP",
         "price_usd": 19.99,
-        "trial_days": 2,
+        "trial_days": 7,
         "analyses_per_day": 7,
         "max_states": 20,
     },
     "elite": {
         "label": "ELITE",
         "price_usd": 49.99,
-        "trial_days": 3,
+        "trial_days": 7,
         "analyses_per_day": -1,   # illimité
         "max_states": -1,         # tous (44+)
     },
