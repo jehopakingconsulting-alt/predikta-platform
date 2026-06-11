@@ -313,8 +313,24 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
         return []
 
     cfg = STATES[state_code]
-    print(f"  [{state_code}] {cfg['name']} — fetching {n_months} months...")
-    draws = fetch_months(state_code, cfg["slug"], n_months)
+    print(f"  [{state_code}] {cfg['name']} — fetching...")
+
+    # lotteryusa.com n'est pas derriere Cloudflare (contrairement a
+    # lotterypost.com, qui bloque les IP de datacenter type Render) — on
+    # l'utilise en priorite pour les resultats recents.
+    draws = []
+    try:
+        import lotteryusa_scraper
+        draws = lotteryusa_scraper.fetch_state(state_code)
+        if draws:
+            print(f"  [{state_code}] {len(draws)} draws via lotteryusa.com")
+    except Exception as e:
+        print(f"  [{state_code}] lotteryusa.com fetch failed: {e}")
+
+    # Repli sur lotterypost.com (historique plus profond, mais souvent
+    # bloque par Cloudflare sur les IP de datacenter).
+    if not draws:
+        draws = fetch_months(state_code, cfg["slug"], n_months)
 
     # Merge extra official-source draws (Morning/Day/Night) when available —
     # lotterypost.com only republishes Midday/Evening for most states.

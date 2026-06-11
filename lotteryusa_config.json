@@ -1,0 +1,546 @@
+{
+  "DC": {
+    "state_slug": "district-of-columbia",
+    "base_slug": "dc-lucky-numbers",
+    "base_title": "DC-3 Evening",
+    "variants": {
+      "base": {
+        "slug": "dc-lucky-numbers",
+        "title": "DC-3 Evening"
+      },
+      "dc-lucky-midday": {
+        "slug": "dc-lucky-midday",
+        "title": "DC-3 Mid-day"
+      },
+      "dc-3-night": {
+        "slug": "dc-3-night",
+        "title": "DC-3 Night"
+      }
+    }
+  },
+  "AZ": {
+    "state_slug": "arizona",
+    "base_slug": "pick-3",
+    "base_title": "ArizonaPick 3",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "ArizonaPick 3"
+      }
+    }
+  },
+  "CA": {
+    "state_slug": "california",
+    "base_slug": "daily-3",
+    "base_title": "CaliforniaDaily 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "daily-3",
+        "title": "CaliforniaDaily 3 Evening"
+      }
+    }
+  },
+  "AR": {
+    "state_slug": "arkansas",
+    "base_slug": "cash-3",
+    "base_title": "ArkansasCash 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "cash-3",
+        "title": "ArkansasCash 3 Evening"
+      },
+      "midday-cash-3": {
+        "slug": "midday-cash-3",
+        "title": "ArkansasCash 3 Midday"
+      }
+    }
+  },
+  "DE": {
+    "state_slug": "delaware",
+    "base_slug": "play-3",
+    "base_title": "DelawarePlay 3 Night",
+    "variants": {
+      "base": {
+        "slug": "play-3",
+        "title": "DelawarePlay 3 Night"
+      },
+      "play-3-midday": {
+        "slug": "play-3-midday",
+        "title": "DelawarePlay 3 Day"
+      }
+    }
+  },
+  "FL": {
+    "state_slug": "florida",
+    "base_slug": "pick-3",
+    "base_title": "FloridaPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "FloridaPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "FloridaPick 3 Midday"
+      }
+    }
+  },
+  "CT": {
+    "state_slug": "connecticut",
+    "base_slug": "play-3",
+    "base_title": "ConnecticutPlay3 Night",
+    "variants": {
+      "base": {
+        "slug": "play-3",
+        "title": "ConnecticutPlay3 Night"
+      }
+    }
+  },
+  "CO": {
+    "state_slug": "colorado",
+    "base_slug": "pick-3",
+    "base_title": "ColoradoPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "ColoradoPick 3 Evening"
+      },
+      "pick-3-midday": {
+        "slug": "pick-3-midday",
+        "title": "ColoradoPick 3 Midday"
+      }
+    }
+  },
+  "GA": {
+    "state_slug": "georgia",
+    "base_slug": "cash-3",
+    "base_title": "GeorgiaCash 3 Night",
+    "variants": {
+      "base": {
+        "slug": "cash-3",
+        "title": "GeorgiaCash 3 Night"
+      },
+      "cash-3-evening": {
+        "slug": "cash-3-evening",
+        "title": "GeorgiaCash 3 Evening"
+      }
+    }
+  },
+  "IA": {
+    "state_slug": "iowa",
+    "base_slug": "pick-3",
+    "base_title": "IowaPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "IowaPick 3 Evening"
+      }
+    }
+  },
+  "IN": {
+    "state_slug": "indiana",
+    "base_slug": "daily-3",
+    "base_title": "IndianaDaily 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "daily-3",
+        "title": "IndianaDaily 3 Evening"
+      }
+    }
+  },
+  "IL": {
+    "state_slug": "illinois",
+    "base_slug": "daily-3",
+    "base_title": "IllinoisPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "daily-3",
+        "title": "IllinoisPick 3 Evening"
+      }
+    }
+  },
+  "KS": {
+    "state_slug": "kansas",
+    "base_slug": "pick-3",
+    "base_title": "KansasPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "KansasPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "KansasPick 3 Midday"
+      }
+    }
+  },
+  "ID": {
+    "state_slug": "idaho",
+    "base_slug": "pick-3",
+    "base_title": "IdahoPick 3 Night",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "IdahoPick 3 Night"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "IdahoPick 3 Day"
+      }
+    }
+  },
+  "KY": {
+    "state_slug": "kentucky",
+    "base_slug": "pick-3",
+    "base_title": "KentuckyPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "KentuckyPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "KentuckyPick 3 Midday"
+      }
+    }
+  },
+  "LA": {
+    "state_slug": "louisiana",
+    "base_slug": "pick-3",
+    "base_title": "LouisianaPick 3",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "LouisianaPick 3"
+      }
+    }
+  },
+  "MD": {
+    "state_slug": "maryland",
+    "base_slug": "pick-3",
+    "base_title": "MarylandPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "MarylandPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "MarylandPick 3 Midday"
+      }
+    }
+  },
+  "ME": {
+    "state_slug": "maine",
+    "base_slug": "pick-3",
+    "base_title": "MainePick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "MainePick 3 Evening"
+      }
+    }
+  },
+  "NC": {
+    "state_slug": "north-carolina",
+    "base_slug": "pick-3",
+    "base_title": "North CarolinaPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "North CarolinaPick 3 Evening"
+      }
+    }
+  },
+  "MO": {
+    "state_slug": "missouri",
+    "base_slug": "pick-3",
+    "base_title": "MissouriPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "MissouriPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "MissouriPick 3 Midday"
+      }
+    }
+  },
+  "MN": {
+    "state_slug": "minnesota",
+    "base_slug": "pick-3",
+    "base_title": "MinnesotaPick 3",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "MinnesotaPick 3"
+      }
+    }
+  },
+  "NE": {
+    "state_slug": "nebraska",
+    "base_slug": "pick-3",
+    "base_title": "NebraskaPick 3",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "NebraskaPick 3"
+      }
+    }
+  },
+  "MI": {
+    "state_slug": "michigan",
+    "base_slug": "daily-3",
+    "base_title": "MichiganDaily 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "daily-3",
+        "title": "MichiganDaily 3 Evening"
+      }
+    }
+  },
+  "MS": {
+    "state_slug": "mississippi",
+    "base_slug": "cash-3",
+    "base_title": "MississippiCash 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "cash-3",
+        "title": "MississippiCash 3 Evening"
+      },
+      "cash-3-midday": {
+        "slug": "cash-3-midday",
+        "title": "MississippiCash 3 Midday"
+      }
+    }
+  },
+  "NH": {
+    "state_slug": "new-hampshire",
+    "base_slug": "pick-3",
+    "base_title": "New HampshirePick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "New HampshirePick 3 Evening"
+      }
+    }
+  },
+  "NJ": {
+    "state_slug": "new-jersey",
+    "base_slug": "pick-3",
+    "base_title": "New JerseyPick-3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "New JerseyPick-3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "New JerseyPick-3 Midday"
+      }
+    }
+  },
+  "OH": {
+    "state_slug": "ohio",
+    "base_slug": "pick-3",
+    "base_title": "OhioPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "OhioPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "OhioPick 3 Midday"
+      }
+    }
+  },
+  "OK": {
+    "state_slug": "oklahoma",
+    "base_slug": "pick-3",
+    "base_title": "OklahomaPick 3",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "OklahomaPick 3"
+      }
+    }
+  },
+  "NY": {
+    "state_slug": "new-york",
+    "base_slug": "numbers",
+    "base_title": "New YorkNumbers Evening",
+    "variants": {
+      "base": {
+        "slug": "numbers",
+        "title": "New YorkNumbers Evening"
+      },
+      "midday-numbers": {
+        "slug": "midday-numbers",
+        "title": "New YorkNumbers Midday"
+      }
+    }
+  },
+  "NM": {
+    "state_slug": "new-mexico",
+    "base_slug": "pick-3",
+    "base_title": "New MexicoPick 3 Plus Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "New MexicoPick 3 Plus Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "New MexicoPick 3 Plus Day"
+      }
+    }
+  },
+  "PA": {
+    "state_slug": "pennsylvania",
+    "base_slug": "pick-3",
+    "base_title": "PennsylvaniaPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "PennsylvaniaPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "PennsylvaniaPick 3 Day"
+      }
+    }
+  },
+  "PR": {
+    "state_slug": "puerto-rico",
+    "base_slug": "pega-3",
+    "base_title": "Puerto RicoPega 3 Noche",
+    "variants": {
+      "base": {
+        "slug": "pega-3",
+        "title": "Puerto RicoPega 3 Noche"
+      },
+      "midday-pega-3": {
+        "slug": "midday-pega-3",
+        "title": "Puerto RicoPega 3 Día"
+      }
+    }
+  },
+  "SC": {
+    "state_slug": "south-carolina",
+    "base_slug": "pick-3",
+    "base_title": "South CarolinaPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "South CarolinaPick 3 Evening"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "South CarolinaPick 3 Midday"
+      }
+    }
+  },
+  "WI": {
+    "state_slug": "wisconsin",
+    "base_slug": "daily-pick-3",
+    "base_title": "Pick 3 Midday",
+    "variants": {
+      "base": {
+        "slug": "daily-pick-3",
+        "title": "Pick 3 Midday"
+      },
+      "daily-pick-3-evening": {
+        "slug": "daily-pick-3-evening",
+        "title": "Pick 3 Evening"
+      }
+    }
+  },
+  "WA": {
+    "state_slug": "washington",
+    "base_slug": "daily",
+    "base_title": "Pick 3",
+    "variants": {
+      "base": {
+        "slug": "daily",
+        "title": "Pick 3"
+      }
+    }
+  },
+  "VT": {
+    "state_slug": "vermont",
+    "base_slug": "pick-3",
+    "base_title": "VermontPick 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "VermontPick 3 Evening"
+      }
+    }
+  },
+  "WV": {
+    "state_slug": "west-virginia",
+    "base_slug": "daily-3",
+    "base_title": "West VirginiaDaily 3",
+    "variants": {
+      "base": {
+        "slug": "daily-3",
+        "title": "West VirginiaDaily 3"
+      }
+    }
+  },
+  "VA": {
+    "state_slug": "virginia",
+    "base_slug": "pick-3",
+    "base_title": "VirginiaPick 3 Night",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "VirginiaPick 3 Night"
+      }
+    }
+  },
+  "TX": {
+    "state_slug": "texas",
+    "base_slug": "pick-3",
+    "base_title": "TexasPick 3 Night",
+    "variants": {
+      "base": {
+        "slug": "pick-3",
+        "title": "TexasPick 3 Night"
+      },
+      "midday-pick-3": {
+        "slug": "midday-pick-3",
+        "title": "TexasPick 3 Day"
+      },
+      "morning-pick-3": {
+        "slug": "morning-pick-3",
+        "title": "TexasPick 3 Morning"
+      },
+      "evening-pick-3": {
+        "slug": "evening-pick-3",
+        "title": "TexasPick 3 Evening"
+      }
+    }
+  },
+  "TN": {
+    "state_slug": "tennessee",
+    "base_slug": "cash-3",
+    "base_title": "TennesseeCash 3 Evening",
+    "variants": {
+      "base": {
+        "slug": "cash-3",
+        "title": "TennesseeCash 3 Evening"
+      },
+      "midday-cash-3": {
+        "slug": "midday-cash-3",
+        "title": "TennesseeCash 3 Midday"
+      },
+      "morning-cash-3": {
+        "slug": "morning-cash-3",
+        "title": "TennesseeCash 3 Morning"
+      }
+    }
+  }
+}
