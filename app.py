@@ -399,6 +399,9 @@ def faq_page():    return send_from_directory("static", "faq.html")
 @app.route("/contact")
 def contact_page(): return send_from_directory("static", "contact.html")
 
+@app.route("/archives")
+def archives_page(): return send_from_directory("static", "archives.html")
+
 @app.route("/privacy")
 def privacy_page(): return send_from_directory("static", "privacy.html")
 

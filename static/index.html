@@ -1483,6 +1483,18 @@ async function loadReport(){
     window._lastData = data;
     renderAll(data);
     updateSidebar(data);
+
+    // Archive cette analyse (historique local, 30 jours) ────────────────
+    if(window.PredArchive){
+      const stateLabel = document.getElementById('stateSelect')
+        ?.selectedOptions?.[0]?.textContent?.trim() || state;
+      window.PredArchive.add({
+        type: 'analyze',
+        state, tod,
+        label: stateLabel,
+        url: `/analyze?state=${encodeURIComponent(state)}&tod=${encodeURIComponent(tod)}`,
+      });
+    }
   }catch(e){ status.textContent='Error: '+e.message; }
 }
 
@@ -1710,6 +1722,25 @@ window.addEventListener('load', ()=>{
   renderQuickStates();
   const sel = document.getElementById('stateSelect');
   if(sel) populateTodOptions(sel.value);
+
+  // Ouverture directe depuis les Archives (?state=XX&tod=YYY)
+  const params = new URLSearchParams(location.search);
+  const qState = params.get('state');
+  if(qState && sel){
+    const opt = [...sel.options].find(o=>o.value===qState.toUpperCase());
+    if(opt){
+      sel.value = qState.toUpperCase();
+      populateTodOptions(sel.value);
+      const qTod = params.get('tod');
+      const todSel = document.getElementById('todSelect');
+      if(qTod && todSel){
+        const todOpt = [...todSel.options].find(o=>o.value===qTod);
+        if(todOpt) todSel.value = qTod;
+      }
+      loadReport();
+      renderQuickStates();
+    }
+  }
 });
 
 // ── Last Draw ──

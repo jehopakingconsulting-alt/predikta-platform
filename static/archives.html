@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Archives — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:860px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:24px;line-height:1.7}
+
+.archive-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.archive-count{font-size:.78rem;color:var(--muted2)}
+.archive-count b{color:var(--text)}
+.btn-clear{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:#ff7766;padding:8px 16px;border-radius:8px;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-clear:hover{background:rgba(255,68,68,.2)}
+
+.retention-banner{background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(136,85,255,.08));border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:.78rem;color:var(--muted2);line-height:1.7}
+.retention-banner b{color:var(--gold)}
+.retention-banner a{color:var(--accent);text-decoration:none;font-weight:700}
+
+.archive-day{margin-bottom:24px}
+.archive-day-label{font-size:.7rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-bottom:10px;padding-left:2px}
+.archive-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:border-color .2s;cursor:pointer}
+.archive-item:hover{border-color:var(--accent)}
+.archive-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
+.archive-info{flex:1;min-width:0}
+.archive-title{font-size:.85rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.archive-meta{font-size:.68rem;color:var(--muted2);margin-top:2px}
+.archive-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.archive-go{font-size:.7rem;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.archive-del{background:none;border:none;color:var(--muted2);font-size:1rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s}
+.archive-del:hover{color:#ff5533;background:rgba(255,68,68,.1)}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted2)}
+.empty-state .ei{font-size:2.4rem;margin-bottom:14px}
+.empty-state p{font-size:.85rem;margin-bottom:18px}
+.empty-state a{display:inline-block;padding:10px 22px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;font-weight:700;font-size:.82rem}
+
+.tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.tier-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.tier-card.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.tier-name{font-size:.78rem;font-weight:900;letter-spacing:.05em}
+.tier-free .tier-name{color:var(--muted2)}
+.tier-vip .tier-name{color:#88aaff}
+.tier-elite .tier-name{color:var(--gold)}
+.tier-days{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;margin:6px 0;color:var(--text)}
+.tier-desc{font-size:.66rem;color:var(--muted2);line-height:1.5}
+@media(max-width:600px){.tier-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 data-i18n="title">Mes Archives</h1>
+  <p class="subtitle" data-i18n="subtitle">Retrouvez l'historique de vos analyses et recherches récentes, sauvegardé directement sur cet appareil.</p>
+
+  <div class="tier-grid">
+    <div class="tier-card tier-free" id="tierFree">
+      <div class="tier-name">FREE</div>
+      <div class="tier-days">7 <span style="font-size:.7rem" data-i18n="days">jours</span></div>
+      <div class="tier-desc" data-i18n="tierFreeDesc">Historique de base</div>
+    </div>
+    <div class="tier-card tier-vip" id="tierVip">
+      <div class="tier-name">VIP</div>
+      <div class="tier-days">7 <span style="font-size:.7rem" data-i18n="days">jours</span></div>
+      <div class="tier-desc" data-i18n="tierVipDesc">Archive prioritaire</div>
+    </div>
+    <div class="tier-card tier-elite" id="tierElite">
+      <div class="tier-name">ELITE</div>
+      <div class="tier-days">30 <span style="font-size:.7rem" data-i18n="days">jours</span></div>
+      <div class="tier-desc" data-i18n="tierEliteDesc">Archive complète & étendue</div>
+    </div>
+  </div>
+
+  <div class="retention-banner">
+    <span data-i18n="retentionInfo">Vos données sont stockées localement sur cet appareil et conservées <b>30 jours</b> (limite ELITE actuellement appliquée à tous). Passez à</span>
+    <a href="/pro" data-i18n="retentionLink">PRO/ELITE</a>
+    <span data-i18n="retentionInfo2"> pour débloquer les fonctionnalités avancées.</span>
+  </div>
+
+  <div class="archive-toolbar">
+    <div class="archive-count" id="archiveCount"></div>
+    <button class="btn-clear" id="btnClear" data-i18n="btnClear">🗑 Effacer l'historique</button>
+  </div>
+
+  <div id="archiveList"></div>
+</div>
+
+<script>
+const T = {
+  fr:{
+    title:"Mes Archives", subtitle:"Retrouvez l'historique de vos analyses et recherches récentes, sauvegardé directement sur cet appareil.",
+    days:"jours", tierFreeDesc:"Historique de base", tierVipDesc:"Archive prioritaire (7 jours)", tierEliteDesc:"Archive complète & étendue (30 jours)",
+    retentionInfo:"Vos données sont stockées localement sur cet appareil et conservées ", retentionLink:"PRO/ELITE",
+    retentionInfo2:" pour débloquer une rétention étendue et la synchronisation cloud.",
+    btnClear:"🗑 Effacer l'historique",
+    emptyTitle:"Aucune analyse archivée pour le moment",
+    emptyCta:"Lancer une analyse",
+    countLabel:"entrée(s) sauvegardée(s)",
+    typeAnalyze:"Analyse",
+    open:"Ouvrir →",
+    confirmClear:"Effacer tout l'historique d'analyses ? Cette action est irréversible.",
+    today:"Aujourd'hui", yesterday:"Hier",
+  },
+  en:{
+    title:"My Archives", subtitle:"Find the history of your recent analyses and searches, saved directly on this device.",
+    days:"days", tierFreeDesc:"Basic history", tierVipDesc:"Priority archive (7 days)", tierEliteDesc:"Full extended archive (30 days)",
+    retentionInfo:"Your data is stored locally on this device and kept for ", retentionLink:"PRO/ELITE",
+    retentionInfo2:" to unlock extended retention and cloud sync.",
+    btnClear:"🗑 Clear history",
+    emptyTitle:"No archived analyses yet",
+    emptyCta:"Run an analysis",
+    countLabel:"saved entr(y/ies)",
+    typeAnalyze:"Analysis",
+    open:"Open →",
+    confirmClear:"Clear all analysis history? This cannot be undone.",
+    today:"Today", yesterday:"Yesterday",
+  },
+  es:{
+    title:"Mis Archivos", subtitle:"Encuentra el historial de tus análisis y búsquedas recientes, guardado directamente en este dispositivo.",
+    days:"días", tierFreeDesc:"Historial básico", tierVipDesc:"Archivo prioritario (7 días)", tierEliteDesc:"Archivo completo y extendido (30 días)",
+    retentionInfo:"Tus datos se guardan localmente en este dispositivo y se conservan ", retentionLink:"PRO/ELITE",
+    retentionInfo2:" para desbloquear retención extendida y sincronización en la nube.",
+    btnClear:"🗑 Borrar historial",
+    emptyTitle:"Aún no hay análisis archivados",
+    emptyCta:"Iniciar un análisis",
+    countLabel:"entrada(s) guardada(s)",
+    typeAnalyze:"Análisis",
+    open:"Abrir →",
+    confirmClear:"¿Borrar todo el historial de análisis? Esta acción es irreversible.",
+    today:"Hoy", yesterday:"Ayer",
+  },
+  pt:{
+    title:"Meus Arquivos", subtitle:"Encontre o histórico das suas análises e pesquisas recentes, salvo diretamente neste dispositivo.",
+    days:"dias", tierFreeDesc:"Histórico básico", tierVipDesc:"Arquivo prioritário (7 dias)", tierEliteDesc:"Arquivo completo e estendido (30 dias)",
+    retentionInfo:"Seus dados são armazenados localmente neste dispositivo e mantidos por ", retentionLink:"PRO/ELITE",
+    retentionInfo2:" para desbloquear retenção estendida e sincronização na nuvem.",
+    btnClear:"🗑 Limpar histórico",
+    emptyTitle:"Nenhuma análise arquivada ainda",
+    emptyCta:"Iniciar uma análise",
+    countLabel:"entrada(s) salva(s)",
+    typeAnalyze:"Análise",
+    open:"Abrir →",
+    confirmClear:"Limpar todo o histórico de análises? Esta ação é irreversível.",
+    today:"Hoje", yesterday:"Ontem",
+  },
+  ht:{
+    title:"Achiv Mwen Yo", subtitle:"Jwenn istorik analiz ak rechèch resan ou yo, sove dirèkteman sou aparèy sa a.",
+    days:"jou", tierFreeDesc:"Istorik de baz", tierVipDesc:"Achiv priyorite (7 jou)", tierEliteDesc:"Achiv konplè & pwolonje (30 jou)",
+    retentionInfo:"Done ou yo estoke lokalman sou aparèy sa a epi konsève pandan ", retentionLink:"PRO/ELITE",
+    retentionInfo2:" pou debloke yon retansyon pwolonje ak senkronizasyon cloud.",
+    btnClear:"🗑 Efase istorik",
+    emptyTitle:"Pa gen analiz achive pou kounye a",
+    emptyCta:"Lanse yon analiz",
+    countLabel:"antre sove",
+    typeAnalyze:"Analiz",
+    open:"Louvri →",
+    confirmClear:"Efase tout istorik analiz yo? Aksyon sa a pa ka anile.",
+    today:"Jodi a", yesterday:"Yè",
+  },
+};
+
+function curT(){
+  const l = window.PREDIKTA_LANG || 'fr';
+  return T[l] || T.fr;
+}
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+  renderArchives();
+}
+window.setLang = applyLang;
+
+function fmtDay(ts, t){
+  const d = new Date(ts);
+  const today = new Date();
+  const yest = new Date(); yest.setDate(today.getDate()-1);
+  const sameDay = (a,b) => a.toDateString()===b.toDateString();
+  if(sameDay(d,today)) return t.today;
+  if(sameDay(d,yest)) return t.yesterday;
+  const locale = window.PREDIKTA_LANG==='en'?'en-US':window.PREDIKTA_LANG==='es'?'es-ES':window.PREDIKTA_LANG==='pt'?'pt-BR':'fr-FR';
+  return d.toLocaleDateString(locale,{weekday:'long',day:'numeric',month:'long'});
+}
+
+function fmtTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+function renderArchives(){
+  const t = curT();
+  const list = (window.PredArchive ? window.PredArchive.getAll() : []);
+  const countEl = document.getElementById('archiveCount');
+  const listEl = document.getElementById('archiveList');
+  const clearBtn = document.getElementById('btnClear');
+
+  countEl.innerHTML = `<b>${list.length}</b> ${t.countLabel}`;
+  clearBtn.style.display = list.length ? '' : 'none';
+
+  if(!list.length){
+    listEl.innerHTML = `<div class="empty-state">
+      <div class="ei">📁</div>
+      <p>${t.emptyTitle}</p>
+      <a href="/analyze">${t.emptyCta}</a>
+    </div>`;
+    return;
+  }
+
+  // Group by day label
+  const groups = {};
+  const order = [];
+  list.forEach(e=>{
+    const lbl = fmtDay(e.ts, t);
+    if(!groups[lbl]){ groups[lbl] = []; order.push(lbl); }
+    groups[lbl].push(e);
+  });
+
+  listEl.innerHTML = order.map(lbl=>{
+    const items = groups[lbl].map(e=>{
+      const icon = e.type==='analyze' ? '⚡' : '🔍';
+      const typeLabel = e.type==='analyze' ? t.typeAnalyze : e.type;
+      return `<div class="archive-item" onclick="window.location='${e.url}'">
+        <div class="archive-icon">${icon}</div>
+        <div class="archive-info">
+          <div class="archive-title">${e.label || e.state}</div>
+          <div class="archive-meta">${typeLabel}${e.tod?' · '+e.tod:''} · ${fmtTime(e.ts)}</div>
+        </div>
+        <div class="archive-actions">
+          <a class="archive-go" href="${e.url}">${t.open}</a>
+          <button class="archive-del" title="🗑" onclick="event.stopPropagation();delEntry('${e.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="archive-day">
+      <div class="archive-day-label">${lbl}</div>
+      ${items}
+    </div>`;
+  }).join('');
+}
+
+function delEntry(id){
+  if(window.PredArchive) window.PredArchive.remove(id);
+  renderArchives();
+}
+
+document.addEventListener('click', e=>{
+  if(e.target && e.target.id === 'btnClear'){
+    const t = curT();
+    if(confirm(t.confirmClear)){
+      if(window.PredArchive) window.PredArchive.clear();
+      renderArchives();
+    }
+  }
+});
+
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+
+  // Met en évidence le palier ELITE (rétention max actuellement appliquée)
+  const days = (window.PredArchive ? window.PredArchive.retentionDays : 30);
+  const id = days >= 30 ? 'tierElite' : days >= 7 ? 'tierVip' : 'tierFree';
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+});
+</script>
+</body></html>

@@ -9,6 +9,7 @@ const OFFLINE_URL = '/offline';
 const PRECACHE = [
   '/',
   '/results',
+  '/archives',
   '/pro',
   '/about',
   '/faq',
