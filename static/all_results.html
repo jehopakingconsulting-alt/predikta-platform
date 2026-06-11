@@ -468,6 +468,17 @@ async function loadData(forceScra=false){
 
     renderStateResults(data, content);
     loadJackpots();
+
+    // Archive cette consultation (historique local, 30 jours) ─────────
+    if(window.PredArchive){
+      window.PredArchive.add({
+        type: 'results',
+        state: currentState,
+        tod: '',
+        label: `${STATE_FLAGS[currentState]||'🎰'} ${STATE_NAMES[currentState]||currentState}`,
+        url: `/all-results?state=${encodeURIComponent(currentState)}`,
+      });
+    }
   }catch(e){
     content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">Erreur: ${e.message}</div><button class="load-data-btn" onclick="loadData(true)">🔄 Réessayer</button></div>`;
   }
@@ -564,6 +575,20 @@ function loadJackpots(){
 }
 
 // ── Init ──────────────────────────────
+// Ouverture directe depuis les Archives (?state=XX)
+(function(){
+  const params = new URLSearchParams(location.search);
+  const qState = (params.get('state')||'').toUpperCase();
+  if(qState && STATE_NAMES[qState]){
+    currentState = qState;
+    const tab = document.querySelector(`.state-tab[data-state="${qState}"]`);
+    if(tab){
+      document.querySelectorAll('.state-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+    }
+  }
+})();
+
 updateDateLabel();
 loadData(false);
 </script>

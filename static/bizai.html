@@ -765,6 +765,17 @@ async function runAnalysis(){
       document.getElementById('reportSection').style.display  = 'block';
       renderReport(json.report);
       window.scrollTo({top:0,behavior:'smooth'});
+
+      // Archive cette analyse business (historique local, 30 jours) ──────
+      if(window.PredArchive && json.report){
+        window.PredArchive.add({
+          type: 'bizai',
+          state: '',
+          tod: '',
+          label: `🚀 ${json.report.project_name || data.project_name || 'Business Analysis'}`,
+          url: '/bizai',
+        });
+      }
     }, 800);
   } catch(e){
     clearInterval(interval);

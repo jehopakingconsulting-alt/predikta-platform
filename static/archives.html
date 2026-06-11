@@ -101,7 +101,7 @@ const T = {
     emptyTitle:"Aucune analyse archivée pour le moment",
     emptyCta:"Lancer une analyse",
     countLabel:"entrée(s) sauvegardée(s)",
-    typeAnalyze:"Analyse",
+    typeAnalyze:"Analyse", typeResults:"Résultats consultés", typeBizai:"Analyse Business",
     open:"Ouvrir →",
     confirmClear:"Effacer tout l'historique d'analyses ? Cette action est irréversible.",
     today:"Aujourd'hui", yesterday:"Hier",
@@ -115,7 +115,7 @@ const T = {
     emptyTitle:"No archived analyses yet",
     emptyCta:"Run an analysis",
     countLabel:"saved entr(y/ies)",
-    typeAnalyze:"Analysis",
+    typeAnalyze:"Analysis", typeResults:"Viewed results", typeBizai:"Business Analysis",
     open:"Open →",
     confirmClear:"Clear all analysis history? This cannot be undone.",
     today:"Today", yesterday:"Yesterday",
@@ -129,7 +129,7 @@ const T = {
     emptyTitle:"Aún no hay análisis archivados",
     emptyCta:"Iniciar un análisis",
     countLabel:"entrada(s) guardada(s)",
-    typeAnalyze:"Análisis",
+    typeAnalyze:"Análisis", typeResults:"Resultados consultados", typeBizai:"Análisis de Negocio",
     open:"Abrir →",
     confirmClear:"¿Borrar todo el historial de análisis? Esta acción es irreversible.",
     today:"Hoy", yesterday:"Ayer",
@@ -143,7 +143,7 @@ const T = {
     emptyTitle:"Nenhuma análise arquivada ainda",
     emptyCta:"Iniciar uma análise",
     countLabel:"entrada(s) salva(s)",
-    typeAnalyze:"Análise",
+    typeAnalyze:"Análise", typeResults:"Resultados consultados", typeBizai:"Análise de Negócio",
     open:"Abrir →",
     confirmClear:"Limpar todo o histórico de análises? Esta ação é irreversível.",
     today:"Hoje", yesterday:"Ontem",
@@ -157,7 +157,7 @@ const T = {
     emptyTitle:"Pa gen analiz achive pou kounye a",
     emptyCta:"Lanse yon analiz",
     countLabel:"antre sove",
-    typeAnalyze:"Analiz",
+    typeAnalyze:"Analiz", typeResults:"Rezilta konsilte", typeBizai:"Analiz Biznis",
     open:"Louvri →",
     confirmClear:"Efase tout istorik analiz yo? Aksyon sa a pa ka anile.",
     today:"Jodi a", yesterday:"Yè",
@@ -226,9 +226,11 @@ function renderArchives(){
   });
 
   listEl.innerHTML = order.map(lbl=>{
+    const TYPE_ICON = { analyze:'⚡', results:'🏆', bizai:'🚀' };
+    const TYPE_LABEL = { analyze:t.typeAnalyze, results:t.typeResults, bizai:t.typeBizai };
     const items = groups[lbl].map(e=>{
-      const icon = e.type==='analyze' ? '⚡' : '🔍';
-      const typeLabel = e.type==='analyze' ? t.typeAnalyze : e.type;
+      const icon = TYPE_ICON[e.type] || '🔍';
+      const typeLabel = TYPE_LABEL[e.type] || e.type;
       return `<div class="archive-item" onclick="window.location='${e.url}'">
         <div class="archive-icon">${icon}</div>
         <div class="archive-info">
