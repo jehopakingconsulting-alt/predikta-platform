@@ -24,6 +24,12 @@ button.submit:disabled{opacity:.6;cursor:default}
 .msg.success{color:var(--green)}
 .alt{text-align:center;font-size:.82rem;color:var(--muted2);margin-top:6px}
 .alt a{color:var(--accent);text-decoration:none;font-weight:700}
+.oauth-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:#fff;color:#1a1a2e;font-weight:700;font-size:.88rem;cursor:pointer;margin-bottom:16px;text-decoration:none}
+.oauth-btn:hover{opacity:.9}
+.oauth-btn img{width:18px;height:18px}
+.oauth-divider{display:flex;align-items:center;gap:10px;margin:6px 0 18px;color:var(--muted2);font-size:.72rem;text-transform:uppercase;letter-spacing:1px}
+.oauth-divider::before,.oauth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+#oauthWrap{display:none}
 </style>
 </head>
 <body>
@@ -32,6 +38,14 @@ button.submit:disabled{opacity:.6;cursor:default}
   <p class="subtitle" data-i18n="subtitle">Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.</p>
 
   <div class="card">
+    <div id="oauthWrap">
+      <a href="/api/auth/oauth/google/login" class="oauth-btn">
+        <img src="https://www.google.com/favicon.ico" alt=""/>
+        <span data-i18n="continueGoogle">Continuer avec Google</span>
+      </a>
+      <div class="oauth-divider" data-i18n="orDivider">ou</div>
+    </div>
+
     <label for="lEmail" data-i18n="lblEmail">Email ou nom d'utilisateur</label>
     <input type="text" id="lEmail" placeholder="ton@email.com" autocomplete="username"/>
 
@@ -46,23 +60,23 @@ button.submit:disabled{opacity:.6;cursor:default}
 
 <script>
 const T = {
-  fr:{title:"Connexion",subtitle:"Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.",
+  fr:{title:"Connexion",subtitle:"Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.",continueGoogle:"Continuer avec Google",orDivider:"ou",
     lblEmail:"Email ou nom d'utilisateur",lblPassword:"Mot de passe",btnLogin:"Se connecter",
     noAccount:"Pas encore de compte ?",registerLink:"Créer un compte",
     errFields:"Merci de remplir tous les champs.",errAuth:"Identifiants incorrects.",success:"Connexion réussie ! Redirection...",},
-  en:{title:"Log in",subtitle:"Log in to access your PREDIKTA analyses and manage your subscription.",
+  en:{title:"Log in",subtitle:"Log in to access your PREDIKTA analyses and manage your subscription.",continueGoogle:"Continue with Google",orDivider:"or",
     lblEmail:"Email or username",lblPassword:"Password",btnLogin:"Log in",
     noAccount:"No account yet?",registerLink:"Create an account",
     errFields:"Please fill in all fields.",errAuth:"Incorrect credentials.",success:"Logged in! Redirecting...",},
-  es:{title:"Iniciar sesión",subtitle:"Inicia sesión para acceder a tus análisis PREDIKTA y gestionar tu suscripción.",
+  es:{title:"Iniciar sesión",subtitle:"Inicia sesión para acceder a tus análisis PREDIKTA y gestionar tu suscripción.",continueGoogle:"Continuar con Google",orDivider:"o",
     lblEmail:"Correo o usuario",lblPassword:"Contraseña",btnLogin:"Iniciar sesión",
     noAccount:"¿No tienes cuenta?",registerLink:"Crear cuenta",
     errFields:"Completa todos los campos.",errAuth:"Credenciales incorrectas.",success:"¡Sesión iniciada! Redirigiendo...",},
-  pt:{title:"Entrar",subtitle:"Entre para acessar suas análises PREDIKTA e gerenciar sua assinatura.",
+  pt:{title:"Entrar",subtitle:"Entre para acessar suas análises PREDIKTA e gerenciar sua assinatura.",continueGoogle:"Continuar com o Google",orDivider:"ou",
     lblEmail:"Email ou usuário",lblPassword:"Senha",btnLogin:"Entrar",
     noAccount:"Ainda não tem conta?",registerLink:"Criar conta",
     errFields:"Preencha todos os campos.",errAuth:"Credenciais incorretas.",success:"Login efetuado! Redirecionando...",},
-  ht:{title:"Konekte",subtitle:"Konekte pou jwenn aksè a analiz PREDIKTA ou epi jere abònman ou.",
+  ht:{title:"Konekte",subtitle:"Konekte pou jwenn aksè a analiz PREDIKTA ou epi jere abònman ou.",continueGoogle:"Kontinye ak Google",orDivider:"oswa",
     lblEmail:"Imel oswa non itilizatè",lblPassword:"Modpas",btnLogin:"Konekte",
     noAccount:"Ou pa gen kont toujou?",registerLink:"Kreye yon kont",
     errFields:"Tanpri ranpli tout chan yo.",errAuth:"Enfòmasyon yo pa kòrèk.",success:"Koneksyon reyisi! N ap redirije...",},
@@ -79,6 +93,10 @@ function applyLang(lang){
 }
 window.setLang = applyLang;
 applyLang(curLang);
+
+fetch('/api/auth/oauth/config').then(r=>r.json()).then(cfg=>{
+  if(cfg.google) document.getElementById('oauthWrap').style.display = 'block';
+}).catch(()=>{});
 
 const msgEl = document.getElementById('msg');
 document.getElementById('btnLogin').addEventListener('click', async ()=>{

@@ -62,8 +62,14 @@ class User(db.Model):
     id            = db.Column(db.Integer, primary_key=True)
     username      = db.Column(db.String(32), unique=True, nullable=False, index=True)
     email         = db.Column(db.String(120), unique=True, nullable=False, index=True)
-    password_hash = db.Column(db.String(255), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=True)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Connexion via fournisseur externe (Google, Facebook, Microsoft...).
+    # Un compte créé via OAuth n'a pas de mot de passe (password_hash=None).
+    oauth_provider = db.Column(db.String(20), nullable=True)   # ex: "google"
+    oauth_id       = db.Column(db.String(128), nullable=True)  # ID unique chez le fournisseur
+    avatar_url     = db.Column(db.String(512), nullable=True)
 
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
@@ -72,6 +78,8 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password: str) -> bool:
+        if not self.password_hash:
+            return False
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
@@ -80,6 +88,9 @@ class User(db.Model):
             "id": self.id,
             "username": self.username,
             "email": self.email,
+            "avatar_url": self.avatar_url,
+            "oauth_provider": self.oauth_provider,
+            "has_password": bool(self.password_hash),
             "subscription": sub.to_dict() if sub else None,
         }
 
@@ -180,6 +191,53 @@ def init_app(app):
 # ── Helpers ──────────────────────────────────────────────────────────────────
 EMAIL_RE = re.compile(r"[^@]+@[^@]+\.[^@]+")
 USERNAME_RE = re.compile(r"^[a-zA-Z0-9_]{3,20}$")
+
+
+def make_unique_username(base: str) -> str:
+    """Génère un nom d'utilisateur valide et unique à partir d'une chaîne
+    (ex: la partie locale d'un email OAuth)."""
+    base = re.sub(r"[^a-zA-Z0-9_]", "", base or "")[:16] or "user"
+    if len(base) < 3:
+        base = (base + "user")[:16]
+    candidate = base
+    suffix = 0
+    while User.query.filter_by(username=candidate).first():
+        suffix += 1
+        candidate = f"{base}{suffix}"[:20]
+    return candidate
+
+
+def find_or_create_oauth_user(provider: str, oauth_id: str, email: str, name: str = "",
+                               avatar_url: str = ""):
+    """Retourne (user, created) pour une connexion OAuth. Lie le compte à un
+    utilisateur existant (même email) ou en crée un nouveau."""
+    email = (email or "").strip().lower()
+
+    user = User.query.filter_by(oauth_provider=provider, oauth_id=oauth_id).first()
+    if user:
+        return user, False
+
+    user = User.query.filter_by(email=email).first() if email else None
+    if user:
+        # Compte existant (créé par mot de passe) → on le lie au fournisseur OAuth
+        user.oauth_provider = provider
+        user.oauth_id = oauth_id
+        if avatar_url and not user.avatar_url:
+            user.avatar_url = avatar_url
+        db.session.commit()
+        return user, False
+
+    base = (email.split("@")[0] if email else name) or "user"
+    username = make_unique_username(base)
+    user = User(username=username, email=email or f"{username}@{provider}.predikta.local",
+                 oauth_provider=provider, oauth_id=oauth_id, avatar_url=avatar_url or None)
+    db.session.add(user)
+    db.session.flush()
+
+    sub = Subscription(user_id=user.id, plan=None, status="none")
+    db.session.add(sub)
+    db.session.commit()
+    return user, True
 
 
 def current_user():

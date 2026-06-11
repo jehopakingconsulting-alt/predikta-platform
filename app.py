@@ -51,6 +51,11 @@ app.register_blueprint(auth_module.auth_bp)
 import billing as billing_module
 app.register_blueprint(billing_module.billing_bp)
 
+# ── Connexion via Google / Facebook / Microsoft (OAuth) ───────────────────
+import oauth as oauth_module
+oauth_module.init_app(app)
+app.register_blueprint(oauth_module.oauth_bp)
+
 # ── Compression (gzip/br) — réduit fortement le poids des pages HTML/JS
 # (index.html ~2000 lignes, nav.js ~900 lignes) et des réponses JSON
 # (/api/results/latest, /api/states, /api/report) → chargements plus rapides
