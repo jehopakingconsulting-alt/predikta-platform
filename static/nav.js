@@ -13,33 +13,34 @@ const SERVICES = [
   { href:'/all-results', icon:'🏆', key:'allresults', badge:'' },
   { href:'/bizai',       icon:'🚀', key:'bizai',      badge:'' },
   { href:'/archives',    icon:'📁', key:'archives',   badge:'' },
+  { href:'/parrainage',  icon:'🎁', key:'referral',   badge:'' },
   { href:'/pro',         icon:'👑', key:'pro',        badge:'PRO' },
 ];
 
 // ── Traductions ───────────────────────────────────────────────────────────
 const NAV_T = {
   fr:{ home:'Accueil', analyze:'Analyser', results:'Résultats', allresults:'Tous Résultats',
-       bizai:'Business Intelligence', pro:'PRO', archives:'Archives', lang:'Langue', theme:'Thème', menu:'Menu',
+       bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Parrainage', lang:'Langue', theme:'Thème', menu:'Menu',
        tagline:'Loterie & Analyse Prédictive',
        footerCopy:'© 2026 PREDIKTA — Pour divertissement uniquement · Jouez responsable',
        about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results',
-       bizai:'Business Intelligence', pro:'PRO', archives:'Archives', lang:'Language', theme:'Theme', menu:'Menu',
+       bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Lottery & Predictive Analysis',
        footerCopy:'© 2026 PREDIKTA — For entertainment only · Play responsibly',
        about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos',
-       bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', lang:'Idioma', theme:'Tema', menu:'Menú',
+       bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Lotería & Análisis Predictivo',
        footerCopy:'© 2026 PREDIKTA — Solo entretenimiento · Juega responsablemente',
        about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos',
-       bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', lang:'Idioma', theme:'Tema', menu:'Menu',
+       bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Loteria & Análise Preditiva',
        footerCopy:'© 2026 PREDIKTA — Apenas entretenimento · Jogue com responsabilidade',
        about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta',
-       bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', lang:'Lang', theme:'Tèm', menu:'Meni',
+       bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Lotri & Analiz Biznis',
        footerCopy:'© 2026 PREDIKTA — Pou amizman sèlman · Jwe ak responsablite',
        about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye' },
@@ -107,6 +108,20 @@ window.PredArchive = {
   clear: archiveClear,
   retentionDays: ARCHIVE_RETENTION_DAYS,
 };
+
+// ── Parrainage : capture du code ?ref=XXXX dans l'URL ──────────────────────
+// Stocké pour être attaché à la prochaine inscription newsletter, quel que
+// soit le point d'entrée du visiteur.
+(function(){
+  try{
+    const params = new URLSearchParams(location.search);
+    const ref = params.get('ref');
+    if(ref) localStorage.setItem('predikta_ref', ref.trim().toUpperCase());
+  }catch(e){}
+})();
+window.PREDIKTA_REF = (function(){
+  try{ return localStorage.getItem('predikta_ref') || ''; }catch(e){ return ''; }
+})();
 
 // ── Langue ────────────────────────────────────────────────────────────────
 const SUPPORTED = ['fr','en','es','pt','ht'];

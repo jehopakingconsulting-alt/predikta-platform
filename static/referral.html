@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Parrainage — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:760px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:28px;line-height:1.7}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+
+.email-form{display:flex;gap:10px;flex-wrap:wrap}
+.email-form input{flex:1;min-width:200px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:#04040f;color:var(--text);font-size:.85rem;font-family:inherit}
+.email-form input:focus{outline:none;border-color:var(--accent)}
+.email-form button{padding:12px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap}
+.email-form button:disabled{opacity:.6;cursor:default}
+
+.dashboard{display:none}
+.dashboard.visible{display:block}
+
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:20px 0}
+.stat{background:#04040f;border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.stat-num{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:.7rem;color:var(--muted2);margin-top:4px}
+
+.ref-link-box{display:flex;gap:8px;align-items:center;background:#04040f;border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:14px 0;flex-wrap:wrap}
+.ref-link-box code{flex:1;min-width:160px;font-size:.78rem;color:var(--accent);word-break:break-all}
+.ref-link-box button{padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(79,110,255,.12);color:var(--text);font-size:.74rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.ref-link-box button:hover{border-color:var(--accent)}
+
+.share-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.share-btn{flex:1;min-width:120px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#04040f;color:var(--text);font-size:.78rem;font-weight:700;cursor:pointer;text-align:center}
+.share-btn:hover{border-color:var(--accent)}
+
+.rewards-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.rewards-list li{display:flex;align-items:center;gap:12px;font-size:.82rem;color:var(--muted2);padding:10px 14px;background:#04040f;border:1px solid var(--border);border-radius:10px}
+.rewards-list .rl-icon{font-size:1.2rem}
+.rewards-list .rl-badge{margin-left:auto;font-size:.65rem;font-weight:900;padding:3px 10px;border-radius:6px;background:rgba(34,232,122,.15);color:var(--green);white-space:nowrap}
+.rewards-list .rl-badge.locked{background:rgba(255,255,255,.05);color:var(--muted)}
+
+.notice{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:14px 18px;font-size:.76rem;color:var(--muted2);line-height:1.7;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 data-i18n="title">Programme de Parrainage 🎁</h1>
+  <p class="subtitle" data-i18n="subtitle">Invite tes amis sur PREDIKTA et débloque des avantages ELITE. Plus tu parraines, plus tu gagnes.</p>
+
+  <div class="card" id="emailCard">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:12px" data-i18n="emailLabel">Entre ton email pour récupérer ton code de parrainage :</div>
+    <div class="email-form">
+      <input type="email" id="refEmail" placeholder="ton@email.com" data-i18n-placeholder="emailPlaceholder"/>
+      <button id="btnGetCode" data-i18n="btnGetCode">Obtenir mon code</button>
+    </div>
+  </div>
+
+  <div class="card dashboard" id="dashboard">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num" id="statCount">0</div>
+        <div class="stat-label" data-i18n="statReferrals">Filleuls inscrits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="statCode">—</div>
+        <div class="stat-label" data-i18n="statCode">Ton code</div>
+      </div>
+    </div>
+
+    <div style="font-weight:700;font-size:.85rem;margin-top:6px" data-i18n="linkLabel">Ton lien de parrainage :</div>
+    <div class="ref-link-box">
+      <code id="refLink"></code>
+      <button id="btnCopy" data-i18n="btnCopy">📋 Copier</button>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn" id="btnShareWA" data-i18n="shareWA">💬 WhatsApp</button>
+      <button class="share-btn" id="btnShareFB" data-i18n="shareFB">📘 Facebook</button>
+      <button class="share-btn" id="btnShareGen" data-i18n="shareGen">🔗 Partager</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:14px" data-i18n="rewardsTitle">🏆 Paliers de récompenses</div>
+    <ul class="rewards-list">
+      <li><span class="rl-icon">🥉</span><span data-i18n="reward1">3 filleuls inscrits → Badge Ambassadeur PREDIKTA</span><span class="rl-badge locked" id="badge1" data-i18n="badgeLocked">Verrouillé</span></li>
+      <li><span class="rl-icon">🥈</span><span data-i18n="reward2">10 filleuls → 7 jours d'accès VIP offerts</span><span class="rl-badge locked" id="badge2" data-i18n="badgeLocked">Verrouillé</span></li>
+      <li><span class="rl-icon">🥇</span><span data-i18n="reward3">25 filleuls → 30 jours d'accès ELITE offerts</span><span class="rl-badge locked" id="badge3" data-i18n="badgeLocked">Verrouillé</span></li>
+    </ul>
+    <div class="notice" data-i18n="noticeText">Programme en phase de lancement : les récompenses seront activées automatiquement dès que le système de comptes PREDIKTA sera disponible. Ton compteur de filleuls est déjà suivi dès maintenant — ne perds pas ton avance !</div>
+  </div>
+</div>
+
+<script>
+const T = {
+  fr:{
+    title:"Programme de Parrainage 🎁", subtitle:"Invite tes amis sur PREDIKTA et débloque des avantages ELITE. Plus tu parraines, plus tu gagnes.",
+    emailLabel:"Entre ton email pour récupérer ton code de parrainage :", emailPlaceholder:"ton@email.com", btnGetCode:"Obtenir mon code",
+    statReferrals:"Filleuls inscrits", statCode:"Ton code", linkLabel:"Ton lien de parrainage :", btnCopy:"📋 Copier", btnCopied:"✅ Copié !",
+    shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Partager",
+    rewardsTitle:"🏆 Paliers de récompenses",
+    reward1:"3 filleuls inscrits → Badge Ambassadeur PREDIKTA",
+    reward2:"10 filleuls → 7 jours d'accès VIP offerts",
+    reward3:"25 filleuls → 30 jours d'accès ELITE offerts",
+    badgeLocked:"Verrouillé", badgeUnlocked:"Débloqué ✓",
+    noticeText:"Programme en phase de lancement : les récompenses seront activées automatiquement dès que le système de comptes PREDIKTA sera disponible. Ton compteur de filleuls est déjà suivi dès maintenant — ne perds pas ton avance !",
+    invalidEmail:"Email invalide", shareText:"🎰 Découvre PREDIKTA, l'analyse prédictive de loterie ! Inscris-toi avec mon lien :",
+  },
+  en:{
+    title:"Referral Program 🎁", subtitle:"Invite your friends to PREDIKTA and unlock ELITE perks. The more you refer, the more you earn.",
+    emailLabel:"Enter your email to get your referral code:", emailPlaceholder:"your@email.com", btnGetCode:"Get my code",
+    statReferrals:"Referred sign-ups", statCode:"Your code", linkLabel:"Your referral link:", btnCopy:"📋 Copy", btnCopied:"✅ Copied!",
+    shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Share",
+    rewardsTitle:"🏆 Reward tiers",
+    reward1:"3 referrals → PREDIKTA Ambassador Badge",
+    reward2:"10 referrals → 7 days of free VIP access",
+    reward3:"25 referrals → 30 days of free ELITE access",
+    badgeLocked:"Locked", badgeUnlocked:"Unlocked ✓",
+    noticeText:"Program in launch phase: rewards will be activated automatically once the PREDIKTA account system is available. Your referral count is already being tracked now — don't lose your head start!",
+    invalidEmail:"Invalid email", shareText:"🎰 Check out PREDIKTA, predictive lottery analysis! Sign up with my link:",
+  },
+  es:{
+    title:"Programa de Referidos 🎁", subtitle:"Invita a tus amigos a PREDIKTA y desbloquea ventajas ELITE. Cuantos más refieras, más ganas.",
+    emailLabel:"Ingresa tu email para obtener tu código de referido:", emailPlaceholder:"tu@email.com", btnGetCode:"Obtener mi código",
+    statReferrals:"Referidos inscritos", statCode:"Tu código", linkLabel:"Tu enlace de referido:", btnCopy:"📋 Copiar", btnCopied:"✅ ¡Copiado!",
+    shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Compartir",
+    rewardsTitle:"🏆 Niveles de recompensas",
+    reward1:"3 referidos → Insignia Embajador PREDIKTA",
+    reward2:"10 referidos → 7 días de acceso VIP gratis",
+    reward3:"25 referidos → 30 días de acceso ELITE gratis",
+    badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
+    noticeText:"Programa en fase de lanzamiento: las recompensas se activarán automáticamente cuando el sistema de cuentas PREDIKTA esté disponible. Tu contador de referidos ya se está registrando ahora — ¡no pierdas tu ventaja!",
+    invalidEmail:"Email inválido", shareText:"🎰 ¡Descubre PREDIKTA, análisis predictivo de lotería! Regístrate con mi enlace:",
+  },
+  pt:{
+    title:"Programa de Indicações 🎁", subtitle:"Convide seus amigos para a PREDIKTA e desbloqueie vantagens ELITE. Quanto mais você indicar, mais ganha.",
+    emailLabel:"Digite seu email para obter seu código de indicação:", emailPlaceholder:"seu@email.com", btnGetCode:"Obter meu código",
+    statReferrals:"Indicados cadastrados", statCode:"Seu código", linkLabel:"Seu link de indicação:", btnCopy:"📋 Copiar", btnCopied:"✅ Copiado!",
+    shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Compartilhar",
+    rewardsTitle:"🏆 Níveis de recompensa",
+    reward1:"3 indicações → Selo Embaixador PREDIKTA",
+    reward2:"10 indicações → 7 dias de acesso VIP grátis",
+    reward3:"25 indicações → 30 dias de acesso ELITE grátis",
+    badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
+    noticeText:"Programa em fase de lançamento: as recompensas serão ativadas automaticamente assim que o sistema de contas PREDIKTA estiver disponível. Seu contador de indicações já está sendo registrado agora — não perca sua vantagem!",
+    invalidEmail:"Email inválido", shareText:"🎰 Conheça a PREDIKTA, análise preditiva de loteria! Cadastre-se com meu link:",
+  },
+  ht:{
+    title:"Pwogram Parennaj 🎁", subtitle:"Envite zanmi ou yo sou PREDIKTA epi debloke avantaj ELITE. Plis ou parenn, plis ou genyen.",
+    emailLabel:"Antre imèl ou pou jwenn kòd parennaj ou:", emailPlaceholder:"imel@ou.com", btnGetCode:"Jwenn kòd mwen",
+    statReferrals:"Filèl enskri", statCode:"Kòd ou", linkLabel:"Lyen parennaj ou:", btnCopy:"📋 Kopye", btnCopied:"✅ Kopye!",
+    shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Pataje",
+    rewardsTitle:"🏆 Nivo rekonpans",
+    reward1:"3 filèl enskri → Badj Anbasadè PREDIKTA",
+    reward2:"10 filèl → 7 jou aksè VIP gratis",
+    reward3:"25 filèl → 30 jou aksè ELITE gratis",
+    badgeLocked:"Bloke", badgeUnlocked:"Debloke ✓",
+    noticeText:"Pwogram nan faz lansman: rekonpans yo ap aktive otomatikman depi sistèm kont PREDIKTA disponib. Konpteur filèl ou deja ap swiv kounye a — pa pèdi avans ou!",
+    invalidEmail:"Imèl envalid", shareText:"🎰 Dekouvri PREDIKTA, analiz prediktif lotri! Enskri ak lyen mwen an:",
+  },
+};
+
+function curT(){ return T[window.PREDIKTA_LANG] || T.fr; }
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(dict[key]) el.placeholder = dict[key];
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title.replace(' 🎁','') + " — PREDIKTA";
+  refreshDashboard();
+}
+window.setLang = applyLang;
+
+let _refData = null;
+
+function refreshDashboard(){
+  if(!_refData) return;
+  const t = curT();
+  document.getElementById('statCount').textContent = _refData.referral_count;
+  document.getElementById('statCode').textContent = _refData.ref_code;
+  const link = `${location.origin}/?ref=${_refData.ref_code}`;
+  document.getElementById('refLink').textContent = link;
+
+  const c = _refData.referral_count;
+  [[1,3],[2,10],[3,25]].forEach(([n,need])=>{
+    const el = document.getElementById('badge'+n);
+    if(c >= need){ el.textContent = t.badgeUnlocked; el.classList.remove('locked'); }
+    else { el.textContent = t.badgeLocked; el.classList.add('locked'); }
+  });
+}
+
+async function loadRefData(email){
+  const r = await fetch('/api/referral/me?email='+encodeURIComponent(email));
+  if(!r.ok) throw new Error('error');
+  _refData = await r.json();
+  localStorage.setItem('predikta_my_email', email);
+  document.getElementById('emailCard').style.display = 'none';
+  document.getElementById('dashboard').classList.add('visible');
+  refreshDashboard();
+}
+
+document.addEventListener('click', async (e)=>{
+  const t = curT();
+  if(e.target && e.target.id === 'btnGetCode'){
+    const email = document.getElementById('refEmail').value.trim().toLowerCase();
+    if(!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)){ alert(t.invalidEmail); return; }
+    e.target.disabled = true;
+    try{ await loadRefData(email); }catch(err){ alert(t.invalidEmail); }
+    e.target.disabled = false;
+  }
+  if(e.target && e.target.id === 'btnCopy'){
+    const link = document.getElementById('refLink').textContent;
+    navigator.clipboard?.writeText(link).then(()=>{
+      e.target.textContent = t.btnCopied;
+      setTimeout(()=>{ e.target.textContent = t.btnCopy; }, 1800);
+    });
+  }
+  if(e.target && e.target.id === 'btnShareWA'){
+    const link = document.getElementById('refLink').textContent;
+    window.open(`https://wa.me/?text=${encodeURIComponent(t.shareText+' '+link)}`,'_blank');
+  }
+  if(e.target && e.target.id === 'btnShareFB'){
+    const link = document.getElementById('refLink').textContent;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,'_blank');
+  }
+  if(e.target && e.target.id === 'btnShareGen'){
+    const link = document.getElementById('refLink').textContent;
+    if(window.shareContent) window.shareContent(t.shareText, link);
+  }
+});
+
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+
+  // Auto-remplissage si email déjà connu sur cet appareil
+  const savedEmail = localStorage.getItem('predikta_my_email');
+  if(savedEmail){
+    document.getElementById('refEmail').value = savedEmail;
+    loadRefData(savedEmail).catch(()=>{});
+  }
+});
+</script>
+</body></html>

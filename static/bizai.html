@@ -1144,7 +1144,8 @@ function shareReport(){
 async function subscribeBiz(){
   const email = document.getElementById('bizEmail').value;
   if(!email) return;
-  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang=fr');
+  const ref = window.PREDIKTA_REF || '';
+  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang=fr'+(ref?'&ref='+encodeURIComponent(ref):''));
   const d = await r.json();
   alert(d.message || 'Merci !');
 }

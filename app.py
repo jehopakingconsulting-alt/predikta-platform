@@ -359,16 +359,65 @@ def load_subscribers():
             return json.load(f)
     return []
 
-def save_subscriber(email, lang="fr"):
+
+def _save_subscribers_list(subs):
+    os.makedirs(os.path.dirname(SUBS_FILE), exist_ok=True)
+    with open(SUBS_FILE, "w") as f:
+        json.dump(subs, f, indent=2)
+
+
+def _gen_ref_code(email: str) -> str:
+    """Code de parrainage court et stable, dérivé de l'email (pas de compte requis)."""
+    import hashlib
+    return hashlib.sha256(email.encode("utf-8")).hexdigest()[:8].upper()
+
+
+def save_subscriber(email, lang="fr", ref_code=None):
+    """Enregistre un nouvel abonné (newsletter / parrainage). Chaque abonné
+    reçoit automatiquement son propre code de parrainage. Si `ref_code`
+    correspond à un abonné existant (et différent de l'email lui-même),
+    son compteur de filleuls est incrémenté."""
     subs = load_subscribers()
     emails = [s["email"] for s in subs]
+
     if email not in emails:
-        subs.append({"email": email, "lang": lang, "date": date.today().isoformat()})
-        os.makedirs(os.path.dirname(SUBS_FILE), exist_ok=True)
-        with open(SUBS_FILE, "w") as f:
-            json.dump(subs, f, indent=2)
+        entry = {
+            "email": email,
+            "lang": lang,
+            "date": date.today().isoformat(),
+            "ref_code": _gen_ref_code(email),
+            "referral_count": 0,
+            "referred_by": None,
+        }
+
+        if ref_code:
+            ref_code = ref_code.strip().upper()
+            referrer = next((s for s in subs if s.get("ref_code") == ref_code), None)
+            if referrer and referrer["email"] != email:
+                referrer["referral_count"] = referrer.get("referral_count", 0) + 1
+                entry["referred_by"] = referrer["email"]
+
+        subs.append(entry)
+        _save_subscribers_list(subs)
         return True
-    return False  # already subscribed
+    else:
+        # Abonné existant sans code (anciennes entrées) : on lui en attribue un.
+        for s in subs:
+            if s["email"] == email and not s.get("ref_code"):
+                s["ref_code"] = _gen_ref_code(email)
+                s.setdefault("referral_count", 0)
+                s.setdefault("referred_by", None)
+                _save_subscribers_list(subs)
+                break
+        return False  # already subscribed
+
+
+def _find_subscriber(email: str):
+    email = (email or "").strip().lower()
+    for s in load_subscribers():
+        if s["email"] == email:
+            return s
+    return None
 
 
 # ═══════════════════════════════════════════════════════════
@@ -401,6 +450,9 @@ def contact_page(): return send_from_directory("static", "contact.html")
 
 @app.route("/archives")
 def archives_page(): return send_from_directory("static", "archives.html")
+
+@app.route("/parrainage")
+def referral_page(): return send_from_directory("static", "referral.html")
 
 @app.route("/privacy")
 def privacy_page(): return send_from_directory("static", "privacy.html")
@@ -460,19 +512,54 @@ def api_subscribe():
     if request.method == "GET":
         email = request.args.get("email", "").strip().lower()
         lang  = request.args.get("lang", "fr")
+        ref   = request.args.get("ref", "").strip()
     else:
         data  = request.get_json(silent=True) or {}
         email = data.get("email", "").strip().lower()
         lang  = data.get("lang", "fr")
+        ref   = (data.get("ref") or "").strip()
 
     if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         return jsonify({"success": False, "message": "Email invalide"}), 400
 
-    is_new = save_subscriber(email, lang)
+    is_new = save_subscriber(email, lang, ref_code=ref or None)
+    sub = _find_subscriber(email)
     return jsonify({
         "success": True,
         "message": "Inscription réussie!" if is_new else "Déjà inscrit",
-        "new": is_new
+        "new": is_new,
+        "ref_code": sub.get("ref_code") if sub else None,
+    })
+
+
+# ── Programme de parrainage (Phase 1 — basé sur l'email, sans compte) ─────
+@app.route("/api/referral/me")
+def api_referral_me():
+    email = request.args.get("email", "").strip().lower()
+    if not email or not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"error": "Email invalide"}), 400
+
+    sub = _find_subscriber(email)
+    if not sub:
+        # Auto-inscription silencieuse pour générer un code de parrainage
+        save_subscriber(email)
+        sub = _find_subscriber(email)
+    elif not sub.get("ref_code"):
+        # Ancienne entrée (avant l'ajout du parrainage) : on lui attribue un code.
+        subs = load_subscribers()
+        for s in subs:
+            if s["email"] == email:
+                s["ref_code"] = _gen_ref_code(email)
+                s.setdefault("referral_count", 0)
+                s.setdefault("referred_by", None)
+        _save_subscribers_list(subs)
+        sub = _find_subscriber(email)
+
+    return jsonify({
+        "email": sub["email"],
+        "ref_code": sub["ref_code"],
+        "referral_count": sub.get("referral_count", 0),
+        "referred_by": sub.get("referred_by"),
     })
 
 

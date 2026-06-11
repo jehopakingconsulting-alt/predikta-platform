@@ -224,7 +224,8 @@ async function sendContact(e){
 async function subscribeNewsletter(){
   const email = document.getElementById('nlEmail').value;
   if(!email) return;
-  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang='+curLang);
+  const ref = window.PREDIKTA_REF || '';
+  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang='+curLang+(ref?'&ref='+encodeURIComponent(ref):''));
   const d = await r.json();
   alert(d.message || T[curLang].thanks);
 }

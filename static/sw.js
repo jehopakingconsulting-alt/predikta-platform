@@ -10,6 +10,7 @@ const PRECACHE = [
   '/',
   '/results',
   '/archives',
+  '/parrainage',
   '/pro',
   '/about',
   '/faq',
