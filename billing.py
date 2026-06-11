@@ -44,6 +44,13 @@ STRIPE_PRICE_IDS = {
 
 if stripe is not None and STRIPE_SECRET_KEY:
     stripe.api_key = STRIPE_SECRET_KEY
+    # Échappatoire DEV UNIQUEMENT : certains environnements Windows locaux
+    # interceptent le TLS (antivirus/proxy) et cassent la vérification du
+    # certificat de api.stripe.com. Ne JAMAIS activer en production
+    # (Render/Linux n'a pas ce problème).
+    if os.environ.get("STRIPE_INSECURE_SSL") == "1":
+        from stripe._http_client import RequestsClient
+        stripe.default_http_client = RequestsClient(verify_ssl_certs=False)
 
 
 def stripe_enabled() -> bool:
@@ -61,6 +68,15 @@ _STRIPE_STATUS_MAP = {
     "incomplete_expired": "expired",
     "paused": "expired",
 }
+
+
+def _get(obj, key, default=None):
+    """Accès sûr type dict.get() pour les StripeObject (qui n'implémentent
+    pas .get() dans certaines versions du SDK)."""
+    try:
+        return obj[key]
+    except (KeyError, TypeError):
+        return default
 
 
 def _site_url() -> str:
@@ -183,9 +199,9 @@ def _sync_subscription_from_stripe(sub: Subscription, stripe_sub):
     except (KeyError, IndexError, TypeError):
         pass
 
-    if stripe_sub.get("trial_end"):
+    if _get(stripe_sub, "trial_end"):
         sub.trial_end = datetime.utcfromtimestamp(stripe_sub["trial_end"])
-    if stripe_sub.get("current_period_end"):
+    if _get(stripe_sub, "current_period_end"):
         sub.current_period_end = datetime.utcfromtimestamp(stripe_sub["current_period_end"])
 
 
@@ -211,9 +227,10 @@ def stripe_webhook():
     obj = event["data"]["object"]
 
     if etype == "checkout.session.completed":
-        user_id = (obj.get("metadata") or {}).get("predikta_user_id") or obj.get("client_reference_id")
-        customer_id = obj.get("customer")
-        stripe_sub_id = obj.get("subscription")
+        metadata = _get(obj, "metadata") or {}
+        user_id = _get(metadata, "predikta_user_id") or _get(obj, "client_reference_id")
+        customer_id = _get(obj, "customer")
+        stripe_sub_id = _get(obj, "subscription")
 
         sub = None
         if user_id:
@@ -233,7 +250,7 @@ def stripe_webhook():
             db.session.commit()
 
     elif etype in ("customer.subscription.updated", "customer.subscription.created"):
-        sub = _find_subscription_by_stripe_id(obj["id"]) or _find_subscription_by_customer(obj.get("customer"))
+        sub = _find_subscription_by_stripe_id(obj["id"]) or _find_subscription_by_customer(_get(obj, "customer"))
         if sub is not None:
             _sync_subscription_from_stripe(sub, obj)
             db.session.commit()
@@ -245,7 +262,7 @@ def stripe_webhook():
             db.session.commit()
 
     elif etype == "invoice.payment_failed":
-        customer_id = obj.get("customer")
+        customer_id = _get(obj, "customer")
         sub = _find_subscription_by_customer(customer_id)
         if sub is not None:
             # Non-paiement → blocage automatique de l'accès
@@ -253,7 +270,7 @@ def stripe_webhook():
             db.session.commit()
 
     elif etype == "invoice.paid":
-        customer_id = obj.get("customer")
+        customer_id = _get(obj, "customer")
         sub = _find_subscription_by_customer(customer_id)
         if sub is not None and sub.status in ("past_due", "expired"):
             sub.status = "active"
