@@ -144,6 +144,7 @@ class Subscription(db.Model):
             "analyses_per_day": cfg.get("analyses_per_day"),
             "max_states": cfg.get("max_states"),
             "allowed_states": self.states_list(),
+            "has_stripe_customer": bool(self.stripe_customer_id),
         }
 
 

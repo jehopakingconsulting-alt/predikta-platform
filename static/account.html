@@ -63,6 +63,7 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
         <div class="plan" data-plan="elite"><b>ELITE</b><span>$49.99/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
       </div>
       <button class="action" id="btnChoosePlan" data-i18n="btnChoosePlan">Activer ce plan</button>
+      <button class="outline" id="btnPortal" style="display:none;margin-left:8px" data-i18n="btnPortal">Gérer mon abonnement (Stripe)</button>
       <div class="msg" id="planMsg"></div>
     </div>
 
@@ -86,22 +87,26 @@ const T = {
     lblUser:"Utilisateur",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Statut",lblDaysLeft:"Temps restant",lblQuota:"Analyses / jour",
     changePlan:"Changer de plan",changePlanNote:"Démarre une nouvelle période d'essai en changeant de plan (paiement requis ensuite).",
     unlimited:"Tous États · illimité",btnChoosePlan:"Activer ce plan",statesTitle:"États sélectionnés",
-    btnSaveStates:"Enregistrer",btnLogout:"Se déconnecter",
+    btnSaveStates:"Enregistrer",btnLogout:"Se déconnecter",btnPortal:"Gérer mon abonnement (Stripe)",
     statusNone:"Aucun plan",statusTrial:"Essai gratuit",statusActive:"Actif",statusExpired:"Expiré",
+    statusPastDue:"Paiement échoué — accès bloqué",statusCanceled:"Annulé",
     daysLeftVal:(n)=>`${n} jour(s)`, quotaUnlimited:"Illimité",
     statesNote:(n)=>`Sélectionne jusqu'à ${n} État(s).`, statesNoteAll:"Tous les États sont accessibles avec ton plan.",
     savedOk:"Enregistré ✓", planActivated:"Plan activé ! Ton essai gratuit commence maintenant.",
-    tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",},
+    tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",
+    redirecting:"Redirection vers le paiement sécurisé Stripe...",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
     changePlan:"Change plan",changePlanNote:"Starting a new plan begins a new trial period (payment required afterwards).",
     unlimited:"All states · unlimited",btnChoosePlan:"Activate this plan",statesTitle:"Selected states",
-    btnSaveStates:"Save",btnLogout:"Log out",
+    btnSaveStates:"Save",btnLogout:"Log out",btnPortal:"Manage subscription (Stripe)",
     statusNone:"No plan",statusTrial:"Free trial",statusActive:"Active",statusExpired:"Expired",
+    statusPastDue:"Payment failed — access blocked",statusCanceled:"Canceled",
     daysLeftVal:(n)=>`${n} day(s)`, quotaUnlimited:"Unlimited",
     statesNote:(n)=>`Select up to ${n} state(s).`, statesNoteAll:"All states are accessible with your plan.",
     savedOk:"Saved ✓", planActivated:"Plan activated! Your free trial starts now.",
-    tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",},
+    tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",
+    redirecting:"Redirecting to secure Stripe checkout...",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
@@ -116,7 +121,7 @@ function applyLang(lang){
 window.setLang = applyLang;
 applyLang(curLang);
 
-const STATUS_LABELS = {none:'statusNone',trial:'statusTrial',active:'statusActive',expired:'statusExpired',canceled:'statusExpired',past_due:'statusExpired'};
+const STATUS_LABELS = {none:'statusNone',trial:'statusTrial',active:'statusActive',expired:'statusExpired',canceled:'statusCanceled',past_due:'statusPastDue'};
 let allStates = [];
 let selectedStates = new Set();
 let currentSub = null;
@@ -153,6 +158,8 @@ async function loadAccount(){
     // États
     selectedStates = new Set(sub.allowed_states || []);
     await loadStatesGrid(sub);
+
+    document.getElementById('btnPortal').style.display = sub.has_stripe_customer ? 'inline-block' : 'none';
 
     document.getElementById('loading').style.display='none';
     document.getElementById('content').style.display='block';
@@ -218,6 +225,23 @@ document.getElementById('btnChoosePlan').addEventListener('click', async ()=>{
   const plan = sel ? sel.dataset.plan : 'vip';
   const msgEl = document.getElementById('planMsg');
   try{
+    // Si Stripe est configuré : redirige vers Stripe Checkout pour
+    // souscrire/changer de plan (carte requise).
+    const cfgR = await fetch('/api/billing/config');
+    const cfg = await cfgR.json();
+    if(cfg.enabled){
+      const co = await fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
+      const coData = await co.json();
+      if(co.ok && coData.checkout_url){
+        msgEl.textContent = dict.redirecting; msgEl.className='msg success';
+        location.href = coData.checkout_url;
+        return;
+      }
+      msgEl.textContent = coData.message || coData.error || 'Error'; msgEl.className='msg error';
+      return;
+    }
+
+    // Fallback dev (sans Stripe) : démarre l'essai gratuit directement
     const r = await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
     const data = await r.json();
     if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; return; }
@@ -245,6 +269,18 @@ document.getElementById('btnSaveStates').addEventListener('click', async ()=>{
 document.getElementById('btnLogout').addEventListener('click', async ()=>{
   await fetch('/api/auth/logout',{method:'POST'});
   location.href='/';
+});
+
+document.getElementById('btnPortal').addEventListener('click', async ()=>{
+  const msgEl = document.getElementById('planMsg');
+  try{
+    const r = await fetch('/api/billing/portal',{method:'POST'});
+    const data = await r.json();
+    if(!r.ok){ msgEl.textContent = data.message || data.error || 'Error'; msgEl.className='msg error'; return; }
+    location.href = data.portal_url;
+  }catch(e){
+    msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error';
+  }
 });
 
 loadAccount();

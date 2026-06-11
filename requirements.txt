@@ -6,6 +6,7 @@ flask
 flask-compress
 flask-sqlalchemy
 psycopg2-binary
+stripe
 pandas
 numpy
 scipy

@@ -47,6 +47,10 @@ import auth as auth_module
 auth_module.init_app(app)
 app.register_blueprint(auth_module.auth_bp)
 
+# ── Facturation Stripe (Phase 2b) ─────────────────────────────────────────
+import billing as billing_module
+app.register_blueprint(billing_module.billing_bp)
+
 # ── Compression (gzip/br) — réduit fortement le poids des pages HTML/JS
 # (index.html ~2000 lignes, nav.js ~900 lignes) et des réponses JSON
 # (/api/results/latest, /api/states, /api/report) → chargements plus rapides

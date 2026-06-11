@@ -137,10 +137,26 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
     const data = await r.json();
     if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
 
-    // Démarre directement le plan choisi (essai gratuit)
-    await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
-
     msgEl.textContent = dict.success; msgEl.className='msg success';
+
+    // Si Stripe est configuré : direction Stripe Checkout (carte requise,
+    // essai gratuit géré par Stripe). Sinon (dev local) : essai gratuit
+    // direct sans paiement.
+    try{
+      const cfgR = await fetch('/api/billing/config');
+      const cfg = await cfgR.json();
+      if(cfg.enabled){
+        const co = await fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
+        const coData = await co.json();
+        if(co.ok && coData.checkout_url){
+          location.href = coData.checkout_url;
+          return;
+        }
+      }
+    }catch(e){}
+
+    // Fallback : démarre directement l'essai gratuit (sans Stripe)
+    await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
     setTimeout(()=>{ location.href='/account'; }, 900);
   }catch(e){
     msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
