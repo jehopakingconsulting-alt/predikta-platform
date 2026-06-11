@@ -191,6 +191,31 @@ def fetch_url(url: str) -> str | None:
     return None
 
 
+def fetch_url_debug(url: str) -> dict:
+    """Diagnostic : renvoie le détail de la tentative de fetch (statut HTTP,
+    exception, taille de la réponse, extrait du HTML) — utilisé via
+    /api/scrape/debug pour diagnostiquer les blocages côté serveur (ex:
+    challenge Cloudflare sur les IP de datacenter)."""
+    info = {"url": url, "cloudscraper": _CLOUDSCRAPER is not None, "attempts": []}
+    for attempt in range(3):
+        a = {"attempt": attempt + 1}
+        try:
+            if _CLOUDSCRAPER is not None:
+                resp = _CLOUDSCRAPER.get(url, timeout=30)
+            else:
+                resp = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+            a["status_code"] = resp.status_code
+            a["len"] = len(resp.text)
+            a["snippet"] = resp.text[:400]
+        except Exception as e:
+            a["error"] = repr(e)
+        info["attempts"].append(a)
+        if a.get("status_code") == 200:
+            break
+        time.sleep(1)
+    return info
+
+
 # ── Month-by-month fetcher ────────────────────────────────────────────────
 
 def fetch_months(state_code: str, slug: str, n_months: int = 12) -> list[dict]:

@@ -13,7 +13,7 @@ import os, json, re, threading, time
 from collections import Counter
 from datetime import datetime, date, timedelta
 from scraper import (scrape_all, fetch_state, save_csv, load_csv,
-                     STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
+                     STATES, fetch_months, parse_draws, fetch_url, fetch_url_debug, BASE_URL)
 from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
 from biz_engine import analyze_project, INDUSTRIES, PLATFORMS, COUNTRIES_DATA
 
@@ -725,6 +725,17 @@ def api_scrape():
     _REPORT_CACHE.clear()
     _LATEST_CACHE["data"] = None
     return jsonify({"message": "Scraping complete for all states"})
+
+
+@app.route("/api/scrape/debug")
+def api_scrape_debug():
+    """Diagnostic temporaire : montre ce que le serveur reçoit en tentant de
+    joindre lotterypost.com — permet de distinguer un blocage Cloudflare
+    (datacenter IP) d'un changement de structure HTML. À retirer une fois le
+    problème de mise à jour des résultats résolu."""
+    state = request.args.get("state", "ny").lower()
+    url = f"{BASE_URL}/results/{state}/numbers/past"
+    return jsonify(fetch_url_debug(url))
 
 
 # ═══════════════════════════════════════════════════════════
