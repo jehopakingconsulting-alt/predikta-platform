@@ -395,23 +395,27 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 
   <!-- PRO card full width -->
-  <a href="/pro" class="service-card sc-pro" style="margin-bottom:40px">
+  <a href="/register" class="service-card sc-pro" style="margin-bottom:40px">
     <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
       <span style="font-size:2.4rem">👑</span>
       <div style="flex:1">
-        <div class="sc-title" style="color:var(--gold)" data-i18n="proTitle">PREDIKTA PRO & ELITE — Débloquez tout</div>
-        <p class="sc-desc" style="margin-bottom:0" data-i18n="proDesc">Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire</p>
+        <div class="sc-title" style="color:var(--gold)" data-i18n="proTitle">PREDIKTA PRO, VIP & ELITE — Débloquez tout</div>
+        <p class="sc-desc" style="margin-bottom:0" data-i18n="proDesc">Prédictions illimitées · Jusqu'à 49 États · Alertes email · API Access · Business Intelligence · Export PDF · Support prioritaire</p>
       </div>
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)">
-          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:var(--gold)">$4.99</div>
+        <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(79,110,255,.12);border:1px solid rgba(79,110,255,.3)">
+          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:#6688ff">$9.99</div>
           <div style="font-size:.62rem;color:var(--muted2)" data-i18n="proLbl">PRO / mois</div>
         </div>
+        <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4)">
+          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:var(--gold)">$19.99</div>
+          <div style="font-size:.62rem;color:var(--muted2)" data-i18n="vipLbl">VIP / mois</div>
+        </div>
         <div style="text-align:center;padding:10px 20px;border-radius:10px;background:rgba(255,150,0,.12);border:1px solid rgba(255,150,0,.3)">
-          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:#ff9900">$9.99</div>
+          <div style="font-family:Orbitron,monospace;font-size:1.2rem;font-weight:900;color:#ff9900">$49.99</div>
           <div style="font-size:.62rem;color:var(--muted2)" data-i18n="eliteLbl">ELITE / mois</div>
         </div>
-        <div class="sc-cta" style="align-self:center" data-i18n="freeTrial">7 jours gratuits →</div>
+        <div class="sc-cta" style="align-self:center" data-i18n="freeTrial">Essai gratuit →</div>
       </div>
     </div>
   </a>
@@ -523,9 +527,9 @@ const T = {
     c4Desc:"Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.",
     c4Tag1:"20 Secteurs",c4Tag2:"25 Pays",c4Tag3:"12 Sections",c4Tag4:"Plan 30-60-90j",
     c4Cta:"Analyser mon projet →",
-    proTitle:"PREDIKTA PRO & ELITE — Débloquez tout",
-    proDesc:"Prédictions illimitées · Tous les États · 5 ans d'historique · Alertes email · API Access · Business Intelligence illimité · Export PDF · Support prioritaire",
-    proLbl:"PRO / mois",eliteLbl:"ELITE / mois",freeTrial:"7 jours gratuits →",
+    proTitle:"PREDIKTA PRO, VIP & ELITE — Débloquez tout",
+    proDesc:"Prédictions illimitées · Jusqu'à 49 États · Alertes email · API Access · Business Intelligence · Export PDF · Support prioritaire",
+    proLbl:"PRO / mois",vipLbl:"VIP / mois",eliteLbl:"ELITE / mois",freeTrial:"Essai gratuit →",
     sectionPartners:"Nos Partenaires",
     aff1Desc:"Loteries mondiales officielles",aff1Cta:"Jouer →",
     aff2Desc:"Outils d'analyse statistique",aff2Cta:"Essai →",
@@ -582,9 +586,9 @@ const T = {
     c4Desc:"Analyze your business project in 5 minutes: niche, audience, 11 scored marketing channels, targeting for 25 countries, 30-60-90 day plan, risks.",
     c4Tag1:"20 Sectors",c4Tag2:"25 Countries",c4Tag3:"12 Sections",c4Tag4:"30-60-90d Plan",
     c4Cta:"Analyze my project →",
-    proTitle:"PREDIKTA PRO & ELITE — Unlock everything",
-    proDesc:"Unlimited predictions · All states · 5-year history · Email alerts · API Access · Unlimited Business Intelligence · PDF export · Priority support",
-    proLbl:"PRO / month",eliteLbl:"ELITE / month",freeTrial:"7-day free trial →",
+    proTitle:"PREDIKTA PRO, VIP & ELITE — Unlock everything",
+    proDesc:"Unlimited predictions · Up to 49 states · Email alerts · API Access · Business Intelligence · PDF export · Priority support",
+    proLbl:"PRO / month",vipLbl:"VIP / month",eliteLbl:"ELITE / month",freeTrial:"Start free trial →",
     sectionPartners:"Our Partners",
     aff1Desc:"Official worldwide lotteries",aff1Cta:"Play →",
     aff2Desc:"Statistical analysis tools",aff2Cta:"Try it →",
@@ -641,9 +645,9 @@ const T = {
     c4Desc:"Analiza tu proyecto empresarial en 5 minutos: nicho, audiencia, 11 canales de marketing evaluados, segmentación en 25 países, plan 30-60-90 días, riesgos.",
     c4Tag1:"20 Sectores",c4Tag2:"25 Países",c4Tag3:"12 Secciones",c4Tag4:"Plan 30-60-90d",
     c4Cta:"Analizar mi proyecto →",
-    proTitle:"PREDIKTA PRO & ELITE — Desbloquea todo",
-    proDesc:"Predicciones ilimitadas · Todos los Estados · 5 años de historial · Alertas por email · Acceso API · Business Intelligence ilimitado · Exportación PDF · Soporte prioritario",
-    proLbl:"PRO / mes",eliteLbl:"ELITE / mes",freeTrial:"7 días gratis →",
+    proTitle:"PREDIKTA PRO, VIP & ELITE — Desbloquea todo",
+    proDesc:"Predicciones ilimitadas · Hasta 49 Estados · Alertas por email · Acceso API · Business Intelligence · Exportación PDF · Soporte prioritario",
+    proLbl:"PRO / mes",vipLbl:"VIP / mes",eliteLbl:"ELITE / mes",freeTrial:"Prueba gratis →",
     sectionPartners:"Nuestros Socios",
     aff1Desc:"Loterías mundiales oficiales",aff1Cta:"Jugar →",
     aff2Desc:"Herramientas de análisis estadístico",aff2Cta:"Probar →",
@@ -700,9 +704,9 @@ const T = {
     c4Desc:"Analise seu projeto de negócio em 5 minutos: nicho, público, 11 canais de marketing avaliados, segmentação em 25 países, plano 30-60-90 dias, riscos.",
     c4Tag1:"20 Setores",c4Tag2:"25 Países",c4Tag3:"12 Seções",c4Tag4:"Plano 30-60-90d",
     c4Cta:"Analisar meu projeto →",
-    proTitle:"PREDIKTA PRO & ELITE — Desbloqueie tudo",
-    proDesc:"Previsões ilimitadas · Todos os Estados · 5 anos de histórico · Alertas por email · Acesso à API · Business Intelligence ilimitado · Exportação PDF · Suporte prioritário",
-    proLbl:"PRO / mês",eliteLbl:"ELITE / mês",freeTrial:"7 dias grátis →",
+    proTitle:"PREDIKTA PRO, VIP & ELITE — Desbloqueie tudo",
+    proDesc:"Previsões ilimitadas · Até 49 Estados · Alertas por email · Acesso à API · Business Intelligence · Exportação PDF · Suporte prioritário",
+    proLbl:"PRO / mês",vipLbl:"VIP / mês",eliteLbl:"ELITE / mês",freeTrial:"Teste grátis →",
     sectionPartners:"Nossos Parceiros",
     aff1Desc:"Loterias mundiais oficiais",aff1Cta:"Jogar →",
     aff2Desc:"Ferramentas de análise estatística",aff2Cta:"Testar →",
@@ -759,9 +763,9 @@ const T = {
     c4Desc:"Analize pwojè biznis ou nan 5 minit: nich, odyans, 11 kanal maketin evalye, sib nan 25 peyi, plan 30-60-90 jou, risk.",
     c4Tag1:"20 Sektè",c4Tag2:"25 Peyi",c4Tag3:"12 Seksyon",c4Tag4:"Plan 30-60-90j",
     c4Cta:"Analize pwojè mwen →",
-    proTitle:"PREDIKTA PRO & ELITE — Debloke tout",
-    proDesc:"Prediksyon san limit · Tout Eta · 5 an istwa · Alèt imèl · Aksè API · Business Intelligence san limit · Ekspòte PDF · Sipò pyoritè",
-    proLbl:"PRO / mwa",eliteLbl:"ELITE / mwa",freeTrial:"7 jou gratis →",
+    proTitle:"PREDIKTA PRO, VIP & ELITE — Debloke tout",
+    proDesc:"Prediksyon san limit · Jiska 49 Eta · Alèt imèl · Aksè API · Business Intelligence · Ekspòte PDF · Sipò pyoritè",
+    proLbl:"PRO / mwa",vipLbl:"VIP / mwa",eliteLbl:"ELITE / mwa",freeTrial:"Eseye gratis →",
     sectionPartners:"Patnè Nou Yo",
     aff1Desc:"Lotri mondyal ofisyèl",aff1Cta:"Jwe →",
     aff2Desc:"Zouti analiz estatistik",aff2Cta:"Eseye →",
