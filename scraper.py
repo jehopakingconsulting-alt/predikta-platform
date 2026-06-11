@@ -15,9 +15,9 @@ from datetime import datetime, date
 from bs4 import BeautifulSoup
 
 try:
-    import cloudscraper
+    from curl_cffi import requests as cffi_requests
 except ImportError:
-    cloudscraper = None
+    cffi_requests = None
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -167,20 +167,20 @@ def parse_draws(html: str) -> list[dict]:
 # ── HTTP Fetch ────────────────────────────────────────────────────────────
 # lotterypost.com est protégé par Cloudflare et renvoie une page de défi
 # JS ("Just a moment...", HTTP 403) aux IP de datacenters (ex: Render).
-# cloudscraper imite un navigateur et résout ce défi automatiquement —
-# on l'utilise en priorité, avec repli sur `requests` classique.
-_CLOUDSCRAPER = cloudscraper.create_scraper(
-    browser={"browser": "chrome", "platform": "windows", "mobile": False}
-) if cloudscraper else None
+# curl_cffi imite l'empreinte TLS (JA3) d'un vrai navigateur Chrome, ce qui
+# suffit à passer le challenge Cloudflare — on l'utilise en priorité, avec
+# repli sur `requests` classique.
+
+def _do_get(url: str):
+    if cffi_requests is not None:
+        return cffi_requests.get(url, impersonate="chrome124", timeout=30, verify=False)
+    return requests.get(url, headers=HEADERS, timeout=20, verify=False)
 
 
 def fetch_url(url: str) -> str | None:
     for attempt in range(3):
         try:
-            if _CLOUDSCRAPER is not None:
-                resp = _CLOUDSCRAPER.get(url, timeout=30)
-            else:
-                resp = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+            resp = _do_get(url)
             if resp.status_code == 200:
                 return resp.text
             if resp.status_code == 404:
@@ -196,14 +196,11 @@ def fetch_url_debug(url: str) -> dict:
     exception, taille de la réponse, extrait du HTML) — utilisé via
     /api/scrape/debug pour diagnostiquer les blocages côté serveur (ex:
     challenge Cloudflare sur les IP de datacenter)."""
-    info = {"url": url, "cloudscraper": _CLOUDSCRAPER is not None, "attempts": []}
+    info = {"url": url, "curl_cffi": cffi_requests is not None, "attempts": []}
     for attempt in range(3):
         a = {"attempt": attempt + 1}
         try:
-            if _CLOUDSCRAPER is not None:
-                resp = _CLOUDSCRAPER.get(url, timeout=30)
-            else:
-                resp = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+            resp = _do_get(url)
             a["status_code"] = resp.status_code
             a["len"] = len(resp.text)
             a["snippet"] = resp.text[:400]

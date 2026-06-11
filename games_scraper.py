@@ -9,6 +9,11 @@ from bs4 import BeautifulSoup
 from datetime import datetime, date
 from games_config import STATE_GAMES, GAME_TYPES
 
+try:
+    from curl_cffi import requests as cffi_requests
+except ImportError:
+    cffi_requests = None
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 BASE_URL = "https://www.lotterypost.com"
@@ -25,7 +30,10 @@ HEADERS = {
 def fetch_url(url: str) -> str | None:
     for _ in range(2):
         try:
-            r = requests.get(url, headers=HEADERS, timeout=15, verify=False)
+            if cffi_requests is not None:
+                r = cffi_requests.get(url, impersonate="chrome124", timeout=15, verify=False)
+            else:
+                r = requests.get(url, headers=HEADERS, timeout=15, verify=False)
             if r.status_code == 200:
                 return r.text
             if r.status_code == 404:

@@ -1,5 +1,5 @@
 requests
-cloudscraper
+curl_cffi
 pywebpush
 beautifulsoup4
 flask
