@@ -538,12 +538,39 @@ function buildFloatingButtons(){
 }
 #predikta-btt.visible{opacity:1;transform:translateY(0)}
 #predikta-btt:hover{box-shadow:0 6px 24px rgba(79,110,255,.6);transform:translateY(-3px)}
+
+/* Notifications flottant */
+#pfloat-notif{
+  position:fixed;bottom:22px;left:138px;z-index:8000;
+  width:46px;height:46px;border-radius:12px;
+  background:linear-gradient(135deg,#0e0e2a,#1a1a40);
+  border:1px solid #252560;color:#e8eeff;
+  font-size:1.2rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,30,.5);
+  transition:all .25s;
+}
+#pfloat-notif:hover{background:linear-gradient(135deg,#4f6eff,#8855ff);border-color:#4f6eff;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
+#pfloat-notif.subscribed{background:linear-gradient(135deg,#22e87a,#0e9e55);border-color:#22e87a;color:#04200f}
+#pfloat-notif .pfn-tooltip{
+  position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
+  background:#1a1a40;border:1px solid #252560;color:#e8eeff;
+  padding:4px 10px;border-radius:6px;font-size:.62rem;font-weight:700;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+}
+#pfloat-notif:hover .pfn-tooltip{opacity:1}
 </style>
 
 <a id="pfloat-home" href="/" title="Accueil / Home">
   🏠
   <span class="pfh-tooltip">Accueil</span>
 </a>
+
+<button id="pfloat-notif" title="Activer les alertes">
+  🔔
+  <span class="pfn-tooltip" id="pfn-tooltip">Activer les alertes</span>
+</button>
 
 <button id="predikta-btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
 `;
@@ -555,6 +582,96 @@ function initFloating(){
   window.addEventListener('scroll', ()=>{
     btt.classList.toggle('visible', window.scrollY > 80); // visible dès 80px
   }, { passive: true });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PUSH NOTIFICATIONS
+// ═══════════════════════════════════════════════════════════════════
+function urlBase64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw = atob(base64);
+  const arr = new Uint8Array(raw.length);
+  for(let i=0;i<raw.length;i++) arr[i] = raw.charCodeAt(i);
+  return arr;
+}
+
+const PUSH_LABELS = {
+  fr: { ask:'Activer les alertes', on:'Alertes activées ✓', unsupported:'Notifications non supportées', denied:'Notifications bloquées — vérifie les réglages du navigateur' },
+  en: { ask:'Enable alerts', on:'Alerts enabled ✓', unsupported:'Notifications not supported', denied:'Notifications blocked — check browser settings' },
+  es: { ask:'Activar alertas', on:'Alertas activadas ✓', unsupported:'Notificaciones no soportadas', denied:'Notificaciones bloqueadas — revisa la configuración' },
+  pt: { ask:'Ativar alertas', on:'Alertas ativados ✓', unsupported:'Notificações não suportadas', denied:'Notificações bloqueadas — verifique as configurações' },
+  ht: { ask:'Aktive alèt yo', on:'Alèt aktive ✓', unsupported:'Notifikasyon pa sipòte', denied:'Notifikasyon bloke — tcheke paramèt navigatè a' },
+};
+
+async function initPushNotif(){
+  const btn = document.getElementById('pfloat-notif');
+  if(!btn) return;
+  const l = (window.PREDIKTA_LANG && PUSH_LABELS[window.PREDIKTA_LANG]) ? window.PREDIKTA_LANG : 'fr';
+  const T = PUSH_LABELS[l] || PUSH_LABELS.fr;
+  const tooltip = document.getElementById('pfn-tooltip');
+
+  if(!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)){
+    btn.style.display = 'none';
+    return;
+  }
+
+  const setState = (subscribed) => {
+    btn.classList.toggle('subscribed', subscribed);
+    if(tooltip) tooltip.textContent = subscribed ? T.on : T.ask;
+  };
+
+  try{
+    const reg = await navigator.serviceWorker.ready;
+    const existing = await reg.pushManager.getSubscription();
+    setState(!!existing && Notification.permission === 'granted');
+  }catch(e){}
+
+  btn.addEventListener('click', async () => {
+    try{
+      if(Notification.permission === 'denied'){
+        if(tooltip) tooltip.textContent = T.denied;
+        return;
+      }
+      const reg = await navigator.serviceWorker.ready;
+      const existing = await reg.pushManager.getSubscription();
+
+      if(existing && Notification.permission === 'granted'){
+        // Already subscribed — unsubscribe
+        await fetch('/api/push/unsubscribe', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ endpoint: existing.endpoint })
+        }).catch(()=>{});
+        await existing.unsubscribe();
+        setState(false);
+        return;
+      }
+
+      const perm = await Notification.requestPermission();
+      if(perm !== 'granted'){
+        if(tooltip) tooltip.textContent = T.denied;
+        return;
+      }
+
+      const keyRes = await fetch('/api/push/vapid-public-key');
+      if(!keyRes.ok){ if(tooltip) tooltip.textContent = T.unsupported; return; }
+      const { key } = await keyRes.json();
+
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(key),
+      });
+
+      await fetch('/api/push/subscribe', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ subscription: sub.toJSON() })
+      });
+
+      setState(true);
+    }catch(e){
+      console.warn('Push subscription failed', e);
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -840,7 +957,7 @@ function inject(){
 
   // Clean old elements
   ['#predikta-nav','#pnav-overlay','#pnav-mobile','#predikta-btt',
-   '#pfloat-home','#passt-bubble','#passt-panel'].forEach(sel=>{
+   '#pfloat-home','#pfloat-notif','#passt-bubble','#passt-panel'].forEach(sel=>{
     document.querySelectorAll(sel).forEach(el=>el.remove());
   });
 
@@ -854,6 +971,7 @@ function inject(){
   floatDiv.innerHTML = buildFloatingButtons();
   document.body.appendChild(floatDiv);
   initFloating();
+  initPushNotif();
 
   // 3. Inject ASSISTANT
   const assistDiv = document.createElement('div');

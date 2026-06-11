@@ -17,6 +17,12 @@ from scraper import (scrape_all, fetch_state, save_csv, load_csv,
 from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
 from biz_engine import analyze_project, INDUSTRIES, PLATFORMS, COUNTRIES_DATA
 
+try:
+    from pywebpush import webpush, WebPushException
+except ImportError:
+    webpush = None
+    WebPushException = Exception
+
 
 class NumpyJSONProvider(DefaultJSONProvider):
     def default(self, o):
@@ -61,6 +67,157 @@ def add_security_headers(response):
         response.headers["Cache-Control"] = "public, max-age=300"
     return response
 
+# ── Notifications push (Web Push / VAPID) ─────────────────────────────────
+# Abonnement anonyme par navigateur (pas de compte utilisateur requis).
+# Les abonnements sont stockés dans data/push_subscriptions.json et les
+# clés VAPID dans data/vapid_private.pem / data/vapid_public.txt (générées
+# une fois via `python -c "from py_vapid import Vapid02; ..."`).
+_PUSH_SUBS_FILE   = os.path.join("data", "push_subscriptions.json")
+_VAPID_PRIV_FILE  = os.path.join("data", "vapid_private.pem")
+_VAPID_PUB_FILE   = os.path.join("data", "vapid_public.txt")
+_PUSH_LAST_SENT_FILE = os.path.join("data", "push_last_sent.txt")
+_VAPID_CLAIMS = {"sub": os.environ.get("PREDIKTA_VAPID_EMAIL", "mailto:contact@predikta.app")}
+
+
+def _vapid_public_key():
+    try:
+        with open(_VAPID_PUB_FILE) as f:
+            return f.read().strip()
+    except Exception:
+        return None
+
+
+def _load_subscriptions():
+    try:
+        with open(_PUSH_SUBS_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+def _save_subscriptions(subs):
+    os.makedirs("data", exist_ok=True)
+    with open(_PUSH_SUBS_FILE, "w", encoding="utf-8") as f:
+        json.dump(subs, f, ensure_ascii=False, indent=2)
+
+
+def _send_push_to_all(title: str, body: str, url: str = "/all-results"):
+    """Envoie une notification push à tous les abonnés. Retire automatiquement
+    les abonnements expirés/invalides (HTTP 404/410)."""
+    if webpush is None or not os.path.exists(_VAPID_PRIV_FILE):
+        return {"sent": 0, "removed": 0, "error": "push not configured"}
+
+    with open(_VAPID_PRIV_FILE) as f:
+        private_key = f.read()
+
+    subs = _load_subscriptions()
+    payload = json.dumps({"title": title, "body": body, "url": url})
+    sent, removed, kept = 0, 0, []
+
+    for sub in subs:
+        try:
+            webpush(
+                subscription_info=sub,
+                data=payload,
+                vapid_private_key=private_key,
+                vapid_claims=dict(_VAPID_CLAIMS),
+            )
+            sent += 1
+            kept.append(sub)
+        except WebPushException as e:
+            status = getattr(e.response, "status_code", None)
+            if status in (404, 410):
+                removed += 1
+                continue
+            kept.append(sub)
+        except Exception:
+            kept.append(sub)
+
+    if removed:
+        _save_subscriptions(kept)
+    return {"sent": sent, "removed": removed}
+
+
+def _maybe_send_daily_push():
+    """Envoie une notification push une fois par jour (au plus), dès que les
+    nouveaux résultats du jour sont disponibles après une mise à jour auto."""
+    if webpush is None or not os.path.exists(_VAPID_PRIV_FILE):
+        return
+    if not _load_subscriptions():
+        return
+
+    today = date.today().isoformat()
+    try:
+        with open(_PUSH_LAST_SENT_FILE) as f:
+            last_sent = f.read().strip()
+    except Exception:
+        last_sent = ""
+
+    if last_sent == today:
+        return
+
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open(_PUSH_LAST_SENT_FILE, "w") as f:
+            f.write(today)
+        _send_push_to_all(
+            "🎰 PREDIKTA — Nouveaux résultats !",
+            "Les tirages du jour sont disponibles. Consulte tes prédictions maintenant.",
+            "/all-results",
+        )
+    except Exception as e:
+        print(f"  [push] daily notification skipped: {e}")
+
+
+@app.route("/api/push/vapid-public-key")
+def api_push_vapid_key():
+    key = _vapid_public_key()
+    if not key:
+        return jsonify({"error": "Push notifications not configured"}), 503
+    return jsonify({"key": key})
+
+
+@app.route("/api/push/subscribe", methods=["POST"])
+def api_push_subscribe():
+    data = request.get_json(silent=True) or {}
+    sub = data.get("subscription")
+    if not sub or "endpoint" not in sub:
+        return jsonify({"error": "Invalid subscription"}), 400
+
+    subs = _load_subscriptions()
+    if not any(s.get("endpoint") == sub["endpoint"] for s in subs):
+        subs.append(sub)
+        _save_subscriptions(subs)
+    return jsonify({"message": "Subscribed", "total": len(subs)})
+
+
+@app.route("/api/push/unsubscribe", methods=["POST"])
+def api_push_unsubscribe():
+    data = request.get_json(silent=True) or {}
+    endpoint = data.get("endpoint")
+    if not endpoint:
+        return jsonify({"error": "Missing endpoint"}), 400
+
+    subs = _load_subscriptions()
+    new_subs = [s for s in subs if s.get("endpoint") != endpoint]
+    _save_subscriptions(new_subs)
+    return jsonify({"message": "Unsubscribed", "total": len(new_subs)})
+
+
+@app.route("/api/push/send", methods=["POST", "GET"])
+def api_push_send():
+    """Déclenchement manuel/admin (protégé par PREDIKTA_ADMIN_SECRET)."""
+    secret = os.environ.get("PREDIKTA_ADMIN_SECRET")
+    if not secret or request.args.get("secret") != secret:
+        return jsonify({"error": "Forbidden"}), 403
+
+    title = request.args.get("title", "🎰 PREDIKTA")
+    body  = request.args.get("body", "Les résultats du jour sont disponibles !")
+    url   = request.args.get("url", "/all-results")
+    result = _send_push_to_all(title, body, url)
+    return jsonify(result)
+
+
 # ── Mise à jour automatique en arrière-plan ───────────────────────────────
 # Au lieu de cliquer manuellement sur "Mettre à jour", un thread de fond
 # rafraîchit périodiquement les résultats de tous les États (LotteryPost &
@@ -96,6 +253,7 @@ def _auto_update_loop():
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
+            _maybe_send_daily_push()
         except Exception as e:
             _auto_update_state["last_status"] = f"error: {e}"
         finally:

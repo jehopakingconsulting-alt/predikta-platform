@@ -1,5 +1,6 @@
 requests
 cloudscraper
+pywebpush
 beautifulsoup4
 flask
 flask-compress
