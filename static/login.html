@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Connexion — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--red:#ff5577;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:440px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;text-align:center}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:28px;line-height:1.7;text-align:center}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+label{display:block;font-size:.8rem;font-weight:700;margin-bottom:6px;color:var(--muted2)}
+input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:#04040f;color:var(--text);font-size:.9rem;font-family:inherit;margin-bottom:16px}
+input:focus{outline:none;border-color:var(--accent)}
+button.submit{width:100%;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer}
+button.submit:disabled{opacity:.6;cursor:default}
+.msg{font-size:.8rem;margin-top:14px;text-align:center;line-height:1.6}
+.msg.error{color:var(--red)}
+.msg.success{color:var(--green)}
+.alt{text-align:center;font-size:.82rem;color:var(--muted2);margin-top:6px}
+.alt a{color:var(--accent);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 data-i18n="title">Connexion</h1>
+  <p class="subtitle" data-i18n="subtitle">Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.</p>
+
+  <div class="card">
+    <label for="lEmail" data-i18n="lblEmail">Email ou nom d'utilisateur</label>
+    <input type="text" id="lEmail" placeholder="ton@email.com" autocomplete="username"/>
+
+    <label for="lPassword" data-i18n="lblPassword">Mot de passe</label>
+    <input type="password" id="lPassword" placeholder="••••••••" autocomplete="current-password"/>
+
+    <button class="submit" id="btnLogin" data-i18n="btnLogin">Se connecter</button>
+    <div class="msg" id="msg"></div>
+    <div class="alt" data-i18n="noAccount">Pas encore de compte ? <a href="/register" data-i18n="registerLink">Créer un compte</a></div>
+  </div>
+</div>
+
+<script>
+const T = {
+  fr:{title:"Connexion",subtitle:"Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.",
+    lblEmail:"Email ou nom d'utilisateur",lblPassword:"Mot de passe",btnLogin:"Se connecter",
+    noAccount:"Pas encore de compte ?",registerLink:"Créer un compte",
+    errFields:"Merci de remplir tous les champs.",errAuth:"Identifiants incorrects.",success:"Connexion réussie ! Redirection...",},
+  en:{title:"Log in",subtitle:"Log in to access your PREDIKTA analyses and manage your subscription.",
+    lblEmail:"Email or username",lblPassword:"Password",btnLogin:"Log in",
+    noAccount:"No account yet?",registerLink:"Create an account",
+    errFields:"Please fill in all fields.",errAuth:"Incorrect credentials.",success:"Logged in! Redirecting...",},
+  es:{title:"Iniciar sesión",subtitle:"Inicia sesión para acceder a tus análisis PREDIKTA y gestionar tu suscripción.",
+    lblEmail:"Correo o usuario",lblPassword:"Contraseña",btnLogin:"Iniciar sesión",
+    noAccount:"¿No tienes cuenta?",registerLink:"Crear cuenta",
+    errFields:"Completa todos los campos.",errAuth:"Credenciales incorrectas.",success:"¡Sesión iniciada! Redirigiendo...",},
+  pt:{title:"Entrar",subtitle:"Entre para acessar suas análises PREDIKTA e gerenciar sua assinatura.",
+    lblEmail:"Email ou usuário",lblPassword:"Senha",btnLogin:"Entrar",
+    noAccount:"Ainda não tem conta?",registerLink:"Criar conta",
+    errFields:"Preencha todos os campos.",errAuth:"Credenciais incorretas.",success:"Login efetuado! Redirecionando...",},
+  ht:{title:"Konekte",subtitle:"Konekte pou jwenn aksè a analiz PREDIKTA ou epi jere abònman ou.",
+    lblEmail:"Imel oswa non itilizatè",lblPassword:"Modpas",btnLogin:"Konekte",
+    noAccount:"Ou pa gen kont toujou?",registerLink:"Kreye yon kont",
+    errFields:"Tanpri ranpli tout chan yo.",errAuth:"Enfòmasyon yo pa kòrèk.",success:"Koneksyon reyisi! N ap redirije...",},
+};
+let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
+if(!T[curLang]) curLang='fr';
+function applyLang(lang){
+  curLang = T[lang]?lang:'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(dict[k]) el.textContent = dict[k];
+  });
+}
+window.setLang = applyLang;
+applyLang(curLang);
+
+const msgEl = document.getElementById('msg');
+document.getElementById('btnLogin').addEventListener('click', async ()=>{
+  const dict = T[curLang];
+  const email = document.getElementById('lEmail').value.trim();
+  const password = document.getElementById('lPassword').value;
+  msgEl.className='msg';
+  if(!email || !password){ msgEl.textContent=dict.errFields; msgEl.className='msg error'; return; }
+
+  const btn = document.getElementById('btnLogin');
+  btn.disabled = true;
+  try{
+    const r = await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+    const data = await r.json();
+    if(!r.ok){ msgEl.textContent = data.error || dict.errAuth; msgEl.className='msg error'; btn.disabled=false; return; }
+    msgEl.textContent = dict.success; msgEl.className='msg success';
+    const params = new URLSearchParams(location.search);
+    const next = params.get('next') || '/account';
+    setTimeout(()=>{ location.href=next; }, 700);
+  }catch(e){
+    msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
+  }
+});
+
+document.getElementById('lPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('btnLogin').click(); });
+</script>
+</body></html>

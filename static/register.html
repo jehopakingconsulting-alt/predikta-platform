@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Créer un compte — PREDIKTA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--red:#ff5577;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:480px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;text-align:center}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:28px;line-height:1.7;text-align:center}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+label{display:block;font-size:.8rem;font-weight:700;margin-bottom:6px;color:var(--muted2)}
+input,select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:#04040f;color:var(--text);font-size:.9rem;font-family:inherit;margin-bottom:16px}
+input:focus,select:focus{outline:none;border-color:var(--accent)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.plan{border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;font-size:.78rem;transition:.15s}
+.plan.selected{border-color:var(--accent);background:rgba(79,110,255,.1)}
+.plan b{display:block;font-family:'Orbitron',monospace;font-size:.95rem;margin-bottom:2px}
+.plan small{color:var(--muted2);font-size:.68rem}
+button.submit{width:100%;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer}
+button.submit:disabled{opacity:.6;cursor:default}
+.msg{font-size:.8rem;margin-top:14px;text-align:center;line-height:1.6}
+.msg.error{color:var(--red)}
+.msg.success{color:var(--green)}
+.alt{text-align:center;font-size:.82rem;color:var(--muted2);margin-top:6px}
+.alt a{color:var(--accent);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 data-i18n="title">Créer un compte PREDIKTA</h1>
+  <p class="subtitle" data-i18n="subtitle">Choisis ton plan, crée ton compte, et profite de ta période d'essai gratuite immédiatement.</p>
+
+  <div class="card">
+    <div class="plans" id="plans">
+      <div class="plan" data-plan="pro"><b>PRO</b><span>$9.99/mo</span><small data-i18n="trial1">1j gratuit</small></div>
+      <div class="plan selected" data-plan="vip"><b>VIP</b><span>$19.99/mo</span><small data-i18n="trial2">2j gratuits</small></div>
+      <div class="plan" data-plan="elite"><b>ELITE</b><span>$49.99/mo</span><small data-i18n="trial3">3j gratuits</small></div>
+    </div>
+
+    <label for="rUsername" data-i18n="lblUsername">Nom d'utilisateur</label>
+    <input type="text" id="rUsername" placeholder="ex: john_doe" autocomplete="username"/>
+
+    <label for="rEmail" data-i18n="lblEmail">Email</label>
+    <input type="email" id="rEmail" placeholder="ton@email.com" autocomplete="email"/>
+
+    <label for="rPassword" data-i18n="lblPassword">Mot de passe</label>
+    <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password"/>
+
+    <button class="submit" id="btnRegister" data-i18n="btnRegister">Créer mon compte &amp; démarrer l'essai</button>
+    <div class="msg" id="msg"></div>
+    <div class="alt" data-i18n="haveAccount">Déjà un compte ? <a href="/login" data-i18n="loginLink">Se connecter</a></div>
+  </div>
+</div>
+
+<script>
+const T = {
+  fr:{title:"Créer un compte PREDIKTA",subtitle:"Choisis ton plan, crée ton compte, et profite de ta période d'essai gratuite immédiatement.",
+    trial1:"1j gratuit",trial2:"2j gratuits",trial3:"3j gratuits",
+    lblUsername:"Nom d'utilisateur",lblEmail:"Email",lblPassword:"Mot de passe",
+    btnRegister:"Créer mon compte & démarrer l'essai",haveAccount:"Déjà un compte ?",loginLink:"Se connecter",
+    errFields:"Merci de remplir tous les champs.",errPwd:"Le mot de passe doit contenir au moins 8 caractères.",
+    success:"Compte créé ! Redirection...",},
+  en:{title:"Create your PREDIKTA account",subtitle:"Pick your plan, create your account, and start your free trial right away.",
+    trial1:"1d free",trial2:"2d free",trial3:"3d free",
+    lblUsername:"Username",lblEmail:"Email",lblPassword:"Password",
+    btnRegister:"Create account & start trial",haveAccount:"Already have an account?",loginLink:"Log in",
+    errFields:"Please fill in all fields.",errPwd:"Password must be at least 8 characters.",
+    success:"Account created! Redirecting...",},
+  es:{title:"Crea tu cuenta PREDIKTA",subtitle:"Elige tu plan, crea tu cuenta y disfruta de tu prueba gratuita de inmediato.",
+    trial1:"1d gratis",trial2:"2d gratis",trial3:"3d gratis",
+    lblUsername:"Usuario",lblEmail:"Correo",lblPassword:"Contraseña",
+    btnRegister:"Crear cuenta y empezar prueba",haveAccount:"¿Ya tienes cuenta?",loginLink:"Iniciar sesión",
+    errFields:"Completa todos los campos.",errPwd:"La contraseña debe tener al menos 8 caracteres.",
+    success:"¡Cuenta creada! Redirigiendo...",},
+  pt:{title:"Crie sua conta PREDIKTA",subtitle:"Escolha seu plano, crie sua conta e aproveite seu teste grátis agora mesmo.",
+    trial1:"1d grátis",trial2:"2d grátis",trial3:"3d grátis",
+    lblUsername:"Usuário",lblEmail:"Email",lblPassword:"Senha",
+    btnRegister:"Criar conta e iniciar teste",haveAccount:"Já tem conta?",loginLink:"Entrar",
+    errFields:"Preencha todos os campos.",errPwd:"A senha deve ter pelo menos 8 caracteres.",
+    success:"Conta criada! Redirecionando...",},
+  ht:{title:"Kreye yon kont PREDIKTA",subtitle:"Chwazi plan ou, kreye kont ou, epi pwofite peryòd esè gratis ou imedyatman.",
+    trial1:"1j gratis",trial2:"2j gratis",trial3:"3j gratis",
+    lblUsername:"Non itilizatè",lblEmail:"Imel",lblPassword:"Modpas",
+    btnRegister:"Kreye kont mwen & kòmanse esè",haveAccount:"Ou gen yon kont deja?",loginLink:"Konekte",
+    errFields:"Tanpri ranpli tout chan yo.",errPwd:"Modpas la dwe gen omwen 8 karaktè.",
+    success:"Kont kreye! N ap redirije...",},
+};
+let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
+if(!T[curLang]) curLang='fr';
+function applyLang(lang){
+  curLang = T[lang]?lang:'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(dict[k]) el.textContent = dict[k];
+  });
+}
+window.setLang = applyLang;
+applyLang(curLang);
+
+let selectedPlan = 'vip';
+document.querySelectorAll('.plan').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.plan').forEach(p=>p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPlan = el.dataset.plan;
+  });
+});
+
+const params = new URLSearchParams(location.search);
+const preset = params.get('plan');
+if(preset && ['pro','vip','elite'].includes(preset)){
+  selectedPlan = preset;
+  document.querySelectorAll('.plan').forEach(p=>p.classList.toggle('selected', p.dataset.plan===preset));
+}
+
+const msgEl = document.getElementById('msg');
+document.getElementById('btnRegister').addEventListener('click', async ()=>{
+  const dict = T[curLang];
+  const username = document.getElementById('rUsername').value.trim();
+  const email = document.getElementById('rEmail').value.trim();
+  const password = document.getElementById('rPassword').value;
+  msgEl.className='msg';
+  if(!username || !email || !password){ msgEl.textContent=dict.errFields; msgEl.className='msg error'; return; }
+  if(password.length < 8){ msgEl.textContent=dict.errPwd; msgEl.className='msg error'; return; }
+
+  const btn = document.getElementById('btnRegister');
+  btn.disabled = true;
+  try{
+    const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
+    const data = await r.json();
+    if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
+
+    // Démarre directement le plan choisi (essai gratuit)
+    await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
+
+    msgEl.textContent = dict.success; msgEl.className='msg success';
+    setTimeout(()=>{ location.href='/account'; }, 900);
+  }catch(e){
+    msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
+  }
+});
+</script>
+</body></html>

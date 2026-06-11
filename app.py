@@ -37,6 +37,16 @@ app = Flask(__name__, static_folder="static")
 app.json_provider_class = NumpyJSONProvider
 app.json = NumpyJSONProvider(app)
 
+# ── Secret key (sessions / cookies signés) ────────────────────────────────
+app.secret_key = os.environ.get("PREDIKTA_SECRET_KEY", "dev-insecure-predikta-key-change-me")
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
+
+# ── Comptes utilisateurs / abonnements (SQLAlchemy) ───────────────────────
+import auth as auth_module
+auth_module.init_app(app)
+app.register_blueprint(auth_module.auth_bp)
+
 # ── Compression (gzip/br) — réduit fortement le poids des pages HTML/JS
 # (index.html ~2000 lignes, nav.js ~900 lignes) et des réponses JSON
 # (/api/results/latest, /api/states, /api/report) → chargements plus rapides
@@ -454,6 +464,15 @@ def archives_page(): return send_from_directory("static", "archives.html")
 @app.route("/parrainage")
 def referral_page(): return send_from_directory("static", "referral.html")
 
+@app.route("/login")
+def login_page(): return send_from_directory("static", "login.html")
+
+@app.route("/register")
+def register_page(): return send_from_directory("static", "register.html")
+
+@app.route("/account")
+def account_page(): return send_from_directory("static", "account.html")
+
 @app.route("/privacy")
 def privacy_page(): return send_from_directory("static", "privacy.html")
 
@@ -647,6 +666,7 @@ def _warm_popular_reports():
             print(f"  [warm-cache][{state}] error: {e}")
 
 @app.route("/api/report")
+@auth_module.subscription_required
 def api_report():
     state      = request.args.get("state", "NY").upper()
     tod_filter = request.args.get("tod", "all")
@@ -658,6 +678,7 @@ def api_report():
     cached = _REPORT_CACHE.get(cache_key)
     now = time.time()
     if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
+        auth_module.record_usage(auth_module.current_user().id)
         return jsonify(cached["data"])
 
     if not load_csv(state):
@@ -668,6 +689,7 @@ def api_report():
         return jsonify({"error": f"No {tod_filter} draws for {state}."}), 200
 
     _REPORT_CACHE[cache_key] = {"ts": now, "data": {**result, "cached": True}}
+    auth_module.record_usage(auth_module.current_user().id)
     return jsonify(result)
 
 

@@ -4,6 +4,8 @@ pywebpush
 beautifulsoup4
 flask
 flask-compress
+flask-sqlalchemy
+psycopg2-binary
 pandas
 numpy
 scipy

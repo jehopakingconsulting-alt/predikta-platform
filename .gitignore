@@ -8,3 +8,4 @@ venv/
 .DS_Store
 out.log
 err.log
+data/predikta.db

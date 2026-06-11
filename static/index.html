@@ -1473,6 +1473,23 @@ async function loadReport(){
     const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`);
     const data = await r.json();
     status.textContent = '';
+
+    // Paywall : compte requis / essai expiré / quota atteint / État non autorisé
+    if(r.status === 401 || r.status === 402 || r.status === 403 || r.status === 429){
+      const msg = data.message || data.error || 'Accès restreint';
+      let cta = `<a href="/login?next=/analyze" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-weight:700;text-decoration:none;margin-right:10px">Se connecter</a>
+                 <a href="/register" style="display:inline-block;padding:10px 20px;border-radius:8px;border:1px solid #1a1a45;color:#e8eeff;font-weight:700;text-decoration:none">Créer un compte</a>`;
+      if(r.status === 402 || r.status === 429 || r.status === 403){
+        cta = `<a href="/account" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-weight:700;text-decoration:none">Gérer mon abonnement</a>`;
+      }
+      document.getElementById('mainContent').innerHTML =
+        `<div class="card" style="border-color:#1a1a45;padding:24px;text-align:center">`+
+        `<div style="font-size:1.6rem;margin-bottom:10px">🔒</div>`+
+        `<div style="margin-bottom:16px;color:var(--muted2)">${msg}</div>`+
+        cta + `</div>`;
+      return;
+    }
+
     if(data.error){
       document.getElementById('mainContent').innerHTML =
         `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">`+
