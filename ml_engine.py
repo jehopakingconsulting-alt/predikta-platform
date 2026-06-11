@@ -9,12 +9,42 @@ import warnings
 warnings.filterwarnings("ignore")
 
 from collections import Counter, defaultdict
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import cross_val_score
-from xgboost import XGBClassifier
-from scipy.fft import fft
-from scipy.stats import chi2_contingency, entropy
+
+# ─── Lazy-loaded heavy ML/scientific libraries ─────────────────────────────
+# sklearn, xgboost et scipy représentent à eux seuls une part importante de
+# la mémoire et du temps de démarrage du process (significatif sur le plan
+# gratuit Render avec --workers 1). On ne les importe qu'à la première
+# utilisation réelle (premier appel à run_all_models / fourier_cycles /
+# entropy_analysis), pas au chargement du module.
+_RF_CLS = _GBM_CLS = _XGB_CLS = None
+_FFT_FN = None
+_ENTROPY_FN = None
+
+
+def _ensure_sklearn_models():
+    global _RF_CLS, _GBM_CLS, _XGB_CLS
+    if _RF_CLS is None:
+        from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+        from xgboost import XGBClassifier
+        _RF_CLS, _GBM_CLS, _XGB_CLS = RandomForestClassifier, GradientBoostingClassifier, XGBClassifier
+    return _RF_CLS, _GBM_CLS, _XGB_CLS
+
+
+def _ensure_fft():
+    global _FFT_FN
+    if _FFT_FN is None:
+        from scipy.fft import fft
+        _FFT_FN = fft
+    return _FFT_FN
+
+
+def _ensure_entropy():
+    global _ENTROPY_FN
+    if _ENTROPY_FN is None:
+        from scipy.stats import entropy
+        _ENTROPY_FN = entropy
+    return _ENTROPY_FN
+
 
 DIGITS = list(range(10))
 
@@ -140,7 +170,7 @@ def fourier_cycles(draws: list[dict], position: str) -> dict:
 
     # Normalize
     seq_norm = seq - seq.mean()
-    spectrum = np.abs(fft(seq_norm))
+    spectrum = np.abs(_ensure_fft()(seq_norm))
     freqs = np.fft.fftfreq(len(seq_norm))
 
     # Find dominant frequency (ignore DC component)
@@ -207,6 +237,7 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
 
 class MLPredictor:
     def __init__(self):
+        RandomForestClassifier, GradientBoostingClassifier, XGBClassifier = _ensure_sklearn_models()
         self.models = {
             # n_estimators réduits (200->100, 150->80) — gain ~40-50% sur le
             # temps d'entraînement avec impact négligeable sur la précision
@@ -373,7 +404,7 @@ def entropy_analysis(draws: list[dict]) -> dict:
         cnt = Counter(int(d[pos]) for d in draws)
         total = sum(cnt.values()) or 1
         probs = [cnt.get(d, 0) / total for d in DIGITS]
-        ent = entropy(probs, base=10)
+        ent = _ensure_entropy()(probs, base=10)
         result[pos] = {
             "entropy": round(ent, 4),
             "max_entropy": round(np.log10(10), 4),
