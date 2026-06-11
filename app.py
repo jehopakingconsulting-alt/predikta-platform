@@ -733,8 +733,10 @@ def api_scrape_debug():
     joindre lotterypost.com — permet de distinguer un blocage Cloudflare
     (datacenter IP) d'un changement de structure HTML. À retirer une fois le
     problème de mise à jour des résultats résolu."""
-    state = request.args.get("state", "ny").lower()
-    url = f"{BASE_URL}/results/{state}/numbers/past"
+    url = request.args.get("url")
+    if not url:
+        state = request.args.get("state", "ny").lower()
+        url = f"{BASE_URL}/results/{state}/numbers/past"
     return jsonify(fetch_url_debug(url))
 
 
