@@ -290,28 +290,13 @@ textarea{resize:vertical;min-height:80px}
   </div>
 </div>
 
-<!-- Pricing strip -->
-<div class="pricing-strip">
-  <div class="price-pill">
-    <div class="pp-name" data-i18n="pFreeName">Free</div>
-    <div class="pp-price">$0</div>
-    <div class="pp-features" data-i18n="pFreeFeat">1 analyse/mois · Rapport basique · 6 sections</div>
+<!-- BI quota status -->
+<div class="pricing-strip" id="biQuotaBar" style="padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div>
+    <div class="pp-name" id="biQuotaName" data-i18n="biQuotaLoading">Chargement...</div>
+    <div class="pp-features" id="biQuotaDesc"></div>
   </div>
-  <div class="price-pill featured">
-    <div class="pp-name" data-i18n="pStarterName">⭐ Starter</div>
-    <div class="pp-price">$29<span data-i18n="perMonth">/mois</span></div>
-    <div class="pp-features" data-i18n="pStarterFeat">5 analyses · Rapport complet 12 sections · Export PDF</div>
-  </div>
-  <div class="price-pill">
-    <div class="pp-name" data-i18n="pProBizName">Pro Business</div>
-    <div class="pp-price">$79<span data-i18n="perMonth">/mois</span></div>
-    <div class="pp-features" data-i18n="pProBizFeat">20 analyses · Multi-projets · API · Suivi mensuel</div>
-  </div>
-  <div class="price-pill">
-    <div class="pp-name" data-i18n="pAgencyName">Agency</div>
-    <div class="pp-price">$199<span data-i18n="perMonth">/mois</span></div>
-    <div class="pp-features" data-i18n="pAgencyFeat">Illimité · White-label · Support dédié · Personnalisation</div>
-  </div>
+  <a href="/pro" class="side-cta-btn" id="biUpgradeLink" style="width:auto;padding:10px 18px;background:linear-gradient(135deg,var(--accent),#8855ff);color:#fff;display:none" data-i18n="biUpgradeBtn">Passer à ELITE pour le BI illimité →</a>
 </div>
 
 <!-- Main layout -->
@@ -647,11 +632,10 @@ fr:{
   heroTitle:"Analyse Complète de Projet<br>par Analyse Prédictive",
   heroDesc:"Répondez à 4 étapes en 5 minutes. Nos algorithmes génèrent un rapport de 12 sections : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial, plan 30-60-90 jours et plus.",
   badge1:"🎯 12 Sections d'Analyse", badge2:"🌍 44 Pays Couverts", badge3:"📊 11 Canaux Marketing", badge4:"📅 Plan 30-60-90 Jours",
-  pFreeName:"Free", pFreeFeat:"1 analyse/mois · Rapport basique · 6 sections",
-  pStarterName:"⭐ Starter", pStarterFeat:"5 analyses · Rapport complet 12 sections · Export PDF",
-  pProBizName:"Pro Business", pProBizFeat:"20 analyses · Multi-projets · API · Suivi mensuel",
-  pAgencyName:"Agency", pAgencyFeat:"Illimité · White-label · Support dédié · Personnalisation",
-  perMonth:"/mois",
+  biQuotaLoading:"Chargement...",
+  biQuotaFreeName:"Plan Free", biQuotaUsedLabel:"analyse(s) utilisée(s) ce mois",
+  biQuotaEliteName:"✓ BI illimité (ELITE)", biQuotaEliteDesc:"Accès illimité au Business Intelligence inclus dans votre abonnement ELITE.",
+  biUpgradeBtn:"Passer à ELITE pour le BI illimité →",
   wizardTitle:"📋 Analysez votre projet",
   stepLabels:['Étape 1 / 4 — Votre Projet','Étape 2 / 4 — Produit & Audience','Étape 3 / 4 — Géographie & Langues','Étape 4 / 4 — Budget & Objectifs'],
   projectNameLabel:"Nom du projet ou de l'entreprise", projectNamePh:"Ex: FoodBox Haïti, AppSanté, ConseilPro...",
@@ -706,11 +690,10 @@ en:{
   heroTitle:"Complete Project Analysis<br>by Predictive Analysis",
   heroDesc:"Answer 4 steps in 5 minutes. Our algorithms generate a 12-section report: niche, audience, marketing channels, launch strategy, global geo-targeting, 30-60-90 day plan and more.",
   badge1:"🎯 12 Analysis Sections", badge2:"🌍 44 Countries Covered", badge3:"📊 11 Marketing Channels", badge4:"📅 30-60-90 Day Plan",
-  pFreeName:"Free", pFreeFeat:"1 analysis/month · Basic report · 6 sections",
-  pStarterName:"⭐ Starter", pStarterFeat:"5 analyses · Full 12-section report · PDF export",
-  pProBizName:"Pro Business", pProBizFeat:"20 analyses · Multi-project · API · Monthly tracking",
-  pAgencyName:"Agency", pAgencyFeat:"Unlimited · White-label · Dedicated support · Customization",
-  perMonth:"/mo",
+  biQuotaLoading:"Loading...",
+  biQuotaFreeName:"Free plan", biQuotaUsedLabel:"analysis/analyses used this month",
+  biQuotaEliteName:"✓ Unlimited BI (ELITE)", biQuotaEliteDesc:"Unlimited access to Business Intelligence included in your ELITE subscription.",
+  biUpgradeBtn:"Upgrade to ELITE for unlimited BI →",
   wizardTitle:"📋 Analyze your project",
   stepLabels:['Step 1 / 4 — Your Project','Step 2 / 4 — Product & Audience','Step 3 / 4 — Geography & Languages','Step 4 / 4 — Budget & Goals'],
   projectNameLabel:"Project or company name", projectNamePh:"E.g.: FoodBox Haiti, HealthApp, ConsultPro...",
@@ -765,11 +748,10 @@ es:{
   heroTitle:"Análisis Completo de Proyecto<br>por Análisis Predictivo",
   heroDesc:"Responde 4 pasos en 5 minutos. Nuestros algoritmos generan un informe de 12 secciones: nicho, audiencia, canales de marketing, estrategia de lanzamiento, segmentación geográfica mundial, plan de 30-60-90 días y más.",
   badge1:"🎯 12 Secciones de Análisis", badge2:"🌍 44 Países Cubiertos", badge3:"📊 11 Canales de Marketing", badge4:"📅 Plan de 30-60-90 Días",
-  pFreeName:"Free", pFreeFeat:"1 análisis/mes · Informe básico · 6 secciones",
-  pStarterName:"⭐ Starter", pStarterFeat:"5 análisis · Informe completo de 12 secciones · Exportación PDF",
-  pProBizName:"Pro Business", pProBizFeat:"20 análisis · Multiproyecto · API · Seguimiento mensual",
-  pAgencyName:"Agency", pAgencyFeat:"Ilimitado · White-label · Soporte dedicado · Personalización",
-  perMonth:"/mes",
+  biQuotaLoading:"Cargando...",
+  biQuotaFreeName:"Plan Free", biQuotaUsedLabel:"análisis usado(s) este mes",
+  biQuotaEliteName:"✓ BI ilimitado (ELITE)", biQuotaEliteDesc:"Acceso ilimitado a Business Intelligence incluido en tu suscripción ELITE.",
+  biUpgradeBtn:"Pasar a ELITE para BI ilimitado →",
   wizardTitle:"📋 Analiza tu proyecto",
   stepLabels:['Paso 1 / 4 — Tu Proyecto','Paso 2 / 4 — Producto y Audiencia','Paso 3 / 4 — Geografía e Idiomas','Paso 4 / 4 — Presupuesto y Objetivos'],
   projectNameLabel:"Nombre del proyecto o de la empresa", projectNamePh:"Ej: FoodBox Haití, AppSalud, ConsultoríaPro...",
@@ -824,11 +806,10 @@ pt:{
   heroTitle:"Análise Completa de Projeto<br>por Análise Preditiva",
   heroDesc:"Responda 4 etapas em 5 minutos. Nossos algoritmos geram um relatório de 12 seções: nicho, público, canais de marketing, estratégia de lançamento, segmentação geográfica global, plano de 30-60-90 dias e mais.",
   badge1:"🎯 12 Seções de Análise", badge2:"🌍 44 Países Cobertos", badge3:"📊 11 Canais de Marketing", badge4:"📅 Plano de 30-60-90 Dias",
-  pFreeName:"Free", pFreeFeat:"1 análise/mês · Relatório básico · 6 seções",
-  pStarterName:"⭐ Starter", pStarterFeat:"5 análises · Relatório completo de 12 seções · Exportação PDF",
-  pProBizName:"Pro Business", pProBizFeat:"20 análises · Multiprojetos · API · Acompanhamento mensal",
-  pAgencyName:"Agency", pAgencyFeat:"Ilimitado · White-label · Suporte dedicado · Personalização",
-  perMonth:"/mês",
+  biQuotaLoading:"Carregando...",
+  biQuotaFreeName:"Plano Free", biQuotaUsedLabel:"análise(s) usada(s) este mês",
+  biQuotaEliteName:"✓ BI ilimitado (ELITE)", biQuotaEliteDesc:"Acesso ilimitado ao Business Intelligence incluído na sua assinatura ELITE.",
+  biUpgradeBtn:"Mudar para ELITE para BI ilimitado →",
   wizardTitle:"📋 Analise seu projeto",
   stepLabels:['Etapa 1 / 4 — Seu Projeto','Etapa 2 / 4 — Produto e Público','Etapa 3 / 4 — Geografia e Idiomas','Etapa 4 / 4 — Orçamento e Objetivos'],
   projectNameLabel:"Nome do projeto ou da empresa", projectNamePh:"Ex: FoodBox Haiti, AppSaúde, ConsultoriaPro...",
@@ -883,11 +864,10 @@ ht:{
   heroTitle:"Analiz Konplè Pwojè<br>pa Analiz Predikitf",
   heroDesc:"Reponn 4 etap nan 5 minit. Algoritm nou yo kreye yon rapò 12 seksyon: nich, odyans, kanal maketing, estrateji lansman, sib jewografik mondyal, plan 30-60-90 jou ak plis ankò.",
   badge1:"🎯 12 Seksyon Analiz", badge2:"🌍 44 Peyi Kouvri", badge3:"📊 11 Kanal Maketing", badge4:"📅 Plan 30-60-90 Jou",
-  pFreeName:"Free", pFreeFeat:"1 analiz/mwa · Rapò debaz · 6 seksyon",
-  pStarterName:"⭐ Starter", pStarterFeat:"5 analiz · Rapò konplè 12 seksyon · Ekspòte PDF",
-  pProBizName:"Pro Business", pProBizFeat:"20 analiz · Plizyè pwojè · API · Swivi chak mwa",
-  pAgencyName:"Agency", pAgencyFeat:"San limit · White-label · Sipò dedye · Pèsonalizasyon",
-  perMonth:"/mwa",
+  biQuotaLoading:"N ap chaje...",
+  biQuotaFreeName:"Plan Free", biQuotaUsedLabel:"analiz itilize mwa sa a",
+  biQuotaEliteName:"✓ BI san limit (ELITE)", biQuotaEliteDesc:"Aksè san limit nan Business Intelligence enkli nan abònman ELITE ou.",
+  biUpgradeBtn:"Pase nan ELITE pou BI san limit →",
   wizardTitle:"📋 Analize pwojè ou",
   stepLabels:['Etap 1 / 4 — Pwojè ou','Etap 2 / 4 — Pwodwi & Odyans','Etap 3 / 4 — Jeyografi & Lang','Etap 4 / 4 — Bidjè & Objektif'],
   projectNameLabel:"Non pwojè a oswa antrepriz la", projectNamePh:"Egz: FoodBox Ayiti, AppSante, KonsiltasyonPro...",
@@ -957,6 +937,7 @@ function applyBizLang(lang){
   });
   document.getElementById('btnPrev').textContent = t.prevBtn;
   if(typeof updateWizard === 'function') updateWizard();
+  if(typeof renderBizQuotaBanner === 'function') renderBizQuotaBanner();
 }
 window.setLang = applyBizLang;
 
@@ -1488,8 +1469,39 @@ async function subscribeBiz(){
   alert(d.message || bizT().subscribeThanks);
 }
 
+// ══════════════════════════════════════════════════
+// BI QUOTA BANNER
+// ══════════════════════════════════════════════════
+let _biQuota = null;
+function renderBizQuotaBanner(){
+  if(!_biQuota) return;
+  const t = bizT();
+  const nameEl = document.getElementById('biQuotaName');
+  const descEl = document.getElementById('biQuotaDesc');
+  const upgradeEl = document.getElementById('biUpgradeLink');
+  if(_biQuota.unlimited){
+    nameEl.textContent = t.biQuotaEliteName;
+    descEl.textContent = t.biQuotaEliteDesc;
+    upgradeEl.style.display = 'none';
+  } else {
+    nameEl.textContent = t.biQuotaFreeName;
+    descEl.textContent = `${_biQuota.used}/${_biQuota.limit} ${t.biQuotaUsedLabel}`;
+    upgradeEl.textContent = t.biUpgradeBtn;
+    upgradeEl.style.display = '';
+  }
+}
+async function loadBizQuota(){
+  try{
+    const r = await fetch('/api/bizai/quota');
+    if(!r.ok) return;
+    _biQuota = await r.json();
+    renderBizQuotaBanner();
+  }catch(e){}
+}
+
 // Init
 applyBizLang(window.PREDIKTA_LANG || 'fr');
 updateWizard();
+loadBizQuota();
 </script>
 </body></html>

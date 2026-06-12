@@ -334,10 +334,10 @@ FREE_BIZAI_ANALYSES_PER_MONTH = 1
 
 
 def bizai_access_required(f):
-    """Vérifie : connecté + (abonnement lottery actif OU quota Free du mois
-    non atteint). Les abonnés PRO/VIP/ELITE actifs ont un accès illimité au
-    module Business Intelligence ; les comptes Free sont limités à
-    `FREE_BIZAI_ANALYSES_PER_MONTH` analyse(s) par mois civil."""
+    """Vérifie : connecté + (abonnement ELITE actif OU quota Free du mois
+    non atteint). Seuls les abonnés ELITE actifs ont un accès illimité au
+    module Business Intelligence ; les comptes Free, PRO et VIP sont limités
+    à `FREE_BIZAI_ANALYSES_PER_MONTH` analyse(s) par mois civil."""
     from functools import wraps
 
     @wraps(f)
@@ -355,7 +355,7 @@ def bizai_access_required(f):
                             "message": "Connecte-toi pour lancer une analyse Business Intelligence."}), 401
 
         sub = user.subscription
-        if sub and sub.plan and sub.is_active():
+        if sub and sub.plan == "elite" and sub.is_active():
             return f(*args, **kwargs)
 
         month = date.today().strftime("%Y-%m")
@@ -386,7 +386,7 @@ def record_bizai_usage(user_id: int):
 def bizai_quota_status(user) -> dict:
     """Retourne l'état du quota Business Intelligence pour l'utilisateur."""
     sub = user.subscription if user else None
-    unlimited = bool(sub and sub.plan and sub.is_active())
+    unlimited = bool(sub and sub.plan == "elite" and sub.is_active())
     month = date.today().strftime("%Y-%m")
     log = BizUsage.query.filter_by(user_id=user.id, month=month).first() if user else None
     used = log.analyses_count if log else 0
