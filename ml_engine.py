@@ -446,6 +446,36 @@ def hot_cold_stats(draws: list[dict], window: int = 30) -> dict:
     return result
 
 
+def repeat_analysis(draws: list[dict]) -> dict:
+    """
+    Classify each draw by repeated-digit pattern: "single" (3 digits
+    distincts), "double" (exactement 2 digits identiques) ou "triple"
+    (les 3 identiques). Renvoie fréquence + nombre de tirages depuis
+    la dernière occurrence de chaque type.
+    """
+    positions = ["d1", "d2", "d3"]
+    counts = Counter()
+    last_seen = {}
+
+    for i, d in enumerate(draws):
+        nums = [d[p] for p in positions]
+        uniq = len(set(nums))
+        label = "single" if uniq == 3 else ("triple" if uniq == 1 else "double")
+        counts[label] += 1
+        if label not in last_seen:
+            last_seen[label] = i
+
+    total = len(draws) or 1
+    return {
+        label: {
+            "count": counts.get(label, 0),
+            "pct": round(counts.get(label, 0) / total * 100, 2),
+            "last_seen_draws_ago": last_seen.get(label),
+        }
+        for label in ["single", "double", "triple"]
+    }
+
+
 def pair_frequencies(draws: list[dict]) -> dict:
     counter = Counter()
     for d in draws:
@@ -602,6 +632,7 @@ def run_all_models(draws: list[dict]) -> dict:
         "parity": parity_analysis(draws),
         "high_low": high_low_analysis(draws),
         "consecutive": consecutive_analysis(draws),
+        "repeats": repeat_analysis(draws),
         "gaps": digit_gap_analysis(draws),
         "entropy": entropy_analysis(draws),
         "chi_square": chi_square_test(draws),

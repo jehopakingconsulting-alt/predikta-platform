@@ -1200,6 +1200,9 @@ const T = {
     entropy:"📐 Entropie & Biais",markov:"🔗 Matrice de Markov",
     sums:"∑ Distribution des Sommes",parity:"⚖ Parité, Haut/Bas",
     pairs:"👥 Paires Fréquentes",
+    doublesTitle:"🎲 Simples / Doubles / Triples",
+    repSingle:"Simple (3 chiffres différents)",repDouble:"Double (2 chiffres identiques)",repTriple:"Triple (3 chiffres identiques)",
+    repLastSeen:"dernière fois il y a",repDraws:"tirage(s)",
     mlActive:"✓ Actif",mlInactive:"Données insuffisantes",
     statsTitle:"Statistiques",selectState:"Sélectionnez un État",
     videoTitle:"📺 PREDIKTA TV — Tutoriels & Analyses Live",
@@ -1229,6 +1232,9 @@ const T = {
     entropy:"📐 Entropy & Bias",markov:"🔗 Markov Matrix",
     sums:"∑ Sum Distribution",parity:"⚖ Parity, High/Low",
     pairs:"👥 Frequent Pairs",
+    doublesTitle:"🎲 Singles / Doubles / Triples",
+    repSingle:"Single (3 different digits)",repDouble:"Double (2 matching digits)",repTriple:"Triple (3 matching digits)",
+    repLastSeen:"last seen",repDraws:"draw(s) ago",
     mlActive:"✓ Active",mlInactive:"Insufficient data",
     statsTitle:"Statistics",selectState:"Select a State",
     videoTitle:"📺 PREDIKTA TV — Tutorials & Live Analysis",
@@ -1258,6 +1264,9 @@ const T = {
     entropy:"📐 Entropía y Sesgo",markov:"🔗 Matriz de Markov",
     sums:"∑ Distribución de Sumas",parity:"⚖ Paridad, Alto/Bajo",
     pairs:"👥 Pares Frecuentes",
+    doublesTitle:"🎲 Simples / Dobles / Triples",
+    repSingle:"Simple (3 cifras diferentes)",repDouble:"Doble (2 cifras iguales)",repTriple:"Triple (3 cifras iguales)",
+    repLastSeen:"vista por última vez hace",repDraws:"sorteo(s)",
     mlActive:"✓ Activo",mlInactive:"Datos insuficientes",
     statsTitle:"Estadísticas",selectState:"Seleccione un Estado",
     videoTitle:"📺 PREDIKTA TV — Tutoriales y Análisis en Vivo",
@@ -1287,6 +1296,9 @@ const T = {
     entropy:"📐 Entropia & Viés",markov:"🔗 Matriz de Markov",
     sums:"∑ Distribuição de Somas",parity:"⚖ Paridade, Alto/Baixo",
     pairs:"👥 Pares Frequentes",
+    doublesTitle:"🎲 Simples / Duplos / Triplos",
+    repSingle:"Simples (3 dígitos diferentes)",repDouble:"Duplo (2 dígitos iguais)",repTriple:"Triplo (3 dígitos iguais)",
+    repLastSeen:"visto pela última vez há",repDraws:"sorteio(s)",
     mlActive:"✓ Ativo",mlInactive:"Dados insuficientes",
     statsTitle:"Estatísticas",selectState:"Selecione um Estado",
     videoTitle:"📺 PREDIKTA TV — Tutoriais e Análises ao Vivo",
@@ -1316,6 +1328,9 @@ const T = {
     entropy:"📐 Entopi & Bya",markov:"🔗 Matris Markov",
     sums:"∑ Distribisyon Sòm",parity:"⚖ Parite, Wo/Ba",
     pairs:"👥 Pè Ki Komen",
+    doublesTitle:"🎲 Senp / Doub / Triple",
+    repSingle:"Senp (3 chif diferan)",repDouble:"Doub (2 chif idantik)",repTriple:"Triple (3 chif idantik)",
+    repLastSeen:"vi dènye fwa",repDraws:"tiraj",
     mlActive:"✓ Aktif",mlInactive:"Done pa ase",
     statsTitle:"Estatistik",selectState:"Chwazi yon Eta",
     videoTitle:"📺 PREDIKTA TV — Tutoryo & Analiz Live",
@@ -1580,6 +1595,7 @@ function renderAll(d){
       ${renderParityHiLo(d)}
     </div>
     ${renderPairs(d)}
+    ${renderDoubles(d)}
   `;
   setTimeout(()=>{
     drawFreqChart(d);
@@ -2144,6 +2160,27 @@ function renderPairs(d){
   ).join('');
   return`<div class="card">
     <div class="card-title"><span class="ct-icon">👥</span>${t('pairs')}</div>
+    <div class="chips">${chips}</div>
+  </div>`;
+}
+
+// ── Singles / Doubles / Triples ──
+function renderDoubles(d){
+  const rep=d.repeats;
+  if(!rep)return'';
+  const labels={single:t('repSingle'),double:t('repDouble'),triple:t('repTriple')};
+  const chips=Object.entries(labels).map(([key,label])=>{
+    const v=rep[key]||{};
+    const ago=v.last_seen_draws_ago;
+    const agoTxt = (ago===null||ago===undefined) ? '' :
+      `<div style="font-size:.68rem;color:var(--muted2);margin-top:2px">${t('repLastSeen')} ${ago} ${t('repDraws')}</div>`;
+    return `<div class="chip" style="display:flex;flex-direction:column;align-items:flex-start;gap:2px">
+      <div>${label}: <strong>${v.pct??0}%</strong></div>
+      ${agoTxt}
+    </div>`;
+  }).join('');
+  return`<div class="card">
+    <div class="card-title"><span class="ct-icon">🎲</span>${t('doublesTitle')}</div>
     <div class="chips">${chips}</div>
   </div>`;
 }
