@@ -463,6 +463,34 @@ def predictions_state(state_code):
     lang = request.args.get("lang", "fr")
     return seo_pages.render_prediction_page(state_code, request.url_root.rstrip("/"), lang)
 
+@app.route("/api/hot-pick3")
+def hot_pick3():
+    """Public lightweight endpoint: today's hottest Pick3 digits/combo for the top-5 priority states."""
+    import analyzer
+    out = []
+    for code in PRIORITY_STATES[:5]:
+        try:
+            rep = analyzer.full_report(code)
+        except Exception:
+            continue
+        if not rep or "error" in rep:
+            continue
+        hot30 = rep.get("hot_cold_30", {})
+        hot_digits = sorted(
+            (d for d, v in hot30.items() if v.get("status") == "HOT"),
+            key=lambda d: hot30[d]["pct"], reverse=True
+        )
+        suggestions = rep.get("suggestions") or []
+        top = suggestions[0] if suggestions else None
+        out.append({
+            "state": code,
+            "name": STATES[code]["name"],
+            "hot_digits": hot_digits[:5],
+            "top_combo": top["combo"] if top else None,
+            "confidence": top["confidence"] if top else None,
+        })
+    return jsonify(out)
+
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")
 
