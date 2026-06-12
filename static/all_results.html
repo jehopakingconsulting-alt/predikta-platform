@@ -382,6 +382,7 @@ fr:{
   analyzeLinkText:"⚡ Analyser →",
   pickGamesTitle:"🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)",
   jackpotGamesTitle:"🌟 Jackpots & Jeux Multi-Boules",
+  tod_Morning:"🌅 Matin", tod_Midday:"☀️ Midi", tod_Day:"🌤️ Jour", tod_Evening:"🌆 Soir", tod_Night:"🌙 Nuit",
   noDrawToday:"— Pas de tirage ce jour",
   footerNote:"Données non disponibles pour certains jeux = pas encore chargées · Cliquez 🔄 pour tout charger",
   loadingAllGamesPre:"Chargement de tous les jeux pour ", loadingAllGamesPost:"...",
@@ -424,6 +425,7 @@ en:{
   analyzeLinkText:"⚡ Analyze →",
   pickGamesTitle:"🎯 Number games (Pick 2 / 3 / 4 / 5 / 6)",
   jackpotGamesTitle:"🌟 Jackpots & Multi-Ball Games",
+  tod_Morning:"🌅 Morning", tod_Midday:"☀️ Midday", tod_Day:"🌤️ Day", tod_Evening:"🌆 Evening", tod_Night:"🌙 Night",
   noDrawToday:"— No draw today",
   footerNote:"Data unavailable for some games = not loaded yet · Click 🔄 to load everything",
   loadingAllGamesPre:"Loading all games for ", loadingAllGamesPost:"...",
@@ -466,6 +468,7 @@ es:{
   analyzeLinkText:"⚡ Analizar →",
   pickGamesTitle:"🎯 Juegos de números (Pick 2 / 3 / 4 / 5 / 6)",
   jackpotGamesTitle:"🌟 Premios Mayores y Juegos Multi-Bola",
+  tod_Morning:"🌅 Mañana", tod_Midday:"☀️ Mediodía", tod_Day:"🌤️ Día", tod_Evening:"🌆 Tarde", tod_Night:"🌙 Noche",
   noDrawToday:"— Sin sorteo hoy",
   footerNote:"Datos no disponibles para algunos juegos = aún no cargados · Haga clic en 🔄 para cargar todo",
   loadingAllGamesPre:"Cargando todos los juegos para ", loadingAllGamesPost:"...",
@@ -508,6 +511,7 @@ pt:{
   analyzeLinkText:"⚡ Analisar →",
   pickGamesTitle:"🎯 Jogos de números (Pick 2 / 3 / 4 / 5 / 6)",
   jackpotGamesTitle:"🌟 Prêmios e Jogos Multi-Bola",
+  tod_Morning:"🌅 Manhã", tod_Midday:"☀️ Meio-dia", tod_Day:"🌤️ Dia", tod_Evening:"🌆 Tarde", tod_Night:"🌙 Noite",
   noDrawToday:"— Sem sorteio hoje",
   footerNote:"Dados não disponíveis para alguns jogos = ainda não carregados · Clique em 🔄 para carregar tudo",
   loadingAllGamesPre:"Carregando todos os jogos para ", loadingAllGamesPost:"...",
@@ -550,6 +554,7 @@ ht:{
   analyzeLinkText:"⚡ Analize →",
   pickGamesTitle:"🎯 Jwèt nimewo (Pick 2 / 3 / 4 / 5 / 6)",
   jackpotGamesTitle:"🌟 Gwo Pri & Jwèt Multi-Boul",
+  tod_Morning:"🌅 Maten", tod_Midday:"☀️ Midi", tod_Day:"🌤️ Jounen", tod_Evening:"🌆 Aswè", tod_Night:"🌙 Nuit",
   noDrawToday:"— Pa gen tiraj jodi a",
   footerNote:"Done pa disponib pou kèk jwèt = poko chaje · Klike sou 🔄 pou chaje tout bagay",
   loadingAllGamesPre:"K ap chaje tout jwèt pou ", loadingAllGamesPost:"...",
@@ -765,7 +770,7 @@ function renderStateResults(data, container){
       return draws.map(draw=>`
         <div class="game-row">
           <div class="game-label">${game.icon||''} ${game.label}</div>
-          ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${draw.tod}${schedMap && schedMap[draw.tod] ? ` · ${schedMap[draw.tod]}` : ''}</span>` : ''}
+          ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${t['tod_'+draw.tod] || draw.tod}${schedMap && schedMap[draw.tod] ? ` · ${schedMap[draw.tod]}` : ''}</span>` : ''}
           <div class="balls-wrap">${renderDrawBalls(draw, game.game_type)}</div>
         </div>`
       ).join('');

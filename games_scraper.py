@@ -7,7 +7,7 @@ Handles Pick2, Pick3, Pick4, Pick5, Pick6, Powerball, Mega Millions, etc.
 import requests, urllib3, re, time, json, os
 from bs4 import BeautifulSoup
 from datetime import datetime, date
-from games_config import STATE_GAMES, GAME_TYPES
+from games_config import STATE_GAMES, GAME_TYPES, TOD_ORDER
 
 try:
     from curl_cffi import requests as cffi_requests
@@ -262,7 +262,6 @@ def get_today_all_games(state: str) -> list[dict]:
     state = state.upper()
     games = STATE_GAMES.get(state, [])
     today = date.today().isoformat()
-    yesterday = date.today().isoformat()
 
     results = []
     for game in games:
@@ -279,7 +278,7 @@ def get_today_all_games(state: str) -> list[dict]:
             continue
 
         latest_date = max(by_date.keys())
-        latest_draws = sorted(by_date[latest_date], key=lambda x: x.get("tod", ""))
+        latest_draws = sorted(by_date[latest_date], key=lambda x: TOD_ORDER.get(x.get("tod", ""), 99))
         is_today = latest_date == today
 
         gt = GAME_TYPES.get(game["type"], {})

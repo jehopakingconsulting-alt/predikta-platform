@@ -1214,6 +1214,7 @@ const T = {
     pos:"Position",cycleLen:"tirages/cycle",predicted:"Prédit:",
     uniform:"uniforme",
     allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
+    tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit",
     quickStates:"États populaires",
   },
   en:{
@@ -1242,6 +1243,7 @@ const T = {
     pos:"Position",cycleLen:"draws/cycle",predicted:"Predicted:",
     uniform:"uniform",
     allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
+    tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night",
     quickStates:"Popular states",
   },
   es:{
@@ -1270,6 +1272,7 @@ const T = {
     pos:"Posición",cycleLen:"sorteos/ciclo",predicted:"Predicho:",
     uniform:"uniforme",
     allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
+    tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche",
     quickStates:"Estados populares",
   },
   pt:{
@@ -1298,6 +1301,7 @@ const T = {
     pos:"Posição",cycleLen:"sorteios/ciclo",predicted:"Previsto:",
     uniform:"uniforme",
     allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
+    tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite",
     quickStates:"Estados populares",
   },
   ht:{
@@ -1326,6 +1330,7 @@ const T = {
     pos:"Pozisyon",cycleLen:"tiraj/sik",predicted:"Predit:",
     uniform:"inifòm",
     allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
+    tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit",
     quickStates:"Eta popilè",
   },
 };
@@ -1698,10 +1703,7 @@ function selectStateAndAnalyze(code){
 // Optimisé : on n'affiche que les créneaux RÉELLEMENT disponibles pour
 // l'État sélectionné (basé sur les données scrapées), pour éviter tout
 // message d'erreur "aucun tirage". S'adapte automatiquement État par État.
-const TOD_LABELS = {
-  Morning: '🌅 Matin', Midday: '☀️ Midi', Day: '🌤️ Jour',
-  Evening: '🌆 Soir',  Night:  '🌙 Nuit',
-};
+function todLabel(tod){ return t('tod_'+tod) || tod; }
 let _statesMeta = null;
 
 async function fetchStatesMeta(){
@@ -1723,7 +1725,7 @@ async function populateTodOptions(stateCode){
   (stMeta.schedule || []).forEach(s => { sched[s.tod] = s.time; });
   const prev = todSel.value;
   todSel.innerHTML = '<option value="all">' + t('allDraws') + '</option>' +
-    tods.map(t => `<option value="${t}">${TOD_LABELS[t] || t}${sched[t] ? ' — ' + sched[t] : ''}</option>`).join('');
+    tods.map(tv => `<option value="${tv}">${todLabel(tv)}${sched[tv] ? ' — ' + sched[tv] : ''}</option>`).join('');
   // Conserve la sélection précédente si toujours valide, sinon "Tous tirages"
   todSel.value = (prev === 'all' || tods.includes(prev)) ? prev : 'all';
 }

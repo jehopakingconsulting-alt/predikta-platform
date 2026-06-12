@@ -16,6 +16,7 @@ from scraper import (scrape_all, fetch_state, save_csv, load_csv,
                      STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
 from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
 from biz_engine import analyze_project, INDUSTRIES, PLATFORMS, COUNTRIES_DATA
+from games_config import TOD_ORDER
 
 try:
     from pywebpush import webpush, WebPushException
@@ -734,14 +735,12 @@ def api_scrape():
 @app.route("/api/states")
 def api_states():
     result = {}
-    # Ordre d'affichage logique pour les créneaux de tirage
-    _TOD_ORDER = {"Morning": 0, "Midday": 1, "Day": 2, "Evening": 3, "Night": 4}
     for code, cfg in STATES.items():
         draws = load_csv(code)
         # Tirages réellement disponibles pour cet État (Matin/Midi/Soir/Nuit
         # selon les données réelles — optimisé et à jour par État)
         tods = sorted({d.get("tod","") for d in draws if d.get("tod")},
-                      key=lambda t: _TOD_ORDER.get(t, 99))
+                      key=lambda t: TOD_ORDER.get(t, 99))
         result[code] = {
             "name":      cfg["name"],
             "slug":      cfg["slug"],
@@ -787,7 +786,7 @@ def api_results_latest():
             by_date.setdefault(d["date"], []).append(d)
 
         latest_date  = max(by_date.keys())
-        latest_draws = sorted(by_date[latest_date], key=lambda x: x.get("tod",""))
+        latest_draws = sorted(by_date[latest_date], key=lambda x: TOD_ORDER.get(x.get("tod",""), 99))
 
         result[code] = {
             "name":        cfg["name"],
@@ -829,7 +828,7 @@ def api_results_state(state_code):
         by_date.setdefault(d["date"], []).append(d)
 
     days = [
-        {"date": dt, "draws": sorted(by_date[dt], key=lambda x: x.get("tod",""))}
+        {"date": dt, "draws": sorted(by_date[dt], key=lambda x: TOD_ORDER.get(x.get("tod",""), 99))}
         for dt in sorted(by_date.keys(), reverse=True)
     ]
 
@@ -948,7 +947,7 @@ def api_results_month(state_code, year, month):
         by_date.setdefault(d["date"], []).append(d)
 
     days = [
-        {"date": dt, "draws": sorted(by_date[dt], key=lambda x: x.get("tod",""))}
+        {"date": dt, "draws": sorted(by_date[dt], key=lambda x: TOD_ORDER.get(x.get("tod",""), 99))}
         for dt in sorted(by_date.keys(), reverse=True)
     ]
 

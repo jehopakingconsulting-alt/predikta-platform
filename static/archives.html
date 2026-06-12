@@ -102,6 +102,7 @@ const T = {
     emptyCta:"Lancer une analyse",
     countLabel:"entrée(s) sauvegardée(s)",
     typeAnalyze:"Analyse", typeResults:"Résultats consultés", typeBizai:"Analyse Business",
+    tod_Morning:"🌅 Matin", tod_Midday:"☀️ Midi", tod_Day:"🌤️ Jour", tod_Evening:"🌆 Soir", tod_Night:"🌙 Nuit",
     open:"Ouvrir →",
     confirmClear:"Effacer tout l'historique d'analyses ? Cette action est irréversible.",
     today:"Aujourd'hui", yesterday:"Hier",
@@ -116,6 +117,7 @@ const T = {
     emptyCta:"Run an analysis",
     countLabel:"saved entr(y/ies)",
     typeAnalyze:"Analysis", typeResults:"Viewed results", typeBizai:"Business Analysis",
+    tod_Morning:"🌅 Morning", tod_Midday:"☀️ Midday", tod_Day:"🌤️ Day", tod_Evening:"🌆 Evening", tod_Night:"🌙 Night",
     open:"Open →",
     confirmClear:"Clear all analysis history? This cannot be undone.",
     today:"Today", yesterday:"Yesterday",
@@ -130,6 +132,7 @@ const T = {
     emptyCta:"Iniciar un análisis",
     countLabel:"entrada(s) guardada(s)",
     typeAnalyze:"Análisis", typeResults:"Resultados consultados", typeBizai:"Análisis de Negocio",
+    tod_Morning:"🌅 Mañana", tod_Midday:"☀️ Mediodía", tod_Day:"🌤️ Día", tod_Evening:"🌆 Tarde", tod_Night:"🌙 Noche",
     open:"Abrir →",
     confirmClear:"¿Borrar todo el historial de análisis? Esta acción es irreversible.",
     today:"Hoy", yesterday:"Ayer",
@@ -144,6 +147,7 @@ const T = {
     emptyCta:"Iniciar uma análise",
     countLabel:"entrada(s) salva(s)",
     typeAnalyze:"Análise", typeResults:"Resultados consultados", typeBizai:"Análise de Negócio",
+    tod_Morning:"🌅 Manhã", tod_Midday:"☀️ Meio-dia", tod_Day:"🌤️ Dia", tod_Evening:"🌆 Tarde", tod_Night:"🌙 Noite",
     open:"Abrir →",
     confirmClear:"Limpar todo o histórico de análises? Esta ação é irreversível.",
     today:"Hoje", yesterday:"Ontem",
@@ -158,6 +162,7 @@ const T = {
     emptyCta:"Lanse yon analiz",
     countLabel:"antre sove",
     typeAnalyze:"Analiz", typeResults:"Rezilta konsilte", typeBizai:"Analiz Biznis",
+    tod_Morning:"🌅 Maten", tod_Midday:"☀️ Midi", tod_Day:"🌤️ Jounen", tod_Evening:"🌆 Aswè", tod_Night:"🌙 Nuit",
     open:"Louvri →",
     confirmClear:"Efase tout istorik analiz yo? Aksyon sa a pa ka anile.",
     today:"Jodi a", yesterday:"Yè",
@@ -235,7 +240,7 @@ function renderArchives(){
         <div class="archive-icon">${icon}</div>
         <div class="archive-info">
           <div class="archive-title">${e.label || e.state}</div>
-          <div class="archive-meta">${typeLabel}${e.tod?' · '+e.tod:''} · ${fmtTime(e.ts)}</div>
+          <div class="archive-meta">${typeLabel}${e.tod?' · '+(t['tod_'+e.tod]||e.tod):''} · ${fmtTime(e.ts)}</div>
         </div>
         <div class="archive-actions">
           <a class="archive-go" href="${e.url}">${t.open}</a>

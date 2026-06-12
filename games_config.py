@@ -8,6 +8,11 @@ All lottery games per state from lotterypost.com
 # extra_balls: count of bonus/extra balls (Powerball, Mega Ball, etc.)
 # extra_name: name of the bonus ball
 
+# Ordre chronologique logique des créneaux de tirage (Matin -> Nuit),
+# utilisé pour trier les tirages d'une même date au lieu d'un tri
+# alphabétique (qui placerait "Evening"/"Night" avant "Morning"/"Midday").
+TOD_ORDER = {"Morning": 0, "Midday": 1, "Day": 2, "Evening": 3, "Night": 4}
+
 GAME_TYPES = {
     "pick2":     {"label": "Pick 2",         "num_balls": 2, "extra_balls": 0, "icon": "2️⃣"},
     "pick3":     {"label": "Pick 3",         "num_balls": 3, "extra_balls": 0, "icon": "3️⃣"},

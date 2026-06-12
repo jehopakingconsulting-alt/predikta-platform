@@ -502,6 +502,7 @@ const T = {
     toolComboHint:"Entrez 3 chiffres pour voir leur historique de sortie.",
     closesIn:"Ferme dans",
     drawLabel:"Tirage",
+    tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit",
     hottestDigit:"Le plus sorti",
     coldestDigit:"Le moins sorti",
     occurrences:"sorties",
@@ -561,6 +562,7 @@ const T = {
     toolComboHint:"Enter 3 digits to see their draw history.",
     closesIn:"Closes in",
     drawLabel:"Draw",
+    tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night",
     hottestDigit:"Most frequent",
     coldestDigit:"Least frequent",
     occurrences:"draws",
@@ -620,6 +622,7 @@ const T = {
     toolComboHint:"Ingresa 3 dígitos para ver su historial de sorteos.",
     closesIn:"Cierra en",
     drawLabel:"Sorteo",
+    tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche",
     hottestDigit:"Más frecuente",
     coldestDigit:"Menos frecuente",
     occurrences:"sorteos",
@@ -679,6 +682,7 @@ const T = {
     toolComboHint:"Digite 3 dígitos para ver o histórico de sorteios.",
     closesIn:"Fecha em",
     drawLabel:"Sorteio",
+    tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite",
     hottestDigit:"Mais frequente",
     coldestDigit:"Menos frequente",
     occurrences:"sorteios",
@@ -738,6 +742,7 @@ const T = {
     toolComboHint:"Antre 3 chif pou wè istwa tiraj yo.",
     closesIn:"Fèmen nan",
     drawLabel:"Tiraj",
+    tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit",
     hottestDigit:"Pi soti",
     coldestDigit:"Mwen soti",
     occurrences:"tiraj",
@@ -877,7 +882,7 @@ async function loadSnap(){
         const timeStr = sched ? sched.time : '';
         return `<div class="snap-draw-row">
           <div class="snap-balls">${balls}</div>
-          <div class="snap-tod">${d.tod||''}${timeStr?' · '+timeStr:''}</div>
+          <div class="snap-tod">${d.tod?(t['tod_'+d.tod]||d.tod):''}${timeStr?' · '+timeStr:''}</div>
         </div>`;
       }).join('');
       return `<div class="snap-card" onclick="window.location='/all-results'">
@@ -956,7 +961,7 @@ function tickCountdown(){
   const totalSec = Math.floor(nd.diff/1000);
   const hh = Math.floor(totalSec/3600), mm = Math.floor((totalSec%3600)/60), ss = totalSec%60;
   document.getElementById('countdownNum').textContent = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-  document.getElementById('countdownSub').textContent = `${t.drawLabel} ${nd.tod} · ${t.closesIn} (${nd.time})`;
+  document.getElementById('countdownSub').textContent = `${t.drawLabel} ${t['tod_'+nd.tod]||nd.tod} · ${t.closesIn} (${nd.time})`;
 }
 
 function startCountdown(){

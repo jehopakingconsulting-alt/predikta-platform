@@ -457,11 +457,11 @@ footer{
 // TRANSLATIONS
 // ══════════════════════════════════════
 const LANGS = {
-  fr:{title:"Résultats des Loteries USA",sub:"Cash3 · Pick3 · Daily3 · 30 États · Mis à jour quotidiennement",search:"Rechercher un État... ex: New York, Texas, Florida",gridTitle:"Tous les États",today:"Aujourd'hui",yesterday:"Hier",noData:"Aucune donnée",update:"Mettre à jour",noDataMsg:"Aucune donnée disponible pour cet État.",scrapeBtn:"🔄 Charger les données",loading:"Chargement...",draws:"tirages",allStates:"Tous les États",hasData:"Données dispo",todayRes:"Résultats aujourd'hui"},
-  en:{title:"USA Lottery Results",sub:"Cash3 · Pick3 · Daily3 · 30 States · Updated Daily",search:"Search a State... e.g. New York, Texas, Florida",gridTitle:"All States",today:"Today",yesterday:"Yesterday",noData:"No data",update:"Update",noDataMsg:"No data available for this state.",scrapeBtn:"🔄 Load Data",loading:"Loading...",draws:"draws",allStates:"All States",hasData:"Data available",todayRes:"Today's results"},
-  es:{title:"Resultados de Lotería USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Actualizado diariamente",search:"Buscar un Estado... ej: New York, Texas, Florida",gridTitle:"Todos los Estados",today:"Hoy",yesterday:"Ayer",noData:"Sin datos",update:"Actualizar",noDataMsg:"No hay datos disponibles para este estado.",scrapeBtn:"🔄 Cargar Datos",loading:"Cargando...",draws:"sorteos",allStates:"Todos los Estados",hasData:"Datos disponibles",todayRes:"Resultados de hoy"},
-  pt:{title:"Resultados da Loteria USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Atualizado diariamente",search:"Buscar um Estado... ex: New York, Texas, Florida",gridTitle:"Todos os Estados",today:"Hoje",yesterday:"Ontem",noData:"Sem dados",update:"Atualizar",noDataMsg:"Nenhum dado disponível para este estado.",scrapeBtn:"🔄 Carregar Dados",loading:"Carregando...",draws:"sorteios",allStates:"Todos os Estados",hasData:"Dados disponíveis",todayRes:"Resultados de hoje"},
-  ht:{title:"Rezilta Lotri USA",sub:"Cash3 · Pick3 · 30 Eta · Mete ajou chak jou",search:"Chèche yon Eta... egz: New York, Texas, Florida",gridTitle:"Tout Eta yo",today:"Jodi a",yesterday:"Ayè",noData:"Pa gen done",update:"Mete ajou",noDataMsg:"Pa gen done pou eta sa a.",scrapeBtn:"🔄 Chaje Done",loading:"Ap chaje...",draws:"tiraj",allStates:"Tout Eta yo",hasData:"Done disponib",todayRes:"Rezilta jodi a"},
+  fr:{title:"Résultats des Loteries USA",sub:"Cash3 · Pick3 · Daily3 · 30 États · Mis à jour quotidiennement",search:"Rechercher un État... ex: New York, Texas, Florida",gridTitle:"Tous les États",today:"Aujourd'hui",yesterday:"Hier",noData:"Aucune donnée",update:"Mettre à jour",noDataMsg:"Aucune donnée disponible pour cet État.",scrapeBtn:"🔄 Charger les données",loading:"Chargement...",draws:"tirages",allStates:"Tous les États",hasData:"Données dispo",todayRes:"Résultats aujourd'hui",tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit"},
+  en:{title:"USA Lottery Results",sub:"Cash3 · Pick3 · Daily3 · 30 States · Updated Daily",search:"Search a State... e.g. New York, Texas, Florida",gridTitle:"All States",today:"Today",yesterday:"Yesterday",noData:"No data",update:"Update",noDataMsg:"No data available for this state.",scrapeBtn:"🔄 Load Data",loading:"Loading...",draws:"draws",allStates:"All States",hasData:"Data available",todayRes:"Today's results",tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night"},
+  es:{title:"Resultados de Lotería USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Actualizado diariamente",search:"Buscar un Estado... ej: New York, Texas, Florida",gridTitle:"Todos los Estados",today:"Hoy",yesterday:"Ayer",noData:"Sin datos",update:"Actualizar",noDataMsg:"No hay datos disponibles para este estado.",scrapeBtn:"🔄 Cargar Datos",loading:"Cargando...",draws:"sorteos",allStates:"Todos los Estados",hasData:"Datos disponibles",todayRes:"Resultados de hoy",tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche"},
+  pt:{title:"Resultados da Loteria USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Atualizado diariamente",search:"Buscar um Estado... ex: New York, Texas, Florida",gridTitle:"Todos os Estados",today:"Hoje",yesterday:"Ontem",noData:"Sem dados",update:"Atualizar",noDataMsg:"Nenhum dado disponível para este estado.",scrapeBtn:"🔄 Carregar Dados",loading:"Carregando...",draws:"sorteios",allStates:"Todos os Estados",hasData:"Dados disponíveis",todayRes:"Resultados de hoje",tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite"},
+  ht:{title:"Rezilta Lotri USA",sub:"Cash3 · Pick3 · 30 Eta · Mete ajou chak jou",search:"Chèche yon Eta... egz: New York, Texas, Florida",gridTitle:"Tout Eta yo",today:"Jodi a",yesterday:"Ayè",noData:"Pa gen done",update:"Mete ajou",noDataMsg:"Pa gen done pou eta sa a.",scrapeBtn:"🔄 Chaje Done",loading:"Ap chaje...",draws:"tiraj",allStates:"Tout Eta yo",hasData:"Done disponib",todayRes:"Rezilta jodi a",tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit"},
 };
 let LANG = (window.PREDIKTA_LANG && LANGS[window.PREDIKTA_LANG]) ? window.PREDIKTA_LANG : 'fr';
 function t(k){ return (LANGS[LANG]||LANGS.fr)[k] || k; }
@@ -494,7 +494,7 @@ function ballsHtml(draws, size=28){
     ).join('');
     const todClass = d.tod==='Midday'?'tod-midday':d.tod==='Evening'?'tod-evening':d.tod==='Morning'?'tod-morning':d.tod==='Night'?'tod-night':'tod-day';
     return `<div class="draw-row">
-      <span class="draw-tod">${d.tod||''}</span>
+      <span class="draw-tod">${d.tod?t('tod_'+d.tod):''}</span>
       <div class="draw-balls">${balls}</div>
     </div>`;
   }).join('');
@@ -600,7 +600,7 @@ function renderStateCard(code, v){
       `<div class="dball" style="width:28px;height:28px;background:${bc(n)}22;border-color:${bc(n)};color:${bc(n)};font-size:11px">${n}</div>`
     ).join('');
     return `<div class="draw-row">
-      <span class="draw-tod">${d.tod||''}</span>
+      <span class="draw-tod">${d.tod?t('tod_'+d.tod):''}</span>
       <div class="draw-balls">${balls}</div>
     </div>`;
   }).join('');
@@ -654,7 +654,7 @@ function openDetail(code){
 
   // Schedule
   const sched = (v.schedule || []).map(s=>
-    `<div class="sched-item"><span class="sched-tod">${s.tod}</span><span class="sched-time">${s.time}</span></div>`
+    `<div class="sched-item"><span class="sched-tod">${t('tod_'+s.tod)}</span><span class="sched-time">${s.time}</span></div>`
   ).join('');
   document.getElementById('scheduleStrip').innerHTML = sched || '';
 
@@ -744,7 +744,7 @@ function renderDetailDays(days){
       const sumVal = parseInt(d.d1)+parseInt(d.d2)+parseInt(d.d3);
       const combo = `${d.d1}-${d.d2}-${d.d3}`;
       return `<div class="detail-draw-row">
-        <span class="detail-tod ${todClass}">${d.tod||'Draw'}</span>
+        <span class="detail-tod ${todClass}">${d.tod?t('tod_'+d.tod):t('draws')}</span>
         <div class="detail-balls">${balls}</div>
         <span class="detail-sum">Σ${sumVal}</span>
         <span class="detail-share" onclick="shareResult('${getStateLongName(_detailState)}','${combo}','${d.tod}','${day.date}')" title="Partager">📤</span>
