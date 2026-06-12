@@ -100,6 +100,46 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
 }
 .analyze-link:hover{background:rgba(79,110,255,.3)}
 
+/* ── Tirage complet banner ── */
+.full-draw-banner{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:10px 18px;background:rgba(79,110,255,.06);
+  border-bottom:1px solid var(--border);
+}
+.full-draw-title{font-size:.74rem;font-weight:800;color:var(--accent)}
+.full-draw-row{display:flex;align-items:center;gap:8px}
+.full-draw-combo{font-size:.95rem;font-weight:800;color:var(--text);letter-spacing:1px}
+
+/* ── Analyze button & panel ── */
+.analyze-game-btn{
+  margin-left:auto;flex-shrink:0;padding:5px 12px;font-size:.68rem;font-weight:800;
+  border:1px solid var(--accent);border-radius:8px;background:rgba(79,110,255,.1);
+  color:var(--accent);cursor:pointer;transition:background .15s;
+}
+.analyze-game-btn:hover{background:rgba(79,110,255,.25)}
+.analysis-panel{
+  padding:12px 18px;background:rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border);
+}
+.analysis-loading,.analysis-error{font-size:.72rem;color:var(--muted2);text-align:center;padding:6px 0}
+.analysis-error{color:#ff7755}
+.analysis-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0}
+.analysis-label{font-size:.68rem;font-weight:700;color:var(--muted2);min-width:160px;flex-shrink:0}
+.analysis-chips{display:flex;gap:6px;flex-wrap:wrap}
+.suggestion-chip{
+  padding:4px 10px;font-size:.74rem;font-weight:800;border-radius:8px;
+  background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:var(--gold);
+  letter-spacing:1px;
+}
+.digit-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;font-size:.74rem;font-weight:800;
+  border:2px solid;
+}
+.digit-hot{background:rgba(255,68,68,.12);border-color:#ff4444;color:#ff4444}
+.digit-cold{background:rgba(68,153,255,.12);border-color:#4499ff;color:#4499ff}
+.digit-overdue{background:rgba(255,204,34,.12);border-color:#ffcc22;color:#ffcc22}
+
 /* ── Games list inside state ── */
 .games-list{padding:4px 0}
 .game-row{
@@ -388,6 +428,14 @@ fr:{
   loadingAllGamesPre:"Chargement de tous les jeux pour ", loadingAllGamesPost:"...",
   statusOk:"OK", statusError:"Erreur",
   locale:"fr-FR",
+  fullDrawTitle:"🎯 Tirage complet",
+  analyzeGameBtn:"🔮 Analyser",
+  analysisLoading:"Calcul de l'analyse...",
+  analysisErrorMsg:"Analyse non disponible pour ce jeu (pas encore de données ou jeu non numérique).",
+  topSuggestionsTitle:"Top combinaisons suggérées",
+  hotTitle:"🔥 Chiffres chauds", coldTitle:"❄️ Chiffres froids", overdueTitle:"⏳ En retard (overdue)",
+  closeBtn:"✕ Fermer",
+  drawsAnalyzedLabel:"tirages analysés",
 },
 en:{
   pageTitle:"PREDIKTA — All Results of the Day",
@@ -431,6 +479,14 @@ en:{
   loadingAllGamesPre:"Loading all games for ", loadingAllGamesPost:"...",
   statusOk:"OK", statusError:"Error",
   locale:"en-US",
+  fullDrawTitle:"🎯 Full Draw",
+  analyzeGameBtn:"🔮 Analyze",
+  analysisLoading:"Computing analysis...",
+  analysisErrorMsg:"Analysis not available for this game (no data yet or non-numeric game).",
+  topSuggestionsTitle:"Top suggested combinations",
+  hotTitle:"🔥 Hot digits", coldTitle:"❄️ Cold digits", overdueTitle:"⏳ Overdue",
+  closeBtn:"✕ Close",
+  drawsAnalyzedLabel:"draws analyzed",
 },
 es:{
   pageTitle:"PREDIKTA — Todos los Resultados del Día",
@@ -474,6 +530,14 @@ es:{
   loadingAllGamesPre:"Cargando todos los juegos para ", loadingAllGamesPost:"...",
   statusOk:"OK", statusError:"Error",
   locale:"es-ES",
+  fullDrawTitle:"🎯 Sorteo completo",
+  analyzeGameBtn:"🔮 Analizar",
+  analysisLoading:"Calculando análisis...",
+  analysisErrorMsg:"Análisis no disponible para este juego (sin datos aún o juego no numérico).",
+  topSuggestionsTitle:"Mejores combinaciones sugeridas",
+  hotTitle:"🔥 Dígitos calientes", coldTitle:"❄️ Dígitos fríos", overdueTitle:"⏳ Atrasados",
+  closeBtn:"✕ Cerrar",
+  drawsAnalyzedLabel:"sorteos analizados",
 },
 pt:{
   pageTitle:"PREDIKTA — Todos os Resultados do Dia",
@@ -517,6 +581,14 @@ pt:{
   loadingAllGamesPre:"Carregando todos os jogos para ", loadingAllGamesPost:"...",
   statusOk:"OK", statusError:"Erro",
   locale:"pt-BR",
+  fullDrawTitle:"🎯 Sorteio completo",
+  analyzeGameBtn:"🔮 Analisar",
+  analysisLoading:"Calculando análise...",
+  analysisErrorMsg:"Análise não disponível para este jogo (sem dados ainda ou jogo não numérico).",
+  topSuggestionsTitle:"Top combinações sugeridas",
+  hotTitle:"🔥 Dígitos quentes", coldTitle:"❄️ Dígitos frios", overdueTitle:"⏳ Atrasados",
+  closeBtn:"✕ Fechar",
+  drawsAnalyzedLabel:"sorteios analisados",
 },
 ht:{
   pageTitle:"PREDIKTA — Tout Rezilta Jodi a",
@@ -560,6 +632,14 @@ ht:{
   loadingAllGamesPre:"K ap chaje tout jwèt pou ", loadingAllGamesPost:"...",
   statusOk:"OK", statusError:"Erè",
   locale:"fr-FR",
+  fullDrawTitle:"🎯 Tiraj konplè",
+  analyzeGameBtn:"🔮 Analize",
+  analysisLoading:"K ap kalkile analiz...",
+  analysisErrorMsg:"Analiz pa disponib pou jwèt sa a (poko gen done oswa jwèt pa nimerik).",
+  topSuggestionsTitle:"Pi bon konbinezon yo sijere",
+  hotTitle:"🔥 Chif cho", coldTitle:"❄️ Chif frèt", overdueTitle:"⏳ An reta",
+  closeBtn:"✕ Fèmen",
+  drawsAnalyzedLabel:"tiraj analize",
 },
 };
 
@@ -757,26 +837,66 @@ function renderStateResults(data, container){
     ? `<span class="state-today-tag">${t.todayTagLabel}</span>`
     : `<span class="state-yesterday-tag">⏰ ${dateStr}</span>`;
 
+  // Jeux "chiffres" pouvant être analysés (Pick3/Pick4/Pick5 numériques) —
+  // Pick5 "lotto" (Take5, Fantasy5, Pick10...) est exclu côté API (numéros > 9).
+  const ANALYZABLE_TYPES = ['pick3','pick4','pick5'];
+
   function gameSection(title, gameList, schedMap){
     if(!gameList.length) return '';
     const rows = gameList.map(game=>{
       const draws = game.draws || [];
+      const canAnalyze = ANALYZABLE_TYPES.includes(game.game_type);
+      const analyzeBtn = canAnalyze
+        ? `<button class="analyze-game-btn" onclick="toggleGameAnalysis('${state}','${game.slug}',this)">${t.analyzeGameBtn}</button>`
+        : '';
+      const panelId = `analysis-${state}-${game.slug}`;
       if(!draws.length){
         return `<div class="game-row">
           <div class="game-label">${game.icon||''} ${game.label}</div>
           <div class="game-no-data">${t.noDrawToday}</div>
-        </div>`;
+          ${analyzeBtn}
+        </div>
+        <div class="analysis-panel" id="${panelId}" style="display:none"></div>`;
       }
-      return draws.map(draw=>`
+      return draws.map((draw,i)=>`
         <div class="game-row">
           <div class="game-label">${game.icon||''} ${game.label}</div>
           ${draw.tod ? `<span class="game-tod ${todClass(draw.tod)}">${t['tod_'+draw.tod] || draw.tod}${schedMap && schedMap[draw.tod] ? ` · ${schedMap[draw.tod]}` : ''}</span>` : ''}
           <div class="balls-wrap">${renderDrawBalls(draw, game.game_type)}</div>
+          ${i===0 ? analyzeBtn : ''}
         </div>`
-      ).join('');
+      ).join('') + `<div class="analysis-panel" id="${panelId}" style="display:none"></div>`;
     }).join('');
 
     return `<div class="game-section-sep">${title}</div>${rows}`;
+  }
+
+  // ── Tirage complet : combine Pick3 + Pick4 du même créneau (ex: 627-1188) ──
+  function fullDrawBanner(gameList){
+    const byTodMain = {};  // tod -> nums.join('') pour les jeux pick3
+    const byTodExt  = {};  // tod -> nums.join('') pour les jeux pick4
+    gameList.forEach(game=>{
+      (game.draws||[]).forEach(draw=>{
+        const tod = draw.tod || 'Evening';
+        const numsStr = (draw.nums||[]).join('');
+        if(game.game_type === 'pick3') byTodMain[tod] = numsStr;
+        else if(game.game_type === 'pick4') byTodExt[tod] = numsStr;
+      });
+    });
+    const tods = Object.keys(byTodMain).filter(tod => byTodExt[tod]);
+    if(!tods.length) return '';
+
+    const rows = tods
+      .sort((a,b)=>(TOD_ORDER[a]??99)-(TOD_ORDER[b]??99))
+      .map(tod => `<span class="full-draw-row">
+        <span class="game-tod ${todClass(tod)}">${t['tod_'+tod] || tod}</span>
+        <strong class="full-draw-combo">${byTodMain[tod]}-${byTodExt[tod]}</strong>
+      </span>`).join('');
+
+    return `<div class="full-draw-banner">
+      <div class="full-draw-title">${t.fullDrawTitle}</div>
+      ${rows}
+    </div>`;
   }
 
   container.innerHTML = `
@@ -789,6 +909,7 @@ function renderStateResults(data, container){
         </div>
         <a class="analyze-link" href="/?state=${state}">${t.analyzeLinkText}</a>
       </div>
+      ${fullDrawBanner(pickGames)}
       <div class="games-list">
         ${gameSection(t.pickGamesTitle, pickGames, schedMap)}
         ${jackpotGames.length ? gameSection(t.jackpotGamesTitle, jackpotGames, schedMap) : ''}
@@ -796,6 +917,76 @@ function renderStateResults(data, container){
     </div>
     <div style="text-align:center;padding:14px;font-size:.72rem;color:var(--muted2)">
       ${t.footerNote}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════
+// PICK3/4/5 ANALYSIS PANEL
+// ══════════════════════════════════════
+const TOD_ORDER = {"Morning":0,"Midday":1,"Day":2,"Evening":3,"Night":4};
+
+async function toggleGameAnalysis(state, slug, btn){
+  const panel = document.getElementById(`analysis-${state}-${slug}`);
+  if(!panel) return;
+
+  if(panel.style.display !== 'none' && panel.dataset.loaded === '1'){
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  const t = curT();
+
+  if(panel.dataset.loaded === '1') return;
+
+  panel.innerHTML = `<div class="analysis-loading">${t.analysisLoading}</div>`;
+  try{
+    const r = await fetch(`/api/games/analyze/${state}/${slug}`);
+    const d = await r.json();
+    if(d.error){
+      panel.innerHTML = `<div class="analysis-error">${t.analysisErrorMsg}</div>`;
+      return;
+    }
+    panel.innerHTML = renderAnalysisPanel(d, t);
+    panel.dataset.loaded = '1';
+  }catch(e){
+    panel.innerHTML = `<div class="analysis-error">${t.analysisErrorMsg}</div>`;
+  }
+}
+
+function renderAnalysisPanel(d, t){
+  const suggestions = (d.suggestions||[]).slice(0,5).map(s=>`
+    <span class="suggestion-chip" title="${s.confidence}">${s.combo}</span>
+  `).join('');
+
+  const hotDigits = Object.entries(d.hot_cold_30||{}).filter(([,v])=>v.status==='HOT').map(([k])=>k);
+  const coldDigits = Object.entries(d.hot_cold_30||{}).filter(([,v])=>v.status==='COLD').map(([k])=>k);
+  const overdueDigits = Object.entries(d.gaps||{}).filter(([,v])=>v.overdue).map(([k])=>k);
+
+  function digitChips(digits, cls){
+    if(!digits.length) return '—';
+    return digits.map(dg=>`<span class="digit-chip ${cls}">${dg}</span>`).join('');
+  }
+
+  return `
+    <div class="analysis-section">
+      <div class="analysis-row">
+        <div class="analysis-label">${t.topSuggestionsTitle} (${d.total_draws} ${t.drawsAnalyzedLabel})</div>
+        <div class="analysis-chips">${suggestions}</div>
+      </div>
+      <div class="analysis-row">
+        <div class="analysis-label">${t.hotTitle}</div>
+        <div class="analysis-chips">${digitChips(hotDigits,'digit-hot')}</div>
+      </div>
+      <div class="analysis-row">
+        <div class="analysis-label">${t.coldTitle}</div>
+        <div class="analysis-chips">${digitChips(coldDigits,'digit-cold')}</div>
+      </div>
+      <div class="analysis-row">
+        <div class="analysis-label">${t.overdueTitle}</div>
+        <div class="analysis-chips">${digitChips(overdueDigits,'digit-overdue')}</div>
+      </div>
     </div>
   `;
 }

@@ -984,6 +984,7 @@ def server_error(e):
 from games_config import STATE_GAMES, GAME_TYPES
 from games_scraper import (fetch_all_games_for_state, get_today_all_games,
                             load_game_results, save_game_results, fetch_game)
+import analyzer_multi
 
 @app.route("/all-results")
 def all_results_page():
@@ -1041,6 +1042,43 @@ def api_games_config():
         },
         "game_types": GAME_TYPES,
     })
+
+
+@app.route("/api/games/analyze/<state_code>/<slug>")
+@auth_module.subscription_required
+def api_games_analyze(state_code, slug):
+    """
+    Statistical analysis (frequency, hot/cold, gaps, Markov, suggestions)
+    for a Pick3/Pick4/digit-Pick5 game — generalization of /api/report to
+    games beyond the main Pick3 CSVs (Win4, Cash4, Daily4, etc).
+    """
+    state_code = state_code.upper()
+    games = STATE_GAMES.get(state_code, [])
+    game = next((g for g in games if g["slug"] == slug), None)
+    if not game:
+        return jsonify({"error": f"Unknown game {slug} for {state_code}"}), 400
+
+    draws = load_game_results(state_code, slug)
+    if not draws:
+        return jsonify({"error": f"No data for {state_code}/{slug}. Scrape first."}), 200
+
+    n = GAME_TYPES.get(game["type"], {}).get("num_balls", 3)
+
+    # Only digit games (each position is a single digit 0-9) support this
+    # analysis — multi-ball lotto games (Take 5, Fantasy 5, Pick 10...) draw
+    # numbers up to 39+ and are not modeled as independent digit positions.
+    if any(int(v) > 9 for d in draws[:50] for v in d["nums"][:n]):
+        return jsonify({"error": f"{game['label']} is not a digit game (numbers > 9) — analysis not applicable."}), 200
+
+    result = analyzer_multi.full_report(draws, n)
+    result["state"] = state_code
+    result["state_name"] = STATES.get(state_code, {}).get("name", state_code)
+    result["slug"] = slug
+    result["label"] = game["label"]
+    result["game_type"] = game["type"]
+
+    auth_module.record_usage(auth_module.current_user().id)
+    return jsonify(result)
 
 # PREDIKTA BUSINESS AI — Routes
 # ═══════════════════════════════════════════════════════════
