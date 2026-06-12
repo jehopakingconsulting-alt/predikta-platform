@@ -280,37 +280,37 @@ textarea{resize:vertical;min-height:80px}
 <!-- Hero -->
 <div class="biz-hero">
   <div class="biz-tag">🚀 PREDIKTA BUSINESS AI</div>
-  <h1>Analyse Complète de Projet<br>par Analyse Prédictive</h1>
-  <p>Répondez à 4 étapes en 5 minutes. Nos algorithmes génèrent un rapport de 12 sections : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial, plan 30-60-90 jours et plus.</p>
+  <h1 data-i18n-html="heroTitle">Analyse Complète de Projet<br>par Analyse Prédictive</h1>
+  <p data-i18n="heroDesc">Répondez à 4 étapes en 5 minutes. Nos algorithmes génèrent un rapport de 12 sections : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial, plan 30-60-90 jours et plus.</p>
   <div class="biz-badges">
-    <span class="biz-badge bb1">🎯 12 Sections d'Analyse</span>
-    <span class="biz-badge bb2">🌍 44 Pays Couverts</span>
-    <span class="biz-badge bb3">📊 11 Canaux Marketing</span>
-    <span class="biz-badge bb4">📅 Plan 30-60-90 Jours</span>
+    <span class="biz-badge bb1" data-i18n="badge1">🎯 12 Sections d'Analyse</span>
+    <span class="biz-badge bb2" data-i18n="badge2">🌍 44 Pays Couverts</span>
+    <span class="biz-badge bb3" data-i18n="badge3">📊 11 Canaux Marketing</span>
+    <span class="biz-badge bb4" data-i18n="badge4">📅 Plan 30-60-90 Jours</span>
   </div>
 </div>
 
 <!-- Pricing strip -->
 <div class="pricing-strip">
   <div class="price-pill">
-    <div class="pp-name">Free</div>
+    <div class="pp-name" data-i18n="pFreeName">Free</div>
     <div class="pp-price">$0</div>
-    <div class="pp-features">1 analyse/mois · Rapport basique · 6 sections</div>
+    <div class="pp-features" data-i18n="pFreeFeat">1 analyse/mois · Rapport basique · 6 sections</div>
   </div>
   <div class="price-pill featured">
-    <div class="pp-name">⭐ Starter</div>
-    <div class="pp-price">$29<span>/mois</span></div>
-    <div class="pp-features">5 analyses · Rapport complet 12 sections · Export PDF</div>
+    <div class="pp-name" data-i18n="pStarterName">⭐ Starter</div>
+    <div class="pp-price">$29<span data-i18n="perMonth">/mois</span></div>
+    <div class="pp-features" data-i18n="pStarterFeat">5 analyses · Rapport complet 12 sections · Export PDF</div>
   </div>
   <div class="price-pill">
-    <div class="pp-name">Pro Business</div>
-    <div class="pp-price">$79<span>/mois</span></div>
-    <div class="pp-features">20 analyses · Multi-projets · API · Suivi mensuel</div>
+    <div class="pp-name" data-i18n="pProBizName">Pro Business</div>
+    <div class="pp-price">$79<span data-i18n="perMonth">/mois</span></div>
+    <div class="pp-features" data-i18n="pProBizFeat">20 analyses · Multi-projets · API · Suivi mensuel</div>
   </div>
   <div class="price-pill">
-    <div class="pp-name">Agency</div>
-    <div class="pp-price">$199<span>/mois</span></div>
-    <div class="pp-features">Illimité · White-label · Support dédié · Personnalisation</div>
+    <div class="pp-name" data-i18n="pAgencyName">Agency</div>
+    <div class="pp-price">$199<span data-i18n="perMonth">/mois</span></div>
+    <div class="pp-features" data-i18n="pAgencyFeat">Illimité · White-label · Support dédié · Personnalisation</div>
   </div>
 </div>
 
@@ -324,7 +324,7 @@ textarea{resize:vertical;min-height:80px}
     <div class="wizard-card" id="wizardSection">
       <div class="wizard-header">
         <div>
-          <div class="wizard-title">📋 Analysez votre projet</div>
+          <div class="wizard-title" data-i18n="wizardTitle">📋 Analysez votre projet</div>
           <div class="step-progress" id="stepProgress">
             <div class="step-dot active" id="sd0"></div>
             <div class="step-dot" id="sd1"></div>
@@ -340,56 +340,56 @@ textarea{resize:vertical;min-height:80px}
         <!-- STEP 1 -->
         <div class="step-panel active" id="step0">
           <div class="fg">
-            <label>Nom du projet ou de l'entreprise</label>
-            <input type="text" id="f_project_name" placeholder="Ex: FoodBox Haïti, AppSanté, ConseilPro..." maxlength="80"/>
+            <label data-i18n="projectNameLabel">Nom du projet ou de l'entreprise</label>
+            <input type="text" id="f_project_name" data-i18n-ph="projectNamePh" placeholder="Ex: FoodBox Haïti, AppSanté, ConseilPro..." maxlength="80"/>
           </div>
           <div class="fg">
-            <label>Décrivez votre projet en 2–3 phrases <span class="hint">(optionnel mais recommandé)</span></label>
-            <textarea id="f_description" placeholder="Que faites-vous ? Pour qui ? Quel problème résolvez-vous ?" maxlength="500" oninput="document.getElementById('descCount').textContent=this.value.length+'/500'"></textarea>
+            <label><span data-i18n="descLabel">Décrivez votre projet en 2–3 phrases</span> <span class="hint" data-i18n="descHint">(optionnel mais recommandé)</span></label>
+            <textarea id="f_description" data-i18n-ph="descPh" placeholder="Que faites-vous ? Pour qui ? Quel problème résolvez-vous ?" maxlength="500" oninput="document.getElementById('descCount').textContent=this.value.length+'/500'"></textarea>
             <div class="char-count" id="descCount">0/500</div>
           </div>
           <div class="fg">
-            <label>Secteur d'activité</label>
+            <label data-i18n="industryLabel">Secteur d'activité</label>
             <select id="f_industry">
-              <option value="">— Sélectionnez votre secteur —</option>
-              <option value="tech">Technologie / SaaS</option>
-              <option value="health">Santé / Bien-être</option>
-              <option value="education">Éducation / Formation</option>
-              <option value="food">Alimentation / Restauration</option>
-              <option value="retail">Commerce / Vente au détail</option>
-              <option value="finance">Finance / Fintech</option>
-              <option value="services">Services aux entreprises</option>
-              <option value="fashion">Mode / Vêtements</option>
-              <option value="real_estate">Immobilier</option>
-              <option value="travel">Voyage / Tourisme</option>
-              <option value="entertainment">Divertissement / Médias</option>
-              <option value="beauty">Beauté / Cosmétiques</option>
-              <option value="fitness">Sport / Fitness</option>
-              <option value="agriculture">Agriculture / Agritech</option>
-              <option value="construction">Construction / BTP</option>
-              <option value="logistics">Logistique / Transport</option>
-              <option value="consulting">Conseil / Consulting</option>
-              <option value="creative">Création / Design / Art</option>
-              <option value="social">Impact social / ONG</option>
-              <option value="other">Autre / Mixte</option>
+              <option value="" data-i18n="industryDefault">— Sélectionnez votre secteur —</option>
+              <option value="tech" data-i18n="ind_tech">Technologie / SaaS</option>
+              <option value="health" data-i18n="ind_health">Santé / Bien-être</option>
+              <option value="education" data-i18n="ind_education">Éducation / Formation</option>
+              <option value="food" data-i18n="ind_food">Alimentation / Restauration</option>
+              <option value="retail" data-i18n="ind_retail">Commerce / Vente au détail</option>
+              <option value="finance" data-i18n="ind_finance">Finance / Fintech</option>
+              <option value="services" data-i18n="ind_services">Services aux entreprises</option>
+              <option value="fashion" data-i18n="ind_fashion">Mode / Vêtements</option>
+              <option value="real_estate" data-i18n="ind_real_estate">Immobilier</option>
+              <option value="travel" data-i18n="ind_travel">Voyage / Tourisme</option>
+              <option value="entertainment" data-i18n="ind_entertainment">Divertissement / Médias</option>
+              <option value="beauty" data-i18n="ind_beauty">Beauté / Cosmétiques</option>
+              <option value="fitness" data-i18n="ind_fitness">Sport / Fitness</option>
+              <option value="agriculture" data-i18n="ind_agriculture">Agriculture / Agritech</option>
+              <option value="construction" data-i18n="ind_construction">Construction / BTP</option>
+              <option value="logistics" data-i18n="ind_logistics">Logistique / Transport</option>
+              <option value="consulting" data-i18n="ind_consulting">Conseil / Consulting</option>
+              <option value="creative" data-i18n="ind_creative">Création / Design / Art</option>
+              <option value="social" data-i18n="ind_social">Impact social / ONG</option>
+              <option value="other" data-i18n="ind_other">Autre / Mixte</option>
             </select>
           </div>
           <div class="form-row">
             <div class="fg">
-              <label>Stade du projet</label>
+              <label data-i18n="stageLabel">Stade du projet</label>
               <select id="f_stage">
-                <option value="idea">💡 Idée / Concept</option>
-                <option value="mvp">🛠 MVP en cours</option>
-                <option value="early">🚀 Lancé (early stage)</option>
-                <option value="growth">📈 En croissance</option>
+                <option value="idea" data-i18n="stage_idea">💡 Idée / Concept</option>
+                <option value="mvp" data-i18n="stage_mvp">🛠 MVP en cours</option>
+                <option value="early" data-i18n="stage_early">🚀 Lancé (early stage)</option>
+                <option value="growth" data-i18n="stage_growth">📈 En croissance</option>
               </select>
             </div>
             <div class="fg">
-              <label>Modèle commercial</label>
+              <label data-i18n="modelLabel">Modèle commercial</label>
               <select id="f_model">
-                <option value="B2C">B2C (Grand public)</option>
-                <option value="B2B">B2B (Entreprises)</option>
-                <option value="Both">Les deux</option>
+                <option value="B2C" data-i18n="model_b2c">B2C (Grand public)</option>
+                <option value="B2B" data-i18n="model_b2b">B2B (Entreprises)</option>
+                <option value="Both" data-i18n="model_both">Les deux</option>
               </select>
             </div>
           </div>
@@ -398,76 +398,76 @@ textarea{resize:vertical;min-height:80px}
         <!-- STEP 2 -->
         <div class="step-panel" id="step1">
           <div class="fg">
-            <label>Type de produit / service</label>
+            <label data-i18n="prodTypeLabel">Type de produit / service</label>
             <div class="chip-group" id="prodTypeGroup">
-              <button class="chip-opt" data-val="product" onclick="selectChip(this,'prodTypeGroup')">📦 Produit physique</button>
-              <button class="chip-opt" data-val="digital" onclick="selectChip(this,'prodTypeGroup')">💾 Produit digital</button>
-              <button class="chip-opt" data-val="saas" onclick="selectChip(this,'prodTypeGroup')">☁️ SaaS / Logiciel</button>
-              <button class="chip-opt" data-val="app" onclick="selectChip(this,'prodTypeGroup')">📱 Application mobile</button>
-              <button class="chip-opt" data-val="service" onclick="selectChip(this,'prodTypeGroup')">🤝 Service</button>
-              <button class="chip-opt" data-val="consulting" onclick="selectChip(this,'prodTypeGroup')">💼 Consulting</button>
+              <button class="chip-opt" data-val="product" data-i18n="pt_product" onclick="selectChip(this,'prodTypeGroup')">📦 Produit physique</button>
+              <button class="chip-opt" data-val="digital" data-i18n="pt_digital" onclick="selectChip(this,'prodTypeGroup')">💾 Produit digital</button>
+              <button class="chip-opt" data-val="saas" data-i18n="pt_saas" onclick="selectChip(this,'prodTypeGroup')">☁️ SaaS / Logiciel</button>
+              <button class="chip-opt" data-val="app" data-i18n="pt_app" onclick="selectChip(this,'prodTypeGroup')">📱 Application mobile</button>
+              <button class="chip-opt" data-val="service" data-i18n="pt_service" onclick="selectChip(this,'prodTypeGroup')">🤝 Service</button>
+              <button class="chip-opt" data-val="consulting" data-i18n="pt_consulting" onclick="selectChip(this,'prodTypeGroup')">💼 Consulting</button>
             </div>
           </div>
           <div class="fg">
-            <label>Tranche de prix du produit / service</label>
+            <label data-i18n="priceRangeLabel">Tranche de prix du produit / service</label>
             <div class="chip-group" id="priceGroup">
-              <button class="chip-opt" data-val="free" onclick="selectChip(this,'priceGroup')">🆓 Gratuit</button>
-              <button class="chip-opt" data-val="low" onclick="selectChip(this,'priceGroup')">💲 $1–$30</button>
-              <button class="chip-opt" data-val="medium" onclick="selectChip(this,'priceGroup')">💲💲 $30–$200</button>
-              <button class="chip-opt" data-val="high" onclick="selectChip(this,'priceGroup')">💲💲💲 $200–$1000</button>
-              <button class="chip-opt" data-val="premium" onclick="selectChip(this,'priceGroup')">👑 $1000+</button>
+              <button class="chip-opt" data-val="free" data-i18n="pr_free" onclick="selectChip(this,'priceGroup')">🆓 Gratuit</button>
+              <button class="chip-opt" data-val="low" data-i18n="pr_low" onclick="selectChip(this,'priceGroup')">💲 $1–$30</button>
+              <button class="chip-opt" data-val="medium" data-i18n="pr_medium" onclick="selectChip(this,'priceGroup')">💲💲 $30–$200</button>
+              <button class="chip-opt" data-val="high" data-i18n="pr_high" onclick="selectChip(this,'priceGroup')">💲💲💲 $200–$1000</button>
+              <button class="chip-opt" data-val="premium" data-i18n="pr_premium" onclick="selectChip(this,'priceGroup')">👑 $1000+</button>
             </div>
           </div>
           <div class="fg">
-            <label>Tranche d'âge de la cible <span class="hint">(plusieurs choix possibles)</span></label>
+            <label><span data-i18n="ageLabel">Tranche d'âge de la cible</span> <span class="hint" data-i18n="ageHint">(plusieurs choix possibles)</span></label>
             <div class="chip-group" id="ageGroup">
-              <button class="chip-opt" data-val="13-18" onclick="toggleChip(this,'ageGroup')">13–18 ans</button>
-              <button class="chip-opt" data-val="18-25" onclick="toggleChip(this,'ageGroup')">18–25 ans</button>
-              <button class="chip-opt" data-val="25-35" onclick="toggleChip(this,'ageGroup')">25–35 ans</button>
-              <button class="chip-opt" data-val="35-45" onclick="toggleChip(this,'ageGroup')">35–45 ans</button>
-              <button class="chip-opt" data-val="45-55" onclick="toggleChip(this,'ageGroup')">45–55 ans</button>
-              <button class="chip-opt" data-val="55+" onclick="toggleChip(this,'ageGroup')">55+ ans</button>
+              <button class="chip-opt" data-val="13-18" data-i18n="age_1318" onclick="toggleChip(this,'ageGroup')">13–18 ans</button>
+              <button class="chip-opt" data-val="18-25" data-i18n="age_1825" onclick="toggleChip(this,'ageGroup')">18–25 ans</button>
+              <button class="chip-opt" data-val="25-35" data-i18n="age_2535" onclick="toggleChip(this,'ageGroup')">25–35 ans</button>
+              <button class="chip-opt" data-val="35-45" data-i18n="age_3545" onclick="toggleChip(this,'ageGroup')">35–45 ans</button>
+              <button class="chip-opt" data-val="45-55" data-i18n="age_4555" onclick="toggleChip(this,'ageGroup')">45–55 ans</button>
+              <button class="chip-opt" data-val="55+" data-i18n="age_55plus" onclick="toggleChip(this,'ageGroup')">55+ ans</button>
             </div>
           </div>
           <div class="fg">
-            <label>Votre proposition de valeur unique (USP) <span class="hint">En 1–2 phrases</span></label>
-            <textarea id="f_usp" placeholder="Ex: Nous aidons les PME haïtiennes à automatiser leur gestion en 24h sans compétence technique..." maxlength="300"></textarea>
+            <label><span data-i18n="uspLabel">Votre proposition de valeur unique (USP)</span> <span class="hint" data-i18n="uspHint">En 1–2 phrases</span></label>
+            <textarea id="f_usp" data-i18n-ph="uspPh" placeholder="Ex: Nous aidons les PME haïtiennes à automatiser leur gestion en 24h sans compétence technique..." maxlength="300"></textarea>
           </div>
         </div>
 
         <!-- STEP 3 -->
         <div class="step-panel" id="step2">
           <div class="fg">
-            <label>Zone géographique cible</label>
+            <label data-i18n="geoScopeLabel">Zone géographique cible</label>
             <div class="chip-group" id="geoScopeGroup">
-              <button class="chip-opt" data-val="local" onclick="selectChip(this,'geoScopeGroup')">📍 Locale (ville / région)</button>
-              <button class="chip-opt" data-val="national" onclick="selectChip(this,'geoScopeGroup')">🏳 Nationale (1 pays)</button>
-              <button class="chip-opt" data-val="international" onclick="selectChip(this,'geoScopeGroup')">🌍 Internationale</button>
+              <button class="chip-opt" data-val="local" data-i18n="gs_local" onclick="selectChip(this,'geoScopeGroup')">📍 Locale (ville / région)</button>
+              <button class="chip-opt" data-val="national" data-i18n="gs_national" onclick="selectChip(this,'geoScopeGroup')">🏳 Nationale (1 pays)</button>
+              <button class="chip-opt" data-val="international" data-i18n="gs_international" onclick="selectChip(this,'geoScopeGroup')">🌍 Internationale</button>
             </div>
           </div>
           <div class="fg">
-            <label>Pays cibles <span class="hint">(plusieurs choix)</span></label>
+            <label><span data-i18n="countriesLabel">Pays cibles</span> <span class="hint" data-i18n="countriesHint">(plusieurs choix)</span></label>
             <div class="chip-group" id="countriesGroup">
-              <button class="chip-opt" data-val="USA" onclick="toggleChip(this,'countriesGroup')">🇺🇸 USA</button>
-              <button class="chip-opt" data-val="Canada" onclick="toggleChip(this,'countriesGroup')">🇨🇦 Canada</button>
-              <button class="chip-opt" data-val="France" onclick="toggleChip(this,'countriesGroup')">🇫🇷 France</button>
-              <button class="chip-opt" data-val="Brésil" onclick="toggleChip(this,'countriesGroup')">🇧🇷 Brésil</button>
-              <button class="chip-opt" data-val="Mexique" onclick="toggleChip(this,'countriesGroup')">🇲🇽 Mexique</button>
-              <button class="chip-opt" data-val="Haïti" onclick="toggleChip(this,'countriesGroup')">🇭🇹 Haïti</button>
-              <button class="chip-opt" data-val="Caraïbes" onclick="toggleChip(this,'countriesGroup')">🌊 Caraïbes</button>
-              <button class="chip-opt" data-val="UK" onclick="toggleChip(this,'countriesGroup')">🇬🇧 UK</button>
-              <button class="chip-opt" data-val="Inde" onclick="toggleChip(this,'countriesGroup')">🇮🇳 Inde</button>
-              <button class="chip-opt" data-val="Afrique du Sud" onclick="toggleChip(this,'countriesGroup')">🇿🇦 Afrique du Sud</button>
-              <button class="chip-opt" data-val="Sénégal" onclick="toggleChip(this,'countriesGroup')">🇸🇳 Sénégal</button>
-              <button class="chip-opt" data-val="Maroc" onclick="toggleChip(this,'countriesGroup')">🇲🇦 Maroc</button>
-              <button class="chip-opt" data-val="Côte d'Ivoire" onclick="toggleChip(this,'countriesGroup')">🇨🇮 Côte d'Ivoire</button>
-              <button class="chip-opt" data-val="Australie" onclick="toggleChip(this,'countriesGroup')">🇦🇺 Australie</button>
-              <button class="chip-opt" data-val="Allemagne" onclick="toggleChip(this,'countriesGroup')">🇩🇪 Allemagne</button>
-              <button class="chip-opt" data-val="Espagne" onclick="toggleChip(this,'countriesGroup')">🇪🇸 Espagne</button>
+              <button class="chip-opt" data-val="USA" data-i18n="country_usa" onclick="toggleChip(this,'countriesGroup')">🇺🇸 USA</button>
+              <button class="chip-opt" data-val="Canada" data-i18n="country_canada" onclick="toggleChip(this,'countriesGroup')">🇨🇦 Canada</button>
+              <button class="chip-opt" data-val="France" data-i18n="country_france" onclick="toggleChip(this,'countriesGroup')">🇫🇷 France</button>
+              <button class="chip-opt" data-val="Brésil" data-i18n="country_brazil" onclick="toggleChip(this,'countriesGroup')">🇧🇷 Brésil</button>
+              <button class="chip-opt" data-val="Mexique" data-i18n="country_mexico" onclick="toggleChip(this,'countriesGroup')">🇲🇽 Mexique</button>
+              <button class="chip-opt" data-val="Haïti" data-i18n="country_haiti" onclick="toggleChip(this,'countriesGroup')">🇭🇹 Haïti</button>
+              <button class="chip-opt" data-val="Caraïbes" data-i18n="country_caribbean" onclick="toggleChip(this,'countriesGroup')">🌊 Caraïbes</button>
+              <button class="chip-opt" data-val="UK" data-i18n="country_uk" onclick="toggleChip(this,'countriesGroup')">🇬🇧 UK</button>
+              <button class="chip-opt" data-val="Inde" data-i18n="country_india" onclick="toggleChip(this,'countriesGroup')">🇮🇳 Inde</button>
+              <button class="chip-opt" data-val="Afrique du Sud" data-i18n="country_southafrica" onclick="toggleChip(this,'countriesGroup')">🇿🇦 Afrique du Sud</button>
+              <button class="chip-opt" data-val="Sénégal" data-i18n="country_senegal" onclick="toggleChip(this,'countriesGroup')">🇸🇳 Sénégal</button>
+              <button class="chip-opt" data-val="Maroc" data-i18n="country_morocco" onclick="toggleChip(this,'countriesGroup')">🇲🇦 Maroc</button>
+              <button class="chip-opt" data-val="Côte d'Ivoire" data-i18n="country_ivorycoast" onclick="toggleChip(this,'countriesGroup')">🇨🇮 Côte d'Ivoire</button>
+              <button class="chip-opt" data-val="Australie" data-i18n="country_australia" onclick="toggleChip(this,'countriesGroup')">🇦🇺 Australie</button>
+              <button class="chip-opt" data-val="Allemagne" data-i18n="country_germany" onclick="toggleChip(this,'countriesGroup')">🇩🇪 Allemagne</button>
+              <button class="chip-opt" data-val="Espagne" data-i18n="country_spain" onclick="toggleChip(this,'countriesGroup')">🇪🇸 Espagne</button>
             </div>
           </div>
           <div class="fg">
-            <label>Langues de communication <span class="hint">(plusieurs choix)</span></label>
+            <label><span data-i18n="langLabel">Langues de communication</span> <span class="hint" data-i18n="countriesHint">(plusieurs choix)</span></label>
             <div class="chip-group" id="langGroup">
               <button class="chip-opt" data-val="fr" onclick="toggleChip(this,'langGroup')">🇫🇷 Français</button>
               <button class="chip-opt" data-val="en" onclick="toggleChip(this,'langGroup')">🇺🇸 English</button>
@@ -483,39 +483,39 @@ textarea{resize:vertical;min-height:80px}
         <div class="step-panel" id="step3">
           <div class="form-row">
             <div class="fg">
-              <label>Objectif principal du lancement</label>
+              <label data-i18n="goalLabel">Objectif principal du lancement</label>
               <select id="f_goal">
-                <option value="sales">💰 Ventes / Revenus</option>
-                <option value="leads">📋 Génération de leads</option>
-                <option value="awareness">📣 Notoriété de marque</option>
-                <option value="downloads">📲 Téléchargements / Inscriptions</option>
-                <option value="community">👥 Communauté / Membres</option>
+                <option value="sales" data-i18n="goal_sales">💰 Ventes / Revenus</option>
+                <option value="leads" data-i18n="goal_leads">📋 Génération de leads</option>
+                <option value="awareness" data-i18n="goal_awareness">📣 Notoriété de marque</option>
+                <option value="downloads" data-i18n="goal_downloads">📲 Téléchargements / Inscriptions</option>
+                <option value="community" data-i18n="goal_community">👥 Communauté / Membres</option>
               </select>
             </div>
             <div class="fg">
-              <label>Timeline de lancement</label>
+              <label data-i18n="timelineLabel">Timeline de lancement</label>
               <select id="f_timeline">
-                <option value="1-3">🔥 1–3 mois</option>
-                <option value="3-6">⚡ 3–6 mois</option>
-                <option value="6-12" selected>📅 6–12 mois</option>
-                <option value="12+">🏗 12+ mois</option>
+                <option value="1-3" data-i18n="tl_13">🔥 1–3 mois</option>
+                <option value="3-6" data-i18n="tl_36">⚡ 3–6 mois</option>
+                <option value="6-12" selected data-i18n="tl_612">📅 6–12 mois</option>
+                <option value="12+" data-i18n="tl_12plus">🏗 12+ mois</option>
               </select>
             </div>
           </div>
           <div class="fg">
-            <label>Budget mensuel marketing disponible</label>
+            <label data-i18n="budgetLabel">Budget mensuel marketing disponible</label>
             <div class="chip-group" id="budgetGroup">
-              <button class="chip-opt" data-val="low" onclick="selectChip(this,'budgetGroup')">💸 Moins de $1 000</button>
-              <button class="chip-opt" data-val="mid" onclick="selectChip(this,'budgetGroup')">💰 $1 000–$5 000</button>
-              <button class="chip-opt" data-val="high" onclick="selectChip(this,'budgetGroup')">💎 $5 000–$20 000</button>
-              <button class="chip-opt sel-gold" data-val="premium" onclick="selectChip(this,'budgetGroup')">👑 $20 000+</button>
+              <button class="chip-opt" data-val="low" data-i18n="budget_low" onclick="selectChip(this,'budgetGroup')">💸 Moins de $1 000</button>
+              <button class="chip-opt" data-val="mid" data-i18n="budget_mid" onclick="selectChip(this,'budgetGroup')">💰 $1 000–$5 000</button>
+              <button class="chip-opt" data-val="high" data-i18n="budget_high" onclick="selectChip(this,'budgetGroup')">💎 $5 000–$20 000</button>
+              <button class="chip-opt sel-gold" data-val="premium" data-i18n="budget_premium" onclick="selectChip(this,'budgetGroup')">👑 $20 000+</button>
             </div>
           </div>
           <div class="fg">
-            <label>Principaux concurrents connus <span class="hint">(optionnel — séparez par virgule)</span></label>
-            <input type="text" id="f_competitors" placeholder="Ex: Jumia, Amazon, MonConcurrent.com..."/>
+            <label><span data-i18n="competitorsLabel">Principaux concurrents connus</span> <span class="hint" data-i18n="competitorsHint">(optionnel — séparez par virgule)</span></label>
+            <input type="text" id="f_competitors" data-i18n-ph="competitorsPh" placeholder="Ex: Jumia, Amazon, MonConcurrent.com..."/>
           </div>
-          <div style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(79,110,255,.08));border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:14px;font-size:.78rem;color:var(--muted2);line-height:1.7;margin-top:4px">
+          <div data-i18n-html="infoBox" style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(79,110,255,.08));border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:14px;font-size:.78rem;color:var(--muted2);line-height:1.7;margin-top:4px">
             🤖 <strong style="color:var(--gold)">Votre rapport de 12 sections sera généré en quelques secondes</strong> incluant : Score de viabilité · Analyse de marché · Audience cible · Concurrence · Recommandations produit · Stratégie de lancement · 11 canaux marketing scorés · Ciblage géographique · Allocation budget · Plan 30-60-90 jours · Analyse de risques
           </div>
         </div>
@@ -531,16 +531,16 @@ textarea{resize:vertical;min-height:80px}
     <!-- LOADING -->
     <div class="analysis-loading" id="loadingSection">
       <div class="spinner"></div>
-      <div style="font-family:'Orbitron',monospace;font-size:.9rem;color:var(--accent);margin-bottom:8px">Analyse en cours...</div>
-      <div style="font-size:.78rem;color:var(--muted2)">Nos algorithmes analyse votre projet en profondeur</div>
+      <div style="font-family:'Orbitron',monospace;font-size:.9rem;color:var(--accent);margin-bottom:8px" data-i18n="loadingTitle">Analyse en cours...</div>
+      <div style="font-size:.78rem;color:var(--muted2)" data-i18n="loadingDesc">Nos algorithmes analyse votre projet en profondeur</div>
       <div class="analysis-steps">
-        <div class="as-step active" id="als0">🔍 Analyse du secteur et du marché...</div>
-        <div class="as-step" id="als1">👥 Identification de l'audience cible...</div>
-        <div class="as-step" id="als2">📊 Scoring des canaux marketing...</div>
-        <div class="as-step" id="als3">🌍 Ciblage géographique...</div>
-        <div class="as-step" id="als4">📅 Construction du plan 30-60-90 jours...</div>
-        <div class="as-step" id="als5">⚠️ Analyse des risques...</div>
-        <div class="as-step" id="als6">✅ Finalisation du rapport...</div>
+        <div class="as-step active" id="als0" data-i18n="als0">🔍 Analyse du secteur et du marché...</div>
+        <div class="as-step" id="als1" data-i18n="als1">👥 Identification de l'audience cible...</div>
+        <div class="as-step" id="als2" data-i18n="als2">📊 Scoring des canaux marketing...</div>
+        <div class="as-step" id="als3" data-i18n="als3">🌍 Ciblage géographique...</div>
+        <div class="as-step" id="als4" data-i18n="als4">📅 Construction du plan 30-60-90 jours...</div>
+        <div class="as-step" id="als5" data-i18n="als5">⚠️ Analyse des risques...</div>
+        <div class="as-step" id="als6" data-i18n="als6">✅ Finalisation du rapport...</div>
       </div>
     </div>
 
@@ -548,10 +548,10 @@ textarea{resize:vertical;min-height:80px}
     <div id="reportSection">
 
       <div class="export-row">
-        <button class="export-btn" onclick="window.print()">🖨️ Imprimer</button>
-        <button class="export-btn" onclick="exportPDF()">📄 Export PDF</button>
-        <button class="export-btn" onclick="shareReport()">📤 Partager</button>
-        <button class="export-btn" onclick="resetWizard()">🔄 Nouvelle analyse</button>
+        <button class="export-btn" onclick="window.print()" data-i18n="printBtn">🖨️ Imprimer</button>
+        <button class="export-btn" onclick="exportPDF()" data-i18n="pdfBtn">📄 Export PDF</button>
+        <button class="export-btn" onclick="shareReport()" data-i18n="shareBtn">📤 Partager</button>
+        <button class="export-btn" onclick="resetWizard()" data-i18n="newAnalysisBtn">🔄 Nouvelle analyse</button>
       </div>
 
       <!-- Report header -->
@@ -595,35 +595,35 @@ textarea{resize:vertical;min-height:80px}
   <div class="biz-side">
 
     <div class="side-cta">
-      <div class="side-cta-title">👑 Rapport PDF Complet</div>
-      <div class="side-cta-desc">Exportez votre analyse en PDF professionnel. Partagez-le avec vos partenaires, investisseurs ou votre équipe.</div>
-      <button class="side-cta-btn" onclick="exportPDF()">Exporter en PDF →</button>
+      <div class="side-cta-title" data-i18n="pdfCtaTitle">👑 Rapport PDF Complet</div>
+      <div class="side-cta-desc" data-i18n="pdfCtaDesc">Exportez votre analyse en PDF professionnel. Partagez-le avec vos partenaires, investisseurs ou votre équipe.</div>
+      <button class="side-cta-btn" onclick="exportPDF()" data-i18n="pdfCtaBtn">Exporter en PDF →</button>
     </div>
 
     <div class="side-cta" style="background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,100,0,.05));border-color:rgba(255,215,0,.2)">
-      <div class="side-cta-title" style="color:#ff9900">🤝 Consultation Stratégique</div>
-      <div class="side-cta-desc">30 minutes avec un expert PREDIKTA pour approfondir votre analyse et définir votre plan d'action personnalisé.</div>
-      <a href="/contact" class="side-cta-btn" style="background:linear-gradient(135deg,#ff9900,#ffd700);color:#000">Réserver une session →</a>
+      <div class="side-cta-title" style="color:#ff9900" data-i18n="consultTitle">🤝 Consultation Stratégique</div>
+      <div class="side-cta-desc" data-i18n="consultDesc">30 minutes avec un expert PREDIKTA pour approfondir votre analyse et définir votre plan d'action personnalisé.</div>
+      <a href="/contact" class="side-cta-btn" style="background:linear-gradient(135deg,#ff9900,#ffd700);color:#000" data-i18n="consultBtn">Réserver une session →</a>
     </div>
 
     <div class="side-cta" style="background:linear-gradient(135deg,rgba(34,232,122,.05),rgba(79,110,255,.05));border-color:rgba(34,232,122,.2)">
-      <div class="side-cta-title" style="color:var(--green)">📧 Alertes Sectorielles</div>
-      <div class="side-cta-desc">Recevez chaque semaine les tendances de votre secteur, nouvelles niches et opportunités de marché.</div>
+      <div class="side-cta-title" style="color:var(--green)" data-i18n="alertsTitle">📧 Alertes Sectorielles</div>
+      <div class="side-cta-desc" data-i18n="alertsDesc">Recevez chaque semaine les tendances de votre secteur, nouvelles niches et opportunités de marché.</div>
       <div style="display:flex;gap:6px;margin-top:10px">
-        <input style="flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.75rem;outline:none" type="email" id="bizEmail" placeholder="email@exemple.com"/>
-        <button onclick="subscribeBiz()" style="padding:8px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:linear-gradient(135deg,var(--green),#2266ff);color:#fff;border:none;cursor:pointer">OK</button>
+        <input style="flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.75rem;outline:none" type="email" id="bizEmail" data-i18n-ph="alertsPh" placeholder="email@exemple.com"/>
+        <button onclick="subscribeBiz()" style="padding:8px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:linear-gradient(135deg,var(--green),#2266ff);color:#fff;border:none;cursor:pointer" data-i18n="alertsOk">OK</button>
       </div>
     </div>
 
     <!-- Recently analyzed (placeholder) -->
     <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px">
-      <div style="font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">💡 Exemples d'analyses</div>
+      <div style="font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px" data-i18n="examplesTitle">💡 Exemples d'analyses</div>
       <div id="examplesList">
         <div style="font-size:.75rem;color:var(--muted2);line-height:2">
-          <div onclick="loadExample('food')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">🍔 Dark Kitchen Caraïbes → <span style="color:var(--accent)">Voir</span></div>
-          <div onclick="loadExample('tech')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">☁️ SaaS PME Haïti → <span style="color:var(--accent)">Voir</span></div>
-          <div onclick="loadExample('education')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)">📚 E-learning Francophone → <span style="color:var(--accent)">Voir</span></div>
-          <div onclick="loadExample('fashion')" style="cursor:pointer;padding:4px 0">👗 Mode Durable B2C → <span style="color:var(--accent)">Voir</span></div>
+          <div onclick="loadExample('food')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)"><span data-i18n="ex_food">🍔 Dark Kitchen Caraïbes</span> → <span style="color:var(--accent)" data-i18n="viewLink">Voir</span></div>
+          <div onclick="loadExample('tech')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)"><span data-i18n="ex_tech">☁️ SaaS PME Haïti</span> → <span style="color:var(--accent)" data-i18n="viewLink">Voir</span></div>
+          <div onclick="loadExample('education')" style="cursor:pointer;padding:4px 0;border-bottom:1px solid var(--border)"><span data-i18n="ex_education">📚 E-learning Francophone</span> → <span style="color:var(--accent)" data-i18n="viewLink">Voir</span></div>
+          <div onclick="loadExample('fashion')" style="cursor:pointer;padding:4px 0"><span data-i18n="ex_fashion">👗 Mode Durable B2C</span> → <span style="color:var(--accent)" data-i18n="viewLink">Voir</span></div>
         </div>
       </div>
     </div>
@@ -638,12 +638,327 @@ textarea{resize:vertical;min-height:80px}
 // ══════════════════════════════════════════════════
 let currentStep = 0;
 const TOTAL_STEPS = 4;
-const STEP_LABELS = [
-  'Étape 1 / 4 — Votre Projet',
-  'Étape 2 / 4 — Produit & Audience',
-  'Étape 3 / 4 — Géographie & Langues',
-  'Étape 4 / 4 — Budget & Objectifs',
-];
+
+// ══════════════════════════════════════════════════
+// I18N — 5 langues (fr/en/es/pt/ht)
+// ══════════════════════════════════════════════════
+const T = {
+fr:{
+  heroTitle:"Analyse Complète de Projet<br>par Analyse Prédictive",
+  heroDesc:"Répondez à 4 étapes en 5 minutes. Nos algorithmes génèrent un rapport de 12 sections : niche, audience, canaux marketing, stratégie de lancement, ciblage géographique mondial, plan 30-60-90 jours et plus.",
+  badge1:"🎯 12 Sections d'Analyse", badge2:"🌍 44 Pays Couverts", badge3:"📊 11 Canaux Marketing", badge4:"📅 Plan 30-60-90 Jours",
+  pFreeName:"Free", pFreeFeat:"1 analyse/mois · Rapport basique · 6 sections",
+  pStarterName:"⭐ Starter", pStarterFeat:"5 analyses · Rapport complet 12 sections · Export PDF",
+  pProBizName:"Pro Business", pProBizFeat:"20 analyses · Multi-projets · API · Suivi mensuel",
+  pAgencyName:"Agency", pAgencyFeat:"Illimité · White-label · Support dédié · Personnalisation",
+  perMonth:"/mois",
+  wizardTitle:"📋 Analysez votre projet",
+  stepLabels:['Étape 1 / 4 — Votre Projet','Étape 2 / 4 — Produit & Audience','Étape 3 / 4 — Géographie & Langues','Étape 4 / 4 — Budget & Objectifs'],
+  projectNameLabel:"Nom du projet ou de l'entreprise", projectNamePh:"Ex: FoodBox Haïti, AppSanté, ConseilPro...",
+  descLabel:"Décrivez votre projet en 2–3 phrases", descHint:"(optionnel mais recommandé)", descPh:"Que faites-vous ? Pour qui ? Quel problème résolvez-vous ?",
+  industryLabel:"Secteur d'activité", industryDefault:"— Sélectionnez votre secteur —",
+  ind_tech:"Technologie / SaaS", ind_health:"Santé / Bien-être", ind_education:"Éducation / Formation", ind_food:"Alimentation / Restauration",
+  ind_retail:"Commerce / Vente au détail", ind_finance:"Finance / Fintech", ind_services:"Services aux entreprises", ind_fashion:"Mode / Vêtements",
+  ind_real_estate:"Immobilier", ind_travel:"Voyage / Tourisme", ind_entertainment:"Divertissement / Médias", ind_beauty:"Beauté / Cosmétiques",
+  ind_fitness:"Sport / Fitness", ind_agriculture:"Agriculture / Agritech", ind_construction:"Construction / BTP", ind_logistics:"Logistique / Transport",
+  ind_consulting:"Conseil / Consulting", ind_creative:"Création / Design / Art", ind_social:"Impact social / ONG", ind_other:"Autre / Mixte",
+  stageLabel:"Stade du projet",
+  stage_idea:"💡 Idée / Concept", stage_mvp:"🛠 MVP en cours", stage_early:"🚀 Lancé (early stage)", stage_growth:"📈 En croissance",
+  modelLabel:"Modèle commercial",
+  model_b2c:"B2C (Grand public)", model_b2b:"B2B (Entreprises)", model_both:"Les deux",
+  prodTypeLabel:"Type de produit / service",
+  pt_product:"📦 Produit physique", pt_digital:"💾 Produit digital", pt_saas:"☁️ SaaS / Logiciel", pt_app:"📱 Application mobile", pt_service:"🤝 Service", pt_consulting:"💼 Consulting",
+  priceRangeLabel:"Tranche de prix du produit / service",
+  pr_free:"🆓 Gratuit", pr_low:"💲 $1–$30", pr_medium:"💲💲 $30–$200", pr_high:"💲💲💲 $200–$1000", pr_premium:"👑 $1000+",
+  ageLabel:"Tranche d'âge de la cible", ageHint:"(plusieurs choix possibles)",
+  age_1318:"13–18 ans", age_1825:"18–25 ans", age_2535:"25–35 ans", age_3545:"35–45 ans", age_4555:"45–55 ans", age_55plus:"55+ ans",
+  uspLabel:"Votre proposition de valeur unique (USP)", uspHint:"En 1–2 phrases",
+  uspPh:"Ex: Nous aidons les PME haïtiennes à automatiser leur gestion en 24h sans compétence technique...",
+  geoScopeLabel:"Zone géographique cible",
+  gs_local:"📍 Locale (ville / région)", gs_national:"🏳 Nationale (1 pays)", gs_international:"🌍 Internationale",
+  countriesLabel:"Pays cibles", countriesHint:"(plusieurs choix)",
+  country_usa:"🇺🇸 USA", country_canada:"🇨🇦 Canada", country_france:"🇫🇷 France", country_brazil:"🇧🇷 Brésil", country_mexico:"🇲🇽 Mexique",
+  country_haiti:"🇭🇹 Haïti", country_caribbean:"🌊 Caraïbes", country_uk:"🇬🇧 UK", country_india:"🇮🇳 Inde", country_southafrica:"🇿🇦 Afrique du Sud",
+  country_senegal:"🇸🇳 Sénégal", country_morocco:"🇲🇦 Maroc", country_ivorycoast:"🇨🇮 Côte d'Ivoire", country_australia:"🇦🇺 Australie", country_germany:"🇩🇪 Allemagne", country_spain:"🇪🇸 Espagne",
+  langLabel:"Langues de communication",
+  goalLabel:"Objectif principal du lancement",
+  goal_sales:"💰 Ventes / Revenus", goal_leads:"📋 Génération de leads", goal_awareness:"📣 Notoriété de marque", goal_downloads:"📲 Téléchargements / Inscriptions", goal_community:"👥 Communauté / Membres",
+  timelineLabel:"Timeline de lancement",
+  tl_13:"🔥 1–3 mois", tl_36:"⚡ 3–6 mois", tl_612:"📅 6–12 mois", tl_12plus:"🏗 12+ mois",
+  budgetLabel:"Budget mensuel marketing disponible",
+  budget_low:"💸 Moins de $1 000", budget_mid:"💰 $1 000–$5 000", budget_high:"💎 $5 000–$20 000", budget_premium:"👑 $20 000+",
+  competitorsLabel:"Principaux concurrents connus", competitorsHint:"(optionnel — séparez par virgule)", competitorsPh:"Ex: Jumia, Amazon, MonConcurrent.com...",
+  infoBox:"🤖 <strong style=\"color:var(--gold)\">Votre rapport de 12 sections sera généré en quelques secondes</strong> incluant : Score de viabilité · Analyse de marché · Audience cible · Concurrence · Recommandations produit · Stratégie de lancement · 11 canaux marketing scorés · Ciblage géographique · Allocation budget · Plan 30-60-90 jours · Analyse de risques",
+  prevBtn:"← Précédent", nextBtn:"Suivant →", launchBtn:"🚀 Lancer l'analyse →",
+  loadingTitle:"Analyse en cours...", loadingDesc:"Nos algorithmes analyse votre projet en profondeur",
+  als0:"🔍 Analyse du secteur et du marché...", als1:"👥 Identification de l'audience cible...", als2:"📊 Scoring des canaux marketing...",
+  als3:"🌍 Ciblage géographique...", als4:"📅 Construction du plan 30-60-90 jours...", als5:"⚠️ Analyse des risques...", als6:"✅ Finalisation du rapport...",
+  printBtn:"🖨️ Imprimer", pdfBtn:"📄 Export PDF", shareBtn:"📤 Partager", newAnalysisBtn:"🔄 Nouvelle analyse",
+  pdfCtaTitle:"👑 Rapport PDF Complet", pdfCtaDesc:"Exportez votre analyse en PDF professionnel. Partagez-le avec vos partenaires, investisseurs ou votre équipe.", pdfCtaBtn:"Exporter en PDF →",
+  consultTitle:"🤝 Consultation Stratégique", consultDesc:"30 minutes avec un expert PREDIKTA pour approfondir votre analyse et définir votre plan d'action personnalisé.", consultBtn:"Réserver une session →",
+  alertsTitle:"📧 Alertes Sectorielles", alertsDesc:"Recevez chaque semaine les tendances de votre secteur, nouvelles niches et opportunités de marché.", alertsPh:"email@exemple.com", alertsOk:"OK",
+  examplesTitle:"💡 Exemples d'analyses",
+  ex_food:"🍔 Dark Kitchen Caraïbes", ex_tech:"☁️ SaaS PME Haïti", ex_education:"📚 E-learning Francophone", ex_fashion:"👗 Mode Durable B2C", viewLink:"Voir",
+  alertProjectName:"Veuillez entrer le nom de votre projet.", alertIndustry:"Veuillez sélectionner votre secteur d'activité.",
+  shareText:"Découvrez mon analyse de projet sur PREDIKTA 🚀", linkCopied:"Lien copié !", subscribeThanks:"Merci !",
+},
+en:{
+  heroTitle:"Complete Project Analysis<br>by Predictive Analysis",
+  heroDesc:"Answer 4 steps in 5 minutes. Our algorithms generate a 12-section report: niche, audience, marketing channels, launch strategy, global geo-targeting, 30-60-90 day plan and more.",
+  badge1:"🎯 12 Analysis Sections", badge2:"🌍 44 Countries Covered", badge3:"📊 11 Marketing Channels", badge4:"📅 30-60-90 Day Plan",
+  pFreeName:"Free", pFreeFeat:"1 analysis/month · Basic report · 6 sections",
+  pStarterName:"⭐ Starter", pStarterFeat:"5 analyses · Full 12-section report · PDF export",
+  pProBizName:"Pro Business", pProBizFeat:"20 analyses · Multi-project · API · Monthly tracking",
+  pAgencyName:"Agency", pAgencyFeat:"Unlimited · White-label · Dedicated support · Customization",
+  perMonth:"/mo",
+  wizardTitle:"📋 Analyze your project",
+  stepLabels:['Step 1 / 4 — Your Project','Step 2 / 4 — Product & Audience','Step 3 / 4 — Geography & Languages','Step 4 / 4 — Budget & Goals'],
+  projectNameLabel:"Project or company name", projectNamePh:"E.g.: FoodBox Haiti, HealthApp, ConsultPro...",
+  descLabel:"Describe your project in 2–3 sentences", descHint:"(optional but recommended)", descPh:"What do you do? For whom? What problem do you solve?",
+  industryLabel:"Industry / Sector", industryDefault:"— Select your industry —",
+  ind_tech:"Technology / SaaS", ind_health:"Health / Wellness", ind_education:"Education / Training", ind_food:"Food / Restaurant",
+  ind_retail:"Retail / Commerce", ind_finance:"Finance / Fintech", ind_services:"Business Services", ind_fashion:"Fashion / Apparel",
+  ind_real_estate:"Real Estate", ind_travel:"Travel / Tourism", ind_entertainment:"Entertainment / Media", ind_beauty:"Beauty / Cosmetics",
+  ind_fitness:"Sports / Fitness", ind_agriculture:"Agriculture / Agritech", ind_construction:"Construction", ind_logistics:"Logistics / Transport",
+  ind_consulting:"Consulting", ind_creative:"Creative / Design / Art", ind_social:"Social Impact / NGO", ind_other:"Other / Mixed",
+  stageLabel:"Project stage",
+  stage_idea:"💡 Idea / Concept", stage_mvp:"🛠 MVP in progress", stage_early:"🚀 Launched (early stage)", stage_growth:"📈 Growing",
+  modelLabel:"Business model",
+  model_b2c:"B2C (Consumers)", model_b2b:"B2B (Businesses)", model_both:"Both",
+  prodTypeLabel:"Product / service type",
+  pt_product:"📦 Physical product", pt_digital:"💾 Digital product", pt_saas:"☁️ SaaS / Software", pt_app:"📱 Mobile app", pt_service:"🤝 Service", pt_consulting:"💼 Consulting",
+  priceRangeLabel:"Product / service price range",
+  pr_free:"🆓 Free", pr_low:"💲 $1–$30", pr_medium:"💲💲 $30–$200", pr_high:"💲💲💲 $200–$1000", pr_premium:"👑 $1000+",
+  ageLabel:"Target age range", ageHint:"(multiple choices possible)",
+  age_1318:"13–18 years", age_1825:"18–25 years", age_2535:"25–35 years", age_3545:"35–45 years", age_4555:"45–55 years", age_55plus:"55+ years",
+  uspLabel:"Your unique value proposition (USP)", uspHint:"In 1–2 sentences",
+  uspPh:"E.g.: We help Haitian SMEs automate their management in 24h with no technical skills required...",
+  geoScopeLabel:"Target geographic area",
+  gs_local:"📍 Local (city / region)", gs_national:"🏳 National (1 country)", gs_international:"🌍 International",
+  countriesLabel:"Target countries", countriesHint:"(multiple choices)",
+  country_usa:"🇺🇸 USA", country_canada:"🇨🇦 Canada", country_france:"🇫🇷 France", country_brazil:"🇧🇷 Brazil", country_mexico:"🇲🇽 Mexico",
+  country_haiti:"🇭🇹 Haiti", country_caribbean:"🌊 Caribbean", country_uk:"🇬🇧 UK", country_india:"🇮🇳 India", country_southafrica:"🇿🇦 South Africa",
+  country_senegal:"🇸🇳 Senegal", country_morocco:"🇲🇦 Morocco", country_ivorycoast:"🇨🇮 Ivory Coast", country_australia:"🇦🇺 Australia", country_germany:"🇩🇪 Germany", country_spain:"🇪🇸 Spain",
+  langLabel:"Communication languages",
+  goalLabel:"Main launch objective",
+  goal_sales:"💰 Sales / Revenue", goal_leads:"📋 Lead generation", goal_awareness:"📣 Brand awareness", goal_downloads:"📲 Downloads / Sign-ups", goal_community:"👥 Community / Members",
+  timelineLabel:"Launch timeline",
+  tl_13:"🔥 1–3 months", tl_36:"⚡ 3–6 months", tl_612:"📅 6–12 months", tl_12plus:"🏗 12+ months",
+  budgetLabel:"Available monthly marketing budget",
+  budget_low:"💸 Less than $1,000", budget_mid:"💰 $1,000–$5,000", budget_high:"💎 $5,000–$20,000", budget_premium:"👑 $20,000+",
+  competitorsLabel:"Main known competitors", competitorsHint:"(optional — comma-separated)", competitorsPh:"E.g.: Jumia, Amazon, MyCompetitor.com...",
+  infoBox:"🤖 <strong style=\"color:var(--gold)\">Your 12-section report will be generated in seconds</strong> including: Viability score · Market analysis · Target audience · Competition · Product recommendations · Launch strategy · 11 scored marketing channels · Geo-targeting · Budget allocation · 30-60-90 day plan · Risk analysis",
+  prevBtn:"← Previous", nextBtn:"Next →", launchBtn:"🚀 Run analysis →",
+  loadingTitle:"Analysis in progress...", loadingDesc:"Our algorithms are analyzing your project in depth",
+  als0:"🔍 Analyzing industry and market...", als1:"👥 Identifying target audience...", als2:"📊 Scoring marketing channels...",
+  als3:"🌍 Geographic targeting...", als4:"📅 Building the 30-60-90 day plan...", als5:"⚠️ Risk analysis...", als6:"✅ Finalizing report...",
+  printBtn:"🖨️ Print", pdfBtn:"📄 Export PDF", shareBtn:"📤 Share", newAnalysisBtn:"🔄 New analysis",
+  pdfCtaTitle:"👑 Complete PDF Report", pdfCtaDesc:"Export your analysis as a professional PDF. Share it with your partners, investors or team.", pdfCtaBtn:"Export to PDF →",
+  consultTitle:"🤝 Strategic Consultation", consultDesc:"30 minutes with a PREDIKTA expert to deepen your analysis and define your personalized action plan.", consultBtn:"Book a session →",
+  alertsTitle:"📧 Industry Alerts", alertsDesc:"Get weekly trends for your industry, new niches and market opportunities.", alertsPh:"email@example.com", alertsOk:"OK",
+  examplesTitle:"💡 Example analyses",
+  ex_food:"🍔 Caribbean Dark Kitchen", ex_tech:"☁️ SaaS for Haitian SMEs", ex_education:"📚 French-speaking E-learning", ex_fashion:"👗 Sustainable B2C Fashion", viewLink:"View",
+  alertProjectName:"Please enter your project name.", alertIndustry:"Please select your industry.",
+  shareText:"Check out my project analysis on PREDIKTA 🚀", linkCopied:"Link copied!", subscribeThanks:"Thanks!",
+},
+es:{
+  heroTitle:"Análisis Completo de Proyecto<br>por Análisis Predictivo",
+  heroDesc:"Responde 4 pasos en 5 minutos. Nuestros algoritmos generan un informe de 12 secciones: nicho, audiencia, canales de marketing, estrategia de lanzamiento, segmentación geográfica mundial, plan de 30-60-90 días y más.",
+  badge1:"🎯 12 Secciones de Análisis", badge2:"🌍 44 Países Cubiertos", badge3:"📊 11 Canales de Marketing", badge4:"📅 Plan de 30-60-90 Días",
+  pFreeName:"Free", pFreeFeat:"1 análisis/mes · Informe básico · 6 secciones",
+  pStarterName:"⭐ Starter", pStarterFeat:"5 análisis · Informe completo de 12 secciones · Exportación PDF",
+  pProBizName:"Pro Business", pProBizFeat:"20 análisis · Multiproyecto · API · Seguimiento mensual",
+  pAgencyName:"Agency", pAgencyFeat:"Ilimitado · White-label · Soporte dedicado · Personalización",
+  perMonth:"/mes",
+  wizardTitle:"📋 Analiza tu proyecto",
+  stepLabels:['Paso 1 / 4 — Tu Proyecto','Paso 2 / 4 — Producto y Audiencia','Paso 3 / 4 — Geografía e Idiomas','Paso 4 / 4 — Presupuesto y Objetivos'],
+  projectNameLabel:"Nombre del proyecto o de la empresa", projectNamePh:"Ej: FoodBox Haití, AppSalud, ConsultoríaPro...",
+  descLabel:"Describe tu proyecto en 2–3 frases", descHint:"(opcional pero recomendado)", descPh:"¿Qué hace? ¿Para quién? ¿Qué problema resuelve?",
+  industryLabel:"Sector de actividad", industryDefault:"— Selecciona tu sector —",
+  ind_tech:"Tecnología / SaaS", ind_health:"Salud / Bienestar", ind_education:"Educación / Formación", ind_food:"Alimentación / Restauración",
+  ind_retail:"Comercio / Venta al por menor", ind_finance:"Finanzas / Fintech", ind_services:"Servicios empresariales", ind_fashion:"Moda / Ropa",
+  ind_real_estate:"Bienes raíces", ind_travel:"Viajes / Turismo", ind_entertainment:"Entretenimiento / Medios", ind_beauty:"Belleza / Cosmética",
+  ind_fitness:"Deporte / Fitness", ind_agriculture:"Agricultura / Agritech", ind_construction:"Construcción", ind_logistics:"Logística / Transporte",
+  ind_consulting:"Consultoría", ind_creative:"Creatividad / Diseño / Arte", ind_social:"Impacto social / ONG", ind_other:"Otro / Mixto",
+  stageLabel:"Etapa del proyecto",
+  stage_idea:"💡 Idea / Concepto", stage_mvp:"🛠 MVP en curso", stage_early:"🚀 Lanzado (etapa inicial)", stage_growth:"📈 En crecimiento",
+  modelLabel:"Modelo de negocio",
+  model_b2c:"B2C (Consumidores)", model_b2b:"B2B (Empresas)", model_both:"Ambos",
+  prodTypeLabel:"Tipo de producto / servicio",
+  pt_product:"📦 Producto físico", pt_digital:"💾 Producto digital", pt_saas:"☁️ SaaS / Software", pt_app:"📱 Aplicación móvil", pt_service:"🤝 Servicio", pt_consulting:"💼 Consultoría",
+  priceRangeLabel:"Rango de precio del producto / servicio",
+  pr_free:"🆓 Gratis", pr_low:"💲 $1–$30", pr_medium:"💲💲 $30–$200", pr_high:"💲💲💲 $200–$1000", pr_premium:"👑 $1000+",
+  ageLabel:"Rango de edad del público objetivo", ageHint:"(se permiten varias opciones)",
+  age_1318:"13–18 años", age_1825:"18–25 años", age_2535:"25–35 años", age_3545:"35–45 años", age_4555:"45–55 años", age_55plus:"55+ años",
+  uspLabel:"Tu propuesta de valor única (USP)", uspHint:"En 1–2 frases",
+  uspPh:"Ej: Ayudamos a las pymes haitianas a automatizar su gestión en 24h sin conocimientos técnicos...",
+  geoScopeLabel:"Zona geográfica objetivo",
+  gs_local:"📍 Local (ciudad / región)", gs_national:"🏳 Nacional (1 país)", gs_international:"🌍 Internacional",
+  countriesLabel:"Países objetivo", countriesHint:"(varias opciones)",
+  country_usa:"🇺🇸 EE. UU.", country_canada:"🇨🇦 Canadá", country_france:"🇫🇷 Francia", country_brazil:"🇧🇷 Brasil", country_mexico:"🇲🇽 México",
+  country_haiti:"🇭🇹 Haití", country_caribbean:"🌊 Caribe", country_uk:"🇬🇧 Reino Unido", country_india:"🇮🇳 India", country_southafrica:"🇿🇦 Sudáfrica",
+  country_senegal:"🇸🇳 Senegal", country_morocco:"🇲🇦 Marruecos", country_ivorycoast:"🇨🇮 Costa de Marfil", country_australia:"🇦🇺 Australia", country_germany:"🇩🇪 Alemania", country_spain:"🇪🇸 España",
+  langLabel:"Idiomas de comunicación",
+  goalLabel:"Objetivo principal del lanzamiento",
+  goal_sales:"💰 Ventas / Ingresos", goal_leads:"📋 Generación de leads", goal_awareness:"📣 Notoriedad de marca", goal_downloads:"📲 Descargas / Registros", goal_community:"👥 Comunidad / Miembros",
+  timelineLabel:"Cronograma de lanzamiento",
+  tl_13:"🔥 1–3 meses", tl_36:"⚡ 3–6 meses", tl_612:"📅 6–12 meses", tl_12plus:"🏗 12+ meses",
+  budgetLabel:"Presupuesto mensual de marketing disponible",
+  budget_low:"💸 Menos de $1,000", budget_mid:"💰 $1,000–$5,000", budget_high:"💎 $5,000–$20,000", budget_premium:"👑 $20,000+",
+  competitorsLabel:"Principales competidores conocidos", competitorsHint:"(opcional — separados por comas)", competitorsPh:"Ej: Jumia, Amazon, MiCompetidor.com...",
+  infoBox:"🤖 <strong style=\"color:var(--gold)\">Tu informe de 12 secciones se generará en segundos</strong> e incluye: Puntuación de viabilidad · Análisis de mercado · Audiencia objetivo · Competencia · Recomendaciones de producto · Estrategia de lanzamiento · 11 canales de marketing puntuados · Segmentación geográfica · Asignación de presupuesto · Plan de 30-60-90 días · Análisis de riesgos",
+  prevBtn:"← Anterior", nextBtn:"Siguiente →", launchBtn:"🚀 Iniciar análisis →",
+  loadingTitle:"Análisis en curso...", loadingDesc:"Nuestros algoritmos están analizando tu proyecto en profundidad",
+  als0:"🔍 Analizando el sector y el mercado...", als1:"👥 Identificando la audiencia objetivo...", als2:"📊 Puntuando los canales de marketing...",
+  als3:"🌍 Segmentación geográfica...", als4:"📅 Construyendo el plan de 30-60-90 días...", als5:"⚠️ Análisis de riesgos...", als6:"✅ Finalizando el informe...",
+  printBtn:"🖨️ Imprimir", pdfBtn:"📄 Exportar PDF", shareBtn:"📤 Compartir", newAnalysisBtn:"🔄 Nuevo análisis",
+  pdfCtaTitle:"👑 Informe PDF Completo", pdfCtaDesc:"Exporta tu análisis como un PDF profesional. Compártelo con tus socios, inversores o equipo.", pdfCtaBtn:"Exportar a PDF →",
+  consultTitle:"🤝 Consultoría Estratégica", consultDesc:"30 minutos con un experto de PREDIKTA para profundizar tu análisis y definir tu plan de acción personalizado.", consultBtn:"Reservar una sesión →",
+  alertsTitle:"📧 Alertas Sectoriales", alertsDesc:"Recibe semanalmente las tendencias de tu sector, nuevos nichos y oportunidades de mercado.", alertsPh:"email@ejemplo.com", alertsOk:"OK",
+  examplesTitle:"💡 Ejemplos de análisis",
+  ex_food:"🍔 Dark Kitchen Caribe", ex_tech:"☁️ SaaS para pymes de Haití", ex_education:"📚 E-learning Francófono", ex_fashion:"👗 Moda Sostenible B2C", viewLink:"Ver",
+  alertProjectName:"Por favor, introduce el nombre de tu proyecto.", alertIndustry:"Por favor, selecciona tu sector de actividad.",
+  shareText:"Descubre mi análisis de proyecto en PREDIKTA 🚀", linkCopied:"¡Enlace copiado!", subscribeThanks:"¡Gracias!",
+},
+pt:{
+  heroTitle:"Análise Completa de Projeto<br>por Análise Preditiva",
+  heroDesc:"Responda 4 etapas em 5 minutos. Nossos algoritmos geram um relatório de 12 seções: nicho, público, canais de marketing, estratégia de lançamento, segmentação geográfica global, plano de 30-60-90 dias e mais.",
+  badge1:"🎯 12 Seções de Análise", badge2:"🌍 44 Países Cobertos", badge3:"📊 11 Canais de Marketing", badge4:"📅 Plano de 30-60-90 Dias",
+  pFreeName:"Free", pFreeFeat:"1 análise/mês · Relatório básico · 6 seções",
+  pStarterName:"⭐ Starter", pStarterFeat:"5 análises · Relatório completo de 12 seções · Exportação PDF",
+  pProBizName:"Pro Business", pProBizFeat:"20 análises · Multiprojetos · API · Acompanhamento mensal",
+  pAgencyName:"Agency", pAgencyFeat:"Ilimitado · White-label · Suporte dedicado · Personalização",
+  perMonth:"/mês",
+  wizardTitle:"📋 Analise seu projeto",
+  stepLabels:['Etapa 1 / 4 — Seu Projeto','Etapa 2 / 4 — Produto e Público','Etapa 3 / 4 — Geografia e Idiomas','Etapa 4 / 4 — Orçamento e Objetivos'],
+  projectNameLabel:"Nome do projeto ou da empresa", projectNamePh:"Ex: FoodBox Haiti, AppSaúde, ConsultoriaPro...",
+  descLabel:"Descreva seu projeto em 2–3 frases", descHint:"(opcional, mas recomendado)", descPh:"O que você faz? Para quem? Que problema você resolve?",
+  industryLabel:"Setor de atividade", industryDefault:"— Selecione seu setor —",
+  ind_tech:"Tecnologia / SaaS", ind_health:"Saúde / Bem-estar", ind_education:"Educação / Formação", ind_food:"Alimentação / Restaurante",
+  ind_retail:"Varejo / Comércio", ind_finance:"Finanças / Fintech", ind_services:"Serviços empresariais", ind_fashion:"Moda / Vestuário",
+  ind_real_estate:"Imóveis", ind_travel:"Viagem / Turismo", ind_entertainment:"Entretenimento / Mídia", ind_beauty:"Beleza / Cosméticos",
+  ind_fitness:"Esporte / Fitness", ind_agriculture:"Agricultura / Agritech", ind_construction:"Construção", ind_logistics:"Logística / Transporte",
+  ind_consulting:"Consultoria", ind_creative:"Criação / Design / Arte", ind_social:"Impacto social / ONG", ind_other:"Outro / Misto",
+  stageLabel:"Estágio do projeto",
+  stage_idea:"💡 Ideia / Conceito", stage_mvp:"🛠 MVP em andamento", stage_early:"🚀 Lançado (estágio inicial)", stage_growth:"📈 Em crescimento",
+  modelLabel:"Modelo de negócio",
+  model_b2c:"B2C (Consumidores)", model_b2b:"B2B (Empresas)", model_both:"Ambos",
+  prodTypeLabel:"Tipo de produto / serviço",
+  pt_product:"📦 Produto físico", pt_digital:"💾 Produto digital", pt_saas:"☁️ SaaS / Software", pt_app:"📱 Aplicativo móvel", pt_service:"🤝 Serviço", pt_consulting:"💼 Consultoria",
+  priceRangeLabel:"Faixa de preço do produto / serviço",
+  pr_free:"🆓 Gratuito", pr_low:"💲 $1–$30", pr_medium:"💲💲 $30–$200", pr_high:"💲💲💲 $200–$1000", pr_premium:"👑 $1000+",
+  ageLabel:"Faixa de idade do público-alvo", ageHint:"(várias opções possíveis)",
+  age_1318:"13–18 anos", age_1825:"18–25 anos", age_2535:"25–35 anos", age_3545:"35–45 anos", age_4555:"45–55 anos", age_55plus:"55+ anos",
+  uspLabel:"Sua proposta de valor única (USP)", uspHint:"Em 1–2 frases",
+  uspPh:"Ex: Ajudamos as PMEs haitianas a automatizar sua gestão em 24h sem necessidade de conhecimento técnico...",
+  geoScopeLabel:"Área geográfica de destino",
+  gs_local:"📍 Local (cidade / região)", gs_national:"🏳 Nacional (1 país)", gs_international:"🌍 Internacional",
+  countriesLabel:"Países-alvo", countriesHint:"(várias opções)",
+  country_usa:"🇺🇸 EUA", country_canada:"🇨🇦 Canadá", country_france:"🇫🇷 França", country_brazil:"🇧🇷 Brasil", country_mexico:"🇲🇽 México",
+  country_haiti:"🇭🇹 Haiti", country_caribbean:"🌊 Caribe", country_uk:"🇬🇧 Reino Unido", country_india:"🇮🇳 Índia", country_southafrica:"🇿🇦 África do Sul",
+  country_senegal:"🇸🇳 Senegal", country_morocco:"🇲🇦 Marrocos", country_ivorycoast:"🇨🇮 Costa do Marfim", country_australia:"🇦🇺 Austrália", country_germany:"🇩🇪 Alemanha", country_spain:"🇪🇸 Espanha",
+  langLabel:"Idiomas de comunicação",
+  goalLabel:"Objetivo principal do lançamento",
+  goal_sales:"💰 Vendas / Receita", goal_leads:"📋 Geração de leads", goal_awareness:"📣 Reconhecimento de marca", goal_downloads:"📲 Downloads / Inscrições", goal_community:"👥 Comunidade / Membros",
+  timelineLabel:"Cronograma de lançamento",
+  tl_13:"🔥 1–3 meses", tl_36:"⚡ 3–6 meses", tl_612:"📅 6–12 meses", tl_12plus:"🏗 12+ meses",
+  budgetLabel:"Orçamento mensal de marketing disponível",
+  budget_low:"💸 Menos de $1.000", budget_mid:"💰 $1.000–$5.000", budget_high:"💎 $5.000–$20.000", budget_premium:"👑 $20.000+",
+  competitorsLabel:"Principais concorrentes conhecidos", competitorsHint:"(opcional — separados por vírgula)", competitorsPh:"Ex: Jumia, Amazon, MeuConcorrente.com...",
+  infoBox:"🤖 <strong style=\"color:var(--gold)\">Seu relatório de 12 seções será gerado em segundos</strong> incluindo: Pontuação de viabilidade · Análise de mercado · Público-alvo · Concorrência · Recomendações de produto · Estratégia de lançamento · 11 canais de marketing avaliados · Segmentação geográfica · Alocação de orçamento · Plano de 30-60-90 dias · Análise de riscos",
+  prevBtn:"← Anterior", nextBtn:"Próximo →", launchBtn:"🚀 Iniciar análise →",
+  loadingTitle:"Análise em andamento...", loadingDesc:"Nossos algoritmos estão analisando seu projeto em profundidade",
+  als0:"🔍 Analisando o setor e o mercado...", als1:"👥 Identificando o público-alvo...", als2:"📊 Avaliando os canais de marketing...",
+  als3:"🌍 Segmentação geográfica...", als4:"📅 Construindo o plano de 30-60-90 dias...", als5:"⚠️ Análise de riscos...", als6:"✅ Finalizando o relatório...",
+  printBtn:"🖨️ Imprimir", pdfBtn:"📄 Exportar PDF", shareBtn:"📤 Compartilhar", newAnalysisBtn:"🔄 Nova análise",
+  pdfCtaTitle:"👑 Relatório PDF Completo", pdfCtaDesc:"Exporte sua análise em PDF profissional. Compartilhe com seus parceiros, investidores ou equipe.", pdfCtaBtn:"Exportar para PDF →",
+  consultTitle:"🤝 Consultoria Estratégica", consultDesc:"30 minutos com um especialista da PREDIKTA para aprofundar sua análise e definir seu plano de ação personalizado.", consultBtn:"Reservar uma sessão →",
+  alertsTitle:"📧 Alertas Setoriais", alertsDesc:"Receba semanalmente as tendências do seu setor, novos nichos e oportunidades de mercado.", alertsPh:"email@exemplo.com", alertsOk:"OK",
+  examplesTitle:"💡 Exemplos de análises",
+  ex_food:"🍔 Dark Kitchen Caribe", ex_tech:"☁️ SaaS para PMEs do Haiti", ex_education:"📚 E-learning Francófono", ex_fashion:"👗 Moda Sustentável B2C", viewLink:"Ver",
+  alertProjectName:"Por favor, insira o nome do seu projeto.", alertIndustry:"Por favor, selecione o seu setor de atividade.",
+  shareText:"Confira minha análise de projeto na PREDIKTA 🚀", linkCopied:"Link copiado!", subscribeThanks:"Obrigado!",
+},
+ht:{
+  heroTitle:"Analiz Konplè Pwojè<br>pa Analiz Predikitf",
+  heroDesc:"Reponn 4 etap nan 5 minit. Algoritm nou yo kreye yon rapò 12 seksyon: nich, odyans, kanal maketing, estrateji lansman, sib jewografik mondyal, plan 30-60-90 jou ak plis ankò.",
+  badge1:"🎯 12 Seksyon Analiz", badge2:"🌍 44 Peyi Kouvri", badge3:"📊 11 Kanal Maketing", badge4:"📅 Plan 30-60-90 Jou",
+  pFreeName:"Free", pFreeFeat:"1 analiz/mwa · Rapò debaz · 6 seksyon",
+  pStarterName:"⭐ Starter", pStarterFeat:"5 analiz · Rapò konplè 12 seksyon · Ekspòte PDF",
+  pProBizName:"Pro Business", pProBizFeat:"20 analiz · Plizyè pwojè · API · Swivi chak mwa",
+  pAgencyName:"Agency", pAgencyFeat:"San limit · White-label · Sipò dedye · Pèsonalizasyon",
+  perMonth:"/mwa",
+  wizardTitle:"📋 Analize pwojè ou",
+  stepLabels:['Etap 1 / 4 — Pwojè ou','Etap 2 / 4 — Pwodwi & Odyans','Etap 3 / 4 — Jeyografi & Lang','Etap 4 / 4 — Bidjè & Objektif'],
+  projectNameLabel:"Non pwojè a oswa antrepriz la", projectNamePh:"Egz: FoodBox Ayiti, AppSante, KonsiltasyonPro...",
+  descLabel:"Dekri pwojè ou nan 2–3 fraz", descHint:"(opsyonèl men rekòmande)", descPh:"Kisa w ap fè? Pou ki moun? Ki pwoblèm w ap rezoud?",
+  industryLabel:"Sektè aktivite", industryDefault:"— Chwazi sektè ou —",
+  ind_tech:"Teknoloji / SaaS", ind_health:"Sante / Byennèt", ind_education:"Edikasyon / Fòmasyon", ind_food:"Manje / Restoran",
+  ind_retail:"Komès / Detay", ind_finance:"Finans / Fintech", ind_services:"Sèvis pou antrepriz", ind_fashion:"Mòd / Rad",
+  ind_real_estate:"Imobilye", ind_travel:"Vwayaj / Touris", ind_entertainment:"Divètisman / Medya", ind_beauty:"Bote / Kosmetik",
+  ind_fitness:"Espò / Fitness", ind_agriculture:"Agrikilti / Agriteknoloji", ind_construction:"Konstriksyon", ind_logistics:"Lojistik / Transpò",
+  ind_consulting:"Konsiltasyon", ind_creative:"Kreyasyon / Desen / Atizay", ind_social:"Enpak sosyal / ONG", ind_other:"Lòt / Miks",
+  stageLabel:"Etap pwojè a",
+  stage_idea:"💡 Lide / Konsèp", stage_mvp:"🛠 MVP ap fèt", stage_early:"🚀 Lanse (premye etap)", stage_growth:"📈 K ap grandi",
+  modelLabel:"Modèl biznis",
+  model_b2c:"B2C (Konsomatè)", model_b2b:"B2B (Antrepriz)", model_both:"Tou de",
+  prodTypeLabel:"Kalite pwodwi / sèvis",
+  pt_product:"📦 Pwodwi fizik", pt_digital:"💾 Pwodwi dijital", pt_saas:"☁️ SaaS / Lojisyèl", pt_app:"📱 Aplikasyon mobil", pt_service:"🤝 Sèvis", pt_consulting:"💼 Konsiltasyon",
+  priceRangeLabel:"Ranje pri pwodwi / sèvis",
+  pr_free:"🆓 Gratis", pr_low:"💲 $1–$30", pr_medium:"💲💲 $30–$200", pr_high:"💲💲💲 $200–$1000", pr_premium:"👑 $1000+",
+  ageLabel:"Ranje laj sib la", ageHint:"(plizyè chwa posib)",
+  age_1318:"13–18 an", age_1825:"18–25 an", age_2535:"25–35 an", age_3545:"35–45 an", age_4555:"45–55 an", age_55plus:"55+ an",
+  uspLabel:"Pwopozisyon valè inik ou (USP)", uspHint:"An 1–2 fraz",
+  uspPh:"Egz: Nou ede ti antrepriz ayisyen yo otomatize jesyon yo nan 24è san konpetans teknik...",
+  geoScopeLabel:"Zòn jewografik sib",
+  gs_local:"📍 Lokal (vil / rejyon)", gs_national:"🏳 Nasyonal (1 peyi)", gs_international:"🌍 Entènasyonal",
+  countriesLabel:"Peyi sib", countriesHint:"(plizyè chwa)",
+  country_usa:"🇺🇸 Etazini", country_canada:"🇨🇦 Kanada", country_france:"🇫🇷 Frans", country_brazil:"🇧🇷 Brezil", country_mexico:"🇲🇽 Meksik",
+  country_haiti:"🇭🇹 Ayiti", country_caribbean:"🌊 Karayib", country_uk:"🇬🇧 Wayòm Ini", country_india:"🇮🇳 End", country_southafrica:"🇿🇦 Lafrik di Sid",
+  country_senegal:"🇸🇳 Senegal", country_morocco:"🇲🇦 Maròk", country_ivorycoast:"🇨🇮 Kòtdivwa", country_australia:"🇦🇺 Ostrali", country_germany:"🇩🇪 Almay", country_spain:"🇪🇸 Espay",
+  langLabel:"Lang kominikasyon",
+  goalLabel:"Objektif prensipal lansman",
+  goal_sales:"💰 Vant / Revni", goal_leads:"📋 Jenerasyon kontak", goal_awareness:"📣 Konesans mak", goal_downloads:"📲 Telechajman / Enskripsyon", goal_community:"👥 Kominote / Manm",
+  timelineLabel:"Orè lansman",
+  tl_13:"🔥 1–3 mwa", tl_36:"⚡ 3–6 mwa", tl_612:"📅 6–12 mwa", tl_12plus:"🏗 12+ mwa",
+  budgetLabel:"Bidjè maketing chak mwa ki disponib",
+  budget_low:"💸 Mwens pase $1 000", budget_mid:"💰 $1 000–$5 000", budget_high:"💎 $5 000–$20 000", budget_premium:"👑 $20 000+",
+  competitorsLabel:"Konkiran prensipal ou konnen", competitorsHint:"(opsyonèl — separe ak vigil)", competitorsPh:"Egz: Jumia, Amazon, KonkiranMwen.com...",
+  infoBox:"🤖 <strong style=\"color:var(--gold)\">Rapò 12 seksyon ou a ap kreye nan kèk segond</strong> ki gen ladan: Eskò vyabilite · Analiz mache · Odyans sib · Konkirans · Rekòmandasyon pwodwi · Estrateji lansman · 11 kanal maketing evalye · Sib jewografik · Distribisyon bidjè · Plan 30-60-90 jou · Analiz risk",
+  prevBtn:"← Anvan", nextBtn:"Apre →", launchBtn:"🚀 Lanse analiz →",
+  loadingTitle:"Analiz ap fèt...", loadingDesc:"Algoritm nou yo ap analize pwojè ou an fon",
+  als0:"🔍 K ap analize sektè ak mache a...", als1:"👥 K ap idantifye odyans sib la...", als2:"📊 K ap evalye kanal maketing yo...",
+  als3:"🌍 Sib jewografik...", als4:"📅 K ap konstwi plan 30-60-90 jou a...", als5:"⚠️ Analiz risk...", als6:"✅ K ap finalize rapò a...",
+  printBtn:"🖨️ Enprime", pdfBtn:"📄 Ekspòte PDF", shareBtn:"📤 Pataje", newAnalysisBtn:"🔄 Nouvo analiz",
+  pdfCtaTitle:"👑 Rapò PDF Konplè", pdfCtaDesc:"Ekspòte analiz ou an PDF pwofesyonèl. Pataje li ak patnè, envestisè oswa ekip ou.", pdfCtaBtn:"Ekspòte an PDF →",
+  consultTitle:"🤝 Konsiltasyon Estratejik", consultDesc:"30 minit ak yon ekspè PREDIKTA pou pwofondi analiz ou epi defini plan aksyon pèsonalize ou.", consultBtn:"Rezève yon sesyon →",
+  alertsTitle:"📧 Alèt Sektoryèl", alertsDesc:"Resevwa chak semèn tandans sektè ou, nouvo nich ak opòtinite mache.", alertsPh:"email@egzanp.com", alertsOk:"OK",
+  examplesTitle:"💡 Egzanp analiz",
+  ex_food:"🍔 Dark Kitchen Karayib", ex_tech:"☁️ SaaS pou Ti Antrepriz Ayiti", ex_education:"📚 E-learning Lang Fransè", ex_fashion:"👗 Mòd Dirab B2C", viewLink:"Wè",
+  alertProjectName:"Tanpri antre non pwojè ou.", alertIndustry:"Tanpri chwazi sektè aktivite ou.",
+  shareText:"Dekouvri analiz pwojè mwen sou PREDIKTA 🚀", linkCopied:"Lyen kopye!", subscribeThanks:"Mèsi!",
+},
+};
+
+function bizT(){ return T[window.PREDIKTA_LANG] || T.fr; }
+
+function applyBizLang(lang){
+  const t = T[lang] || T.fr;
+  document.documentElement.setAttribute('lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(t[k]===undefined) return;
+    if(el.hasAttribute('data-i18n-html')) el.innerHTML = t[k];
+    else el.textContent = t[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const k = el.getAttribute('data-i18n-ph');
+    if(t[k]!==undefined) el.setAttribute('placeholder', t[k]);
+  });
+  document.getElementById('btnPrev').textContent = t.prevBtn;
+  if(typeof updateWizard === 'function') updateWizard();
+}
+window.setLang = applyBizLang;
 
 function selectChip(el, groupId){
   document.querySelectorAll(`#${groupId} .chip-opt`).forEach(b=>{
@@ -664,8 +979,9 @@ function getSingle(groupId){
 }
 
 function updateWizard(){
+  const t = bizT();
   document.querySelectorAll('.step-panel').forEach((p,i)=>p.classList.toggle('active', i===currentStep));
-  document.getElementById('stepLabel').textContent = STEP_LABELS[currentStep];
+  document.getElementById('stepLabel').textContent = t.stepLabels[currentStep];
   for(let i=0;i<TOTAL_STEPS;i++){
     const d = document.getElementById('sd'+i);
     if(d){ d.className = 'step-dot' + (i<currentStep?' done':i===currentStep?' active':''); }
@@ -673,11 +989,11 @@ function updateWizard(){
   document.getElementById('btnPrev').style.visibility = currentStep===0?'hidden':'visible';
   const nextBtn = document.getElementById('btnNext');
   if(currentStep === TOTAL_STEPS-1){
-    nextBtn.textContent = '🚀 Lancer l\'analyse →';
+    nextBtn.textContent = t.launchBtn;
     nextBtn.className = 'btn-analyze';
     nextBtn.onclick = runAnalysis;
   } else {
-    nextBtn.textContent = 'Suivant →';
+    nextBtn.textContent = t.nextBtn;
     nextBtn.className = 'btn-next';
     nextBtn.onclick = nextStep;
   }
@@ -687,8 +1003,8 @@ function nextStep(){
   if(currentStep === 0){
     const name = document.getElementById('f_project_name').value.trim();
     const ind  = document.getElementById('f_industry').value;
-    if(!name){ alert('Veuillez entrer le nom de votre projet.'); return; }
-    if(!ind)  { alert('Veuillez sélectionner votre secteur d\'activité.'); return; }
+    if(!name){ alert(bizT().alertProjectName); return; }
+    if(!ind)  { alert(bizT().alertIndustry); return; }
   }
   if(currentStep < TOTAL_STEPS-1){ currentStep++; updateWizard(); window.scrollTo({top:0,behavior:'smooth'}); }
 }
@@ -1149,7 +1465,7 @@ async function loadExample(type){
       renderReport(json.report);
       window.scrollTo({top:0,behavior:'smooth'});
     },1000);
-  }catch(e){ alert('Erreur: '+e.message); resetWizard(); }
+  }catch(e){ alert('Error: '+e.message); resetWizard(); }
 }
 
 // ══════════════════════════════════════════════════
@@ -1157,21 +1473,23 @@ async function loadExample(type){
 // ══════════════════════════════════════════════════
 function exportPDF(){ window.print(); }
 function shareReport(){
-  const text = 'Découvrez mon analyse de projet sur PREDIKTA 🚀';
+  const text = bizT().shareText;
   if(navigator.share) navigator.share({title:'PREDIKTA Business Intelligence',text,url:window.location.href});
-  else navigator.clipboard?.writeText(window.location.href).then(()=>alert('Lien copié !'));
+  else navigator.clipboard?.writeText(window.location.href).then(()=>alert(bizT().linkCopied));
 }
 
 async function subscribeBiz(){
   const email = document.getElementById('bizEmail').value;
   if(!email) return;
   const ref = window.PREDIKTA_REF || '';
-  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang=fr'+(ref?'&ref='+encodeURIComponent(ref):''));
+  const lang = window.PREDIKTA_LANG || 'fr';
+  const r = await fetch('/api/subscribe?email='+encodeURIComponent(email)+'&lang='+encodeURIComponent(lang)+(ref?'&ref='+encodeURIComponent(ref):''));
   const d = await r.json();
-  alert(d.message || 'Merci !');
+  alert(d.message || bizT().subscribeThanks);
 }
 
 // Init
+applyBizLang(window.PREDIKTA_LANG || 'fr');
 updateWizard();
 </script>
 </body></html>
