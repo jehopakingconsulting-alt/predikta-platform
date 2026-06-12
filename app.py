@@ -446,6 +446,23 @@ def _find_subscriber(email: str):
 @app.route("/")
 def index():       return send_from_directory("static", "home.html")
 
+@app.route("/predictions")
+def predictions_index():
+    import seo_pages
+    lang = request.args.get("lang", "fr")
+    return seo_pages.render_predictions_index(request.url_root.rstrip("/"), lang)
+
+@app.route("/predictions/<state_code>")
+def predictions_state(state_code):
+    import seo_pages
+    from scraper import STATES as _STATES
+    if state_code.upper() not in _STATES:
+        if os.path.exists("static/404.html"):
+            return send_from_directory("static", "404.html"), 404
+        return "Not found", 404
+    lang = request.args.get("lang", "fr")
+    return seo_pages.render_prediction_page(state_code, request.url_root.rstrip("/"), lang)
+
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")
 

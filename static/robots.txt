@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Allow: /results
+Allow: /predictions
 Allow: /pro
 Allow: /about
 Allow: /faq
@@ -12,4 +13,4 @@ Disallow: /api/
 Disallow: /data/
 Disallow: /sw.js
 
-Sitemap: http://localhost:5000/sitemap.xml
+Sitemap: https://predikta-tez2.onrender.com/sitemap.xml
