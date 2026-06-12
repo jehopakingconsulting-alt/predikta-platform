@@ -204,10 +204,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
 <!-- Hero -->
 <div class="page-hero">
   <div>
-    <div class="page-hero-title">🎰 Résultats Complets du Jour</div>
-    <div class="page-hero-sub">Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Tous jeux · Tous États</div>
+    <div class="page-hero-title" data-i18n="heroTitle">🎰 Résultats Complets du Jour</div>
+    <div class="page-hero-sub" data-i18n="heroSub">Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Tous jeux · Tous États</div>
   </div>
-  <div class="live-badge"><div class="live-dot"></div>LIVE — Mis à jour quotidiennement</div>
+  <div class="live-badge"><div class="live-dot"></div><span data-i18n="liveBadge">LIVE — Mis à jour quotidiennement</span></div>
 </div>
 
 <!-- Controls -->
@@ -255,24 +255,24 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
     <button class="state-tab" data-state="ID" onclick="selectState('ID',this)">🥔 Idaho</button>
     <button class="state-tab" data-state="PR" onclick="selectState('PR',this)">🌺 Puerto Rico</button>
   </div>
-  <button class="scrape-btn" onclick="loadData(true)" id="scrapeBtn">🔄 Charger données</button>
+  <button class="scrape-btn" onclick="loadData(true)" id="scrapeBtn" data-i18n="scrapeBtn">🔄 Charger données</button>
   <span id="ctrl-status"></span>
 </div>
 
 <!-- Date nav -->
 <div class="date-nav">
-  <button class="date-nav-btn" onclick="navDate(-1)">← Veille</button>
-  <button class="date-nav-btn today-btn" onclick="goToday()">🟢 Aujourd'hui</button>
+  <button class="date-nav-btn" onclick="navDate(-1)" data-i18n="navPrev">← Veille</button>
+  <button class="date-nav-btn today-btn" onclick="goToday()" data-i18n="navToday">🟢 Aujourd'hui</button>
   <div id="currentDateLabel">—</div>
-  <button class="date-nav-btn" onclick="navDate(+1)" id="nextDayBtn">Lendemain →</button>
-  <a href="/results" style="margin-left:auto;font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600">← Vue Grille Tous États</a>
+  <button class="date-nav-btn" onclick="navDate(+1)" id="nextDayBtn" data-i18n="navNext">Lendemain →</button>
+  <a href="/results" style="margin-left:auto;font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600" data-i18n="gridViewLink">← Vue Grille Tous États</a>
 </div>
 
 <!-- Main -->
 <div class="main-wrap">
 
   <div id="mainContent">
-    <div class="loading-block"><div class="spinner"></div><div>Chargement des résultats...</div></div>
+    <div class="loading-block"><div class="spinner"></div><div data-i18n="loadingResults">Chargement des résultats...</div></div>
   </div>
 
   <!-- Sidebar -->
@@ -280,52 +280,52 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
 
     <!-- Jackpots nationaux -->
     <div class="side-card">
-      <div class="side-title">🏆 Jackpots Nationaux</div>
+      <div class="side-title" data-i18n="jackpotsTitle">🏆 Jackpots Nationaux</div>
       <div class="jackpot-row">
         <div class="jackpot-icon">🔴</div>
         <div>
-          <div class="jackpot-name">Powerball</div>
-          <div class="jackpot-amount" id="pbJackpot">Chargement...</div>
-          <div class="jackpot-next">Prochain tirage: Lun/Mer/Sam</div>
+          <div class="jackpot-name" data-i18n="powerballName">Powerball</div>
+          <div class="jackpot-amount" id="pbJackpot" data-i18n="loadingShort">Chargement...</div>
+          <div class="jackpot-next" data-i18n="pbNext">Prochain tirage: Lun/Mer/Sam</div>
         </div>
       </div>
       <div class="jackpot-row">
         <div class="jackpot-icon">🔵</div>
         <div>
-          <div class="jackpot-name">Mega Millions</div>
-          <div class="jackpot-amount" id="mmJackpot">Chargement...</div>
-          <div class="jackpot-next">Prochain tirage: Mar/Ven</div>
+          <div class="jackpot-name" data-i18n="megaMillionsName">Mega Millions</div>
+          <div class="jackpot-amount" id="mmJackpot" data-i18n="loadingShort">Chargement...</div>
+          <div class="jackpot-next" data-i18n="mmNext">Prochain tirage: Mar/Ven</div>
         </div>
       </div>
       <div class="jackpot-row">
         <div class="jackpot-icon">💚</div>
         <div>
-          <div class="jackpot-name">Cash4Life</div>
-          <div class="jackpot-amount">$1,000/jour à vie</div>
-          <div class="jackpot-next">Tirage quotidien</div>
+          <div class="jackpot-name" data-i18n="cash4lifeName">Cash4Life</div>
+          <div class="jackpot-amount" data-i18n="cash4lifeAmount">$1,000/jour à vie</div>
+          <div class="jackpot-next" data-i18n="cash4lifeNext">Tirage quotidien</div>
         </div>
       </div>
     </div>
 
     <!-- Légende boules -->
     <div class="side-card">
-      <div class="side-title">📖 Légende</div>
+      <div class="side-title" data-i18n="legendTitle">📖 Légende</div>
       <div style="font-size:.72rem;color:var(--muted2);line-height:1.9">
-        <div><strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 chiffres (0–9)</div>
-        <div><strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 chiffres</div>
-        <div><strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 numéros</div>
-        <div><strong style="color:var(--text)">🎱 Lotto</strong> — 6 numéros</div>
-        <div><strong style="color:#ff6644">🔴 Boule rouge</strong> — Powerball</div>
-        <div><strong style="color:#4499ff">🔵 Boule bleue</strong> — Mega Ball</div>
-        <div><strong style="color:#ffcc44">🟡 Boule jaune</strong> — Cash Ball</div>
+        <div data-i18n-html="legend_pick3"><strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 chiffres (0–9)</div>
+        <div data-i18n-html="legend_pick4"><strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 chiffres</div>
+        <div data-i18n-html="legend_pick5"><strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 numéros</div>
+        <div data-i18n-html="legend_lotto"><strong style="color:var(--text)">🎱 Lotto</strong> — 6 numéros</div>
+        <div data-i18n-html="legend_red"><strong style="color:#ff6644">🔴 Boule rouge</strong> — Powerball</div>
+        <div data-i18n-html="legend_blue"><strong style="color:#4499ff">🔵 Boule bleue</strong> — Mega Ball</div>
+        <div data-i18n-html="legend_yellow"><strong style="color:#ffcc44">🟡 Boule jaune</strong> — Cash Ball</div>
       </div>
     </div>
 
     <!-- Lien analyseur -->
     <div class="side-card" style="text-align:center">
-      <div class="side-title">🤖 Analyser ces numéros</div>
-      <div style="font-size:.74rem;color:var(--muted2);margin-bottom:12px;line-height:1.6">Utilisez nos algorithmes pour analyser les patterns et générer des prédictions</div>
-      <a href="/" style="display:block;padding:11px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none">⚡ Ouvrir l'Analyseur →</a>
+      <div class="side-title" data-i18n="analyzeTitle">🤖 Analyser ces numéros</div>
+      <div style="font-size:.74rem;color:var(--muted2);margin-bottom:12px;line-height:1.6" data-i18n="analyzeDesc">Utilisez nos algorithmes pour analyser les patterns et générer des prédictions</div>
+      <a href="/" style="display:block;padding:11px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none" data-i18n="analyzeBtn">⚡ Ouvrir l'Analyseur →</a>
     </div>
 
   </div>
@@ -341,6 +341,239 @@ const TODAY = new Date().toISOString().split('T')[0];
 
 const STATE_FLAGS = {AR:'💎',AZ:'🌵',CA:'☀️',CO:'🏔️',CT:'⚓',DC:'🏛️',DE:'🦆',FL:'🌴',GA:'🍑',IA:'🌽',ID:'🥔',IL:'🏙️',IN:'🏁',KS:'🌾',KY:'🐎',LA:'🎷',MA:'🦞',MD:'🦀',ME:'🦞',MI:'🚗',MN:'🌨️',MO:'⛵',MS:'🎶',NC:'🌲',NE:'🌾',NH:'🏔️',NJ:'🌊',NM:'🌶️',NY:'🗽',OH:'🌻',OK:'🛢️',PA:'🔔',PR:'🌺',SC:'🌴',TN:'🎸',TX:'⭐',VA:'🦅',VT:'🍁',WA:'🌧️',WI:'🧀',WV:'⛰️'};
 const STATE_NAMES = {NY:'New York',GA:'Georgia',TX:'Texas',FL:'Florida',CA:'California',PA:'Pennsylvania',NJ:'New Jersey',IL:'Illinois',OH:'Ohio',NC:'N. Carolina',VA:'Virginia',MA:'Massachusetts',MI:'Michigan',MD:'Maryland',TN:'Tennessee',SC:'S. Carolina',CT:'Connecticut',IN:'Indiana',KY:'Kentucky',MO:'Missouri',AZ:'Arizona',CO:'Colorado',LA:'Louisiana',MS:'Mississippi',AR:'Arkansas',IA:'Iowa',KS:'Kansas',OK:'Oklahoma',DE:'Delaware',NM:'New Mexico',WV:'W. Virginia',DC:'Washington DC',WI:'Wisconsin',MN:'Minnesota',NE:'Nebraska',NH:'New Hampshire',VT:'Vermont',ME:'Maine',WA:'Washington',ID:'Idaho',PR:'Puerto Rico'};
+
+// ══════════════════════════════════════
+// I18N — 5 langues (fr/en/es/pt/ht)
+// ══════════════════════════════════════
+const T = {
+fr:{
+  pageTitle:"PREDIKTA — Tous les Résultats du Jour",
+  heroTitle:"🎰 Résultats Complets du Jour",
+  heroSub:"Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Tous jeux · Tous États",
+  liveBadge:"LIVE — Mis à jour quotidiennement",
+  scrapeBtn:"🔄 Charger données", scrapeBtnLoading:"⏳ Chargement...",
+  navPrev:"← Veille", navToday:"🟢 Aujourd'hui", navNext:"Lendemain →",
+  gridViewLink:"← Vue Grille Tous États",
+  loadingResults:"Chargement des résultats...",
+  jackpotsTitle:"🏆 Jackpots Nationaux",
+  powerballName:"Powerball", megaMillionsName:"Mega Millions", cash4lifeName:"Cash4Life",
+  loadingShort:"Chargement...",
+  pbNext:"Prochain tirage: Lun/Mer/Sam", mmNext:"Prochain tirage: Mar/Ven",
+  cash4lifeAmount:"$1,000/jour à vie", cash4lifeNext:"Tirage quotidien",
+  legendTitle:"📖 Légende",
+  legend_pick3:'<strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 chiffres (0–9)',
+  legend_pick4:'<strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 chiffres',
+  legend_pick5:'<strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 numéros',
+  legend_lotto:'<strong style="color:var(--text)">🎱 Lotto</strong> — 6 numéros',
+  legend_red:'<strong style="color:#ff6644">🔴 Boule rouge</strong> — Powerball',
+  legend_blue:'<strong style="color:#4499ff">🔵 Boule bleue</strong> — Mega Ball',
+  legend_yellow:'<strong style="color:#ffcc44">🟡 Boule jaune</strong> — Cash Ball',
+  analyzeTitle:"🤖 Analyser ces numéros",
+  analyzeDesc:"Utilisez nos algorithmes pour analyser les patterns et générer des prédictions",
+  analyzeBtn:"⚡ Ouvrir l'Analyseur →",
+  noDataLabel:"Aucune donnée disponible",
+  noDataLoadedPre:"Les données pour ", noDataLoadedPost:" n'ont pas encore été chargées.",
+  loadAllGamesBtn:"🔄 Charger tous les jeux →",
+  errorPrefix:"Erreur: ", retryBtn:"🔄 Réessayer",
+  noResultsForDate:"Aucun résultat disponible pour la date sélectionnée.",
+  loadDataBtn:"🔄 Charger les données",
+  todayTagLabel:"🟢 Aujourd'hui",
+  gamesWithDataSuffix:" jeux avec données",
+  analyzeLinkText:"⚡ Analyser →",
+  pickGamesTitle:"🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)",
+  jackpotGamesTitle:"🌟 Jackpots & Jeux Multi-Boules",
+  noDrawToday:"— Pas de tirage ce jour",
+  footerNote:"Données non disponibles pour certains jeux = pas encore chargées · Cliquez 🔄 pour tout charger",
+  loadingAllGamesPre:"Chargement de tous les jeux pour ", loadingAllGamesPost:"...",
+  statusOk:"OK", statusError:"Erreur",
+  locale:"fr-FR",
+},
+en:{
+  pageTitle:"PREDIKTA — All Results of the Day",
+  heroTitle:"🎰 Complete Daily Results",
+  heroSub:"Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · All games · All States",
+  liveBadge:"LIVE — Updated daily",
+  scrapeBtn:"🔄 Load data", scrapeBtnLoading:"⏳ Loading...",
+  navPrev:"← Previous day", navToday:"🟢 Today", navNext:"Next day →",
+  gridViewLink:"← All-States Grid View",
+  loadingResults:"Loading results...",
+  jackpotsTitle:"🏆 National Jackpots",
+  powerballName:"Powerball", megaMillionsName:"Mega Millions", cash4lifeName:"Cash4Life",
+  loadingShort:"Loading...",
+  pbNext:"Next draw: Mon/Wed/Sat", mmNext:"Next draw: Tue/Fri",
+  cash4lifeAmount:"$1,000/day for life", cash4lifeNext:"Daily draw",
+  legendTitle:"📖 Legend",
+  legend_pick3:'<strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 digits (0–9)',
+  legend_pick4:'<strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 digits',
+  legend_pick5:'<strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 numbers',
+  legend_lotto:'<strong style="color:var(--text)">🎱 Lotto</strong> — 6 numbers',
+  legend_red:'<strong style="color:#ff6644">🔴 Red ball</strong> — Powerball',
+  legend_blue:'<strong style="color:#4499ff">🔵 Blue ball</strong> — Mega Ball',
+  legend_yellow:'<strong style="color:#ffcc44">🟡 Yellow ball</strong> — Cash Ball',
+  analyzeTitle:"🤖 Analyze these numbers",
+  analyzeDesc:"Use our algorithms to analyze patterns and generate predictions",
+  analyzeBtn:"⚡ Open the Analyzer →",
+  noDataLabel:"No data available",
+  noDataLoadedPre:"Data for ", noDataLoadedPost:" hasn't been loaded yet.",
+  loadAllGamesBtn:"🔄 Load all games →",
+  errorPrefix:"Error: ", retryBtn:"🔄 Retry",
+  noResultsForDate:"No results available for the selected date.",
+  loadDataBtn:"🔄 Load data",
+  todayTagLabel:"🟢 Today",
+  gamesWithDataSuffix:" games with data",
+  analyzeLinkText:"⚡ Analyze →",
+  pickGamesTitle:"🎯 Number games (Pick 2 / 3 / 4 / 5 / 6)",
+  jackpotGamesTitle:"🌟 Jackpots & Multi-Ball Games",
+  noDrawToday:"— No draw today",
+  footerNote:"Data unavailable for some games = not loaded yet · Click 🔄 to load everything",
+  loadingAllGamesPre:"Loading all games for ", loadingAllGamesPost:"...",
+  statusOk:"OK", statusError:"Error",
+  locale:"en-US",
+},
+es:{
+  pageTitle:"PREDIKTA — Todos los Resultados del Día",
+  heroTitle:"🎰 Resultados Completos del Día",
+  heroSub:"Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Todos los juegos · Todos los Estados",
+  liveBadge:"EN VIVO — Actualizado diariamente",
+  scrapeBtn:"🔄 Cargar datos", scrapeBtnLoading:"⏳ Cargando...",
+  navPrev:"← Día anterior", navToday:"🟢 Hoy", navNext:"Día siguiente →",
+  gridViewLink:"← Vista de Cuadrícula Todos los Estados",
+  loadingResults:"Cargando resultados...",
+  jackpotsTitle:"🏆 Premios Mayores Nacionales",
+  powerballName:"Powerball", megaMillionsName:"Mega Millions", cash4lifeName:"Cash4Life",
+  loadingShort:"Cargando...",
+  pbNext:"Próximo sorteo: Lun/Mié/Sáb", mmNext:"Próximo sorteo: Mar/Vie",
+  cash4lifeAmount:"$1,000/día de por vida", cash4lifeNext:"Sorteo diario",
+  legendTitle:"📖 Leyenda",
+  legend_pick3:'<strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 dígitos (0–9)',
+  legend_pick4:'<strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 dígitos',
+  legend_pick5:'<strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 números',
+  legend_lotto:'<strong style="color:var(--text)">🎱 Lotto</strong> — 6 números',
+  legend_red:'<strong style="color:#ff6644">🔴 Bola roja</strong> — Powerball',
+  legend_blue:'<strong style="color:#4499ff">🔵 Bola azul</strong> — Mega Ball',
+  legend_yellow:'<strong style="color:#ffcc44">🟡 Bola amarilla</strong> — Cash Ball',
+  analyzeTitle:"🤖 Analizar estos números",
+  analyzeDesc:"Use nuestros algoritmos para analizar patrones y generar predicciones",
+  analyzeBtn:"⚡ Abrir el Analizador →",
+  noDataLabel:"No hay datos disponibles",
+  noDataLoadedPre:"Los datos de ", noDataLoadedPost:" aún no se han cargado.",
+  loadAllGamesBtn:"🔄 Cargar todos los juegos →",
+  errorPrefix:"Error: ", retryBtn:"🔄 Reintentar",
+  noResultsForDate:"No hay resultados disponibles para la fecha seleccionada.",
+  loadDataBtn:"🔄 Cargar datos",
+  todayTagLabel:"🟢 Hoy",
+  gamesWithDataSuffix:" juegos con datos",
+  analyzeLinkText:"⚡ Analizar →",
+  pickGamesTitle:"🎯 Juegos de números (Pick 2 / 3 / 4 / 5 / 6)",
+  jackpotGamesTitle:"🌟 Premios Mayores y Juegos Multi-Bola",
+  noDrawToday:"— Sin sorteo hoy",
+  footerNote:"Datos no disponibles para algunos juegos = aún no cargados · Haga clic en 🔄 para cargar todo",
+  loadingAllGamesPre:"Cargando todos los juegos para ", loadingAllGamesPost:"...",
+  statusOk:"OK", statusError:"Error",
+  locale:"es-ES",
+},
+pt:{
+  pageTitle:"PREDIKTA — Todos os Resultados do Dia",
+  heroTitle:"🎰 Resultados Completos do Dia",
+  heroSub:"Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Todos os jogos · Todos os Estados",
+  liveBadge:"EM DIRETO — Atualizado diariamente",
+  scrapeBtn:"🔄 Carregar dados", scrapeBtnLoading:"⏳ Carregando...",
+  navPrev:"← Dia anterior", navToday:"🟢 Hoje", navNext:"Dia seguinte →",
+  gridViewLink:"← Vista em Grade de Todos os Estados",
+  loadingResults:"Carregando resultados...",
+  jackpotsTitle:"🏆 Prêmios Nacionais",
+  powerballName:"Powerball", megaMillionsName:"Mega Millions", cash4lifeName:"Cash4Life",
+  loadingShort:"Carregando...",
+  pbNext:"Próximo sorteio: Seg/Qua/Sáb", mmNext:"Próximo sorteio: Ter/Sex",
+  cash4lifeAmount:"$1.000/dia para sempre", cash4lifeNext:"Sorteio diário",
+  legendTitle:"📖 Legenda",
+  legend_pick3:'<strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 dígitos (0–9)',
+  legend_pick4:'<strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 dígitos',
+  legend_pick5:'<strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 números',
+  legend_lotto:'<strong style="color:var(--text)">🎱 Lotto</strong> — 6 números',
+  legend_red:'<strong style="color:#ff6644">🔴 Bola vermelha</strong> — Powerball',
+  legend_blue:'<strong style="color:#4499ff">🔵 Bola azul</strong> — Mega Ball',
+  legend_yellow:'<strong style="color:#ffcc44">🟡 Bola amarela</strong> — Cash Ball',
+  analyzeTitle:"🤖 Analisar estes números",
+  analyzeDesc:"Use nossos algoritmos para analisar padrões e gerar previsões",
+  analyzeBtn:"⚡ Abrir o Analisador →",
+  noDataLabel:"Nenhum dado disponível",
+  noDataLoadedPre:"Os dados de ", noDataLoadedPost:" ainda não foram carregados.",
+  loadAllGamesBtn:"🔄 Carregar todos os jogos →",
+  errorPrefix:"Erro: ", retryBtn:"🔄 Tentar novamente",
+  noResultsForDate:"Nenhum resultado disponível para a data selecionada.",
+  loadDataBtn:"🔄 Carregar dados",
+  todayTagLabel:"🟢 Hoje",
+  gamesWithDataSuffix:" jogos com dados",
+  analyzeLinkText:"⚡ Analisar →",
+  pickGamesTitle:"🎯 Jogos de números (Pick 2 / 3 / 4 / 5 / 6)",
+  jackpotGamesTitle:"🌟 Prêmios e Jogos Multi-Bola",
+  noDrawToday:"— Sem sorteio hoje",
+  footerNote:"Dados não disponíveis para alguns jogos = ainda não carregados · Clique em 🔄 para carregar tudo",
+  loadingAllGamesPre:"Carregando todos os jogos para ", loadingAllGamesPost:"...",
+  statusOk:"OK", statusError:"Erro",
+  locale:"pt-BR",
+},
+ht:{
+  pageTitle:"PREDIKTA — Tout Rezilta Jodi a",
+  heroTitle:"🎰 Rezilta Konplè Jodi a",
+  heroSub:"Pick2 · Pick3 · Pick4 · Pick5 · Lotto · Powerball · Mega Millions · Tout jwèt · Tout Eta",
+  liveBadge:"AN DIRÈK — Mizajou chak jou",
+  scrapeBtn:"🔄 Chaje done", scrapeBtnLoading:"⏳ K ap chaje...",
+  navPrev:"← Jou anvan", navToday:"🟢 Jodi a", navNext:"Jou apre →",
+  gridViewLink:"← Vi Griy Tout Eta",
+  loadingResults:"K ap chaje rezilta yo...",
+  jackpotsTitle:"🏆 Gwo Pri Nasyonal",
+  powerballName:"Powerball", megaMillionsName:"Mega Millions", cash4lifeName:"Cash4Life",
+  loadingShort:"K ap chaje...",
+  pbNext:"Pwochen tiraj: Lin/Mèk/Sam", mmNext:"Pwochen tiraj: Mad/Van",
+  cash4lifeAmount:"$1,000/jou pou tout vi", cash4lifeNext:"Tiraj chak jou",
+  legendTitle:"📖 Lejand",
+  legend_pick3:'<strong style="color:var(--text)">3️⃣ Pick 3</strong> — 3 chif (0–9)',
+  legend_pick4:'<strong style="color:var(--text)">4️⃣ Pick 4</strong> — 4 chif',
+  legend_pick5:'<strong style="color:var(--text)">5️⃣ Pick 5</strong> — 5 nimewo',
+  legend_lotto:'<strong style="color:var(--text)">🎱 Lotto</strong> — 6 nimewo',
+  legend_red:'<strong style="color:#ff6644">🔴 Boul wouj</strong> — Powerball',
+  legend_blue:'<strong style="color:#4499ff">🔵 Boul ble</strong> — Mega Ball',
+  legend_yellow:'<strong style="color:#ffcc44">🟡 Boul jòn</strong> — Cash Ball',
+  analyzeTitle:"🤖 Analize nimewo sa yo",
+  analyzeDesc:"Itilize algoritm nou yo pou analize modèl yo epi kreye prediksyon",
+  analyzeBtn:"⚡ Louvri Analizè a →",
+  noDataLabel:"Pa gen done disponib",
+  noDataLoadedPre:"Done pou ", noDataLoadedPost:" poko chaje.",
+  loadAllGamesBtn:"🔄 Chaje tout jwèt yo →",
+  errorPrefix:"Erè: ", retryBtn:"🔄 Eseye ankò",
+  noResultsForDate:"Pa gen rezilta disponib pou dat ou chwazi a.",
+  loadDataBtn:"🔄 Chaje done yo",
+  todayTagLabel:"🟢 Jodi a",
+  gamesWithDataSuffix:" jwèt ki gen done",
+  analyzeLinkText:"⚡ Analize →",
+  pickGamesTitle:"🎯 Jwèt nimewo (Pick 2 / 3 / 4 / 5 / 6)",
+  jackpotGamesTitle:"🌟 Gwo Pri & Jwèt Multi-Boul",
+  noDrawToday:"— Pa gen tiraj jodi a",
+  footerNote:"Done pa disponib pou kèk jwèt = poko chaje · Klike sou 🔄 pou chaje tout bagay",
+  loadingAllGamesPre:"K ap chaje tout jwèt pou ", loadingAllGamesPost:"...",
+  statusOk:"OK", statusError:"Erè",
+  locale:"fr-FR",
+},
+};
+
+function curT(){ return T[window.PREDIKTA_LANG] || T.fr; }
+
+function applyLang(lang){
+  const t = T[lang] || T.fr;
+  document.documentElement.setAttribute('lang', lang);
+  document.title = t.pageTitle;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(t[k]===undefined) return;
+    if(el.hasAttribute('data-i18n-html')) el.innerHTML = t[k];
+    else el.textContent = t[k];
+  });
+  updateDateLabel();
+  loadData(false);
+}
+window.setLang = applyLang;
 
 const BALL_COLORS = [
   '#ff4444','#ff7722','#ffcc22','#88cc22','#22cc66',
@@ -372,11 +605,12 @@ function goToday(){
 }
 
 function updateDateLabel(){
+  const t = curT();
   const d = new Date(currentDate + 'T12:00:00');
   const isToday = currentDate === TODAY;
   const label = isToday
-    ? '🟢 Aujourd\'hui — ' + d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
-    : d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    ? t.todayTagLabel + ' — ' + d.toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long',year:'numeric'})
+    : d.toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   document.getElementById('currentDateLabel').textContent = label;
   document.getElementById('nextDayBtn').disabled = currentDate >= TODAY;
 }
@@ -422,26 +656,27 @@ function todClass(tod){
 // LOAD & RENDER
 // ══════════════════════════════════════
 async function loadData(forceScra=false){
+  const t = curT();
   const content = document.getElementById('mainContent');
   const status  = document.getElementById('ctrl-status');
   updateDateLabel();
 
   if(forceScra){
     const btn = document.getElementById('scrapeBtn');
-    btn.textContent = '⏳ Chargement...';
+    btn.textContent = t.scrapeBtnLoading;
     btn.disabled = true;
-    status.textContent = `Chargement de tous les jeux pour ${currentState}...`;
+    status.textContent = `${t.loadingAllGamesPre}${currentState}${t.loadingAllGamesPost}`;
     try{
       const r = await fetch(`/api/games/scrape/${currentState}`);
       const d = await r.json();
-      status.textContent = d.message || 'OK';
-    }catch(e){ status.textContent = 'Erreur'; }
-    btn.textContent = '🔄 Charger données';
+      status.textContent = d.message || t.statusOk;
+    }catch(e){ status.textContent = t.statusError; }
+    btn.textContent = t.scrapeBtn;
     btn.disabled = false;
     setTimeout(()=>{ status.textContent=''; },3000);
   }
 
-  content.innerHTML = '<div class="loading-block"><div class="spinner"></div><div>Chargement des résultats...</div></div>';
+  content.innerHTML = `<div class="loading-block"><div class="spinner"></div><div>${t.loadingResults}</div></div>`;
 
   try{
     const r = await fetch(`/api/games/today/${currentState}`);
@@ -454,13 +689,13 @@ async function loadData(forceScra=false){
             <div class="state-flag">${STATE_FLAGS[currentState]||'🎰'}</div>
             <div class="state-info">
               <div class="state-name">${STATE_NAMES[currentState]||currentState}</div>
-              <div class="state-date">Aucune donnée disponible</div>
+              <div class="state-date">${t.noDataLabel}</div>
             </div>
           </div>
           <div class="no-data-block">
             <div style="font-size:2rem;margin-bottom:10px">📭</div>
-            <div style="font-size:.82rem;margin-bottom:14px">Les données pour <strong>${STATE_NAMES[currentState]}</strong> n'ont pas encore été chargées.</div>
-            <button class="load-data-btn" onclick="loadData(true)">🔄 Charger tous les jeux →</button>
+            <div style="font-size:.82rem;margin-bottom:14px">${t.noDataLoadedPre}<strong>${STATE_NAMES[currentState]}</strong>${t.noDataLoadedPost}</div>
+            <button class="load-data-btn" onclick="loadData(true)">${t.loadAllGamesBtn}</button>
           </div>
         </div>`;
       return;
@@ -480,11 +715,12 @@ async function loadData(forceScra=false){
       });
     }
   }catch(e){
-    content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">Erreur: ${e.message}</div><button class="load-data-btn" onclick="loadData(true)">🔄 Réessayer</button></div>`;
+    content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">${t.errorPrefix}${e.message}</div><button class="load-data-btn" onclick="loadData(true)">${t.retryBtn}</button></div>`;
   }
 }
 
 function renderStateResults(data, container){
+  const t = curT();
   const state = data.state;
   const games  = data.games;
   const schedMap = {};
@@ -497,8 +733,8 @@ function renderStateResults(data, container){
         <div class="state-info"><div class="state-name">${STATE_NAMES[state]||state}</div></div>
       </div>
       <div class="no-data-block">
-        <div>Aucun résultat disponible pour la date sélectionnée.</div>
-        <button class="load-data-btn" onclick="loadData(true)">🔄 Charger les données</button>
+        <div>${t.noResultsForDate}</div>
+        <button class="load-data-btn" onclick="loadData(true)">${t.loadDataBtn}</button>
       </div>
     </div>`;
     return;
@@ -511,9 +747,9 @@ function renderStateResults(data, container){
   const isToday    = games.some(g=>g.is_today);
   const dateStr    = games[0]?.date || '—';
   const dateObj    = new Date(dateStr+'T12:00:00');
-  const dateLabel  = dateObj.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const dateLabel  = dateObj.toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const dateTag    = isToday
-    ? `<span class="state-today-tag">🟢 Aujourd'hui</span>`
+    ? `<span class="state-today-tag">${t.todayTagLabel}</span>`
     : `<span class="state-yesterday-tag">⏰ ${dateStr}</span>`;
 
   function gameSection(title, gameList, schedMap){
@@ -523,7 +759,7 @@ function renderStateResults(data, container){
       if(!draws.length){
         return `<div class="game-row">
           <div class="game-label">${game.icon||''} ${game.label}</div>
-          <div class="game-no-data">— Pas de tirage ce jour</div>
+          <div class="game-no-data">${t.noDrawToday}</div>
         </div>`;
       }
       return draws.map(draw=>`
@@ -544,17 +780,17 @@ function renderStateResults(data, container){
         <div class="state-flag">${STATE_FLAGS[state]||'🎰'}</div>
         <div class="state-info">
           <div class="state-name">${STATE_NAMES[state]||state} ${dateTag}</div>
-          <div class="state-date">${dateLabel} · ${games.length} jeux avec données</div>
+          <div class="state-date">${dateLabel} · ${games.length}${t.gamesWithDataSuffix}</div>
         </div>
-        <a class="analyze-link" href="/?state=${state}">⚡ Analyser →</a>
+        <a class="analyze-link" href="/?state=${state}">${t.analyzeLinkText}</a>
       </div>
       <div class="games-list">
-        ${gameSection('🎯 Jeux de chiffres (Pick 2 / 3 / 4 / 5 / 6)', pickGames, schedMap)}
-        ${jackpotGames.length ? gameSection('🌟 Jackpots & Jeux Multi-Boules', jackpotGames, schedMap) : ''}
+        ${gameSection(t.pickGamesTitle, pickGames, schedMap)}
+        ${jackpotGames.length ? gameSection(t.jackpotGamesTitle, jackpotGames, schedMap) : ''}
       </div>
     </div>
     <div style="text-align:center;padding:14px;font-size:.72rem;color:var(--muted2)">
-      Données non disponibles pour certains jeux = pas encore chargées · Cliquez 🔄 pour tout charger
+      ${t.footerNote}
     </div>
   `;
 }
@@ -589,8 +825,7 @@ function loadJackpots(){
   }
 })();
 
-updateDateLabel();
-loadData(false);
+applyLang(window.PREDIKTA_LANG || 'fr');
 </script>
 </body>
 </html>

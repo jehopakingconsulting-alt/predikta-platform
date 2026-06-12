@@ -467,7 +467,6 @@ let LANG = (window.PREDIKTA_LANG && LANGS[window.PREDIKTA_LANG]) ? window.PREDIK
 function t(k){ return (LANGS[LANG]||LANGS.fr)[k] || k; }
 function setLang(l){
   LANG = (LANGS[l]) ? l : 'fr';
-  if(window.saveLang) window.saveLang(l);
   document.documentElement.setAttribute('data-lang', LANG);
   const srTitle = document.getElementById('srTitle');
   const srSub   = document.getElementById('srSub');
@@ -479,6 +478,7 @@ function setLang(l){
   if(gridTit) gridTit.textContent = t('gridTitle');
   if(window._allData) renderGrid(window._allData);
 }
+window.setLang = setLang;
 
 // ══════════════════════════════════════
 // BALL COLORS
@@ -877,6 +877,7 @@ setInterval(()=>{
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDetail(); });
 
 // Init
+setLang(LANG);
 loadAll();
 </script>
 </body>
