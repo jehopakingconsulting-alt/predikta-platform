@@ -312,7 +312,6 @@ def api_autoupdate_status():
 
 # ── Draw schedule ─────────────────────────────────────────────────────────
 DRAW_SCHEDULE = {
-    "AL": [{"tod":"Midday","time":"12:29 PM CT"}, {"tod":"Evening","time":"6:59 PM CT"}],
     "AR": [{"tod":"Midday","time":"12:59 PM CT"}, {"tod":"Evening","time":"6:59 PM CT"}],
     "AZ": [{"tod":"Evening","time":"7:00 PM MST"}],
     "CA": [{"tod":"Midday","time":"1:00 PM PT"},  {"tod":"Evening","time":"6:30 PM PT"}],
@@ -350,7 +349,7 @@ DRAW_SCHEDULE = {
     "RI": [{"tod":"Midday","time":"1:30 PM ET"},  {"tod":"Evening","time":"7:29 PM ET"}],
     "SC": [{"tod":"Midday","time":"12:59 PM ET"}, {"tod":"Evening","time":"6:59 PM ET"}],
     "TN": [{"tod":"Morning","time":"9:28 AM CT"}, {"tod":"Midday","time":"12:28 PM CT"}, {"tod":"Evening","time":"6:28 PM CT"}],
-    "TX": [{"tod":"Morning","time":"10:00 AM CT"}, {"tod":"Day","time":"12:27 PM CT"}, {"tod":"Evening","time":"6:00 PM CT"}, {"tod":"Night","time":"10:12 PM CT"}],
+    "TX": [{"tod":"Morning","time":"10:00 AM CT"}, {"tod":"Midday","time":"12:27 PM CT"}, {"tod":"Evening","time":"6:00 PM CT"}, {"tod":"Night","time":"10:12 PM CT"}],
     "VA": [{"tod":"Day","time":"1:59 PM ET"},  {"tod":"Night","time":"11:00 PM ET"}],
     "VT": [{"tod":"Day","time":"1:10 PM ET"}, {"tod":"Evening","time":"6:59 PM ET"}],
     "WA": [{"tod":"Evening","time":"8:00 PM PT"}],
@@ -360,7 +359,7 @@ DRAW_SCHEDULE = {
 }
 
 STATE_FLAGS = {
-    "AL":"🏈","AR":"💎","AZ":"🌵","CA":"☀️","CO":"🏔️","CT":"⚓","DC":"🏛️",
+    "AR":"💎","AZ":"🌵","CA":"☀️","CO":"🏔️","CT":"⚓","DC":"🏛️",
     "DE":"🦆","FL":"🌴","GA":"🍑","IA":"🌽","ID":"🥔","IL":"🏙️","IN":"🏁",
     "KS":"🌾","KY":"🐎","LA":"🎷","MA":"🦞","MD":"🦀","ME":"🦞","MI":"🚗",
     "MN":"🌨️","MO":"⛵","MS":"🎶","NC":"🌲","NE":"🌾","NH":"🏔️","NJ":"🌊",

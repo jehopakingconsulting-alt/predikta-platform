@@ -257,7 +257,6 @@ scraper_checks = [
     ('"PA"',  "État Pennsylvania"),
     ('"IL"',  "État Illinois"),
     ('"DC"',  "État DC (nouveau)"),
-    ('"AL"',  "État Alabama (nouveau)"),
     ('"PR"',  "Puerto Rico (nouveau)"),
     ("def parse_draws",       "Parser HTML lotterypost"),
     ("def fetch_months",      "Pagination par mois"),
