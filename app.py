@@ -656,7 +656,7 @@ _REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 10 * 60))  #
 # l'attente de 15-25s sur les états les plus populaires).
 PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 
-def _build_report(state: str, tod_filter: str = "all"):
+def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = ()):
     """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data."""
     draws = load_csv(state)
     if not draws:
@@ -667,10 +667,22 @@ def _build_report(state: str, tod_filter: str = "all"):
         if not draws:
             return None
 
+    if exclude_dow:
+        draws = [d for d in draws if datetime.strptime(d["date"], "%Y-%m-%d").weekday() not in exclude_dow]
+        if not draws:
+            return None
+
+    if exclude_dom:
+        draws = [d for d in draws if int(d["date"][8:10]) not in exclude_dom]
+        if not draws:
+            return None
+
     result = run_all_models(draws)
     result["state"]       = state
     result["state_name"]  = STATES[state]["name"]
     result["tod_filter"]  = tod_filter
+    result["exclude_dow"] = list(exclude_dow)
+    result["exclude_dom"] = list(exclude_dom)
     result["dpd"]         = STATES[state].get("dpd", 2)
     result["schedule"]    = DRAW_SCHEDULE.get(state, [])
     result["cached"]      = False
@@ -680,7 +692,7 @@ def _warm_popular_reports():
     """Pre-compute & cache the 'all' report for the most popular states."""
     now = time.time()
     for state in PRIORITY_STATES:
-        cache_key = (state, "all")
+        cache_key = (state, "all", (), ())
         cached = _REPORT_CACHE.get(cache_key)
         if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
             continue
@@ -691,16 +703,32 @@ def _warm_popular_reports():
         except Exception as e:
             print(f"  [warm-cache][{state}] error: {e}")
 
+def _parse_int_list(raw: str, lo: int, hi: int) -> tuple:
+    out = set()
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            v = int(part)
+        except ValueError:
+            continue
+        if lo <= v <= hi:
+            out.add(v)
+    return tuple(sorted(out))
+
 @app.route("/api/report")
 @auth_module.subscription_required
 def api_report():
-    state      = request.args.get("state", "NY").upper()
-    tod_filter = request.args.get("tod", "all")
+    state       = request.args.get("state", "NY").upper()
+    tod_filter  = request.args.get("tod", "all")
+    exclude_dow = _parse_int_list(request.args.get("exclude_dow", ""), 0, 6)
+    exclude_dom = _parse_int_list(request.args.get("exclude_dom", ""), 1, 31)
 
     if state not in STATES:
         return jsonify({"error": f"Unknown state: {state}"}), 400
 
-    cache_key = (state, tod_filter)
+    cache_key = (state, tod_filter, exclude_dow, exclude_dom)
     cached = _REPORT_CACHE.get(cache_key)
     now = time.time()
     if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
@@ -710,9 +738,9 @@ def api_report():
     if not load_csv(state):
         return jsonify({"error": f"No data for {state}. Click Scrape first."}), 200
 
-    result = _build_report(state, tod_filter)
+    result = _build_report(state, tod_filter, exclude_dow, exclude_dom)
     if result is None:
-        return jsonify({"error": f"No {tod_filter} draws for {state}."}), 200
+        return jsonify({"error": f"No draws left for {state} after applying filters."}), 200
 
     _REPORT_CACHE[cache_key] = {"ts": now, "data": {**result, "cached": True}}
     auth_module.record_usage(auth_module.current_user().id)

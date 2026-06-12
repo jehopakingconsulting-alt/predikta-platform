@@ -423,6 +423,51 @@ header{
 .btn-scrape:hover{background:linear-gradient(135deg,#123028,#226040)}
 #status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
 
+/* ── Date filters ───────────────────────────────────────────────── */
+.filters-wrap{position:relative}
+.btn-filters{
+  background:#0c0c28;color:var(--text);border-color:var(--border2);
+  display:inline-flex;align-items:center;gap:6px;font-weight:600;
+}
+.btn-filters.active{border-color:var(--accent);color:var(--accent)}
+.filters-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:var(--accent);color:#fff;font-size:.62rem;font-weight:800;
+}
+.filters-panel{
+  display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:50;
+  width:min(320px,90vw);padding:16px;border-radius:12px;
+  background:#0c0c28;border:1px solid var(--border2);
+  box-shadow:0 12px 40px rgba(0,0,30,.6);
+  font-size:.8rem;
+}
+.filters-panel.open{display:block}
+.filters-panel h4{font-size:.7rem;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin:0 0 10px}
+.filters-dow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.filters-dow label{
+  display:flex;align-items:center;justify-content:center;
+  width:38px;height:32px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border2);font-size:.72rem;font-weight:700;color:var(--muted2);
+  transition:all .2s;user-select:none;
+}
+.filters-dow input{display:none}
+.filters-dow input:checked + span{color:#ff7755}
+.filters-dow label:has(input:checked){background:rgba(255,85,85,.12);border-color:#ff5555;color:#ff7755}
+.filters-dom input{
+  width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border2);
+  background:#0a0a20;color:var(--text);font-size:.8rem;font-family:'Inter',sans-serif;
+  box-sizing:border-box;
+}
+.filters-dom small{display:block;margin-top:5px;color:var(--muted2);font-size:.66rem}
+.filters-actions{display:flex;gap:8px;margin-top:14px}
+.filters-actions button{
+  flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border2);
+  font-size:.76rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+}
+.filters-apply{background:linear-gradient(135deg,#2a3acc,#4f6eff);color:#fff;border:none}
+.filters-reset{background:transparent;color:var(--muted2)}
+
 /* ═══════════════════════════
    VIDEO PLAYER 4K
    ═══════════════════════════ */
@@ -970,6 +1015,24 @@ footer{
     <option value="36">3 ans</option>
     <option value="60">5 ans</option>
   </select>
+  <div class="filters-wrap">
+    <button class="btn-filters" id="btn-filters" onclick="toggleFiltersPanel()">
+      📅 <span id="btn-filters-label">Filtres</span><span class="filters-badge" id="filters-badge" style="display:none">0</span>
+    </button>
+    <div class="filters-panel" id="filters-panel">
+      <h4 id="filters-dow-title">Exclure jours de la semaine</h4>
+      <div class="filters-dow" id="filters-dow"></div>
+      <h4 id="filters-dom-title">Exclure jours du mois</h4>
+      <div class="filters-dom">
+        <input type="text" id="filters-dom-input" placeholder="ex: 1, 13, 31"/>
+        <small id="filters-dom-hint">Numéros de jours (1-31) séparés par des virgules</small>
+      </div>
+      <div class="filters-actions">
+        <button class="filters-reset" id="filters-reset-btn" onclick="resetDateFilters()">Réinitialiser</button>
+        <button class="filters-apply" id="filters-apply-btn" onclick="applyDateFilters()">Appliquer</button>
+      </div>
+    </div>
+  </div>
   <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
   <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
   <a href="/results" style="padding:10px 18px;border-radius:10px;font-size:.88rem;font-weight:700;
@@ -1218,6 +1281,10 @@ const T = {
     allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",
     tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit",
     quickStates:"États populaires",
+    filtersBtn:"Filtres",filtersDowTitle:"Exclure jours de la semaine",filtersDomTitle:"Exclure jours du mois",
+    filtersDomHint:"Numéros de jours (1-31) séparés par des virgules",
+    filtersReset:"Réinitialiser",filtersApply:"Appliquer",
+    dowShort:["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"],
   },
   en:{
     heroTitle:"Advanced Algorithm Predictions",
@@ -1250,6 +1317,10 @@ const T = {
     allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",
     tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night",
     quickStates:"Popular states",
+    filtersBtn:"Filters",filtersDowTitle:"Exclude days of week",filtersDomTitle:"Exclude days of month",
+    filtersDomHint:"Day numbers (1-31) separated by commas",
+    filtersReset:"Reset",filtersApply:"Apply",
+    dowShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
   },
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
@@ -1282,6 +1353,10 @@ const T = {
     allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",
     tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche",
     quickStates:"Estados populares",
+    filtersBtn:"Filtros",filtersDowTitle:"Excluir días de la semana",filtersDomTitle:"Excluir días del mes",
+    filtersDomHint:"Números de días (1-31) separados por comas",
+    filtersReset:"Restablecer",filtersApply:"Aplicar",
+    dowShort:["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],
   },
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
@@ -1314,6 +1389,10 @@ const T = {
     allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",
     tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite",
     quickStates:"Estados populares",
+    filtersBtn:"Filtros",filtersDowTitle:"Excluir dias da semana",filtersDomTitle:"Excluir dias do mês",
+    filtersDomHint:"Números de dias (1-31) separados por vírgulas",
+    filtersReset:"Redefinir",filtersApply:"Aplicar",
+    dowShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
   },
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
@@ -1346,6 +1425,10 @@ const T = {
     allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",
     tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit",
     quickStates:"Eta popilè",
+    filtersBtn:"Filtè",filtersDowTitle:"Eskli jou nan semèn",filtersDomTitle:"Eskli jou nan mwa",
+    filtersDomHint:"Nimewo jou (1-31) separe ak vigil",
+    filtersReset:"Reyajiste",filtersApply:"Aplike",
+    dowShort:["Dim","Lin","Mad","Mèk","Jed","Van","Sam"],
   },
 };
 
@@ -1374,9 +1457,89 @@ function setLang(lang){
   if(statsLbl)  statsLbl.textContent  = t('statsTitle');
   const qsLbl = document.getElementById('quickStatesLabel');
   if(qsLbl) qsLbl.textContent = t('quickStates');
+  // Date filters panel labels
+  const fBtnLbl = document.getElementById('btn-filters-label');
+  const fDowT   = document.getElementById('filters-dow-title');
+  const fDomT   = document.getElementById('filters-dom-title');
+  const fDomH   = document.getElementById('filters-dom-hint');
+  const fReset  = document.getElementById('filters-reset-btn');
+  const fApply  = document.getElementById('filters-apply-btn');
+  if(fBtnLbl) fBtnLbl.textContent = t('filtersBtn');
+  if(fDowT)   fDowT.textContent   = t('filtersDowTitle');
+  if(fDomT)   fDomT.textContent   = t('filtersDomTitle');
+  if(fDomH)   fDomH.textContent   = t('filtersDomHint');
+  if(fReset)  fReset.textContent  = t('filtersReset');
+  if(fApply)  fApply.textContent  = t('filtersApply');
+  renderDowCheckboxes();
   // Re-render if data exists
   if(window._lastData) renderAll(window._lastData);
 }
+
+// ── Date filters (exclude days of week / days of month) ──────────────────
+let excludeDow = [];
+let excludeDom = [];
+
+function renderDowCheckboxes(){
+  const wrap = document.getElementById('filters-dow');
+  if(!wrap) return;
+  const names = t('dowShort');
+  wrap.innerHTML = names.map((name, i) =>
+    `<label><input type="checkbox" value="${i}" ${excludeDow.includes(i)?'checked':''} onchange="toggleDow(${i},this.checked)"><span>${name}</span></label>`
+  ).join('');
+}
+
+function toggleDow(day, checked){
+  if(checked){ if(!excludeDow.includes(day)) excludeDow.push(day); }
+  else{ excludeDow = excludeDow.filter(d=>d!==day); }
+}
+
+function toggleFiltersPanel(){
+  document.getElementById('filters-panel')?.classList.toggle('open');
+}
+
+function updateFiltersBadge(){
+  const badge = document.getElementById('filters-badge');
+  const btn   = document.getElementById('btn-filters');
+  const count = excludeDow.length + excludeDom.length;
+  if(!badge || !btn) return;
+  if(count > 0){
+    badge.style.display = 'inline-flex';
+    badge.textContent = count;
+    btn.classList.add('active');
+  } else {
+    badge.style.display = 'none';
+    btn.classList.remove('active');
+  }
+}
+
+function applyDateFilters(){
+  const domInput = document.getElementById('filters-dom-input');
+  excludeDom = (domInput?.value || '')
+    .split(',').map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n) && n>=1 && n<=31);
+  updateFiltersBadge();
+  toggleFiltersPanel();
+  loadReport();
+}
+
+function resetDateFilters(){
+  excludeDow = [];
+  excludeDom = [];
+  const domInput = document.getElementById('filters-dom-input');
+  if(domInput) domInput.value = '';
+  renderDowCheckboxes();
+  updateFiltersBadge();
+  toggleFiltersPanel();
+  loadReport();
+}
+
+// Close filters panel when clicking outside
+document.addEventListener('click', (e)=>{
+  const wrap = document.querySelector('.filters-wrap');
+  const panel = document.getElementById('filters-panel');
+  if(wrap && panel && panel.classList.contains('open') && !wrap.contains(e.target)){
+    panel.classList.remove('open');
+  }
+});
 
 // ── Quick state tabs (États les plus consultés) ───────────────────────────
 const QUICK_STATE_FLAGS = {
@@ -1399,6 +1562,8 @@ window.addEventListener('load', ()=>{
   if(navLang && navLang !== LANG && T[navLang]){
     LANG = navLang;
     setLang(LANG);
+  } else {
+    renderDowCheckboxes();
   }
 });
 
@@ -1489,7 +1654,9 @@ async function loadReport(){
   Object.values(currentCharts).forEach(c=>{ try{c.destroy()}catch(e){} });
   currentCharts = {};
   try{
-    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`);
+    const dowQS = excludeDow.length ? `&exclude_dow=${excludeDow.join(',')}` : '';
+    const domQS = excludeDom.length ? `&exclude_dom=${excludeDom.join(',')}` : '';
+    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`);
     const data = await r.json();
     status.textContent = '';
 
