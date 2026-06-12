@@ -150,6 +150,24 @@ def fetch_game(state: str, game: dict, n_months: int = 3) -> list[dict]:
 
     all_draws = []
     seen = set()
+
+    # lotteryusa.com n'est pas derriere Cloudflare (contrairement a
+    # lotterypost.com, bloque sur les IP de datacenter type Render) — on
+    # l'utilise en priorite pour les resultats recents.
+    try:
+        import lotteryusa_games_scraper
+        lu_draws = lotteryusa_games_scraper.fetch_game(state, slug)
+        for d in lu_draws:
+            key = f"{d['date']}_{d['tod']}"
+            if key not in seen:
+                all_draws.append(d)
+                seen.add(key)
+    except Exception:
+        pass
+
+    if all_draws:
+        return all_draws
+
     now = datetime.now()
     year, month = now.year, now.month
 

@@ -1,0 +1,590 @@
+{
+  "NY": {
+    "cash4life": {
+      "lu_slug": "cash4life",
+      "title": "New YorkCash4Life"
+    },
+    "lotto": {
+      "lu_slug": "lotto",
+      "title": "New YorkLOTTO"
+    },
+    "midday-numbers": {
+      "lu_slug": "midday-numbers",
+      "title": "New YorkNumbers Midday"
+    },
+    "numbers": {
+      "lu_slug": "numbers",
+      "title": "New YorkNumbers Evening"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "New YorkMega Millions"
+    },
+    "pick10": {
+      "lu_slug": "pick-10",
+      "title": "New YorkPick 10"
+    },
+    "midday-win4": {
+      "lu_slug": "midday-win-4",
+      "title": "New YorkWin 4 Midday"
+    },
+    "win4": {
+      "lu_slug": "win-4",
+      "title": "New YorkWin 4 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "New YorkPowerball"
+    },
+    "take5": {
+      "lu_slug": "take-5",
+      "title": "New YorkTake 5 Evening"
+    },
+    "take5-midday": {
+      "lu_slug": "take-5-midday",
+      "title": "New YorkTake 5 Midday"
+    }
+  },
+  "GA": {
+    "cash3": {
+      "lu_slug": "cash-3",
+      "title": "GeorgiaCash 3 Night"
+    },
+    "cash4life": {
+      "lu_slug": "cash4life",
+      "title": "GeorgiaCash4Life"
+    },
+    "jumbo-bucks-lotto": {
+      "lu_slug": null,
+      "title": null
+    },
+    "cash3-midday": {
+      "lu_slug": null,
+      "title": null
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "GeorgiaPowerball"
+    },
+    "fantasy5": {
+      "lu_slug": "fantasy-5",
+      "title": "GeorgiaFantasy 5"
+    },
+    "cash4-midday": {
+      "lu_slug": null,
+      "title": null
+    },
+    "cash4": {
+      "lu_slug": "cash-4",
+      "title": "GeorgiaCash 4 Night"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "GeorgiaMega Millions"
+    }
+  },
+  "TX": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "TexasPick 3 Night"
+    },
+    "daily4": {
+      "lu_slug": "daily-4",
+      "title": "TexasDaily 4 Night"
+    },
+    "lotto-texas": {
+      "lu_slug": "lotto-texas",
+      "title": "TexasLotto Texas"
+    },
+    "allornothing": {
+      "lu_slug": null,
+      "title": null
+    },
+    "cash5": {
+      "lu_slug": "cash-5",
+      "title": "TexasCash Five"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "TexasPowerball"
+    },
+    "texastwostep": {
+      "lu_slug": "texas-two-step",
+      "title": "TexasTwo Step"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "TexasMega Millions"
+    }
+  },
+  "FL": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "FloridaPick 3 Evening"
+    },
+    "pick2": {
+      "lu_slug": "pick-2",
+      "title": "FloridaPick 2 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "FloridaPick 4 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "midday-pick-3",
+      "title": "FloridaPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "midday-pick-4",
+      "title": "FloridaPick 4 Midday"
+    },
+    "pick2-midday": {
+      "lu_slug": "pick-2-midday",
+      "title": "FloridaPick 2 Midday"
+    },
+    "lotto": {
+      "lu_slug": "lotto",
+      "title": "FloridaLotto"
+    },
+    "pick5": {
+      "lu_slug": "pick-5",
+      "title": "FloridaPick 5 Evening"
+    },
+    "fantasy5": {
+      "lu_slug": "fantasy-5",
+      "title": "FloridaFantasy 5 Evening"
+    },
+    "cash4life": {
+      "lu_slug": "cash4life",
+      "title": "FloridaCash4Life"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "FloridaPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "FloridaMega Millions"
+    },
+    "pick5-midday": {
+      "lu_slug": "pick-5-midday",
+      "title": "FloridaPick 5 Midday"
+    }
+  },
+  "CA": {
+    "daily-derby": {
+      "lu_slug": "daily-derby",
+      "title": "CaliforniaDaily Derby"
+    },
+    "daily3": {
+      "lu_slug": "daily-3",
+      "title": "CaliforniaDaily 3 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "CaliforniaPowerball"
+    },
+    "daily4": {
+      "lu_slug": "daily-4",
+      "title": "CaliforniaDaily 4"
+    },
+    "superlottoplus": {
+      "lu_slug": "super-lotto-plus",
+      "title": "CaliforniaSuperLotto Plus"
+    },
+    "fantasy5": {
+      "lu_slug": "fantasy-5",
+      "title": "CaliforniaFantasy 5"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "CaliforniaMega Millions"
+    }
+  },
+  "PA": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "PennsylvaniaPick 3 Evening"
+    },
+    "pick2": {
+      "lu_slug": "pick-2",
+      "title": "PennsylvaniaPick 2 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "PennsylvaniaPick 4 Evening"
+    },
+    "pick5": {
+      "lu_slug": "pick-5",
+      "title": "PennsylvaniaPick 5 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "PennsylvaniaPowerball"
+    },
+    "cash5": {
+      "lu_slug": "cash-5",
+      "title": "PennsylvaniaCash 5"
+    },
+    "match6lotto": {
+      "lu_slug": "match-6",
+      "title": "manual"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "PennsylvaniaMega Millions"
+    }
+  },
+  "NJ": {
+    "jersey-cash-5": {
+      "lu_slug": "cash-5",
+      "title": "manual"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "New JerseyPowerball"
+    },
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "New JerseyPick-3 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "New JerseyPick-4 Evening"
+    },
+    "pick6": {
+      "lu_slug": "pick-6",
+      "title": "New JerseyPick-6"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "New JerseyMega Millions"
+    },
+    "cash5": {
+      "lu_slug": "cash-5",
+      "title": "New JerseyJersey Cash 5"
+    }
+  },
+  "IL": {
+    "lucky-day-lotto": {
+      "lu_slug": "lucky-day-lotto-evening",
+      "title": "manual"
+    },
+    "pick4": {
+      "lu_slug": "daily-4",
+      "title": "manual"
+    },
+    "pick3": {
+      "lu_slug": "daily-3",
+      "title": "manual"
+    },
+    "lotto": {
+      "lu_slug": "lotto",
+      "title": "IllinoisLotto"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "IllinoisPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "IllinoisMega Millions"
+    }
+  },
+  "OH": {
+    "rolling-cash-5": {
+      "lu_slug": "rolling-cash-5",
+      "title": "OhioRolling Cash 5"
+    },
+    "classic-lotto": {
+      "lu_slug": "classic-lotto",
+      "title": "OhioClassic Lotto"
+    },
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "OhioPick 3 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "OhioPick 4 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "OhioPowerball"
+    },
+    "pick5": {
+      "lu_slug": "pick-5",
+      "title": "OhioPick 5 Evening"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "OhioMega Millions"
+    }
+  },
+  "NC": {
+    "lucky-for-life": {
+      "lu_slug": null,
+      "title": null
+    },
+    "cash5": {
+      "lu_slug": "cash-5",
+      "title": "North CarolinaCash 5"
+    },
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "North CarolinaPick 3 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "North CarolinaPick 4 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "North CarolinaPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "North CarolinaMega Millions"
+    }
+  },
+  "VA": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "VirginiaPick 3 Night"
+    },
+    "bank-a-million": {
+      "lu_slug": "bank-a-million",
+      "title": "VirginiaBank a Million"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "VirginiaPick 4 Night"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "VirginiaPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "VirginiaMega Millions"
+    },
+    "cash5": {
+      "lu_slug": "cash-5",
+      "title": "VirginiaCash 5"
+    }
+  },
+  "MD": {
+    "multimatch": {
+      "lu_slug": "multi-match",
+      "title": "manual"
+    },
+    "bonus-match-5": {
+      "lu_slug": "bonus-match-5",
+      "title": "MarylandBonus Match 5"
+    },
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "MarylandPick 3 Evening"
+    },
+    "pick4": {
+      "lu_slug": "pick-4",
+      "title": "MarylandPick 4 Evening"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "MarylandPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "MarylandMega Millions"
+    }
+  },
+  "MI": {
+    "pick3": {
+      "lu_slug": "daily-3",
+      "title": "manual"
+    },
+    "pick4": {
+      "lu_slug": "daily-4",
+      "title": "manual"
+    },
+    "fantasy5": {
+      "lu_slug": "fantasy-5",
+      "title": "MichiganFantasy 5"
+    },
+    "lotto47": {
+      "lu_slug": "classic-lotto-47",
+      "title": "manual"
+    },
+    "powerball": {
+      "lu_slug": "powerball",
+      "title": "MichiganPowerball"
+    },
+    "megamillions": {
+      "lu_slug": "mega-millions",
+      "title": "MichiganMega Millions"
+    }
+  },
+  "AR": {
+    "cash3": {
+      "lu_slug": "cash-3",
+      "title": "ArkansasCash 3 Evening"
+    }
+  },
+  "AZ": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "ArizonaPick 3"
+    }
+  },
+  "CO": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "ColoradoPick 3 Evening"
+    }
+  },
+  "CT": {
+    "play3": {
+      "lu_slug": "play-3",
+      "title": "ConnecticutPlay3 Night"
+    }
+  },
+  "DC": {
+    "pick3": {
+      "lu_slug": "dc-lucky-numbers",
+      "title": "manual"
+    }
+  },
+  "DE": {
+    "play3": {
+      "lu_slug": "play-3",
+      "title": "DelawarePlay 3 Night"
+    }
+  },
+  "IA": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "IowaPick 3 Evening"
+    }
+  },
+  "ID": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "IdahoPick 3 Night"
+    }
+  },
+  "IN": {
+    "daily3": {
+      "lu_slug": "daily-3",
+      "title": "IndianaDaily 3 Evening"
+    }
+  },
+  "KS": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "KansasPick 3 Evening"
+    }
+  },
+  "KY": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "KentuckyPick 3 Evening"
+    }
+  },
+  "LA": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "LouisianaPick 3"
+    }
+  },
+  "ME": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "MainePick 3 Evening"
+    }
+  },
+  "MN": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "MinnesotaPick 3"
+    }
+  },
+  "MO": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "MissouriPick 3 Evening"
+    }
+  },
+  "MS": {
+    "pick3": {
+      "lu_slug": "cash-3",
+      "title": "manual"
+    }
+  },
+  "NE": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "NebraskaPick 3"
+    }
+  },
+  "NH": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "New HampshirePick 3 Evening"
+    }
+  },
+  "NM": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "New MexicoPick 3 Plus Evening"
+    }
+  },
+  "OK": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "OklahomaPick 3"
+    }
+  },
+  "PR": {
+    "pega3": {
+      "lu_slug": "pega-3",
+      "title": "Puerto RicoPega 3 Noche"
+    }
+  },
+  "SC": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "South CarolinaPick 3 Evening"
+    }
+  },
+  "TN": {
+    "cash3": {
+      "lu_slug": "cash-3",
+      "title": "TennesseeCash 3 Evening"
+    }
+  },
+  "VT": {
+    "pick3": {
+      "lu_slug": "pick-3",
+      "title": "VermontPick 3 Evening"
+    }
+  },
+  "WA": {
+    "pick3": {
+      "lu_slug": "daily",
+      "title": "manual"
+    }
+  },
+  "WI": {
+    "pick3": {
+      "lu_slug": "daily-pick-3",
+      "title": "manual"
+    }
+  },
+  "WV": {
+    "daily3": {
+      "lu_slug": "daily-3",
+      "title": "West VirginiaDaily 3"
+    }
+  }
+}
