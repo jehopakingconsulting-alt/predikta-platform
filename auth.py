@@ -170,6 +170,18 @@ class UsageLog(db.Model):
     __table_args__ = (db.UniqueConstraint("user_id", "day", name="uq_usage_user_day"),)
 
 
+class BizUsage(db.Model):
+    """Compteur mensuel d'analyses Business Intelligence (/bizai)."""
+    __tablename__ = "biz_usage"
+
+    id             = db.Column(db.Integer, primary_key=True)
+    user_id        = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    month          = db.Column(db.String(7), nullable=False)  # YYYY-MM
+    analyses_count = db.Column(db.Integer, default=0)
+
+    __table_args__ = (db.UniqueConstraint("user_id", "month", name="uq_bizusage_user_month"),)
+
+
 # ── Setup ─────────────────────────────────────────────────────────────────
 def init_app(app):
     db_url = os.environ.get("DATABASE_URL", "")
@@ -315,6 +327,75 @@ def record_usage(user_id: int):
         log = UsageLog(user_id=user_id, day=today, analyses_count=1)
         db.session.add(log)
     db.session.commit()
+
+
+# ── Business Intelligence (/bizai) — quota Free = 1 analyse/mois ────────────
+FREE_BIZAI_ANALYSES_PER_MONTH = 1
+
+
+def bizai_access_required(f):
+    """Vérifie : connecté + (abonnement lottery actif OU quota Free du mois
+    non atteint). Les abonnés PRO/VIP/ELITE actifs ont un accès illimité au
+    module Business Intelligence ; les comptes Free sont limités à
+    `FREE_BIZAI_ANALYSES_PER_MONTH` analyse(s) par mois civil."""
+    from functools import wraps
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        # Les rapports d'exemple (démo, pré-remplis) restent en accès libre
+        # et ne consomment pas le quota.
+        if request.method == "POST":
+            body = request.get_json(silent=True) or {}
+            if body.get("_example"):
+                return f(*args, **kwargs)
+
+        user = current_user()
+        if not user:
+            return jsonify({"error": "login_required",
+                            "message": "Connecte-toi pour lancer une analyse Business Intelligence."}), 401
+
+        sub = user.subscription
+        if sub and sub.plan and sub.is_active():
+            return f(*args, **kwargs)
+
+        month = date.today().strftime("%Y-%m")
+        log = BizUsage.query.filter_by(user_id=user.id, month=month).first()
+        count = log.analyses_count if log else 0
+        if count >= FREE_BIZAI_ANALYSES_PER_MONTH:
+            return jsonify({"error": "quota_exceeded",
+                            "message": f"Limite de {FREE_BIZAI_ANALYSES_PER_MONTH} analyse(s)/mois atteinte pour le plan Free. "
+                                       "Passe à un plan supérieur pour continuer."}), 429
+
+        return f(*args, **kwargs)
+
+    return wrapper
+
+
+def record_bizai_usage(user_id: int):
+    """Incrémente le compteur mensuel d'analyses Business Intelligence."""
+    month = date.today().strftime("%Y-%m")
+    log = BizUsage.query.filter_by(user_id=user_id, month=month).first()
+    if log:
+        log.analyses_count += 1
+    else:
+        log = BizUsage(user_id=user_id, month=month, analyses_count=1)
+        db.session.add(log)
+    db.session.commit()
+
+
+def bizai_quota_status(user) -> dict:
+    """Retourne l'état du quota Business Intelligence pour l'utilisateur."""
+    sub = user.subscription if user else None
+    unlimited = bool(sub and sub.plan and sub.is_active())
+    month = date.today().strftime("%Y-%m")
+    log = BizUsage.query.filter_by(user_id=user.id, month=month).first() if user else None
+    used = log.analyses_count if log else 0
+    return {
+        "unlimited": unlimited,
+        "limit": None if unlimited else FREE_BIZAI_ANALYSES_PER_MONTH,
+        "used": used,
+        "remaining": None if unlimited else max(0, FREE_BIZAI_ANALYSES_PER_MONTH - used),
+    }
 
 
 # ── Blueprint : routes d'authentification & compte ──────────────────────────

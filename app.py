@@ -1060,7 +1060,21 @@ def bizai_meta():
         "platforms":  {k: {"name": v["name"], "icon": v["icon"]} for k, v in PLATFORMS.items()},
     })
 
+@app.route("/api/bizai/quota")
+def bizai_quota():
+    """Return the current user's Business Intelligence quota status."""
+    user = auth_module.current_user()
+    if not user:
+        return jsonify({"logged_in": False, "unlimited": False,
+                         "limit": auth_module.FREE_BIZAI_ANALYSES_PER_MONTH,
+                         "used": 0,
+                         "remaining": auth_module.FREE_BIZAI_ANALYSES_PER_MONTH})
+    status = auth_module.bizai_quota_status(user)
+    status["logged_in"] = True
+    return jsonify(status)
+
 @app.route("/api/bizai/analyze", methods=["GET", "POST"])
+@auth_module.bizai_access_required
 def bizai_analyze():
     """Run the full business analysis."""
     if request.method == "POST":
@@ -1090,6 +1104,9 @@ def bizai_analyze():
 
     try:
         report = analyze_project(data)
+        user = auth_module.current_user()
+        if user and not data.get("_example"):
+            auth_module.record_bizai_usage(user.id)
         return jsonify({"success": True, "report": report})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

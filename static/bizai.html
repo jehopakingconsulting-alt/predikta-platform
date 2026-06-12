@@ -759,6 +759,27 @@ async function runAnalysis(){
       body: JSON.stringify(data),
     });
     const json = await r.json();
+
+    if(r.status === 401 && json.error === 'login_required'){
+      clearInterval(interval);
+      document.getElementById('loadingSection').style.display = 'none';
+      document.getElementById('wizardSection').style.display  = 'block';
+      if(confirm((json.message || 'Connexion requise pour lancer une analyse.') + '\n\nSe connecter maintenant ?')){
+        window.location.href = '/login.html?next=/bizai';
+      }
+      return;
+    }
+
+    if(r.status === 429 && json.error === 'quota_exceeded'){
+      clearInterval(interval);
+      document.getElementById('loadingSection').style.display = 'none';
+      document.getElementById('wizardSection').style.display  = 'block';
+      if(confirm((json.message || 'Quota mensuel atteint.') + '\n\nVoir les plans ?')){
+        window.location.href = '/pro';
+      }
+      return;
+    }
+
     clearInterval(interval);
     setTimeout(()=>{
       document.getElementById('loadingSection').style.display = 'none';
@@ -1114,8 +1135,8 @@ const EXAMPLES = {
 };
 
 async function loadExample(type){
-  const data = EXAMPLES[type];
-  if(!data) return;
+  const data = {...EXAMPLES[type], _example: true};
+  if(!EXAMPLES[type]) return;
   document.getElementById('wizardSection').style.display = 'none';
   document.getElementById('loadingSection').style.display = 'block';
   document.getElementById('reportSection').style.display  = 'none';
