@@ -4,9 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="description" content="PREDIKTA — Prédictions de loterie par analyse prédictive. Pick3, Cash3, 44 états US. XGBoost, Markov, Monte Carlo, Fourier."/>
-<meta name="keywords" content="loterie, lottery, prediction, pick3, cash3, new york, georgia, texas, florida, analyse prédictive, AI"/>
+<meta name="keywords" content="loterie, lottery, prediction, pick3, cash3, new york, georgia, texas, florida, analyse prédictive"/>
 <meta property="og:title" content="PREDIKTA — World Lottery Analytics"/>
-<meta property="og:description" content="Prédictions Pick3 par IA · 44 états · Markov · Monte Carlo · Fourier · XGBoost"/>
+<meta property="og:description" content="Prédictions Pick3 par analyse prédictive · 44 états · Markov · Monte Carlo · Fourier · XGBoost"/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="/manifest.json"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -1020,7 +1020,7 @@ footer{
     <div class="video-playlist" id="playlist">
       <div class="playlist-item active" data-src="" id="nowPlaying" onclick="loadTrack(this)">🎬 Guide Prédictions</div>
       <div class="playlist-item" data-src="" onclick="loadTrack(this)">📊 Analyse Markov</div>
-      <div class="playlist-item" data-src="" onclick="loadTrack(this)">🤖 IA Expliquée</div>
+      <div class="playlist-item" data-src="" onclick="loadTrack(this)">📊 Analyse Expliquée</div>
       <div class="playlist-item" data-src="" onclick="loadTrack(this)">💰 Stratégies Gagnantes</div>
     </div>
   </div>
@@ -1073,7 +1073,7 @@ footer{
     <div class="newsletter-block">
       <div class="nl-icon">⚡</div>
       <div class="nl-title">PREDIKTA PRO — Gratuit 7 jours</div>
-      <div class="nl-desc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour IA</div>
+      <div class="nl-desc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour</div>
       <input class="nl-input" type="email" placeholder="votre@email.com"/>
       <button class="nl-btn" onclick="subscribeNewsletter()">S'abonner Gratuitement</button>
       <div class="nl-note">Sans engagement · Résiliation en 1 clic</div>
@@ -1591,7 +1591,7 @@ function updateSidebar(d){
     <div>📍 <strong>${state}</strong></div>
     <div>📊 ${d.total_draws} ${t('totalDraws')}</div>
     <div>📅 ${ld?ld.date:'—'}</div>
-    <div>🤖 ML: ${ml}</div>
+    <div>⚙️ ML: ${ml}</div>
     <div>📅 ${t('today')}: ${new Date().toLocaleDateString()}</div>
   `;
 }
@@ -1875,7 +1875,7 @@ function renderConsensus(d, today){
     <div class="consensus-row">${cards}</div>
     ${shareRow}
     <div style="margin-top:10px;font-size:.68rem;color:var(--muted);line-height:1.6">
-      🤖 XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
+      ⚙️ XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
     </div>
   </div>`;
 }

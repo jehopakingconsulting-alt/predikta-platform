@@ -323,7 +323,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
 
     <!-- Lien analyseur -->
     <div class="side-card" style="text-align:center">
-      <div class="side-title" data-i18n="analyzeTitle">🤖 Analyser ces numéros</div>
+      <div class="side-title" data-i18n="analyzeTitle">📊 Analyser ces numéros</div>
       <div style="font-size:.74rem;color:var(--muted2);margin-bottom:12px;line-height:1.6" data-i18n="analyzeDesc">Utilisez nos algorithmes pour analyser les patterns et générer des prédictions</div>
       <a href="/" style="display:block;padding:11px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none" data-i18n="analyzeBtn">⚡ Ouvrir l'Analyseur →</a>
     </div>
@@ -368,7 +368,7 @@ fr:{
   legend_red:'<strong style="color:#ff6644">🔴 Boule rouge</strong> — Powerball',
   legend_blue:'<strong style="color:#4499ff">🔵 Boule bleue</strong> — Mega Ball',
   legend_yellow:'<strong style="color:#ffcc44">🟡 Boule jaune</strong> — Cash Ball',
-  analyzeTitle:"🤖 Analyser ces numéros",
+  analyzeTitle:"📊 Analyser ces numéros",
   analyzeDesc:"Utilisez nos algorithmes pour analyser les patterns et générer des prédictions",
   analyzeBtn:"⚡ Ouvrir l'Analyseur →",
   noDataLabel:"Aucune donnée disponible",
@@ -410,7 +410,7 @@ en:{
   legend_red:'<strong style="color:#ff6644">🔴 Red ball</strong> — Powerball',
   legend_blue:'<strong style="color:#4499ff">🔵 Blue ball</strong> — Mega Ball',
   legend_yellow:'<strong style="color:#ffcc44">🟡 Yellow ball</strong> — Cash Ball',
-  analyzeTitle:"🤖 Analyze these numbers",
+  analyzeTitle:"📊 Analyze these numbers",
   analyzeDesc:"Use our algorithms to analyze patterns and generate predictions",
   analyzeBtn:"⚡ Open the Analyzer →",
   noDataLabel:"No data available",
@@ -452,7 +452,7 @@ es:{
   legend_red:'<strong style="color:#ff6644">🔴 Bola roja</strong> — Powerball',
   legend_blue:'<strong style="color:#4499ff">🔵 Bola azul</strong> — Mega Ball',
   legend_yellow:'<strong style="color:#ffcc44">🟡 Bola amarilla</strong> — Cash Ball',
-  analyzeTitle:"🤖 Analizar estos números",
+  analyzeTitle:"📊 Analizar estos números",
   analyzeDesc:"Use nuestros algoritmos para analizar patrones y generar predicciones",
   analyzeBtn:"⚡ Abrir el Analizador →",
   noDataLabel:"No hay datos disponibles",
@@ -494,7 +494,7 @@ pt:{
   legend_red:'<strong style="color:#ff6644">🔴 Bola vermelha</strong> — Powerball',
   legend_blue:'<strong style="color:#4499ff">🔵 Bola azul</strong> — Mega Ball',
   legend_yellow:'<strong style="color:#ffcc44">🟡 Bola amarela</strong> — Cash Ball',
-  analyzeTitle:"🤖 Analisar estes números",
+  analyzeTitle:"📊 Analisar estes números",
   analyzeDesc:"Use nossos algoritmos para analisar padrões e gerar previsões",
   analyzeBtn:"⚡ Abrir o Analisador →",
   noDataLabel:"Nenhum dado disponível",
@@ -536,7 +536,7 @@ ht:{
   legend_red:'<strong style="color:#ff6644">🔴 Boul wouj</strong> — Powerball',
   legend_blue:'<strong style="color:#4499ff">🔵 Boul ble</strong> — Mega Ball',
   legend_yellow:'<strong style="color:#ffcc44">🟡 Boul jòn</strong> — Cash Ball',
-  analyzeTitle:"🤖 Analize nimewo sa yo",
+  analyzeTitle:"📊 Analize nimewo sa yo",
   analyzeDesc:"Itilize algoritm nou yo pou analize modèl yo epi kreye prediksyon",
   analyzeBtn:"⚡ Louvri Analizè a →",
   noDataLabel:"Pa gen done disponib",
@@ -564,8 +564,8 @@ function applyLang(lang){
   const t = T[lang] || T.fr;
   document.documentElement.setAttribute('lang', lang);
   document.title = t.pageTitle;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k = el.getAttribute('data-i18n');
+  document.querySelectorAll('[data-i18n], [data-i18n-html]').forEach(el=>{
+    const k = el.getAttribute('data-i18n') || el.getAttribute('data-i18n-html');
     if(t[k]===undefined) return;
     if(el.hasAttribute('data-i18n-html')) el.innerHTML = t[k];
     else el.textContent = t[k];

@@ -198,7 +198,7 @@ window.closeMobileMenu  = closeMobileMenu;
 document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeMobileMenu(); closeAssistant(); }});
 
 // ═══════════════════════════════════════════════════════════════════
-// ASSISTANT IA MULTILINGUE
+// ASSISTANT MULTILINGUE
 // ═══════════════════════════════════════════════════════════════════
 const ASSIST_T = {
   fr:{
@@ -265,7 +265,7 @@ const KB = {
       answer:'Pour voir les résultats du jour :\n\n🎱 <a href="/results" style="color:#4f6eff">Hub Résultats (Pick3)</a> — tous les 44 États\n🏆 <a href="/all-results" style="color:#4f6eff">Tous les Jeux</a> — Pick2, Pick4, Lotto, Powerball...',
       quick:[{t:'Voir Hub Résultats',href:'/results'},{t:'Voir Tous les Jeux',href:'/all-results'}] },
     { kw:['analyser','analyse','prédiction','prédire','analyse','pick3','cash3','numéro','chiffre'],
-      answer:'Pour analyser et obtenir des prédictions :\n\n⚡ <a href="/analyze" style="color:#4f6eff">Analyseur IA Loterie</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Choisissez la période (3 mois à 5 ans)\n→ Cliquez ⚡ Analyser\n\n7 algorithmes génèrent vos prédictions en quelques secondes.',
+      answer:'Pour analyser et obtenir des prédictions :\n\n⚡ <a href="/analyze" style="color:#4f6eff">Analyseur Prédictif Loterie</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Choisissez la période (3 mois à 5 ans)\n→ Cliquez ⚡ Analyser\n\n7 algorithmes génèrent vos prédictions en quelques secondes.',
       quick:[{t:'Ouvrir l\'Analyseur',href:'/analyze'}] },
     { kw:['business','entreprise','projet','startup','pme','marketing','lancer','marché','niche'],
       answer:'PREDIKTA Business Intelligence analyse votre projet en 4 étapes :\n\n🚀 <a href="/bizai" style="color:#4f6eff">Ouvrir Business Intelligence</a>\n→ Étape 1 : Nom, secteur, stade\n→ Étape 2 : Produit, prix, audience\n→ Étape 3 : Géographie, langues\n→ Étape 4 : Budget, objectifs\n\nRapport 12 sections généré en 30 secondes !',
@@ -294,7 +294,7 @@ const KB = {
       answer:'To see today\'s results:\n\n🎱 <a href="/results" style="color:#4f6eff">Results Hub (Pick3)</a> — all 44 states\n🏆 <a href="/all-results" style="color:#4f6eff">All Games</a> — Pick2, Pick4, Lotto, Powerball...',
       quick:[{t:'Results Hub',href:'/results'},{t:'All Games',href:'/all-results'}] },
     { kw:['analyze','predict','prediction','pick3','cash3','number','digit'],
-      answer:'To analyze and get predictions:\n\n⚡ <a href="/analyze" style="color:#4f6eff">AI Lottery Analyzer</a>\n→ Select your State (NY, GA, TX, FL...)\n→ Choose period (3 months to 5 years)\n→ Click ⚡ Analyze\n\n7 AI models generate predictions in seconds.',
+      answer:'To analyze and get predictions:\n\n⚡ <a href="/analyze" style="color:#4f6eff">Predictive Lottery Analyzer</a>\n→ Select your State (NY, GA, TX, FL...)\n→ Choose period (3 months to 5 years)\n→ Click ⚡ Analyze\n\n7 algorithms generate predictions in seconds.',
       quick:[{t:'Open Analyzer',href:'/analyze'}] },
     { kw:['business','project','startup','marketing','launch','market','niche'],
       answer:'PREDIKTA Business Intelligence analyzes your project in 4 steps:\n\n🚀 <a href="/bizai" style="color:#4f6eff">Open Business Intelligence</a>\n→ 12-section report in 30 seconds\n→ Market analysis · Target audience · 11 marketing channels\n→ 30-60-90 day action plan',
@@ -461,14 +461,14 @@ function buildAssistantHTML(){
 
 <!-- Bubble -->
 <button id="passt-bubble" onclick="toggleAssistant()" title="Assistant PREDIKTA">
-  🤖
+  💬
   <span id="passt-notif">1</span>
 </button>
 
 <!-- Panel -->
 <div id="passt-panel">
   <div class="passt-header">
-    <div class="passt-avatar">🤖</div>
+    <div class="passt-avatar">💬</div>
     <div class="passt-header-text">
       <span class="passt-header-title" id="passt-title">${T.title}</span>
       <span class="passt-header-sub" id="passt-subtitle">${T.subtitle}</span>
@@ -506,7 +506,7 @@ function passtBotMsg(text, quickLinks=[]){
   // Typing indicator
   const typing = document.createElement('div');
   typing.className = 'passt-msg bot';
-  typing.innerHTML = '<div class="passt-msg-avatar">🤖</div><div class="passt-typing"><span></span><span></span><span></span></div>';
+  typing.innerHTML = '<div class="passt-msg-avatar">💬</div><div class="passt-typing"><span></span><span></span><span></span></div>';
   msgs.appendChild(typing);
   msgs.scrollTop = msgs.scrollHeight;
 
@@ -523,7 +523,7 @@ function passtBotMsg(text, quickLinks=[]){
       ).join('') + '</div>';
     }
 
-    msg.innerHTML = `<div class="passt-msg-avatar">🤖</div>
+    msg.innerHTML = `<div class="passt-msg-avatar">💬</div>
       <div class="passt-msg-bubble">${text.replace(/\n/g,'<br>')}${quickHtml}</div>`;
     msgs.appendChild(msg);
     msgs.scrollTop = msgs.scrollHeight;
@@ -966,7 +966,7 @@ function buildNav(){
   </div>
   <div class="pmob-section" style="display:flex;gap:8px">
     <button style="flex:1;padding:10px;border-radius:9px;border:1px solid #1a1a45;background:transparent;color:#7888bb;font-size:.74rem;font-weight:600;cursor:pointer" onclick="toggleTheme();closeMobileMenu()">${_dark?'☀️ Mode Clair':'🌙 Mode Sombre'}</button>
-    <button style="flex:1;padding:10px;border-radius:9px;border:1px solid rgba(79,110,255,.3);background:rgba(79,110,255,.1);color:#88aaff;font-size:.74rem;font-weight:600;cursor:pointer" onclick="closeAssistant();window.setTimeout(()=>toggleAssistant(),100);closeMobileMenu()">🤖 Assistant</button>
+    <button style="flex:1;padding:10px;border-radius:9px;border:1px solid rgba(79,110,255,.3);background:rgba(79,110,255,.1);color:#88aaff;font-size:.74rem;font-weight:600;cursor:pointer" onclick="closeAssistant();window.setTimeout(()=>toggleAssistant(),100);closeMobileMenu()">💬 Assistant</button>
   </div>
   <div class="pmob-footer">
     <a href="/about">À Propos</a><a href="/faq">FAQ</a>
