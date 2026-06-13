@@ -7,6 +7,7 @@ Handles Pick2, Pick3, Pick4, Pick5, Pick6, Powerball, Mega Millions, etc.
 import requests, urllib3, re, time, json, os
 from bs4 import BeautifulSoup
 from datetime import datetime, date
+from zoneinfo import ZoneInfo
 from games_config import STATE_GAMES, GAME_TYPES, TOD_ORDER
 
 try:
@@ -261,7 +262,7 @@ def get_today_all_games(state: str) -> list[dict]:
     """
     state = state.upper()
     games = STATE_GAMES.get(state, [])
-    today = date.today().isoformat()
+    today = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
 
     results = []
     for game in games:

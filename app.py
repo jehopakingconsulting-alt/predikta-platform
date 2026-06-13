@@ -12,6 +12,7 @@ import numpy as np
 import os, json, re, threading, time
 from collections import Counter, defaultdict
 from datetime import datetime, date, timedelta
+from zoneinfo import ZoneInfo
 from scraper import (scrape_all, fetch_state, save_csv, load_csv,
                      STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
 from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
@@ -859,8 +860,11 @@ def api_results_latest():
     if _LATEST_CACHE["data"] is not None and (now - _LATEST_CACHE["ts"]) < _LATEST_CACHE_TTL:
         return jsonify(_LATEST_CACHE["data"])
 
-    today_str     = date.today().isoformat()
-    yesterday_str = (date.today() - timedelta(days=1)).isoformat()
+    # Les tirages sont datés en heure US (ET) ; le serveur (Render) tourne en UTC,
+    # donc date.today() peut déjà être "demain" par rapport aux dates des tirages US.
+    today_us      = datetime.now(ZoneInfo("America/New_York")).date()
+    today_str     = today_us.isoformat()
+    yesterday_str = (today_us - timedelta(days=1)).isoformat()
     result = {}
 
     for code, cfg in STATES.items():
@@ -1101,7 +1105,6 @@ def api_games_today(state_code):
 @app.route("/api/games/all-states/today")
 def api_games_all_states_today():
     """Quick summary: most recent draw for all configured games across all states."""
-    today = date.today().isoformat()
     result = {}
     for state_code in STATE_GAMES:
         games = get_today_all_games(state_code)
