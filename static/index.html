@@ -368,10 +368,17 @@ header{
   position:relative;z-index:5;
   background:rgba(7,7,26,.95);
   border-bottom:1px solid var(--border);
-  padding:14px 28px;
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:16px 28px;
+  display:flex;flex-direction:column;gap:12px;
   max-width:100%;
 }
+.controls-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.controls-actions{gap:12px}
+.controls-actions > *{flex:1 1 160px}
+.controls-selects #stateSelect{flex:2 1 220px}
+.controls-selects select{flex:1 1 130px}
 
 /* ── Quick state tabs ── */
 .quick-states{
@@ -410,6 +417,12 @@ header{
   background-repeat:no-repeat;background-position:right 12px center;
   padding-right:32px;
 }
+.controls-actions select,.controls-actions button,.controls-actions a{
+  padding:14px 20px;border-radius:12px;
+  font-size:.95rem;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  text-align:center;white-space:nowrap;
+}
 .btn-analyze{
   background:linear-gradient(135deg,#2a3acc,#4f6eff);
   color:#fff;font-weight:700;border:none;
@@ -421,13 +434,22 @@ header{
   color:#44ff99;font-weight:600;border-color:#226633;
 }
 .btn-scrape:hover{background:linear-gradient(135deg,#123028,#226040)}
+.btn-results{
+  text-decoration:none;background:linear-gradient(135deg,rgba(34,232,122,.15),rgba(34,232,122,.08));
+  color:#22e87a;border:1px solid rgba(34,232,122,.4);transition:background .2s;
+}
+.btn-results:hover{background:rgba(34,232,122,.25)}
 #status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
+@media(max-width:700px){
+  .controls-actions > *{flex:1 1 100%}
+}
 
 /* ── Date filters ───────────────────────────────────────────────── */
-.filters-wrap{position:relative}
+.filters-wrap{position:relative;flex:1 1 160px}
 .btn-filters{
+  width:100%;
   background:#0c0c28;color:var(--text);border-color:var(--border2);
-  display:inline-flex;align-items:center;gap:6px;font-weight:600;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;
 }
 .btn-filters.active{border-color:var(--accent);color:var(--accent)}
 .filters-badge{
@@ -955,6 +977,7 @@ footer{
 
 <!-- ══ CONTROLS ══ -->
 <div class="controls-bar">
+<div class="controls-row controls-selects">
   <select id="stateSelect">
     <optgroup label="── Tous les États (A-Z) ──">
       <option value="AR">💎 Arkansas</option>
@@ -1015,6 +1038,8 @@ footer{
     <option value="36">3 ans</option>
     <option value="60">5 ans</option>
   </select>
+</div>
+<div class="controls-row controls-actions">
   <div class="filters-wrap">
     <button class="btn-filters" id="btn-filters" onclick="toggleFiltersPanel()">
       📅 <span id="btn-filters-label">Filtres</span><span class="filters-badge" id="filters-badge" style="display:none">0</span>
@@ -1035,13 +1060,9 @@ footer{
   </div>
   <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
   <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
-  <a href="/results" style="padding:10px 18px;border-radius:10px;font-size:.88rem;font-weight:700;
-    text-decoration:none;background:linear-gradient(135deg,rgba(34,232,122,.15),rgba(34,232,122,.08));
-    color:#22e87a;border:1px solid rgba(34,232,122,.4);white-space:nowrap;transition:all .2s;display:inline-flex;align-items:center;gap:6px"
-    onmouseover="this.style.background='rgba(34,232,122,.25)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(34,232,122,.15),rgba(34,232,122,.08))'">
-    🟢 Résultats du Jour
-  </a>
-  <span id="status"></span>
+  <a href="/results" class="btn-results">🟢 Résultats du Jour</a>
+</div>
+<span id="status"></span>
 </div>
 
 <!-- ══ VIDEO PLAYER 4K ══ -->
