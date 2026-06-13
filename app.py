@@ -10,7 +10,7 @@ except ImportError:
     Compress = None
 import numpy as np
 import os, json, re, threading, time
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime, date, timedelta
 from scraper import (scrape_all, fetch_state, save_csv, load_csv,
                      STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
@@ -465,31 +465,51 @@ def predictions_state(state_code):
 
 @app.route("/api/hot-pick3")
 def hot_pick3():
-    """Public lightweight endpoint: today's hottest Pick3 digits/combo for the top-5 priority states."""
+    """Public lightweight endpoint: hottest Pick3 digits/combo per state + draw (tirage/date/heure)."""
     import analyzer
-    out = []
-    for code in PRIORITY_STATES[:5]:
+
+    try:
+        limit = int(request.args.get("limit", "5"))
+    except ValueError:
+        limit = 5
+    limit = max(1, min(limit, 10))
+
+    entries = []
+    for code in PRIORITY_STATES:
         try:
-            rep = analyzer.full_report(code)
+            draws = analyzer.load_draws(code)
         except Exception:
             continue
-        if not rep or "error" in rep:
+        if not draws:
             continue
-        hot30 = rep.get("hot_cold_30", {})
-        hot_digits = sorted(
-            (d for d, v in hot30.items() if v.get("status") == "HOT"),
-            key=lambda d: hot30[d]["pct"], reverse=True
-        )
-        suggestions = rep.get("suggestions") or []
-        top = suggestions[0] if suggestions else None
-        out.append({
-            "state": code,
-            "name": STATES[code]["name"],
-            "hot_digits": hot_digits[:5],
-            "top_combo": top["combo"] if top else None,
-            "confidence": top["confidence"] if top else None,
-        })
-    return jsonify(out)
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        for tod, tdraws in by_tod.items():
+            if not tdraws:
+                continue
+            hot30 = analyzer.hot_cold(tdraws, 30)
+            hot_digits = sorted(
+                (dg for dg, v in hot30.items() if v.get("status") == "HOT"),
+                key=lambda dg: hot30[dg]["pct"], reverse=True
+            )
+            suggestions = analyzer.weighted_suggestions(tdraws, top_n=1)
+            top = suggestions[0] if suggestions else None
+            entries.append({
+                "state": code,
+                "name": STATES[code]["name"],
+                "tod": tod,
+                "date": tdraws[0]["date"],
+                "hot_digits": hot_digits[:5],
+                "top_combo": top["combo"] if top else None,
+                "confidence": top["confidence"] if top else None,
+                "score": top["score"] if top else 0,
+            })
+
+    entries.sort(key=lambda e: e["score"], reverse=True)
+    return jsonify(entries[:limit])
 
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")

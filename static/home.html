@@ -242,10 +242,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 @media(max-width:700px){ .raffle-banner{flex-direction:column;text-align:center} .raffle-side{width:100%} }
 
 .hot-cta{margin-bottom:40px}
-.hot-cta-header{margin-bottom:14px}
+.hot-cta-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .hot-cta-title{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#ff5e3a;margin-bottom:4px}
 .hot-cta-sub{font-size:.78rem;color:var(--muted2)}
-.hot-cta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.hot-cta-select{
+  padding:9px 14px;border-radius:10px;background:#0c0c28;color:var(--text);
+  border:1px solid var(--border2);font-family:'Inter',sans-serif;font-size:.8rem;
+  font-weight:700;cursor:pointer;flex-shrink:0;
+}
+.hot-cta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .hot-card{
   background:var(--card);border:1px solid rgba(255,94,58,.35);border-radius:14px;
   padding:14px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;
@@ -255,6 +260,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:linear-gradient(90deg,#ff5e3a,var(--gold));
 }
 .hot-card-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.82rem;color:var(--text)}
+.hot-card-meta{font-size:.62rem;color:var(--muted2)}
 .hot-card-digits{display:flex;gap:6px;flex-wrap:wrap}
 .hot-card-combo{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;color:var(--gold);letter-spacing:2px}
 .hot-card-lbl{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px}
@@ -263,8 +269,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   font-size:.7rem;font-weight:700;color:#ff5e3a;text-decoration:none;
 }
 .hot-card-cta:hover{opacity:.8}
-@media(max-width:1000px){ .hot-cta-grid{grid-template-columns:repeat(2,1fr)} }
-@media(max-width:480px){ .hot-cta-grid{grid-template-columns:1fr} }
+@media(max-width:480px){ .hot-cta-grid{grid-template-columns:repeat(2,1fr)} }
 
 @media(max-width:700px){
   .services-grid{grid-template-columns:1fr}
@@ -328,8 +333,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <!-- Hot Pick3 CTA -->
   <div class="hot-cta">
     <div class="hot-cta-header">
-      <div class="hot-cta-title" data-i18n="hotCtaTitle">🔥 Top 5 Pick3 les plus chauds aujourd'hui</div>
-      <div class="hot-cta-sub" data-i18n="hotCtaSub">Chiffres chauds et combinaison suggérée pour les états les plus joués</div>
+      <div>
+        <div class="hot-cta-title" id="hotCtaTitle">🔥 Pick3 les plus chauds</div>
+        <div class="hot-cta-sub" data-i18n="hotCtaSub">Chiffres chauds et combinaison suggérée par tirage (état, séance, date)</div>
+      </div>
+      <select class="hot-cta-select" id="hotCtaLimit" onchange="loadHotCta()">
+        <option value="3">Top 3</option>
+        <option value="5" selected>Top 5</option>
+        <option value="10">Top 10</option>
+      </select>
     </div>
     <div class="hot-cta-grid" id="hotCtaGrid">
       <div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px;grid-column:1/-1" data-i18n="loading">Chargement…</div>
@@ -573,7 +585,7 @@ const T = {
     aff3Desc:"Jackpots en temps réel",aff3Cta:"Voir →",
     raffleTitle:"🎁 Tirage Cadeau du Mois",raffleDesc:"Inscrivez-vous gratuitement et tentez de gagner 1 mois PREDIKTA PRO offert + des bonus exclusifs !",
     raffleCta:"Participer →",raffleEndsIn:"Tirage dans",
-    hotCtaTitle:"🔥 Top 5 Pick3 les plus chauds aujourd'hui",hotCtaSub:"Chiffres chauds et combinaison suggérée pour les états les plus joués",hotCtaDigits:"Chiffres chauds",hotCtaCombo:"Combo suggéré",hotCtaLink:"Voir l'analyse →",
+    hotCtaTitle:n=>`🔥 Top ${n} Pick3 les plus chauds`,hotCtaSub:"Chiffres chauds et combinaison suggérée pour les états les plus joués",hotCtaDigits:"Chiffres chauds",hotCtaCombo:"Combo suggéré",hotCtaLink:"Voir l'analyse →",
     dAbbr:"j",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Services pour la Diaspora",
     daff1Desc:"Envoyez de l'argent en Haïti et ailleurs, rapide et sans frais cachés",daff1Cta:"Envoyer →",
@@ -634,7 +646,7 @@ const T = {
     aff3Desc:"Real-time jackpots",aff3Cta:"View →",
     raffleTitle:"🎁 Monthly Giveaway",raffleDesc:"Sign up for free for a chance to win 1 month of PREDIKTA PRO + exclusive bonuses!",
     raffleCta:"Enter now →",raffleEndsIn:"Drawing in",
-    hotCtaTitle:"🔥 Top 5 hottest Pick3 today",hotCtaSub:"Hot digits and suggested combo for the most popular states",hotCtaDigits:"Hot digits",hotCtaCombo:"Suggested combo",hotCtaLink:"View analysis →",
+    hotCtaTitle:n=>`🔥 Top ${n} hottest Pick3`,hotCtaSub:"Hot digits and suggested combo for the most popular states",hotCtaDigits:"Hot digits",hotCtaCombo:"Suggested combo",hotCtaLink:"View analysis →",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Diaspora Services",
     daff1Desc:"Send money to Haiti and beyond, fast with no hidden fees",daff1Cta:"Send →",
@@ -695,7 +707,7 @@ const T = {
     aff3Desc:"Jackpots en tiempo real",aff3Cta:"Ver →",
     raffleTitle:"🎁 Sorteo Mensual",raffleDesc:"¡Regístrate gratis y participa para ganar 1 mes de PREDIKTA PRO + bonos exclusivos!",
     raffleCta:"Participar →",raffleEndsIn:"Sorteo en",
-    hotCtaTitle:"🔥 Top 5 Pick3 más calientes hoy",hotCtaSub:"Dígitos calientes y combinación sugerida para los estados más jugados",hotCtaDigits:"Dígitos calientes",hotCtaCombo:"Combinación sugerida",hotCtaLink:"Ver análisis →",
+    hotCtaTitle:n=>`🔥 Top ${n} Pick3 más calientes`,hotCtaSub:"Dígitos calientes y combinación sugerida para los estados más jugados",hotCtaDigits:"Dígitos calientes",hotCtaCombo:"Combinación sugerida",hotCtaLink:"Ver análisis →",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Servicios para la Diáspora",
     daff1Desc:"Envía dinero a Haití y otros países, rápido y sin comisiones ocultas",daff1Cta:"Enviar →",
@@ -756,7 +768,7 @@ const T = {
     aff3Desc:"Jackpots em tempo real",aff3Cta:"Ver →",
     raffleTitle:"🎁 Sorteio Mensal",raffleDesc:"Cadastre-se grátis e concorra a 1 mês de PREDIKTA PRO + bônus exclusivos!",
     raffleCta:"Participar →",raffleEndsIn:"Sorteio em",
-    hotCtaTitle:"🔥 Top 5 Pick3 mais quentes hoje",hotCtaSub:"Dígitos quentes e combinação sugerida para os estados mais jogados",hotCtaDigits:"Dígitos quentes",hotCtaCombo:"Combinação sugerida",hotCtaLink:"Ver análise →",
+    hotCtaTitle:n=>`🔥 Top ${n} Pick3 mais quentes`,hotCtaSub:"Dígitos quentes e combinação sugerida para os estados mais jogados",hotCtaDigits:"Dígitos quentes",hotCtaCombo:"Combinação sugerida",hotCtaLink:"Ver análise →",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Serviços para a Diáspora",
     daff1Desc:"Envie dinheiro para o Haiti e outros países, rápido e sem taxas ocultas",daff1Cta:"Enviar →",
@@ -817,7 +829,7 @@ const T = {
     aff3Desc:"Jackpot an tan reyèl",aff3Cta:"Wè →",
     raffleTitle:"🎁 Tiraj Kado Chak Mwa",raffleDesc:"Enskri gratis epi patisipe pou genyen 1 mwa PREDIKTA PRO gratis + bonis eksklizif !",
     raffleCta:"Patisipe →",raffleEndsIn:"Tiraj nan",
-    hotCtaTitle:"🔥 Top 5 Pick3 ki pi cho jodi a",hotCtaSub:"Chif cho ak konbinezon sijere pou eta ki pi jwe yo",hotCtaDigits:"Chif cho",hotCtaCombo:"Konbinezon sijere",hotCtaLink:"Wè analiz →",
+    hotCtaTitle:n=>`🔥 Top ${n} Pick3 ki pi cho`,hotCtaSub:"Chif cho ak konbinezon sijere pou eta ki pi jwe yo",hotCtaDigits:"Chif cho",hotCtaCombo:"Konbinezon sijere",hotCtaLink:"Wè analiz →",
     dAbbr:"j",hAbbr:"è",mAbbr:"min",
     sectionDiaspora:"Sèvis pou Dyaspora",
     daff1Desc:"Voye lajan an Ayiti ak lòt peyi, rapid san frè kache",daff1Cta:"Voye →",
@@ -939,20 +951,24 @@ async function loadSnap(){
   }
 }
 
-// Top 5 Pick3 chauds (NY/FL/GA/TX/NJ) — chargé une fois, ré-affiché au changement de langue
-let _HOT_CTA_DATA = null;
-const HOT_CTA_FLAGS = { NY:'🗽', FL:'🌴', GA:'🍑', TX:'⭐', NJ:'🌊' };
+// Pick3 chauds par tirage (état/séance/date) — top N choisi par l'utilisateur (3/5/10)
+let _HOT_CTA_DATA = {};
+const HOT_CTA_FLAGS = { NY:'🗽', FL:'🌴', GA:'🍑', TX:'⭐', NJ:'🌊', TN:'🎸', CA:'☀️', PA:'🔔', IL:'🏙️', OH:'🌻', VA:'🦅' };
 
 async function loadHotCta(){
   const t = curT();
   const grid = document.getElementById('hotCtaGrid');
+  const titleEl = document.getElementById('hotCtaTitle');
   if(!grid) return;
+  const limit = document.getElementById('hotCtaLimit')?.value || '5';
+  if(titleEl) titleEl.textContent = t.hotCtaTitle(limit);
+  grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px;grid-column:1/-1">${t.loading}</div>`;
   try{
-    let data = _HOT_CTA_DATA;
+    let data = _HOT_CTA_DATA[limit];
     if(!data){
-      const r = await fetch('/api/hot-pick3');
+      const r = await fetch(`/api/hot-pick3?limit=${limit}`);
       data = await r.json();
-      _HOT_CTA_DATA = data;
+      _HOT_CTA_DATA[limit] = data;
     }
     if(!Array.isArray(data) || !data.length){
       grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);grid-column:1/-1">${t.noResults}</div>`;
@@ -964,8 +980,10 @@ async function loadHotCta(){
         `<div class="sball" style="width:24px;height:24px;font-size:.68rem;background:${bc(d)}22;border-color:${bc(d)};color:${bc(d)}">${d}</div>`
       ).join('');
       const combo = s.top_combo ? `<div class="hot-card-combo">${s.top_combo}</div>` : '';
+      const todLbl = s.tod ? (t['tod_'+s.tod]||s.tod) : '';
       return `<div class="hot-card">
         <div class="hot-card-head">${flag} ${s.state}</div>
+        <div class="hot-card-meta">${todLbl}${todLbl&&s.date?' · ':''}${fmtDate(s.date)}</div>
         <div class="hot-card-lbl">${t.hotCtaDigits}</div>
         <div class="hot-card-digits">${digits}</div>
         <div class="hot-card-lbl">${t.hotCtaCombo}</div>
