@@ -1818,7 +1818,6 @@ async function loadTodayWidget(){
   try{
     const r = await fetch('/api/results/latest');
     const data = await r.json();
-    const today = new Date().toISOString().split('T')[0];
 
     // Filter states with today's OR yesterday's results, prioritize the
     // most-consulted states (NY, FL, GA, TX, NJ, TN...) then "today" status

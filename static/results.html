@@ -718,7 +718,8 @@ async function loadDetailMonth(){
 }
 
 function renderDetailDays(days){
-  const today = new Date().toISOString().split('T')[0];
+  // Tirages dates en heure US (ET) - on aligne "aujourd'hui" sur ce fuseau.
+  const today = new Date().toLocaleDateString('en-CA', {timeZone:'America/New_York'});
   if(!days || !days.length){
     document.getElementById('detailContent').innerHTML = `
       <div class="no-data-msg">

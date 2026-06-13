@@ -376,8 +376,11 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
 // STATE & DATE MANAGEMENT
 // ══════════════════════════════════════
 let currentState = 'NY';
-let currentDate  = new Date().toISOString().split('T')[0];
-const TODAY = new Date().toISOString().split('T')[0];
+// Les tirages sont dates en heure US (ET) ; on aligne "aujourd'hui" sur ce
+// fuseau plutot que sur l'heure locale du navigateur (toISOString() est en
+// UTC et peut deja etre "demain" en soiree pour les utilisateurs US/Europe).
+const TODAY = new Date().toLocaleDateString('en-CA', {timeZone:'America/New_York'});
+let currentDate  = TODAY;
 
 const STATE_FLAGS = {AR:'💎',AZ:'🌵',CA:'☀️',CO:'🏔️',CT:'⚓',DC:'🏛️',DE:'🦆',FL:'🌴',GA:'🍑',IA:'🌽',ID:'🥔',IL:'🏙️',IN:'🏁',KS:'🌾',KY:'🐎',LA:'🎷',MA:'🦞',MD:'🦀',ME:'🦞',MI:'🚗',MN:'🌨️',MO:'⛵',MS:'🎶',NC:'🌲',NE:'🌾',NH:'🏔️',NJ:'🌊',NM:'🌶️',NY:'🗽',OH:'🌻',OK:'🛢️',PA:'🔔',PR:'🌺',SC:'🌴',TN:'🎸',TX:'⭐',VA:'🦅',VT:'🍁',WA:'🌧️',WI:'🧀',WV:'⛰️'};
 const STATE_NAMES = {NY:'New York',GA:'Georgia',TX:'Texas',FL:'Florida',CA:'California',PA:'Pennsylvania',NJ:'New Jersey',IL:'Illinois',OH:'Ohio',NC:'N. Carolina',VA:'Virginia',MA:'Massachusetts',MI:'Michigan',MD:'Maryland',TN:'Tennessee',SC:'S. Carolina',CT:'Connecticut',IN:'Indiana',KY:'Kentucky',MO:'Missouri',AZ:'Arizona',CO:'Colorado',LA:'Louisiana',MS:'Mississippi',AR:'Arkansas',IA:'Iowa',KS:'Kansas',OK:'Oklahoma',DE:'Delaware',NM:'New Mexico',WV:'W. Virginia',DC:'Washington DC',WI:'Wisconsin',MN:'Minnesota',NE:'Nebraska',NH:'New Hampshire',VT:'Vermont',ME:'Maine',WA:'Washington',ID:'Idaho',PR:'Puerto Rico'};
