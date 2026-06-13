@@ -755,7 +755,11 @@ function buildNav(){
   const path = location.pathname;
   const l    = window.PREDIKTA_LANG;
 
-  const svcLinks = SERVICES.map(s=>{
+  // Prédictions / Archives / Parrainage retirés du header (manque de place) —
+  // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
+  // le menu mobile et le footer (SERVICES complet).
+  const HEADER_HIDDEN = ['predictions','archives','referral'];
+  const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
     const badge  = s.badge ? `<span style="margin-left:3px;padding:1px 5px;border-radius:4px;font-size:.5rem;font-weight:900;background:${s.badge==='PRO'?'linear-gradient(90deg,#ffd700,#ff9900)':'rgba(34,232,122,.35)'};color:${s.badge==='PRO'?'#000':'#22e87a'}">${s.badge}</span>` : '';

@@ -266,6 +266,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .hot-card-cta:hover{opacity:.8}
 @media(max-width:480px){ .hot-cta-grid{grid-template-columns:repeat(2,1fr)} }
 
+/* ── Quick links (déplacés du header) ── */
+.quick-links-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px}
+.quick-link-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;text-decoration:none;display:flex;align-items:center;gap:14px;
+  transition:transform .2s,border-color .2s;
+}
+.quick-link-card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.ql-icon{font-size:1.8rem;flex-shrink:0}
+.ql-title{font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:3px}
+.ql-desc{font-size:.7rem;color:var(--muted2);line-height:1.5}
+@media(max-width:700px){ .quick-links-grid{grid-template-columns:1fr} }
+
 @media(max-width:700px){
   .services-grid{grid-template-columns:1fr}
   .stats-banner{grid-template-columns:repeat(2,1fr)}
@@ -336,6 +349,31 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div class="hot-cta-grid" id="hotCtaGrid">
       <div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px;grid-column:1/-1" data-i18n="loading">Chargement…</div>
     </div>
+  </div>
+
+  <!-- Quick links (Prédictions / Archives / Parrainage) -->
+  <div class="quick-links-grid">
+    <a href="/predictions" class="quick-link-card">
+      <span class="ql-icon">🎯</span>
+      <div>
+        <div class="ql-title" data-i18n="qlPredictionsTitle">Prédictions</div>
+        <div class="ql-desc" data-i18n="qlPredictionsDesc">Pronostics quotidiens par État</div>
+      </div>
+    </a>
+    <a href="/archives" class="quick-link-card">
+      <span class="ql-icon">📁</span>
+      <div>
+        <div class="ql-title" data-i18n="qlArchivesTitle">Archives</div>
+        <div class="ql-desc" data-i18n="qlArchivesDesc">Historique complet des tirages</div>
+      </div>
+    </a>
+    <a href="/parrainage" class="quick-link-card">
+      <span class="ql-icon">🎁</span>
+      <div>
+        <div class="ql-title" data-i18n="qlReferralTitle">Parrainage</div>
+        <div class="ql-desc" data-i18n="qlReferralDesc">Invitez vos amis et gagnez des récompenses</div>
+      </div>
+    </a>
   </div>
 
   <!-- Outils Express -->
@@ -576,6 +614,9 @@ const T = {
     raffleTitle:"🎁 Tirage Cadeau du Mois",raffleDesc:"Inscrivez-vous gratuitement et tentez de gagner 1 mois PREDIKTA PRO offert + des bonus exclusifs !",
     raffleCta:"Participer →",raffleEndsIn:"Tirage dans",
     hotCtaTitle:n=>`🔥 Top ${n} Pick3 les plus chauds`,hotCtaSub:"Chiffres chauds et combinaison suggérée pour les états les plus joués",hotCtaDigits:"Chiffres chauds",hotCtaCombo:"Combo suggéré",hotCtaLink:"Voir l'analyse →",
+    qlPredictionsTitle:"Prédictions",qlPredictionsDesc:"Pronostics quotidiens par État",
+    qlArchivesTitle:"Archives",qlArchivesDesc:"Historique complet des tirages",
+    qlReferralTitle:"Parrainage",qlReferralDesc:"Invitez vos amis et gagnez des récompenses",
     dAbbr:"j",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Services pour la Diaspora",
     daff1Desc:"Envoyez de l'argent en Haïti et ailleurs, rapide et sans frais cachés",daff1Cta:"Envoyer →",
@@ -637,6 +678,9 @@ const T = {
     raffleTitle:"🎁 Monthly Giveaway",raffleDesc:"Sign up for free for a chance to win 1 month of PREDIKTA PRO + exclusive bonuses!",
     raffleCta:"Enter now →",raffleEndsIn:"Drawing in",
     hotCtaTitle:n=>`🔥 Top ${n} hottest Pick3`,hotCtaSub:"Hot digits and suggested combo for the most popular states",hotCtaDigits:"Hot digits",hotCtaCombo:"Suggested combo",hotCtaLink:"View analysis →",
+    qlPredictionsTitle:"Predictions",qlPredictionsDesc:"Daily forecasts by State",
+    qlArchivesTitle:"Archives",qlArchivesDesc:"Full history of draws",
+    qlReferralTitle:"Referral",qlReferralDesc:"Invite your friends and earn rewards",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Diaspora Services",
     daff1Desc:"Send money to Haiti and beyond, fast with no hidden fees",daff1Cta:"Send →",
@@ -698,6 +742,9 @@ const T = {
     raffleTitle:"🎁 Sorteo Mensual",raffleDesc:"¡Regístrate gratis y participa para ganar 1 mes de PREDIKTA PRO + bonos exclusivos!",
     raffleCta:"Participar →",raffleEndsIn:"Sorteo en",
     hotCtaTitle:n=>`🔥 Top ${n} Pick3 más calientes`,hotCtaSub:"Dígitos calientes y combinación sugerida para los estados más jugados",hotCtaDigits:"Dígitos calientes",hotCtaCombo:"Combinación sugerida",hotCtaLink:"Ver análisis →",
+    qlPredictionsTitle:"Predicciones",qlPredictionsDesc:"Pronósticos diarios por Estado",
+    qlArchivesTitle:"Archivos",qlArchivesDesc:"Historial completo de sorteos",
+    qlReferralTitle:"Referidos",qlReferralDesc:"Invita a tus amigos y gana recompensas",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Servicios para la Diáspora",
     daff1Desc:"Envía dinero a Haití y otros países, rápido y sin comisiones ocultas",daff1Cta:"Enviar →",
@@ -759,6 +806,9 @@ const T = {
     raffleTitle:"🎁 Sorteio Mensal",raffleDesc:"Cadastre-se grátis e concorra a 1 mês de PREDIKTA PRO + bônus exclusivos!",
     raffleCta:"Participar →",raffleEndsIn:"Sorteio em",
     hotCtaTitle:n=>`🔥 Top ${n} Pick3 mais quentes`,hotCtaSub:"Dígitos quentes e combinação sugerida para os estados mais jogados",hotCtaDigits:"Dígitos quentes",hotCtaCombo:"Combinação sugerida",hotCtaLink:"Ver análise →",
+    qlPredictionsTitle:"Previsões",qlPredictionsDesc:"Prognósticos diários por Estado",
+    qlArchivesTitle:"Arquivos",qlArchivesDesc:"Histórico completo dos sorteios",
+    qlReferralTitle:"Indicações",qlReferralDesc:"Convide amigos e ganhe recompensas",
     dAbbr:"d",hAbbr:"h",mAbbr:"m",
     sectionDiaspora:"Serviços para a Diáspora",
     daff1Desc:"Envie dinheiro para o Haiti e outros países, rápido e sem taxas ocultas",daff1Cta:"Enviar →",
@@ -820,6 +870,9 @@ const T = {
     raffleTitle:"🎁 Tiraj Kado Chak Mwa",raffleDesc:"Enskri gratis epi patisipe pou genyen 1 mwa PREDIKTA PRO gratis + bonis eksklizif !",
     raffleCta:"Patisipe →",raffleEndsIn:"Tiraj nan",
     hotCtaTitle:n=>`🔥 Top ${n} Pick3 ki pi cho`,hotCtaSub:"Chif cho ak konbinezon sijere pou eta ki pi jwe yo",hotCtaDigits:"Chif cho",hotCtaCombo:"Konbinezon sijere",hotCtaLink:"Wè analiz →",
+    qlPredictionsTitle:"Prediksyon",qlPredictionsDesc:"Pwonostik chak jou pa Eta",
+    qlArchivesTitle:"Achiv",qlArchivesDesc:"Istorik konplè tiraj yo",
+    qlReferralTitle:"Parennaj",qlReferralDesc:"Envite zanmi w epi genyen rekonpans",
     dAbbr:"j",hAbbr:"è",mAbbr:"min",
     sectionDiaspora:"Sèvis pou Dyaspora",
     daff1Desc:"Voye lajan an Ayiti ak lòt peyi, rapid san frè kache",daff1Cta:"Voye →",
