@@ -245,11 +245,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .hot-cta-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .hot-cta-title{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#ff5e3a;margin-bottom:4px}
 .hot-cta-sub{font-size:.78rem;color:var(--muted2)}
-.hot-cta-select{
-  padding:9px 14px;border-radius:10px;background:#0c0c28;color:var(--text);
-  border:1px solid var(--border2);font-family:'Inter',sans-serif;font-size:.8rem;
-  font-weight:700;cursor:pointer;flex-shrink:0;
-}
 .hot-cta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .hot-card{
   background:var(--card);border:1px solid rgba(255,94,58,.35);border-radius:14px;
@@ -337,11 +332,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         <div class="hot-cta-title" id="hotCtaTitle">🔥 Pick3 les plus chauds</div>
         <div class="hot-cta-sub" data-i18n="hotCtaSub">Chiffres chauds et combinaison suggérée par tirage (état, séance, date)</div>
       </div>
-      <select class="hot-cta-select" id="hotCtaLimit" onchange="loadHotCta()">
-        <option value="4">Top 4</option>
-        <option value="8" selected>Top 8</option>
-        <option value="12">Top 12</option>
-      </select>
     </div>
     <div class="hot-cta-grid" id="hotCtaGrid">
       <div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px;grid-column:1/-1" data-i18n="loading">Chargement…</div>
@@ -951,8 +941,9 @@ async function loadSnap(){
   }
 }
 
-// Pick3 chauds par tirage (état/séance/date) — top N choisi par l'utilisateur (3/5/10)
-let _HOT_CTA_DATA = {};
+// Pick3 chauds par tirage (état/séance/date) — toujours top 6, fixé sur la page principale
+let _HOT_CTA_DATA = null;
+const HOT_CTA_LIMIT = 6;
 const HOT_CTA_FLAGS = { NY:'🗽', FL:'🌴', GA:'🍑', TX:'⭐', NJ:'🌊', TN:'🎸', CA:'☀️', PA:'🔔', IL:'🏙️', OH:'🌻', VA:'🦅' };
 
 async function loadHotCta(){
@@ -960,15 +951,14 @@ async function loadHotCta(){
   const grid = document.getElementById('hotCtaGrid');
   const titleEl = document.getElementById('hotCtaTitle');
   if(!grid) return;
-  const limit = document.getElementById('hotCtaLimit')?.value || '8';
-  if(titleEl) titleEl.textContent = t.hotCtaTitle(limit);
+  if(titleEl) titleEl.textContent = t.hotCtaTitle(HOT_CTA_LIMIT);
   grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);text-align:center;padding:10px;grid-column:1/-1">${t.loading}</div>`;
   try{
-    let data = _HOT_CTA_DATA[limit];
+    let data = _HOT_CTA_DATA;
     if(!data){
-      const r = await fetch(`/api/hot-pick3?limit=${limit}`);
+      const r = await fetch(`/api/hot-pick3?limit=${HOT_CTA_LIMIT}`);
       data = await r.json();
-      _HOT_CTA_DATA[limit] = data;
+      _HOT_CTA_DATA = data;
     }
     if(!Array.isArray(data) || !data.length){
       grid.innerHTML = `<div style="font-size:.75rem;color:var(--muted2);grid-column:1/-1">${t.noResults}</div>`;
