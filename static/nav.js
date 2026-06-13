@@ -817,13 +817,21 @@ function buildNav(){
 }
 .pnav-services::-webkit-scrollbar{display:none}
 .pnav-svc{
+  position:relative;
   display:flex;align-items:center;gap:4px;
   padding:6px 10px;border-radius:7px;
   text-decoration:none;color:#7888bb;font-size:.73rem;font-weight:600;
   border:1px solid transparent;white-space:nowrap;transition:all .18s;flex-shrink:0;
 }
+.pnav-svc::after{
+  content:'';position:absolute;left:10px;right:10px;bottom:-1px;height:2px;border-radius:2px;
+  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  transform:scaleX(0);transition:transform .18s;
+}
 .pnav-svc:hover{color:#e8eeff;background:rgba(255,255,255,.05);border-color:#1a1a45}
+.pnav-svc:hover::after{transform:scaleX(1)}
 .pnav-svc.active{background:#4f6eff;color:#fff;border-color:#4f6eff}
+.pnav-svc.active::after{transform:scaleX(1);background:#ffd700}
 
 /* RIGHT CONTROLS */
 .pnav-right{display:flex;align-items:center;gap:5px;flex-shrink:0;padding-left:10px;border-left:1px solid #1a1a45;margin-left:4px}
@@ -866,6 +874,8 @@ function buildNav(){
   .pnav-services{display:none}
   .pnav-hamburger{display:flex}
   .pnav-home .pnav-logo-tag{display:none}
+  .pnav-logo-svg{width:38px;height:38px}
+  .pnav-logo-name{font-size:1.15rem;letter-spacing:2.5px}
   /* LANGUE reste visible en mode flags seulement */
 }
 
