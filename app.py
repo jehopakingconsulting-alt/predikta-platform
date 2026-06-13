@@ -476,7 +476,7 @@ def hot_pick3():
     limit = max(1, min(limit, 12))
 
     entries = []
-    for code in PRIORITY_STATES:
+    for code in HOT_PICK3_STATES:
         try:
             draws = analyzer.load_draws(code)
         except Exception:
@@ -710,6 +710,9 @@ _REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 10 * 60))  #
 # scraping pour que le 1er clic utilisateur tombe déjà en cache (évite
 # l'attente de 15-25s sur les états les plus populaires).
 PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
+
+# États retenus pour le Top 6 Pick3 "les plus chauds" de la page d'accueil.
+HOT_PICK3_STATES = ['NY','FL','GA','TX','NJ','TN']
 
 def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = ()):
     """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data."""
