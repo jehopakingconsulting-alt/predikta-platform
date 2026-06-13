@@ -472,7 +472,7 @@ def hot_pick3():
         limit = int(request.args.get("limit", "5"))
     except ValueError:
         limit = 5
-    limit = max(1, min(limit, 10))
+    limit = max(1, min(limit, 12))
 
     entries = []
     for code in PRIORITY_STATES:
