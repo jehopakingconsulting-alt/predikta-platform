@@ -120,13 +120,27 @@ h1{{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,5vw,1.9rem);font-wei
   border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;font-size:.8rem;transition:border-color .15s}}
 .state-card:hover{{border-color:var(--accent)}}
 footer{{text-align:center;padding:20px;font-size:.7rem;color:var(--muted2)}}
+.home-link{{display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;font-size:.8rem;color:var(--muted2);text-decoration:none;font-weight:700}}
+.home-link:hover{{color:var(--accent)}}
+#backToTop{{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;
+  font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);z-index:999}}
+#backToTop.show{{display:flex}}
 </style>
 </head>
 <body>
 <div class="wrap">
+<a class="home-link" href="/">🏠 Accueil</a>
 {body}
 </div>
 <footer>© PREDIKTA — <a href="/">predikta.app</a></footer>
+<button id="backToTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})" aria-label="Retour en haut" title="Retour en haut">⬆️</button>
+<script>
+window.addEventListener('scroll', ()=>{{
+  document.getElementById('backToTop').classList.toggle('show', window.scrollY > 300);
+}});
+</script>
 </body>
 </html>"""
 
