@@ -352,7 +352,7 @@ DRAW_SCHEDULE = {
     "TN": [{"tod":"Morning","time":"9:28 AM CT"}, {"tod":"Midday","time":"12:28 PM CT"}, {"tod":"Evening","time":"6:28 PM CT"}],
     "TX": [{"tod":"Morning","time":"10:00 AM CT"}, {"tod":"Midday","time":"12:27 PM CT"}, {"tod":"Evening","time":"6:00 PM CT"}, {"tod":"Night","time":"10:12 PM CT"}],
     "VA": [{"tod":"Day","time":"1:59 PM ET"},  {"tod":"Night","time":"11:00 PM ET"}],
-    "VT": [{"tod":"Day","time":"1:10 PM ET"}, {"tod":"Evening","time":"6:59 PM ET"}],
+    "VT": [{"tod":"Day","time":"1:10 PM ET"}, {"tod":"Evening","time":"6:55 PM ET"}],
     "WA": [{"tod":"Evening","time":"8:00 PM PT"}],
     "WI": [{"tod":"Midday","time":"1:30 PM CT"},  {"tod":"Night","time":"9:00 PM CT"}],
     "WV": [{"tod":"Evening","time":"6:59 PM ET"}],

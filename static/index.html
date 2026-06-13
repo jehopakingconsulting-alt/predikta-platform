@@ -1795,10 +1795,16 @@ function updateSidebar(d){
   const state = d.state_name||d.state;
   const ld = d.last_draw;
   const ml = d.ml_trained ? `<span style="color:#22dd66">${t('mlActive')}</span>` : `<span style="color:#ff8822">${t('mlInactive')}</span>`;
+  let lastDrawStr = ld ? ld.date : '—';
+  if(ld && ld.tod){
+    const sched=(d.schedule||[]).find(s=>s.tod===ld.tod);
+    const todStr=t('tod_'+ld.tod)||ld.tod;
+    lastDrawStr += ' · ' + todStr + (sched ? ' — ' + sched.time : '');
+  }
   document.getElementById('stateStats').innerHTML = `
     <div>📍 <strong>${state}</strong></div>
     <div>📊 ${d.total_draws} ${t('totalDraws')}</div>
-    <div>📅 ${ld?ld.date:'—'}</div>
+    <div>📅 ${lastDrawStr}</div>
     <div>⚙️ ML: ${ml}</div>
     <div>📅 ${t('today')}: ${new Date().toLocaleDateString()}</div>
   `;
@@ -1980,6 +1986,10 @@ function renderLastDraw(d){
   const balls=['d1','d2','d3'].map(k=>
     `<div class="ball" style="background:linear-gradient(135deg,${bc(ld[k])}33,${bc(ld[k])}55);border:2px solid ${bc(ld[k])};--ball-glow:${bg(ld[k])};color:${bc(ld[k])}">${ld[k]}</div>`
   ).join('');
+  const sched=(d.schedule||[]).find(s=>s.tod===ld.tod);
+  const todStr=ld.tod?(t('tod_'+ld.tod)||ld.tod):'';
+  const timeStr=sched?sched.time:'';
+  const todLine=(todStr||timeStr)?`<span class="meta-chip">${[todStr,timeStr].filter(Boolean).join(' · ')}</span>`:'';
   return`<div class="card">
     <div class="card-title"><span class="ct-icon">🎱</span>${t('lastDraw')}</div>
     <div class="last-draw-row">
@@ -1987,6 +1997,7 @@ function renderLastDraw(d){
       <div class="draw-info">
         <div class="draw-date">${ld.date}</div>
         <div class="draw-meta-tags">
+          ${todLine}
           <span class="meta-chip">Σ = ${sumVal}</span>
           <span class="meta-chip">${parity}</span>
           <span class="meta-chip">${hi}</span>
