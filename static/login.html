@@ -30,6 +30,12 @@ button.submit:disabled{opacity:.6;cursor:default}
 .oauth-divider{display:flex;align-items:center;gap:10px;margin:6px 0 18px;color:var(--muted2);font-size:.72rem;text-transform:uppercase;letter-spacing:1px}
 .oauth-divider::before,.oauth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 #oauthWrap{display:none}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:44px}
+.pwd-toggle{position:absolute;right:6px;top:0;height:46px;width:36px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;font-size:1.05rem;color:var(--muted2)}
+.pwd-toggle:hover{color:var(--text)}
+.forgot{text-align:right;margin:-10px 0 16px}
+.forgot a{color:var(--accent);text-decoration:none;font-size:.78rem;font-weight:700}
 </style>
 </head>
 <body>
@@ -50,7 +56,11 @@ button.submit:disabled{opacity:.6;cursor:default}
     <input type="text" id="lEmail" placeholder="ton@email.com" autocomplete="username"/>
 
     <label for="lPassword" data-i18n="lblPassword">Mot de passe</label>
-    <input type="password" id="lPassword" placeholder="••••••••" autocomplete="current-password"/>
+    <div class="pwd-wrap">
+      <input type="password" id="lPassword" placeholder="••••••••" autocomplete="current-password"/>
+      <button type="button" class="pwd-toggle" id="togglePwd" aria-label="Afficher le mot de passe">👁️</button>
+    </div>
+    <div class="forgot"><a href="/forgot-password" data-i18n="forgotLink">Mot de passe oublié ?</a></div>
 
     <button class="submit" id="btnLogin" data-i18n="btnLogin">Se connecter</button>
     <div class="msg" id="msg"></div>
@@ -61,23 +71,23 @@ button.submit:disabled{opacity:.6;cursor:default}
 <script>
 const T = {
   fr:{title:"Connexion",subtitle:"Connecte-toi pour accéder à tes analyses PREDIKTA et gérer ton abonnement.",continueGoogle:"Continuer avec Google",orDivider:"ou",
-    lblEmail:"Email ou nom d'utilisateur",lblPassword:"Mot de passe",btnLogin:"Se connecter",
+    lblEmail:"Email ou nom d'utilisateur",lblPassword:"Mot de passe",btnLogin:"Se connecter",forgotLink:"Mot de passe oublié ?",
     noAccount:"Pas encore de compte ?",registerLink:"Créer un compte",
     errFields:"Merci de remplir tous les champs.",errAuth:"Identifiants incorrects.",success:"Connexion réussie ! Redirection...",},
   en:{title:"Log in",subtitle:"Log in to access your PREDIKTA analyses and manage your subscription.",continueGoogle:"Continue with Google",orDivider:"or",
-    lblEmail:"Email or username",lblPassword:"Password",btnLogin:"Log in",
+    lblEmail:"Email or username",lblPassword:"Password",btnLogin:"Log in",forgotLink:"Forgot password?",
     noAccount:"No account yet?",registerLink:"Create an account",
     errFields:"Please fill in all fields.",errAuth:"Incorrect credentials.",success:"Logged in! Redirecting...",},
   es:{title:"Iniciar sesión",subtitle:"Inicia sesión para acceder a tus análisis PREDIKTA y gestionar tu suscripción.",continueGoogle:"Continuar con Google",orDivider:"o",
-    lblEmail:"Correo o usuario",lblPassword:"Contraseña",btnLogin:"Iniciar sesión",
+    lblEmail:"Correo o usuario",lblPassword:"Contraseña",btnLogin:"Iniciar sesión",forgotLink:"¿Olvidaste tu contraseña?",
     noAccount:"¿No tienes cuenta?",registerLink:"Crear cuenta",
     errFields:"Completa todos los campos.",errAuth:"Credenciales incorrectas.",success:"¡Sesión iniciada! Redirigiendo...",},
   pt:{title:"Entrar",subtitle:"Entre para acessar suas análises PREDIKTA e gerenciar sua assinatura.",continueGoogle:"Continuar com o Google",orDivider:"ou",
-    lblEmail:"Email ou usuário",lblPassword:"Senha",btnLogin:"Entrar",
+    lblEmail:"Email ou usuário",lblPassword:"Senha",btnLogin:"Entrar",forgotLink:"Esqueceu a senha?",
     noAccount:"Ainda não tem conta?",registerLink:"Criar conta",
     errFields:"Preencha todos os campos.",errAuth:"Credenciais incorretas.",success:"Login efetuado! Redirecionando...",},
   ht:{title:"Konekte",subtitle:"Konekte pou jwenn aksè a analiz PREDIKTA ou epi jere abònman ou.",continueGoogle:"Kontinye ak Google",orDivider:"oswa",
-    lblEmail:"Imel oswa non itilizatè",lblPassword:"Modpas",btnLogin:"Konekte",
+    lblEmail:"Imel oswa non itilizatè",lblPassword:"Modpas",btnLogin:"Konekte",forgotLink:"Bliye modpas?",
     noAccount:"Ou pa gen kont toujou?",registerLink:"Kreye yon kont",
     errFields:"Tanpri ranpli tout chan yo.",errAuth:"Enfòmasyon yo pa kòrèk.",success:"Koneksyon reyisi! N ap redirije...",},
 };
@@ -122,5 +132,13 @@ document.getElementById('btnLogin').addEventListener('click', async ()=>{
 });
 
 document.getElementById('lPassword').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('btnLogin').click(); });
+
+document.getElementById('togglePwd').addEventListener('click', ()=>{
+  const pwd = document.getElementById('lPassword');
+  const btn = document.getElementById('togglePwd');
+  const show = pwd.type === 'password';
+  pwd.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁️';
+});
 </script>
 </body></html>

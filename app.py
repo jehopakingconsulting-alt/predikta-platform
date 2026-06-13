@@ -545,6 +545,12 @@ def login_page(): return send_from_directory("static", "login.html")
 @app.route("/register")
 def register_page(): return send_from_directory("static", "register.html")
 
+@app.route("/forgot-password")
+def forgot_password_page(): return send_from_directory("static", "forgot-password.html")
+
+@app.route("/reset-password")
+def reset_password_page(): return send_from_directory("static", "reset-password.html")
+
 @app.route("/account")
 def account_page(): return send_from_directory("static", "account.html")
 

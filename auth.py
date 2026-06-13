@@ -15,6 +15,9 @@ n'est pas définie.
 
 import os
 import re
+import secrets
+import smtplib
+from email.message import EmailMessage
 from datetime import datetime, date, timedelta
 
 from flask import Blueprint, jsonify, request, session
@@ -157,6 +160,16 @@ class Subscription(db.Model):
             "allowed_states": self.states_list(),
             "has_stripe_customer": bool(self.stripe_customer_id),
         }
+
+
+class PasswordResetToken(db.Model):
+    __tablename__ = "password_reset_tokens"
+
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    token      = db.Column(db.String(64), unique=True, nullable=False, index=True)
+    expires_at = db.Column(db.DateTime, nullable=False)
+    used       = db.Column(db.Boolean, default=False)
 
 
 class UsageLog(db.Model):
@@ -315,6 +328,42 @@ def subscription_required(f):
         return f(*args, **kwargs)
 
     return wrapper
+
+
+def send_password_reset_email(user, token: str):
+    """Envoie l'email de réinitialisation si le SMTP est configuré
+    (variables d'env SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/SMTP_FROM).
+    En l'absence de configuration (dev local), le lien est juste loggé."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    reset_link = f"{base_url}/reset-password?token={token}"
+
+    smtp_host = os.environ.get("SMTP_HOST")
+    if not smtp_host:
+        print(f"[auth] Lien de réinitialisation pour {user.email}: {reset_link}")
+        return
+
+    msg = EmailMessage()
+    msg["Subject"] = "PREDIKTA — Réinitialisation de votre mot de passe"
+    msg["From"] = os.environ.get("SMTP_FROM", "no-reply@predikta.app")
+    msg["To"] = user.email
+    msg.set_content(
+        "Bonjour,\n\n"
+        "Une demande de réinitialisation de mot de passe a été effectuée pour votre compte PREDIKTA.\n"
+        f"Cliquez sur ce lien pour choisir un nouveau mot de passe (valable 1 heure) :\n{reset_link}\n\n"
+        "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email."
+    )
+
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER")
+    smtp_pass = os.environ.get("SMTP_PASS")
+    try:
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+            server.starttls()
+            if smtp_user and smtp_pass:
+                server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"[auth] Échec envoi email de réinitialisation: {e}")
 
 
 def record_usage(user_id: int):
@@ -491,6 +540,59 @@ def choose_plan():
 
     db.session.commit()
     return jsonify({"success": True, "subscription": sub.to_dict()})
+
+
+@auth_bp.route("/forgot-password", methods=["POST"])
+def forgot_password():
+    """Demande de réinitialisation : génère un token valable 1h et envoie
+    le lien par email. Réponse identique que l'email existe ou non, pour
+    ne pas révéler quels emails sont enregistrés."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+
+    generic_msg = "Si un compte existe avec cet email, un lien de réinitialisation a été envoyé."
+    if not EMAIL_RE.match(email):
+        return jsonify({"error": "Email invalide"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if user and user.password_hash:
+        token = secrets.token_urlsafe(32)
+        reset = PasswordResetToken(
+            user_id=user.id,
+            token=token,
+            expires_at=datetime.utcnow() + timedelta(hours=1),
+        )
+        db.session.add(reset)
+        db.session.commit()
+        send_password_reset_email(user, token)
+
+    return jsonify({"success": True, "message": generic_msg})
+
+
+@auth_bp.route("/reset-password", methods=["POST"])
+def reset_password():
+    """Finalise la réinitialisation à partir du token reçu par email."""
+    data = request.get_json(silent=True) or {}
+    token = (data.get("token") or "").strip()
+    password = data.get("password") or ""
+
+    if not token:
+        return jsonify({"error": "Lien invalide ou expiré"}), 400
+    if len(password) < 8:
+        return jsonify({"error": "Le mot de passe doit contenir au moins 8 caractères"}), 400
+
+    reset = PasswordResetToken.query.filter_by(token=token, used=False).first()
+    if not reset or reset.expires_at < datetime.utcnow():
+        return jsonify({"error": "Lien invalide ou expiré"}), 400
+
+    user = db.session.get(User, reset.user_id)
+    if not user:
+        return jsonify({"error": "Lien invalide ou expiré"}), 400
+
+    user.set_password(password)
+    reset.used = True
+    db.session.commit()
+    return jsonify({"success": True})
 
 
 @auth_bp.route("/states", methods=["POST"])
