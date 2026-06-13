@@ -509,8 +509,15 @@ def hot_pick3():
                 "score": top["score"] if top else 0,
             })
 
-    entries.sort(key=lambda e: e["score"], reverse=True)
-    return jsonify(entries[:limit])
+    # Un seul tirage (le plus chaud) par État, dans l'ordre NY-FL-GA-TX-NJ-TN.
+    best_by_state = {}
+    for e in entries:
+        cur = best_by_state.get(e["state"])
+        if cur is None or e["score"] > cur["score"]:
+            best_by_state[e["state"]] = e
+
+    ordered = [best_by_state[code] for code in HOT_PICK3_STATES if code in best_by_state]
+    return jsonify(ordered[:limit])
 
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")
