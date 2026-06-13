@@ -1962,6 +1962,12 @@ window.addEventListener('load', ()=>{
       renderQuickStates();
     }
   }
+
+  // Raccourcis depuis la page d'accueil (?go=analyze|scrape|filters)
+  const go = params.get('go');
+  if(go === 'analyze') loadReport();
+  else if(go === 'scrape') runScrape();
+  else if(go === 'filters') toggleFiltersPanel();
 });
 
 // ── Last Draw ──
