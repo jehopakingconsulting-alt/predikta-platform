@@ -141,6 +141,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   font-size:.72rem;font-weight:800;border:2px solid;
 }
 .snap-tod{font-size:.58rem;color:var(--muted2);margin-top:5px}
+.snap-updated{font-size:.55rem;color:var(--green);margin-top:3px;opacity:.8}
 .snap-draw-row{margin-bottom:6px}
 .snap-draw-row:last-of-type{margin-bottom:2px}
 .snap-load-btn{
@@ -629,6 +630,7 @@ const T = {
     daff2Desc:"Rechargez le téléphone de vos proches en Haïti instantanément",daff2Cta:"Recharger →",
     daff3Desc:"Trouvez les meilleurs vols pas chers vers Haïti et les Caraïbes",daff3Cta:"Réserver →",
     loading:"Chargement...",noResults:"Aucun résultat disponible.",loadLink:"Charger →",
+    updatedAgo:m=>m<1?"Mis à jour à l'instant":m<60?`Mis à jour il y a ${m} min`:`Mis à jour il y a ${Math.floor(m/60)} h`,
     today:"🟢 Auj.",yesterday:"⏰ Hier",moreOthers:n=>`+${n} autres →`,viewAll:"Voir tous les résultats →",
     locale:"fr-FR",
     greetMorning:"Bonjour",greetAfternoon:"Bon après-midi",greetEvening:"Bonsoir",
@@ -694,6 +696,7 @@ const T = {
     daff2Desc:"Top up your loved ones' phones in Haiti instantly",daff2Cta:"Top up →",
     daff3Desc:"Find the best cheap flights to Haiti and the Caribbean",daff3Cta:"Book →",
     loading:"Loading...",noResults:"No results available.",loadLink:"Load →",
+    updatedAgo:m=>m<1?"Updated just now":m<60?`Updated ${m} min ago`:`Updated ${Math.floor(m/60)} h ago`,
     today:"🟢 Today",yesterday:"⏰ Yesterday",moreOthers:n=>`+${n} more →`,viewAll:"View all results →",
     locale:"en-US",
     greetMorning:"Good morning",greetAfternoon:"Good afternoon",greetEvening:"Good evening",
@@ -759,6 +762,7 @@ const T = {
     daff2Desc:"Recarga el teléfono de tus seres queridos en Haití al instante",daff2Cta:"Recargar →",
     daff3Desc:"Encuentra los mejores vuelos baratos a Haití y el Caribe",daff3Cta:"Reservar →",
     loading:"Cargando...",noResults:"No hay resultados disponibles.",loadLink:"Cargar →",
+    updatedAgo:m=>m<1?"Actualizado ahora":m<60?`Actualizado hace ${m} min`:`Actualizado hace ${Math.floor(m/60)} h`,
     today:"🟢 Hoy",yesterday:"⏰ Ayer",moreOthers:n=>`+${n} más →`,viewAll:"Ver todos los resultados →",
     locale:"es-ES",
     greetMorning:"Buenos días",greetAfternoon:"Buenas tardes",greetEvening:"Buenas noches",
@@ -824,6 +828,7 @@ const T = {
     daff2Desc:"Recarregue o telefone de seus entes queridos no Haiti instantaneamente",daff2Cta:"Recarregar →",
     daff3Desc:"Encontre as melhores passagens baratas para o Haiti e o Caribe",daff3Cta:"Reservar →",
     loading:"Carregando...",noResults:"Nenhum resultado disponível.",loadLink:"Carregar →",
+    updatedAgo:m=>m<1?"Atualizado agora":m<60?`Atualizado há ${m} min`:`Atualizado há ${Math.floor(m/60)} h`,
     today:"🟢 Hoje",yesterday:"⏰ Ontem",moreOthers:n=>`+${n} outros →`,viewAll:"Ver todos os resultados →",
     locale:"pt-BR",
     greetMorning:"Bom dia",greetAfternoon:"Boa tarde",greetEvening:"Boa noite",
@@ -889,6 +894,7 @@ const T = {
     daff2Desc:"Rechaje telefòn fanmi ou an Ayiti imedyatman",daff2Cta:"Rechaje →",
     daff3Desc:"Jwenn pi bon vòl pa chè pou Ayiti ak Karayib",daff3Cta:"Rezève →",
     loading:"Chajman...",noResults:"Pa gen rezilta disponib.",loadLink:"Chaje →",
+    updatedAgo:m=>m<1?"Mizajou kounye a":m<60?`Mizajou sa fè ${m} min`:`Mizajou sa fè ${Math.floor(m/60)} è`,
     today:"🟢 Jodi a",yesterday:"⏰ Yè",moreOthers:n=>`+${n} lòt →`,viewAll:"Wè tout rezilta yo →",
     locale:"fr-FR",
     greetMorning:"Bonjou",greetAfternoon:"Bon apremidi",greetEvening:"Bonswa",
@@ -902,6 +908,12 @@ function fmtDate(iso){
   if(!iso) return '';
   const d = new Date(iso+'T12:00:00');
   return d.toLocaleDateString(curT().locale,{day:'2-digit',month:'short'});
+}
+
+function fmtAgo(iso){
+  if(!iso) return '';
+  const mins = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime())/60000));
+  return curT().updatedAgo(mins);
 }
 
 function applyLang(lang){
@@ -992,10 +1004,12 @@ async function loadSnap(){
           <div class="snap-tod">${d.tod?(t['tod_'+d.tod]||d.tod):''}${timeStr?' · '+timeStr:''}</div>
         </div>`;
       }).join('');
+      const agoStr = fmtAgo(v.updated_at);
       return `<div class="snap-card" onclick="window.location='/all-results'">
         <div class="snap-state">${v.flag} ${code} ${todTag}</div>
         ${rows}
         <div class="snap-tod" style="opacity:.7">${fmtDate(last.date)} · ${v.name.split(' ').slice(-2).join(' ')}</div>
+        ${agoStr?`<div class="snap-updated">${agoStr}</div>`:''}
       </div>`;
     }).join('')
     + (entries.length>SHOWN?`<div class="snap-card" style="display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="window.location='/all-results'"><div style="font-size:.75rem;color:var(--accent);font-weight:700">${t.moreOthers(entries.length-SHOWN)}</div></div>`:'');

@@ -1291,6 +1291,7 @@ const T = {
     statsTitle:"Statistiques",selectState:"Sélectionnez un État",
     videoTitle:"📺 PREDIKTA TV — Tutoriels & Analyses Live",
     today:"Aujourd'hui",totalDraws:"tirages analysés",
+    updatedAgo:m=>m<1?"Données mises à jour à l'instant":m<60?`Données mises à jour il y a ${m} min`:`Données mises à jour il y a ${Math.floor(m/60)} h`,
     about:"À Propos",privacy:"Confidentialité",terms:"Conditions",
     contact:"Contact",affil:"Affiliations",api:"API",
     footer:"© 2026 PREDIKTA — Plateforme d'analyse statistique mondiale · Pour divertissement uniquement · Jouer responsable",
@@ -1327,6 +1328,7 @@ const T = {
     statsTitle:"Statistics",selectState:"Select a State",
     videoTitle:"📺 PREDIKTA TV — Tutorials & Live Analysis",
     today:"Today",totalDraws:"draws analyzed",
+    updatedAgo:m=>m<1?"Data updated just now":m<60?`Data updated ${m} min ago`:`Data updated ${Math.floor(m/60)} h ago`,
     about:"About",privacy:"Privacy",terms:"Terms",
     contact:"Contact",affil:"Affiliates",api:"API",
     footer:"© 2026 PREDIKTA — Global Statistical Analysis Platform · For entertainment only · Play responsibly",
@@ -1363,6 +1365,7 @@ const T = {
     statsTitle:"Estadísticas",selectState:"Seleccione un Estado",
     videoTitle:"📺 PREDIKTA TV — Tutoriales y Análisis en Vivo",
     today:"Hoy",totalDraws:"sorteos analizados",
+    updatedAgo:m=>m<1?"Datos actualizados ahora":m<60?`Datos actualizados hace ${m} min`:`Datos actualizados hace ${Math.floor(m/60)} h`,
     about:"Acerca de",privacy:"Privacidad",terms:"Términos",
     contact:"Contacto",affil:"Afiliados",api:"API",
     footer:"© 2026 PREDIKTA — Plataforma global de análisis estadístico · Solo entretenimiento · Juegue responsablemente",
@@ -1399,6 +1402,7 @@ const T = {
     statsTitle:"Estatísticas",selectState:"Selecione um Estado",
     videoTitle:"📺 PREDIKTA TV — Tutoriais e Análises ao Vivo",
     today:"Hoje",totalDraws:"sorteios analisados",
+    updatedAgo:m=>m<1?"Dados atualizados agora":m<60?`Dados atualizados há ${m} min`:`Dados atualizados há ${Math.floor(m/60)} h`,
     about:"Sobre",privacy:"Privacidade",terms:"Termos",
     contact:"Contato",affil:"Afiliados",api:"API",
     footer:"© 2026 PREDIKTA — Plataforma global de análise estatística · Apenas entretenimento · Jogue com responsabilidade",
@@ -1435,6 +1439,7 @@ const T = {
     statsTitle:"Estatistik",selectState:"Chwazi yon Eta",
     videoTitle:"📺 PREDIKTA TV — Tutoryo & Analiz Live",
     today:"Jodi a",totalDraws:"tiraj analize",
+    updatedAgo:m=>m<1?"Done mizajou kounye a":m<60?`Done mizajou sa fè ${m} min`:`Done mizajou sa fè ${Math.floor(m/60)} è`,
     about:"Sou",privacy:"Konfidansyalite",terms:"Tèm",
     contact:"Kontak",affil:"Afilye",api:"API",
     footer:"© 2026 PREDIKTA — Platfòm analiz mondyal · Pou amizman sèlman · Jwe responsab",
@@ -1801,12 +1806,18 @@ function updateSidebar(d){
     const todStr=t('tod_'+ld.tod)||ld.tod;
     lastDrawStr += ' · ' + todStr + (sched ? ' — ' + sched.time : '');
   }
+  let updatedStr = '';
+  if(d.updated_at){
+    const mins = Math.max(0, Math.floor((Date.now() - new Date(d.updated_at).getTime())/60000));
+    updatedStr = `<div>🔄 ${t('updatedAgo')(mins)}</div>`;
+  }
   document.getElementById('stateStats').innerHTML = `
     <div>📍 <strong>${state}</strong></div>
     <div>📊 ${d.total_draws} ${t('totalDraws')}</div>
     <div>📅 ${lastDrawStr}</div>
     <div>⚙️ ML: ${ml}</div>
     <div>📅 ${t('today')}: ${new Date().toLocaleDateString()}</div>
+    ${updatedStr}
   `;
 }
 

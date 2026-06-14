@@ -14,7 +14,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
 from scraper import (scrape_all, fetch_state, save_csv, load_csv,
-                     STATES, fetch_months, parse_draws, fetch_url, BASE_URL)
+                     STATES, fetch_months, parse_draws, fetch_url, BASE_URL, DATA_DIR)
 from ml_engine import run_all_models, hot_cold_stats, digit_gap_analysis
 from biz_engine import analyze_project, INDUSTRIES, PLATFORMS, COUNTRIES_DATA
 from games_config import TOD_ORDER
@@ -758,6 +758,7 @@ def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), 
     result["exclude_dom"] = list(exclude_dom)
     result["dpd"]         = STATES[state].get("dpd", 2)
     result["schedule"]    = DRAW_SCHEDULE.get(state, [])
+    result["updated_at"]  = _data_updated_at(state)
     result["cached"]      = False
     return result
 
@@ -849,6 +850,17 @@ def api_scrape():
 # API — STATES LIST
 # ═══════════════════════════════════════════════════════════
 
+def _data_updated_at(code):
+    """Horodatage (ISO, heure US/Eastern) de la dernière écriture du CSV
+    de cet État — sert d'indicateur de fraîcheur des données scrapées."""
+    path = os.path.join(DATA_DIR, f"{code.lower()}.csv")
+    try:
+        ts = os.path.getmtime(path)
+    except OSError:
+        return None
+    return datetime.fromtimestamp(ts, tz=ZoneInfo("America/New_York")).isoformat()
+
+
 @app.route("/api/states")
 def api_states():
     result = {}
@@ -859,14 +871,15 @@ def api_states():
         tods = sorted({d.get("tod","") for d in draws if d.get("tod")},
                       key=lambda t: TOD_ORDER.get(t, 99))
         result[code] = {
-            "name":      cfg["name"],
-            "slug":      cfg["slug"],
-            "dpd":       cfg.get("dpd", 2),
-            "draws":     len(draws),
-            "last_draw": draws[0] if draws else None,
-            "flag":      STATE_FLAGS.get(code, "🎰"),
-            "schedule":  DRAW_SCHEDULE.get(code, []),
-            "tods":      tods,
+            "name":       cfg["name"],
+            "slug":       cfg["slug"],
+            "dpd":        cfg.get("dpd", 2),
+            "draws":      len(draws),
+            "last_draw":  draws[0] if draws else None,
+            "flag":       STATE_FLAGS.get(code, "🎰"),
+            "schedule":   DRAW_SCHEDULE.get(code, []),
+            "tods":       tods,
+            "updated_at": _data_updated_at(code),
         }
     return jsonify(result)
 
@@ -898,6 +911,7 @@ def api_results_latest():
                 "name": cfg["name"], "flag": STATE_FLAGS.get(code,"🎰"),
                 "schedule": DRAW_SCHEDULE.get(code,[]),
                 "latest": [], "has_data": False,
+                "updated_at": _data_updated_at(code),
             }
             continue
 
@@ -918,6 +932,7 @@ def api_results_latest():
             "is_yesterday":latest_date == yesterday_str,
             "total_draws": len(draws),
             "has_data":    True,
+            "updated_at":  _data_updated_at(code),
         }
 
     _LATEST_CACHE["ts"] = now
