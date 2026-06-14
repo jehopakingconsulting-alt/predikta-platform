@@ -527,6 +527,82 @@ def hot_pick3():
     ordered = [best_by_state[code] for code in HOT_PICK3_STATES if code in best_by_state]
     return jsonify(ordered[:limit])
 
+_TRACK_RECORD_CACHE = {}
+_TRACK_RECORD_CACHE_TTL = int(os.environ.get("PREDIKTA_TRACK_RECORD_CACHE_SEC", 30 * 60))  # 30 min
+
+@app.route("/api/track-record")
+def api_track_record():
+    """
+    Transparency endpoint: for each state/tod, replay the last N draws and
+    show what PREDIKTA's TOP PICK would have suggested (using only data
+    available before that draw) vs. what was actually drawn.
+    """
+    import analyzer
+
+    try:
+        n = int(request.args.get("n", "15"))
+    except ValueError:
+        n = 15
+    n = max(1, min(n, 30))
+
+    cache_key = n
+    cached = _TRACK_RECORD_CACHE.get(cache_key)
+    if cached and (time.time() - cached["ts"]) < _TRACK_RECORD_CACHE_TTL:
+        return jsonify(cached["data"])
+
+    out = []
+    grand_n = grand_straight = grand_box = 0
+    for code in HOT_PICK3_STATES:
+        draws = analyzer.load_draws(code)
+        if not draws:
+            continue
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        tods_out = {}
+        state_n = state_straight = state_box = 0
+        for tod, tdraws in by_tod.items():
+            rows = analyzer.backtest_suggestions(tdraws, n=n)
+            if not rows:
+                continue
+            straight = sum(1 for r in rows if r["hit_straight"])
+            box = sum(1 for r in rows if r["hit_box"])
+            tods_out[tod] = {
+                "rows": rows,
+                "n": len(rows),
+                "straight_hits": straight,
+                "box_hits": box,
+            }
+            state_n += len(rows)
+            state_straight += straight
+            state_box += box
+
+        if not tods_out:
+            continue
+
+        out.append({
+            "state": code,
+            "name": STATES[code]["name"],
+            "tods": tods_out,
+            "totals": {"n": state_n, "straight_hits": state_straight, "box_hits": state_box},
+        })
+        grand_n += state_n
+        grand_straight += state_straight
+        grand_box += state_box
+
+    payload = {
+        "states": out,
+        "grand_totals": {"n": grand_n, "straight_hits": grand_straight, "box_hits": grand_box},
+        "updated_at": datetime.now(tz=ZoneInfo("America/New_York")).isoformat(),
+    }
+    _TRACK_RECORD_CACHE[cache_key] = {"ts": time.time(), "data": payload}
+    return jsonify(payload)
+
+@app.route("/track-record")
+def track_record_page(): return send_from_directory("static", "track-record.html")
+
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")
 

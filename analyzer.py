@@ -173,6 +173,36 @@ def confidence_label(score: float, max_score: float) -> str:
         return "Faible"
 
 
+def backtest_suggestions(draws: list[dict], n: int = 15, min_history: int = 60) -> list[dict]:
+    """
+    Replay the last `n` draws: for each one, compute the TOP PICK that
+    weighted_suggestions() would have produced using only the draws that
+    happened BEFORE it (no lookahead), then compare to what actually came out.
+    Returns the most recent results first.
+    """
+    results = []
+    for i in range(min(n, len(draws))):
+        history = draws[i + 1:]
+        if len(history) < min_history:
+            break
+        actual = draws[i]
+        sugg = weighted_suggestions(history, top_n=1)
+        if not sugg:
+            continue
+        top = sugg[0]
+        actual_digits = [actual["d1"], actual["d2"], actual["d3"]]
+        results.append({
+            "date": actual["date"],
+            "tod": actual.get("tod", ""),
+            "predicted": top["combo"],
+            "confidence": top["confidence"],
+            "actual": f"{actual['d1']}{actual['d2']}{actual['d3']}",
+            "hit_straight": top["digits"] == actual_digits,
+            "hit_box": sorted(top["digits"]) == sorted(actual_digits),
+        })
+    return results
+
+
 def full_report(state_code: str) -> dict:
     draws = load_draws(state_code)
     if not draws:
