@@ -22,7 +22,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .badge.trial{background:rgba(255,215,0,.15);color:var(--gold)}
 .badge.active{background:rgba(34,232,122,.15);color:var(--green)}
 .badge.expired,.badge.none{background:rgba(255,85,119,.15);color:var(--red)}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
 .plan{border:1px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;font-size:.78rem;transition:.15s}
 .plan.selected{border-color:var(--accent);background:rgba(79,110,255,.1)}
 .plan b{display:block;font-family:'Orbitron',monospace;font-size:.95rem;margin-bottom:2px}
@@ -78,6 +78,7 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
         <div class="plan" data-plan="pro"><b>PRO</b><span>$19.99/mo</span><small>4 États · 1/jour</small></div>
         <div class="plan" data-plan="vip"><b>VIP</b><span>$49.99/mo</span><small>20 États · 7/jour</small></div>
         <div class="plan" data-plan="elite"><b>PREMIUM</b><span>$99.99/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
+        <div class="plan" data-plan="business"><b>BUSINESS</b><span>$199.99/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
       </div>
       <button class="action" id="btnChoosePlan" data-i18n="btnChoosePlan">Activer ce plan</button>
       <button class="outline" id="btnPortal" style="display:none;margin-left:8px" data-i18n="btnPortal">Gérer mon abonnement (Stripe)</button>

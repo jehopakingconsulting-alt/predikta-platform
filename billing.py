@@ -1,9 +1,9 @@
 """
 PREDIKTA — Facturation Stripe (Phase 2b)
 ==========================================
-Gère les abonnements payants PRO / VIP / ELITE via Stripe Checkout +
-Customer Portal, et synchronise l'état de l'abonnement (essai, actif,
-impayé, annulé) via les webhooks Stripe.
+Gère les abonnements payants PRO / VIP / PREMIUM / BUSINESS via Stripe
+Checkout + Customer Portal, et synchronise l'état de l'abonnement (essai,
+actif, impayé, annulé) via les webhooks Stripe.
 
 Configuration (variables d'environnement) :
   STRIPE_SECRET_KEY        — clé secrète (sk_test_... / sk_live_...)
@@ -11,7 +11,8 @@ Configuration (variables d'environnement) :
   STRIPE_WEBHOOK_SECRET    — secret du endpoint webhook (whsec_...)
   STRIPE_PRICE_PRO         — ID du Price Stripe pour le plan PRO
   STRIPE_PRICE_VIP         — ID du Price Stripe pour le plan VIP
-  STRIPE_PRICE_ELITE       — ID du Price Stripe pour le plan ELITE
+  STRIPE_PRICE_ELITE       — ID du Price Stripe pour le plan PREMIUM (elite)
+  STRIPE_PRICE_BUSINESS    — ID du Price Stripe pour le plan BUSINESS
 
 Si STRIPE_SECRET_KEY n'est pas défini, les routes de facturation
 répondent avec {"error": "stripe_not_configured"} — le frontend bascule
@@ -37,9 +38,10 @@ STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 
 STRIPE_PRICE_IDS = {
-    "pro":   os.environ.get("STRIPE_PRICE_PRO", ""),
-    "vip":   os.environ.get("STRIPE_PRICE_VIP", ""),
-    "elite": os.environ.get("STRIPE_PRICE_ELITE", ""),
+    "pro":      os.environ.get("STRIPE_PRICE_PRO", ""),
+    "vip":      os.environ.get("STRIPE_PRICE_VIP", ""),
+    "elite":    os.environ.get("STRIPE_PRICE_ELITE", ""),
+    "business": os.environ.get("STRIPE_PRICE_BUSINESS", ""),
 }
 
 if stripe is not None and STRIPE_SECRET_KEY:
