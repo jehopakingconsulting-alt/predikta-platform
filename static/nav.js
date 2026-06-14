@@ -803,6 +803,14 @@ html{scroll-behavior:smooth}
 .pr-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .pr-table-wrap table{min-width:560px}
 
+/* Tap/press micro-interaction for buttons, links-as-buttons and cards */
+button,a[class*="btn"],a[class*="-cta"],.state-card,.plan-card,.card{-webkit-tap-highlight-color:transparent}
+button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97)}
+.state-card:active,.plan-card:active,.card:active{transform:scale(.985)}
+@media(prefers-reduced-motion:reduce){
+  button:active,a[class*="btn"]:active,a[class*="-cta"]:active,.state-card:active,.plan-card:active,.card:active{transform:none}
+}
+
 /* ══════════════════════════════════════
    PREDIKTA NAV v4.0 — Langue toujours visible
    ══════════════════════════════════════ */
