@@ -160,6 +160,8 @@ class Subscription(db.Model):
     stripe_customer_id     = db.Column(db.String(64), nullable=True)
     stripe_subscription_id = db.Column(db.String(64), nullable=True)
 
+    trial_reminder_sent = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+
     user = db.relationship("User", back_populates="subscription")
 
     def states_list(self) -> list[str]:
@@ -384,6 +386,7 @@ def init_app(app):
         _ensure_column(db, "users", "ambassador_badge", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "referral_rewards", "TEXT")
         _ensure_column(db, "users", "referral_balance_usd", "FLOAT DEFAULT 0")
+        _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")
 
 
 def _ensure_column(db, table, column, ddl_type):
@@ -620,28 +623,21 @@ def subscription_required(f):
     return wrapper
 
 
-def send_password_reset_email(user, token: str):
-    """Envoie l'email de réinitialisation si le SMTP est configuré
+def _send_email(to: str, subject: str, body: str):
+    """Envoie un email texte si le SMTP est configuré
     (variables d'env SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/SMTP_FROM).
-    En l'absence de configuration (dev local), le lien est juste loggé."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
-    reset_link = f"{base_url}/reset-password?token={token}"
-
+    En l'absence de configuration (dev local), le message est juste loggé."""
     smtp_host = os.environ.get("SMTP_HOST")
     if not smtp_host:
-        print(f"[auth] Lien de réinitialisation pour {user.email}: {reset_link}")
+        text = f"[auth] (email non envoye, SMTP non configure) A: {to} | Sujet: {subject}\n{body}"
+        print(text.encode("ascii", "replace").decode("ascii"))
         return
 
     msg = EmailMessage()
-    msg["Subject"] = "PREDIKTA — Réinitialisation de votre mot de passe"
+    msg["Subject"] = subject
     msg["From"] = os.environ.get("SMTP_FROM", "no-reply@predikta.app")
-    msg["To"] = user.email
-    msg.set_content(
-        "Bonjour,\n\n"
-        "Une demande de réinitialisation de mot de passe a été effectuée pour votre compte PREDIKTA.\n"
-        f"Cliquez sur ce lien pour choisir un nouveau mot de passe (valable 1 heure) :\n{reset_link}\n\n"
-        "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email."
-    )
+    msg["To"] = to
+    msg.set_content(body)
 
     smtp_port = int(os.environ.get("SMTP_PORT", "587"))
     smtp_user = os.environ.get("SMTP_USER")
@@ -653,7 +649,67 @@ def send_password_reset_email(user, token: str):
                 server.login(smtp_user, smtp_pass)
             server.send_message(msg)
     except Exception as e:
-        print(f"[auth] Échec envoi email de réinitialisation: {e}")
+        print(f"[auth] Échec envoi email ({subject}) à {to}: {e}")
+
+
+def send_password_reset_email(user, token: str):
+    """Envoie l'email de réinitialisation de mot de passe."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    reset_link = f"{base_url}/reset-password?token={token}"
+
+    _send_email(
+        user.email,
+        "PREDIKTA — Réinitialisation de votre mot de passe",
+        "Bonjour,\n\n"
+        "Une demande de réinitialisation de mot de passe a été effectuée pour votre compte PREDIKTA.\n"
+        f"Cliquez sur ce lien pour choisir un nouveau mot de passe (valable 1 heure) :\n{reset_link}\n\n"
+        "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email."
+    )
+
+
+def send_welcome_email(user):
+    """Email de confirmation d'inscription, envoyé juste après la création du compte."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    _send_email(
+        user.email,
+        "Bienvenue sur PREDIKTA 🎉",
+        f"Bonjour {user.username},\n\n"
+        "Bienvenue sur PREDIKTA, ta plateforme d'analyse prédictive de loterie !\n\n"
+        "Ton compte a bien été créé. Choisis ton plan pour démarrer ta période d'essai gratuite :\n"
+        f"{base_url}/pricing\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
+
+
+def send_trial_ending_email(user, sub):
+    """Email de rappel envoyé lorsque la période d'essai arrive à échéance."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    cfg = PLAN_CONFIG.get(sub.plan, {})
+    plan_label = cfg.get("label", sub.plan or "")
+    _send_email(
+        user.email,
+        "PREDIKTA — Ton essai gratuit se termine bientôt",
+        f"Bonjour {user.username},\n\n"
+        f"Ta période d'essai gratuite du plan {plan_label} se termine dans moins de 24 heures.\n"
+        "Pour continuer à profiter de tes analyses et prédictions sans interruption, "
+        "ajoute un moyen de paiement dès maintenant :\n"
+        f"{base_url}/account\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
+
+
+def send_payment_failed_email(user):
+    """Email envoyé lorsqu'un paiement Stripe échoue (invoice.payment_failed)."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    _send_email(
+        user.email,
+        "PREDIKTA — Échec de paiement",
+        f"Bonjour {user.username},\n\n"
+        "Le paiement de ton abonnement PREDIKTA a échoué.\n"
+        "Pour éviter toute interruption de ton accès, merci de mettre à jour ton moyen de paiement :\n"
+        f"{base_url}/account\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
 
 
 def record_usage(user_id: int):
@@ -783,6 +839,8 @@ def register():
         _apply_referral_rewards(referrer)
 
     db.session.commit()
+
+    send_welcome_email(user)
 
     session["user_id"] = user.id
     session.permanent = True
@@ -949,3 +1007,33 @@ def set_states():
     sub.set_states(states)
     db.session.commit()
     return jsonify({"success": True, "subscription": sub.to_dict()})
+
+
+@auth_bp.route("/cron/trial-reminders", methods=["POST", "GET"])
+def trial_reminders():
+    """Envoie un email de rappel aux comptes dont l'essai gratuit se termine
+    dans moins de 24h (une seule fois par essai). Destiné à être appelé
+    périodiquement par un job cron externe, protégé par CRON_SECRET."""
+    secret = os.environ.get("CRON_SECRET")
+    if secret and request.args.get("secret") != secret:
+        return jsonify({"error": "unauthorized"}), 401
+
+    now = datetime.utcnow()
+    soon = now + timedelta(hours=24)
+    subs = Subscription.query.filter(
+        Subscription.status == "trial",
+        Subscription.trial_reminder_sent.is_(False),
+        Subscription.trial_end.isnot(None),
+        Subscription.trial_end <= soon,
+        Subscription.trial_end > now,
+    ).all()
+
+    sent = 0
+    for sub in subs:
+        if sub.user:
+            send_trial_ending_email(sub.user, sub)
+            sub.trial_reminder_sent = True
+            sent += 1
+
+    db.session.commit()
+    return jsonify({"success": True, "emails_sent": sent})

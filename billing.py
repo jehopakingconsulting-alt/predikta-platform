@@ -267,6 +267,9 @@ def stripe_webhook():
         if sub is not None:
             # Non-paiement → blocage automatique de l'accès
             sub.status = "past_due"
+            if sub.user:
+                from auth import send_payment_failed_email
+                send_payment_failed_email(sub.user)
             db.session.commit()
 
     elif etype == "invoice.paid":
