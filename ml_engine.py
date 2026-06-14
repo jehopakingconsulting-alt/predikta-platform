@@ -501,6 +501,7 @@ def ensemble_consensus(
     mc_preds: list[dict],
     fourier_hints: dict,
     draws: list[dict],
+    hot_cold: dict = None,
     top_n: int = 10,
 ) -> list[dict]:
     """
@@ -509,13 +510,19 @@ def ensemble_consensus(
     """
     gaps = digit_gap_analysis(draws)
     combo_scores = defaultdict(float)
+    combo_components = defaultdict(lambda: {
+        "ml": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
+        "monte_carlo": 0.0, "fourier": 0.0, "gap": 0.0,
+    })
 
     # Score from each source
-    def idx_score(pred_list: list[dict], combo: str, weight: float, key: str = "score"):
+    def idx_score(pred_list: list[dict], combo: str, weight: float, component: str):
         for i, p in enumerate(pred_list):
             if p.get("combo") == combo:
                 rank_bonus = (len(pred_list) - i) / len(pred_list)
-                combo_scores[combo] += weight * rank_bonus
+                contrib = weight * rank_bonus
+                combo_scores[combo] += contrib
+                combo_components[combo][component] += contrib
                 break
 
     all_combos = set()
@@ -536,22 +543,27 @@ def ensemble_consensus(
         all_combos.add(fc)
 
     for combo in all_combos:
-        idx_score(ml_preds, combo, 0.35)
-        idx_score(markov1, combo, 0.12)
-        idx_score(markov2, combo, 0.10)
-        idx_score(markov3, combo, 0.08)
-        idx_score(mc_preds, combo, 0.20)
+        idx_score(ml_preds, combo, 0.35, "ml")
+        idx_score(markov1, combo, 0.12, "markov1")
+        idx_score(markov2, combo, 0.10, "markov2")
+        idx_score(markov3, combo, 0.08, "markov3")
+        idx_score(mc_preds, combo, 0.20, "monte_carlo")
 
         # Fourier bonus
         parts = combo.split("-")
         if len(parts) == 3 and len(f_digits) == 3:
             matches = sum(1 for pos, key in [("d1",0),("d2",1),("d3",2)] if f_digits.get(pos) == int(parts[key]))
-            combo_scores[combo] += 0.10 * (matches / 3)
+            fourier_contrib = 0.10 * (matches / 3)
+            combo_scores[combo] += fourier_contrib
+            combo_components[combo]["fourier"] += fourier_contrib
 
         # Gap/overdue bonus
+        gap_contrib = 0.0
         for part in parts:
             g = gaps.get(part, {})
-            combo_scores[combo] += 0.05 * g.get("due_prob", 0)
+            gap_contrib += 0.05 * g.get("due_prob", 0)
+        combo_scores[combo] += gap_contrib
+        combo_components[combo]["gap"] += gap_contrib
 
     top = sorted(combo_scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     max_score = top[0][1] if top else 1
@@ -563,9 +575,45 @@ def ensemble_consensus(
             "consensus_score": round(score, 4),
             "confidence_pct": round(score / max_score * 100, 1),
             "confidence_label": _conf_label(score / max_score),
+            "breakdown": _consensus_breakdown(combo, combo_components[combo], gaps, hot_cold),
         }
         for combo, score in top
     ]
+
+
+def _consensus_breakdown(combo: str, components: dict, gaps: dict, hot_cold: dict = None) -> dict:
+    """
+    "Mode Transparence": explains why a combo was suggested by exposing
+    per-digit historical signals (frequency/hot-cold, gap/overdue) and the
+    relative weight each model family contributed to its consensus score.
+    """
+    positions = ["d1", "d2", "d3"]
+    parts = combo.split("-")
+    digits_info = []
+    for part, pos in zip(parts, positions):
+        g = gaps.get(part, {})
+        hc = (hot_cold or {}).get(pos, {}).get(part, {})
+        digits_info.append({
+            "position": pos,
+            "digit": int(part),
+            "current_gap": g.get("current_gap"),
+            "avg_gap": g.get("avg_gap"),
+            "overdue": g.get("overdue", False),
+            "hot_cold": hc.get("status", "NEUTRAL"),
+            "freq_pct": hc.get("pct", 0),
+        })
+
+    total = sum(components.values()) or 1
+    return {
+        "digits": digits_info,
+        "model_contributions": {
+            "ml_pct": round(components["ml"] / total * 100, 1),
+            "markov_pct": round((components["markov1"] + components["markov2"] + components["markov3"]) / total * 100, 1),
+            "monte_carlo_pct": round(components["monte_carlo"] / total * 100, 1),
+            "fourier_pct": round(components["fourier"] / total * 100, 1),
+            "gap_pct": round(components["gap"] / total * 100, 1),
+        },
+    }
 
 
 def _conf_label(ratio: float) -> str:
@@ -616,8 +664,11 @@ def run_all_models(draws: list[dict]) -> dict:
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}
 
+    # Hot/cold (last 30 draws) — feeds the consensus breakdown
+    hc30 = hot_cold_stats(draws, 30)
+
     # Ensemble consensus
-    consensus = ensemble_consensus(m1, m2, m3, ml_preds, mc_preds, fourier, draws)
+    consensus = ensemble_consensus(m1, m2, m3, ml_preds, mc_preds, fourier, draws, hot_cold=hc30)
 
     return {
         "markov_order1_top": m1[:10],

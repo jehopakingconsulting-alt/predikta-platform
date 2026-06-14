@@ -1298,6 +1298,11 @@ const T = {
     noData:"Aucune donnée. Cliquez sur 🔄 Scraper d'abord.",
     confVH:"Tendance Très Forte ★★★★★",confH:"Tendance Forte ★★★★",confM:"Tendance Moyenne ★★★",confL:"Tendance Légère ★★",confVL:"Tendance Faible ★",
     overdue:"EN RETARD",normal:"normal",
+    transBtn:"🔍 Mode Transparence",transTitle:"Pourquoi cette suggestion ?",
+    transFreq:"Fréquence historique",transGap:"Écart actuel / moyen",transHotCold:"Tendance récente",
+    transModels:"Contribution des modèles",transHot:"CHAUD",transCold:"FROID",transNeutral:"NEUTRE",
+    transML:"IA (ML)",transMarkov:"Markov",transMC:"Monte Carlo",transFourier:"Fourier",transGapModel:"Écart",
+    transDisclaimer:"Ces signaux décrivent l'historique des tirages — ils n'augmentent pas vos chances de gagner et ne garantissent aucun résultat futur.",
     pos:"Position",cycleLen:"tirages/cycle",predicted:"Prédit:",
     uniform:"uniforme",
     allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",signal:"Signal",
@@ -1335,6 +1340,11 @@ const T = {
     noData:"No data. Click 🔄 Scrape first.",
     confVH:"Very Strong Trend ★★★★★",confH:"Strong Trend ★★★★",confM:"Medium Trend ★★★",confL:"Light Trend ★★",confVL:"Weak Trend ★",
     overdue:"OVERDUE",normal:"normal",
+    transBtn:"🔍 Transparency Mode",transTitle:"Why this suggestion?",
+    transFreq:"Historical frequency",transGap:"Current / average gap",transHotCold:"Recent trend",
+    transModels:"Model contributions",transHot:"HOT",transCold:"COLD",transNeutral:"NEUTRAL",
+    transML:"AI (ML)",transMarkov:"Markov",transMC:"Monte Carlo",transFourier:"Fourier",transGapModel:"Gap",
+    transDisclaimer:"These signals describe historical draw patterns — they do not increase your odds of winning or guarantee any future outcome.",
     pos:"Position",cycleLen:"draws/cycle",predicted:"Predicted:",
     uniform:"uniform",
     allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",signal:"Signal",
@@ -1372,6 +1382,11 @@ const T = {
     noData:"Sin datos. Haga clic en 🔄 Scrapear primero.",
     confVH:"Tendencia Muy Fuerte ★★★★★",confH:"Tendencia Fuerte ★★★★",confM:"Tendencia Media ★★★",confL:"Tendencia Ligera ★★",confVL:"Tendencia Débil ★",
     overdue:"VENCIDA",normal:"normal",
+    transBtn:"🔍 Modo Transparencia",transTitle:"¿Por qué esta sugerencia?",
+    transFreq:"Frecuencia histórica",transGap:"Brecha actual / promedio",transHotCold:"Tendencia reciente",
+    transModels:"Contribución de modelos",transHot:"CALIENTE",transCold:"FRÍO",transNeutral:"NEUTRAL",
+    transML:"IA (ML)",transMarkov:"Markov",transMC:"Monte Carlo",transFourier:"Fourier",transGapModel:"Brecha",
+    transDisclaimer:"Estas señales describen patrones históricos de los sorteos — no aumentan sus posibilidades de ganar ni garantizan ningún resultado futuro.",
     pos:"Posición",cycleLen:"sorteos/ciclo",predicted:"Predicho:",
     uniform:"uniforme",
     allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",signal:"Señal",
@@ -1409,6 +1424,11 @@ const T = {
     noData:"Sem dados. Clique em 🔄 Raspar primeiro.",
     confVH:"Tendência Muito Forte ★★★★★",confH:"Tendência Forte ★★★★",confM:"Tendência Média ★★★",confL:"Tendência Leve ★★",confVL:"Tendência Fraca ★",
     overdue:"EM ATRASO",normal:"normal",
+    transBtn:"🔍 Modo Transparência",transTitle:"Por que esta sugestão?",
+    transFreq:"Frequência histórica",transGap:"Lacuna atual / média",transHotCold:"Tendência recente",
+    transModels:"Contribuição dos modelos",transHot:"QUENTE",transCold:"FRIO",transNeutral:"NEUTRO",
+    transML:"IA (ML)",transMarkov:"Markov",transMC:"Monte Carlo",transFourier:"Fourier",transGapModel:"Lacuna",
+    transDisclaimer:"Esses sinais descrevem padrões históricos dos sorteios — eles não aumentam suas chances de ganhar nem garantem qualquer resultado futuro.",
     pos:"Posição",cycleLen:"sorteios/ciclo",predicted:"Previsto:",
     uniform:"uniforme",
     allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",signal:"Sinal",
@@ -1446,6 +1466,11 @@ const T = {
     noData:"Pa gen done. Klike sou 🔄 Chache Done anvan.",
     confVH:"Tandans Trè Fò ★★★★★",confH:"Tandans Fò ★★★★",confM:"Tandans Mwayen ★★★",confL:"Tandans Lejè ★★",confVL:"Tandans Fèb ★",
     overdue:"AN RETA",normal:"nòmal",
+    transBtn:"🔍 Mòd Transparans",transTitle:"Poukisa sigjesyon sa a?",
+    transFreq:"Frekans istorik",transGap:"Espas aktyèl / mwayèn",transHotCold:"Tandans resan",
+    transModels:"Kontribisyon modèl yo",transHot:"CHO",transCold:"FRÈT",transNeutral:"NÈITRAL",
+    transML:"AI (ML)",transMarkov:"Markov",transMC:"Monte Carlo",transFourier:"Fourier",transGapModel:"Espas",
+    transDisclaimer:"Siyal sa yo dekri modèl istorik tiraj yo — yo pa ogmante chans ou pou genyen ni garanti okenn rezilta nan lavni.",
     pos:"Pozisyon",cycleLen:"tiraj/sik",predicted:"Predit:",
     uniform:"inifòm",
     allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",signal:"Siyal",
@@ -2077,6 +2102,7 @@ function renderConsensus(d, today){
     ).join('');
     const confLabel = getConfLabel(s.confidence_pct);
     const isFav = window.PREDIKTA?.isFav(s.combo);
+    const transId = `trans-${state}-${i}`;
     return`<div class="pred-card">
       <div class="pred-rank" style="display:flex;align-items:center;justify-content:space-between">
         <span>#${i+1} — ${['🥇','🥈','🥉','④','⑤','⑥','⑦','⑧','⑨','⑩'][i]||'#'+(i+1)}</span>
@@ -2091,6 +2117,7 @@ function renderConsensus(d, today){
       <div class="pred-conf-label ${confClass(confLabel)}">${confLabel}</div>
       <div class="pred-bar"><div class="pred-bar-fill" style="width:${s.confidence_pct}%"></div></div>
       <div class="pred-score">${t('score')}: ${s.consensus_score} · ${s.confidence_pct}%</div>
+      ${renderTransparencyToggle(transId, s.breakdown)}
     </div>`;
   }).join('');
 
@@ -2110,6 +2137,49 @@ function renderConsensus(d, today){
       ⚙️ XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
     </div>
   </div>`;
+}
+
+// ── Mode Transparence ──
+function renderTransparencyToggle(transId, breakdown){
+  if(!breakdown) return '';
+  const hcLabel = hc => hc==='HOT'?t('transHot'):hc==='COLD'?t('transCold'):t('transNeutral');
+  const hcColor = hc => hc==='HOT'?'#ff6b6b':hc==='COLD'?'#4f9eff':'var(--muted2)';
+  const digitRows = (breakdown.digits||[]).map(dInfo => `
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:5px 0;border-bottom:1px solid var(--border2)">
+      <span style="font-weight:700;color:${bc(dInfo.digit)}">${dInfo.position.toUpperCase()} = ${dInfo.digit}</span>
+      <span style="color:var(--muted2)">${t('transFreq')}: ${dInfo.freq_pct}%</span>
+      <span style="color:${hcColor(dInfo.hot_cold)}">${hcLabel(dInfo.hot_cold)}</span>
+      <span style="color:${dInfo.overdue?'#ffb347':'var(--muted2)'}">${t('transGap')}: ${dInfo.current_gap}${dInfo.avg_gap?` / ${dInfo.avg_gap}`:''}${dInfo.overdue?' ⏰ '+t('overdue'):''}</span>
+    </div>`).join('');
+  const mc = breakdown.model_contributions || {};
+  const modelRows = [
+    [t('transML'), mc.ml_pct], [t('transMarkov'), mc.markov_pct],
+    [t('transMC'), mc.monte_carlo_pct], [t('transFourier'), mc.fourier_pct],
+    [t('transGapModel'), mc.gap_pct],
+  ].map(([label, pct]) => `
+    <div style="display:flex;align-items:center;gap:8px;font-size:.68rem;margin:3px 0">
+      <span style="width:90px;color:var(--muted2)">${label}</span>
+      <div style="flex:1;height:6px;background:var(--glass2);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${Math.min(pct||0,100)}%;background:linear-gradient(135deg,var(--accent),var(--accent2))"></div>
+      </div>
+      <span style="width:40px;text-align:right">${pct||0}%</span>
+    </div>`).join('');
+
+  return `
+    <button onclick="toggleTransparency('${transId}')" style="margin-top:8px;width:100%;padding:6px 10px;border-radius:8px;font-size:.68rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">${t('transBtn')}</button>
+    <div id="${transId}" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--glass2);border:1px solid var(--border2);font-size:.7rem">
+      <div style="font-weight:700;margin-bottom:6px">${t('transTitle')}</div>
+      ${digitRows}
+      <div style="font-weight:700;margin:8px 0 4px">${t('transModels')}</div>
+      ${modelRows}
+      <div style="margin-top:8px;font-size:.62rem;color:var(--muted);line-height:1.5">${t('transDisclaimer')}</div>
+    </div>`;
+}
+
+function toggleTransparency(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 function toggleFavCombo(combo, btn){

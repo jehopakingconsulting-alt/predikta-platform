@@ -124,6 +124,7 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5) -> list[dict]:
     freq = {pos: digit_frequencies(draws, pos) for pos in ["d1", "d2", "d3"]}
     gaps = gap_analysis(draws)
     markov = {pos: markov_transitions(draws, pos) for pos in ["d1", "d2", "d3"]}
+    hc = hot_cold(draws, 30)
 
     for d1 in DIGITS:
         for d2 in DIGITS:
@@ -156,9 +157,37 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5) -> list[dict]:
             "digits": list(c),
             "score": round(s, 3),
             "confidence": confidence_label(s, top[0][1]),
+            "breakdown": _suggestion_breakdown(c, freq, gaps, markov, hc, last),
         }
         for c, s in top
     ]
+
+
+def _suggestion_breakdown(combo, freq, gaps, markov, hot_cold_map, last_draw):
+    """
+    Per-digit explanation of why a suggested combo was chosen ("Mode
+    Transparence"): historical frequency, gap/overdue status, recent
+    hot/cold trend, and Markov transition weight from the last draw.
+    """
+    positions = ["d1", "d2", "d3"]
+    out = []
+    for digit, pos in zip(combo, positions):
+        g = gaps[digit]
+        overdue = bool(g["avg_gap"] and g["current_gap"] > g["avg_gap"])
+        last_digit = last_draw[pos]
+        markov_pct = round(markov[pos].get(last_digit, {}).get(digit, 0), 2)
+        out.append({
+            "position": pos,
+            "digit": digit,
+            "freq_pct": freq[pos][digit]["pct"],
+            "current_gap": g["current_gap"],
+            "avg_gap": round(g["avg_gap"], 1) if g["avg_gap"] else 0,
+            "overdue": overdue,
+            "hot_cold": hot_cold_map.get(digit, {}).get("status", "NEUTRAL"),
+            "markov_pct": markov_pct,
+            "markov_from": last_digit,
+        })
+    return out
 
 
 def confidence_label(score: float, max_score: float) -> str:

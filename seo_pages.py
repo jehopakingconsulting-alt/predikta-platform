@@ -41,6 +41,11 @@ T = {
         "indexH1": "🎯 Pick 3 — Prédictions du jour par État",
         "totalDraws": "tirages analysés",
         "drawn": "tiré",
+        "transBtn": "🔍 Mode Transparence — pourquoi ces suggestions ?",
+        "transFreq": "Fréquence", "transGap": "Écart actuel/moyen", "transHotCold": "Tendance",
+        "transOverdue": "en retard", "transHot": "CHAUD", "transCold": "FROID", "transNeutral": "NEUTRE",
+        "transMarkov": "Markov (vs dernier tirage)",
+        "transDisclaimer": "Ces signaux décrivent l'historique des tirages — ils n'augmentent pas vos chances de gagner et ne garantissent aucun résultat futur.",
     },
     "en": {
         "title": lambda name, d: f"Pick 3 {name} Predictions Today {d} | PREDIKTA",
@@ -57,6 +62,11 @@ T = {
         "indexH1": "🎯 Pick 3 — Today's Predictions by State",
         "totalDraws": "draws analyzed",
         "drawn": "drawn",
+        "transBtn": "🔍 Transparency Mode — why these suggestions?",
+        "transFreq": "Frequency", "transGap": "Current/avg gap", "transHotCold": "Trend",
+        "transOverdue": "overdue", "transHot": "HOT", "transCold": "COLD", "transNeutral": "NEUTRAL",
+        "transMarkov": "Markov (vs last draw)",
+        "transDisclaimer": "These signals describe historical draw patterns — they do not increase your odds of winning or guarantee any future outcome.",
     },
     "es": {
         "title": lambda name, d: f"Pick 3 {name} — Predicciones de hoy {d} | PREDIKTA",
@@ -73,6 +83,11 @@ T = {
         "indexH1": "🎯 Pick 3 — Predicciones de hoy por estado",
         "totalDraws": "sorteos analizados",
         "drawn": "sorteado",
+        "transBtn": "🔍 Modo Transparencia — ¿por qué estas sugerencias?",
+        "transFreq": "Frecuencia", "transGap": "Brecha actual/promedio", "transHotCold": "Tendencia",
+        "transOverdue": "atrasado", "transHot": "CALIENTE", "transCold": "FRÍO", "transNeutral": "NEUTRAL",
+        "transMarkov": "Markov (vs último sorteo)",
+        "transDisclaimer": "Estas señales describen patrones históricos de los sorteos — no aumentan sus posibilidades de ganar ni garantizan ningún resultado futuro.",
     },
     "pt": {
         "title": lambda name, d: f"Pick 3 {name} — Previsões de hoje {d} | PREDIKTA",
@@ -89,6 +104,11 @@ T = {
         "indexH1": "🎯 Pick 3 — Previsões de hoje por estado",
         "totalDraws": "sorteios analisados",
         "drawn": "sorteado",
+        "transBtn": "🔍 Modo Transparência — por que essas sugestões?",
+        "transFreq": "Frequência", "transGap": "Lacuna atual/média", "transHotCold": "Tendência",
+        "transOverdue": "em atraso", "transHot": "QUENTE", "transCold": "FRIO", "transNeutral": "NEUTRO",
+        "transMarkov": "Markov (vs último sorteio)",
+        "transDisclaimer": "Esses sinais descrevem padrões históricos dos sorteios — eles não aumentam suas chances de ganhar nem garantem qualquer resultado futuro.",
     },
     "ht": {
         "title": lambda name, d: f"Pick 3 {name} — Prediksyon jodi a {d} | PREDIKTA",
@@ -105,6 +125,11 @@ T = {
         "indexH1": "🎯 Pick 3 — Prediksyon jodi a pa eta",
         "totalDraws": "tiraj analize",
         "drawn": "tire",
+        "transBtn": "🔍 Mòd Transparans — poukisa sigjesyon sa yo?",
+        "transFreq": "Frekans", "transGap": "Espas aktyèl/mwayèn", "transHotCold": "Tandans",
+        "transOverdue": "an reta", "transHot": "CHO", "transCold": "FRÈT", "transNeutral": "NÈITRAL",
+        "transMarkov": "Markov (vs dènye tiraj)",
+        "transDisclaimer": "Siyal sa yo dekri modèl istorik tiraj yo — yo pa ogmante chans ou pou genyen ni garanti okenn rezilta nan lavni.",
     },
 }
 
@@ -180,6 +205,14 @@ h1{{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,5vw,1.9rem);font-wei
 .state-card{{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--card);
   border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;font-size:.8rem;transition:border-color .15s}}
 .state-card:hover{{border-color:var(--accent)}}
+.trans-toggle{{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}}
+.trans-toggle>summary{{cursor:pointer;font-size:.78rem;font-weight:700;color:var(--muted2)}}
+.trans-wrap{{margin-top:10px}}
+.trans-details{{margin-bottom:6px;border:1px solid var(--border);border-radius:8px;padding:6px 10px}}
+.trans-details>summary{{cursor:pointer;font-size:.85rem;font-weight:700;letter-spacing:1px}}
+.trans-body{{margin-top:6px;font-size:.72rem;color:var(--muted2);line-height:1.7}}
+.trans-row{{padding:3px 0}}
+.trans-disclaimer{{font-size:.68rem;color:var(--muted);line-height:1.6;margin-top:8px}}
 </style>
 </head>
 <body>
@@ -232,6 +265,31 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
         conf = CONF_BY_LANG.get(lang, {}).get(s["confidence"], s["confidence"])
         sugg_html += f'<span class="combo-chip">{s["combo"]} <span class="combo-conf">{conf}</span></span>'
 
+    trans_html = ""
+    hc_status_label = {"HOT": t["transHot"], "COLD": t["transCold"], "NEUTRAL": t["transNeutral"]}
+    for s in report["suggestions"][:5]:
+        combo_conf = CONF_BY_LANG.get(lang, {}).get(s["confidence"], s["confidence"])
+        rows = ""
+        for di in s.get("breakdown", []):
+            gap_txt = f'{di["current_gap"]}/{di["avg_gap"]}' if di["avg_gap"] else str(di["current_gap"])
+            overdue_txt = f' ⏰ {t["transOverdue"]}' if di["overdue"] else ""
+            rows += (
+                f'<div class="trans-row">'
+                f'<b>{di["position"].upper()} = {di["digit"]}</b> · '
+                f'{t["transFreq"]}: {di["freq_pct"]}% · '
+                f'{t["transHotCold"]}: {hc_status_label.get(di["hot_cold"], di["hot_cold"])} · '
+                f'{t["transGap"]}: {gap_txt}{overdue_txt} · '
+                f'{t["transMarkov"]}: {di["markov_pct"]}%'
+                f'</div>'
+            )
+        trans_html += (
+            f'<details class="trans-details">'
+            f'<summary>{s["combo"]} — {combo_conf}</summary>'
+            f'<div class="trans-body">{rows}</div>'
+            f'</details>'
+        )
+    trans_html += f'<p class="trans-disclaimer">{t["transDisclaimer"]}</p>'
+
     tod = last.get("tod", "")
     tod_label = TOD_T.get(lang, {}).get(tod, tod)
 
@@ -247,6 +305,10 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
 <div class="card">
   <h2>{t['suggestions']}</h2>
   <div>{sugg_html}</div>
+  <details class="trans-toggle">
+    <summary>{t['transBtn']}</summary>
+    <div class="trans-wrap">{trans_html}</div>
+  </details>
 </div>
 
 <div class="card">
