@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Carte du Monde des Loteries — PREDIKTA</title>
-<meta name="description" content="Bientôt disponible : une carte interactive mondiale des loteries, pour comparer les jeux, les jackpots et les statistiques par pays et par état."/>
+<title>Carte de Couverture Interactive — PREDIKTA</title>
+<meta name="description" content="Explorez les 40 marchés de loterie couverts par PREDIKTA : 38 États américains, DC et Porto Rico. Trouvez votre État et accédez directement à ses prédictions IA."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/world-map"/>
 <link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/world-map"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
@@ -12,35 +12,43 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(34,232,122,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(79,110,255,.07) 0%,transparent 60%)}
-.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
-.hero{text-align:center;padding:20px 10px 40px}
+.page{max-width:1080px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;padding:20px 10px 30px}
 .hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:#88aaff;margin-bottom:18px}
 .hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#22e87a,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
-.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
-.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--green));color:#04040f;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(34,232,122,.25);text-decoration:none;display:inline-block}
-.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+.hero-sub{font-size:.92rem;color:var(--muted2);max-width:680px;margin:0 auto 24px;line-height:1.7}
 
+.stats-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 22px;text-align:center;min-width:110px}
+.stat-box .num{font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;background:linear-gradient(135deg,#6688ff,#22e87a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-box .lbl{font-size:.7rem;color:var(--muted2);margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search-input{flex:1;min-width:200px;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem}
+.search-input::placeholder{color:var(--muted)}
+.region-chip{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted2);font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.region-chip.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
+
+.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:30px}
+.state-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;color:var(--text);transition:transform .15s,border-color .15s}
+.state-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.state-card .flag{font-size:1.5rem;margin-bottom:6px}
+.state-card .name{font-size:.82rem;font-weight:700;margin-bottom:4px;line-height:1.3}
+.state-card .game{font-size:.7rem;color:var(--muted2);margin-bottom:6px}
+.state-card .dpd{display:inline-block;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:6px;background:rgba(34,232,122,.12);border:1px solid rgba(34,232,122,.3);color:var(--green)}
+.no-results{text-align:center;color:var(--muted2);font-size:.85rem;padding:30px}
+
+.preview-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:30px 20px;text-align:center;margin-bottom:18px}
+.preview-box .globe{font-size:2.5rem;margin-bottom:10px;opacity:.7}
+.preview-box p{font-size:.85rem;color:var(--muted2);max-width:560px;margin:0 auto;line-height:1.7}
 .soon-badge{display:inline-block;padding:3px 12px;border-radius:8px;font-size:.68rem;font-weight:700;letter-spacing:1px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-left:8px;vertical-align:middle}
-
-.preview-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 20px;text-align:center;margin-bottom:18px}
-.preview-box .globe{font-size:3.5rem;margin-bottom:14px;opacity:.7}
-.preview-box p{font-size:.85rem;color:var(--muted2);max-width:520px;margin:0 auto;line-height:1.7}
-
-.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
-.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#88aaff;margin-bottom:10px}
-.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
-.sections .sec p:last-child{margin-bottom:0}
-.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
-.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
-.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
-.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
-.sections .sec a:hover{text-decoration:underline}
 
 .bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(34,232,122,.07),rgba(79,110,255,.08));border:1px solid rgba(34,232,122,.2);border-radius:20px;margin-top:10px}
 .bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#22e87a,#6688ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
 .bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
 .bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--green));color:#04040f;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(34,232,122,.25);text-decoration:none;display:inline-block}
+.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
 
 .disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
 .disclaimer a{color:var(--accent)}
@@ -50,25 +58,29 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 
 <div class="page">
 <div class="hero">
-  <div class="hero-tag" data-i18n="tag">CARTE DU MONDE</div>
-  <h1 data-i18n-html="h1">La carte mondiale<br>des loteries arrive</h1>
-  <p class="hero-sub" data-i18n="sub">Explorez bientôt les loteries du monde entier sur une carte interactive : jackpots, fréquences de tirage et statistiques par pays et par état, en un coup d'œil.</p>
-  <div class="hero-cta">
-    <a class="cta-btn-main" href="/predictions" data-i18n="ctaMain">Voir les prédictions par État</a>
-    <a class="cta-btn-sec" href="/results" data-i18n="ctaSec">Voir les derniers tirages</a>
-  </div>
+  <div class="hero-tag" data-i18n="tag">CARTE DE COUVERTURE</div>
+  <h1 data-i18n-html="h1">Explorez nos<br>40 marchés couverts</h1>
+  <p class="hero-sub" data-i18n="sub">Recherchez votre État ou territoire et accédez en un clic à ses prédictions IA, ses statistiques et son historique de tirages.</p>
 </div>
+
+<div class="stats-row" id="statsRow"></div>
+
+<div class="controls">
+  <input type="text" class="search-input" id="searchInput" data-i18n-ph="searchPh" placeholder="Rechercher un État (ex: Florida, FL, Texas...)">
+</div>
+<div class="controls" id="regionChips"></div>
+
+<div class="state-grid" id="stateGrid"></div>
+<div class="no-results" id="noResults" style="display:none" data-i18n="noResults">Aucun État trouvé.</div>
 
 <div class="preview-box">
   <div class="globe">🌍</div>
-  <p data-i18n="previewText">Aperçu de la fonctionnalité : une carte interactive du monde où chaque pays et chaque état affichera ses jeux disponibles, ses prochains tirages et ses statistiques clés en un clic.</p>
+  <p data-i18n="previewText">Une véritable carte géographique interactive (zoom, survol, comparaison visuelle) arrive prochainement <span class="soon-badge">BIENTÔT</span>. En attendant, utilisez la recherche ci-dessus pour accéder instantanément à votre État.</p>
 </div>
 
-<div class="sections" id="sections"></div>
-
 <div class="bottom-cta">
-  <h2 data-i18n="ctaTitle">Soyez parmi les premiers informés</h2>
-  <p data-i18n="ctaP">Créez votre compte PREDIKTA dès aujourd'hui pour être averti dès que la carte du monde sera disponible, et profitez déjà de nos prédictions par État.</p>
+  <h2 data-i18n="ctaTitle">Prêt à passer au niveau supérieur ?</h2>
+  <p data-i18n="ctaP">Créez votre compte PREDIKTA gratuit pour sauvegarder vos États favoris, recevoir des alertes et débloquer les analyses avancées (Markov, Monte Carlo, Machine Learning).</p>
   <div class="bottom-cta-btns">
     <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer mon compte gratuit</a>
     <a class="cta-btn-sec" href="/predictions" data-i18n="ctaBtnPredictions">Explorer les prédictions</a>
@@ -79,98 +91,169 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 </div>
 
 <script>
+const STATES = [
+ {code:"AR",flag:"💎",region:"SE",game:"Cash 3",dpd:2},
+ {code:"AZ",flag:"🌵",region:"SW",game:"Pick 3",dpd:1},
+ {code:"CA",flag:"☀️",region:"W",game:"Daily 3",dpd:2},
+ {code:"CO",flag:"🏔️",region:"W",game:"Pick 3",dpd:2},
+ {code:"CT",flag:"⚓",region:"NE",game:"Play 3",dpd:2},
+ {code:"DC",flag:"🏛️",region:"NE",game:"Pick 3",dpd:3},
+ {code:"DE",flag:"🦆",region:"NE",game:"Play 3",dpd:2},
+ {code:"FL",flag:"🌴",region:"SE",game:"Pick 3",dpd:2},
+ {code:"GA",flag:"🍑",region:"SE",game:"Cash 3",dpd:3},
+ {code:"IA",flag:"🌽",region:"MW",game:"Pick 3",dpd:2},
+ {code:"ID",flag:"🥔",region:"W",game:"Pick 3",dpd:2},
+ {code:"IL",flag:"🏙️",region:"MW",game:"Pick 3",dpd:2},
+ {code:"IN",flag:"🏁",region:"MW",game:"Daily 3",dpd:2},
+ {code:"KS",flag:"🌾",region:"MW",game:"Pick 3",dpd:2},
+ {code:"KY",flag:"🐎",region:"SE",game:"Pick 3",dpd:2},
+ {code:"LA",flag:"🎷",region:"SE",game:"Pick 3",dpd:1},
+ {code:"MD",flag:"🦀",region:"NE",game:"Pick 3",dpd:2},
+ {code:"ME",flag:"🦞",region:"NE",game:"Pick 3",dpd:2},
+ {code:"MI",flag:"🚗",region:"MW",game:"Pick 3",dpd:2},
+ {code:"MN",flag:"🌨️",region:"MW",game:"Pick 3",dpd:1},
+ {code:"MO",flag:"⛵",region:"MW",game:"Pick 3",dpd:2},
+ {code:"MS",flag:"🎶",region:"SE",game:"Pick 3",dpd:2},
+ {code:"NC",flag:"🌲",region:"SE",game:"Pick 3",dpd:2},
+ {code:"NE",flag:"🌾",region:"MW",game:"Pick 3",dpd:1},
+ {code:"NH",flag:"🏔️",region:"NE",game:"Pick 3",dpd:2},
+ {code:"NJ",flag:"🌊",region:"NE",game:"Pick 3",dpd:2},
+ {code:"NM",flag:"🌶️",region:"SW",game:"Pick 3",dpd:2},
+ {code:"NY",flag:"🗽",region:"NE",game:"Numbers",dpd:2},
+ {code:"OH",flag:"🌻",region:"MW",game:"Pick 3",dpd:2},
+ {code:"OK",flag:"🛢️",region:"SW",game:"Pick 3",dpd:1},
+ {code:"PA",flag:"🔔",region:"NE",game:"Pick 3",dpd:2},
+ {code:"PR",flag:"🌺",region:"TR",game:"Pega 3",dpd:2},
+ {code:"SC",flag:"🌴",region:"SE",game:"Pick 3",dpd:2},
+ {code:"TN",flag:"🎸",region:"SE",game:"Cash 3",dpd:3},
+ {code:"TX",flag:"⭐",region:"SW",game:"Pick 3",dpd:4},
+ {code:"VA",flag:"🦅",region:"SE",game:"Pick 3",dpd:2},
+ {code:"VT",flag:"🍁",region:"NE",game:"Pick 3",dpd:2},
+ {code:"WA",flag:"🌧️",region:"W",game:"Pick 3",dpd:1},
+ {code:"WI",flag:"🧀",region:"MW",game:"Pick 3",dpd:2},
+ {code:"WV",flag:"⛰️",region:"SE",game:"Daily 3",dpd:1},
+];
+
 const T = {
-fr:{ tag:"CARTE DU MONDE", h1:"La carte mondiale<br>des loteries arrive",
- sub:"Explorez bientôt les loteries du monde entier sur une carte interactive : jackpots, fréquences de tirage et statistiques par pays et par état, en un coup d'œil.",
- ctaMain:"Voir les prédictions par État", ctaSec:"Voir les derniers tirages",
- previewText:"Aperçu de la fonctionnalité : une carte interactive du monde où chaque pays et chaque état affichera ses jeux disponibles, ses prochains tirages et ses statistiques clés en un clic.",
- ctaTitle:"Soyez parmi les premiers informés", ctaP:"Créez votre compte PREDIKTA dès aujourd'hui pour être averti dès que la carte du monde sera disponible, et profitez déjà de nos prédictions par État.",
+fr:{ tag:"CARTE DE COUVERTURE", h1:"Explorez nos<br>40 marchés couverts",
+ sub:"Recherchez votre État ou territoire et accédez en un clic à ses prédictions IA, ses statistiques et son historique de tirages.",
+ searchPh:"Rechercher un État (ex: Florida, FL, Texas...)", noResults:"Aucun État trouvé.",
+ statCovered:"États + DC + PR", statDraws:"Tirages/jour (total)", statGames:"Types de jeux",
+ regionAll:"Tous", regionNE:"Nord-Est", regionSE:"Sud-Est", regionMW:"Midwest", regionSW:"Sud-Ouest", regionW:"Ouest", regionTR:"Territoires",
+ drawsLabel:"tirage(s)/jour",
+ previewText:'Une véritable carte géographique interactive (zoom, survol, comparaison visuelle) arrive prochainement <span class="soon-badge">BIENTÔT</span>. En attendant, utilisez la recherche ci-dessus pour accéder instantanément à votre État.',
+ ctaTitle:"Prêt à passer au niveau supérieur ?", ctaP:"Créez votre compte PREDIKTA gratuit pour sauvegarder vos États favoris, recevoir des alertes et débloquer les analyses avancées (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Créer mon compte gratuit", ctaBtnPredictions:"Explorer les prédictions",
  disclaimer:'⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.',
- sections:[
-  ["Ce que la carte du monde proposera <span class=\"soon-badge\">BIENTÔT</span>",
-   "<p>La carte interactive de PREDIKTA permettra de visualiser en un coup d'œil l'ensemble des loteries couvertes, pays par pays et état par état.</p>",
-   ["Visualisation interactive des 49 états couverts + Porto Rico","Jackpots actuels pour Powerball, Mega Millions et plus","Heures et fréquences des tirages par région","Accès direct aux prédictions IA de chaque état","Comparaison rapide entre plusieurs états","Mises à jour en temps réel des résultats"]],
-  ["Déjà disponible aujourd'hui",
-   "<p>En attendant la carte interactive, vous pouvez déjà explorer toutes nos données état par état directement depuis la page Prédictions.</p>",
-   ["49 états américains + Porto Rico couverts","Prédictions Pick 3, Pick 4, Powerball et plus","Statistiques détaillées et Mode Transparence","Résultats mis à jour quotidiennement"]]
- ]},
-
-en:{ tag:"WORLD MAP", h1:"The global lottery<br>map is coming",
- sub:"Soon you'll be able to explore lotteries worldwide on an interactive map: jackpots, draw frequencies and statistics by country and state, at a glance.",
- ctaMain:"View predictions by state", ctaSec:"View latest draws",
- previewText:"Feature preview: an interactive world map where every country and state will show its available games, upcoming draws and key statistics in one click.",
- ctaTitle:"Be among the first to know", ctaP:"Create your PREDIKTA account today to be notified as soon as the world map launches, and already enjoy our state-by-state predictions.",
+ names:{AR:"Arkansas",AZ:"Arizona",CA:"Californie",CO:"Colorado",CT:"Connecticut",DC:"Washington D.C.",DE:"Delaware",FL:"Floride",GA:"Géorgie",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Louisiane",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Missouri",MS:"Mississippi",NC:"Caroline du Nord",NE:"Nebraska",NH:"New Hampshire",NJ:"New Jersey",NM:"Nouveau-Mexique",NY:"New York",OH:"Ohio",OK:"Oklahoma",PA:"Pennsylvanie",PR:"Porto Rico",SC:"Caroline du Sud",TN:"Tennessee",TX:"Texas",VA:"Virginie",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"Virginie-Occidentale"},
+},
+en:{ tag:"COVERAGE MAP", h1:"Explore our<br>40 covered markets",
+ sub:"Search for your state or territory and jump straight to its AI predictions, statistics and draw history.",
+ searchPh:"Search a state (e.g. Florida, FL, Texas...)", noResults:"No state found.",
+ statCovered:"States + DC + PR", statDraws:"Draws/day (total)", statGames:"Game types",
+ regionAll:"All", regionNE:"Northeast", regionSE:"Southeast", regionMW:"Midwest", regionSW:"Southwest", regionW:"West", regionTR:"Territories",
+ drawsLabel:"draw(s)/day",
+ previewText:'A true interactive geographic map (zoom, hover, visual comparison) is coming <span class="soon-badge">SOON</span>. Meanwhile, use the search above to jump straight to your state.',
+ ctaTitle:"Ready for the next level?", ctaP:"Create your free PREDIKTA account to save your favorite states, get alerts and unlock advanced analysis (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Create my free account", ctaBtnPredictions:"Explore predictions",
  disclaimer:'⚠️ PREDIKTA provides statistical analysis and AI-assisted predictions for informational purposes only. No lottery outcome can be guaranteed. Play responsibly. <a href="/responsible-gaming">Learn more</a>.',
- sections:[
-  ["What the world map will offer <span class=\"soon-badge\">COMING SOON</span>",
-   "<p>PREDIKTA's interactive map will let you visualize all covered lotteries at a glance, country by country and state by state.</p>",
-   ["Interactive view of all 49 covered states + Puerto Rico","Current jackpots for Powerball, Mega Millions and more","Draw times and frequencies by region","Direct access to each state's AI predictions","Quick comparison between multiple states","Real-time result updates"]],
-  ["Already available today",
-   "<p>While you wait for the interactive map, you can already explore all our state-by-state data directly from the Predictions page.</p>",
-   ["49 U.S. states + Puerto Rico covered","Pick 3, Pick 4, Powerball and more predictions","Detailed statistics and Transparency Mode","Results updated daily"]]
- ]},
-
-es:{ tag:"MAPA MUNDIAL", h1:"El mapa mundial<br>de loterías llega pronto",
- sub:"Pronto podrás explorar las loterías de todo el mundo en un mapa interactivo: jackpots, frecuencias de sorteo y estadísticas por país y estado, de un vistazo.",
- ctaMain:"Ver predicciones por estado", ctaSec:"Ver últimos sorteos",
- previewText:"Vista previa de la función: un mapa mundial interactivo donde cada país y estado mostrará sus juegos disponibles, próximos sorteos y estadísticas clave con un clic.",
- ctaTitle:"Sé de los primeros en saberlo", ctaP:"Crea tu cuenta PREDIKTA hoy para recibir un aviso en cuanto el mapa mundial esté disponible, y disfruta ya de nuestras predicciones por estado.",
+ names:{AR:"Arkansas",AZ:"Arizona",CA:"California",CO:"Colorado",CT:"Connecticut",DC:"Washington D.C.",DE:"Delaware",FL:"Florida",GA:"Georgia",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Missouri",MS:"Mississippi",NC:"North Carolina",NE:"Nebraska",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NY:"New York",OH:"Ohio",OK:"Oklahoma",PA:"Pennsylvania",PR:"Puerto Rico",SC:"South Carolina",TN:"Tennessee",TX:"Texas",VA:"Virginia",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"West Virginia"},
+},
+es:{ tag:"MAPA DE COBERTURA", h1:"Explora nuestros<br>40 mercados cubiertos",
+ sub:"Busca tu estado o territorio y accede directamente a sus predicciones IA, estadísticas e historial de sorteos.",
+ searchPh:"Buscar un estado (ej: Florida, FL, Texas...)", noResults:"No se encontró ningún estado.",
+ statCovered:"Estados + DC + PR", statDraws:"Sorteos/día (total)", statGames:"Tipos de juego",
+ regionAll:"Todos", regionNE:"Noreste", regionSE:"Sureste", regionMW:"Medio Oeste", regionSW:"Suroeste", regionW:"Oeste", regionTR:"Territorios",
+ drawsLabel:"sorteo(s)/día",
+ previewText:'Un verdadero mapa geográfico interactivo (zoom, hover, comparación visual) llega <span class="soon-badge">PRONTO</span>. Mientras tanto, usa la búsqueda de arriba para ir directo a tu estado.',
+ ctaTitle:"¿Listo para el siguiente nivel?", ctaP:"Crea tu cuenta gratuita de PREDIKTA para guardar tus estados favoritos, recibir alertas y desbloquear análisis avanzados (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Crear mi cuenta gratis", ctaBtnPredictions:"Explorar predicciones",
  disclaimer:'⚠️ PREDIKTA ofrece análisis estadísticos y predicciones asistidas por IA solo con fines informativos. Ningún resultado de lotería puede garantizarse. Juega de forma responsable. <a href="/responsible-gaming">Más información</a>.',
- sections:[
-  ["Qué ofrecerá el mapa mundial <span class=\"soon-badge\">PRÓXIMAMENTE</span>",
-   "<p>El mapa interactivo de PREDIKTA permitirá visualizar de un vistazo todas las loterías cubiertas, país por país y estado por estado.</p>",
-   ["Vista interactiva de los 49 estados cubiertos + Puerto Rico","Jackpots actuales de Powerball, Mega Millions y más","Horarios y frecuencias de sorteos por región","Acceso directo a las predicciones IA de cada estado","Comparación rápida entre varios estados","Actualizaciones en tiempo real de resultados"]],
-  ["Ya disponible hoy",
-   "<p>Mientras esperas el mapa interactivo, ya puedes explorar todos nuestros datos por estado directamente desde la página de Predicciones.</p>",
-   ["49 estados de EE.UU. + Puerto Rico cubiertos","Predicciones de Pick 3, Pick 4, Powerball y más","Estadísticas detalladas y Modo Transparencia","Resultados actualizados diariamente"]]
- ]},
-
-pt:{ tag:"MAPA MUNDIAL", h1:"O mapa mundial<br>de loterias está chegando",
- sub:"Em breve você poderá explorar loterias do mundo todo em um mapa interativo: jackpots, frequências de sorteio e estatísticas por país e estado, em um piscar de olhos.",
- ctaMain:"Ver previsões por estado", ctaSec:"Ver últimos sorteios",
- previewText:"Prévia do recurso: um mapa mundial interativo onde cada país e estado mostrará seus jogos disponíveis, próximos sorteios e principais estatísticas com um clique.",
- ctaTitle:"Seja um dos primeiros a saber", ctaP:"Crie sua conta PREDIKTA hoje para ser avisado assim que o mapa mundial estiver disponível, e aproveite já nossas previsões por estado.",
+ names:{AR:"Arkansas",AZ:"Arizona",CA:"California",CO:"Colorado",CT:"Connecticut",DC:"Washington D.C.",DE:"Delaware",FL:"Florida",GA:"Georgia",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Luisiana",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Misuri",MS:"Misisipi",NC:"Carolina del Norte",NE:"Nebraska",NH:"New Hampshire",NJ:"Nueva Jersey",NM:"Nuevo México",NY:"Nueva York",OH:"Ohio",OK:"Oklahoma",PA:"Pensilvania",PR:"Puerto Rico",SC:"Carolina del Sur",TN:"Tennessee",TX:"Texas",VA:"Virginia",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"Virginia Occidental"},
+},
+pt:{ tag:"MAPA DE COBERTURA", h1:"Explore nossos<br>40 mercados cobertos",
+ sub:"Procure seu estado ou território e acesse diretamente suas previsões de IA, estatísticas e histórico de sorteios.",
+ searchPh:"Buscar um estado (ex: Florida, FL, Texas...)", noResults:"Nenhum estado encontrado.",
+ statCovered:"Estados + DC + PR", statDraws:"Sorteios/dia (total)", statGames:"Tipos de jogo",
+ regionAll:"Todos", regionNE:"Nordeste", regionSE:"Sudeste", regionMW:"Centro-Oeste", regionSW:"Sudoeste", regionW:"Oeste", regionTR:"Territórios",
+ drawsLabel:"sorteio(s)/dia",
+ previewText:'Um verdadeiro mapa geográfico interativo (zoom, hover, comparação visual) chega <span class="soon-badge">EM BREVE</span>. Enquanto isso, use a busca acima para ir direto ao seu estado.',
+ ctaTitle:"Pronto para o próximo nível?", ctaP:"Crie sua conta gratuita PREDIKTA para salvar seus estados favoritos, receber alertas e desbloquear análises avançadas (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Criar minha conta grátis", ctaBtnPredictions:"Explorar previsões",
  disclaimer:'⚠️ A PREDIKTA fornece análises estatísticas e previsões assistidas por IA apenas para fins informativos. Nenhum resultado de loteria pode ser garantido. Jogue com responsabilidade. <a href="/responsible-gaming">Saiba mais</a>.',
- sections:[
-  ["O que o mapa mundial vai oferecer <span class=\"soon-badge\">EM BREVE</span>",
-   "<p>O mapa interativo da PREDIKTA permitirá visualizar de um só olhar todas as loterias cobertas, país por país e estado por estado.</p>",
-   ["Visualização interativa dos 49 estados cobertos + Porto Rico","Jackpots atuais de Powerball, Mega Millions e mais","Horários e frequências de sorteio por região","Acesso direto às previsões de IA de cada estado","Comparação rápida entre vários estados","Atualizações de resultados em tempo real"]],
-  ["Já disponível hoje",
-   "<p>Enquanto espera pelo mapa interativo, você já pode explorar todos os nossos dados por estado diretamente na página de Previsões.</p>",
-   ["49 estados dos EUA + Porto Rico cobertos","Previsões de Pick 3, Pick 4, Powerball e mais","Estatísticas detalhadas e Modo Transparência","Resultados atualizados diariamente"]]
- ]},
-
-ht:{ tag:"KAT MONN AN", h1:"Kat lotri mondyal<br>ap vini talè",
- sub:"Talè ou ap ka eksplore lotri toupatou nan lemonn sou yon kat entèraktif: jackpot, frekans tiraj ak estatistik pa peyi ak pa eta, nan yon sèl kout je.",
- ctaMain:"Gade prediksyon pa eta", ctaSec:"Gade dènye tiraj yo",
- previewText:"Apèsi karakteristik la: yon kat mondyal entèraktif kote chak peyi ak eta ap montre jwèt ki disponib, pwochen tiraj ak estatistik kle yo nan yon sèl klik.",
- ctaTitle:"Fè pati premye moun ki konnen", ctaP:"Kreye kont PREDIKTA ou jodi a pou yo avize w depi kat mondyal la disponib, epi pwofite deja prediksyon nou yo pa eta.",
+ names:{AR:"Arkansas",AZ:"Arizona",CA:"Califórnia",CO:"Colorado",CT:"Connecticut",DC:"Washington D.C.",DE:"Delaware",FL:"Flórida",GA:"Geórgia",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Luisiana",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Missouri",MS:"Mississippi",NC:"Carolina do Norte",NE:"Nebraska",NH:"New Hampshire",NJ:"Nova Jersey",NM:"Novo México",NY:"Nova York",OH:"Ohio",OK:"Oklahoma",PA:"Pensilvânia",PR:"Porto Rico",SC:"Carolina do Sul",TN:"Tennessee",TX:"Texas",VA:"Virgínia",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"Virgínia Ocidental"},
+},
+ht:{ tag:"KAT KOUVÈTI", h1:"Eksplore 40<br>mache nou kouvri",
+ sub:"Chèche eta ou oswa teritwa ou e ale dirèkteman nan prediksyon IA, estatistik ak istwa tiraj li yo.",
+ searchPh:"Chèche yon eta (egz: Florida, FL, Texas...)", noResults:"Pa gen eta jwenn.",
+ statCovered:"Eta + DC + PR", statDraws:"Tiraj/jou (total)", statGames:"Kalite jwèt",
+ regionAll:"Tout", regionNE:"Nòdès", regionSE:"Sidès", regionMW:"Mitan Lwès", regionSW:"Sidwès", regionW:"Lwès", regionTR:"Teritwa",
+ drawsLabel:"tiraj/jou",
+ previewText:'Yon vrè kat jewografik entèraktif (zoom, hover, konparezon vizyèl) ap vini <span class="soon-badge">TALÈ</span>. Pandan sa, sèvi ak rechèch anwo a pou ale dirèkteman nan eta ou.',
+ ctaTitle:"Pare pou pwochen nivo a?", ctaP:"Kreye kont gratis PREDIKTA ou pou anrejistre eta favorit ou, resevwa alèt epi debloke analiz avanse (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Kreye kont gratis mwen", ctaBtnPredictions:"Eksplore prediksyon yo",
  disclaimer:'⚠️ PREDIKTA bay analiz estatistik ak prediksyon ki asiste pa IA sèlman pou enfòmasyon. Pa gen rezilta loteri ki garanti. Jwe yon fason responsab. <a href="/responsible-gaming">Aprann plis</a>.',
- sections:[
-  ["Sa kat mondyal la pral ofri <span class=\"soon-badge\">TALÈ</span>",
-   "<p>Kat entèraktif PREDIKTA ap pèmèt ou wè nan yon sèl kout je tout lotri ki kouvri, peyi pa peyi ak eta pa eta.</p>",
-   ["Vizyalizasyon entèraktif tout 49 eta yo kouvri + Puerto Rico","Jackpot aktyèl pou Powerball, Mega Millions ak plis","Lè ak frekans tiraj pa rejyon","Aksè dirèk a prediksyon IA chak eta","Konparezon rapid ant plizyè eta","Mizajou rezilta an tan reyèl"]],
-  ["Deja disponib jodi a",
-   "<p>Pandan w ap tann kat entèraktif la, ou ka deja eksplore tout done nou yo pa eta dirèkteman nan paj Prediksyon.</p>",
-   ["49 eta Ozetazini + Puerto Rico kouvri","Prediksyon Pick 3, Pick 4, Powerball ak plis","Estatistik detaye ak Mòd Transparans","Rezilta mizajou chak jou"]]
- ]},
+ names:{AR:"Arkansas",AZ:"Arizona",CA:"Kalifòni",CO:"Kolorado",CT:"Connecticut",DC:"Washington D.C.",DE:"Delaware",FL:"Florida",GA:"Georgia",IA:"Iowa",ID:"Idaho",IL:"Illinois",IN:"Indiana",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",MD:"Maryland",ME:"Maine",MI:"Michigan",MN:"Minnesota",MO:"Missouri",MS:"Mississippi",NC:"Kawolin Dinò",NE:"Nebraska",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NY:"New York",OH:"Ohio",OK:"Oklahoma",PA:"Pennsylvania",PR:"Pòtoriko",SC:"Kawolin Disid",TN:"Tennessee",TX:"Texas",VA:"Virginia",VT:"Vermont",WA:"Washington",WI:"Wisconsin",WV:"West Virginia"},
+},
 };
 
-function renderSections(dict){
-  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
-  <div class="sec">
-    <h2>${h2}</h2>
-    ${html}
-    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
-  </div>`).join('');
+const REGIONS = ["ALL","NE","SE","MW","SW","W","TR"];
+let curLang = 'fr';
+let curRegion = 'ALL';
+let curSearch = '';
+
+function renderStats(dict){
+  const totalDraws = STATES.reduce((s,x)=>s+x.dpd,0);
+  const games = new Set(STATES.map(x=>x.game)).size;
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-box"><div class="num">${STATES.length}</div><div class="lbl">${dict.statCovered}</div></div>
+    <div class="stat-box"><div class="num">${totalDraws}</div><div class="lbl">${dict.statDraws}</div></div>
+    <div class="stat-box"><div class="num">${games}</div><div class="lbl">${dict.statGames}</div></div>
+  `;
 }
 
-let curLang = 'fr';
+function renderChips(dict){
+  document.getElementById('regionChips').innerHTML = REGIONS.map(r=>
+    `<button class="region-chip ${r===curRegion?'active':''}" data-region="${r}">${dict['region'+(r==='ALL'?'All':r)]}</button>`
+  ).join('');
+  document.querySelectorAll('.region-chip').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ curRegion = btn.dataset.region; renderAll(); });
+  });
+}
+
+function renderGrid(dict){
+  const search = curSearch.trim().toLowerCase();
+  const filtered = STATES.filter(s=>{
+    if(curRegion !== 'ALL' && s.region !== curRegion) return false;
+    if(!search) return true;
+    const name = (dict.names[s.code]||'').toLowerCase();
+    return s.code.toLowerCase().includes(search) || name.includes(search);
+  });
+  const grid = document.getElementById('stateGrid');
+  const noRes = document.getElementById('noResults');
+  if(filtered.length === 0){
+    grid.innerHTML = '';
+    noRes.style.display = 'block';
+    return;
+  }
+  noRes.style.display = 'none';
+  grid.innerHTML = filtered.map(s=>`
+    <a class="state-card" href="/predictions/${s.code.toLowerCase()}">
+      <div class="flag">${s.flag}</div>
+      <div class="name">${dict.names[s.code]||s.code} <span style="color:var(--muted2);font-weight:400">(${s.code})</span></div>
+      <div class="game">${s.game}</div>
+      <div class="dpd">${s.dpd} ${dict.drawsLabel}</div>
+    </a>
+  `).join('');
+}
+
+function renderAll(){
+  const dict = T[curLang];
+  renderStats(dict);
+  renderChips(dict);
+  renderGrid(dict);
+}
+
 function applyLang(lang){
   curLang = T[lang] ? lang : 'fr';
   const dict = T[curLang];
@@ -182,10 +265,20 @@ function applyLang(lang){
     const key = el.getAttribute('data-i18n-html');
     if(dict[key] != null) el.innerHTML = dict[key];
   });
-  renderSections(dict);
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(dict[key] != null) el.setAttribute('placeholder', dict[key]);
+  });
   document.documentElement.setAttribute('lang', curLang);
+  renderAll();
 }
 window.setLang = applyLang;
+
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  curSearch = e.target.value;
+  renderGrid(T[curLang]);
+});
+
 window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
