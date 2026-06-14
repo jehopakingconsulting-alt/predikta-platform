@@ -20,7 +20,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .free-note{display:inline-block;font-size:.78rem;color:var(--green);background:rgba(34,232,122,.1);border:1px solid rgba(34,232,122,.3);border-radius:10px;padding:8px 16px;max-width:560px;line-height:1.6}
 
 /* Pricing grid */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:50px;margin-top:36px}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:50px;margin-top:36px}
 .plan{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px 24px;position:relative;transition:transform .2s,box-shadow .2s}
 .plan:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(79,110,255,.2)}
 .plan.featured{border-color:var(--accent);background:linear-gradient(180deg,rgba(79,110,255,.08),var(--card))}
@@ -38,6 +38,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .btn-vip:hover{box-shadow:0 6px 28px rgba(136,85,255,.5);opacity:.9}
 .btn-elite{background:linear-gradient(135deg,#aa8800,var(--gold));color:#000}
 .btn-elite:hover{opacity:.9}
+.btn-business{background:linear-gradient(135deg,#1a1a45,#3a3a7a);color:#fff;border:1px solid var(--accent2)}
+.btn-business:hover{opacity:.9}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:8px}
 .plan-features li{font-size:.78rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
 .plan-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
@@ -85,6 +87,7 @@ tbody tr:last-child td{border-bottom:none}
 .bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(79,110,255,.35);text-decoration:none;display:inline-block}
 .cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+@media(max-width:1000px){.plans{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){.plans,.testimonials{grid-template-columns:1fr}}
 @media(max-width:600px){table{font-size:.7rem}thead th,tbody td{padding:8px 10px}}
 </style>
@@ -109,7 +112,7 @@ tbody tr:last-child td{border-bottom:none}
   <div class="compare-title" data-i18n="compareTitle">Comparaison détaillée des fonctionnalités</div>
   <table>
     <thead>
-      <tr><th style="text-align:left" data-i18n="thFeature">Fonctionnalité</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">VIP</th><th style="color:#ff9900">ELITE</th></tr>
+      <tr><th style="text-align:left" data-i18n="thFeature">Fonctionnalité</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">VIP</th><th style="color:#ff9900">ELITE</th><th style="color:#aa88ff">BUSINESS</th></tr>
     </thead>
     <tbody id="compareBody"></tbody>
   </table>
@@ -143,9 +146,10 @@ let curLang = 'fr';
 
 // Données structurelles des plans (identiques à PLAN_CONFIG côté serveur)
 const PLAN_DATA = {
-  pro:   { price: '$9.99', states: 4,  analyses: 1,  trial: 3 },
-  vip:   { price: '$19.99', states: 20, analyses: 7,  trial: 7 },
-  elite: { price: '$49.99', states: 49, analyses: -1, trial: 7 },
+  pro:      { price: '$9.99', states: 4,  analyses: 1,  trial: 3 },
+  vip:      { price: '$19.99', states: 20, analyses: 7,  trial: 7 },
+  elite:    { price: '$49.99', states: 49, analyses: -1, trial: 7 },
+  business: { price: '$199.99', states: 49, analyses: -1, trial: 7 },
 };
 
 const T = {
@@ -155,19 +159,23 @@ const T = {
   proName:"PRO", proBadge:"Pour commencer", proDesc:"Pour découvrir PREDIKTA. 4 États, 1 analyse par jour, et 3 jours d'essai gratuit.",
   vipName:"VIP", vipBadge:"⭐ Le Plus Populaire", vipDesc:"Pour les joueurs sérieux. 20 États, 7 analyses par jour, et 7 jours d'essai gratuit.",
   eliteName:"ELITE", eliteBadge:"👑 Accès total", eliteDesc:"Pour les professionnels. Tous les États (49), analyses illimitées, et 7 jours d'essai gratuit.",
+  businessName:"BUSINESS", businessBadge:"🏢 Pour les entreprises", businessDesc:"Pour les entreprises et investisseurs. Business AI complet, rapports de projet, analyse de marché et stratégie 30-60-90 jours.",
   proFeats:["4 États disponibles","1 analyse / jour","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Analyse de Fourier (cycles)","Alertes & notifications push","Archives de vos analyses","#Business Intelligence illimité"],
   vipFeats:["20 États disponibles","7 analyses / jour","Tous les algorithmes (Markov, Monte Carlo, ML, Fourier)","Alertes & notifications push","Archives de vos analyses","#Business Intelligence illimité","Export PDF"],
   eliteFeats:["Tous les États (49) + Puerto Rico","Analyses illimitées","Tous les algorithmes (Markov, Monte Carlo, ML, Fourier)","Alertes & notifications push","Archives illimitées","Business Intelligence illimité","Export PDF","Support prioritaire"],
+  businessFeats:["Tout ELITE inclus","Business AI — analyses illimitées","Rapports de projet personnalisés","Analyse de marché approfondie","Stratégie 30-60-90 jours","Exports premium (PDF & Excel)","Support dédié prioritaire"],
   trialBtn:(plan,days)=>`Démarrer ${plan} — ${days} jours gratuits`,
   compareTitle:"Comparaison détaillée des fonctionnalités", thFeature:"Fonctionnalité",
   compareRows:[
-    ["États disponibles","4","20","49 (Tous)"],["Analyses / jour","1","7","Illimitées"],
-    ["Essai gratuit","3 jours","7 jours","7 jours"],
-    ["Markov Ordres 1/2/3","✓","✓","✓"],["Monte Carlo (50 000 sim.)","✓","✓","✓"],
-    ["ML — XGBoost / Random Forest","✓","✓","✓"],["Analyse de Fourier (cycles)","✓","✓","✓"],
-    ["Business Intelligence","✗","✗","✓"],["Export PDF","✗","✓","✓"],
-    ["Archives","✓","✓","Illimitées"],
-    ["Support","Email","Email prioritaire","Prioritaire 24h"]],
+    ["États disponibles","4","20","49 (Tous)","49 (Tous)"],["Analyses / jour","1","7","Illimitées","Illimitées"],
+    ["Essai gratuit","3 jours","7 jours","7 jours","7 jours"],
+    ["Markov Ordres 1/2/3","✓","✓","✓","✓"],["Monte Carlo (50 000 sim.)","✓","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✓","✓","✓","✓"],["Analyse de Fourier (cycles)","✓","✓","✓","✓"],
+    ["Business Intelligence","✗","✗","✓","✓"],["Export PDF","✗","✓","✓","✓"],
+    ["Rapports de projet Business AI","✗","✗","✗","✓"],["Analyse de marché","✗","✗","✗","✓"],
+    ["Stratégie 30-60-90 jours","✗","✗","✗","✓"],["Exports premium (Excel)","✗","✗","✗","✓"],
+    ["Archives","✓","✓","Illimitées","Illimitées"],
+    ["Support","Email","Email prioritaire","Prioritaire 24h","Dédié prioritaire"]],
   membersTitle:"Ce que disent nos membres",
   testimonials:[["★★★★★","\"PREDIKTA m'a aidé à analyser les patterns de Cash3 Georgia comme jamais auparavant. Les modèles ML sont vraiment précis.\"","Marcus T.","Georgia · Membre PRO"],
     ["★★★★★","\"J'utilise PREDIKTA ELITE depuis 3 mois. L'analyse de Fourier sur New York Numbers m'a surpris par sa précision.\"","Jennifer W.","New York · Membre ELITE"],
@@ -188,19 +196,23 @@ const T = {
   proName:"PRO", proBadge:"Get started", proDesc:"To discover PREDIKTA. 4 states, 1 analysis per day, and a 3-day free trial.",
   vipName:"VIP", vipBadge:"⭐ Most Popular", vipDesc:"For serious players. 20 states, 7 analyses per day, and a 7-day free trial.",
   eliteName:"ELITE", eliteBadge:"👑 Full access", eliteDesc:"For professionals. All states (49), unlimited analyses, and a 7-day free trial.",
+  businessName:"BUSINESS", businessBadge:"🏢 For companies", businessDesc:"For businesses and investors. Full Business AI, project reports, market analysis and 30-60-90 day strategy.",
   proFeats:["4 states available","1 analysis / day","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Fourier analysis (cycles)","Push alerts & notifications","Analysis archive","#Unlimited Business Intelligence"],
   vipFeats:["20 states available","7 analyses / day","All algorithms (Markov, Monte Carlo, ML, Fourier)","Push alerts & notifications","Analysis archive","#Unlimited Business Intelligence","PDF export"],
   eliteFeats:["All states (49) + Puerto Rico","Unlimited analyses","All algorithms (Markov, Monte Carlo, ML, Fourier)","Push alerts & notifications","Unlimited archive","Unlimited Business Intelligence","PDF export","Priority support"],
+  businessFeats:["Everything in ELITE","Business AI — unlimited analyses","Custom project reports","In-depth market analysis","30-60-90 day strategy","Premium exports (PDF & Excel)","Dedicated priority support"],
   trialBtn:(plan,days)=>`Start ${plan} — ${days}-day free trial`,
   compareTitle:"Detailed feature comparison", thFeature:"Feature",
   compareRows:[
-    ["Available states","4","20","49 (All)"],["Analyses / day","1","7","Unlimited"],
-    ["Free trial","3 days","7 days","7 days"],
-    ["Markov Orders 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
-    ["ML — XGBoost / Random Forest","✓","✓","✓"],["Fourier analysis (cycles)","✓","✓","✓"],
-    ["Business Intelligence","✗","✗","✓"],["PDF export","✗","✓","✓"],
-    ["Archive","✓","✓","Unlimited"],
-    ["Support","Email","Priority email","24h Priority"]],
+    ["Available states","4","20","49 (All)","49 (All)"],["Analyses / day","1","7","Unlimited","Unlimited"],
+    ["Free trial","3 days","7 days","7 days","7 days"],
+    ["Markov Orders 1/2/3","✓","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✓","✓","✓","✓"],["Fourier analysis (cycles)","✓","✓","✓","✓"],
+    ["Business Intelligence","✗","✗","✓","✓"],["PDF export","✗","✓","✓","✓"],
+    ["Business AI project reports","✗","✗","✗","✓"],["Market analysis","✗","✗","✗","✓"],
+    ["30-60-90 day strategy","✗","✗","✗","✓"],["Premium exports (Excel)","✗","✗","✗","✓"],
+    ["Archive","✓","✓","Unlimited","Unlimited"],
+    ["Support","Email","Priority email","24h Priority","Dedicated priority"]],
   membersTitle:"What our members say",
   testimonials:[["★★★★★","\"PREDIKTA helped me analyze Georgia Cash3 patterns like never before. The ML models are remarkably accurate.\"","Marcus T.","Georgia · PRO member"],
     ["★★★★★","\"I've used PREDIKTA ELITE for 3 months. The Fourier analysis on New York Numbers surprised me with its accuracy.\"","Jennifer W.","New York · ELITE member"],
@@ -221,19 +233,23 @@ const T = {
   proName:"PRO", proBadge:"Para empezar", proDesc:"Para descubrir PREDIKTA. 4 estados, 1 análisis por día y 3 días de prueba gratuita.",
   vipName:"VIP", vipBadge:"⭐ Lo Más Popular", vipDesc:"Para jugadores serios. 20 estados, 7 análisis por día y 7 días de prueba gratuita.",
   eliteName:"ELITE", eliteBadge:"👑 Acceso total", eliteDesc:"Para profesionales. Todos los estados (49), análisis ilimitados y 7 días de prueba gratuita.",
+  businessName:"BUSINESS", businessBadge:"🏢 Para empresas", businessDesc:"Para empresas e inversores. Business AI completo, informes de proyecto, análisis de mercado y estrategia 30-60-90 días.",
   proFeats:["4 estados disponibles","1 análisis / día","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Análisis de Fourier (ciclos)","Alertas y notificaciones push","Archivo de análisis","#Business Intelligence ilimitado"],
   vipFeats:["20 estados disponibles","7 análisis / día","Todos los algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas y notificaciones push","Archivo de análisis","#Business Intelligence ilimitado","Exportación PDF"],
   eliteFeats:["Todos los estados (49) + Puerto Rico","Análisis ilimitados","Todos los algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas y notificaciones push","Archivo ilimitado","Business Intelligence ilimitado","Exportación PDF","Soporte prioritario"],
+  businessFeats:["Todo lo de ELITE incluido","Business AI — análisis ilimitados","Informes de proyecto personalizados","Análisis de mercado en profundidad","Estrategia 30-60-90 días","Exportaciones premium (PDF y Excel)","Soporte dedicado prioritario"],
   trialBtn:(plan,days)=>`Empezar ${plan} — ${days} días gratis`,
   compareTitle:"Comparación detallada de funciones", thFeature:"Función",
   compareRows:[
-    ["Estados disponibles","4","20","49 (Todos)"],["Análisis / día","1","7","Ilimitados"],
-    ["Prueba gratuita","3 días","7 días","7 días"],
-    ["Markov Órdenes 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
-    ["ML — XGBoost / Random Forest","✓","✓","✓"],["Análisis de Fourier (ciclos)","✓","✓","✓"],
-    ["Business Intelligence","✗","✗","✓"],["Exportación PDF","✗","✓","✓"],
-    ["Archivo","✓","✓","Ilimitado"],
-    ["Soporte","Email","Email prioritario","Prioritario 24h"]],
+    ["Estados disponibles","4","20","49 (Todos)","49 (Todos)"],["Análisis / día","1","7","Ilimitados","Ilimitados"],
+    ["Prueba gratuita","3 días","7 días","7 días","7 días"],
+    ["Markov Órdenes 1/2/3","✓","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✓","✓","✓","✓"],["Análisis de Fourier (ciclos)","✓","✓","✓","✓"],
+    ["Business Intelligence","✗","✗","✓","✓"],["Exportación PDF","✗","✓","✓","✓"],
+    ["Informes de proyecto Business AI","✗","✗","✗","✓"],["Análisis de mercado","✗","✗","✗","✓"],
+    ["Estrategia 30-60-90 días","✗","✗","✗","✓"],["Exportaciones premium (Excel)","✗","✗","✗","✓"],
+    ["Archivo","✓","✓","Ilimitado","Ilimitado"],
+    ["Soporte","Email","Email prioritario","Prioritario 24h","Dedicado prioritario"]],
   membersTitle:"Lo que dicen nuestros miembros",
   testimonials:[["★★★★★","\"PREDIKTA me ayudó a analizar los patrones de Cash3 Georgia como nunca antes. Los modelos de ML son realmente precisos.\"","Marcus T.","Georgia · Miembro PRO"],
     ["★★★★★","\"Uso PREDIKTA ELITE desde hace 3 meses. El análisis de Fourier en New York Numbers me sorprendió por su precisión.\"","Jennifer W.","Nueva York · Miembro ELITE"],
@@ -254,19 +270,23 @@ const T = {
   proName:"PRO", proBadge:"Para começar", proDesc:"Para descobrir a PREDIKTA. 4 estados, 1 análise por dia e 3 dias de teste grátis.",
   vipName:"VIP", vipBadge:"⭐ Mais Popular", vipDesc:"Para jogadores sérios. 20 estados, 7 análises por dia e 7 dias de teste grátis.",
   eliteName:"ELITE", eliteBadge:"👑 Acesso total", eliteDesc:"Para profissionais. Todos os estados (49), análises ilimitadas e 7 dias de teste grátis.",
+  businessName:"BUSINESS", businessBadge:"🏢 Para empresas", businessDesc:"Para empresas e investidores. Business AI completo, relatórios de projeto, análise de mercado e estratégia 30-60-90 dias.",
   proFeats:["4 estados disponíveis","1 análise / dia","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Análise de Fourier (ciclos)","Alertas e notificações push","Arquivo de análises","#Business Intelligence ilimitado"],
   vipFeats:["20 estados disponíveis","7 análises / dia","Todos os algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas e notificações push","Arquivo de análises","#Business Intelligence ilimitado","Exportação PDF"],
   eliteFeats:["Todos os estados (49) + Porto Rico","Análises ilimitadas","Todos os algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas e notificações push","Arquivo ilimitado","Business Intelligence ilimitado","Exportação PDF","Suporte prioritário"],
+  businessFeats:["Tudo do ELITE incluído","Business AI — análises ilimitadas","Relatórios de projeto personalizados","Análise de mercado em profundidade","Estratégia 30-60-90 dias","Exportações premium (PDF e Excel)","Suporte dedicado prioritário"],
   trialBtn:(plan,days)=>`Começar ${plan} — ${days} dias grátis`,
   compareTitle:"Comparação detalhada de recursos", thFeature:"Recurso",
   compareRows:[
-    ["Estados disponíveis","4","20","49 (Todos)"],["Análises / dia","1","7","Ilimitadas"],
-    ["Teste grátis","3 dias","7 dias","7 dias"],
-    ["Markov Ordens 1/2/3","✓","✓","✓"],["Monte Carlo (50.000 sim.)","✓","✓","✓"],
-    ["ML — XGBoost / Random Forest","✓","✓","✓"],["Análise de Fourier (ciclos)","✓","✓","✓"],
-    ["Business Intelligence","✗","✗","✓"],["Exportação PDF","✗","✓","✓"],
-    ["Arquivo","✓","✓","Ilimitado"],
-    ["Suporte","E-mail","E-mail prioritário","Prioritário 24h"]],
+    ["Estados disponíveis","4","20","49 (Todos)","49 (Todos)"],["Análises / dia","1","7","Ilimitadas","Ilimitadas"],
+    ["Teste grátis","3 dias","7 dias","7 dias","7 dias"],
+    ["Markov Ordens 1/2/3","✓","✓","✓","✓"],["Monte Carlo (50.000 sim.)","✓","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✓","✓","✓","✓"],["Análise de Fourier (ciclos)","✓","✓","✓","✓"],
+    ["Business Intelligence","✗","✗","✓","✓"],["Exportação PDF","✗","✓","✓","✓"],
+    ["Relatórios de projeto Business AI","✗","✗","✗","✓"],["Análise de mercado","✗","✗","✗","✓"],
+    ["Estratégia 30-60-90 dias","✗","✗","✗","✓"],["Exportações premium (Excel)","✗","✗","✗","✓"],
+    ["Arquivo","✓","✓","Ilimitado","Ilimitado"],
+    ["Suporte","E-mail","E-mail prioritário","Prioritário 24h","Dedicado prioritário"]],
   membersTitle:"O que nossos membros dizem",
   testimonials:[["★★★★★","\"A PREDIKTA me ajudou a analisar os padrões do Cash3 Geórgia como nunca antes. Os modelos de ML são realmente precisos.\"","Marcus T.","Geórgia · Membro PRO"],
     ["★★★★★","\"Uso a PREDIKTA ELITE há 3 meses. A análise de Fourier no New York Numbers me surpreendeu pela precisão.\"","Jennifer W.","Nova York · Membro ELITE"],
@@ -287,19 +307,23 @@ const T = {
   proName:"PRO", proBadge:"Pou kòmanse", proDesc:"Pou dekouvri PREDIKTA. 4 eta, 1 analiz pa jou, ak 3 jou esè gratis.",
   vipName:"VIP", vipBadge:"⭐ Pi Popilè a", vipDesc:"Pou jwè serye yo. 20 eta, 7 analiz pa jou, ak 7 jou esè gratis.",
   eliteName:"ELITE", eliteBadge:"👑 Aksè total", eliteDesc:"Pou pwofesyonèl yo. Tout eta yo (49), analiz san limit, ak 7 jou esè gratis.",
+  businessName:"BUSINESS", businessBadge:"🏢 Pou antrepriz", businessDesc:"Pou antrepriz ak envestisè. Business AI konplè, rapò pwojè, analiz mache, ak estrateji 30-60-90 jou.",
   proFeats:["4 eta disponib","1 analiz / jou","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Analiz Fourier (sik)","Alèt & notifikasyon push","Achiv analiz ou yo","#Business Intelligence san limit"],
   vipFeats:["20 eta disponib","7 analiz / jou","Tout algoritm yo (Markov, Monte Carlo, ML, Fourier)","Alèt & notifikasyon push","Achiv analiz ou yo","#Business Intelligence san limit","Ekspòte PDF"],
   eliteFeats:["Tout eta yo (49) + Pòtoriko","Analiz san limit","Tout algoritm yo (Markov, Monte Carlo, ML, Fourier)","Alèt & notifikasyon push","Achiv san limit","Business Intelligence san limit","Ekspòte PDF","Sipò priyoritè"],
+  businessFeats:["Tout sa ki nan ELITE","Business AI — analiz san limit","Rapò pwojè pèsonalize","Analiz mache an pwofondè","Estrateji 30-60-90 jou","Ekspòte premium (PDF & Excel)","Sipò dedye priyoritè"],
   trialBtn:(plan,days)=>`Kòmanse ${plan} — ${days} jou gratis`,
   compareTitle:"Konparezon detaye fonksyonalite yo", thFeature:"Fonksyonalite",
   compareRows:[
-    ["Eta disponib","4","20","49 (Tout)"],["Analiz / jou","1","7","San limit"],
-    ["Esè gratis","3 jou","7 jou","7 jou"],
-    ["Markov Lòd 1/2/3","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓"],
-    ["ML — XGBoost / Random Forest","✓","✓","✓"],["Analiz Fourier (sik)","✓","✓","✓"],
-    ["Business Intelligence","✗","✗","✓"],["Ekspòte PDF","✗","✓","✓"],
-    ["Achiv","✓","✓","San limit"],
-    ["Sipò","Imèl","Imèl priyoritè","Priyoritè 24è"]],
+    ["Eta disponib","4","20","49 (Tout)","49 (Tout)"],["Analiz / jou","1","7","San limit","San limit"],
+    ["Esè gratis","3 jou","7 jou","7 jou","7 jou"],
+    ["Markov Lòd 1/2/3","✓","✓","✓","✓"],["Monte Carlo (50,000 sim.)","✓","✓","✓","✓"],
+    ["ML — XGBoost / Random Forest","✓","✓","✓","✓"],["Analiz Fourier (sik)","✓","✓","✓","✓"],
+    ["Business Intelligence","✗","✗","✓","✓"],["Ekspòte PDF","✗","✓","✓","✓"],
+    ["Rapò pwojè Business AI","✗","✗","✗","✓"],["Analiz mache","✗","✗","✗","✓"],
+    ["Estrateji 30-60-90 jou","✗","✗","✗","✓"],["Ekspòte premium (Excel)","✗","✗","✗","✓"],
+    ["Achiv","✓","✓","San limit","San limit"],
+    ["Sipò","Imèl","Imèl priyoritè","Priyoritè 24è","Dedye priyoritè"]],
   membersTitle:"Sa manm nou yo di",
   testimonials:[["★★★★★","\"PREDIKTA ede m analize modèl Cash3 Georgia tankou jamè anvan. Modèl ML yo trè presi.\"","Marcus T.","Georgia · Manm PRO"],
     ["★★★★★","\"Mwen itilize PREDIKTA ELITE depi 3 mwa. Analiz Fourier sou New York Numbers te siprann mwen ak presizyon li.\"","Jennifer W.","New York · Manm ELITE"],
@@ -346,12 +370,20 @@ function renderPlans(dict){
     <p class="plan-desc">${dict.eliteDesc}</p>
     <a href="/register?plan=elite" class="plan-btn btn-elite">${dict.trialBtn(dict.eliteName, PLAN_DATA.elite.trial)}</a>
     <ul class="plan-features">${mk(dict.eliteFeats)}</ul>
+  </div>
+  <div class="plan">
+    <div class="plan-name">${dict.businessName}</div>
+    <div class="plan-price">${PLAN_DATA.business.price}<span>/mo</span></div>
+    <div class="plan-period">${dict.businessBadge}</div>
+    <p class="plan-desc">${dict.businessDesc}</p>
+    <a href="/register?plan=business" class="plan-btn btn-business">${dict.trialBtn(dict.businessName, PLAN_DATA.business.trial)}</a>
+    <ul class="plan-features">${mk(dict.businessFeats)}</ul>
   </div>`;
 }
 function cls(v){ return v==='✓'?'check':(v==='✗'?'cross':'partial'); }
 function renderCompare(dict){
-  document.getElementById('compareBody').innerHTML = dict.compareRows.map(([f,a,b,c])=>
-    `<tr><td>${f}</td><td class="${cls(a)}">${a}</td><td class="${cls(b)}">${b}</td><td class="${cls(c)}">${c}</td></tr>`
+  document.getElementById('compareBody').innerHTML = dict.compareRows.map(([f,a,b,c,d])=>
+    `<tr><td>${f}</td><td class="${cls(a)}">${a}</td><td class="${cls(b)}">${b}</td><td class="${cls(c)}">${c}</td><td class="${cls(d)}">${d}</td></tr>`
   ).join('');
 }
 function renderTesti(dict){
