@@ -79,6 +79,15 @@ REFERRAL_MILESTONES = {
     25: {"type": "access", "plan": "elite", "days": 30},
 }
 
+# Commission de parrainage : pourcentage du montant payé par le filleul,
+# reversé au parrain à chaque paiement (Stripe invoice.paid).
+REFERRAL_COMMISSION_RATES = {
+    "pro": 0.25,
+    "vip": 0.15,
+    "elite": 0.10,
+    "business": 0.10,
+}
+
 
 # ── Modèles ──────────────────────────────────────────────────────────────────
 class User(db.Model):
@@ -104,6 +113,7 @@ class User(db.Model):
     referral_count   = db.Column(db.Integer, default=0, nullable=False, server_default="0")
     ambassador_badge = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
     referral_rewards = db.Column(db.Text, nullable=True)  # JSON list des paliers déjà accordés
+    referral_balance_usd = db.Column(db.Float, default=0, nullable=False, server_default="0")  # commissions cumulées
 
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
@@ -131,6 +141,7 @@ class User(db.Model):
             "ref_code": self.ref_code,
             "referral_count": self.referral_count or 0,
             "ambassador_badge": bool(self.ambassador_badge),
+            "referral_balance_usd": round(self.referral_balance_usd or 0, 2),
         }
 
 
@@ -195,6 +206,31 @@ class Subscription(db.Model):
             "max_states": cfg.get("max_states"),
             "allowed_states": self.states_list(),
             "has_stripe_customer": bool(self.stripe_customer_id),
+        }
+
+
+class ReferralCommission(db.Model):
+    """Commission de parrainage versée à `referrer` sur un paiement de `referred_user`."""
+    __tablename__ = "referral_commissions"
+
+    id               = db.Column(db.Integer, primary_key=True)
+    referrer_id      = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    referred_user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    plan             = db.Column(db.String(16), nullable=False)
+    rate             = db.Column(db.Float, nullable=False)
+    amount_usd       = db.Column(db.Float, nullable=False)       # montant payé par le filleul
+    commission_usd   = db.Column(db.Float, nullable=False)       # part reversée au parrain
+    created_at       = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "plan": self.plan,
+            "plan_label": PLAN_CONFIG.get(self.plan, {}).get("label"),
+            "rate": self.rate,
+            "amount_usd": round(self.amount_usd, 2),
+            "commission_usd": round(self.commission_usd, 2),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
         }
 
 
@@ -347,6 +383,7 @@ def init_app(app):
         _ensure_column(db, "users", "referral_count", "INTEGER DEFAULT 0")
         _ensure_column(db, "users", "ambassador_badge", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "referral_rewards", "TEXT")
+        _ensure_column(db, "users", "referral_balance_usd", "FLOAT DEFAULT 0")
 
 
 def _ensure_column(db, table, column, ddl_type):
@@ -406,6 +443,32 @@ def _grant_referral_access(user, plan_key: str, days: int):
     if not sub.is_active() or current_rank < reward_rank:
         sub.plan = plan_key
     _extend_subscription(sub, days)
+
+
+def record_referral_commission(referred_user: "User", plan: str, amount_usd: float):
+    """Crédite le parrain de `referred_user` d'une commission sur un paiement
+    de `amount_usd` pour le plan `plan` (appelé depuis le webhook Stripe
+    `invoice.paid`)."""
+    if not referred_user.referred_by_id or amount_usd <= 0:
+        return
+    rate = REFERRAL_COMMISSION_RATES.get(plan, 0)
+    if rate <= 0:
+        return
+
+    referrer = db.session.get(User, referred_user.referred_by_id)
+    if not referrer:
+        return
+
+    commission = round(amount_usd * rate, 2)
+    referrer.referral_balance_usd = (referrer.referral_balance_usd or 0) + commission
+    db.session.add(ReferralCommission(
+        referrer_id=referrer.id,
+        referred_user_id=referred_user.id,
+        plan=plan,
+        rate=rate,
+        amount_usd=amount_usd,
+        commission_usd=commission,
+    ))
 
 
 def _apply_referral_rewards(referrer: "User"):
@@ -771,11 +834,19 @@ def referral_info():
     except Exception:
         applied = []
 
+    recent = (ReferralCommission.query
+              .filter_by(referrer_id=user.id)
+              .order_by(ReferralCommission.created_at.desc())
+              .limit(20).all())
+
     return jsonify({
         "ref_code": user.ref_code,
         "referral_count": user.referral_count or 0,
         "ambassador_badge": bool(user.ambassador_badge),
         "rewards": {str(m): (m in applied) for m in REFERRAL_MILESTONES},
+        "commission_rates": {plan: REFERRAL_COMMISSION_RATES.get(plan, 0) for plan in PLAN_CONFIG},
+        "referral_balance_usd": round(user.referral_balance_usd or 0, 2),
+        "recent_commissions": [c.to_dict() for c in recent],
     })
 
 

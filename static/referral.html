@@ -79,6 +79,10 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
         <div class="stat-num" id="statCode">—</div>
         <div class="stat-label" data-i18n="statCode">Ton code</div>
       </div>
+      <div class="stat">
+        <div class="stat-num" id="statBalance">$0.00</div>
+        <div class="stat-label" data-i18n="statBalance">Gains cumulés</div>
+      </div>
     </div>
 
     <div style="font-weight:700;font-size:.85rem;margin-top:6px" data-i18n="linkLabel">Ton lien de parrainage :</div>
@@ -103,6 +107,17 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
     </ul>
     <div class="notice" id="noticeEl" data-i18n="noticeText">Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes PREDIKTA. Connecte-toi ou crée un compte pour en bénéficier.</div>
   </div>
+
+  <div class="card">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:14px" data-i18n="commissionTitle">💰 Commissions de parrainage</div>
+    <ul class="rewards-list">
+      <li><span class="rl-icon">🔵</span><span data-i18n="commissionPro">Plan PRO : 25% de commission récurrente</span></li>
+      <li><span class="rl-icon">🟣</span><span data-i18n="commissionVip">Plan VIP : 15% de commission récurrente</span></li>
+      <li><span class="rl-icon">🟡</span><span data-i18n="commissionElite">Plan PREMIUM : 10% de commission récurrente</span></li>
+      <li><span class="rl-icon">⚫</span><span data-i18n="commissionBusiness">Plan BUSINESS : 10% de commission récurrente</span></li>
+    </ul>
+    <div class="notice" data-i18n="commissionNotice">Pour chaque paiement effectué par un filleul, tu reçois automatiquement un pourcentage en gains de parrainage, créditeé sur ton compte.</div>
+  </div>
 </div>
 
 <script>
@@ -122,6 +137,13 @@ const T = {
     loginPrompt:"Connecte-toi à ton compte PREDIKTA pour suivre ton parrainage et débloquer tes récompenses automatiquement.",
     loginBtn:"Se connecter", orEmailMode:"Continuer sans compte",
     invalidEmail:"Email invalide", shareText:"🎰 Découvre PREDIKTA, l'analyse prédictive de loterie ! Inscris-toi avec mon lien :",
+    statBalance:"Gains cumulés",
+    commissionTitle:"💰 Commissions de parrainage",
+    commissionPro:"Plan PRO : 25% de commission récurrente",
+    commissionVip:"Plan VIP : 15% de commission récurrente",
+    commissionElite:"Plan PREMIUM : 10% de commission récurrente",
+    commissionBusiness:"Plan BUSINESS : 10% de commission récurrente",
+    commissionNotice:"Pour chaque paiement effectué par un filleul, tu reçois automatiquement un pourcentage en gains de parrainage, crédité sur ton compte.",
   },
   en:{
     title:"Referral Program 🎁", subtitle:"Invite your friends to PREDIKTA and unlock PREMIUM perks. The more you refer, the more you earn.",
@@ -138,6 +160,13 @@ const T = {
     loginPrompt:"Log in to your PREDIKTA account to track your referrals and unlock rewards automatically.",
     loginBtn:"Log in", orEmailMode:"Continue without an account",
     invalidEmail:"Invalid email", shareText:"🎰 Check out PREDIKTA, predictive lottery analysis! Sign up with my link:",
+    statBalance:"Total earnings",
+    commissionTitle:"💰 Referral commissions",
+    commissionPro:"PRO plan: 25% recurring commission",
+    commissionVip:"VIP plan: 15% recurring commission",
+    commissionElite:"PREMIUM plan: 10% recurring commission",
+    commissionBusiness:"BUSINESS plan: 10% recurring commission",
+    commissionNotice:"For every payment made by a referral, you automatically earn a percentage as referral earnings, credited to your account.",
   },
   es:{
     title:"Programa de Referidos 🎁", subtitle:"Invita a tus amigos a PREDIKTA y desbloquea ventajas PREMIUM. Cuantos más refieras, más ganas.",
@@ -154,6 +183,13 @@ const T = {
     loginPrompt:"Inicia sesión en tu cuenta PREDIKTA para rastrear tus referidos y desbloquear recompensas automáticamente.",
     loginBtn:"Iniciar sesión", orEmailMode:"Continuar sin cuenta",
     invalidEmail:"Email inválido", shareText:"🎰 ¡Descubre PREDIKTA, análisis predictivo de lotería! Regístrate con mi enlace:",
+    statBalance:"Ganancias acumuladas",
+    commissionTitle:"💰 Comisiones de referidos",
+    commissionPro:"Plan PRO: 25% de comisión recurrente",
+    commissionVip:"Plan VIP: 15% de comisión recurrente",
+    commissionElite:"Plan PREMIUM: 10% de comisión recurrente",
+    commissionBusiness:"Plan BUSINESS: 10% de comisión recurrente",
+    commissionNotice:"Por cada pago realizado por un referido, recibes automáticamente un porcentaje como ganancia de referido, acreditado en tu cuenta.",
   },
   pt:{
     title:"Programa de Indicações 🎁", subtitle:"Convide seus amigos para a PREDIKTA e desbloqueie vantagens PREMIUM. Quanto mais você indicar, mais ganha.",
@@ -170,6 +206,13 @@ const T = {
     loginPrompt:"Faça login na sua conta PREDIKTA para acompanhar suas indicações e desbloquear recompensas automaticamente.",
     loginBtn:"Entrar", orEmailMode:"Continuar sem conta",
     invalidEmail:"Email inválido", shareText:"🎰 Conheça a PREDIKTA, análise preditiva de loteria! Cadastre-se com meu link:",
+    statBalance:"Ganhos acumulados",
+    commissionTitle:"💰 Comissões de indicação",
+    commissionPro:"Plano PRO: 25% de comissão recorrente",
+    commissionVip:"Plano VIP: 15% de comissão recorrente",
+    commissionElite:"Plano PREMIUM: 10% de comissão recorrente",
+    commissionBusiness:"Plano BUSINESS: 10% de comissão recorrente",
+    commissionNotice:"Para cada pagamento feito por um indicado, você ganha automaticamente uma porcentagem como ganho de indicação, creditada na sua conta.",
   },
   ht:{
     title:"Pwogram Parennaj 🎁", subtitle:"Envite zanmi ou yo sou PREDIKTA epi debloke avantaj PREMIUM. Plis ou parenn, plis ou genyen.",
@@ -186,6 +229,13 @@ const T = {
     loginPrompt:"Konekte sou kont PREDIKTA ou pou swiv parennaj ou epi debloke rekonpans yo otomatikman.",
     loginBtn:"Konekte", orEmailMode:"Kontinye san kont",
     invalidEmail:"Imèl envalid", shareText:"🎰 Dekouvri PREDIKTA, analiz prediktif lotri! Enskri ak lyen mwen an:",
+    statBalance:"Total ou genyen",
+    commissionTitle:"💰 Komisyon parennaj",
+    commissionPro:"Plan PRO: 25% komisyon recurrent",
+    commissionVip:"Plan VIP: 15% komisyon recurrent",
+    commissionElite:"Plan PREMIUM: 10% komisyon recurrent",
+    commissionBusiness:"Plan BUSINESS: 10% komisyon recurrent",
+    commissionNotice:"Pou chak peman yon filèl fè, ou resevwa otomatikman yon pousantaj kòm gen parennaj, kredite sou kont ou.",
   },
 };
 
@@ -215,6 +265,7 @@ function refreshDashboard(){
   const t = curT();
   document.getElementById('statCount').textContent = _refData.referral_count;
   document.getElementById('statCode').textContent = _refData.ref_code;
+  document.getElementById('statBalance').textContent = '$' + Number(_refData.referral_balance_usd || 0).toFixed(2);
   const link = `${location.origin}/?ref=${_refData.ref_code}`;
   document.getElementById('refLink').textContent = link;
 

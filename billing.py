@@ -272,8 +272,15 @@ def stripe_webhook():
     elif etype == "invoice.paid":
         customer_id = _get(obj, "customer")
         sub = _find_subscription_by_customer(customer_id)
-        if sub is not None and sub.status in ("past_due", "expired"):
-            sub.status = "active"
+        if sub is not None:
+            if sub.status in ("past_due", "expired"):
+                sub.status = "active"
+
+            amount_paid = (_get(obj, "amount_paid") or 0) / 100.0
+            if amount_paid > 0 and sub.plan and sub.user:
+                from auth import record_referral_commission
+                record_referral_commission(sub.user, sub.plan, amount_paid)
+
             db.session.commit()
 
     return jsonify({"received": True})
