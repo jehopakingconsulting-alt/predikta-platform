@@ -1732,6 +1732,180 @@ def dashboard_page():
     return send_from_directory("static", "dashboard.html")
 
 
+# ═══════════════════════════════════════════════════════════════════════
+# ADMIN — Panneau d'administration (gestion utilisateurs & abonnements)
+# ═══════════════════════════════════════════════════════════════════════
+@app.route("/api/admin/claim", methods=["POST"])
+@auth_module.login_required
+def admin_claim():
+    """Permet à l'utilisateur connecté de devenir admin s'il fournit le
+    secret PREDIKTA_ADMIN_SECRET (configuré côté serveur)."""
+    db = auth_module.db
+    secret = os.environ.get("PREDIKTA_ADMIN_SECRET")
+    data = request.get_json(silent=True) or {}
+    if not secret or data.get("secret") != secret:
+        return jsonify({"error": "Forbidden"}), 403
+    user = auth_module.current_user()
+    user.is_admin = True
+    db.session.commit()
+    return jsonify({"success": True, "user": user.to_dict()})
+
+
+@app.route("/api/admin/stats")
+@auth_module.admin_required
+def admin_stats():
+    User = auth_module.User
+    Subscription = auth_module.Subscription
+    SavedPrediction = auth_module.SavedPrediction
+    Alert = auth_module.Alert
+    BusinessReport = auth_module.BusinessReport
+
+    total_users = User.query.count()
+    now = datetime.utcnow()
+    new_7d = User.query.filter(User.created_at >= now - timedelta(days=7)).count()
+    new_30d = User.query.filter(User.created_at >= now - timedelta(days=30)).count()
+
+    by_plan = {}
+    by_status = {}
+    active_count = 0
+    for sub in Subscription.query.all():
+        plan_key = sub.plan or "none"
+        by_plan[plan_key] = by_plan.get(plan_key, 0) + 1
+        status_key = sub.status or "none"
+        by_status[status_key] = by_status.get(status_key, 0) + 1
+        if sub.is_active():
+            active_count += 1
+
+    return jsonify({
+        "total_users": total_users,
+        "new_users_7d": new_7d,
+        "new_users_30d": new_30d,
+        "active_subscriptions": active_count,
+        "by_plan": by_plan,
+        "by_status": by_status,
+        "total_saved_predictions": SavedPrediction.query.count(),
+        "total_alerts": Alert.query.count(),
+        "total_business_reports": BusinessReport.query.count(),
+    })
+
+
+@app.route("/api/admin/users")
+@auth_module.admin_required
+def admin_users_list():
+    db = auth_module.db
+    User = auth_module.User
+    Subscription = auth_module.Subscription
+
+    q = (request.args.get("q") or "").strip()
+    plan = (request.args.get("plan") or "").strip()
+    status = (request.args.get("status") or "").strip()
+    page = max(1, int(request.args.get("page", 1)))
+    per_page = min(100, max(1, int(request.args.get("per_page", 25))))
+
+    query = User.query
+    if q:
+        like = f"%{q}%"
+        query = query.filter(db.or_(User.username.ilike(like), User.email.ilike(like)))
+    if plan or status:
+        query = query.join(Subscription, isouter=True)
+        if plan:
+            query = query.filter(Subscription.plan == plan)
+        if status:
+            query = query.filter(Subscription.status == status)
+
+    total = query.count()
+    items = (query.order_by(User.created_at.desc())
+             .offset((page - 1) * per_page).limit(per_page).all())
+
+    return jsonify({
+        "users": [u.to_dict() for u in items],
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+        "pages": (total + per_page - 1) // per_page if per_page else 1,
+    })
+
+
+@app.route("/api/admin/users/<int:user_id>")
+@auth_module.admin_required
+def admin_user_detail(user_id):
+    db = auth_module.db
+    User = auth_module.User
+    SavedPrediction = auth_module.SavedPrediction
+    Alert = auth_module.Alert
+    BusinessReport = auth_module.BusinessReport
+
+    user = db.session.get(User, user_id)
+    if not user:
+        return jsonify({"error": "not_found"}), 404
+
+    return jsonify({
+        "user": user.to_dict(),
+        "counts": {
+            "saved_predictions": SavedPrediction.query.filter_by(user_id=user.id).count(),
+            "alerts": Alert.query.filter_by(user_id=user.id).count(),
+            "business_reports": BusinessReport.query.filter_by(user_id=user.id).count(),
+        },
+        "created_at": user.created_at.isoformat() if user.created_at else None,
+    })
+
+
+@app.route("/api/admin/users/<int:user_id>", methods=["PATCH"])
+@auth_module.admin_required
+def admin_user_update(user_id):
+    db = auth_module.db
+    User = auth_module.User
+    Subscription = auth_module.Subscription
+    PLAN_ORDER = auth_module.PLAN_ORDER
+
+    user = db.session.get(User, user_id)
+    if not user:
+        return jsonify({"error": "not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+
+    if "is_admin" in data:
+        user.is_admin = bool(data["is_admin"])
+
+    sub = user.subscription
+    if sub is None:
+        sub = Subscription(user_id=user.id, plan=None, status="none")
+        db.session.add(sub)
+
+    if "plan" in data:
+        plan = data["plan"]
+        if plan not in (None, "", *PLAN_ORDER):
+            return jsonify({"error": f"plan invalide (attendu: {', '.join(PLAN_ORDER)})"}), 400
+        sub.plan = plan or None
+
+    if "status" in data:
+        valid_status = {"none", "trial", "active", "past_due", "canceled", "expired"}
+        if data["status"] not in valid_status:
+            return jsonify({"error": f"status invalide (attendu: {', '.join(sorted(valid_status))})"}), 400
+        sub.status = data["status"]
+
+    if "extend_days" in data:
+        try:
+            days = int(data["extend_days"])
+        except (TypeError, ValueError):
+            return jsonify({"error": "extend_days doit être un entier"}), 400
+        now = datetime.utcnow()
+        if sub.status == "trial":
+            base = sub.trial_end if (sub.trial_end and sub.trial_end > now) else now
+            sub.trial_end = base + timedelta(days=days)
+        else:
+            base = sub.current_period_end if (sub.current_period_end and sub.current_period_end > now) else now
+            sub.current_period_end = base + timedelta(days=days)
+
+    db.session.commit()
+    return jsonify({"success": True, "user": user.to_dict()})
+
+
+@app.route("/admin")
+def admin_page():
+    return send_from_directory("static", "admin.html")
+
+
 if __name__ == "__main__":
     print("=" * 45)
     print("  PREDIKTA  v4.0  - READY")

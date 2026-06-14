@@ -83,6 +83,8 @@ class User(db.Model):
     oauth_id       = db.Column(db.String(128), nullable=True)  # ID unique chez le fournisseur
     avatar_url     = db.Column(db.String(512), nullable=True)
 
+    is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
 
@@ -103,6 +105,8 @@ class User(db.Model):
             "avatar_url": self.avatar_url,
             "oauth_provider": self.oauth_provider,
             "has_password": bool(self.password_hash),
+            "is_admin": bool(self.is_admin),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
             "subscription": sub.to_dict() if sub else None,
         }
 
@@ -314,6 +318,20 @@ def init_app(app):
 
     with app.app_context():
         db.create_all()
+        _ensure_column(db, "users", "is_admin", "BOOLEAN DEFAULT FALSE")
+
+
+def _ensure_column(db, table, column, ddl_type):
+    """Ajoute une colonne manquante sur une table existante (mini-migration,
+    pour les bases créées avant l'ajout de ce champ)."""
+    from sqlalchemy import inspect, text
+    inspector = inspect(db.engine)
+    cols = [c["name"] for c in inspector.get_columns(table)]
+    if column in cols:
+        return
+    with db.engine.connect() as conn:
+        conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {column} {ddl_type}"))
+        conn.commit()
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -382,6 +400,21 @@ def login_required(f):
     def wrapper(*args, **kwargs):
         if not current_user():
             return jsonify({"error": "login_required", "message": "Connexion requise"}), 401
+        return f(*args, **kwargs)
+
+    return wrapper
+
+
+def admin_required(f):
+    from functools import wraps
+
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        user = current_user()
+        if not user:
+            return jsonify({"error": "login_required", "message": "Connexion requise"}), 401
+        if not user.is_admin:
+            return jsonify({"error": "forbidden", "message": "Accès administrateur requis"}), 403
         return f(*args, **kwargs)
 
     return wrapper
