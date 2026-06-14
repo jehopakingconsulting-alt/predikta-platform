@@ -8,9 +8,19 @@ Allow: /faq
 Allow: /contact
 Allow: /privacy
 Allow: /terms
+Allow: /parrainage
+Allow: /archives
+Allow: /bizai
 
 Disallow: /api/
 Disallow: /data/
 Disallow: /sw.js
+Disallow: /account
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /admin
 
 Sitemap: https://predikta-tez2.onrender.com/sitemap.xml
