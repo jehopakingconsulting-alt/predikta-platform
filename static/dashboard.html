@@ -45,6 +45,13 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .locked a{display:inline-block;padding:12px 28px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;text-decoration:none;font-size:.85rem}
 
 .report-detail{font-size:.78rem;color:var(--muted2);background:#04040f;border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:8px;max-height:220px;overflow:auto;white-space:pre-wrap;display:none}
+
+.status-card{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.status-card::before{display:none}
+.status-plan-label{font-size:.66rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.status-plan-badge{font-family:'Orbitron',monospace;font-weight:900;font-size:1.15rem;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.status-plan-days{font-size:.78rem;color:var(--muted2);margin-top:2px}
+.btn-manage{display:inline-block;padding:9px 18px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -61,6 +68,15 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
   </div>
 
   <div id="content" style="display:none">
+
+    <div class="card status-card">
+      <div>
+        <div class="status-plan-label" data-i18n="planLabel">Votre plan</div>
+        <div class="status-plan-badge" id="planBadge">—</div>
+        <div class="status-plan-days" id="planDays"></div>
+      </div>
+      <a href="/account" class="btn-manage" data-i18n="manageBtn">Gérer mon abonnement →</a>
+    </div>
 
     <div class="card">
       <h2 data-i18n="favTitle">⭐ Prédictions favorites</h2>
@@ -108,6 +124,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 const T = {
 fr:{ title:"Mon tableau de bord", subtitle:"Retrouvez vos prédictions favorites, vos alertes et vos rapports Business AI sauvegardés.", loading:"Chargement...",
  lockedTitle:"Abonnement requis", lockedText:"Le tableau de bord est réservé aux membres avec un essai actif ou un abonnement payant.", lockedCta:"Voir les plans",
+ planLabel:"Votre plan", manageBtn:"Gérer mon abonnement →", daysLeft:"{n} jour(s) restant(s)", trialBadge:"Essai", planActive:"Actif",
  favTitle:"⭐ Prédictions favorites", favHint:"Sauvegardez vos combinaisons préférées depuis la page Prédictions, ou ajoutez-les manuellement ici.",
  alertTitle:"🔔 Alertes", alertHint:"Créez une liste de surveillance par État et par jeu. La notification automatique (email/push) arrive prochainement — vos alertes sont déjà enregistrées et prêtes.",
  reportTitle:"📊 Rapports Business AI", reportHint:"Vos rapports générés depuis Business AI, sauvegardés pour consultation ultérieure.",
@@ -119,6 +136,7 @@ fr:{ title:"Mon tableau de bord", subtitle:"Retrouvez vos prédictions favorites
 },
 en:{ title:"My dashboard", subtitle:"Find your favorite predictions, alerts and saved Business AI reports.", loading:"Loading...",
  lockedTitle:"Subscription required", lockedText:"The dashboard is reserved for members with an active trial or paid plan.", lockedCta:"View plans",
+ planLabel:"Your plan", manageBtn:"Manage subscription →", daysLeft:"{n} day(s) left", trialBadge:"Trial", planActive:"Active",
  favTitle:"⭐ Favorite predictions", favHint:"Save your favorite combinations from the Predictions page, or add them manually here.",
  alertTitle:"🔔 Alerts", alertHint:"Build a watchlist by state and game. Automatic notifications (email/push) are coming soon — your alerts are already saved and ready.",
  reportTitle:"📊 Business AI reports", reportHint:"Reports generated from Business AI, saved for later review.",
@@ -130,6 +148,7 @@ en:{ title:"My dashboard", subtitle:"Find your favorite predictions, alerts and 
 },
 es:{ title:"Mi panel", subtitle:"Encuentra tus predicciones favoritas, alertas e informes de Business AI guardados.", loading:"Cargando...",
  lockedTitle:"Suscripción requerida", lockedText:"El panel está reservado para miembros con una prueba activa o un plan de pago.", lockedCta:"Ver planes",
+ planLabel:"Tu plan", manageBtn:"Gestionar suscripción →", daysLeft:"{n} día(s) restante(s)", trialBadge:"Prueba", planActive:"Activo",
  favTitle:"⭐ Predicciones favoritas", favHint:"Guarda tus combinaciones favoritas desde la página de Predicciones, o añádelas manualmente aquí.",
  alertTitle:"🔔 Alertas", alertHint:"Crea una lista de seguimiento por Estado y juego. Las notificaciones automáticas (email/push) llegarán pronto — tus alertas ya están guardadas y listas.",
  reportTitle:"📊 Informes de Business AI", reportHint:"Informes generados desde Business AI, guardados para consulta posterior.",
@@ -141,6 +160,7 @@ es:{ title:"Mi panel", subtitle:"Encuentra tus predicciones favoritas, alertas e
 },
 pt:{ title:"Meu painel", subtitle:"Encontre suas previsões favoritas, alertas e relatórios do Business AI salvos.", loading:"Carregando...",
  lockedTitle:"Assinatura necessária", lockedText:"O painel é reservado para membros com teste ativo ou plano pago.", lockedCta:"Ver planos",
+ planLabel:"Seu plano", manageBtn:"Gerenciar assinatura →", daysLeft:"{n} dia(s) restante(s)", trialBadge:"Teste", planActive:"Ativo",
  favTitle:"⭐ Previsões favoritas", favHint:"Salve suas combinações favoritas a partir da página de Previsões, ou adicione manualmente aqui.",
  alertTitle:"🔔 Alertas", alertHint:"Crie uma lista de monitoramento por Estado e jogo. Notificações automáticas (e-mail/push) chegam em breve — seus alertas já estão salvos e prontos.",
  reportTitle:"📊 Relatórios do Business AI", reportHint:"Relatórios gerados pelo Business AI, salvos para consulta posterior.",
@@ -152,6 +172,7 @@ pt:{ title:"Meu painel", subtitle:"Encontre suas previsões favoritas, alertas e
 },
 ht:{ title:"Tablodbò mwen", subtitle:"Jwenn prediksyon favorit ou, alèt ou ak rapò Business AI ou anrejistre.", loading:"K ap chaje...",
  lockedTitle:"Abònman obligatwa", lockedText:"Tablodbò a rezève pou manm ki gen yon esè aktif oswa yon plan peye.", lockedCta:"Gade plan yo",
+ planLabel:"Plan ou", manageBtn:"Jere abònman ou →", daysLeft:"{n} jou ki rete", trialBadge:"Esè", planActive:"Aktif",
  favTitle:"⭐ Prediksyon favorit", favHint:"Anrejistre konbinezon favorit ou nan paj Prediksyon, oswa ajoute yo manyèlman isit la.",
  alertTitle:"🔔 Alèt", alertHint:"Kreye yon lis siveyans pa Eta ak jwèt. Notifikasyon otomatik (email/push) ap vini talè — alèt ou yo deja anrejistre e pare.",
  reportTitle:"📊 Rapò Business AI", reportHint:"Rapò ki kreye nan Business AI, anrejistre pou konsiltasyon pita.",
@@ -192,6 +213,12 @@ async function init(){
       document.getElementById('locked').style.display='block';
       return;
     }
+    const t = T[curLang] || T.en;
+    document.getElementById('planBadge').textContent = sub.plan_label || sub.plan || '—';
+    const daysTxt = (t.daysLeft||'').replace('{n}', sub.days_left ?? 0);
+    const statusTxt = sub.status === 'trial' ? (t.trialBadge||'') : (t.planActive||'');
+    document.getElementById('planDays').textContent = statusTxt ? `${statusTxt} · ${daysTxt}` : daysTxt;
+
     await Promise.all([loadFavs(), loadAlerts(), loadReports()]);
     document.getElementById('loading').style.display='none';
     document.getElementById('content').style.display='block';
