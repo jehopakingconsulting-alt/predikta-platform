@@ -791,6 +791,19 @@ function buildNav(){
   return `
 <style>
 /* ══════════════════════════════════════
+   PREDIKTA GLOBAL POLISH — scroll, reveal, responsive
+   ══════════════════════════════════════ */
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.pr-reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.pr-reveal.pr-in{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){
+  .pr-reveal,.pr-reveal.pr-in{opacity:1;transform:none;transition:none}
+}
+.pr-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.pr-table-wrap table{min-width:560px}
+
+/* ══════════════════════════════════════
    PREDIKTA NAV v4.0 — Langue toujours visible
    ══════════════════════════════════════ */
 #predikta-nav{
@@ -1048,6 +1061,67 @@ function buildFooter(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
+// POLISH — reveal-on-scroll + responsive tables
+// ═══════════════════════════════════════════════════════════════════
+function initRevealAnimations(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!('IntersectionObserver' in window)) return;
+  const selector = '.page>.hero, .page>.sec, .sec, .card, .plan-card, .state-card, .stat-box, .preview-box, .bottom-cta';
+  const els = Array.from(document.querySelectorAll(selector)).filter(el=>{
+    if(el.classList.contains('pr-reveal')) return false;
+    if(el.closest('#predikta-nav,#pnav-mobile,.predikta-footer,#passt-panel,#passt-bubble')) return false;
+    return true;
+  });
+  if(!els.length) return;
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('pr-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach((el,i)=>{
+    el.classList.add('pr-reveal');
+    el.style.transitionDelay = Math.min(i * 40, 240) + 'ms';
+    io.observe(el);
+  });
+  // Safety net: reveal anything already in view immediately, and force-reveal
+  // everything after a short delay in case IO never fires (older browsers, headless, etc.)
+  requestAnimationFrame(()=>{
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    els.forEach(el=>{
+      const r = el.getBoundingClientRect();
+      if(r.top < vh && r.bottom > 0) el.classList.add('pr-in');
+    });
+  });
+  setTimeout(()=>{ els.forEach(el=>el.classList.add('pr-in')); io.disconnect(); }, 1500);
+}
+
+function wrapResponsiveTables(){
+  document.querySelectorAll('table').forEach(table=>{
+    if(table.closest('.pr-table-wrap')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'pr-table-wrap';
+    table.parentNode.insertBefore(wrap, table);
+    wrap.appendChild(table);
+  });
+}
+
+// Tables/cards are often rendered after async data fetches — keep polishing
+// the page for a few seconds after load to catch them.
+function watchDynamicContent(){
+  let runs = 0;
+  const tick = ()=>{
+    wrapResponsiveTables();
+    initRevealAnimations();
+    runs++;
+    if(runs < 6) setTimeout(tick, 600);
+  };
+  setTimeout(tick, 600);
+}
+
+// ═══════════════════════════════════════════════════════════════════
 // INJECT ALL
 // ═══════════════════════════════════════════════════════════════════
 function inject(){
@@ -1088,6 +1162,11 @@ function inject(){
     fd.innerHTML = buildFooter();
     document.body.appendChild(fd);
   }
+
+  // 5. POLISH — reveal animations + responsive tables
+  wrapResponsiveTables();
+  initRevealAnimations();
+  watchDynamicContent();
 }
 
 if(document.readyState==='loading'){
