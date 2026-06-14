@@ -282,7 +282,7 @@ const KB = {
       answer:'Pour changer la langue, utilisez les boutons en haut à droite de chaque page :\n\n🇫🇷 FR · 🇺🇸 EN · 🇪🇸 ES · 🇧🇷 PT · 🇭🇹 HT\n\nLa langue est sauvegardée automatiquement sur toutes les pages.',
       quick:SUPPORTED.map(l=>({t:LANG_FLAGS[l]+' '+l.toUpperCase(),fn:`saveLang('${l}')`})) },
     { kw:['pro','elite','abonnement','payer','prix','tarif','subscribe','forfait','plan'],
-      answer:'Nos plans :\n\n👑 PRO — $9.99/mois (4 États, 1 analyse/jour, 3 jours d\'essai)\n💎 VIP — $19.99/mois (20 États, 7 analyses/jour, 7 jours d\'essai)\n⭐ ELITE — $49.99/mois (Tous les États, analyses illimitées, 7 jours d\'essai)\n\nUn compte et un abonnement actif sont requis pour lancer des analyses.',
+      answer:'Nos plans :\n\n👑 PRO — $19.99/mois (4 États, 1 analyse/jour, 3 jours d\'essai)\n💎 VIP — $49.99/mois (20 États, 7 analyses/jour, 7 jours d\'essai)\n⭐ PREMIUM — $99.99/mois (Tous les États, analyses illimitées, 7 jours d\'essai)\n\nUn compte et un abonnement actif sont requis pour lancer des analyses.',
       quick:[{t:'Voir les Plans',href:'/register'}] },
     { kw:['powerball','mega','million','jackpot','lotto','pick4','pick5','pick2','tous jeux','all'],
       answer:'Pour voir Powerball, Mega Millions et TOUS les jeux :\n\n🏆 <a href="/all-results" style="color:#4f6eff">Page Tous les Résultats</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Tous les jeux s\'affichent : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
@@ -311,7 +311,7 @@ const KB = {
       answer:'To change language, use the buttons at the top right of every page:\n\n🇫🇷 FR · 🇺🇸 EN · 🇪🇸 ES · 🇧🇷 PT · 🇭🇹 HT\n\nYour language preference is saved automatically.',
       quick:SUPPORTED.map(l=>({t:LANG_FLAGS[l]+' '+l.toUpperCase(),fn:`saveLang('${l}')`})) },
     { kw:['pro','elite','subscription','price','plan','subscribe','pay'],
-      answer:'Our plans:\n\n👑 PRO — $9.99/mo (4 states, 1 analysis/day, 3-day trial)\n💎 VIP — $19.99/mo (20 states, 7 analyses/day, 7-day trial)\n⭐ ELITE — $49.99/mo (All states, unlimited analyses, 7-day trial)\n\nAn account with an active subscription is required to run analyses.',
+      answer:'Our plans:\n\n👑 PRO — $19.99/mo (4 states, 1 analysis/day, 3-day trial)\n💎 VIP — $49.99/mo (20 states, 7 analyses/day, 7-day trial)\n⭐ PREMIUM — $99.99/mo (All states, unlimited analyses, 7-day trial)\n\nAn account with an active subscription is required to run analyses.',
       quick:[{t:'See Plans',href:'/register'}] },
     { kw:['powerball','mega','million','jackpot','lotto','pick4','pick5','all games'],
       answer:'For Powerball, Mega Millions and ALL games:\n\n🏆 <a href="/all-results" style="color:#4f6eff">All Results Page</a>\n→ Select your State\n→ All games shown: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
@@ -1053,9 +1053,9 @@ function buildFooter(){
           ${SUPPORTED.map(ll=>`<button class="plang-btn${ll===l?' active':''}" data-navlang="${ll}" onclick="saveLang('${ll}')" style="padding:5px 10px">${LANG_FLAGS[ll]} ${ll.toUpperCase()}</button>`).join('')}
         </div>
         <div class="pf-col-title" style="margin-top:10px">👑 Plans</div>
-        <a class="pf-link" href="/register?plan=pro" style="color:#6688ff;font-weight:700">PRO — $9.99/mois</a>
-        <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $19.99/mois</a>
-        <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">ELITE — $49.99/mois</a>
+        <a class="pf-link" href="/register?plan=pro" style="color:#6688ff;font-weight:700">PRO — $19.99/mois</a>
+        <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $49.99/mois</a>
+        <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">PREMIUM — $99.99/mois</a>
         <a class="pf-link" href="/api/health" target="_blank" style="color:#22e87a">● API Status</a>
       </div>
     </div>
