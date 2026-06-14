@@ -808,6 +808,24 @@ def accuracy_page(): return send_from_directory("static", "accuracy.html")
 @app.route("/offline")
 def offline_page(): return send_from_directory("static", "offline.html")
 
+@app.route("/lottery-predictions")
+def lottery_predictions_page(): return send_from_directory("static", "lottery-predictions.html")
+
+@app.route("/pick3-predictions")
+def pick3_predictions_page(): return send_from_directory("static", "pick3-predictions.html")
+
+@app.route("/pick4-predictions")
+def pick4_predictions_page(): return send_from_directory("static", "pick4-predictions.html")
+
+@app.route("/powerball-analysis")
+def powerball_analysis_page(): return send_from_directory("static", "powerball-analysis.html")
+
+@app.route("/business-ai")
+def business_ai_page(): return send_from_directory("static", "business-ai.html")
+
+@app.route("/api")
+def api_info_page(): return send_from_directory("static", "api.html")
+
 @app.route("/nav.js")
 def nav_js():
     resp = make_response(send_from_directory("static", "nav.js"))

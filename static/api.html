@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA API — Accès développeur (bientôt disponible)</title>
+<meta name="description" content="L'API PREDIKTA permettra d'accéder aux prédictions de loterie par IA, aux statistiques et à Business AI par programmation. Disponible prochainement pour les comptes BUSINESS."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/api"/>
+<link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/api"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(79,110,255,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
+.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;padding:20px 10px 40px}
+.hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:var(--green);margin-bottom:18px}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#22e87a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
+.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(79,110,255,.35);text-decoration:none;display:inline-block}
+.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+
+.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
+.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#88aaff;margin-bottom:10px}
+.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
+.sections .sec p:last-child{margin-bottom:0}
+.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
+.sections .sec a:hover{text-decoration:underline}
+
+.code-block{background:#04040f;border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:#9fd8ff;overflow-x:auto;margin-top:10px;white-space:pre}
+.code-block .c1{color:var(--muted)}
+.code-block .c2{color:var(--green)}
+
+.soon-badge{display:inline-block;padding:3px 12px;border-radius:8px;font-size:.68rem;font-weight:700;letter-spacing:1px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-left:8px;vertical-align:middle}
+
+.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(34,232,122,.07),rgba(79,110,255,.08));border:1px solid rgba(34,232,122,.2);border-radius:20px;margin-top:10px}
+.bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#22e87a,#6688ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
+.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="hero">
+  <div class="hero-tag" data-i18n="tag">PREDIKTA API</div>
+  <h1 data-i18n-html="h1">L'API PREDIKTA<br>arrive bientôt</h1>
+  <p class="hero-sub" data-i18n="sub">Accédez par programmation aux prédictions de loterie par IA, aux statistiques historiques et à Business AI. L'API REST de PREDIKTA sera proposée aux comptes BUSINESS.</p>
+  <div class="hero-cta">
+    <a class="cta-btn-main" href="/register?plan=business" data-i18n="ctaMain">Rejoindre la liste d'attente (BUSINESS)</a>
+    <a class="cta-btn-sec" href="/pro" data-i18n="ctaSec">Voir les plans</a>
+  </div>
+</div>
+
+<div class="sections" id="sections"></div>
+
+<div class="bottom-cta">
+  <h2 data-i18n="ctaTitle">Soyez prêt pour le lancement</h2>
+  <p data-i18n="ctaP">Les abonnés BUSINESS auront un accès prioritaire à l'API dès son lancement. Démarrez votre essai gratuit dès maintenant.</p>
+  <div class="bottom-cta-btns">
+    <a class="cta-btn-main" href="/register?plan=business" data-i18n="ctaBtnRegister">Démarrer l'essai gratuit BUSINESS</a>
+    <a class="cta-btn-sec" href="/business-ai" data-i18n="ctaBtnBiz">Découvrir Business AI</a>
+  </div>
+</div>
+
+<div class="disclaimer" data-i18n="disclaimer">⚠️ L'API PREDIKTA est en cours de développement et n'est pas encore disponible publiquement. Les fonctionnalités, limites et tarifs décrits ici peuvent évoluer avant le lancement officiel.</div>
+</div>
+
+<script>
+const T = {
+fr:{ tag:"PREDIKTA API", h1:"L'API PREDIKTA<br>arrive bientôt",
+ sub:"Accédez par programmation aux prédictions de loterie par IA, aux statistiques historiques et à Business AI. L'API REST de PREDIKTA sera proposée aux comptes BUSINESS.",
+ ctaMain:"Rejoindre la liste d'attente (BUSINESS)", ctaSec:"Voir les plans",
+ ctaTitle:"Soyez prêt pour le lancement", ctaP:"Les abonnés BUSINESS auront un accès prioritaire à l'API dès son lancement. Démarrez votre essai gratuit dès maintenant.",
+ ctaBtnRegister:"Démarrer l'essai gratuit BUSINESS", ctaBtnBiz:"Découvrir Business AI",
+ disclaimer:"⚠️ L'API PREDIKTA est en cours de développement et n'est pas encore disponible publiquement. Les fonctionnalités, limites et tarifs décrits ici peuvent évoluer avant le lancement officiel.",
+ sections:[
+  ["Ce que l'API proposera <span class=\"soon-badge\">BIENTÔT</span>",
+   "<p>L'API REST de PREDIKTA donnera accès par programmation à l'ensemble du moteur de prédiction, pour intégrer PREDIKTA dans vos propres outils, tableaux de bord ou applications.</p>",
+   ["Prédictions IA pour Pick 3, Pick 4, Powerball et plus","Historique des tirages et statistiques par état","Scores de consensus et niveaux de confiance","Accès aux rapports Business AI","Authentification par clé API personnelle","Webhooks pour les nouveaux résultats (à venir)"]],
+  ["Exemple d'utilisation (aperçu)",
+   "<p>Voici un aperçu de ce à quoi pourrait ressembler un appel API une fois le service lancé :</p><div class=\"code-block\"><span class=\"c1\"># Exemple — format provisoire, sujet à modification</span>\ncurl https://predikta-tez2.onrender.com/api/v1/predictions/florida/pick3 \\\n  -H <span class=\"c2\">\"Authorization: Bearer VOTRE_CLE_API\"</span></div>"],
+  ["Accès anticipé pour les comptes BUSINESS",
+   "<p>Le plan <strong>BUSINESS ($199.99/mois)</strong> inclura un accès prioritaire à l'API dès son lancement, avec des quotas adaptés à un usage professionnel. Inscrivez-vous dès aujourd'hui pour être informé en premier.</p>",
+   ["Accès prioritaire au lancement de l'API","Quotas élevés adaptés aux entreprises","Documentation complète et support dédié","Inclus dans votre abonnement BUSINESS, sans surcoût"]]
+ ]},
+
+en:{ tag:"PREDIKTA API", h1:"The PREDIKTA API<br>is coming soon",
+ sub:"Programmatically access AI lottery predictions, historical statistics and Business AI. PREDIKTA's REST API will be offered to BUSINESS accounts.",
+ ctaMain:"Join the waitlist (BUSINESS)", ctaSec:"View plans",
+ ctaTitle:"Be ready for launch", ctaP:"BUSINESS subscribers will get priority access to the API as soon as it launches. Start your free trial now.",
+ ctaBtnRegister:"Start the BUSINESS free trial", ctaBtnBiz:"Discover Business AI",
+ disclaimer:"⚠️ The PREDIKTA API is under development and not yet publicly available. The features, limits and pricing described here may change before the official launch.",
+ sections:[
+  ["What the API will offer <span class=\"soon-badge\">COMING SOON</span>",
+   "<p>PREDIKTA's REST API will provide programmatic access to the entire prediction engine, so you can integrate PREDIKTA into your own tools, dashboards or applications.</p>",
+   ["AI predictions for Pick 3, Pick 4, Powerball and more","Draw history and per-state statistics","Consensus scores and confidence levels","Access to Business AI reports","Authentication via personal API key","Webhooks for new results (coming later)"]],
+  ["Usage example (preview)",
+   "<p>Here's a preview of what an API call might look like once the service launches:</p><div class=\"code-block\"><span class=\"c1\"># Example — provisional format, subject to change</span>\ncurl https://predikta-tez2.onrender.com/api/v1/predictions/florida/pick3 \\\n  -H <span class=\"c2\">\"Authorization: Bearer YOUR_API_KEY\"</span></div>"],
+  ["Early access for BUSINESS accounts",
+   "<p>The <strong>BUSINESS plan ($199.99/mo)</strong> will include priority access to the API at launch, with quotas suited to professional use. Sign up today to be notified first.</p>",
+   ["Priority access at API launch","High quotas suited to businesses","Full documentation and dedicated support","Included with your BUSINESS subscription, no extra cost"]]
+ ]},
+
+es:{ tag:"PREDIKTA API", h1:"La API de PREDIKTA<br>llega pronto",
+ sub:"Accede mediante programación a predicciones de lotería por IA, estadísticas históricas y Business AI. La API REST de PREDIKTA se ofrecerá a las cuentas BUSINESS.",
+ ctaMain:"Unirse a la lista de espera (BUSINESS)", ctaSec:"Ver planes",
+ ctaTitle:"Prepárate para el lanzamiento", ctaP:"Los suscriptores BUSINESS tendrán acceso prioritario a la API en cuanto se lance. Comienza tu prueba gratuita ahora.",
+ ctaBtnRegister:"Iniciar la prueba gratuita BUSINESS", ctaBtnBiz:"Descubrir Business AI",
+ disclaimer:"⚠️ La API de PREDIKTA está en desarrollo y aún no está disponible públicamente. Las funciones, límites y precios descritos aquí pueden cambiar antes del lanzamiento oficial.",
+ sections:[
+  ["Qué ofrecerá la API <span class=\"soon-badge\">PRÓXIMAMENTE</span>",
+   "<p>La API REST de PREDIKTA dará acceso por programación a todo el motor de predicción, para integrar PREDIKTA en tus propias herramientas, paneles o aplicaciones.</p>",
+   ["Predicciones IA para Pick 3, Pick 4, Powerball y más","Historial de sorteos y estadísticas por estado","Puntuaciones de consenso y niveles de confianza","Acceso a los informes de Business AI","Autenticación mediante clave API personal","Webhooks para nuevos resultados (próximamente)"]],
+  ["Ejemplo de uso (vista previa)",
+   "<p>Esto es un avance de cómo podría ser una llamada a la API una vez lanzado el servicio:</p><div class=\"code-block\"><span class=\"c1\"># Ejemplo — formato provisional, sujeto a cambios</span>\ncurl https://predikta-tez2.onrender.com/api/v1/predictions/florida/pick3 \\\n  -H <span class=\"c2\">\"Authorization: Bearer TU_CLAVE_API\"</span></div>"],
+  ["Acceso anticipado para cuentas BUSINESS",
+   "<p>El plan <strong>BUSINESS ($199.99/mes)</strong> incluirá acceso prioritario a la API en el lanzamiento, con cuotas adaptadas al uso profesional. Regístrate hoy para ser de los primeros en saberlo.</p>",
+   ["Acceso prioritario al lanzamiento de la API","Cuotas elevadas adaptadas a empresas","Documentación completa y soporte dedicado","Incluido en tu suscripción BUSINESS, sin coste adicional"]]
+ ]},
+
+pt:{ tag:"PREDIKTA API", h1:"A API da PREDIKTA<br>chega em breve",
+ sub:"Acesse via programação as previsões de loteria por IA, estatísticas históricas e o Business AI. A API REST da PREDIKTA será oferecida às contas BUSINESS.",
+ ctaMain:"Entrar na lista de espera (BUSINESS)", ctaSec:"Ver planos",
+ ctaTitle:"Esteja pronto para o lançamento", ctaP:"Assinantes BUSINESS terão acesso prioritário à API logo no lançamento. Comece seu teste grátis agora.",
+ ctaBtnRegister:"Iniciar o teste grátis BUSINESS", ctaBtnBiz:"Conhecer o Business AI",
+ disclaimer:"⚠️ A API da PREDIKTA está em desenvolvimento e ainda não está disponível publicamente. Os recursos, limites e preços descritos aqui podem mudar antes do lançamento oficial.",
+ sections:[
+  ["O que a API vai oferecer <span class=\"soon-badge\">EM BREVE</span>",
+   "<p>A API REST da PREDIKTA dará acesso via programação a todo o motor de previsão, para integrar a PREDIKTA às suas próprias ferramentas, painéis ou aplicações.</p>",
+   ["Previsões de IA para Pick 3, Pick 4, Powerball e mais","Histórico de sorteios e estatísticas por estado","Pontuações de consenso e níveis de confiança","Acesso aos relatórios do Business AI","Autenticação via chave de API pessoal","Webhooks para novos resultados (em breve)"]],
+  ["Exemplo de uso (prévia)",
+   "<p>Veja uma prévia de como uma chamada de API poderia ser após o lançamento do serviço:</p><div class=\"code-block\"><span class=\"c1\"># Exemplo — formato provisório, sujeito a alterações</span>\ncurl https://predikta-tez2.onrender.com/api/v1/predictions/florida/pick3 \\\n  -H <span class=\"c2\">\"Authorization: Bearer SUA_CHAVE_API\"</span></div>"],
+  ["Acesso antecipado para contas BUSINESS",
+   "<p>O plano <strong>BUSINESS ($199.99/mês)</strong> incluirá acesso prioritário à API no lançamento, com cotas adequadas ao uso profissional. Cadastre-se hoje para ser avisado primeiro.</p>",
+   ["Acesso prioritário no lançamento da API","Cotas altas adequadas para empresas","Documentação completa e suporte dedicado","Incluído na sua assinatura BUSINESS, sem custo extra"]]
+ ]},
+
+ht:{ tag:"PREDIKTA API", h1:"API PREDIKTA<br>ap vini talè",
+ sub:"Jwenn aksè pwogramatik a prediksyon loteri IA, estatistik istorik ak Business AI. API REST PREDIKTA ap pwopoze pou kont BUSINESS.",
+ ctaMain:"Antre nan lis datant (BUSINESS)", ctaSec:"Gade plan yo",
+ ctaTitle:"Pare pou lansman an", ctaP:"Abone BUSINESS yo ap jwenn aksè priyoritè a API a depi li lanse. Kòmanse esè gratis ou kounye a.",
+ ctaBtnRegister:"Kòmanse esè gratis BUSINESS", ctaBtnBiz:"Dekouvri Business AI",
+ disclaimer:"⚠️ API PREDIKTA ap devlope e li poko disponib piblikman. Karakteristik, limit ak pri ki dekri isit la ka chanje anvan lansman ofisyèl la.",
+ sections:[
+  ["Sa API a pral ofri <span class=\"soon-badge\">TALÈ</span>",
+   "<p>API REST PREDIKTA pral bay aksè pwogramatik a tout motè prediksyon an, pou ou ka entegre PREDIKTA nan zouti, tablodbò oswa aplikasyon pa ou.</p>",
+   ["Prediksyon IA pou Pick 3, Pick 4, Powerball ak plis","Istorik tiraj ak estatistik pa eta","Eskò konsansis ak nivo konfyans","Aksè a rapò Business AI","Otantifikasyon ak kle API pèsonèl","Webhook pou nouvo rezilta (pita)"]],
+  ["Egzanp itilizasyon (apèsi)",
+   "<p>Men yon apèsi de sa yon apèl API ta ka sanble apre lansman sèvis la:</p><div class=\"code-block\"><span class=\"c1\"># Egzanp — fòma pwovizwa, ka chanje</span>\ncurl https://predikta-tez2.onrender.com/api/v1/predictions/florida/pick3 \\\n  -H <span class=\"c2\">\"Authorization: Bearer KLE_API_OU\"</span></div>"],
+  ["Aksè davans pou kont BUSINESS",
+   "<p>Plan <strong>BUSINESS ($199.99/mwa)</strong> ap gen aksè priyoritè a API a nan lansman, ak kota ki adapte pou itilizasyon pwofesyonèl. Enskri jodi a pou w premye moun ki konnen.</p>",
+   ["Aksè priyoritè nan lansman API","Kota wo ki adapte pou biznis","Dokimantasyon konplè ak sipò dedye","Enkli nan abònman BUSINESS ou, san frè anplis"]]
+ ]},
+};
+
+function renderSections(dict){
+  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
+  <div class="sec">
+    <h2>${h2}</h2>
+    ${html}
+    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+  </div>`).join('');
+}
+
+let curLang = 'fr';
+function applyLang(lang){
+  curLang = T[lang] ? lang : 'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  renderSections(dict);
+  document.documentElement.setAttribute('lang', curLang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
+</body></html>

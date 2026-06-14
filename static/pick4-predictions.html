@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Prédictions Pick 4 par IA — PREDIKTA</title>
+<meta name="description" content="Analyses Pick 4 (Win 4, Play 4, Daily 4...) par IA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning. Mode Transparence inclus."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/pick4-predictions"/>
+<link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/pick4-predictions"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(79,110,255,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
+.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;padding:20px 10px 40px}
+.hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:#88aaff;margin-bottom:18px}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
+.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(79,110,255,.35);text-decoration:none;display:inline-block}
+.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+
+.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
+.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#88aaff;margin-bottom:10px}
+.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
+.sections .sec p:last-child{margin-bottom:0}
+.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
+.sections .sec a:hover{text-decoration:underline}
+
+.odds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px}
+.odds-card{border:1px solid var(--border);border-radius:12px;background:#04040f;padding:14px;text-align:center}
+.odds-card .lbl{font-size:.7rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.odds-card .val{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:var(--gold)}
+
+.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:20px;margin-top:10px}
+.bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
+.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="hero">
+  <div class="hero-tag" data-i18n="tag">PRÉDICTIONS PICK 4</div>
+  <h1 data-i18n-html="h1">Prédictions Pick 4<br>analysées par IA</h1>
+  <p class="hero-sub" data-i18n="sub">Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyse chaque position du Pick 4 séparément (milliers, centaines, dizaines, unités) avec Markov, Monte Carlo, Machine Learning et analyse de Fourier.</p>
+  <div class="hero-cta">
+    <a class="cta-btn-main" href="/predictions" data-i18n="ctaMain">Voir les prédictions Pick 4 par État</a>
+    <a class="cta-btn-sec" href="/results" data-i18n="ctaSec">Voir les derniers tirages</a>
+  </div>
+</div>
+
+<div class="sections" id="sections"></div>
+
+<div class="bottom-cta">
+  <h2 data-i18n="ctaTitle">Prêt à analyser le Pick 4 ?</h2>
+  <p data-i18n="ctaP">Créez un compte gratuit et lancez votre première analyse Pick 4 avec PREDIKTA.</p>
+  <div class="bottom-cta-btns">
+    <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer un compte gratuit</a>
+    <a class="cta-btn-sec" href="/lottery-predictions" data-i18n="ctaBtnAll">Toutes nos prédictions</a>
+  </div>
+</div>
+
+<div class="disclaimer" data-i18n="disclaimer">⚠️ Le Pick 4 est un jeu de hasard : la probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href="/responsible-gaming">Jeu Responsable</a>.</div>
+</div>
+
+<script>
+const T = {
+fr:{ tag:"PRÉDICTIONS PICK 4", h1:"Prédictions Pick 4<br>analysées par IA",
+ sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyse chaque position du Pick 4 séparément (milliers, centaines, dizaines, unités) avec Markov, Monte Carlo, Machine Learning et analyse de Fourier.",
+ ctaMain:"Voir les prédictions Pick 4 par État", ctaSec:"Voir les derniers tirages",
+ ctaTitle:"Prêt à analyser le Pick 4 ?", ctaP:"Créez un compte gratuit et lancez votre première analyse Pick 4 avec PREDIKTA.",
+ ctaBtnRegister:"Créer un compte gratuit", ctaBtnAll:"Toutes nos prédictions",
+ disclaimer:"⚠️ Le Pick 4 est un jeu de hasard : la probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href=\"/responsible-gaming\">Jeu Responsable</a>.",
+ sections:[
+  ["Le Pick 4 : comment ça marche",
+   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exact (Straight)</div><div class=\"val\">1 / 10 000</div></div><div class=\"odds-card\"><div class=\"lbl\">Groupé (Box, 4 chiffres différents)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinaisons possibles</div><div class=\"val\">0000 – 9999</div></div></div><p>Le Pick 4 consiste à tirer 4 chiffres (0-9) sur 4 positions : milliers, centaines, dizaines et unités. Chaque tirage est indépendant et aléatoire — ces probabilités ne changent jamais, peu importe l'historique.</p>"],
+  ["Notre approche pour le Pick 4",
+   "<p>PREDIKTA analyse chaque position du Pick 4 individuellement : <strong>fréquence historique</strong> de chaque chiffre par position, <strong>retard (gap)</strong> depuis sa dernière sortie, et <strong>tendance récente</strong> (chaud / froid / neutre sur 30 tirages). Ces signaux sont combinés avec les chaînes de <strong>Markov</strong> (quel chiffre suit généralement quel autre), une <strong>simulation Monte Carlo</strong> de 50 000 tirages, des modèles de <strong>Machine Learning</strong> (XGBoost, Random Forest) et une <strong>analyse de Fourier</strong> pour les cycles.</p><p>Le <strong>Mode Transparence</strong> affiche, pour chaque suggestion, le détail position par position et la contribution de chaque modèle au score final.</p>",
+   ["Analyse par position (milliers / centaines / dizaines / unités)","Fréquence historique & retard (gap)","Tendances chaud / froid sur 30 tirages","Markov + Monte Carlo + ML + Fourier","Mode Transparence détaillé"]],
+  ["États avec Pick 4",
+   "<p>Le Pick 4 existe sous différents noms selon l'État : Win 4, Play 4, Daily 4, Pick 4... PREDIKTA couvre la plupart des États proposant ce jeu. Consultez la page <a href=\"/predictions\">Prédictions</a>, choisissez votre État, puis sélectionnez le jeu Pick 4 correspondant pour lancer votre analyse.</p>"]
+ ]},
+
+en:{ tag:"PICK 4 PREDICTIONS", h1:"Pick 4 predictions<br>analyzed by AI",
+ sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyzes each Pick 4 position separately (thousands, hundreds, tens, units) using Markov chains, Monte Carlo, Machine Learning and Fourier analysis.",
+ ctaMain:"View Pick 4 predictions by state", ctaSec:"View latest draws",
+ ctaTitle:"Ready to analyze Pick 4?", ctaP:"Create a free account and run your first Pick 4 analysis with PREDIKTA.",
+ ctaBtnRegister:"Create a free account", ctaBtnAll:"All our predictions",
+ disclaimer:"⚠️ Pick 4 is a game of chance: the odds of an exact draw remain about 1 in 10,000, regardless of analysis. PREDIKTA provides educational statistical analysis, with no guarantee of winnings. See our <a href=\"/responsible-gaming\">Responsible Gaming</a> page.",
+ sections:[
+  ["Pick 4: how it works",
+   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exact (Straight)</div><div class=\"val\">1 / 10,000</div></div><div class=\"odds-card\"><div class=\"lbl\">Box (4 different digits)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Possible combinations</div><div class=\"val\">0000 – 9999</div></div></div><p>Pick 4 draws 4 digits (0-9) across 4 positions: thousands, hundreds, tens and units. Every draw is random and independent — these odds never change, regardless of history.</p>"],
+  ["Our approach to Pick 4",
+   "<p>PREDIKTA analyzes each Pick 4 position individually: <strong>historical frequency</strong> of each digit per position, <strong>overdue status (gap)</strong> since its last appearance, and <strong>recent trend</strong> (hot / cold / neutral over 30 draws). These signals are combined with <strong>Markov chains</strong> (which digit usually follows which), a <strong>50,000-draw Monte Carlo simulation</strong>, <strong>Machine Learning</strong> models (XGBoost, Random Forest) and <strong>Fourier analysis</strong> for cycles.</p><p><strong>Transparency Mode</strong> shows, for each suggestion, a position-by-position breakdown and each model's contribution to the final score.</p>",
+   ["Per-position analysis (thousands / hundreds / tens / units)","Historical frequency & gap analysis","Hot/cold trends over 30 draws","Markov + Monte Carlo + ML + Fourier","Detailed Transparency Mode"]],
+  ["States offering Pick 4",
+   "<p>Pick 4 goes by different names depending on the state: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA covers most states offering this game. Visit the <a href=\"/predictions\">Predictions</a> page, choose your state, then select the matching Pick 4 game to run your analysis.</p>"]
+ ]},
+
+es:{ tag:"PREDICCIONES PICK 4", h1:"Predicciones Pick 4<br>analizadas por IA",
+ sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analiza cada posición del Pick 4 por separado (millares, centenas, decenas, unidades) usando cadenas de Markov, Monte Carlo, Machine Learning y análisis de Fourier.",
+ ctaMain:"Ver predicciones Pick 4 por estado", ctaSec:"Ver últimos sorteos",
+ ctaTitle:"¿Listo para analizar el Pick 4?", ctaP:"Crea una cuenta gratuita y ejecuta tu primer análisis Pick 4 con PREDIKTA.",
+ ctaBtnRegister:"Crear cuenta gratis", ctaBtnAll:"Todas nuestras predicciones",
+ disclaimer:"⚠️ El Pick 4 es un juego de azar: la probabilidad de un sorteo exacto sigue siendo de aproximadamente 1 entre 10.000, sin importar el análisis. PREDIKTA ofrece análisis estadísticos educativos, sin garantía de premio. Ver nuestra página de <a href=\"/responsible-gaming\">Juego Responsable</a>.",
+ sections:[
+  ["El Pick 4: cómo funciona",
+   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exacto (Straight)</div><div class=\"val\">1 / 10.000</div></div><div class=\"odds-card\"><div class=\"lbl\">Agrupado (Box, 4 dígitos distintos)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinaciones posibles</div><div class=\"val\">0000 – 9999</div></div></div><p>El Pick 4 consiste en sortear 4 dígitos (0-9) en 4 posiciones: millares, centenas, decenas y unidades. Cada sorteo es independiente y aleatorio: estas probabilidades nunca cambian, sin importar el historial.</p>"],
+  ["Nuestro enfoque para el Pick 4",
+   "<p>PREDIKTA analiza cada posición del Pick 4 individualmente: <strong>frecuencia histórica</strong> de cada dígito por posición, <strong>estado de retraso (gap)</strong> desde su última aparición y <strong>tendencia reciente</strong> (caliente / frío / neutral en los últimos 30 sorteos). Estas señales se combinan con <strong>cadenas de Markov</strong> (qué dígito suele seguir a cuál), una <strong>simulación Monte Carlo</strong> de 50.000 sorteos, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) y <strong>análisis de Fourier</strong> para ciclos.</p><p>El <strong>Modo Transparencia</strong> muestra, para cada sugerencia, el detalle posición por posición y la contribución de cada modelo a la puntuación final.</p>",
+   ["Análisis por posición (millares / centenas / decenas / unidades)","Frecuencia histórica y análisis de retraso","Tendencias caliente/frío en 30 sorteos","Markov + Monte Carlo + ML + Fourier","Modo Transparencia detallado"]],
+  ["Estados con Pick 4",
+   "<p>El Pick 4 recibe distintos nombres según el estado: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA cubre la mayoría de los estados que ofrecen este juego. Visita la página de <a href=\"/predictions\">Predicciones</a>, elige tu estado y luego selecciona el juego Pick 4 correspondiente para ejecutar tu análisis.</p>"]
+ ]},
+
+pt:{ tag:"PREVISÕES PICK 4", h1:"Previsões Pick 4<br>analisadas por IA",
+ sub:"Win 4, Play 4, Daily 4, Pick 4... A PREDIKTA analisa cada posição do Pick 4 separadamente (milhares, centenas, dezenas, unidades) usando cadeias de Markov, Monte Carlo, Machine Learning e análise de Fourier.",
+ ctaMain:"Ver previsões Pick 4 por estado", ctaSec:"Ver últimos sorteios",
+ ctaTitle:"Pronto para analisar o Pick 4?", ctaP:"Crie uma conta grátis e faça sua primeira análise Pick 4 com a PREDIKTA.",
+ ctaBtnRegister:"Criar conta gratuita", ctaBtnAll:"Todas as nossas previsões",
+ disclaimer:"⚠️ O Pick 4 é um jogo de azar: a probabilidade de um sorteio exato continua sendo de aproximadamente 1 em 10.000, independentemente da análise. A PREDIKTA fornece análises estatísticas educativas, sem garantia de prêmio. Veja nossa página de <a href=\"/responsible-gaming\">Jogo Responsável</a>.",
+ sections:[
+  ["O Pick 4: como funciona",
+   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exato (Straight)</div><div class=\"val\">1 / 10.000</div></div><div class=\"odds-card\"><div class=\"lbl\">Agrupado (Box, 4 dígitos diferentes)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinações possíveis</div><div class=\"val\">0000 – 9999</div></div></div><p>O Pick 4 consiste em sortear 4 dígitos (0-9) em 4 posições: milhares, centenas, dezenas e unidades. Cada sorteio é independente e aleatório — essas probabilidades nunca mudam, independentemente do histórico.</p>"],
+  ["Nossa abordagem para o Pick 4",
+   "<p>A PREDIKTA analisa cada posição do Pick 4 individualmente: <strong>frequência histórica</strong> de cada dígito por posição, <strong>status de atraso (gap)</strong> desde sua última aparição e <strong>tendência recente</strong> (quente / frio / neutro nos últimos 30 sorteios). Esses sinais são combinados com <strong>cadeias de Markov</strong> (qual dígito geralmente segue qual), uma <strong>simulação Monte Carlo</strong> de 50.000 sorteios, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) e <strong>análise de Fourier</strong> para ciclos.</p><p>O <strong>Modo Transparência</strong> mostra, para cada sugestão, o detalhe posição por posição e a contribuição de cada modelo para a pontuação final.</p>",
+   ["Análise por posição (milhares / centenas / dezenas / unidades)","Frequência histórica e análise de atraso","Tendências quente/frio em 30 sorteios","Markov + Monte Carlo + ML + Fourier","Modo Transparência detalhado"]],
+  ["Estados com Pick 4",
+   "<p>O Pick 4 tem nomes diferentes dependendo do estado: Win 4, Play 4, Daily 4, Pick 4... A PREDIKTA cobre a maioria dos estados que oferecem esse jogo. Visite a página de <a href=\"/predictions\">Previsões</a>, escolha seu estado e selecione o jogo Pick 4 correspondente para executar sua análise.</p>"]
+ ]},
+
+ht:{ tag:"PREDIKSYON PICK 4", h1:"Prediksyon Pick 4<br>analize pa AI",
+ sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analize chak pozisyon Pick 4 separeman (mil, santèn, dizèn, inite) ak Markov, Monte Carlo, Machine Learning ak analiz Fourier.",
+ ctaMain:"Gade prediksyon Pick 4 pa eta", ctaSec:"Gade dènye tiraj yo",
+ ctaTitle:"Pare pou analize Pick 4?", ctaP:"Kreye yon kont gratis epi lanse premye analiz Pick 4 ou ak PREDIKTA.",
+ ctaBtnRegister:"Kreye kont gratis", ctaBtnAll:"Tout prediksyon nou yo",
+ disclaimer:"⚠️ Pick 4 se yon jwèt aleyatwa: pwobabilite pou yon tiraj egzak rete anviwon 1 sou 10,000, kèlkeswa analiz la. PREDIKTA bay analiz estatistik edikatif, san garanti lo. Gade paj <a href=\"/responsible-gaming\">Jwe Responsab</a> nou an.",
+ sections:[
+  ["Pick 4: kijan li fonksyone",
+   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Egzak (Straight)</div><div class=\"val\">1 / 10,000</div></div><div class=\"odds-card\"><div class=\"lbl\">Gwoupe (Box, 4 chif diferan)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Konbinezon posib</div><div class=\"val\">0000 – 9999</div></div></div><p>Pick 4 se tiraj 4 chif (0-9) sou 4 pozisyon: mil, santèn, dizèn ak inite. Chak tiraj se aleyatwa ak endepandan — pwobabilite sa yo pa janm chanje, kèlkeswa istwa a.</p>"],
+  ["Apwòch nou pou Pick 4",
+   "<p>PREDIKTA analize chak pozisyon Pick 4 endividyèlman: <strong>frekans istorik</strong> chak chif pa pozisyon, <strong>estati reta (gap)</strong> depi dènye fwa li sòti, ak <strong>tandans resan</strong> (cho / frèt / net sou 30 tiraj). Siyal sa yo konbine ak <strong>chenn Markov</strong> (ki chif ki anjeneral vin apre yon lòt), yon <strong>similasyon Monte Carlo</strong> 50,000 tiraj, modèl <strong>Machine Learning</strong> (XGBoost, Random Forest) ak <strong>analiz Fourier</strong> pou sik yo.</p><p><strong>Mòd Transparans</strong> montre, pou chak sijesyon, detay pozisyon pa pozisyon ak kontribisyon chak modèl nan eskò final la.</p>",
+   ["Analiz pa pozisyon (mil / santèn / dizèn / inite)","Frekans istorik ak analiz reta","Tandans cho/frèt sou 30 tiraj","Markov + Monte Carlo + ML + Fourier","Mòd Transparans detaye"]],
+  ["Eta ki gen Pick 4",
+   "<p>Pick 4 gen diferan non selon eta a: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA kouvri pifò eta ki ofri jwèt sa a. Vizite paj <a href=\"/predictions\">Prediksyon</a>, chwazi eta ou, epi seleksyone jwèt Pick 4 ki koresponn pou lanse analiz ou.</p>"]
+ ]},
+};
+
+function renderSections(dict){
+  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
+  <div class="sec">
+    <h2>${h2}</h2>
+    ${html}
+    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+  </div>`).join('');
+}
+
+let curLang = 'fr';
+function applyLang(lang){
+  curLang = T[lang] ? lang : 'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  renderSections(dict);
+  document.documentElement.setAttribute('lang', curLang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
+</body></html>
