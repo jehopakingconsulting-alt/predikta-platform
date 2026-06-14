@@ -15,7 +15,9 @@ n'est pas définie.
 
 import os
 import re
+import json
 import secrets
+import string
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime, date, timedelta
@@ -66,6 +68,17 @@ PLAN_CONFIG = {
 
 PLAN_ORDER = ["pro", "vip", "elite", "business"]
 
+# ── Programme de parrainage (Phase 2) ───────────────────────────────────────
+# Paliers basés sur le nombre de filleuls inscrits (referral_count) :
+#  - 3  filleuls  -> badge Ambassadeur PREDIKTA
+#  - 10 filleuls  -> 7 jours d'accès VIP offerts
+#  - 25 filleuls  -> 30 jours d'accès PREMIUM (elite) offerts
+REFERRAL_MILESTONES = {
+    3:  {"type": "badge"},
+    10: {"type": "access", "plan": "vip",   "days": 7},
+    25: {"type": "access", "plan": "elite", "days": 30},
+}
+
 
 # ── Modèles ──────────────────────────────────────────────────────────────────
 class User(db.Model):
@@ -84,6 +97,13 @@ class User(db.Model):
     avatar_url     = db.Column(db.String(512), nullable=True)
 
     is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+
+    # Programme de parrainage (Phase 2 — basé sur les comptes)
+    ref_code         = db.Column(db.String(12), nullable=True)
+    referred_by_id   = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+    referral_count   = db.Column(db.Integer, default=0, nullable=False, server_default="0")
+    ambassador_badge = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+    referral_rewards = db.Column(db.Text, nullable=True)  # JSON list des paliers déjà accordés
 
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
@@ -108,6 +128,9 @@ class User(db.Model):
             "is_admin": bool(self.is_admin),
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "subscription": sub.to_dict() if sub else None,
+            "ref_code": self.ref_code,
+            "referral_count": self.referral_count or 0,
+            "ambassador_badge": bool(self.ambassador_badge),
         }
 
 
@@ -319,6 +342,11 @@ def init_app(app):
     with app.app_context():
         db.create_all()
         _ensure_column(db, "users", "is_admin", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "ref_code", "VARCHAR(12)")
+        _ensure_column(db, "users", "referred_by_id", "INTEGER")
+        _ensure_column(db, "users", "referral_count", "INTEGER DEFAULT 0")
+        _ensure_column(db, "users", "ambassador_badge", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "referral_rewards", "TEXT")
 
 
 def _ensure_column(db, table, column, ddl_type):
@@ -337,6 +365,69 @@ def _ensure_column(db, table, column, ddl_type):
 # ── Helpers ──────────────────────────────────────────────────────────────────
 EMAIL_RE = re.compile(r"[^@]+@[^@]+\.[^@]+")
 USERNAME_RE = re.compile(r"^[a-zA-Z0-9_]{3,20}$")
+
+
+def _gen_user_ref_code() -> str:
+    """Génère un code de parrainage court (6 caractères) et unique."""
+    alphabet = string.ascii_uppercase + string.digits
+    for _ in range(10):
+        code = "".join(secrets.choice(alphabet) for _ in range(6))
+        if not User.query.filter_by(ref_code=code).first():
+            return code
+    return secrets.token_hex(4).upper()
+
+
+def _extend_subscription(sub, days: int):
+    """Prolonge l'abonnement actif (essai ou payant) de `days` jours, ou
+    démarre un essai de `days` jours si aucun abonnement n'est en cours."""
+    now = datetime.utcnow()
+    if sub.status == "trial":
+        base = sub.trial_end if (sub.trial_end and sub.trial_end > now) else now
+        sub.trial_end = base + timedelta(days=days)
+    elif sub.status == "active":
+        base = sub.current_period_end if (sub.current_period_end and sub.current_period_end > now) else now
+        sub.current_period_end = base + timedelta(days=days)
+    else:
+        sub.status = "trial"
+        sub.trial_end = now + timedelta(days=days)
+
+
+def _grant_referral_access(user, plan_key: str, days: int):
+    """Accorde (ou prolonge) un accès bonus de `days` jours au plan `plan_key`,
+    sans jamais rétrograder un abonnement existant de niveau supérieur."""
+    sub = user.subscription
+    if not sub:
+        sub = Subscription(user_id=user.id)
+        db.session.add(sub)
+        user.subscription = sub
+
+    current_rank = PLAN_ORDER.index(sub.plan) if sub.plan in PLAN_ORDER else -1
+    reward_rank = PLAN_ORDER.index(plan_key)
+    if not sub.is_active() or current_rank < reward_rank:
+        sub.plan = plan_key
+    _extend_subscription(sub, days)
+
+
+def _apply_referral_rewards(referrer: "User"):
+    """Vérifie les paliers de parrainage atteints par `referrer` et applique
+    les récompenses pas encore accordées (badge, jours d'accès bonus)."""
+    try:
+        applied = json.loads(referrer.referral_rewards) if referrer.referral_rewards else []
+    except Exception:
+        applied = []
+
+    changed = False
+    for milestone, reward in REFERRAL_MILESTONES.items():
+        if (referrer.referral_count or 0) >= milestone and milestone not in applied:
+            if reward["type"] == "badge":
+                referrer.ambassador_badge = True
+            elif reward["type"] == "access":
+                _grant_referral_access(referrer, reward["plan"], reward["days"])
+            applied.append(milestone)
+            changed = True
+
+    if changed:
+        referrer.referral_rewards = json.dumps(applied)
 
 
 def make_unique_username(base: str) -> str:
@@ -610,13 +701,24 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({"error": "Cet email est déjà utilisé"}), 409
 
+    ref_code = (data.get("ref_code") or "").strip().upper()
+    referrer = User.query.filter_by(ref_code=ref_code).first() if ref_code else None
+
     user = User(username=username, email=email)
     user.set_password(password)
+    user.ref_code = _gen_user_ref_code()
+    if referrer:
+        user.referred_by_id = referrer.id
     db.session.add(user)
     db.session.flush()
 
     sub = Subscription(user_id=user.id, plan=None, status="none")
     db.session.add(sub)
+
+    if referrer:
+        referrer.referral_count = (referrer.referral_count or 0) + 1
+        _apply_referral_rewards(referrer)
+
     db.session.commit()
 
     session["user_id"] = user.id
@@ -654,6 +756,27 @@ def me():
     if not user:
         return jsonify({"user": None})
     return jsonify({"user": user.to_dict()})
+
+
+@auth_bp.route("/referral")
+@login_required
+def referral_info():
+    user = current_user()
+    if not user.ref_code:
+        user.ref_code = _gen_user_ref_code()
+        db.session.commit()
+
+    try:
+        applied = json.loads(user.referral_rewards) if user.referral_rewards else []
+    except Exception:
+        applied = []
+
+    return jsonify({
+        "ref_code": user.ref_code,
+        "referral_count": user.referral_count or 0,
+        "ambassador_badge": bool(user.ambassador_badge),
+        "rewards": {str(m): (m in applied) for m in REFERRAL_MILESTONES},
+    })
 
 
 @auth_bp.route("/plan", methods=["POST"])

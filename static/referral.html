@@ -53,7 +53,15 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
   <h1 data-i18n="title">Programme de Parrainage 🎁</h1>
   <p class="subtitle" data-i18n="subtitle">Invite tes amis sur PREDIKTA et débloque des avantages PREMIUM. Plus tu parraines, plus tu gagnes.</p>
 
-  <div class="card" id="emailCard">
+  <div class="card" id="loginPromptCard" style="display:none">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:12px" data-i18n="loginPrompt">Connecte-toi à ton compte PREDIKTA pour suivre ton parrainage et débloquer tes récompenses automatiquement.</div>
+    <div class="email-form">
+      <a id="btnLogin" href="/login?next=/referral" class="share-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" data-i18n="loginBtn">Se connecter</a>
+      <button id="btnEmailMode" data-i18n="orEmailMode">Continuer sans compte</button>
+    </div>
+  </div>
+
+  <div class="card" id="emailCard" style="display:none">
     <div style="font-weight:700;font-size:.9rem;margin-bottom:12px" data-i18n="emailLabel">Entre ton email pour récupérer ton code de parrainage :</div>
     <div class="email-form">
       <input type="email" id="refEmail" placeholder="ton@email.com" data-i18n-placeholder="emailPlaceholder"/>
@@ -93,7 +101,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
       <li><span class="rl-icon">🥈</span><span data-i18n="reward2">10 filleuls → 7 jours d'accès VIP offerts</span><span class="rl-badge locked" id="badge2" data-i18n="badgeLocked">Verrouillé</span></li>
       <li><span class="rl-icon">🥇</span><span data-i18n="reward3">25 filleuls → 30 jours d'accès PREMIUM offerts</span><span class="rl-badge locked" id="badge3" data-i18n="badgeLocked">Verrouillé</span></li>
     </ul>
-    <div class="notice" data-i18n="noticeText">Programme en phase de lancement : les récompenses seront activées automatiquement dès que le système de comptes PREDIKTA sera disponible. Ton compteur de filleuls est déjà suivi dès maintenant — ne perds pas ton avance !</div>
+    <div class="notice" id="noticeEl" data-i18n="noticeText">Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes PREDIKTA. Connecte-toi ou crée un compte pour en bénéficier.</div>
   </div>
 </div>
 
@@ -109,7 +117,10 @@ const T = {
     reward2:"10 filleuls → 7 jours d'accès VIP offerts",
     reward3:"25 filleuls → 30 jours d'accès PREMIUM offerts",
     badgeLocked:"Verrouillé", badgeUnlocked:"Débloqué ✓",
-    noticeText:"Programme en phase de lancement : les récompenses seront activées automatiquement dès que le système de comptes PREDIKTA sera disponible. Ton compteur de filleuls est déjà suivi dès maintenant — ne perds pas ton avance !",
+    noticeText:"Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes PREDIKTA. Connecte-toi ou crée un compte pour en bénéficier.",
+    noticeTextAccount:"Tes récompenses (badge Ambassadeur, jours VIP/PREMIUM bonus) sont appliquées automatiquement à ton compte dès qu'un palier est atteint.",
+    loginPrompt:"Connecte-toi à ton compte PREDIKTA pour suivre ton parrainage et débloquer tes récompenses automatiquement.",
+    loginBtn:"Se connecter", orEmailMode:"Continuer sans compte",
     invalidEmail:"Email invalide", shareText:"🎰 Découvre PREDIKTA, l'analyse prédictive de loterie ! Inscris-toi avec mon lien :",
   },
   en:{
@@ -122,7 +133,10 @@ const T = {
     reward2:"10 referrals → 7 days of free VIP access",
     reward3:"25 referrals → 30 days of free PREMIUM access",
     badgeLocked:"Locked", badgeUnlocked:"Unlocked ✓",
-    noticeText:"Program in launch phase: rewards will be activated automatically once the PREDIKTA account system is available. Your referral count is already being tracked now — don't lose your head start!",
+    noticeText:"This account-free mode tracks your referral count, but rewards (badge, bonus VIP/PREMIUM days) are applied automatically only to PREDIKTA accounts. Log in or create an account to benefit.",
+    noticeTextAccount:"Your rewards (Ambassador badge, bonus VIP/PREMIUM days) are applied automatically to your account as soon as a tier is reached.",
+    loginPrompt:"Log in to your PREDIKTA account to track your referrals and unlock rewards automatically.",
+    loginBtn:"Log in", orEmailMode:"Continue without an account",
     invalidEmail:"Invalid email", shareText:"🎰 Check out PREDIKTA, predictive lottery analysis! Sign up with my link:",
   },
   es:{
@@ -135,7 +149,10 @@ const T = {
     reward2:"10 referidos → 7 días de acceso VIP gratis",
     reward3:"25 referidos → 30 días de acceso PREMIUM gratis",
     badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
-    noticeText:"Programa en fase de lanzamiento: las recompensas se activarán automáticamente cuando el sistema de cuentas PREDIKTA esté disponible. Tu contador de referidos ya se está registrando ahora — ¡no pierdas tu ventaja!",
+    noticeText:"Este modo sin cuenta rastrea tu contador de referidos, pero las recompensas (insignia, días VIP/PREMIUM extra) se aplican automáticamente solo a las cuentas PREDIKTA. Inicia sesión o crea una cuenta para beneficiarte.",
+    noticeTextAccount:"Tus recompensas (insignia Embajador, días VIP/PREMIUM extra) se aplican automáticamente a tu cuenta en cuanto alcanzas un nivel.",
+    loginPrompt:"Inicia sesión en tu cuenta PREDIKTA para rastrear tus referidos y desbloquear recompensas automáticamente.",
+    loginBtn:"Iniciar sesión", orEmailMode:"Continuar sin cuenta",
     invalidEmail:"Email inválido", shareText:"🎰 ¡Descubre PREDIKTA, análisis predictivo de lotería! Regístrate con mi enlace:",
   },
   pt:{
@@ -148,7 +165,10 @@ const T = {
     reward2:"10 indicações → 7 dias de acesso VIP grátis",
     reward3:"25 indicações → 30 dias de acesso PREMIUM grátis",
     badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
-    noticeText:"Programa em fase de lançamento: as recompensas serão ativadas automaticamente assim que o sistema de contas PREDIKTA estiver disponível. Seu contador de indicações já está sendo registrado agora — não perca sua vantagem!",
+    noticeText:"Este modo sem conta rastreia seu contador de indicações, mas as recompensas (selo, dias VIP/PREMIUM extras) são aplicadas automaticamente apenas a contas PREDIKTA. Faça login ou crie uma conta para se beneficiar.",
+    noticeTextAccount:"Suas recompensas (selo Embaixador, dias VIP/PREMIUM extras) são aplicadas automaticamente à sua conta assim que você atinge um nível.",
+    loginPrompt:"Faça login na sua conta PREDIKTA para acompanhar suas indicações e desbloquear recompensas automaticamente.",
+    loginBtn:"Entrar", orEmailMode:"Continuar sem conta",
     invalidEmail:"Email inválido", shareText:"🎰 Conheça a PREDIKTA, análise preditiva de loteria! Cadastre-se com meu link:",
   },
   ht:{
@@ -161,7 +181,10 @@ const T = {
     reward2:"10 filèl → 7 jou aksè VIP gratis",
     reward3:"25 filèl → 30 jou aksè PREMIUM gratis",
     badgeLocked:"Bloke", badgeUnlocked:"Debloke ✓",
-    noticeText:"Pwogram nan faz lansman: rekonpans yo ap aktive otomatikman depi sistèm kont PREDIKTA disponib. Konpteur filèl ou deja ap swiv kounye a — pa pèdi avans ou!",
+    noticeText:"Mòd sa a san kont swiv konpteur filèl ou, men rekonpans yo (badj, jou VIP/PREMIUM bonis) aplike otomatikman sèlman sou kont PREDIKTA. Konekte oswa kreye yon kont pou benefisye.",
+    noticeTextAccount:"Rekonpans ou yo (badj Anbasadè, jou VIP/PREMIUM bonis) aplike otomatikman sou kont ou kou ou rive nan yon nivo.",
+    loginPrompt:"Konekte sou kont PREDIKTA ou pou swiv parennaj ou epi debloke rekonpans yo otomatikman.",
+    loginBtn:"Konekte", orEmailMode:"Kontinye san kont",
     invalidEmail:"Imèl envalid", shareText:"🎰 Dekouvri PREDIKTA, analiz prediktif lotri! Enskri ak lyen mwen an:",
   },
 };
@@ -185,6 +208,7 @@ function applyLang(lang){
 window.setLang = applyLang;
 
 let _refData = null;
+let _accountMode = false;
 
 function refreshDashboard(){
   if(!_refData) return;
@@ -197,16 +221,35 @@ function refreshDashboard(){
   const c = _refData.referral_count;
   [[1,3],[2,10],[3,25]].forEach(([n,need])=>{
     const el = document.getElementById('badge'+n);
-    if(c >= need){ el.textContent = t.badgeUnlocked; el.classList.remove('locked'); }
+    const unlocked = _accountMode && _refData.rewards
+      ? !!_refData.rewards[String(need)]
+      : (c >= need);
+    if(unlocked){ el.textContent = t.badgeUnlocked; el.classList.remove('locked'); }
     else { el.textContent = t.badgeLocked; el.classList.add('locked'); }
   });
+
+  const noticeEl = document.getElementById('noticeEl');
+  if(noticeEl) noticeEl.textContent = _accountMode ? t.noticeTextAccount : t.noticeText;
 }
 
 async function loadRefData(email){
   const r = await fetch('/api/referral/me?email='+encodeURIComponent(email));
   if(!r.ok) throw new Error('error');
   _refData = await r.json();
+  _accountMode = false;
   localStorage.setItem('predikta_my_email', email);
+  document.getElementById('loginPromptCard').style.display = 'none';
+  document.getElementById('emailCard').style.display = 'none';
+  document.getElementById('dashboard').classList.add('visible');
+  refreshDashboard();
+}
+
+async function loadRefDataAccount(){
+  const r = await fetch('/api/auth/referral');
+  if(!r.ok) throw new Error('error');
+  _refData = await r.json();
+  _accountMode = true;
+  document.getElementById('loginPromptCard').style.display = 'none';
   document.getElementById('emailCard').style.display = 'none';
   document.getElementById('dashboard').classList.add('visible');
   refreshDashboard();
@@ -214,6 +257,10 @@ async function loadRefData(email){
 
 document.addEventListener('click', async (e)=>{
   const t = curT();
+  if(e.target && e.target.id === 'btnEmailMode'){
+    document.getElementById('loginPromptCard').style.display = 'none';
+    document.getElementById('emailCard').style.display = '';
+  }
   if(e.target && e.target.id === 'btnGetCode'){
     const email = document.getElementById('refEmail').value.trim().toLowerCase();
     if(!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)){ alert(t.invalidEmail); return; }
@@ -242,14 +289,29 @@ document.addEventListener('click', async (e)=>{
   }
 });
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', async ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
+
+  // Compte connecté : tableau de parrainage avec récompenses automatiques.
+  try{
+    const meR = await fetch('/api/auth/me');
+    const me = await meR.json();
+    if(me.user){
+      await loadRefDataAccount();
+      return;
+    }
+  }catch(e){}
+
+  // Pas connecté : proposer la connexion, ou le mode sans compte (legacy).
+  document.getElementById('loginPromptCard').style.display = '';
+  applyLang(window.PREDIKTA_LANG || 'fr');
 
   // Auto-remplissage si email déjà connu sur cet appareil
   const savedEmail = localStorage.getItem('predikta_my_email');
   if(savedEmail){
     document.getElementById('refEmail').value = savedEmail;
+    document.getElementById('emailCard').style.display = '';
     loadRefData(savedEmail).catch(()=>{});
   }
 });

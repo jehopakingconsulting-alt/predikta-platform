@@ -178,7 +178,7 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
   const btn = document.getElementById('btnRegister');
   btn.disabled = true;
   try{
-    const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password,disclaimer_accepted:true})});
+    const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password,disclaimer_accepted:true,ref_code:window.PREDIKTA_REF||''})});
     const data = await r.json();
     if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
 
