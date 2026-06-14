@@ -66,6 +66,29 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .hb4{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
+/* ── Trust strip ── */
+.trust-strip{
+  display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
+  position:relative;z-index:2;margin-top:-10px;margin-bottom:32px;
+}
+.trust-item{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 16px;border-radius:12px;
+  background:var(--glass,rgba(255,255,255,.03));border:1px solid var(--border2,var(--border));
+  font-size:.75rem;font-weight:600;color:var(--muted2);
+  text-decoration:none;transition:all .25s;
+}
+.trust-item .ti-icon{font-size:.95rem}
+.trust-item:hover{
+  border-color:var(--accent);color:var(--text);
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(79,110,255,.2);
+}
+@media(prefers-reduced-motion:reduce){.trust-item:hover{transform:none}}
+@media(max-width:560px){
+  .trust-item{font-size:.68rem;padding:6px 12px}
+}
+
 /* ── Services Grid ── */
 .section{max-width:1200px;margin:0 auto;padding:40px 24px;position:relative;z-index:5}
 .section-label{
@@ -302,6 +325,12 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <span class="hbadge hb2" data-i18n="hb2">🎲 Monte Carlo 50K</span>
     <span class="hbadge hb3" data-i18n="hb3">🌍 44 États US</span>
     <span class="hbadge hb4" data-i18n="hb4">● LIVE</span>
+  </div>
+  <div class="trust-strip">
+    <a href="/world-map" class="trust-item"><span class="ti-icon">🗺️</span><span data-i18n="tsCoverage">40+ États & territoires</span></a>
+    <a href="/accuracy" class="trust-item"><span class="ti-icon">🎯</span><span data-i18n="tsAccuracy">Score de précision</span></a>
+    <a href="/track-record" class="trust-item"><span class="ti-icon">📊</span><span data-i18n="tsTrack">Historique vérifiable</span></a>
+    <a href="/pro" class="trust-item"><span class="ti-icon">⭐</span><span data-i18n="tsPlans">Plans Pro & VIP</span></a>
   </div>
 </div>
 
@@ -574,6 +603,7 @@ const T = {
     heroKicker:"🌍 Plateforme Mondiale · Powered by Advanced Analytics",
     heroSub:"Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
+    tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",
     snapLabel:"Résultats d'aujourd'hui",snapLoadBtn:"🔄 Charger les résultats du jour",
     stat1:"États US couverts",stat2:"Algorithmes actifs",stat3:"Simulations/analyse",stat4:"Langues disponibles",
     sectionTools:"Outils Express",
@@ -640,6 +670,7 @@ const T = {
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Lottery & Predictive Analysis by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
+    tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",
     snapLabel:"Today's Results",snapLoadBtn:"🔄 Load today's results",
     stat1:"US States covered",stat2:"Active algorithms",stat3:"Simulations/analysis",stat4:"Languages available",
     sectionTools:"Quick Tools",
@@ -706,6 +737,7 @@ const T = {
     heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
+    tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",
     snapLabel:"Resultados de hoy",snapLoadBtn:"🔄 Cargar resultados de hoy",
     stat1:"Estados de EE.UU. cubiertos",stat2:"Algoritmos activos",stat3:"Simulaciones/análisis",stat4:"Idiomas disponibles",
     sectionTools:"Herramientas Rápidas",
@@ -772,6 +804,7 @@ const T = {
     heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
+    tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",
     snapLabel:"Resultados de hoje",snapLoadBtn:"🔄 Carregar resultados de hoje",
     stat1:"Estados dos EUA cobertos",stat2:"Algoritmos ativos",stat3:"Simulações/análise",stat4:"Idiomas disponíveis",
     sectionTools:"Ferramentas Rápidas",
@@ -838,6 +871,7 @@ const T = {
     heroKicker:"🌍 Platfòm Mondyal · Powered by Advanced Analytics",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
+    tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",
     snapLabel:"Rezilta jodi a",snapLoadBtn:"🔄 Chaje rezilta jodi a",
     stat1:"Eta Ozetazini kouvri",stat2:"Algoritm aktif",stat3:"Similasyon/analiz",stat4:"Lang disponib",
     sectionTools:"Zouti Rapid",
