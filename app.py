@@ -272,6 +272,10 @@ def _auto_update_loop():
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _LATEST_CACHE["data"] = None
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
+            try:
+                _verify_draw_schedule()
+            except Exception as se:
+                print(f"  [schedule-check] error: {se}")
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
             _maybe_send_daily_push()
@@ -290,6 +294,10 @@ def _initial_warm_loop():
         _warm_popular_reports()
     except Exception as e:
         print(f"  [warm-cache][initial] error: {e}")
+    try:
+        _verify_draw_schedule()
+    except Exception as e:
+        print(f"  [schedule-check][initial] error: {e}")
 
 def start_auto_update():
     if os.environ.get("PREDIKTA_DISABLE_AUTOUPDATE") == "1":
@@ -358,6 +366,65 @@ DRAW_SCHEDULE = {
     "WV": [{"tod":"Evening","time":"6:59 PM ET"}],
 
 }
+
+_SCHEDULE_CHECK = {"last_run": None, "issues": []}
+
+def _verify_draw_schedule():
+    """Automated sanity check: compare DRAW_SCHEDULE's declared draw
+    times-of-day against the tods actually observed in each state's recent
+    data (last ~45 days). Catches drift like a state adding/dropping a draw
+    or a 'tod' label mismatch (e.g. the VT 'Evening' vs 6:55 PM ET case)
+    without needing a manual audit. Results are logged and exposed via
+    /api/schedule-check."""
+    issues = []
+    cutoff = (datetime.now() - timedelta(days=45)).date()
+
+    for code, sched in DRAW_SCHEDULE.items():
+        sched_tods = {e["tod"] for e in sched}
+        try:
+            draws = load_csv(code)
+        except Exception:
+            continue
+        if not draws:
+            continue
+
+        recent_tods = set()
+        for d in draws:
+            try:
+                if datetime.strptime(d["date"], "%Y-%m-%d").date() >= cutoff:
+                    recent_tods.add(d.get("tod", ""))
+            except ValueError:
+                continue
+
+        extra_in_data = recent_tods - sched_tods
+        extra_in_schedule = sched_tods - recent_tods
+        if extra_in_data:
+            issues.append({"state": code, "type": "tod_in_data_not_in_schedule", "tods": sorted(extra_in_data)})
+        if extra_in_schedule:
+            issues.append({"state": code, "type": "tod_in_schedule_not_in_data", "tods": sorted(extra_in_schedule)})
+
+    for code in STATES:
+        if code not in DRAW_SCHEDULE:
+            try:
+                draws = load_csv(code)
+            except Exception:
+                draws = []
+            if draws:
+                issues.append({"state": code, "type": "state_missing_from_schedule", "tods": []})
+
+    _SCHEDULE_CHECK["last_run"] = datetime.utcnow().isoformat() + "Z"
+    _SCHEDULE_CHECK["issues"] = issues
+    if issues:
+        print(f"  [schedule-check] {len(issues)} discrepancy(ies) found:")
+        for it in issues:
+            print(f"    - {it['state']}: {it['type']} {it['tods']}")
+    else:
+        print("  [schedule-check] OK — DRAW_SCHEDULE matches observed data for all states")
+    return issues
+
+@app.route("/api/schedule-check")
+def api_schedule_check():
+    return jsonify(_SCHEDULE_CHECK)
 
 STATE_FLAGS = {
     "AR":"💎","AZ":"🌵","CA":"☀️","CO":"🏔️","CT":"⚓","DC":"🏛️",
