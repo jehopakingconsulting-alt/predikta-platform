@@ -58,10 +58,71 @@ T = {
         "totalDraws": "draws analyzed",
         "drawn": "drawn",
     },
+    "es": {
+        "title": lambda name, d: f"Pick 3 {name} — Predicciones de hoy {d} | PREDIKTA",
+        "desc": lambda name, d: f"Números calientes, fríos y combinaciones sugeridas para {name} Pick 3, actualizado el {d}. Análisis estadístico gratuito de PREDIKTA.",
+        "h1": lambda name: f"🎯 Pick 3 {name} — Predicciones de hoy",
+        "lastDraw": "Último sorteo", "hot": "🔥 Números calientes (últimos 30 sorteos)",
+        "cold": "❄️ Números fríos (últimos 30 sorteos)", "overdue": "⏳ Números atrasados",
+        "suggestions": "Combinaciones sugeridas", "confidence": "Confianza",
+        "noData": "Datos no disponibles para este estado por el momento.",
+        "ctaTitle": "Ve más allá con PREDIKTA", "ctaDesc": "Cadenas de Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), análisis de Fourier, archivos ilimitados y más para todos los estados.",
+        "ctaBtn": "🔮 Iniciar el análisis completo →", "backToIndex": "← Todos los estados",
+        "indexTitle": "Pick 3 — Predicciones de hoy para todos los estados | PREDIKTA",
+        "indexDesc": "Números calientes, fríos y combinaciones sugeridas Pick 3 para todos los estados de EE.UU., actualizado diariamente.",
+        "indexH1": "🎯 Pick 3 — Predicciones de hoy por estado",
+        "totalDraws": "sorteos analizados",
+        "drawn": "sorteado",
+    },
+    "pt": {
+        "title": lambda name, d: f"Pick 3 {name} — Previsões de hoje {d} | PREDIKTA",
+        "desc": lambda name, d: f"Números quentes, frios e combinações sugeridas para {name} Pick 3, atualizado em {d}. Análise estatística gratuita da PREDIKTA.",
+        "h1": lambda name: f"🎯 Pick 3 {name} — Previsões de hoje",
+        "lastDraw": "Último sorteio", "hot": "🔥 Números quentes (últimos 30 sorteios)",
+        "cold": "❄️ Números frios (últimos 30 sorteios)", "overdue": "⏳ Números atrasados",
+        "suggestions": "Combinações sugeridas", "confidence": "Confiança",
+        "noData": "Dados não disponíveis para este estado no momento.",
+        "ctaTitle": "Vá mais longe com a PREDIKTA", "ctaDesc": "Cadeias de Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), análise de Fourier, arquivos ilimitados e mais para todos os estados.",
+        "ctaBtn": "🔮 Iniciar a análise completa →", "backToIndex": "← Todos os estados",
+        "indexTitle": "Pick 3 — Previsões de hoje para todos os estados | PREDIKTA",
+        "indexDesc": "Números quentes, frios e combinações sugeridas Pick 3 para todos os estados dos EUA, atualizado diariamente.",
+        "indexH1": "🎯 Pick 3 — Previsões de hoje por estado",
+        "totalDraws": "sorteios analisados",
+        "drawn": "sorteado",
+    },
+    "ht": {
+        "title": lambda name, d: f"Pick 3 {name} — Prediksyon jodi a {d} | PREDIKTA",
+        "desc": lambda name, d: f"Chif cho, frèt ak konbinezon ki sijere pou {name} Pick 3, mizajou {d}. Analiz statistik gratis pa PREDIKTA.",
+        "h1": lambda name: f"🎯 Pick 3 {name} — Prediksyon jodi a",
+        "lastDraw": "Dènye tiraj", "hot": "🔥 Chif cho yo (30 dènye tiraj)",
+        "cold": "❄️ Chif frèt yo (30 dènye tiraj)", "overdue": "⏳ Chif an reta",
+        "suggestions": "Konbinezon ki sijere", "confidence": "Konfyans",
+        "noData": "Pa gen done disponib pou eta sa a kounye a.",
+        "ctaTitle": "Ale pi lwen ak PREDIKTA", "ctaDesc": "Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), analiz Fourier, achiv san limit ak plis pou tout eta.",
+        "ctaBtn": "🔮 Lanse analiz konplè →", "backToIndex": "← Tout eta yo",
+        "indexTitle": "Pick 3 — Prediksyon jodi a pou tout eta | PREDIKTA",
+        "indexDesc": "Chif cho, frèt ak konbinezon Pick 3 ki sijere pou tout eta Ozetazini, mizajou chak jou.",
+        "indexH1": "🎯 Pick 3 — Prediksyon jodi a pa eta",
+        "totalDraws": "tiraj analize",
+        "drawn": "tire",
+    },
 }
 
-CONF_EN = {
-    "Très élevée": "Very high", "Élevée": "High", "Moyenne": "Medium", "Faible": "Low",
+SUPPORTED_LANGS = ["fr", "en", "es", "pt", "ht"]
+
+CONF_BY_LANG = {
+    "en": {"Très élevée": "Very high", "Élevée": "High", "Moyenne": "Medium", "Faible": "Low"},
+    "es": {"Très élevée": "Muy alta", "Élevée": "Alta", "Moyenne": "Media", "Faible": "Baja"},
+    "pt": {"Très élevée": "Muito alta", "Élevée": "Alta", "Moyenne": "Média", "Faible": "Baixa"},
+    "ht": {"Très élevée": "Trè wo", "Élevée": "Wo", "Moyenne": "Mwayen", "Faible": "Ba"},
+}
+
+TOD_T = {
+    "fr": {"Morning": "Matin", "Midday": "Midi", "Day": "Jour", "Evening": "Soir", "Night": "Nuit"},
+    "en": {"Morning": "Morning", "Midday": "Midday", "Day": "Day", "Evening": "Evening", "Night": "Night"},
+    "es": {"Morning": "Mañana", "Midday": "Mediodía", "Day": "Día", "Evening": "Tarde", "Night": "Noche"},
+    "pt": {"Morning": "Manhã", "Midday": "Meio-dia", "Day": "Dia", "Evening": "Tarde", "Night": "Noite"},
+    "ht": {"Morning": "Maten", "Midday": "Midi", "Day": "Jounen", "Evening": "Aswè", "Night": "Nuit"},
 }
 
 
@@ -141,12 +202,15 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
     flag = STATE_FLAGS.get(state_code, "🎰")
 
     draws = load_csv(state_code)
-    canonical = f"{base_url}/predictions/{state_code.lower()}" + ("?lang=en" if lang == "en" else "")
-    alt = (f'<link rel="alternate" hreflang="fr" href="{base_url}/predictions/{state_code.lower()}"/>'
-           f'<link rel="alternate" hreflang="en" href="{base_url}/predictions/{state_code.lower()}?lang=en"/>')
+    base_path = f"{base_url}/predictions/{state_code.lower()}"
+    canonical = base_path + (f"?lang={lang}" if lang != "fr" else "")
+    alt = "".join(
+        f'<link rel="alternate" hreflang="{ll}" href="{base_path}{"?lang=" + ll if ll != "fr" else ""}"/>'
+        for ll in SUPPORTED_LANGS
+    )
 
     if not draws:
-        body = (f'<a class="back" href="/predictions{"?lang=en" if lang=="en" else ""}">{t["backToIndex"]}</a>'
+        body = (f'<a class="back" href="/predictions{"?lang=" + lang if lang != "fr" else ""}">{t["backToIndex"]}</a>'
                 f'<h1>{flag} {t["h1"](name)}</h1>'
                 f'<div class="card">{t["noData"]}</div>')
         return _page_shell(t["title"](name, today), t["desc"](name, today), canonical, lang, body, alt)
@@ -165,17 +229,18 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
 
     sugg_html = ""
     for s in report["suggestions"][:5]:
-        conf = s["confidence"]
-        if lang == "en":
-            conf = CONF_EN.get(conf, conf)
+        conf = CONF_BY_LANG.get(lang, {}).get(s["confidence"], s["confidence"])
         sugg_html += f'<span class="combo-chip">{s["combo"]} <span class="combo-conf">{conf}</span></span>'
 
-    body = f"""<a class="back" href="/predictions{'?lang=en' if lang=='en' else ''}">{t['backToIndex']}</a>
+    tod = last.get("tod", "")
+    tod_label = TOD_T.get(lang, {}).get(tod, tod)
+
+    body = f"""<a class="back" href="/predictions{'?lang=' + lang if lang != 'fr' else ''}">{t['backToIndex']}</a>
 <h1>{flag} {t['h1'](name)}</h1>
 <div class="sub">{today} · {report['total_draws']} {t['totalDraws']}</div>
 
 <div class="card">
-  <h2>{t['lastDraw']} — {last['date']} ({last.get('tod','')})</h2>
+  <h2>{t['lastDraw']} — {last['date']} ({tod_label})</h2>
   <div>{balls}</div>
 </div>
 
@@ -211,11 +276,13 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
 def render_predictions_index(base_url: str, lang: str = "fr") -> str:
     lang = lang if lang in T else "fr"
     t = T[lang]
-    canonical = f"{base_url}/predictions" + ("?lang=en" if lang == "en" else "")
-    alt = (f'<link rel="alternate" hreflang="fr" href="{base_url}/predictions"/>'
-           f'<link rel="alternate" hreflang="en" href="{base_url}/predictions?lang=en"/>')
+    canonical = f"{base_url}/predictions" + (f"?lang={lang}" if lang != "fr" else "")
+    alt = "".join(
+        f'<link rel="alternate" hreflang="{ll}" href="{base_url}/predictions{"?lang=" + ll if ll != "fr" else ""}"/>'
+        for ll in SUPPORTED_LANGS
+    )
 
-    qs = "?lang=en" if lang == "en" else ""
+    qs = f"?lang={lang}" if lang != "fr" else ""
     cards = "".join(
         f'<a class="state-card" href="/predictions/{code.lower()}{qs}">'
         f'{STATE_FLAGS.get(code,"🎰")} {cfg["name"]}</a>'

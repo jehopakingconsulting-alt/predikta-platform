@@ -158,6 +158,13 @@ function saveLang(l){
   if(typeof window.setLang === 'function') window.setLang(l);
   // Refresh assistant
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
+  // Server-rendered SEO prediction pages: reload with ?lang= to refresh content
+  if(typeof window.setLang !== 'function' && location.pathname.startsWith('/predictions')){
+    const url = new URL(location.href);
+    if(l === 'fr') url.searchParams.delete('lang');
+    else url.searchParams.set('lang', l);
+    location.href = url.toString();
+  }
 }
 window.saveLang = saveLang;
 function nt(k){ return (NAV_T[window.PREDIKTA_LANG]||NAV_T.en)[k]||k; }
