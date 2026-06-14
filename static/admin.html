@@ -103,7 +103,7 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
           <option value="">Tous les plans</option>
           <option value="pro">PRO</option>
           <option value="vip">VIP</option>
-          <option value="elite">ELITE</option>
+          <option value="elite">PREMIUM</option>
           <option value="business">BUSINESS</option>
         </select>
         <select id="statusFilter">
@@ -257,7 +257,7 @@ function buildEditForm(u){
         <option value="" ${!plan?'selected':''}>(aucun plan)</option>
         <option value="pro" ${plan==='pro'?'selected':''}>PRO</option>
         <option value="vip" ${plan==='vip'?'selected':''}>VIP</option>
-        <option value="elite" ${plan==='elite'?'selected':''}>ELITE</option>
+        <option value="elite" ${plan==='elite'?'selected':''}>PREMIUM</option>
         <option value="business" ${plan==='business'?'selected':''}>BUSINESS</option>
       </select>
       <select id="statusSel-${u.id}">

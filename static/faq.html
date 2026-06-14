@@ -78,12 +78,12 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q6">À quelle fréquence les résultats sont-ils mis à jour ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a6">Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et ELITE reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a6">Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et PREMIUM reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.</div></div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q7">Combien d'années d'historique sont disponibles ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a7">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a7">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement PREMIUM, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.</div></div>
     </div>
 
     <div class="faq-item">
@@ -100,7 +100,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q8">Comment fonctionne la période d'essai gratuite de 7 jours ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a8">Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a8">Vous avez accès à toutes les fonctionnalités PRO ou PREMIUM pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.</div></div>
     </div>
 
     <div class="faq-item">
@@ -179,9 +179,9 @@ const T = {
     q5:"D'où viennent les données historiques ?",
     a5:"Toutes les données proviennent de sources officielles publiques des loteries d'État américaines (site officiel de chaque loterie d'état, ex. New York Lottery, Florida Lottery, etc.). Les résultats de loterie sont des informations factuelles publiées quotidiennement dans le domaine public — PREDIKTA les collecte, les vérifie et les structure dans une base de données interne pour permettre les analyses statistiques. Aucune donnée n'est inventée ou estimée : chaque tirage affiché correspond à un résultat réellement publié par l'organisme officiel de loterie de l'état concerné.",
     q6:"À quelle fréquence les résultats sont-ils mis à jour ?",
-    a6:"Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et ELITE reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.",
+    a6:"Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et PREMIUM reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.",
     q7:"Combien d'années d'historique sont disponibles ?",
-    a7:"Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.",
+    a7:"Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement PREMIUM, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.",
     q12:"Quels états et jeux sont couverts par PREDIKTA ?",
     a12:"PREDIKTA couvre actuellement les principales loteries Pick 3 et Pick 4 (Numbers) des États américains, avec leurs tirages Midi, Jour, Soir et Nuit selon le calendrier officiel de chaque état (affiché sur la page d'accueil). La liste des états couverts est consultable sur la page Résultats. De nouveaux états et jeux sont ajoutés régulièrement — si votre état n'est pas encore disponible, contactez-nous pour en faire la demande.",
     q13:"Que signifie l'indicateur « Mis à jour il y a X min » ?",
@@ -193,7 +193,7 @@ const T = {
     q16:"Comment contacter le support ?",
     a16:'Vous pouvez nous contacter à tout moment via la page Contact, accessible depuis le pied de page ou le bouton "Contactez-nous" en bas de cette page FAQ. Nous répondons généralement dans les 24 à 48 heures ouvrables.',
     q8:"Comment fonctionne la période d'essai gratuite de 7 jours ?",
-    a8:"Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.",
+    a8:"Vous avez accès à toutes les fonctionnalités PRO ou PREMIUM pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.",
     q9:"Puis-je annuler à tout moment ?",
     a9:"Oui, l'annulation est possible à tout moment en un seul clic depuis votre tableau de bord. Si vous annulez avant la fin de la période de facturation, vous conservez l'accès jusqu'à la fin de la période payée.",
     q10:"PREDIKTA fonctionne-t-il hors ligne ?",
@@ -217,9 +217,9 @@ const T = {
     q5:"Where does the historical data come from?",
     a5:"All data comes from official public sources of US state lotteries (each state lottery's official website, e.g. New York Lottery, Florida Lottery, etc.). Lottery results are factual information published daily in the public domain — PREDIKTA collects, verifies and structures them into an internal database to enable statistical analysis. No data is invented or estimated: every draw shown corresponds to a result actually published by the relevant state lottery authority.",
     q6:"How often are results updated?",
-    a6:"Results are fetched automatically and updated continuously, shortly after the official time of each draw (shown on the Home and Analyze pages, with the exact time per state). A '🔄 Updated X min/h ago' indicator under each state shows you exactly how fresh the data is. You can also force a manual refresh from the Results page by clicking a state's 🔄 Update button. PRO and ELITE users additionally receive automatic email alerts as soon as a new draw is available.",
+    a6:"Results are fetched automatically and updated continuously, shortly after the official time of each draw (shown on the Home and Analyze pages, with the exact time per state). A '🔄 Updated X min/h ago' indicator under each state shows you exactly how fresh the data is. You can also force a manual refresh from the Results page by clicking a state's 🔄 Update button. PRO and PREMIUM users additionally receive automatic email alerts as soon as a new draw is available.",
     q7:"How many years of history are available?",
-    a7:"It depends on the state and game. New York Numbers has data going back to 1980 (25,000+ draws). By default, PREDIKTA loads 12 months of history, which is enough for most statistical models. With the ELITE plan, you can load up to 5 years of data for deeper, longer-term analysis.",
+    a7:"It depends on the state and game. New York Numbers has data going back to 1980 (25,000+ draws). By default, PREDIKTA loads 12 months of history, which is enough for most statistical models. With the PREMIUM plan, you can load up to 5 years of data for deeper, longer-term analysis.",
     q12:"Which states and games does PREDIKTA cover?",
     a12:"PREDIKTA currently covers the main Pick 3 and Pick 4 (Numbers) lotteries of US states, with their Midday, Day, Evening and Night draws according to each state's official schedule (shown on the Home page). The list of covered states is available on the Results page. New states and games are added regularly — if your state isn't available yet, contact us to request it.",
     q13:"What does the 'Updated X min ago' indicator mean?",
@@ -231,7 +231,7 @@ const T = {
     q16:"How do I contact support?",
     a16:"You can reach us at any time via the Contact page, accessible from the footer or the 'Contact us' button at the bottom of this FAQ page. We typically respond within 24 to 48 business hours.",
     q8:"How does the 7-day free trial work?",
-    a8:"You get access to all PRO or ELITE features for 7 days at no cost. No credit card is required for the trial. At the end of the period, you can choose to continue with a paid plan or stay on the FREE plan.",
+    a8:"You get access to all PRO or PREMIUM features for 7 days at no cost. No credit card is required for the trial. At the end of the period, you can choose to continue with a paid plan or stay on the FREE plan.",
     q9:"Can I cancel at any time?",
     a9:"Yes, cancellation is possible at any time with a single click from your dashboard. If you cancel before the end of the billing period, you keep access until the end of the paid period.",
     q10:"Does PREDIKTA work offline?",
@@ -255,9 +255,9 @@ const T = {
     q5:"¿De dónde provienen los datos históricos?",
     a5:"Todos los datos provienen de fuentes oficiales públicas de las loterías estatales de EE.UU. (el sitio oficial de cada lotería estatal, p. ej. New York Lottery, Florida Lottery, etc.). Los resultados de lotería son información factual publicada diariamente en el dominio público — PREDIKTA los recopila, verifica y estructura en una base de datos interna para permitir los análisis estadísticos. Ningún dato es inventado o estimado: cada sorteo mostrado corresponde a un resultado realmente publicado por el organismo oficial de lotería del estado correspondiente.",
     q6:"¿Con qué frecuencia se actualizan los resultados?",
-    a6:"Los resultados se obtienen automáticamente y se actualizan de forma continua, poco después de la hora oficial de cada sorteo (visible en la página de inicio y en Analizar, con la hora exacta por estado). Un indicador '🔄 Actualizado hace X min/h' debajo de cada estado le muestra exactamente la frescura de los datos. También puede forzar una actualización manual desde la página de Resultados haciendo clic en el botón 🔄 Actualizar de un estado. Los usuarios PRO y ELITE además reciben alertas automáticas por correo en cuanto hay un nuevo sorteo disponible.",
+    a6:"Los resultados se obtienen automáticamente y se actualizan de forma continua, poco después de la hora oficial de cada sorteo (visible en la página de inicio y en Analizar, con la hora exacta por estado). Un indicador '🔄 Actualizado hace X min/h' debajo de cada estado le muestra exactamente la frescura de los datos. También puede forzar una actualización manual desde la página de Resultados haciendo clic en el botón 🔄 Actualizar de un estado. Los usuarios PRO y PREMIUM además reciben alertas automáticas por correo en cuanto hay un nuevo sorteo disponible.",
     q7:"¿Cuántos años de historial están disponibles?",
-    a7:"Depende del estado y el juego. New York Numbers tiene datos desde 1980 (25,000+ sorteos). Por defecto, PREDIKTA carga 12 meses de historial, suficiente para la mayoría de los modelos estadísticos. Con el plan ELITE, puede cargar hasta 5 años de datos para análisis más profundos y de mayor plazo.",
+    a7:"Depende del estado y el juego. New York Numbers tiene datos desde 1980 (25,000+ sorteos). Por defecto, PREDIKTA carga 12 meses de historial, suficiente para la mayoría de los modelos estadísticos. Con el plan PREMIUM, puede cargar hasta 5 años de datos para análisis más profundos y de mayor plazo.",
     q12:"¿Qué estados y juegos cubre PREDIKTA?",
     a12:"PREDIKTA cubre actualmente las principales loterías Pick 3 y Pick 4 (Numbers) de los estados de EE.UU., con sus sorteos de Mediodía, Día, Tarde y Noche según el calendario oficial de cada estado (mostrado en la página de inicio). La lista de estados cubiertos está disponible en la página de Resultados. Se añaden nuevos estados y juegos regularmente — si su estado aún no está disponible, contáctenos para solicitarlo.",
     q13:"¿Qué significa el indicador 'Actualizado hace X min'?",
@@ -269,7 +269,7 @@ const T = {
     q16:"¿Cómo contacto con el soporte?",
     a16:"Puede contactarnos en cualquier momento a través de la página de Contacto, accesible desde el pie de página o el botón 'Contáctenos' al final de esta página de FAQ. Normalmente respondemos dentro de 24 a 48 horas hábiles.",
     q8:"¿Cómo funciona la prueba gratuita de 7 días?",
-    a8:"Tiene acceso a todas las funciones PRO o ELITE durante 7 días sin costo. No se requiere tarjeta de crédito para la prueba. Al final del período, puede elegir continuar con un plan de pago o permanecer en el plan FREE.",
+    a8:"Tiene acceso a todas las funciones PRO o PREMIUM durante 7 días sin costo. No se requiere tarjeta de crédito para la prueba. Al final del período, puede elegir continuar con un plan de pago o permanecer en el plan FREE.",
     q9:"¿Puedo cancelar en cualquier momento?",
     a9:"Sí, la cancelación es posible en cualquier momento con un solo clic desde su panel. Si cancela antes del final del período de facturación, conserva el acceso hasta el final del período pagado.",
     q10:"¿Funciona PREDIKTA sin conexión?",
@@ -293,9 +293,9 @@ const T = {
     q5:"De onde vêm os dados históricos?",
     a5:"Todos os dados vêm de fontes oficiais públicas das loterias estaduais dos EUA (o site oficial de cada loteria estadual, ex. New York Lottery, Florida Lottery, etc.). Os resultados de loteria são informações factuais publicadas diariamente em domínio público — a PREDIKTA os coleta, verifica e estrutura em um banco de dados interno para permitir as análises estatísticas. Nenhum dado é inventado ou estimado: cada sorteio exibido corresponde a um resultado realmente publicado pelo órgão oficial de loteria do estado correspondente.",
     q6:"Com que frequência os resultados são atualizados?",
-    a6:"Os resultados são obtidos automaticamente e atualizados continuamente, pouco após o horário oficial de cada sorteio (visível na página inicial e na página Analisar, com o horário exato por estado). Um indicador '🔄 Atualizado há X min/h' abaixo de cada estado mostra exatamente a atualidade dos dados. Você também pode forçar uma atualização manual na página de Resultados clicando no botão 🔄 Atualizar de um estado. Os usuários PRO e ELITE também recebem alertas automáticos por e-mail logo que um novo sorteio está disponível.",
+    a6:"Os resultados são obtidos automaticamente e atualizados continuamente, pouco após o horário oficial de cada sorteio (visível na página inicial e na página Analisar, com o horário exato por estado). Um indicador '🔄 Atualizado há X min/h' abaixo de cada estado mostra exatamente a atualidade dos dados. Você também pode forçar uma atualização manual na página de Resultados clicando no botão 🔄 Atualizar de um estado. Os usuários PRO e PREMIUM também recebem alertas automáticos por e-mail logo que um novo sorteio está disponível.",
     q7:"Quantos anos de histórico estão disponíveis?",
-    a7:"Depende do estado e do jogo. O New York Numbers tem dados desde 1980 (25.000+ sorteios). Por padrão, a PREDIKTA carrega 12 meses de histórico, suficiente para a maioria dos modelos estatísticos. Com o plano ELITE, você pode carregar até 5 anos de dados para análises mais profundas e de longo prazo.",
+    a7:"Depende do estado e do jogo. O New York Numbers tem dados desde 1980 (25.000+ sorteios). Por padrão, a PREDIKTA carrega 12 meses de histórico, suficiente para a maioria dos modelos estatísticos. Com o plano PREMIUM, você pode carregar até 5 anos de dados para análises mais profundas e de longo prazo.",
     q12:"Quais estados e jogos a PREDIKTA cobre?",
     a12:"A PREDIKTA cobre atualmente as principais loterias Pick 3 e Pick 4 (Numbers) dos estados dos EUA, com seus sorteios de Meio-dia, Dia, Tarde e Noite de acordo com o calendário oficial de cada estado (exibido na página inicial). A lista de estados cobertos está disponível na página de Resultados. Novos estados e jogos são adicionados regularmente — se o seu estado ainda não estiver disponível, contate-nos para solicitá-lo.",
     q13:"O que significa o indicador 'Atualizado há X min'?",
@@ -307,7 +307,7 @@ const T = {
     q16:"Como entro em contato com o suporte?",
     a16:"Você pode nos contatar a qualquer momento pela página de Contato, acessível pelo rodapé ou pelo botão 'Fale conosco' no final desta página de FAQ. Normalmente respondemos dentro de 24 a 48 horas úteis.",
     q8:"Como funciona o teste grátis de 7 dias?",
-    a8:"Você tem acesso a todos os recursos PRO ou ELITE por 7 dias sem custo. Nenhum cartão de crédito é necessário para o teste. No final do período, você pode optar por continuar com um plano pago ou permanecer no plano FREE.",
+    a8:"Você tem acesso a todos os recursos PRO ou PREMIUM por 7 dias sem custo. Nenhum cartão de crédito é necessário para o teste. No final do período, você pode optar por continuar com um plano pago ou permanecer no plano FREE.",
     q9:"Posso cancelar a qualquer momento?",
     a9:"Sim, o cancelamento é possível a qualquer momento com um único clique no seu painel. Se você cancelar antes do final do período de cobrança, mantém o acesso até o final do período pago.",
     q10:"A PREDIKTA funciona offline?",
@@ -331,9 +331,9 @@ const T = {
     q5:"Ki kote done istorik yo soti?",
     a5:"Tout done yo soti nan sous ofisyèl piblik lotri eta ameriken yo (sit ofisyèl chak lotri eta, pa egzanp New York Lottery, Florida Lottery, elatriye). Rezilta lotri yo se enfòmasyon faktyèl ki pibliye chak jou nan domèn piblik — PREDIKTA ranmase yo, verifye yo epi estriktire yo nan yon baz done entèn pou pèmèt analiz estatistik yo. Pa gen okenn done envante oswa estime: chak tiraj ki parèt koresponn ak yon rezilta ki reyèlman pibliye pa otorite ofisyèl lotri eta a konsène.",
     q6:"Ki frekans rezilta yo mete ajou?",
-    a6:"Rezilta yo ranmase otomatikman epi yo mete ajou an kontinyèl, yon ti tan apre lè ofisyèl chak tiraj (vizib sou paj Akèy ak paj Analize, ak lè egzak pou chak eta). Yon endikatè '🔄 Mete ajou X min/h pase' anba chak eta montre w egzakteman ki kantite tan done yo genyen. Ou ka tou fòse yon mizajou manyèl nan paj Rezilta a lè ou klike sou bouton 🔄 Mete ajou pou yon eta. Itilizatè PRO ak ELITE yo resevwa tou alèt imèl otomatik depi yon nouvo tiraj disponib.",
+    a6:"Rezilta yo ranmase otomatikman epi yo mete ajou an kontinyèl, yon ti tan apre lè ofisyèl chak tiraj (vizib sou paj Akèy ak paj Analize, ak lè egzak pou chak eta). Yon endikatè '🔄 Mete ajou X min/h pase' anba chak eta montre w egzakteman ki kantite tan done yo genyen. Ou ka tou fòse yon mizajou manyèl nan paj Rezilta a lè ou klike sou bouton 🔄 Mete ajou pou yon eta. Itilizatè PRO ak PREMIUM yo resevwa tou alèt imèl otomatik depi yon nouvo tiraj disponib.",
     q7:"Konbyen ane istwa ki disponib?",
-    a7:"Sa depann de eta ak jwèt la. New York Numbers gen done depi 1980 (25,000+ tiraj). Pa default, PREDIKTA chaje 12 mwa istwa, ki ase pou pifò modèl estatistik. Ak abònman ELITE, ou ka chaje jiska 5 ane done pou analiz pi fon ak pi alontèm.",
+    a7:"Sa depann de eta ak jwèt la. New York Numbers gen done depi 1980 (25,000+ tiraj). Pa default, PREDIKTA chaje 12 mwa istwa, ki ase pou pifò modèl estatistik. Ak abònman PREMIUM, ou ka chaje jiska 5 ane done pou analiz pi fon ak pi alontèm.",
     q12:"Ki eta ak jwèt PREDIKTA kouvri?",
     a12:"PREDIKTA kouvri kounye a prensipal lotri Pick 3 ak Pick 4 (Numbers) nan eta ameriken yo, ak tiraj Midi, Jounen, Aswè ak Nuit yo selon orè ofisyèl chak eta (ki parèt sou paj Akèy). Lis eta ki kouvri disponib sou paj Rezilta. Nouvo eta ak jwèt ajoute regilyèman — si eta w pa disponib ankò, kontakte nou pou mande sa.",
     q13:"Kisa endikatè 'Mete ajou X min pase' la vle di?",
@@ -345,7 +345,7 @@ const T = {
     q16:"Kijan pou m kontakte sipò?",
     a16:"Ou ka kontakte nou nenpòt kilè atravè paj Kontak la, ki aksesib soti nan pye paj la oswa bouton 'Kontakte nou' anba paj FAQ sa a. Nou anjeneral reponn nan 24 a 48 èdtan ouvrab.",
     q8:"Kijan peryòd esè gratis 7 jou a fonksyone?",
-    a8:"Ou gen aksè a tout fonksyonalite PRO oswa ELITE pandan 7 jou san frè. Pa gen kat bankè ki nesesè pou esè a. Nan fen peryòd la, ou ka chwazi kontinye ak yon plan peye oswa rete sou plan FREE la.",
+    a8:"Ou gen aksè a tout fonksyonalite PRO oswa PREMIUM pandan 7 jou san frè. Pa gen kat bankè ki nesesè pou esè a. Nan fen peryòd la, ou ka chwazi kontinye ak yon plan peye oswa rete sou plan FREE la.",
     q9:"Èske mwen ka anile nenpòt kilè?",
     a9:"Wi, anilasyon posib nenpòt kilè ak yon sèl klik soti nan tablo bò ou. Si ou anile anvan fen peryòd fakti a, ou kenbe aksè jiska fen peryòd ou peye a.",
     q10:"Èske PREDIKTA fonksyone san koneksyon entènèt?",

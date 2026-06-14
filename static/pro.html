@@ -2,7 +2,7 @@
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>PREDIKTA — Plans & Tarifs</title>
-<meta name="description" content="Choisissez PRO, VIP ou ELITE pour débloquer les analyses prédictives PREDIKTA : plus d'États, plus d'analyses par jour, et un accès illimité avec ELITE."/>
+<meta name="description" content="Choisissez PRO, VIP ou PREMIUM pour débloquer les analyses prédictives PREDIKTA : plus d'États, plus d'analyses par jour, et un accès illimité avec PREMIUM."/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
@@ -112,7 +112,7 @@ tbody tr:last-child td{border-bottom:none}
   <div class="compare-title" data-i18n="compareTitle">Comparaison détaillée des fonctionnalités</div>
   <table>
     <thead>
-      <tr><th style="text-align:left" data-i18n="thFeature">Fonctionnalité</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">VIP</th><th style="color:#ff9900">ELITE</th><th style="color:#aa88ff">BUSINESS</th></tr>
+      <tr><th style="text-align:left" data-i18n="thFeature">Fonctionnalité</th><th style="color:#88aaff">PRO</th><th style="color:#ffd700">VIP</th><th style="color:#ff9900">PREMIUM</th><th style="color:#aa88ff">BUSINESS</th></tr>
     </thead>
     <tbody id="compareBody"></tbody>
   </table>
@@ -146,9 +146,9 @@ let curLang = 'fr';
 
 // Données structurelles des plans (identiques à PLAN_CONFIG côté serveur)
 const PLAN_DATA = {
-  pro:      { price: '$9.99', states: 4,  analyses: 1,  trial: 3 },
-  vip:      { price: '$19.99', states: 20, analyses: 7,  trial: 7 },
-  elite:    { price: '$49.99', states: 49, analyses: -1, trial: 7 },
+  pro:      { price: '$19.99', states: 4,  analyses: 1,  trial: 3 },
+  vip:      { price: '$49.99', states: 20, analyses: 7,  trial: 7 },
+  elite:    { price: '$99.99', states: 49, analyses: -1, trial: 7 },
   business: { price: '$199.99', states: 49, analyses: -1, trial: 7 },
 };
 
@@ -158,12 +158,12 @@ const T = {
   freeNote:"🔓 Les résultats des tirages (Résultats &amp; Tous les Résultats) restent gratuits et accessibles sans compte.",
   proName:"PRO", proBadge:"Pour commencer", proDesc:"Pour découvrir PREDIKTA. 4 États, 1 analyse par jour, et 3 jours d'essai gratuit.",
   vipName:"VIP", vipBadge:"⭐ Le Plus Populaire", vipDesc:"Pour les joueurs sérieux. 20 États, 7 analyses par jour, et 7 jours d'essai gratuit.",
-  eliteName:"ELITE", eliteBadge:"👑 Accès total", eliteDesc:"Pour les professionnels. Tous les États (49), analyses illimitées, et 7 jours d'essai gratuit.",
+  eliteName:"PREMIUM", eliteBadge:"👑 Accès total", eliteDesc:"Pour les professionnels. Tous les États (49), analyses illimitées, et 7 jours d'essai gratuit.",
   businessName:"BUSINESS", businessBadge:"🏢 Pour les entreprises", businessDesc:"Pour les entreprises et investisseurs. Business AI complet, rapports de projet, analyse de marché et stratégie 30-60-90 jours.",
   proFeats:["4 États disponibles","1 analyse / jour","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Analyse de Fourier (cycles)","Alertes & notifications push","Archives de vos analyses","#Business Intelligence illimité"],
   vipFeats:["20 États disponibles","7 analyses / jour","Tous les algorithmes (Markov, Monte Carlo, ML, Fourier)","Alertes & notifications push","Archives de vos analyses","#Business Intelligence illimité","Export PDF"],
   eliteFeats:["Tous les États (49) + Puerto Rico","Analyses illimitées","Tous les algorithmes (Markov, Monte Carlo, ML, Fourier)","Alertes & notifications push","Archives illimitées","Business Intelligence illimité","Export PDF","Support prioritaire"],
-  businessFeats:["Tout ELITE inclus","Business AI — analyses illimitées","Rapports de projet personnalisés","Analyse de marché approfondie","Stratégie 30-60-90 jours","Exports premium (PDF & Excel)","Support dédié prioritaire"],
+  businessFeats:["Tout PREMIUM inclus","Business AI — analyses illimitées","Rapports de projet personnalisés","Analyse de marché approfondie","Stratégie 30-60-90 jours","Exports premium (PDF & Excel)","Support dédié prioritaire"],
   trialBtn:(plan,days)=>`Démarrer ${plan} — ${days} jours gratuits`,
   compareTitle:"Comparaison détaillée des fonctionnalités", thFeature:"Fonctionnalité",
   compareRows:[
@@ -178,12 +178,12 @@ const T = {
     ["Support","Email","Email prioritaire","Prioritaire 24h","Dédié prioritaire"]],
   membersTitle:"Ce que disent nos membres",
   testimonials:[["★★★★★","\"PREDIKTA m'a aidé à analyser les patterns de Cash3 Georgia comme jamais auparavant. Les modèles ML sont vraiment précis.\"","Marcus T.","Georgia · Membre PRO"],
-    ["★★★★★","\"J'utilise PREDIKTA ELITE depuis 3 mois. L'analyse de Fourier sur New York Numbers m'a surpris par sa précision.\"","Jennifer W.","New York · Membre ELITE"],
+    ["★★★★★","\"J'utilise PREDIKTA PREMIUM depuis 3 mois. L'analyse de Fourier sur New York Numbers m'a surpris par sa précision.\"","Jennifer W.","New York · Membre PREMIUM"],
     ["★★★★☆","\"Le plan VIP me donne accès à 20 États, parfait pour suivre plusieurs loteries en même temps.\"","Carlos M.","Texas · Membre VIP"]],
   faqTitle:"Questions fréquentes",
   faq:[["Les prédictions garantissent-elles des gains ?","Non. PREDIKTA fournit des analyses statistiques basées sur des données historiques. Chaque tirage de loterie est aléatoire et indépendant. Nos outils sont conçus pour l'analyse et le divertissement, pas pour garantir des gains."],
-    ["Comment fonctionne la période d'essai gratuite ?","Chaque plan inclut un essai gratuit (3 jours pour PRO, 7 jours pour VIP et ELITE). Une carte bancaire est requise lors de l'inscription via Stripe, mais vous ne serez débité qu'à la fin de la période d'essai. Annulation possible à tout moment depuis votre compte."],
-    ["Puis-je changer de plan ?","Oui, vous pouvez passer de PRO à VIP, de VIP à ELITE, ou inversement à tout moment depuis la page Mon Compte."],
+    ["Comment fonctionne la période d'essai gratuite ?","Chaque plan inclut un essai gratuit (3 jours pour PRO, 7 jours pour VIP et PREMIUM). Une carte bancaire est requise lors de l'inscription via Stripe, mais vous ne serez débité qu'à la fin de la période d'essai. Annulation possible à tout moment depuis votre compte."],
+    ["Puis-je changer de plan ?","Oui, vous pouvez passer de PRO à VIP, de VIP à PREMIUM, ou inversement à tout moment depuis la page Mon Compte."],
     ["Que se passe-t-il si mon paiement échoue ?","L'accès aux analyses est automatiquement suspendu jusqu'à la mise à jour de votre moyen de paiement. Vos données restent conservées."],
     ["Les résultats de tirages sont-ils gratuits ?","Oui. Les pages Résultats et Tous les Résultats restent 100% gratuites et accessibles sans compte. Seules les analyses prédictives nécessitent un compte avec abonnement actif."]],
   ctaTitle:"Prêt à passer au niveau supérieur ?", ctaP:"Rejoignez les joueurs qui utilisent PREDIKTA chaque jour pour analyser leurs numéros.",
@@ -195,12 +195,12 @@ const T = {
   freeNote:"🔓 Draw results (Results &amp; All Results) remain free and accessible without an account.",
   proName:"PRO", proBadge:"Get started", proDesc:"To discover PREDIKTA. 4 states, 1 analysis per day, and a 3-day free trial.",
   vipName:"VIP", vipBadge:"⭐ Most Popular", vipDesc:"For serious players. 20 states, 7 analyses per day, and a 7-day free trial.",
-  eliteName:"ELITE", eliteBadge:"👑 Full access", eliteDesc:"For professionals. All states (49), unlimited analyses, and a 7-day free trial.",
+  eliteName:"PREMIUM", eliteBadge:"👑 Full access", eliteDesc:"For professionals. All states (49), unlimited analyses, and a 7-day free trial.",
   businessName:"BUSINESS", businessBadge:"🏢 For companies", businessDesc:"For businesses and investors. Full Business AI, project reports, market analysis and 30-60-90 day strategy.",
   proFeats:["4 states available","1 analysis / day","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Fourier analysis (cycles)","Push alerts & notifications","Analysis archive","#Unlimited Business Intelligence"],
   vipFeats:["20 states available","7 analyses / day","All algorithms (Markov, Monte Carlo, ML, Fourier)","Push alerts & notifications","Analysis archive","#Unlimited Business Intelligence","PDF export"],
   eliteFeats:["All states (49) + Puerto Rico","Unlimited analyses","All algorithms (Markov, Monte Carlo, ML, Fourier)","Push alerts & notifications","Unlimited archive","Unlimited Business Intelligence","PDF export","Priority support"],
-  businessFeats:["Everything in ELITE","Business AI — unlimited analyses","Custom project reports","In-depth market analysis","30-60-90 day strategy","Premium exports (PDF & Excel)","Dedicated priority support"],
+  businessFeats:["Everything in PREMIUM","Business AI — unlimited analyses","Custom project reports","In-depth market analysis","30-60-90 day strategy","Premium exports (PDF & Excel)","Dedicated priority support"],
   trialBtn:(plan,days)=>`Start ${plan} — ${days}-day free trial`,
   compareTitle:"Detailed feature comparison", thFeature:"Feature",
   compareRows:[
@@ -215,12 +215,12 @@ const T = {
     ["Support","Email","Priority email","24h Priority","Dedicated priority"]],
   membersTitle:"What our members say",
   testimonials:[["★★★★★","\"PREDIKTA helped me analyze Georgia Cash3 patterns like never before. The ML models are remarkably accurate.\"","Marcus T.","Georgia · PRO member"],
-    ["★★★★★","\"I've used PREDIKTA ELITE for 3 months. The Fourier analysis on New York Numbers surprised me with its accuracy.\"","Jennifer W.","New York · ELITE member"],
+    ["★★★★★","\"I've used PREDIKTA PREMIUM for 3 months. The Fourier analysis on New York Numbers surprised me with its accuracy.\"","Jennifer W.","New York · PREMIUM member"],
     ["★★★★☆","\"The VIP plan gives me access to 20 states, perfect for tracking multiple lotteries at once.\"","Carlos M.","Texas · VIP member"]],
   faqTitle:"Frequently asked questions",
   faq:[["Do predictions guarantee winnings?","No. PREDIKTA provides statistical analyses based on historical data. Every lottery draw is random and independent. Our tools are designed for analysis and entertainment, not to guarantee winnings."],
-    ["How does the free trial work?","Every plan includes a free trial (3 days for PRO, 7 days for VIP and ELITE). A card is required at signup via Stripe, but you won't be charged until the trial ends. Cancel anytime from your account page."],
-    ["Can I change plans?","Yes, you can switch from PRO to VIP, VIP to ELITE, or vice versa at any time from the My Account page."],
+    ["How does the free trial work?","Every plan includes a free trial (3 days for PRO, 7 days for VIP and PREMIUM). A card is required at signup via Stripe, but you won't be charged until the trial ends. Cancel anytime from your account page."],
+    ["Can I change plans?","Yes, you can switch from PRO to VIP, VIP to PREMIUM, or vice versa at any time from the My Account page."],
     ["What happens if my payment fails?","Access to analyses is automatically suspended until your payment method is updated. Your data remains saved."],
     ["Are draw results free?","Yes. The Results and All Results pages remain 100% free and accessible without an account. Only predictive analyses require an account with an active subscription."]],
   ctaTitle:"Ready to level up?", ctaP:"Join the players who use PREDIKTA every day to analyze their numbers.",
@@ -232,12 +232,12 @@ const T = {
   freeNote:"🔓 Los resultados de los sorteos (Resultados y Todos los Resultados) siguen siendo gratuitos y accesibles sin cuenta.",
   proName:"PRO", proBadge:"Para empezar", proDesc:"Para descubrir PREDIKTA. 4 estados, 1 análisis por día y 3 días de prueba gratuita.",
   vipName:"VIP", vipBadge:"⭐ Lo Más Popular", vipDesc:"Para jugadores serios. 20 estados, 7 análisis por día y 7 días de prueba gratuita.",
-  eliteName:"ELITE", eliteBadge:"👑 Acceso total", eliteDesc:"Para profesionales. Todos los estados (49), análisis ilimitados y 7 días de prueba gratuita.",
+  eliteName:"PREMIUM", eliteBadge:"👑 Acceso total", eliteDesc:"Para profesionales. Todos los estados (49), análisis ilimitados y 7 días de prueba gratuita.",
   businessName:"BUSINESS", businessBadge:"🏢 Para empresas", businessDesc:"Para empresas e inversores. Business AI completo, informes de proyecto, análisis de mercado y estrategia 30-60-90 días.",
   proFeats:["4 estados disponibles","1 análisis / día","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Análisis de Fourier (ciclos)","Alertas y notificaciones push","Archivo de análisis","#Business Intelligence ilimitado"],
   vipFeats:["20 estados disponibles","7 análisis / día","Todos los algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas y notificaciones push","Archivo de análisis","#Business Intelligence ilimitado","Exportación PDF"],
   eliteFeats:["Todos los estados (49) + Puerto Rico","Análisis ilimitados","Todos los algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas y notificaciones push","Archivo ilimitado","Business Intelligence ilimitado","Exportación PDF","Soporte prioritario"],
-  businessFeats:["Todo lo de ELITE incluido","Business AI — análisis ilimitados","Informes de proyecto personalizados","Análisis de mercado en profundidad","Estrategia 30-60-90 días","Exportaciones premium (PDF y Excel)","Soporte dedicado prioritario"],
+  businessFeats:["Todo lo de PREMIUM incluido","Business AI — análisis ilimitados","Informes de proyecto personalizados","Análisis de mercado en profundidad","Estrategia 30-60-90 días","Exportaciones premium (PDF y Excel)","Soporte dedicado prioritario"],
   trialBtn:(plan,days)=>`Empezar ${plan} — ${days} días gratis`,
   compareTitle:"Comparación detallada de funciones", thFeature:"Función",
   compareRows:[
@@ -252,12 +252,12 @@ const T = {
     ["Soporte","Email","Email prioritario","Prioritario 24h","Dedicado prioritario"]],
   membersTitle:"Lo que dicen nuestros miembros",
   testimonials:[["★★★★★","\"PREDIKTA me ayudó a analizar los patrones de Cash3 Georgia como nunca antes. Los modelos de ML son realmente precisos.\"","Marcus T.","Georgia · Miembro PRO"],
-    ["★★★★★","\"Uso PREDIKTA ELITE desde hace 3 meses. El análisis de Fourier en New York Numbers me sorprendió por su precisión.\"","Jennifer W.","Nueva York · Miembro ELITE"],
+    ["★★★★★","\"Uso PREDIKTA PREMIUM desde hace 3 meses. El análisis de Fourier en New York Numbers me sorprendió por su precisión.\"","Jennifer W.","Nueva York · Miembro PREMIUM"],
     ["★★★★☆","\"El plan VIP me da acceso a 20 estados, perfecto para seguir varias loterías a la vez.\"","Carlos M.","Texas · Miembro VIP"]],
   faqTitle:"Preguntas frecuentes",
   faq:[["¿Las predicciones garantizan ganancias?","No. PREDIKTA ofrece análisis estadísticos basados en datos históricos. Cada sorteo de lotería es aleatorio e independiente. Nuestras herramientas están diseñadas para análisis y entretenimiento, no para garantizar ganancias."],
-    ["¿Cómo funciona la prueba gratuita?","Cada plan incluye una prueba gratuita (3 días para PRO, 7 días para VIP y ELITE). Se requiere una tarjeta al registrarse vía Stripe, pero no se le cobrará hasta que termine la prueba. Puede cancelar en cualquier momento desde su cuenta."],
-    ["¿Puedo cambiar de plan?","Sí, puede pasar de PRO a VIP, de VIP a ELITE, o viceversa en cualquier momento desde la página Mi Cuenta."],
+    ["¿Cómo funciona la prueba gratuita?","Cada plan incluye una prueba gratuita (3 días para PRO, 7 días para VIP y PREMIUM). Se requiere una tarjeta al registrarse vía Stripe, pero no se le cobrará hasta que termine la prueba. Puede cancelar en cualquier momento desde su cuenta."],
+    ["¿Puedo cambiar de plan?","Sí, puede pasar de PRO a VIP, de VIP a PREMIUM, o viceversa en cualquier momento desde la página Mi Cuenta."],
     ["¿Qué pasa si falla mi pago?","El acceso a los análisis se suspende automáticamente hasta que actualice su método de pago. Sus datos permanecen guardados."],
     ["¿Los resultados de los sorteos son gratuitos?","Sí. Las páginas Resultados y Todos los Resultados siguen siendo 100% gratuitas y accesibles sin cuenta. Solo los análisis predictivos requieren una cuenta con suscripción activa."]],
   ctaTitle:"¿Listo para subir de nivel?", ctaP:"Únase a los jugadores que usan PREDIKTA cada día para analizar sus números.",
@@ -269,12 +269,12 @@ const T = {
   freeNote:"🔓 Os resultados dos sorteios (Resultados e Todos os Resultados) continuam grátis e acessíveis sem conta.",
   proName:"PRO", proBadge:"Para começar", proDesc:"Para descobrir a PREDIKTA. 4 estados, 1 análise por dia e 3 dias de teste grátis.",
   vipName:"VIP", vipBadge:"⭐ Mais Popular", vipDesc:"Para jogadores sérios. 20 estados, 7 análises por dia e 7 dias de teste grátis.",
-  eliteName:"ELITE", eliteBadge:"👑 Acesso total", eliteDesc:"Para profissionais. Todos os estados (49), análises ilimitadas e 7 dias de teste grátis.",
+  eliteName:"PREMIUM", eliteBadge:"👑 Acesso total", eliteDesc:"Para profissionais. Todos os estados (49), análises ilimitadas e 7 dias de teste grátis.",
   businessName:"BUSINESS", businessBadge:"🏢 Para empresas", businessDesc:"Para empresas e investidores. Business AI completo, relatórios de projeto, análise de mercado e estratégia 30-60-90 dias.",
   proFeats:["4 estados disponíveis","1 análise / dia","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Análise de Fourier (ciclos)","Alertas e notificações push","Arquivo de análises","#Business Intelligence ilimitado"],
   vipFeats:["20 estados disponíveis","7 análises / dia","Todos os algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas e notificações push","Arquivo de análises","#Business Intelligence ilimitado","Exportação PDF"],
   eliteFeats:["Todos os estados (49) + Porto Rico","Análises ilimitadas","Todos os algoritmos (Markov, Monte Carlo, ML, Fourier)","Alertas e notificações push","Arquivo ilimitado","Business Intelligence ilimitado","Exportação PDF","Suporte prioritário"],
-  businessFeats:["Tudo do ELITE incluído","Business AI — análises ilimitadas","Relatórios de projeto personalizados","Análise de mercado em profundidade","Estratégia 30-60-90 dias","Exportações premium (PDF e Excel)","Suporte dedicado prioritário"],
+  businessFeats:["Tudo do PREMIUM incluído","Business AI — análises ilimitadas","Relatórios de projeto personalizados","Análise de mercado em profundidade","Estratégia 30-60-90 dias","Exportações premium (PDF e Excel)","Suporte dedicado prioritário"],
   trialBtn:(plan,days)=>`Começar ${plan} — ${days} dias grátis`,
   compareTitle:"Comparação detalhada de recursos", thFeature:"Recurso",
   compareRows:[
@@ -289,12 +289,12 @@ const T = {
     ["Suporte","E-mail","E-mail prioritário","Prioritário 24h","Dedicado prioritário"]],
   membersTitle:"O que nossos membros dizem",
   testimonials:[["★★★★★","\"A PREDIKTA me ajudou a analisar os padrões do Cash3 Geórgia como nunca antes. Os modelos de ML são realmente precisos.\"","Marcus T.","Geórgia · Membro PRO"],
-    ["★★★★★","\"Uso a PREDIKTA ELITE há 3 meses. A análise de Fourier no New York Numbers me surpreendeu pela precisão.\"","Jennifer W.","Nova York · Membro ELITE"],
+    ["★★★★★","\"Uso a PREDIKTA PREMIUM há 3 meses. A análise de Fourier no New York Numbers me surpreendeu pela precisão.\"","Jennifer W.","Nova York · Membro PREMIUM"],
     ["★★★★☆","\"O plano VIP me dá acesso a 20 estados, perfeito para acompanhar várias loterias ao mesmo tempo.\"","Carlos M.","Texas · Membro VIP"]],
   faqTitle:"Perguntas frequentes",
   faq:[["As previsões garantem ganhos?","Não. A PREDIKTA fornece análises estatísticas baseadas em dados históricos. Cada sorteio de loteria é aleatório e independente. Nossas ferramentas são feitas para análise e entretenimento, não para garantir ganhos."],
-    ["Como funciona o teste grátis?","Cada plano inclui um teste grátis (3 dias para PRO, 7 dias para VIP e ELITE). Um cartão é exigido no cadastro via Stripe, mas você só será cobrado após o término do teste. Cancele a qualquer momento na sua conta."],
-    ["Posso mudar de plano?","Sim, você pode passar de PRO para VIP, de VIP para ELITE, ou vice-versa a qualquer momento na página Minha Conta."],
+    ["Como funciona o teste grátis?","Cada plano inclui um teste grátis (3 dias para PRO, 7 dias para VIP e PREMIUM). Um cartão é exigido no cadastro via Stripe, mas você só será cobrado após o término do teste. Cancele a qualquer momento na sua conta."],
+    ["Posso mudar de plano?","Sim, você pode passar de PRO para VIP, de VIP para PREMIUM, ou vice-versa a qualquer momento na página Minha Conta."],
     ["O que acontece se meu pagamento falhar?","O acesso às análises é suspenso automaticamente até que sua forma de pagamento seja atualizada. Seus dados permanecem salvos."],
     ["Os resultados dos sorteios são gratuitos?","Sim. As páginas Resultados e Todos os Resultados continuam 100% gratuitas e acessíveis sem conta. Apenas as análises preditivas exigem uma conta com assinatura ativa."]],
   ctaTitle:"Pronto para subir de nível?", ctaP:"Junte-se aos jogadores que usam a PREDIKTA todos os dias para analisar seus números.",
@@ -306,12 +306,12 @@ const T = {
   freeNote:"🔓 Rezilta tiraj yo (Rezilta ak Tout Rezilta) rete gratis ak aksesib san kont.",
   proName:"PRO", proBadge:"Pou kòmanse", proDesc:"Pou dekouvri PREDIKTA. 4 eta, 1 analiz pa jou, ak 3 jou esè gratis.",
   vipName:"VIP", vipBadge:"⭐ Pi Popilè a", vipDesc:"Pou jwè serye yo. 20 eta, 7 analiz pa jou, ak 7 jou esè gratis.",
-  eliteName:"ELITE", eliteBadge:"👑 Aksè total", eliteDesc:"Pou pwofesyonèl yo. Tout eta yo (49), analiz san limit, ak 7 jou esè gratis.",
+  eliteName:"PREMIUM", eliteBadge:"👑 Aksè total", eliteDesc:"Pou pwofesyonèl yo. Tout eta yo (49), analiz san limit, ak 7 jou esè gratis.",
   businessName:"BUSINESS", businessBadge:"🏢 Pou antrepriz", businessDesc:"Pou antrepriz ak envestisè. Business AI konplè, rapò pwojè, analiz mache, ak estrateji 30-60-90 jou.",
   proFeats:["4 eta disponib","1 analiz / jou","Markov + Monte Carlo + ML (XGBoost, Random Forest)","Analiz Fourier (sik)","Alèt & notifikasyon push","Achiv analiz ou yo","#Business Intelligence san limit"],
   vipFeats:["20 eta disponib","7 analiz / jou","Tout algoritm yo (Markov, Monte Carlo, ML, Fourier)","Alèt & notifikasyon push","Achiv analiz ou yo","#Business Intelligence san limit","Ekspòte PDF"],
   eliteFeats:["Tout eta yo (49) + Pòtoriko","Analiz san limit","Tout algoritm yo (Markov, Monte Carlo, ML, Fourier)","Alèt & notifikasyon push","Achiv san limit","Business Intelligence san limit","Ekspòte PDF","Sipò priyoritè"],
-  businessFeats:["Tout sa ki nan ELITE","Business AI — analiz san limit","Rapò pwojè pèsonalize","Analiz mache an pwofondè","Estrateji 30-60-90 jou","Ekspòte premium (PDF & Excel)","Sipò dedye priyoritè"],
+  businessFeats:["Tout sa ki nan PREMIUM","Business AI — analiz san limit","Rapò pwojè pèsonalize","Analiz mache an pwofondè","Estrateji 30-60-90 jou","Ekspòte premium (PDF & Excel)","Sipò dedye priyoritè"],
   trialBtn:(plan,days)=>`Kòmanse ${plan} — ${days} jou gratis`,
   compareTitle:"Konparezon detaye fonksyonalite yo", thFeature:"Fonksyonalite",
   compareRows:[
@@ -326,12 +326,12 @@ const T = {
     ["Sipò","Imèl","Imèl priyoritè","Priyoritè 24è","Dedye priyoritè"]],
   membersTitle:"Sa manm nou yo di",
   testimonials:[["★★★★★","\"PREDIKTA ede m analize modèl Cash3 Georgia tankou jamè anvan. Modèl ML yo trè presi.\"","Marcus T.","Georgia · Manm PRO"],
-    ["★★★★★","\"Mwen itilize PREDIKTA ELITE depi 3 mwa. Analiz Fourier sou New York Numbers te siprann mwen ak presizyon li.\"","Jennifer W.","New York · Manm ELITE"],
+    ["★★★★★","\"Mwen itilize PREDIKTA PREMIUM depi 3 mwa. Analiz Fourier sou New York Numbers te siprann mwen ak presizyon li.\"","Jennifer W.","New York · Manm PREMIUM"],
     ["★★★★☆","\"Plan VIP la ban mwen aksè a 20 eta, pafè pou swiv plizyè lotri an menm tan.\"","Carlos M.","Texas · Manm VIP"]],
   faqTitle:"Kesyon moun poze souvan",
   faq:[["Èske prediksyon yo garanti genyen?","Non. PREDIKTA bay analiz estatistik ki baze sou done istorik. Chak tiraj lotri se aleyatwa ak endepandan. Zouti nou yo fèt pou analiz ak amizman, pa pou garanti genyen."],
-    ["Kijan esè gratis la fonksyone?","Chak plan gen ladan yon esè gratis (3 jou pou PRO, 7 jou pou VIP ak ELITE). Yo mande yon kat lè enskripsyon via Stripe, men yo p ap chaje ou jiskaske esè a fini. Ou ka anile nenpòt kilè nan kont ou."],
-    ["Èske mwen ka chanje plan?","Wi, ou ka pase soti nan PRO rive nan VIP, nan VIP rive nan ELITE, oswa lòt sans, nenpòt kilè nan paj Kont Mwen."],
+    ["Kijan esè gratis la fonksyone?","Chak plan gen ladan yon esè gratis (3 jou pou PRO, 7 jou pou VIP ak PREMIUM). Yo mande yon kat lè enskripsyon via Stripe, men yo p ap chaje ou jiskaske esè a fini. Ou ka anile nenpòt kilè nan kont ou."],
+    ["Èske mwen ka chanje plan?","Wi, ou ka pase soti nan PRO rive nan VIP, nan VIP rive nan PREMIUM, oswa lòt sans, nenpòt kilè nan paj Kont Mwen."],
     ["Kisa k ap pase si peman m echwe?","Aksè a analiz yo sispann otomatikman jiskaske ou mete ajou metòd peman ou. Done ou yo rete sove."],
     ["Èske rezilta tiraj yo gratis?","Wi. Paj Rezilta ak Tout Rezilta yo rete 100% gratis ak aksesib san kont. Se sèlman analiz prediktif yo ki bezwen yon kont ak yon abònman aktif."]],
   ctaTitle:"Pare pou monte yon nivo?", ctaP:"Rejwenn jwè ki itilize PREDIKTA chak jou pou analize nimewo yo.",

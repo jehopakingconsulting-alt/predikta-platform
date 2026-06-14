@@ -70,15 +70,15 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
       <div class="tier-desc" data-i18n="tierVipDesc">Archive prioritaire</div>
     </div>
     <div class="tier-card tier-elite" id="tierElite">
-      <div class="tier-name">ELITE</div>
+      <div class="tier-name">PREMIUM</div>
       <div class="tier-days">30 <span style="font-size:.7rem" data-i18n="days">jours</span></div>
       <div class="tier-desc" data-i18n="tierEliteDesc">Archive complète & étendue</div>
     </div>
   </div>
 
   <div class="retention-banner">
-    <span data-i18n="retentionInfo">Vos données sont stockées localement sur cet appareil et conservées <b>30 jours</b> (limite ELITE actuellement appliquée à tous). Passez à</span>
-    <a href="/pro" data-i18n="retentionLink">PRO/ELITE</a>
+    <span data-i18n="retentionInfo">Vos données sont stockées localement sur cet appareil et conservées <b>30 jours</b> (limite PREMIUM actuellement appliquée à tous). Passez à</span>
+    <a href="/pro" data-i18n="retentionLink">PRO/PREMIUM</a>
     <span data-i18n="retentionInfo2"> pour débloquer les fonctionnalités avancées.</span>
   </div>
 
@@ -95,7 +95,7 @@ const T = {
   fr:{
     title:"Mes Archives", subtitle:"Retrouvez l'historique de vos analyses et recherches récentes, sauvegardé directement sur cet appareil.",
     days:"jours", tierFreeDesc:"Historique de base", tierVipDesc:"Archive prioritaire (7 jours)", tierEliteDesc:"Archive complète & étendue (30 jours)",
-    retentionInfo:"Vos données sont stockées localement sur cet appareil et conservées ", retentionLink:"PRO/ELITE",
+    retentionInfo:"Vos données sont stockées localement sur cet appareil et conservées ", retentionLink:"PRO/PREMIUM",
     retentionInfo2:" pour débloquer une rétention étendue et la synchronisation cloud.",
     btnClear:"🗑 Effacer l'historique",
     emptyTitle:"Aucune analyse archivée pour le moment",
@@ -110,7 +110,7 @@ const T = {
   en:{
     title:"My Archives", subtitle:"Find the history of your recent analyses and searches, saved directly on this device.",
     days:"days", tierFreeDesc:"Basic history", tierVipDesc:"Priority archive (7 days)", tierEliteDesc:"Full extended archive (30 days)",
-    retentionInfo:"Your data is stored locally on this device and kept for ", retentionLink:"PRO/ELITE",
+    retentionInfo:"Your data is stored locally on this device and kept for ", retentionLink:"PRO/PREMIUM",
     retentionInfo2:" to unlock extended retention and cloud sync.",
     btnClear:"🗑 Clear history",
     emptyTitle:"No archived analyses yet",
@@ -125,7 +125,7 @@ const T = {
   es:{
     title:"Mis Archivos", subtitle:"Encuentra el historial de tus análisis y búsquedas recientes, guardado directamente en este dispositivo.",
     days:"días", tierFreeDesc:"Historial básico", tierVipDesc:"Archivo prioritario (7 días)", tierEliteDesc:"Archivo completo y extendido (30 días)",
-    retentionInfo:"Tus datos se guardan localmente en este dispositivo y se conservan ", retentionLink:"PRO/ELITE",
+    retentionInfo:"Tus datos se guardan localmente en este dispositivo y se conservan ", retentionLink:"PRO/PREMIUM",
     retentionInfo2:" para desbloquear retención extendida y sincronización en la nube.",
     btnClear:"🗑 Borrar historial",
     emptyTitle:"Aún no hay análisis archivados",
@@ -140,7 +140,7 @@ const T = {
   pt:{
     title:"Meus Arquivos", subtitle:"Encontre o histórico das suas análises e pesquisas recentes, salvo diretamente neste dispositivo.",
     days:"dias", tierFreeDesc:"Histórico básico", tierVipDesc:"Arquivo prioritário (7 dias)", tierEliteDesc:"Arquivo completo e estendido (30 dias)",
-    retentionInfo:"Seus dados são armazenados localmente neste dispositivo e mantidos por ", retentionLink:"PRO/ELITE",
+    retentionInfo:"Seus dados são armazenados localmente neste dispositivo e mantidos por ", retentionLink:"PRO/PREMIUM",
     retentionInfo2:" para desbloquear retenção estendida e sincronização na nuvem.",
     btnClear:"🗑 Limpar histórico",
     emptyTitle:"Nenhuma análise arquivada ainda",
@@ -155,7 +155,7 @@ const T = {
   ht:{
     title:"Achiv Mwen Yo", subtitle:"Jwenn istorik analiz ak rechèch resan ou yo, sove dirèkteman sou aparèy sa a.",
     days:"jou", tierFreeDesc:"Istorik de baz", tierVipDesc:"Achiv priyorite (7 jou)", tierEliteDesc:"Achiv konplè & pwolonje (30 jou)",
-    retentionInfo:"Done ou yo estoke lokalman sou aparèy sa a epi konsève pandan ", retentionLink:"PRO/ELITE",
+    retentionInfo:"Done ou yo estoke lokalman sou aparèy sa a epi konsève pandan ", retentionLink:"PRO/PREMIUM",
     retentionInfo2:" pou debloke yon retansyon pwolonje ak senkronizasyon cloud.",
     btnClear:"🗑 Efase istorik",
     emptyTitle:"Pa gen analiz achive pou kounye a",
@@ -274,7 +274,7 @@ window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
 
-  // Met en évidence le palier ELITE (rétention max actuellement appliquée)
+  // Met en évidence le palier PREMIUM (rétention max actuellement appliquée)
   const days = (window.PredArchive ? window.PredArchive.retentionDays : 30);
   const id = days >= 30 ? 'tierElite' : days >= 7 ? 'tierVip' : 'tierFree';
   const el = document.getElementById(id);
