@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Jeu Responsable — PREDIKTA</title>
+<meta name="description" content="PREDIKTA encourage le jeu responsable : limites de budget et de temps, signes d'alerte, ressources d'aide et clauses légales."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;--green:#2ee6a6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.page{max-width:780px;margin:0 auto;padding:40px 24px 80px}
+h1{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;color:#88aaff;margin-bottom:6px}
+.updated{font-size:.72rem;color:var(--muted2);margin-bottom:36px}
+h2{font-size:.88rem;font-weight:700;color:var(--text);margin:28px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+p,li{font-size:.81rem;color:var(--muted2);line-height:1.85;margin-bottom:10px}
+ul{padding-left:20px;margin-bottom:10px}
+li{margin-bottom:6px}
+strong{color:var(--text)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.warning{background:rgba(255,61,46,.08);border-left:3px solid #ff3d2e;padding:14px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:.8rem;color:#ff9988;line-height:1.7}
+.tip-box{background:rgba(46,230,166,.08);border-left:3px solid var(--green);padding:14px 16px;border-radius:0 8px 8px 0;margin:16px 0;font-size:.8rem;color:#a8f5dd;line-height:1.7}
+.helpline{border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:10px;background:var(--card)}
+.helpline strong{color:#88aaff}
+</style>
+</head>
+<body>
+<div class="page">
+<h1 data-i18n="title">Jeu Responsable</h1>
+<p class="updated" data-i18n="updated">Dernière mise à jour : 14 juin 2026</p>
+
+<div class="warning" data-i18n="warning">
+  ⚠️ <strong>Important :</strong> Les loteries sont des jeux de hasard. PREDIKTA fournit des analyses statistiques éducatives et expérimentales — elles ne garantissent aucun gain. Jouez uniquement avec de l'argent que vous pouvez vous permettre de perdre.
+</div>
+
+<div id="body"></div>
+</div>
+<script>
+const T = {
+fr:{ title:"Jeu Responsable", updated:"Dernière mise à jour : 14 juin 2026",
+ warning:"⚠️ <strong>Important :</strong> Les loteries sont des jeux de hasard. PREDIKTA fournit des analyses statistiques éducatives et expérimentales — elles ne garantissent aucun gain. Jouez uniquement avec de l'argent que vous pouvez vous permettre de perdre.",
+ body:`
+<h2>1. Notre engagement</h2>
+<p>PREDIKTA est avant tout une plateforme d'<strong>analyse statistique et d'aide à la décision</strong>. Nous croyons que la donnée et la transparence rendent le jeu plus intelligent — mais jamais sans risque. Notre priorité est que chaque utilisateur comprenne la nature aléatoire des loteries avant d'y jouer.</p>
+
+<h2>2. Aucune garantie de gain</h2>
+<p>Toutes les prédictions, suggestions, scores de confiance et « tendances statistiques » affichés sur PREDIKTA sont calculés à partir de données historiques publiques. <strong>Ils ne prédisent pas l'avenir.</strong> Chaque tirage de loterie est un événement aléatoire et indépendant : la probabilité de gagner reste la même, peu importe ce qu'indique notre algorithme (environ 1 chance sur 1 000 pour un Pick 3 en exact, ~1 sur 167 en groupé). Voir notre <a href="/track-record">historique de performance</a> et notre <a href="/faq">FAQ</a> pour le détail.</p>
+
+<h2>3. Non-affiliation</h2>
+<p>PREDIKTA <strong>n'est pas une loterie officielle</strong> et n'est <strong>affilié à aucune société de loterie gouvernementale ou étatique</strong> (New York Lottery, Florida Lottery, etc.). Nous utilisons uniquement des résultats publics, déjà publiés par ces organismes, à des fins d'analyse statistique.</p>
+
+<h2>4. Âge légal</h2>
+<p>PREDIKTA est <strong>réservé aux personnes ayant l'âge légal pour jouer à la loterie dans leur juridiction</strong> (généralement 18 ans, parfois 21 selon l'État ou le pays). Si vous êtes mineur, n'utilisez pas ce service pour acheter des billets de loterie.</p>
+
+<h2>5. Conseils pour jouer de manière responsable</h2>
+<ul>
+  <li><strong>Fixez un budget avant de jouer</strong> et ne le dépassez jamais, même après une perte.</li>
+  <li><strong>Fixez une limite de temps</strong> pour vos sessions de jeu et respectez-la.</li>
+  <li>Ne jouez jamais pour « se refaire » après une perte (chasing losses).</li>
+  <li>Ne considérez jamais la loterie comme une source de revenu ou un plan financier.</li>
+  <li>Ne jouez pas sous l'effet de l'alcool, de stress intense ou de problèmes émotionnels.</li>
+  <li>Faites des pauses régulières — utilisez les outils d'auto-exclusion proposés par votre loterie locale si besoin.</li>
+  <li>Parlez-en à un proche si le jeu commence à occuper une place importante dans votre vie ou vos finances.</li>
+</ul>
+
+<div class="tip-box">
+  💡 <strong>Signes d'alerte :</strong> jouer plus que prévu, emprunter de l'argent pour jouer, mentir sur ses habitudes de jeu, ressentir de l'anxiété à l'idée de ne pas jouer. Si vous reconnaissez ces signes, contactez l'une des ressources ci-dessous.
+</div>
+
+<h2>6. Limites de budget et de temps</h2>
+<p>Avant chaque session, posez-vous ces deux questions : <strong>« Combien suis-je prêt(e) à perdre aujourd'hui sans que cela affecte mes finances ? »</strong> et <strong>« Combien de temps vais-je consacrer à cela ? »</strong> Notez ces deux limites, et arrêtez-vous dès qu'une des deux est atteinte — gain ou perte. De nombreuses loteries d'État proposent des outils gratuits de définition de limites et d'auto-exclusion sur leurs sites officiels.</p>
+
+<h2>7. Besoin d'aide ? Ressources gratuites et confidentielles</h2>
+<div class="helpline"><strong>États-Unis :</strong> National Problem Gambling Helpline — <strong>1-800-GAMBLER</strong> (1-800-426-2537) · <a href="https://www.ncpgambling.org" target="_blank">ncpgambling.org</a></div>
+<div class="helpline"><strong>Canada :</strong> ConnexOntario — <strong>1-866-531-2600</strong> · <a href="https://www.connexontario.ca" target="_blank">connexontario.ca</a></div>
+<div class="helpline"><strong>France :</strong> Joueurs Info Service — <strong>09 74 75 13 13</strong> (gratuit, 24h/24) · <a href="https://www.joueurs-info-service.fr" target="_blank">joueurs-info-service.fr</a></div>
+<div class="helpline"><strong>International :</strong> <a href="https://www.gamblersanonymous.org" target="_blank">Gamblers Anonymous — gamblersanonymous.org</a> (groupes dans de nombreux pays)</div>
+
+<h2>8. Vérification d'identité et restriction</h2>
+<p>PREDIKTA ne vend pas de billets de loterie et ne traite aucun paiement de jeu. Cependant, si vous estimez avoir besoin de vous protéger contre vos propres habitudes de jeu, vous pouvez nous contacter pour demander la <strong>fermeture de votre compte PREDIKTA</strong> à tout moment via la page <a href="/contact">Contact</a>.</p>
+
+<h2>9. Contact</h2>
+<p>Pour toute question relative au jeu responsable ou à ces informations : <a href="/contact">formulaire de contact</a> ou <a href="mailto:legal@predikta.ai">legal@predikta.ai</a></p>` },
+
+en:{ title:"Responsible Gaming", updated:"Last updated: June 14, 2026",
+ warning:"⚠️ <strong>Important:</strong> Lotteries are games of chance. PREDIKTA provides educational, experimental statistical analysis — it does not guarantee any winnings. Only play with money you can afford to lose.",
+ body:`
+<h2>1. Our commitment</h2>
+<p>PREDIKTA is first and foremost a <strong>statistical analysis and decision-support platform</strong>. We believe data and transparency make play smarter — but never risk-free. Our priority is that every user understands the random nature of lotteries before playing.</p>
+
+<h2>2. No guarantee of winnings</h2>
+<p>All predictions, suggestions, confidence scores and "statistical trends" shown on PREDIKTA are computed from public historical data. <strong>They do not predict the future.</strong> Every lottery draw is a random, independent event: your odds of winning stay the same no matter what our algorithm shows (roughly 1 in 1,000 for an exact Pick 3 match, ~1 in 167 for a box match). See our <a href="/track-record">performance track record</a> and <a href="/faq">FAQ</a> for details.</p>
+
+<h2>3. No affiliation</h2>
+<p>PREDIKTA is <strong>not an official lottery</strong> and is <strong>not affiliated with any government or state lottery organization</strong> (New York Lottery, Florida Lottery, etc.). We only use public results already published by those organizations, for statistical analysis purposes.</p>
+
+<h2>4. Legal age</h2>
+<p>PREDIKTA is <strong>restricted to people who are of legal age to play the lottery in their jurisdiction</strong> (usually 18, sometimes 21 depending on the state or country). If you are a minor, do not use this service to purchase lottery tickets.</p>
+
+<h2>5. Tips for playing responsibly</h2>
+<ul>
+  <li><strong>Set a budget before you play</strong> and never exceed it, even after a loss.</li>
+  <li><strong>Set a time limit</strong> for your play sessions and stick to it.</li>
+  <li>Never play to "chase" a previous loss.</li>
+  <li>Never treat the lottery as a source of income or a financial plan.</li>
+  <li>Don't play while under the influence of alcohol, intense stress, or emotional distress.</li>
+  <li>Take regular breaks — use self-exclusion tools offered by your local lottery if needed.</li>
+  <li>Talk to someone you trust if gambling starts taking up a large place in your life or finances.</li>
+</ul>
+
+<div class="tip-box">
+  💡 <strong>Warning signs:</strong> playing more than planned, borrowing money to play, lying about your gambling habits, feeling anxious when not playing. If you recognize these signs, contact one of the resources below.
+</div>
+
+<h2>6. Budget and time limits</h2>
+<p>Before each session, ask yourself two questions: <strong>"How much am I willing to lose today without it affecting my finances?"</strong> and <strong>"How much time will I spend on this?"</strong> Write down both limits and stop as soon as either is reached — win or lose. Many state lotteries offer free limit-setting and self-exclusion tools on their official websites.</p>
+
+<h2>7. Need help? Free and confidential resources</h2>
+<div class="helpline"><strong>United States:</strong> National Problem Gambling Helpline — <strong>1-800-GAMBLER</strong> (1-800-426-2537) · <a href="https://www.ncpgambling.org" target="_blank">ncpgambling.org</a></div>
+<div class="helpline"><strong>Canada:</strong> ConnexOntario — <strong>1-866-531-2600</strong> · <a href="https://www.connexontario.ca" target="_blank">connexontario.ca</a></div>
+<div class="helpline"><strong>UK:</strong> GamCare — <strong>0808 8020 133</strong> · <a href="https://www.gamcare.org.uk" target="_blank">gamcare.org.uk</a></div>
+<div class="helpline"><strong>International:</strong> <a href="https://www.gamblersanonymous.org" target="_blank">Gamblers Anonymous — gamblersanonymous.org</a> (groups in many countries)</div>
+
+<h2>8. Identity verification and restriction</h2>
+<p>PREDIKTA does not sell lottery tickets and does not process any gambling payments. However, if you feel you need to protect yourself from your own gambling habits, you can contact us to request the <strong>closure of your PREDIKTA account</strong> at any time via the <a href="/contact">Contact</a> page.</p>
+
+<h2>9. Contact</h2>
+<p>For any question about responsible gaming or this information: <a href="/contact">contact form</a> or <a href="mailto:legal@predikta.ai">legal@predikta.ai</a></p>` },
+
+es:{ title:"Juego Responsable", updated:"Última actualización: 14 de junio de 2026",
+ warning:"⚠️ <strong>Importante:</strong> Las loterías son juegos de azar. PREDIKTA ofrece análisis estadísticos educativos y experimentales — no garantizan ningún premio. Juegue solo con dinero que pueda permitirse perder.",
+ body:`
+<h2>1. Nuestro compromiso</h2>
+<p>PREDIKTA es, ante todo, una plataforma de <strong>análisis estadístico y apoyo a la decisión</strong>. Creemos que los datos y la transparencia hacen que jugar sea más inteligente — pero nunca sin riesgo. Nuestra prioridad es que cada usuario comprenda la naturaleza aleatoria de las loterías antes de jugar.</p>
+
+<h2>2. Ninguna garantía de premio</h2>
+<p>Todas las predicciones, sugerencias, puntuaciones de confianza y "tendencias estadísticas" mostradas en PREDIKTA se calculan a partir de datos históricos públicos. <strong>No predicen el futuro.</strong> Cada sorteo de lotería es un evento aleatorio e independiente: sus probabilidades de ganar son las mismas sin importar lo que indique nuestro algoritmo (aproximadamente 1 entre 1.000 para un Pick 3 exacto, ~1 entre 167 para un acierto agrupado). Consulte nuestro <a href="/track-record">historial de rendimiento</a> y nuestras <a href="/faq">preguntas frecuentes</a> para más detalles.</p>
+
+<h2>3. Sin afiliación</h2>
+<p>PREDIKTA <strong>no es una lotería oficial</strong> y <strong>no está afiliado a ninguna organización de lotería estatal o gubernamental</strong> (New York Lottery, Florida Lottery, etc.). Solo utilizamos resultados públicos ya publicados por esas organizaciones, con fines de análisis estadístico.</p>
+
+<h2>4. Edad legal</h2>
+<p>PREDIKTA está <strong>reservado a personas que tengan la edad legal para jugar a la lotería en su jurisdicción</strong> (generalmente 18 años, a veces 21 según el estado o país). Si es menor de edad, no utilice este servicio para comprar billetes de lotería.</p>
+
+<h2>5. Consejos para jugar de forma responsable</h2>
+<ul>
+  <li><strong>Establezca un presupuesto antes de jugar</strong> y no lo supere nunca, ni siquiera después de una pérdida.</li>
+  <li><strong>Establezca un límite de tiempo</strong> para sus sesiones de juego y respételo.</li>
+  <li>Nunca juegue para "recuperar" una pérdida anterior.</li>
+  <li>Nunca considere la lotería como una fuente de ingresos o un plan financiero.</li>
+  <li>No juegue bajo los efectos del alcohol, estrés intenso o malestar emocional.</li>
+  <li>Tómese descansos regulares — use las herramientas de autoexclusión que ofrece su lotería local si es necesario.</li>
+  <li>Hable con alguien de confianza si el juego empieza a ocupar un lugar importante en su vida o finanzas.</li>
+</ul>
+
+<div class="tip-box">
+  💡 <strong>Señales de alerta:</strong> jugar más de lo previsto, pedir dinero prestado para jugar, mentir sobre sus hábitos de juego, sentir ansiedad al no jugar. Si reconoce estas señales, contacte a uno de los recursos a continuación.
+</div>
+
+<h2>6. Límites de presupuesto y tiempo</h2>
+<p>Antes de cada sesión, hágase dos preguntas: <strong>"¿Cuánto estoy dispuesto a perder hoy sin que afecte mis finanzas?"</strong> y <strong>"¿Cuánto tiempo voy a dedicar a esto?"</strong> Anote ambos límites y deténgase en cuanto alcance cualquiera de ellos, gane o pierda. Muchas loterías estatales ofrecen herramientas gratuitas de límites y autoexclusión en sus sitios web oficiales.</p>
+
+<h2>7. ¿Necesita ayuda? Recursos gratuitos y confidenciales</h2>
+<div class="helpline"><strong>Estados Unidos:</strong> National Problem Gambling Helpline — <strong>1-800-GAMBLER</strong> (1-800-426-2537) · <a href="https://www.ncpgambling.org" target="_blank">ncpgambling.org</a></div>
+<div class="helpline"><strong>España:</strong> Federación Jugadores en Rehabilitación — <strong>900 200 225</strong> · <a href="https://www.fejar.org" target="_blank">fejar.org</a></div>
+<div class="helpline"><strong>Canadá:</strong> ConnexOntario — <strong>1-866-531-2600</strong> · <a href="https://www.connexontario.ca" target="_blank">connexontario.ca</a></div>
+<div class="helpline"><strong>Internacional:</strong> <a href="https://www.gamblersanonymous.org" target="_blank">Jugadores Anónimos — gamblersanonymous.org</a> (grupos en muchos países)</div>
+
+<h2>8. Verificación de identidad y restricción</h2>
+<p>PREDIKTA no vende billetes de lotería ni procesa pagos de juego. Sin embargo, si considera que necesita protegerse de sus propios hábitos de juego, puede contactarnos para solicitar el <strong>cierre de su cuenta PREDIKTA</strong> en cualquier momento a través de la página de <a href="/contact">Contacto</a>.</p>
+
+<h2>9. Contacto</h2>
+<p>Para cualquier pregunta sobre el juego responsable o esta información: <a href="/contact">formulario de contacto</a> o <a href="mailto:legal@predikta.ai">legal@predikta.ai</a></p>` },
+
+pt:{ title:"Jogo Responsável", updated:"Última atualização: 14 de junho de 2026",
+ warning:"⚠️ <strong>Importante:</strong> As loterias são jogos de azar. A PREDIKTA fornece análises estatísticas educativas e experimentais — elas não garantem nenhum prêmio. Jogue apenas com dinheiro que você pode perder.",
+ body:`
+<h2>1. Nosso compromisso</h2>
+<p>A PREDIKTA é, antes de tudo, uma plataforma de <strong>análise estatística e apoio à decisão</strong>. Acreditamos que dados e transparência tornam o jogo mais inteligente — mas nunca sem risco. Nossa prioridade é que cada usuário entenda a natureza aleatória das loterias antes de jogar.</p>
+
+<h2>2. Nenhuma garantia de prêmio</h2>
+<p>Todas as previsões, sugestões, pontuações de confiança e "tendências estatísticas" exibidas na PREDIKTA são calculadas a partir de dados históricos públicos. <strong>Elas não preveem o futuro.</strong> Cada sorteio de loteria é um evento aleatório e independente: suas chances de ganhar permanecem as mesmas, independentemente do que nosso algoritmo indique (aproximadamente 1 em 1.000 para um Pick 3 exato, ~1 em 167 para um acerto agrupado). Veja nosso <a href="/track-record">histórico de desempenho</a> e nosso <a href="/faq">FAQ</a> para mais detalhes.</p>
+
+<h2>3. Sem afiliação</h2>
+<p>A PREDIKTA <strong>não é uma loteria oficial</strong> e <strong>não é afiliada a nenhuma organização de loteria estatal ou governamental</strong> (New York Lottery, Florida Lottery, etc.). Usamos apenas resultados públicos já publicados por essas organizações, para fins de análise estatística.</p>
+
+<h2>4. Idade legal</h2>
+<p>A PREDIKTA é <strong>restrita a pessoas com idade legal para jogar na loteria em sua jurisdição</strong> (geralmente 18 anos, às vezes 21 dependendo do estado ou país). Se você for menor de idade, não use este serviço para comprar bilhetes de loteria.</p>
+
+<h2>5. Dicas para jogar com responsabilidade</h2>
+<ul>
+  <li><strong>Defina um orçamento antes de jogar</strong> e nunca o exceda, mesmo após uma perda.</li>
+  <li><strong>Defina um limite de tempo</strong> para suas sessões de jogo e respeite-o.</li>
+  <li>Nunca jogue para "recuperar" uma perda anterior.</li>
+  <li>Nunca trate a loteria como uma fonte de renda ou plano financeiro.</li>
+  <li>Não jogue sob efeito de álcool, estresse intenso ou sofrimento emocional.</li>
+  <li>Faça pausas regulares — use ferramentas de autoexclusão oferecidas pela sua loteria local, se necessário.</li>
+  <li>Converse com alguém de confiança se o jogo começar a ocupar um espaço importante em sua vida ou finanças.</li>
+</ul>
+
+<div class="tip-box">
+  💡 <strong>Sinais de alerta:</strong> jogar mais do que planejado, pedir dinheiro emprestado para jogar, mentir sobre seus hábitos de jogo, sentir ansiedade quando não está jogando. Se você reconhecer esses sinais, contate um dos recursos abaixo.
+</div>
+
+<h2>6. Limites de orçamento e tempo</h2>
+<p>Antes de cada sessão, faça a si mesmo duas perguntas: <strong>"Quanto estou dispost(a) a perder hoje sem afetar minhas finanças?"</strong> e <strong>"Quanto tempo vou dedicar a isso?"</strong> Anote os dois limites e pare assim que qualquer um deles for atingido, ganhando ou perdendo. Muitas loterias estaduais oferecem ferramentas gratuitas de definição de limites e autoexclusão em seus sites oficiais.</p>
+
+<h2>7. Precisa de ajuda? Recursos gratuitos e confidenciais</h2>
+<div class="helpline"><strong>Estados Unidos:</strong> National Problem Gambling Helpline — <strong>1-800-GAMBLER</strong> (1-800-426-2537) · <a href="https://www.ncpgambling.org" target="_blank">ncpgambling.org</a></div>
+<div class="helpline"><strong>Brasil:</strong> CVV (Centro de Valorização da Vida) — <strong>188</strong> · <a href="https://www.cvv.org.br" target="_blank">cvv.org.br</a></div>
+<div class="helpline"><strong>Portugal:</strong> SICAD — Linha Vida — <strong>1414</strong> · <a href="https://www.sicad.pt" target="_blank">sicad.pt</a></div>
+<div class="helpline"><strong>Internacional:</strong> <a href="https://www.gamblersanonymous.org" target="_blank">Jogadores Anônimos — gamblersanonymous.org</a> (grupos em muitos países)</div>
+
+<h2>8. Verificação de identidade e restrição</h2>
+<p>A PREDIKTA não vende bilhetes de loteria nem processa pagamentos de jogo. No entanto, se você sentir que precisa se proteger dos seus próprios hábitos de jogo, pode nos contatar para solicitar o <strong>encerramento da sua conta PREDIKTA</strong> em qualquer momento pela página de <a href="/contact">Contato</a>.</p>
+
+<h2>9. Contato</h2>
+<p>Para qualquer pergunta sobre jogo responsável ou estas informações: <a href="/contact">formulário de contato</a> ou <a href="mailto:legal@predikta.ai">legal@predikta.ai</a></p>` },
+
+ht:{ title:"Jwe Responsab", updated:"Dènye mizajou: 14 jen 2026",
+ warning:"⚠️ <strong>Enpòtan:</strong> Lotri se jwèt chans. PREDIKTA bay analiz statistik edikatif ak esperimantal — yo pa garanti okenn lo. Jwe sèlman ak lajan ou ka pèdi san pwoblèm.",
+ body:`
+<h2>1. Angajman nou</h2>
+<p>PREDIKTA se anvan tout bagay yon platfòm <strong>analiz statistik ak èd nan desizyon</strong>. Nou kwè done ak transparans fè jwèt la pi entelijan — men jamè san risk. Priyorite nou se chak itilizatè konprann nati o aza nan lotri anvan yo jwe.</p>
+
+<h2>2. Pa gen garanti lo</h2>
+<p>Tout prediksyon, sijesyon, nòt konfyans ak "tandans statistik" ki parèt sou PREDIKTA kalkile ak done istorik piblik. <strong>Yo pa predi sa k ap pase.</strong> Chak tiraj lotri se yon evènman o aza ak endepandan: chans ou genyen rete menm bagay kèlkeswa sa algorit nou montre (anviwon 1 sou 1,000 pou yon Pick 3 egzak, ~1 sou 167 pou yon match gwoupe). Gade <a href="/track-record">istorik pèfòmans</a> nou ak <a href="/faq">FAQ</a> nou pou plis detay.</p>
+
+<h2>3. Pa gen afilyasyon</h2>
+<p>PREDIKTA <strong>se pa yon lotri ofisyèl</strong> e li <strong>pa afilye ak okenn òganizasyon lotri eta oswa gouvènman</strong> (New York Lottery, Florida Lottery, elatriye). Nou sèlman itilize rezilta piblik ki deja pibliye pa òganizasyon sa yo, pou rezon analiz statistik.</p>
+
+<h2>4. Laj legal</h2>
+<p>PREDIKTA <strong>rezève pou moun ki gen laj legal pou jwe lotri nan jiridiksyon yo</strong> (souvan 18 an, pafwa 21 an selon eta oswa peyi). Si w minè, pa itilize sèvis sa a pou achte tikè lotri.</p>
+
+<h2>5. Konsèy pou jwe responsab</h2>
+<ul>
+  <li><strong>Fikse yon bidjè anvan ou jwe</strong> e pa janm depase l, menm apre yon pèt.</li>
+  <li><strong>Fikse yon limit tan</strong> pou sesyon jwèt ou e respekte l.</li>
+  <li>Pa janm jwe pou "rekipere" yon pèt anvan.</li>
+  <li>Pa janm konsidere lotri kòm yon sous revni oswa yon plan finansye.</li>
+  <li>Pa jwe lè ou anba efè alkòl, gwo estrès oswa twoub emosyonèl.</li>
+  <li>Pran poz regilyèman — itilize zouti otoeskli lotri lokal ou ofri si ou bezwen.</li>
+  <li>Pale ak yon moun ou fè konfyans si jwèt la kòmanse pran yon plas enpòtan nan lavi w oswa nan finans ou.</li>
+</ul>
+
+<div class="tip-box">
+  💡 <strong>Siyal alèt:</strong> jwe plis pase sa w te planifye, prete lajan pou jwe, bay manti sou abitid jwèt ou, santi enkyetid lè w pa ap jwe. Si w rekonèt siyal sa yo, kontakte youn nan resous anba a.
+</div>
+
+<h2>6. Limit bidjè ak tan</h2>
+<p>Anvan chak sesyon, poze tèt ou de kesyon: <strong>"Konbyen mwen pare pou pèdi jodi a san sa pa afekte finans mwen?"</strong> ak <strong>"Konbyen tan mwen pral pase sou sa?"</strong> Ekri toulède limit yo, e sispann depi ou rive nan youn ladan yo — kit ou genyen kit ou pèdi. Anpil lotri eta ofri zouti gratis pou fikse limit ak otoeskli sou sit ofisyèl yo.</p>
+
+<h2>7. Bezwen èd? Resous gratis ak konfidansyèl</h2>
+<div class="helpline"><strong>Etazini:</strong> National Problem Gambling Helpline — <strong>1-800-GAMBLER</strong> (1-800-426-2537) · <a href="https://www.ncpgambling.org" target="_blank">ncpgambling.org</a></div>
+<div class="helpline"><strong>Entènasyonal:</strong> <a href="https://www.gamblersanonymous.org" target="_blank">Gamblers Anonymous — gamblersanonymous.org</a> (gwoup nan anpil peyi)</div>
+
+<h2>8. Verifikasyon idantite ak restriksyon</h2>
+<p>PREDIKTA pa vann tikè lotri e li pa trete okenn peman jwèt. Sepandan, si ou santi ou bezwen pwoteje tèt ou kont pwòp abitid jwèt ou, ou ka kontakte nou pou mande <strong>fèmen kont PREDIKTA</strong> ou nenpòt kilè atravè paj <a href="/contact">Kontak</a>.</p>
+
+<h2>9. Kontak</h2>
+<p>Pou nenpòt kesyon sou jwe responsab oswa enfòmasyon sa yo: <a href="/contact">fòm kontak</a> oswa <a href="mailto:legal@predikta.ai">legal@predikta.ai</a></p>` },
+};
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelector('[data-i18n="title"]').textContent = dict.title;
+  document.querySelector('[data-i18n="updated"]').textContent = dict.updated;
+  document.querySelector('[data-i18n="warning"]').innerHTML = dict.warning;
+  document.getElementById('body').innerHTML = dict.body;
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
+</body></html>

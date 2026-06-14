@@ -718,6 +718,9 @@ def privacy_page(): return send_from_directory("static", "privacy.html")
 @app.route("/terms")
 def terms_page():  return send_from_directory("static", "terms.html")
 
+@app.route("/responsible-gaming")
+def responsible_gaming_page(): return send_from_directory("static", "responsible-gaming.html")
+
 @app.route("/offline")
 def offline_page(): return send_from_directory("static", "offline.html")
 
