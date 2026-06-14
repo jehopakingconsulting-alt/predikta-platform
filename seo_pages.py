@@ -32,7 +32,7 @@ T = {
         "h1": lambda name: f"🎯 Pick 3 {name} — Prédictions du jour",
         "lastDraw": "Dernier tirage", "hot": "🔥 Chiffres chauds (30 derniers tirages)",
         "cold": "❄️ Chiffres froids (30 derniers tirages)", "overdue": "⏳ Chiffres en retard",
-        "suggestions": "Combinaisons suggérées", "confidence": "Confiance",
+        "suggestions": "Combinaisons suggérées", "confidence": "Tendance statistique",
         "noData": "Données non disponibles pour cet État pour le moment.",
         "ctaTitle": "Aller plus loin avec PREDIKTA", "ctaDesc": "Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), analyse de Fourier, archives illimitées et plus pour tous les États.",
         "ctaBtn": "🔮 Lancer l'analyse complète →", "backToIndex": "← Tous les États",
@@ -48,7 +48,7 @@ T = {
         "h1": lambda name: f"🎯 Pick 3 {name} — Today's Predictions",
         "lastDraw": "Last draw", "hot": "🔥 Hot digits (last 30 draws)",
         "cold": "❄️ Cold digits (last 30 draws)", "overdue": "⏳ Overdue digits",
-        "suggestions": "Suggested combinations", "confidence": "Confidence",
+        "suggestions": "Suggested combinations", "confidence": "Statistical trend",
         "noData": "No data available for this state yet.",
         "ctaTitle": "Go further with PREDIKTA", "ctaDesc": "Markov chains, Monte Carlo, Machine Learning (XGBoost/Random Forest), Fourier analysis, unlimited archives and more for every state.",
         "ctaBtn": "🔮 Run the full analysis →", "backToIndex": "← All states",
@@ -64,7 +64,7 @@ T = {
         "h1": lambda name: f"🎯 Pick 3 {name} — Predicciones de hoy",
         "lastDraw": "Último sorteo", "hot": "🔥 Números calientes (últimos 30 sorteos)",
         "cold": "❄️ Números fríos (últimos 30 sorteos)", "overdue": "⏳ Números atrasados",
-        "suggestions": "Combinaciones sugeridas", "confidence": "Confianza",
+        "suggestions": "Combinaciones sugeridas", "confidence": "Tendencia estadística",
         "noData": "Datos no disponibles para este estado por el momento.",
         "ctaTitle": "Ve más allá con PREDIKTA", "ctaDesc": "Cadenas de Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), análisis de Fourier, archivos ilimitados y más para todos los estados.",
         "ctaBtn": "🔮 Iniciar el análisis completo →", "backToIndex": "← Todos los estados",
@@ -80,7 +80,7 @@ T = {
         "h1": lambda name: f"🎯 Pick 3 {name} — Previsões de hoje",
         "lastDraw": "Último sorteio", "hot": "🔥 Números quentes (últimos 30 sorteios)",
         "cold": "❄️ Números frios (últimos 30 sorteios)", "overdue": "⏳ Números atrasados",
-        "suggestions": "Combinações sugeridas", "confidence": "Confiança",
+        "suggestions": "Combinações sugeridas", "confidence": "Tendência estatística",
         "noData": "Dados não disponíveis para este estado no momento.",
         "ctaTitle": "Vá mais longe com a PREDIKTA", "ctaDesc": "Cadeias de Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), análise de Fourier, arquivos ilimitados e mais para todos os estados.",
         "ctaBtn": "🔮 Iniciar a análise completa →", "backToIndex": "← Todos os estados",
@@ -96,7 +96,7 @@ T = {
         "h1": lambda name: f"🎯 Pick 3 {name} — Prediksyon jodi a",
         "lastDraw": "Dènye tiraj", "hot": "🔥 Chif cho yo (30 dènye tiraj)",
         "cold": "❄️ Chif frèt yo (30 dènye tiraj)", "overdue": "⏳ Chif an reta",
-        "suggestions": "Konbinezon ki sijere", "confidence": "Konfyans",
+        "suggestions": "Konbinezon ki sijere", "confidence": "Tandans statistik",
         "noData": "Pa gen done disponib pou eta sa a kounye a.",
         "ctaTitle": "Ale pi lwen ak PREDIKTA", "ctaDesc": "Markov, Monte Carlo, Machine Learning (XGBoost/Random Forest), analiz Fourier, achiv san limit ak plis pou tout eta.",
         "ctaBtn": "🔮 Lanse analiz konplè →", "backToIndex": "← Tout eta yo",
@@ -111,10 +111,10 @@ T = {
 SUPPORTED_LANGS = ["fr", "en", "es", "pt", "ht"]
 
 CONF_BY_LANG = {
-    "en": {"Très élevée": "Very high", "Élevée": "High", "Moyenne": "Medium", "Faible": "Low"},
-    "es": {"Très élevée": "Muy alta", "Élevée": "Alta", "Moyenne": "Media", "Faible": "Baja"},
-    "pt": {"Très élevée": "Muito alta", "Élevée": "Alta", "Moyenne": "Média", "Faible": "Baixa"},
-    "ht": {"Très élevée": "Trè wo", "Élevée": "Wo", "Moyenne": "Mwayen", "Faible": "Ba"},
+    "en": {"Tendance très forte": "Very strong trend", "Tendance forte": "Strong trend", "Tendance moyenne": "Medium trend", "Tendance faible": "Weak trend"},
+    "es": {"Tendance très forte": "Tendencia muy fuerte", "Tendance forte": "Tendencia fuerte", "Tendance moyenne": "Tendencia media", "Tendance faible": "Tendencia débil"},
+    "pt": {"Tendance très forte": "Tendência muito forte", "Tendance forte": "Tendência forte", "Tendance moyenne": "Tendência média", "Tendance faible": "Tendência fraca"},
+    "ht": {"Tendance très forte": "Tandans trè fò", "Tendance forte": "Tandans fò", "Tendance moyenne": "Tandans mwayen", "Tendance faible": "Tandans fèb"},
 }
 
 TOD_T = {

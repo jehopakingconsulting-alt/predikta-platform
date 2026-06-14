@@ -97,15 +97,16 @@ def pair_frequencies(draws: list[dict], n: int) -> dict:
 
 
 def confidence_label(score: float, max_score: float) -> str:
+    """Relative statistical signal vs. the top combo — not a win probability."""
     ratio = score / max_score if max_score else 0
     if ratio >= 0.95:
-        return "Très élevée"
+        return "Tendance très forte"
     elif ratio >= 0.85:
-        return "Élevée"
+        return "Tendance forte"
     elif ratio >= 0.70:
-        return "Moyenne"
+        return "Tendance moyenne"
     else:
-        return "Faible"
+        return "Tendance faible"
 
 
 def weighted_suggestions(draws: list[dict], n: int, top_n: int = 5) -> list[dict]:

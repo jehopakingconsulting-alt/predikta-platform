@@ -569,11 +569,12 @@ def ensemble_consensus(
 
 
 def _conf_label(ratio: float) -> str:
-    if ratio >= 0.95: return "Très Élevée ★★★★★"
-    if ratio >= 0.85: return "Élevée ★★★★"
-    if ratio >= 0.70: return "Moyenne ★★★"
-    if ratio >= 0.55: return "Modérée ★★"
-    return "Faible ★"
+    """Relative statistical signal vs. the top combo — not a win probability."""
+    if ratio >= 0.95: return "Tendance très forte ★★★★★"
+    if ratio >= 0.85: return "Tendance forte ★★★★"
+    if ratio >= 0.70: return "Tendance moyenne ★★★"
+    if ratio >= 0.55: return "Tendance légère ★★"
+    return "Tendance faible ★"
 
 
 # ─── Top-level runner ──────────────────────────────────────────────────────
