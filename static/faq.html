@@ -22,7 +22,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 .faq-icon{font-size:1.2rem;color:var(--muted2);transition:transform .3s;flex-shrink:0}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s}
 .faq-a-inner{padding:0 18px 16px;font-size:.8rem;color:var(--muted2);line-height:1.8}
-.faq-item.open .faq-a{max-height:400px}
+.faq-item.open .faq-a{max-height:900px}
 .faq-item.open .faq-icon{transform:rotate(45deg);color:var(--accent)}
 .faq-a-inner a{color:var(--accent);text-decoration:none}
 .faq-a-inner a:hover{text-decoration:underline}
@@ -46,17 +46,17 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q1">Comment PREDIKTA génère-t-il ses prédictions ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a1">PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a1">PREDIKTA combine 7 algorithmes indépendants : <strong>Markov (ordres 1, 2 et 3)</strong> pour les transitions entre chiffres, <strong>Random Forest</strong> et <strong>XGBoost</strong> pour la classification de patterns, <strong>Gradient Boosting</strong> pour affiner les scores, <strong>Monte Carlo</strong> (50 000 simulations) pour estimer les probabilités, <strong>Analyse de Fourier</strong> pour détecter les cycles cachés et <strong>Gap Analysis</strong> pour repérer les chiffres en retard. Un algorithme de consensus pondère chaque modèle selon sa performance historique récente et génère un score final sur 100. Les combinaisons (Pick3, Pick4...) avec les scores les plus élevés sont présentées comme suggestions TOP PICK, accompagnées d'un niveau de confiance (Faible, Moyenne, Élevée, Très élevée).</div></div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q2">Les prédictions sont-elles fiables ? Peut-on gagner ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a2">Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. Elles n'augmentent pas mathématiquement vos chances de gagner, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a2">Les prédictions de PREDIKTA sont basées sur des analyses statistiques rigoureuses de données historiques réelles (des milliers de tirages par état). Cependant, il est important de comprendre que <strong>chaque tirage de loterie est un événement aléatoire et indépendant</strong> : mathématiquement, aucun algorithme, peu importe sa sophistication, ne peut prédire avec certitude le résultat d'un tirage futur. Ce que PREDIKTA fait, c'est identifier des tendances statistiques (chiffres chauds, chiffres en retard, cycles, transitions fréquentes) qui peuvent légèrement orienter vos choix de jeu, exactement comme un analyste sportif étudie des statistiques sans pouvoir garantir le résultat d'un match. Utilisez PREDIKTA comme un outil d'aide à la décision et de divertissement éclairé, jamais comme une garantie de gain. Jouez toujours de manière responsable et uniquement avec un budget que vous pouvez vous permettre de perdre.</div></div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q3">Qu'est-ce que l'analyse de Fourier appliquée à la loterie ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a3">L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a3">L'analyse de Fourier est une technique mathématique qui décompose une série de données (ici, la séquence des tirages) en une somme de fréquences (cycles). Appliquée à la loterie, elle permet de détecter si certains chiffres ont tendance à revenir selon un rythme régulier — par exemple, si un chiffre apparaît en moyenne toutes les 11 à 12 sessions. PREDIKTA calcule ces fréquences pour chaque position (1er, 2e, 3e chiffre) et chaque état, puis intègre les cycles détectés comme un indicateur supplémentaire dans le score de consensus final. Ce n'est pas une certitude — les cycles peuvent se rompre à tout moment — mais c'est un signal statistique de plus parmi les 7 utilisés par PREDIKTA.</div></div>
     </div>
 
     <div class="faq-item">
@@ -73,17 +73,27 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q5">D'où viennent les données historiques ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a5">Toutes les données proviennent de sources officielles publiques de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a5">Toutes les données proviennent de sources officielles publiques des loteries d'État américaines (site officiel de chaque loterie d'état, ex. New York Lottery, Florida Lottery, etc.). Les résultats de loterie sont des informations factuelles publiées quotidiennement dans le domaine public — PREDIKTA les collecte, les vérifie et les structure dans une base de données interne pour permettre les analyses statistiques. Aucune donnée n'est inventée ou estimée : chaque tirage affiché correspond à un résultat réellement publié par l'organisme officiel de loterie de l'état concerné.</div></div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q6">À quelle fréquence les résultats sont-ils mis à jour ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a6">Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton 🔄 Mettre à jour d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a6">Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et ELITE reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.</div></div>
     </div>
 
     <div class="faq-item">
       <div class="faq-q" onclick="toggle(this)"><span data-i18n="q7">Combien d'années d'historique sont disponibles ?</span> <span class="faq-icon">+</span></div>
-      <div class="faq-a"><div class="faq-a-inner" data-i18n="a7">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.</div></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a7">Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q12">Quels états et jeux sont couverts par PREDIKTA ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a12">PREDIKTA couvre actuellement les principales loteries Pick 3 et Pick 4 (Numbers) des États américains, avec leurs tirages Midi, Jour, Soir et Nuit selon le calendrier officiel de chaque état (affiché sur la page d'accueil). La liste des états couverts est consultable sur la page Résultats. De nouveaux états et jeux sont ajoutés régulièrement — si votre état n'est pas encore disponible, contactez-nous pour en faire la demande.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q13">Que signifie l'indicateur « Mis à jour il y a X min » ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a13">Cet indicateur affiche le temps écoulé depuis la dernière récupération des données pour un état donné. Il vous permet de savoir en un coup d'œil si les chiffres affichés (derniers tirages, suggestions TOP PICK) reflètent l'information la plus récente disponible. Si l'indicateur affiche plusieurs heures, cliquez sur 🔄 Mettre à jour pour forcer une nouvelle récupération.</div></div>
     </div>
 
     <div class="section-label" data-i18n="secBilling">Plans & Facturation</div>
@@ -114,6 +124,23 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
       </div></div>
     </div>
 
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q15">PREDIKTA est-il disponible dans plusieurs langues ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a15">Oui, PREDIKTA est disponible en 5 langues : français, anglais, espagnol, portugais et créole haïtien. Vous pouvez changer de langue à tout moment via le sélecteur de langue dans le menu de navigation — votre préférence est mémorisée pour vos prochaines visites.</div></div>
+    </div>
+
+    <div class="section-label" data-i18n="secAccount">Compte & Confidentialité</div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q14">Mes données personnelles sont-elles en sécurité ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a14">Oui. PREDIKTA ne collecte que les informations nécessaires à votre compte (email, préférences). Vos données de connexion sont chiffrées, et nous ne vendons ni ne partageons vos informations personnelles avec des tiers à des fins publicitaires. Les données de loterie utilisées pour les analyses sont des informations publiques et ne sont liées à aucune donnée personnelle.</div></div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)"><span data-i18n="q16">Comment contacter le support ?</span> <span class="faq-icon">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner" data-i18n="a16">Vous pouvez nous contacter à tout moment via la page Contact, accessible depuis le pied de page ou le bouton "Contactez-nous" en bas de cette page FAQ. Nous répondons généralement dans les 24 à 48 heures ouvrables.</div></div>
+    </div>
+
   </div>
 
   <div class="cta-box">
@@ -140,21 +167,31 @@ const T = {
   fr:{
     title:"Questions Fréquentes", subtitle:"Tout ce que vous devez savoir sur PREDIKTA",
     searchPh:"🔍  Rechercher une question...",
-    secAlgo:"Prédictions & Algorithmes", secData:"Données & Résultats", secBilling:"Plans & Facturation", secTech:"Technique",
+    secAlgo:"Prédictions & Algorithmes", secData:"Données & Résultats", secBilling:"Plans & Facturation", secTech:"Technique", secAccount:"Compte & Confidentialité",
     q1:"Comment PREDIKTA génère-t-il ses prédictions ?",
-    a1:"PREDIKTA combine 7 algorithmes indépendants : Markov (ordres 1, 2 et 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50 000 simulations), Analyse de Fourier et Gap Analysis. Un algorithme de consensus pondère chaque modèle et génère un score final. Les combinaisons avec les scores les plus élevés sont présentées comme suggestions.",
+    a1:"PREDIKTA combine 7 algorithmes indépendants : <strong>Markov (ordres 1, 2 et 3)</strong> pour les transitions entre chiffres, <strong>Random Forest</strong> et <strong>XGBoost</strong> pour la classification de patterns, <strong>Gradient Boosting</strong> pour affiner les scores, <strong>Monte Carlo</strong> (50 000 simulations) pour estimer les probabilités, <strong>Analyse de Fourier</strong> pour détecter les cycles cachés et <strong>Gap Analysis</strong> pour repérer les chiffres en retard. Un algorithme de consensus pondère chaque modèle selon sa performance historique récente et génère un score final sur 100. Les combinaisons (Pick3, Pick4...) avec les scores les plus élevés sont présentées comme suggestions TOP PICK, accompagnées d'un niveau de confiance (Faible, Moyenne, Élevée, Très élevée).",
     q2:"Les prédictions sont-elles fiables ? Peut-on gagner ?",
-    a2:"Les prédictions de PREDIKTA sont basées sur des analyses statistiques de données historiques. Elles n'augmentent pas mathématiquement vos chances de gagner, car chaque tirage de loterie est un événement aléatoire et indépendant. Notre outil identifie des tendances et des patterns passés, mais ces tendances ne prédisent pas l'avenir avec certitude. Utilisez PREDIKTA comme outil d'analyse, pas comme garantie de gain.",
+    a2:"Les prédictions de PREDIKTA sont basées sur des analyses statistiques rigoureuses de données historiques réelles (des milliers de tirages par état). Cependant, il est important de comprendre que <strong>chaque tirage de loterie est un événement aléatoire et indépendant</strong> : mathématiquement, aucun algorithme, peu importe sa sophistication, ne peut prédire avec certitude le résultat d'un tirage futur. Ce que PREDIKTA fait, c'est identifier des tendances statistiques (chiffres chauds, chiffres en retard, cycles, transitions fréquentes) qui peuvent légèrement orienter vos choix de jeu, exactement comme un analyste sportif étudie des statistiques sans pouvoir garantir le résultat d'un match. Utilisez PREDIKTA comme un outil d'aide à la décision et de divertissement éclairé, jamais comme une garantie de gain. Jouez toujours de manière responsable et uniquement avec un budget que vous pouvez vous permettre de perdre.",
     q3:"Qu'est-ce que l'analyse de Fourier appliquée à la loterie ?",
-    a3:"L'analyse de Fourier décompose la séquence de tirages en fréquences pour détecter d'éventuels cycles cachés. Par exemple, si un chiffre revient toutes les 11–12 sessions en moyenne, Fourier peut l'identifier. Ce n'est pas une certitude, mais un indicateur supplémentaire dans le consensus multi-modèles.",
+    a3:"L'analyse de Fourier est une technique mathématique qui décompose une série de données (ici, la séquence des tirages) en une somme de fréquences (cycles). Appliquée à la loterie, elle permet de détecter si certains chiffres ont tendance à revenir selon un rythme régulier — par exemple, si un chiffre apparaît en moyenne toutes les 11 à 12 sessions. PREDIKTA calcule ces fréquences pour chaque position (1er, 2e, 3e chiffre) et chaque état, puis intègre les cycles détectés comme un indicateur supplémentaire dans le score de consensus final. Ce n'est pas une certitude — les cycles peuvent se rompre à tout moment — mais c'est un signal statistique de plus parmi les 7 utilisés par PREDIKTA.",
     q4:"Quelle différence entre Markov Ordre 1, 2 et 3 ?",
     a4:'<strong>Ordre 1 :</strong> Prédit le prochain chiffre basé sur le dernier tirage uniquement.<br><strong>Ordre 2 :</strong> Prend en compte les 2 derniers tirages pour calculer la transition.<br><strong>Ordre 3 :</strong> Analyse 3 tirages consécutifs pour détecter des patterns plus longs.<br>Les trois ordres sont combinés dans le score consensus final.',
     q5:"D'où viennent les données historiques ?",
-    a5:"Toutes les données proviennent de sources officielles publiques de résultats de loterie américaines. Les résultats de loterie sont des informations factuelles de domaine public, collectées et vérifiées quotidiennement.",
+    a5:"Toutes les données proviennent de sources officielles publiques des loteries d'État américaines (site officiel de chaque loterie d'état, ex. New York Lottery, Florida Lottery, etc.). Les résultats de loterie sont des informations factuelles publiées quotidiennement dans le domaine public — PREDIKTA les collecte, les vérifie et les structure dans une base de données interne pour permettre les analyses statistiques. Aucune donnée n'est inventée ou estimée : chaque tirage affiché correspond à un résultat réellement publié par l'organisme officiel de loterie de l'état concerné.",
     q6:"À quelle fréquence les résultats sont-ils mis à jour ?",
-    a6:"Les résultats sont mis à jour quotidiennement. Dans la page Résultats, cliquez sur le bouton 🔄 Mettre à jour d'un état pour récupérer les derniers tirages. Les utilisateurs PRO reçoivent aussi des alertes email automatiques après chaque tirage.",
+    a6:"Les résultats sont récupérés automatiquement et mis à jour en continu, peu après l'heure officielle de chaque tirage (visible sur la page d'accueil et la page Analyser, avec l'heure exacte par état). Un indicateur « 🔄 Mis à jour il y a X min/h » affiché sous chaque état vous montre la fraîcheur exacte des données. Vous pouvez aussi forcer une mise à jour manuelle depuis la page Résultats en cliquant sur le bouton 🔄 Mettre à jour d'un état. Les utilisateurs PRO et ELITE reçoivent en plus des alertes email automatiques dès qu'un nouveau tirage est disponible.",
     q7:"Combien d'années d'historique sont disponibles ?",
-    a7:"Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes.",
+    a7:"Cela dépend de l'état et du jeu. New York Numbers dispose de données depuis 1980 (25 000+ tirages). Par défaut, PREDIKTA charge 12 mois d'historique, ce qui est suffisant pour la plupart des modèles statistiques. Avec l'abonnement ELITE, vous pouvez charger jusqu'à 5 ans de données pour des analyses plus profondes et à plus long terme.",
+    q12:"Quels états et jeux sont couverts par PREDIKTA ?",
+    a12:"PREDIKTA couvre actuellement les principales loteries Pick 3 et Pick 4 (Numbers) des États américains, avec leurs tirages Midi, Jour, Soir et Nuit selon le calendrier officiel de chaque état (affiché sur la page d'accueil). La liste des états couverts est consultable sur la page Résultats. De nouveaux états et jeux sont ajoutés régulièrement — si votre état n'est pas encore disponible, contactez-nous pour en faire la demande.",
+    q13:"Que signifie l'indicateur « Mis à jour il y a X min » ?",
+    a13:"Cet indicateur affiche le temps écoulé depuis la dernière récupération des données pour un état donné. Il vous permet de savoir en un coup d'œil si les chiffres affichés (derniers tirages, suggestions TOP PICK) reflètent l'information la plus récente disponible. Si l'indicateur affiche plusieurs heures, cliquez sur 🔄 Mettre à jour pour forcer une nouvelle récupération.",
+    q14:"Mes données personnelles sont-elles en sécurité ?",
+    a14:"Oui. PREDIKTA ne collecte que les informations nécessaires à votre compte (email, préférences). Vos données de connexion sont chiffrées, et nous ne vendons ni ne partageons vos informations personnelles avec des tiers à des fins publicitaires. Les données de loterie utilisées pour les analyses sont des informations publiques et ne sont liées à aucune donnée personnelle.",
+    q15:"PREDIKTA est-il disponible dans plusieurs langues ?",
+    a15:"Oui, PREDIKTA est disponible en 5 langues : français, anglais, espagnol, portugais et créole haïtien. Vous pouvez changer de langue à tout moment via le sélecteur de langue dans le menu de navigation — votre préférence est mémorisée pour vos prochaines visites.",
+    q16:"Comment contacter le support ?",
+    a16:'Vous pouvez nous contacter à tout moment via la page Contact, accessible depuis le pied de page ou le bouton "Contactez-nous" en bas de cette page FAQ. Nous répondons généralement dans les 24 à 48 heures ouvrables.',
     q8:"Comment fonctionne la période d'essai gratuite de 7 jours ?",
     a8:"Vous avez accès à toutes les fonctionnalités PRO ou ELITE pendant 7 jours sans frais. Aucune carte bancaire n'est requise pour l'essai. À la fin de la période, vous pouvez choisir de continuer avec un plan payant ou rester sur le plan FREE.",
     q9:"Puis-je annuler à tout moment ?",
@@ -162,27 +199,37 @@ const T = {
     q10:"PREDIKTA fonctionne-t-il hors ligne ?",
     a10:"Oui ! PREDIKTA est une Progressive Web App (PWA). Installez-la sur votre téléphone ou ordinateur via le menu de votre navigateur. Une fois installée, certaines fonctionnalités sont disponibles hors ligne grâce au service worker qui met en cache les données essentielles.",
     q11:"Comment installer PREDIKTA sur mon téléphone ?",
-    a11:'<strong>Android (Chrome) :</strong> Menu ⋮ → "Ajouter à l\\'écran d\\'accueil"<br><strong>iPhone (Safari) :</strong> Bouton Partager → "Sur l\\'écran d\\'accueil"<br>L\\'app s\\'installe comme une application native, sans passer par l\\'App Store.',
+    a11:'<strong>Android (Chrome) :</strong> Menu ⋮ → "Ajouter à l\'écran d\'accueil"<br><strong>iPhone (Safari) :</strong> Bouton Partager → "Sur l\'écran d\'accueil"<br>L\'app s\'installe comme une application native, sans passer par l\'App Store.',
     ctaText:"Vous n'avez pas trouvé la réponse à votre question ?", ctaBtn:"Contactez-nous →",
   },
   en:{
     title:"Frequently Asked Questions", subtitle:"Everything you need to know about PREDIKTA",
     searchPh:"🔍  Search a question...",
-    secAlgo:"Predictions & Algorithms", secData:"Data & Results", secBilling:"Plans & Billing", secTech:"Technical",
+    secAlgo:"Predictions & Algorithms", secData:"Data & Results", secBilling:"Plans & Billing", secTech:"Technical", secAccount:"Account & Privacy",
     q1:"How does PREDIKTA generate its predictions?",
-    a1:"PREDIKTA combines 7 independent algorithms: Markov (orders 1, 2 and 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 simulations), Fourier Analysis and Gap Analysis. A consensus algorithm weighs each model and produces a final score. The combinations with the highest scores are presented as suggestions.",
+    a1:"PREDIKTA combines 7 independent algorithms: <strong>Markov chains (orders 1, 2 and 3)</strong> for digit transitions, <strong>Random Forest</strong> and <strong>XGBoost</strong> for pattern classification, <strong>Gradient Boosting</strong> to refine scores, <strong>Monte Carlo</strong> (50,000 simulations) to estimate probabilities, <strong>Fourier Analysis</strong> to detect hidden cycles, and <strong>Gap Analysis</strong> to spot overdue digits. A consensus algorithm weighs each model based on its recent historical performance and produces a final score out of 100. The combinations (Pick3, Pick4...) with the highest scores are presented as TOP PICK suggestions, along with a confidence level (Low, Medium, High, Very High).",
     q2:"Are the predictions reliable? Can you actually win?",
-    a2:"PREDIKTA's predictions are based on statistical analyses of historical data. They do not mathematically increase your chances of winning, since every lottery draw is a random, independent event. Our tool identifies past trends and patterns, but these trends do not predict the future with certainty. Use PREDIKTA as an analysis tool, not a guarantee of winnings.",
+    a2:"PREDIKTA's predictions are based on rigorous statistical analysis of real historical data (thousands of draws per state). However, it's important to understand that <strong>every lottery draw is a random, independent event</strong>: mathematically, no algorithm, however sophisticated, can predict the outcome of a future draw with certainty. What PREDIKTA does is identify statistical trends (hot digits, overdue digits, cycles, frequent transitions) that may slightly inform your number choices — much like a sports analyst studies statistics without being able to guarantee a game's outcome. Use PREDIKTA as a decision-support and informed-entertainment tool, never as a guarantee of winning. Always play responsibly and only with a budget you can afford to lose.",
     q3:"What is Fourier analysis applied to the lottery?",
-    a3:"Fourier analysis decomposes the sequence of draws into frequencies to detect possible hidden cycles. For example, if a digit returns every 11–12 sessions on average, Fourier can identify it. It's not a certainty, but an additional indicator in the multi-model consensus.",
+    a3:"Fourier analysis is a mathematical technique that decomposes a data series (here, the sequence of draws) into a sum of frequencies (cycles). Applied to the lottery, it can detect whether certain digits tend to return at a regular rhythm — for example, if a digit appears on average every 11 to 12 sessions. PREDIKTA computes these frequencies for each position (1st, 2nd, 3rd digit) and each state, then factors any detected cycles into the final consensus score as an extra indicator. It's not a certainty — cycles can break at any time — but it's one more statistical signal among the 7 PREDIKTA uses.",
     q4:"What's the difference between Markov Order 1, 2 and 3?",
     a4:'<strong>Order 1:</strong> Predicts the next digit based only on the last draw.<br><strong>Order 2:</strong> Takes the last 2 draws into account to compute the transition.<br><strong>Order 3:</strong> Analyzes 3 consecutive draws to detect longer patterns.<br>All three orders are combined in the final consensus score.',
     q5:"Where does the historical data come from?",
-    a5:"All data comes from official public sources of US lottery results. Lottery results are public-domain factual information, collected and verified daily.",
+    a5:"All data comes from official public sources of US state lotteries (each state lottery's official website, e.g. New York Lottery, Florida Lottery, etc.). Lottery results are factual information published daily in the public domain — PREDIKTA collects, verifies and structures them into an internal database to enable statistical analysis. No data is invented or estimated: every draw shown corresponds to a result actually published by the relevant state lottery authority.",
     q6:"How often are results updated?",
-    a6:"Results are updated daily. On the Results page, click a state's 🔄 Update button to fetch the latest draws. PRO users also receive automatic email alerts after every draw.",
+    a6:"Results are fetched automatically and updated continuously, shortly after the official time of each draw (shown on the Home and Analyze pages, with the exact time per state). A '🔄 Updated X min/h ago' indicator under each state shows you exactly how fresh the data is. You can also force a manual refresh from the Results page by clicking a state's 🔄 Update button. PRO and ELITE users additionally receive automatic email alerts as soon as a new draw is available.",
     q7:"How many years of history are available?",
-    a7:"It depends on the state and game. New York Numbers has data going back to 1980 (25,000+ draws). By default, PREDIKTA loads 12 months of history. With the ELITE plan, you can load up to 5 years of data for deeper analysis.",
+    a7:"It depends on the state and game. New York Numbers has data going back to 1980 (25,000+ draws). By default, PREDIKTA loads 12 months of history, which is enough for most statistical models. With the ELITE plan, you can load up to 5 years of data for deeper, longer-term analysis.",
+    q12:"Which states and games does PREDIKTA cover?",
+    a12:"PREDIKTA currently covers the main Pick 3 and Pick 4 (Numbers) lotteries of US states, with their Midday, Day, Evening and Night draws according to each state's official schedule (shown on the Home page). The list of covered states is available on the Results page. New states and games are added regularly — if your state isn't available yet, contact us to request it.",
+    q13:"What does the 'Updated X min ago' indicator mean?",
+    a13:"This indicator shows how long ago the data for a given state was last fetched. It lets you see at a glance whether the displayed figures (latest draws, TOP PICK suggestions) reflect the most recent information available. If it shows several hours, click 🔄 Update to force a new fetch.",
+    q14:"Is my personal data secure?",
+    a14:"Yes. PREDIKTA only collects the information needed for your account (email, preferences). Your login data is encrypted, and we never sell or share your personal information with third parties for advertising purposes. The lottery data used for analysis is public information and is not linked to any personal data.",
+    q15:"Is PREDIKTA available in multiple languages?",
+    a15:"Yes, PREDIKTA is available in 5 languages: French, English, Spanish, Portuguese and Haitian Creole. You can change the language at any time via the language selector in the navigation menu — your preference is remembered for future visits.",
+    q16:"How do I contact support?",
+    a16:"You can reach us at any time via the Contact page, accessible from the footer or the 'Contact us' button at the bottom of this FAQ page. We typically respond within 24 to 48 business hours.",
     q8:"How does the 7-day free trial work?",
     a8:"You get access to all PRO or ELITE features for 7 days at no cost. No credit card is required for the trial. At the end of the period, you can choose to continue with a paid plan or stay on the FREE plan.",
     q9:"Can I cancel at any time?",
@@ -196,21 +243,31 @@ const T = {
   es:{
     title:"Preguntas Frecuentes", subtitle:"Todo lo que necesita saber sobre PREDIKTA",
     searchPh:"🔍  Buscar una pregunta...",
-    secAlgo:"Predicciones y Algoritmos", secData:"Datos y Resultados", secBilling:"Planes y Facturación", secTech:"Técnico",
+    secAlgo:"Predicciones y Algoritmos", secData:"Datos y Resultados", secBilling:"Planes y Facturación", secTech:"Técnico", secAccount:"Cuenta y Privacidad",
     q1:"¿Cómo genera PREDIKTA sus predicciones?",
-    a1:"PREDIKTA combina 7 algoritmos independientes: Markov (órdenes 1, 2 y 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 simulaciones), Análisis de Fourier y Gap Analysis. Un algoritmo de consenso pondera cada modelo y genera una puntuación final. Las combinaciones con las puntuaciones más altas se presentan como sugerencias.",
+    a1:"PREDIKTA combina 7 algoritmos independientes: <strong>Cadenas de Markov (órdenes 1, 2 y 3)</strong> para las transiciones entre dígitos, <strong>Random Forest</strong> y <strong>XGBoost</strong> para la clasificación de patrones, <strong>Gradient Boosting</strong> para refinar las puntuaciones, <strong>Monte Carlo</strong> (50,000 simulaciones) para estimar probabilidades, <strong>Análisis de Fourier</strong> para detectar ciclos ocultos y <strong>Gap Analysis</strong> para detectar dígitos atrasados. Un algoritmo de consenso pondera cada modelo según su rendimiento histórico reciente y genera una puntuación final sobre 100. Las combinaciones (Pick3, Pick4...) con las puntuaciones más altas se presentan como sugerencias TOP PICK, junto con un nivel de confianza (Baja, Media, Alta, Muy alta).",
     q2:"¿Son fiables las predicciones? ¿Se puede ganar?",
-    a2:"Las predicciones de PREDIKTA se basan en análisis estadísticos de datos históricos. No aumentan matemáticamente sus posibilidades de ganar, ya que cada sorteo de lotería es un evento aleatorio e independiente. Nuestra herramienta identifica tendencias y patrones pasados, pero estas tendencias no predicen el futuro con certeza. Use PREDIKTA como herramienta de análisis, no como garantía de ganancias.",
+    a2:"Las predicciones de PREDIKTA se basan en análisis estadísticos rigurosos de datos históricos reales (miles de sorteos por estado). Sin embargo, es importante entender que <strong>cada sorteo de lotería es un evento aleatorio e independiente</strong>: matemáticamente, ningún algoritmo, sin importar su sofisticación, puede predecir con certeza el resultado de un sorteo futuro. Lo que hace PREDIKTA es identificar tendencias estadísticas (dígitos calientes, dígitos atrasados, ciclos, transiciones frecuentes) que pueden orientar ligeramente sus elecciones, igual que un analista deportivo estudia estadísticas sin poder garantizar el resultado de un partido. Use PREDIKTA como una herramienta de apoyo a la decisión y entretenimiento informado, nunca como garantía de ganancia. Juegue siempre de forma responsable y solo con un presupuesto que pueda permitirse perder.",
     q3:"¿Qué es el análisis de Fourier aplicado a la lotería?",
-    a3:"El análisis de Fourier descompone la secuencia de sorteos en frecuencias para detectar posibles ciclos ocultos. Por ejemplo, si un dígito vuelve cada 11-12 sesiones en promedio, Fourier puede identificarlo. No es una certeza, sino un indicador adicional en el consenso multimodelo.",
+    a3:"El análisis de Fourier es una técnica matemática que descompone una serie de datos (aquí, la secuencia de sorteos) en una suma de frecuencias (ciclos). Aplicado a la lotería, permite detectar si ciertos dígitos tienden a repetirse según un ritmo regular — por ejemplo, si un dígito aparece en promedio cada 11 a 12 sesiones. PREDIKTA calcula estas frecuencias para cada posición (1º, 2º, 3º dígito) y cada estado, y luego incorpora los ciclos detectados como un indicador adicional en la puntuación de consenso final. No es una certeza — los ciclos pueden romperse en cualquier momento — pero es una señal estadística más entre las 7 que utiliza PREDIKTA.",
     q4:"¿Cuál es la diferencia entre Markov Orden 1, 2 y 3?",
     a4:'<strong>Orden 1:</strong> Predice el próximo dígito basándose únicamente en el último sorteo.<br><strong>Orden 2:</strong> Tiene en cuenta los últimos 2 sorteos para calcular la transición.<br><strong>Orden 3:</strong> Analiza 3 sorteos consecutivos para detectar patrones más largos.<br>Los tres órdenes se combinan en la puntuación de consenso final.',
     q5:"¿De dónde provienen los datos históricos?",
-    a5:"Todos los datos provienen de fuentes oficiales públicas de resultados de lotería de EE.UU. Los resultados de lotería son información factual de dominio público, recopilada y verificada diariamente.",
+    a5:"Todos los datos provienen de fuentes oficiales públicas de las loterías estatales de EE.UU. (el sitio oficial de cada lotería estatal, p. ej. New York Lottery, Florida Lottery, etc.). Los resultados de lotería son información factual publicada diariamente en el dominio público — PREDIKTA los recopila, verifica y estructura en una base de datos interna para permitir los análisis estadísticos. Ningún dato es inventado o estimado: cada sorteo mostrado corresponde a un resultado realmente publicado por el organismo oficial de lotería del estado correspondiente.",
     q6:"¿Con qué frecuencia se actualizan los resultados?",
-    a6:"Los resultados se actualizan diariamente. En la página de Resultados, haga clic en el botón 🔄 Actualizar de un estado para obtener los últimos sorteos. Los usuarios PRO también reciben alertas automáticas por correo después de cada sorteo.",
+    a6:"Los resultados se obtienen automáticamente y se actualizan de forma continua, poco después de la hora oficial de cada sorteo (visible en la página de inicio y en Analizar, con la hora exacta por estado). Un indicador '🔄 Actualizado hace X min/h' debajo de cada estado le muestra exactamente la frescura de los datos. También puede forzar una actualización manual desde la página de Resultados haciendo clic en el botón 🔄 Actualizar de un estado. Los usuarios PRO y ELITE además reciben alertas automáticas por correo en cuanto hay un nuevo sorteo disponible.",
     q7:"¿Cuántos años de historial están disponibles?",
-    a7:"Depende del estado y el juego. New York Numbers tiene datos desde 1980 (25,000+ sorteos). Por defecto, PREDIKTA carga 12 meses de historial. Con el plan ELITE, puede cargar hasta 5 años de datos para análisis más profundos.",
+    a7:"Depende del estado y el juego. New York Numbers tiene datos desde 1980 (25,000+ sorteos). Por defecto, PREDIKTA carga 12 meses de historial, suficiente para la mayoría de los modelos estadísticos. Con el plan ELITE, puede cargar hasta 5 años de datos para análisis más profundos y de mayor plazo.",
+    q12:"¿Qué estados y juegos cubre PREDIKTA?",
+    a12:"PREDIKTA cubre actualmente las principales loterías Pick 3 y Pick 4 (Numbers) de los estados de EE.UU., con sus sorteos de Mediodía, Día, Tarde y Noche según el calendario oficial de cada estado (mostrado en la página de inicio). La lista de estados cubiertos está disponible en la página de Resultados. Se añaden nuevos estados y juegos regularmente — si su estado aún no está disponible, contáctenos para solicitarlo.",
+    q13:"¿Qué significa el indicador 'Actualizado hace X min'?",
+    a13:"Este indicador muestra cuánto tiempo ha pasado desde la última obtención de datos para un estado determinado. Le permite ver de un vistazo si las cifras mostradas (últimos sorteos, sugerencias TOP PICK) reflejan la información más reciente disponible. Si muestra varias horas, haga clic en 🔄 Actualizar para forzar una nueva obtención.",
+    q14:"¿Están seguros mis datos personales?",
+    a14:"Sí. PREDIKTA solo recopila la información necesaria para su cuenta (correo electrónico, preferencias). Sus datos de acceso están cifrados, y nunca vendemos ni compartimos su información personal con terceros con fines publicitarios. Los datos de lotería utilizados para los análisis son información pública y no están vinculados a ningún dato personal.",
+    q15:"¿Está PREDIKTA disponible en varios idiomas?",
+    a15:"Sí, PREDIKTA está disponible en 5 idiomas: francés, inglés, español, portugués y criollo haitiano. Puede cambiar de idioma en cualquier momento mediante el selector de idioma en el menú de navegación — su preferencia se recuerda para sus próximas visitas.",
+    q16:"¿Cómo contacto con el soporte?",
+    a16:"Puede contactarnos en cualquier momento a través de la página de Contacto, accesible desde el pie de página o el botón 'Contáctenos' al final de esta página de FAQ. Normalmente respondemos dentro de 24 a 48 horas hábiles.",
     q8:"¿Cómo funciona la prueba gratuita de 7 días?",
     a8:"Tiene acceso a todas las funciones PRO o ELITE durante 7 días sin costo. No se requiere tarjeta de crédito para la prueba. Al final del período, puede elegir continuar con un plan de pago o permanecer en el plan FREE.",
     q9:"¿Puedo cancelar en cualquier momento?",
@@ -224,21 +281,31 @@ const T = {
   pt:{
     title:"Perguntas Frequentes", subtitle:"Tudo o que você precisa saber sobre a PREDIKTA",
     searchPh:"🔍  Pesquisar uma pergunta...",
-    secAlgo:"Previsões e Algoritmos", secData:"Dados e Resultados", secBilling:"Planos e Faturamento", secTech:"Técnico",
+    secAlgo:"Previsões e Algoritmos", secData:"Dados e Resultados", secBilling:"Planos e Faturamento", secTech:"Técnico", secAccount:"Conta e Privacidade",
     q1:"Como a PREDIKTA gera suas previsões?",
-    a1:"A PREDIKTA combina 7 algoritmos independentes: Markov (ordens 1, 2 e 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50.000 simulações), Análise de Fourier e Gap Analysis. Um algoritmo de consenso pondera cada modelo e gera uma pontuação final. As combinações com as pontuações mais altas são apresentadas como sugestões.",
+    a1:"A PREDIKTA combina 7 algoritmos independentes: <strong>Cadeias de Markov (ordens 1, 2 e 3)</strong> para as transições entre dígitos, <strong>Random Forest</strong> e <strong>XGBoost</strong> para a classificação de padrões, <strong>Gradient Boosting</strong> para refinar as pontuações, <strong>Monte Carlo</strong> (50.000 simulações) para estimar probabilidades, <strong>Análise de Fourier</strong> para detectar ciclos ocultos e <strong>Gap Analysis</strong> para identificar dígitos atrasados. Um algoritmo de consenso pondera cada modelo de acordo com seu desempenho histórico recente e gera uma pontuação final sobre 100. As combinações (Pick3, Pick4...) com as pontuações mais altas são apresentadas como sugestões TOP PICK, junto com um nível de confiança (Baixa, Média, Alta, Muito alta).",
     q2:"As previsões são confiáveis? É possível ganhar?",
-    a2:"As previsões da PREDIKTA são baseadas em análises estatísticas de dados históricos. Elas não aumentam matematicamente suas chances de ganhar, pois cada sorteio de loteria é um evento aleatório e independente. Nossa ferramenta identifica tendências e padrões passados, mas essas tendências não preveem o futuro com certeza. Use a PREDIKTA como ferramenta de análise, não como garantia de ganhos.",
+    a2:"As previsões da PREDIKTA são baseadas em análises estatísticas rigorosas de dados históricos reais (milhares de sorteios por estado). No entanto, é importante entender que <strong>cada sorteio de loteria é um evento aleatório e independente</strong>: matematicamente, nenhum algoritmo, por mais sofisticado que seja, pode prever com certeza o resultado de um sorteio futuro. O que a PREDIKTA faz é identificar tendências estatísticas (dígitos quentes, dígitos atrasados, ciclos, transições frequentes) que podem orientar ligeiramente suas escolhas, assim como um analista esportivo estuda estatísticas sem poder garantir o resultado de uma partida. Use a PREDIKTA como uma ferramenta de apoio à decisão e entretenimento informado, nunca como garantia de ganhos. Jogue sempre de forma responsável e apenas com um orçamento que você possa perder.",
     q3:"O que é a análise de Fourier aplicada à loteria?",
-    a3:"A análise de Fourier decompõe a sequência de sorteios em frequências para detectar possíveis ciclos ocultos. Por exemplo, se um dígito retorna a cada 11-12 sessões em média, Fourier pode identificá-lo. Não é uma certeza, mas um indicador adicional no consenso multimodelo.",
+    a3:"A análise de Fourier é uma técnica matemática que decompõe uma série de dados (aqui, a sequência de sorteios) em uma soma de frequências (ciclos). Aplicada à loteria, permite detectar se certos dígitos tendem a retornar em um ritmo regular — por exemplo, se um dígito aparece em média a cada 11 a 12 sessões. A PREDIKTA calcula essas frequências para cada posição (1º, 2º, 3º dígito) e cada estado, e depois incorpora os ciclos detectados como um indicador adicional na pontuação de consenso final. Não é uma certeza — os ciclos podem se romper a qualquer momento — mas é mais um sinal estatístico entre os 7 utilizados pela PREDIKTA.",
     q4:"Qual a diferença entre Markov Ordem 1, 2 e 3?",
     a4:'<strong>Ordem 1:</strong> Prevê o próximo dígito com base apenas no último sorteio.<br><strong>Ordem 2:</strong> Considera os últimos 2 sorteios para calcular a transição.<br><strong>Ordem 3:</strong> Analisa 3 sorteios consecutivos para detectar padrões mais longos.<br>As três ordens são combinadas na pontuação de consenso final.',
     q5:"De onde vêm os dados históricos?",
-    a5:"Todos os dados vêm de fontes oficiais públicas de resultados de loterias dos EUA. Os resultados de loteria são informações factuais de domínio público, coletadas e verificadas diariamente.",
+    a5:"Todos os dados vêm de fontes oficiais públicas das loterias estaduais dos EUA (o site oficial de cada loteria estadual, ex. New York Lottery, Florida Lottery, etc.). Os resultados de loteria são informações factuais publicadas diariamente em domínio público — a PREDIKTA os coleta, verifica e estrutura em um banco de dados interno para permitir as análises estatísticas. Nenhum dado é inventado ou estimado: cada sorteio exibido corresponde a um resultado realmente publicado pelo órgão oficial de loteria do estado correspondente.",
     q6:"Com que frequência os resultados são atualizados?",
-    a6:"Os resultados são atualizados diariamente. Na página de Resultados, clique no botão 🔄 Atualizar de um estado para obter os últimos sorteios. Os usuários PRO também recebem alertas automáticos por e-mail após cada sorteio.",
+    a6:"Os resultados são obtidos automaticamente e atualizados continuamente, pouco após o horário oficial de cada sorteio (visível na página inicial e na página Analisar, com o horário exato por estado). Um indicador '🔄 Atualizado há X min/h' abaixo de cada estado mostra exatamente a atualidade dos dados. Você também pode forçar uma atualização manual na página de Resultados clicando no botão 🔄 Atualizar de um estado. Os usuários PRO e ELITE também recebem alertas automáticos por e-mail logo que um novo sorteio está disponível.",
     q7:"Quantos anos de histórico estão disponíveis?",
-    a7:"Depende do estado e do jogo. O New York Numbers tem dados desde 1980 (25.000+ sorteios). Por padrão, a PREDIKTA carrega 12 meses de histórico. Com o plano ELITE, você pode carregar até 5 anos de dados para análises mais profundas.",
+    a7:"Depende do estado e do jogo. O New York Numbers tem dados desde 1980 (25.000+ sorteios). Por padrão, a PREDIKTA carrega 12 meses de histórico, suficiente para a maioria dos modelos estatísticos. Com o plano ELITE, você pode carregar até 5 anos de dados para análises mais profundas e de longo prazo.",
+    q12:"Quais estados e jogos a PREDIKTA cobre?",
+    a12:"A PREDIKTA cobre atualmente as principais loterias Pick 3 e Pick 4 (Numbers) dos estados dos EUA, com seus sorteios de Meio-dia, Dia, Tarde e Noite de acordo com o calendário oficial de cada estado (exibido na página inicial). A lista de estados cobertos está disponível na página de Resultados. Novos estados e jogos são adicionados regularmente — se o seu estado ainda não estiver disponível, contate-nos para solicitá-lo.",
+    q13:"O que significa o indicador 'Atualizado há X min'?",
+    a13:"Esse indicador mostra quanto tempo se passou desde a última coleta de dados de um determinado estado. Ele permite ver rapidamente se os números exibidos (últimos sorteios, sugestões TOP PICK) refletem a informação mais recente disponível. Se mostrar várias horas, clique em 🔄 Atualizar para forçar uma nova coleta.",
+    q14:"Meus dados pessoais estão seguros?",
+    a14:"Sim. A PREDIKTA coleta apenas as informações necessárias para sua conta (e-mail, preferências). Seus dados de login são criptografados, e nunca vendemos ou compartilhamos suas informações pessoais com terceiros para fins publicitários. Os dados de loteria usados nas análises são informações públicas e não estão vinculados a nenhum dado pessoal.",
+    q15:"A PREDIKTA está disponível em vários idiomas?",
+    a15:"Sim, a PREDIKTA está disponível em 5 idiomas: francês, inglês, espanhol, português e crioulo haitiano. Você pode mudar o idioma a qualquer momento pelo seletor de idioma no menu de navegação — sua preferência é lembrada nas próximas visitas.",
+    q16:"Como entro em contato com o suporte?",
+    a16:"Você pode nos contatar a qualquer momento pela página de Contato, acessível pelo rodapé ou pelo botão 'Fale conosco' no final desta página de FAQ. Normalmente respondemos dentro de 24 a 48 horas úteis.",
     q8:"Como funciona o teste grátis de 7 dias?",
     a8:"Você tem acesso a todos os recursos PRO ou ELITE por 7 dias sem custo. Nenhum cartão de crédito é necessário para o teste. No final do período, você pode optar por continuar com um plano pago ou permanecer no plano FREE.",
     q9:"Posso cancelar a qualquer momento?",
@@ -252,21 +319,31 @@ const T = {
   ht:{
     title:"Kesyon Moun Poze Souvan", subtitle:"Tout sa ou bezwen konnen sou PREDIKTA",
     searchPh:"🔍  Chèche yon kesyon...",
-    secAlgo:"Prediksyon ak Algoritm", secData:"Done ak Rezilta", secBilling:"Plan ak Fakti", secTech:"Teknik",
+    secAlgo:"Prediksyon ak Algoritm", secData:"Done ak Rezilta", secBilling:"Plan ak Fakti", secTech:"Teknik", secAccount:"Kont ak Konfidansyalite",
     q1:"Kijan PREDIKTA jenere prediksyon li yo?",
-    a1:"PREDIKTA konbine 7 algoritm endepandan: Markov (lòd 1, 2 ak 3), Random Forest, XGBoost, Gradient Boosting, Monte Carlo (50,000 similasyon), Analiz Fourier ak Gap Analysis. Yon algoritm konsansis peze chak modèl epi jenere yon nòt final. Konbinezon ak pi gwo nòt yo prezante kòm sijesyon.",
+    a1:"PREDIKTA konbine 7 algoritm endepandan: <strong>Chèn Markov (lòd 1, 2 ak 3)</strong> pou tranzisyon ant chif yo, <strong>Random Forest</strong> ak <strong>XGBoost</strong> pou klase modèl, <strong>Gradient Boosting</strong> pou rafine nòt yo, <strong>Monte Carlo</strong> (50,000 similasyon) pou estime pwobabilite, <strong>Analiz Fourier</strong> pou detekte sik kache, ak <strong>Gap Analysis</strong> pou idantifye chif ki an reta. Yon algoritm konsansis peze chak modèl selon pèfòmans istorik resan li epi jenere yon nòt final sou 100. Konbinezon yo (Pick3, Pick4...) ak pi gwo nòt yo prezante kòm sijesyon TOP PICK, ansanm ak yon nivo konfyans (Ba, Mwayen, Wo, Trè wo).",
     q2:"Èske prediksyon yo fyab? Èske ou ka genyen?",
-    a2:"Prediksyon PREDIKTA yo baze sou analiz estatistik done istorik. Yo pa ogmante mate matikman chans ou pou genyen, paske chak tiraj lotri se yon evènman aleyatwa ak endepandan. Zouti nou an idantifye tandans ak modèl ki sot pase, men tandans sa yo pa predi avni a ak sètitid. Itilize PREDIKTA kòm yon zouti analiz, pa kòm yon garanti pou genyen.",
+    a2:"Prediksyon PREDIKTA yo baze sou analiz estatistik rigorez sou done istorik reyèl (plizyè milye tiraj pou chak eta). Sepandan, li enpòtan pou konprann ke <strong>chak tiraj lotri se yon evènman aleyatwa ak endepandan</strong>: matematikman, okenn algoritm, kèlkeswa jan li sofistike, pa kapab predi rezilta yon tiraj nan lavni ak sètitid. Sa PREDIKTA fè se idantifye tandans estatistik (chif cho, chif an reta, sik, tranzisyon frekan) ki ka oryante chwa ou yon ti jan, menm jan yon analis espòtif etidye estatistik san l pa ka garanti rezilta yon match. Itilize PREDIKTA kòm yon zouti pou ede ou pran desizyon ak amizman enfòme, jamè kòm yon garanti pou genyen. Toujou jwe avèk responsablite epi sèlman ak yon bidjè ou ka pèdi.",
     q3:"Kisa analiz Fourier aplike nan lotri a ye?",
-    a3:"Analiz Fourier dekonpoze sekans tiraj yo an frekans pou detekte posib sik kache. Pa egzanp, si yon chif retounen chak 11-12 sesyon an mwayèn, Fourier ka idantifye li. Sa pa yon sètitid, men yon endikatè anplis nan konsansis miltimodèl la.",
+    a3:"Analiz Fourier se yon teknik matematik ki dekonpoze yon seri done (isit la, sekans tiraj yo) an yon sòm frekans (sik). Aplike nan lotri a, li ka detekte si sèten chif gen tandans retounen selon yon rit regilye — pa egzanp, si yon chif parèt an mwayèn chak 11 a 12 sesyon. PREDIKTA kalkile frekans sa yo pou chak pozisyon (1ye, 2yèm, 3yèm chif) ak chak eta, epi li enkòpore sik yo detekte kòm yon endikatè anplis nan nòt konsansis final la. Sa pa yon sètitid — sik yo ka kraze nenpòt ki lè — men se yon siyal estatistik anplis pami 7 PREDIKTA itilize.",
     q4:"Ki diferans ant Markov Lòd 1, 2 ak 3?",
     a4:'<strong>Lòd 1:</strong> Predi pwochen chif la baze sèlman sou dènye tiraj la.<br><strong>Lòd 2:</strong> Pran an kont 2 dènye tiraj yo pou kalkile tranzisyon an.<br><strong>Lòd 3:</strong> Analize 3 tiraj youn apre lòt pou detekte modèl ki pi long.<br>Twa lòd yo konbine nan nòt konsansis final la.',
     q5:"Ki kote done istorik yo soti?",
-    a5:"Tout done yo soti nan sous ofisyèl piblik rezilta lotri ameriken. Rezilta lotri yo se enfòmasyon faktyèl nan domèn piblik, ranmase epi verifye chak jou.",
+    a5:"Tout done yo soti nan sous ofisyèl piblik lotri eta ameriken yo (sit ofisyèl chak lotri eta, pa egzanp New York Lottery, Florida Lottery, elatriye). Rezilta lotri yo se enfòmasyon faktyèl ki pibliye chak jou nan domèn piblik — PREDIKTA ranmase yo, verifye yo epi estriktire yo nan yon baz done entèn pou pèmèt analiz estatistik yo. Pa gen okenn done envante oswa estime: chak tiraj ki parèt koresponn ak yon rezilta ki reyèlman pibliye pa otorite ofisyèl lotri eta a konsène.",
     q6:"Ki frekans rezilta yo mete ajou?",
-    a6:"Rezilta yo mete ajou chak jou. Nan paj Rezilta a, klike sou bouton 🔄 Mete ajou pou yon eta pou jwenn dènye tiraj yo. Itilizatè PRO yo resevwa tou alèt imèl otomatik apre chak tiraj.",
+    a6:"Rezilta yo ranmase otomatikman epi yo mete ajou an kontinyèl, yon ti tan apre lè ofisyèl chak tiraj (vizib sou paj Akèy ak paj Analize, ak lè egzak pou chak eta). Yon endikatè '🔄 Mete ajou X min/h pase' anba chak eta montre w egzakteman ki kantite tan done yo genyen. Ou ka tou fòse yon mizajou manyèl nan paj Rezilta a lè ou klike sou bouton 🔄 Mete ajou pou yon eta. Itilizatè PRO ak ELITE yo resevwa tou alèt imèl otomatik depi yon nouvo tiraj disponib.",
     q7:"Konbyen ane istwa ki disponib?",
-    a7:"Sa depann de eta ak jwèt la. New York Numbers gen done depi 1980 (25,000+ tiraj). Pa default, PREDIKTA chaje 12 mwa istwa. Ak abònman ELITE, ou ka chaje jiska 5 ane done pou analiz pi fon.",
+    a7:"Sa depann de eta ak jwèt la. New York Numbers gen done depi 1980 (25,000+ tiraj). Pa default, PREDIKTA chaje 12 mwa istwa, ki ase pou pifò modèl estatistik. Ak abònman ELITE, ou ka chaje jiska 5 ane done pou analiz pi fon ak pi alontèm.",
+    q12:"Ki eta ak jwèt PREDIKTA kouvri?",
+    a12:"PREDIKTA kouvri kounye a prensipal lotri Pick 3 ak Pick 4 (Numbers) nan eta ameriken yo, ak tiraj Midi, Jounen, Aswè ak Nuit yo selon orè ofisyèl chak eta (ki parèt sou paj Akèy). Lis eta ki kouvri disponib sou paj Rezilta. Nouvo eta ak jwèt ajoute regilyèman — si eta w pa disponib ankò, kontakte nou pou mande sa.",
+    q13:"Kisa endikatè 'Mete ajou X min pase' la vle di?",
+    a13:"Endikatè sa a montre konbyen tan ki pase depi dènye fwa done pou yon eta espesifik te ranmase. Li pèmèt ou wè byen vit si chif ki parèt yo (dènye tiraj, sijesyon TOP PICK) reflete enfòmasyon ki pi resan ki disponib. Si li montre plizyè èdtan, klike sou 🔄 Mete ajou pou fòse yon nouvo ranmasaj.",
+    q14:"Èske done pèsonèl mwen yo an sekirite?",
+    a14:"Wi. PREDIKTA sèlman ranmase enfòmasyon ki nesesè pou kont ou (imèl, preferans). Done koneksyon ou yo chifre, e nou pa janm vann ni pataje enfòmasyon pèsonèl ou ak twazyèm pati pou rezon piblisite. Done lotri yo itilize pou analiz yo se enfòmasyon piblik epi yo pa konekte ak okenn done pèsonèl.",
+    q15:"Èske PREDIKTA disponib nan plizyè lang?",
+    a15:"Wi, PREDIKTA disponib nan 5 lang: franse, anglè, panyòl, pòtigè ak kreyòl ayisyen. Ou ka chanje lang nenpòt kilè atravè selektè lang nan meni navigasyon an — preferans ou sove pou pwochen vizit ou yo.",
+    q16:"Kijan pou m kontakte sipò?",
+    a16:"Ou ka kontakte nou nenpòt kilè atravè paj Kontak la, ki aksesib soti nan pye paj la oswa bouton 'Kontakte nou' anba paj FAQ sa a. Nou anjeneral reponn nan 24 a 48 èdtan ouvrab.",
     q8:"Kijan peryòd esè gratis 7 jou a fonksyone?",
     a8:"Ou gen aksè a tout fonksyonalite PRO oswa ELITE pandan 7 jou san frè. Pa gen kat bankè ki nesesè pou esè a. Nan fen peryòd la, ou ka chwazi kontinye ak yon plan peye oswa rete sou plan FREE la.",
     q9:"Èske mwen ka anile nenpòt kilè?",
