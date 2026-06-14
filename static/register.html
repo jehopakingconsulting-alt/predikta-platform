@@ -35,6 +35,10 @@ button.submit:disabled{opacity:.6;cursor:default}
 .oauth-divider{display:flex;align-items:center;gap:10px;margin:6px 0 18px;color:var(--muted2);font-size:.72rem;text-transform:uppercase;letter-spacing:1px}
 .oauth-divider::before,.oauth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 #oauthWrap{display:none}
+.disclaimer{display:flex;align-items:flex-start;gap:10px;margin:4px 0 16px;font-size:.74rem;color:var(--muted2);line-height:1.6}
+.disclaimer input{width:auto;margin:2px 0 0;flex-shrink:0;accent-color:var(--accent)}
+.disclaimer a{color:var(--accent);text-decoration:none}
+.disclaimer a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -66,6 +70,11 @@ button.submit:disabled{opacity:.6;cursor:default}
     <label for="rPassword" data-i18n="lblPassword">Mot de passe</label>
     <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password"/>
 
+    <label class="disclaimer">
+      <input type="checkbox" id="rDisclaimer"/>
+      <span id="disclaimerText">J'ai au moins l'âge légal pour jouer à la loterie dans ma juridiction et je reconnais que PREDIKTA fournit uniquement des analyses statistiques éducatives, sans garantie de gain. Voir le <a href="/responsible-gaming" target="_blank">Jeu Responsable</a>.</span>
+    </label>
+
     <button class="submit" id="btnRegister" data-i18n="btnRegister">Créer mon compte &amp; démarrer l'essai</button>
     <div class="msg" id="msg"></div>
     <div class="alt"><span data-i18n="haveAccount">Déjà un compte ?</span> <a href="/login" data-i18n="loginLink">Se connecter</a></div>
@@ -79,30 +88,40 @@ const T = {
     lblUsername:"Nom d'utilisateur",lblEmail:"Email",lblPassword:"Mot de passe",
     btnRegister:"Créer mon compte & démarrer l'essai",haveAccount:"Déjà un compte ?",loginLink:"Se connecter",
     errFields:"Merci de remplir tous les champs.",errPwd:"Le mot de passe doit contenir au moins 8 caractères.",
+    errDisclaimer:"Vous devez confirmer votre âge et accepter l'avertissement sur le jeu responsable.",
+    disclaimerHtml:"J'ai au moins l'âge légal pour jouer à la loterie dans ma juridiction et je reconnais que PREDIKTA fournit uniquement des analyses statistiques éducatives, sans garantie de gain. Voir le <a href=\"/responsible-gaming\" target=\"_blank\">Jeu Responsable</a>.",
     success:"Compte créé ! Redirection...",},
   en:{title:"Create your PREDIKTA account",subtitle:"Pick your plan, create your account, and start your free trial right away.",continueGoogle:"Continue with Google",orDivider:"or",
     trial1:"3d free",trial2:"7d free",trial3:"7d free",
     lblUsername:"Username",lblEmail:"Email",lblPassword:"Password",
     btnRegister:"Create account & start trial",haveAccount:"Already have an account?",loginLink:"Log in",
     errFields:"Please fill in all fields.",errPwd:"Password must be at least 8 characters.",
+    errDisclaimer:"You must confirm your age and accept the responsible gaming notice.",
+    disclaimerHtml:"I am at least the legal age to play the lottery in my jurisdiction and I acknowledge that PREDIKTA provides educational statistical analysis only, with no guarantee of winnings. See <a href=\"/responsible-gaming\" target=\"_blank\">Responsible Gaming</a>.",
     success:"Account created! Redirecting...",},
   es:{title:"Crea tu cuenta PREDIKTA",subtitle:"Elige tu plan, crea tu cuenta y disfruta de tu prueba gratuita de inmediato.",continueGoogle:"Continuar con Google",orDivider:"o",
     trial1:"3d gratis",trial2:"7d gratis",trial3:"7d gratis",
     lblUsername:"Usuario",lblEmail:"Correo",lblPassword:"Contraseña",
     btnRegister:"Crear cuenta y empezar prueba",haveAccount:"¿Ya tienes cuenta?",loginLink:"Iniciar sesión",
     errFields:"Completa todos los campos.",errPwd:"La contraseña debe tener al menos 8 caracteres.",
+    errDisclaimer:"Debes confirmar tu edad y aceptar el aviso de juego responsable.",
+    disclaimerHtml:"Tengo al menos la edad legal para jugar a la lotería en mi jurisdicción y reconozco que PREDIKTA ofrece únicamente análisis estadísticos educativos, sin garantía de premio. Ver <a href=\"/responsible-gaming\" target=\"_blank\">Juego Responsable</a>.",
     success:"¡Cuenta creada! Redirigiendo...",},
   pt:{title:"Crie sua conta PREDIKTA",subtitle:"Escolha seu plano, crie sua conta e aproveite seu teste grátis agora mesmo.",continueGoogle:"Continuar com o Google",orDivider:"ou",
     trial1:"3d grátis",trial2:"7d grátis",trial3:"7d grátis",
     lblUsername:"Usuário",lblEmail:"Email",lblPassword:"Senha",
     btnRegister:"Criar conta e iniciar teste",haveAccount:"Já tem conta?",loginLink:"Entrar",
     errFields:"Preencha todos os campos.",errPwd:"A senha deve ter pelo menos 8 caracteres.",
+    errDisclaimer:"Você deve confirmar sua idade e aceitar o aviso de jogo responsável.",
+    disclaimerHtml:"Tenho pelo menos a idade legal para jogar na loteria em minha jurisdição e reconheço que a PREDIKTA fornece apenas análises estatísticas educativas, sem garantia de prêmio. Veja <a href=\"/responsible-gaming\" target=\"_blank\">Jogo Responsável</a>.",
     success:"Conta criada! Redirecionando...",},
   ht:{title:"Kreye yon kont PREDIKTA",subtitle:"Chwazi plan ou, kreye kont ou, epi pwofite peryòd esè gratis ou imedyatman.",continueGoogle:"Kontinye ak Google",orDivider:"oswa",
     trial1:"3j gratis",trial2:"7j gratis",trial3:"7j gratis",
     lblUsername:"Non itilizatè",lblEmail:"Imel",lblPassword:"Modpas",
     btnRegister:"Kreye kont mwen & kòmanse esè",haveAccount:"Ou gen yon kont deja?",loginLink:"Konekte",
     errFields:"Tanpri ranpli tout chan yo.",errPwd:"Modpas la dwe gen omwen 8 karaktè.",
+    errDisclaimer:"Ou dwe konfime laj ou e aksepte avi sou jwe responsab.",
+    disclaimerHtml:"Mwen gen omwen laj legal pou jwe lotri nan jiridiksyon mwen e mwen rekonèt PREDIKTA bay sèlman analiz statistik edikatif, san garanti lo. Gade <a href=\"/responsible-gaming\" target=\"_blank\">Jwe Responsab</a>.",
     success:"Kont kreye! N ap redirije...",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
@@ -114,6 +133,7 @@ function applyLang(lang){
     const k = el.getAttribute('data-i18n');
     if(dict[k]) el.textContent = dict[k];
   });
+  document.getElementById('disclaimerText').innerHTML = dict.disclaimerHtml;
 }
 window.setLang = applyLang;
 applyLang(curLang);
@@ -152,11 +172,12 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
   msgEl.className='msg';
   if(!username || !email || !password){ msgEl.textContent=dict.errFields; msgEl.className='msg error'; return; }
   if(password.length < 8){ msgEl.textContent=dict.errPwd; msgEl.className='msg error'; return; }
+  if(!document.getElementById('rDisclaimer').checked){ msgEl.textContent=dict.errDisclaimer; msgEl.className='msg error'; return; }
 
   const btn = document.getElementById('btnRegister');
   btn.disabled = true;
   try{
-    const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password})});
+    const r = await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password,disclaimer_accepted:true})});
     const data = await r.json();
     if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
 

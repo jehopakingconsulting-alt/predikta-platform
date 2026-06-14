@@ -457,6 +457,7 @@ def register():
     username = (data.get("username") or "").strip()
     email    = (data.get("email") or "").strip().lower()
     password = data.get("password") or ""
+    disclaimer_accepted = bool(data.get("disclaimer_accepted"))
 
     if not USERNAME_RE.match(username):
         return jsonify({"error": "Nom d'utilisateur invalide (3-20 caractères, lettres/chiffres/_)"}), 400
@@ -464,6 +465,8 @@ def register():
         return jsonify({"error": "Email invalide"}), 400
     if len(password) < 8:
         return jsonify({"error": "Le mot de passe doit contenir au moins 8 caractères"}), 400
+    if not disclaimer_accepted:
+        return jsonify({"error": "Vous devez accepter l'avertissement sur le jeu responsable pour créer un compte."}), 400
 
     if User.query.filter_by(username=username).first():
         return jsonify({"error": "Ce nom d'utilisateur est déjà pris"}), 409
