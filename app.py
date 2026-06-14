@@ -667,6 +667,87 @@ def api_track_record():
     _TRACK_RECORD_CACHE[cache_key] = {"ts": time.time(), "data": payload}
     return jsonify(payload)
 
+
+_ACCURACY_CACHE = {}
+_ACCURACY_CACHE_TTL = int(os.environ.get("PREDIKTA_ACCURACY_CACHE_SEC", 30 * 60))  # 30 min
+ACCURACY_WINDOWS = [7, 30, 90]
+
+
+@app.route("/api/accuracy")
+def api_accuracy():
+    """
+    PREDIKTA Accuracy Score: for each state, replay the last 7/30/90 draws
+    per draw-time and compute straight & box hit rates vs. the random-chance
+    baseline (~0.1% straight, ~0.6% box for Pick 3).
+    """
+    import analyzer
+
+    cached = _ACCURACY_CACHE.get("data")
+    if cached and (time.time() - cached["ts"]) < _ACCURACY_CACHE_TTL:
+        return jsonify(cached["data"])
+
+    max_n = max(ACCURACY_WINDOWS)
+    out = []
+    grand = {w: {"n": 0, "straight": 0, "box": 0} for w in ACCURACY_WINDOWS}
+
+    for code in HOT_PICK3_STATES:
+        draws = analyzer.load_draws(code)
+        if not draws:
+            continue
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        state_totals = {w: {"n": 0, "straight": 0, "box": 0} for w in ACCURACY_WINDOWS}
+        any_data = False
+        for tod, tdraws in by_tod.items():
+            rows = analyzer.backtest_suggestions(tdraws, n=max_n)
+            if not rows:
+                continue
+            any_data = True
+            for w in ACCURACY_WINDOWS:
+                window_rows = rows[:w]
+                n = len(window_rows)
+                state_totals[w]["n"] += n
+                state_totals[w]["straight"] += sum(1 for r in window_rows if r["hit_straight"])
+                state_totals[w]["box"] += sum(1 for r in window_rows if r["hit_box"])
+
+        if not any_data:
+            continue
+
+        out.append({"state": code, "name": STATES[code]["name"], "windows": state_totals})
+        for w in ACCURACY_WINDOWS:
+            grand[w]["n"] += state_totals[w]["n"]
+            grand[w]["straight"] += state_totals[w]["straight"]
+            grand[w]["box"] += state_totals[w]["box"]
+
+    def rate(d, key):
+        return (d[key] / d["n"] * 100) if d["n"] else 0.0
+
+    best_states = sorted(
+        (s for s in out if s["windows"][90]["n"] >= 20),
+        key=lambda s: rate(s["windows"][90], "box"),
+        reverse=True,
+    )[:3]
+    best_states = [{
+        "state": s["state"], "name": s["name"],
+        "n": s["windows"][90]["n"],
+        "straight_rate": round(rate(s["windows"][90], "straight"), 2),
+        "box_rate": round(rate(s["windows"][90], "box"), 2),
+    } for s in best_states]
+
+    payload = {
+        "windows": ACCURACY_WINDOWS,
+        "baseline": {"straight_pct": 0.1, "box_pct": 0.6},
+        "states": out,
+        "grand_totals": grand,
+        "best_states": best_states,
+        "updated_at": datetime.now(tz=ZoneInfo("America/New_York")).isoformat(),
+    }
+    _ACCURACY_CACHE["data"] = {"ts": time.time(), "data": payload}
+    return jsonify(payload)
+
 @app.route("/track-record")
 def track_record_page(): return send_from_directory("static", "track-record.html")
 
@@ -720,6 +801,9 @@ def terms_page():  return send_from_directory("static", "terms.html")
 
 @app.route("/responsible-gaming")
 def responsible_gaming_page(): return send_from_directory("static", "responsible-gaming.html")
+
+@app.route("/accuracy")
+def accuracy_page(): return send_from_directory("static", "accuracy.html")
 
 @app.route("/offline")
 def offline_page(): return send_from_directory("static", "offline.html")

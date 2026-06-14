@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA Accuracy Score — PREDIKTA</title>
+<meta name="description" content="PREDIKTA Accuracy Score : taux de réussite réels de nos suggestions sur 7, 30 et 90 jours, comparés au hasard pur, par État."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;--green:#22cc88;--red:#ff5566}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 30% 30%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:920px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;margin-bottom:28px}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2)}
+
+.method-box{border:1px solid var(--border);border-radius:14px;background:var(--card);padding:18px 20px;margin-bottom:28px;font-size:.78rem;color:var(--muted2);line-height:1.7}
+.method-box h2{font-size:.9rem;color:var(--text);margin-bottom:8px;font-weight:700}
+.method-box ul{margin:8px 0 0 18px}
+.method-box .updated{margin-top:10px;font-size:.7rem;color:var(--green);opacity:.85}
+
+.windows{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+.wcard{border:1px solid var(--border);border-radius:14px;background:var(--card);padding:18px}
+.wcard h3{font-family:'Orbitron',monospace;font-size:1rem;color:var(--text);margin-bottom:10px;text-align:center}
+.wrow{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted2);padding:6px 0;border-bottom:1px solid rgba(26,26,69,.5)}
+.wrow:last-child{border-bottom:none}
+.wrow .val{font-family:'Orbitron',monospace;font-weight:900;color:var(--gold)}
+.wrow .val.base{color:var(--muted2);font-weight:700}
+
+.section-title{font-size:1rem;font-weight:700;margin:32px 0 14px;color:var(--text)}
+
+.best-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:28px}
+.best-card{border:1px solid var(--border);border-radius:12px;background:var(--card);padding:14px;text-align:center}
+.best-card .rank{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.best-card .sname{font-family:'Orbitron',monospace;font-weight:900;font-size:1.05rem;color:var(--gold);margin-bottom:6px}
+.best-card .srate{font-size:.74rem;color:var(--muted2)}
+.best-card .srate b{color:var(--green)}
+
+table.acc{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:28px}
+table.acc th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:.65rem;text-transform:uppercase;letter-spacing:.5px}
+table.acc td{padding:8px 10px;border-bottom:1px solid rgba(26,26,69,.5);color:var(--muted2)}
+table.acc td.sname{color:var(--text);font-weight:700}
+table.acc td.rate{font-family:'Orbitron',monospace;color:var(--gold);font-weight:700}
+
+.loading{text-align:center;padding:40px;color:var(--muted2);font-size:.85rem}
+
+.cta-box{margin-top:40px;text-align:center;padding:32px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:16px}
+.cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:16px}
+.cta-btn{padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#8855ff);color:#fff;border:none;cursor:pointer;text-decoration:none;display:inline-block;margin:0 6px}
+.cta-btn.alt{background:transparent;border:1px solid var(--border);color:var(--muted2)}
+
+.warning{background:rgba(255,61,46,.08);border-left:3px solid #ff3d2e;padding:14px 16px;border-radius:0 8px 8px 0;margin:20px 0;font-size:.78rem;color:#ff9988;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <h1 data-i18n="title">PREDIKTA Accuracy Score</h1>
+    <p class="subtitle" data-i18n="subtitle">Le taux de réussite réel de nos suggestions TOP PICK, mesuré objectivement sur 7, 30 et 90 jours</p>
+  </div>
+
+  <div class="method-box">
+    <h2 data-i18n="methodTitle">Comment est calculé ce score ?</h2>
+    <div data-i18n="methodBody"></div>
+    <div class="updated" id="updatedLine"></div>
+  </div>
+
+  <div id="windows" class="windows"><div class="loading" data-i18n="loading">Chargement…</div></div>
+
+  <div class="section-title" data-i18n="bestTitle">🏆 Meilleurs États (90 jours)</div>
+  <div id="bestList" class="best-list"></div>
+
+  <div class="section-title" data-i18n="byStateTitle">Détail par État</div>
+  <table class="acc" id="stateTable"></table>
+
+  <div class="warning" data-i18n="warning"></div>
+
+  <div class="cta-box">
+    <p data-i18n="ctaText">Envie de voir le détail tirage par tirage ?</p>
+    <a href="/track-record" class="cta-btn" data-i18n="ctaBtn">Historique des Suggestions →</a>
+    <a href="/analyze" class="cta-btn alt" data-i18n="ctaBtn2">Ouvrir l'Analyseur</a>
+  </div>
+</div>
+<script>
+const T = {
+fr:{
+  title:"PREDIKTA Accuracy Score", subtitle:"Le taux de réussite réel de nos suggestions TOP PICK, mesuré objectivement sur 7, 30 et 90 jours",
+  methodTitle:"Comment est calculé ce score ?",
+  methodBody:`Pour chaque tirage passé de chaque État, nous recalculons la suggestion TOP PICK que PREDIKTA aurait générée en utilisant uniquement les données disponibles AVANT ce tirage (aucune anticipation). Nous comparons ensuite cette suggestion au résultat réellement tiré, sur des fenêtres glissantes de 7, 30 et 90 tirages.
+    <ul>
+      <li><strong>Exact (straight)</strong> — la combinaison correspond chiffre par chiffre et position par position. Probabilité par pur hasard ≈ 0,1% (1 chance sur 1 000).</li>
+      <li><strong>Box</strong> — les mêmes 3 chiffres, dans n'importe quel ordre. Probabilité par pur hasard ≈ jusqu'à 0,6% (6 chances sur 1 000).</li>
+    </ul>
+    Ce score mesure objectivement la performance passée de l'algorithme face au hasard pur — il ne garantit aucun résultat futur. Voir aussi notre <a href="/track-record" style="color:#7888bb">historique détaillé</a>.`,
+  loading:"Chargement…", noData:"Pas encore assez de données.",
+  win7:"7 jours", win30:"30 jours", win90:"90 jours",
+  drawsAnalyzed:"Tirages analysés", straightRate:"Taux exact", boxRate:"Taux box", vsBaseline:"vs hasard pur",
+  bestTitle:"🏆 Meilleurs États (90 jours)", byStateTitle:"Détail par État",
+  colState:"État", colN:"Tirages", colStraight:"Exact", colBox:"Box",
+  warning:"⚠️ <strong>Important :</strong> Ces chiffres sont des statistiques historiques, pas des prédictions. Chaque tirage de loterie reste un événement aléatoire et indépendant — les performances passées ne garantissent aucun gain futur. Jouez de manière responsable.",
+  ctaText:"Envie de voir le détail tirage par tirage ?", ctaBtn:"Historique des Suggestions →", ctaBtn2:"Ouvrir l'Analyseur",
+  updatedAgo:m=>m<1?"Mis à jour à l'instant":m<60?`Mis à jour il y a ${m} min`:`Mis à jour il y a ${Math.floor(m/60)} h`,
+  rankPrefix:n=>`#${n}`, basisN:n=>`sur ${n} tirages`,
+},
+en:{
+  title:"PREDIKTA Accuracy Score", subtitle:"The real hit rate of our TOP PICK suggestions, objectively measured over 7, 30 and 90 days",
+  methodTitle:"How is this score calculated?",
+  methodBody:`For each past draw in every state, we recompute the TOP PICK suggestion PREDIKTA would have generated using only data available BEFORE that draw (no lookahead). We then compare it to the actual result, over rolling windows of 7, 30 and 90 draws.
+    <ul>
+      <li><strong>Straight</strong> — the combination matches digit by digit, position by position. Pure-chance probability ≈ 0.1% (1 in 1,000).</li>
+      <li><strong>Box</strong> — the same 3 digits, in any order. Pure-chance probability ≈ up to 0.6% (6 in 1,000).</li>
+    </ul>
+    This score objectively measures the algorithm's past performance against pure chance — it does not guarantee any future result. See also our <a href="/track-record" style="color:#7888bb">detailed track record</a>.`,
+  loading:"Loading…", noData:"Not enough data yet.",
+  win7:"7 days", win30:"30 days", win90:"90 days",
+  drawsAnalyzed:"Draws analyzed", straightRate:"Straight rate", boxRate:"Box rate", vsBaseline:"vs pure chance",
+  bestTitle:"🏆 Best States (90 days)", byStateTitle:"Per-State Breakdown",
+  colState:"State", colN:"Draws", colStraight:"Straight", colBox:"Box",
+  warning:"⚠️ <strong>Important:</strong> These numbers are historical statistics, not predictions. Every lottery draw remains a random, independent event — past performance does not guarantee any future winnings. Play responsibly.",
+  ctaText:"Want to see the draw-by-draw detail?", ctaBtn:"Suggestions Track Record →", ctaBtn2:"Open the Analyzer",
+  updatedAgo:m=>m<1?"Updated just now":m<60?`Updated ${m} min ago`:`Updated ${Math.floor(m/60)} h ago`,
+  rankPrefix:n=>`#${n}`, basisN:n=>`over ${n} draws`,
+},
+es:{
+  title:"PREDIKTA Accuracy Score", subtitle:"La tasa de aciertos real de nuestras sugerencias TOP PICK, medida objetivamente durante 7, 30 y 90 días",
+  methodTitle:"¿Cómo se calcula esta puntuación?",
+  methodBody:`Para cada sorteo pasado de cada estado, recalculamos la sugerencia TOP PICK que PREDIKTA habría generado usando solo datos disponibles ANTES de ese sorteo (sin anticipación). Luego comparamos esa sugerencia con el resultado real, en ventanas móviles de 7, 30 y 90 sorteos.
+    <ul>
+      <li><strong>Exacto (straight)</strong> — la combinación coincide dígito por dígito, posición por posición. Probabilidad por azar puro ≈ 0,1% (1 entre 1.000).</li>
+      <li><strong>Box</strong> — los mismos 3 dígitos, en cualquier orden. Probabilidad por azar puro ≈ hasta 0,6% (6 entre 1.000).</li>
+    </ul>
+    Esta puntuación mide objetivamente el rendimiento pasado del algoritmo frente al azar puro — no garantiza ningún resultado futuro. Vea también nuestro <a href="/track-record" style="color:#7888bb">historial detallado</a>.`,
+  loading:"Cargando…", noData:"Aún no hay suficientes datos.",
+  win7:"7 días", win30:"30 días", win90:"90 días",
+  drawsAnalyzed:"Sorteos analizados", straightRate:"Tasa exacta", boxRate:"Tasa box", vsBaseline:"vs azar puro",
+  bestTitle:"🏆 Mejores Estados (90 días)", byStateTitle:"Detalle por Estado",
+  colState:"Estado", colN:"Sorteos", colStraight:"Exacto", colBox:"Box",
+  warning:"⚠️ <strong>Importante:</strong> Estas cifras son estadísticas históricas, no predicciones. Cada sorteo de lotería sigue siendo un evento aleatorio e independiente — el rendimiento pasado no garantiza ningún premio futuro. Juegue de forma responsable.",
+  ctaText:"¿Quiere ver el detalle sorteo por sorteo?", ctaBtn:"Historial de Sugerencias →", ctaBtn2:"Abrir el Analizador",
+  updatedAgo:m=>m<1?"Actualizado ahora mismo":m<60?`Actualizado hace ${m} min`:`Actualizado hace ${Math.floor(m/60)} h`,
+  rankPrefix:n=>`#${n}`, basisN:n=>`sobre ${n} sorteos`,
+},
+pt:{
+  title:"PREDIKTA Accuracy Score", subtitle:"A taxa de acerto real das nossas sugestões TOP PICK, medida objetivamente em 7, 30 e 90 dias",
+  methodTitle:"Como esse índice é calculado?",
+  methodBody:`Para cada sorteio passado de cada estado, recalculamos a sugestão TOP PICK que a PREDIKTA teria gerado usando apenas dados disponíveis ANTES desse sorteio (sem antecipação). Em seguida, comparamos essa sugestão com o resultado real, em janelas móveis de 7, 30 e 90 sorteios.
+    <ul>
+      <li><strong>Exato (straight)</strong> — a combinação corresponde dígito por dígito, posição por posição. Probabilidade por puro acaso ≈ 0,1% (1 em 1.000).</li>
+      <li><strong>Box</strong> — os mesmos 3 dígitos, em qualquer ordem. Probabilidade por puro acaso ≈ até 0,6% (6 em 1.000).</li>
+    </ul>
+    Esse índice mede objetivamente o desempenho passado do algoritmo frente ao puro acaso — não garante nenhum resultado futuro. Veja também nosso <a href="/track-record" style="color:#7888bb">histórico detalhado</a>.`,
+  loading:"Carregando…", noData:"Ainda não há dados suficientes.",
+  win7:"7 dias", win30:"30 dias", win90:"90 dias",
+  drawsAnalyzed:"Sorteios analisados", straightRate:"Taxa exata", boxRate:"Taxa box", vsBaseline:"vs puro acaso",
+  bestTitle:"🏆 Melhores Estados (90 dias)", byStateTitle:"Detalhe por Estado",
+  colState:"Estado", colN:"Sorteios", colStraight:"Exato", colBox:"Box",
+  warning:"⚠️ <strong>Importante:</strong> Esses números são estatísticas históricas, não previsões. Cada sorteio de loteria continua sendo um evento aleatório e independente — o desempenho passado não garante nenhum prêmio futuro. Jogue com responsabilidade.",
+  ctaText:"Quer ver o detalhe sorteio a sorteio?", ctaBtn:"Histórico de Sugestões →", ctaBtn2:"Abrir o Analisador",
+  updatedAgo:m=>m<1?"Atualizado agora mesmo":m<60?`Atualizado há ${m} min`:`Atualizado há ${Math.floor(m/60)} h`,
+  rankPrefix:n=>`#${n}`, basisN:n=>`em ${n} sorteios`,
+},
+ht:{
+  title:"PREDIKTA Accuracy Score", subtitle:"Pousantaj reyèl kout sijesyon TOP PICK nou yo, mezire objektivman sou 7, 30 ak 90 jou",
+  methodTitle:"Kijan nòt sa a kalkile?",
+  methodBody:`Pou chak tiraj ki sot pase nan chak eta, nou rekalkile sijesyon TOP PICK PREDIKTA ta jenere a lè l sèvi ak sèlman done ki disponib AVAN tiraj sa a (pa gen anvan-konnen). Apre sa nou konpare sijesyon sa a ak rezilta reyèl la, sou fenèt 7, 30 ak 90 tiraj.
+    <ul>
+      <li><strong>Egzak (straight)</strong> — konbinezon an matche chif pa chif, pozisyon pa pozisyon. Pwobabilite o aza pi ≈ 0,1% (1 chans sou 1 000).</li>
+      <li><strong>Box</strong> — menm 3 chif yo, nan nenpòt lòd. Pwobabilite o aza pi ≈ jiska 0,6% (6 chans sou 1 000).</li>
+    </ul>
+    Nòt sa a mezire objektivman pèfòmans pase algoritm lan devan aza pi — li pa garanti okenn rezilta nan lavni. Gade tou <a href="/track-record" style="color:#7888bb">istorik detaye</a> nou.`,
+  loading:"N ap chaje…", noData:"Poko gen ase done.",
+  win7:"7 jou", win30:"30 jou", win90:"90 jou",
+  drawsAnalyzed:"Tiraj analize", straightRate:"To egzak", boxRate:"To box", vsBaseline:"vs aza pi",
+  bestTitle:"🏆 Pi Bon Eta yo (90 jou)", byStateTitle:"Detay pa Eta",
+  colState:"Eta", colN:"Tiraj", colStraight:"Egzak", colBox:"Box",
+  warning:"⚠️ <strong>Enpòtan:</strong> Chif sa yo se estatistik istorik, se pa prediksyon. Chak tiraj lotri rete yon evènman o aza ak endepandan — pèfòmans pase pa garanti okenn lo nan lavni. Jwe ak responsablite.",
+  ctaText:"Ou vle wè detay tiraj pa tiraj?", ctaBtn:"Istorik Sijesyon yo →", ctaBtn2:"Ouvri Analizè a",
+  updatedAgo:m=>m<1?"Mete ajou kounye a":m<60?`Mete ajou ${m} min pase`:`Mete ajou ${Math.floor(m/60)} è pase`,
+  rankPrefix:n=>`#${n}`, basisN:n=>`sou ${n} tiraj`,
+},
+};
+
+let CUR_LANG = 'fr';
+let ACC_DATA = null;
+function curT(){ return T[CUR_LANG] || T.fr; }
+
+function fmtAgo(iso){
+  if(!iso) return '';
+  const mins = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime())/60000));
+  return curT().updatedAgo(mins);
+}
+
+function applyLang(lang){
+  CUR_LANG = T[lang] ? lang : 'fr';
+  const dict = curT();
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] == null) return;
+    if(key === 'methodBody' || key === 'warning') el.innerHTML = dict[key];
+    else el.textContent = dict[key];
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+  renderData();
+}
+window.setLang = applyLang;
+
+function renderData(){
+  if(!ACC_DATA) return;
+  const t = curT();
+
+  document.getElementById('updatedLine').textContent = fmtAgo(ACC_DATA.updated_at);
+
+  const wlabels = {7:t.win7, 30:t.win30, 90:t.win90};
+  document.getElementById('windows').innerHTML = ACC_DATA.windows.map(w=>{
+    const gt = ACC_DATA.grand_totals[w];
+    const sRate = gt.n ? (gt.straight/gt.n*100).toFixed(2) : '0.00';
+    const bRate = gt.n ? (gt.box/gt.n*100).toFixed(2) : '0.00';
+    return `<div class="wcard">
+      <h3>${wlabels[w]}</h3>
+      <div class="wrow"><span>${t.drawsAnalyzed}</span><span class="val">${gt.n}</span></div>
+      <div class="wrow"><span>${t.straightRate}</span><span class="val">${sRate}%</span></div>
+      <div class="wrow"><span>${t.boxRate}</span><span class="val">${bRate}%</span></div>
+      <div class="wrow"><span>${t.vsBaseline}</span><span class="val base">${ACC_DATA.baseline.straight_pct}% / ${ACC_DATA.baseline.box_pct}%</span></div>
+    </div>`;
+  }).join('');
+
+  const bestList = document.getElementById('bestList');
+  if(!ACC_DATA.best_states.length){
+    bestList.innerHTML = `<div class="loading">${t.noData}</div>`;
+  } else {
+    bestList.innerHTML = ACC_DATA.best_states.map((s,i)=>`
+      <div class="best-card">
+        <div class="rank">${t.rankPrefix(i+1)}</div>
+        <div class="sname">${s.name} (${s.state})</div>
+        <div class="srate"><b>${s.box_rate}%</b> ${t.boxRate.toLowerCase()} · ${s.straight_rate}% ${t.straightRate.toLowerCase()}</div>
+        <div class="srate">${t.basisN(s.n)}</div>
+      </div>`).join('');
+  }
+
+  const table = document.getElementById('stateTable');
+  if(!ACC_DATA.states.length){
+    table.innerHTML = `<tr><td class="loading">${t.noData}</td></tr>`;
+    return;
+  }
+  const rows = ACC_DATA.states.map(s=>{
+    const w90 = s.windows[90];
+    const sRate = w90.n ? (w90.straight/w90.n*100).toFixed(1) : '0.0';
+    const bRate = w90.n ? (w90.box/w90.n*100).toFixed(1) : '0.0';
+    return `<tr>
+      <td class="sname">${s.name} (${s.state})</td>
+      <td>${w90.n}</td>
+      <td class="rate">${sRate}%</td>
+      <td class="rate">${bRate}%</td>
+    </tr>`;
+  }).join('');
+  table.innerHTML = `<thead><tr><th>${t.colState}</th><th>${t.colN}</th><th>${t.colStraight}</th><th>${t.colBox}</th></tr></thead><tbody>${rows}</tbody>`;
+}
+
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  fetch('/api/accuracy').then(r=>r.json()).then(data=>{
+    ACC_DATA = data;
+    applyLang(T[navLang] ? navLang : 'fr');
+  }).catch(()=>{
+    document.getElementById('windows').innerHTML = `<div class="loading">${curT().noData}</div>`;
+  });
+});
+</script>
+</body></html>

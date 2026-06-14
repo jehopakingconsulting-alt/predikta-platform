@@ -25,27 +25,27 @@ const NAV_T = {
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Parrainage', account:'Mon Compte', lang:'Langue', theme:'Thème', menu:'Menu',
        tagline:'Loterie & Analyse Prédictive',
        footerCopy:'© 2026 PREDIKTA — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#7888bb">Jeu Responsable</a>.',
-       about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable' },
+       about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable', accuracy:'Accuracy Score' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Lottery & Predictive Analysis',
        footerCopy:'© 2026 PREDIKTA — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#7888bb">Responsible Gaming</a>.',
-       about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming' },
+       about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Lotería & Análisis Predictivo',
        footerCopy:'© 2026 PREDIKTA — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#7888bb">Juego Responsable</a>.',
-       about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable' },
+       about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable', accuracy:'Accuracy Score' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Loteria & Análise Preditiva',
        footerCopy:'© 2026 PREDIKTA — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#7888bb">Jogo Responsável</a>.',
-       about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável' },
+       about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável', accuracy:'Accuracy Score' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Lotri & Analiz Biznis',
        footerCopy:'© 2026 PREDIKTA — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#7888bb">Jwe Responsab</a>.',
-       about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab' },
+       about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab', accuracy:'Accuracy Score' },
 };
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
@@ -1014,6 +1014,7 @@ function buildFooter(){
         <a class="pf-link" href="/about">${T.about}</a>
         <a class="pf-link" href="/faq">${T.faq}</a>
         <a class="pf-link" href="/track-record">${T.trackrecord}</a>
+        <a class="pf-link" href="/accuracy">${T.accuracy}</a>
         <a class="pf-link" href="/contact">${T.contact}</a>
         <a class="pf-link" href="/privacy">${T.privacy}</a>
         <a class="pf-link" href="/terms">${T.terms}</a>
