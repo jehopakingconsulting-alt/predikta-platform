@@ -1540,6 +1540,198 @@ def bizai_analyze():
         return jsonify({"error": str(e)}), 500
 
 
+# ═══════════════════════════════════════════════════════════
+# DASHBOARD — Favoris, alertes & rapports Business AI
+# ═══════════════════════════════════════════════════════════
+
+MAX_SAVED_PREDICTIONS = 50
+MAX_ALERTS = 10
+MAX_BUSINESS_REPORTS = 20
+
+
+@app.route("/api/dashboard/summary")
+@auth_module.login_required
+def dashboard_summary():
+    user = auth_module.current_user()
+    sub = user.subscription
+    return jsonify({
+        "subscription": sub.to_dict() if sub else None,
+        "saved_predictions_count": auth_module.SavedPrediction.query.filter_by(user_id=user.id).count(),
+        "alerts_count": auth_module.Alert.query.filter_by(user_id=user.id).count(),
+        "business_reports_count": auth_module.BusinessReport.query.filter_by(user_id=user.id).count(),
+    })
+
+
+@app.route("/api/dashboard/predictions", methods=["GET", "POST"])
+@auth_module.login_required
+def dashboard_predictions():
+    user = auth_module.current_user()
+    db = auth_module.db
+
+    if request.method == "POST":
+        data = request.get_json(silent=True) or {}
+        state = (data.get("state") or "").upper()
+        game  = data.get("game") or ""
+        numbers = data.get("numbers")
+        if not state or not game or numbers is None:
+            return jsonify({"error": "state, game et numbers sont requis"}), 400
+
+        count = auth_module.SavedPrediction.query.filter_by(user_id=user.id).count()
+        if count >= MAX_SAVED_PREDICTIONS:
+            return jsonify({"error": "limit_reached",
+                            "message": f"Limite de {MAX_SAVED_PREDICTIONS} prédictions sauvegardées atteinte."}), 429
+
+        import json as _json
+        saved = auth_module.SavedPrediction(
+            user_id=user.id, state=state, game=game,
+            tod=data.get("tod"), label=data.get("label"),
+            numbers=_json.dumps(numbers), source=data.get("source"),
+        )
+        db.session.add(saved)
+        db.session.commit()
+        return jsonify({"success": True, "prediction": saved.to_dict()})
+
+    items = (auth_module.SavedPrediction.query
+             .filter_by(user_id=user.id)
+             .order_by(auth_module.SavedPrediction.created_at.desc())
+             .all())
+    return jsonify({"predictions": [p.to_dict() for p in items]})
+
+
+@app.route("/api/dashboard/predictions/<int:pred_id>", methods=["DELETE"])
+@auth_module.login_required
+def dashboard_delete_prediction(pred_id):
+    user = auth_module.current_user()
+    db = auth_module.db
+    item = auth_module.SavedPrediction.query.filter_by(id=pred_id, user_id=user.id).first()
+    if not item:
+        return jsonify({"error": "not_found"}), 404
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"success": True})
+
+
+@app.route("/api/dashboard/alerts", methods=["GET", "POST"])
+@auth_module.login_required
+def dashboard_alerts():
+    user = auth_module.current_user()
+    db = auth_module.db
+
+    if request.method == "POST":
+        data = request.get_json(silent=True) or {}
+        state = (data.get("state") or "").upper()
+        game  = data.get("game") or ""
+        alert_type = data.get("alert_type") or ""
+        if not state or not game or not alert_type:
+            return jsonify({"error": "state, game et alert_type sont requis"}), 400
+
+        count = auth_module.Alert.query.filter_by(user_id=user.id).count()
+        if count >= MAX_ALERTS:
+            return jsonify({"error": "limit_reached",
+                            "message": f"Limite de {MAX_ALERTS} alertes atteinte."}), 429
+
+        import json as _json
+        criteria = data.get("criteria")
+        alert = auth_module.Alert(
+            user_id=user.id, state=state, game=game, alert_type=alert_type,
+            criteria=_json.dumps(criteria) if criteria is not None else None,
+            active=True,
+        )
+        db.session.add(alert)
+        db.session.commit()
+        return jsonify({"success": True, "alert": alert.to_dict()})
+
+    items = (auth_module.Alert.query
+             .filter_by(user_id=user.id)
+             .order_by(auth_module.Alert.created_at.desc())
+             .all())
+    return jsonify({"alerts": [a.to_dict() for a in items]})
+
+
+@app.route("/api/dashboard/alerts/<int:alert_id>", methods=["PATCH", "DELETE"])
+@auth_module.login_required
+def dashboard_alert_detail(alert_id):
+    user = auth_module.current_user()
+    db = auth_module.db
+    item = auth_module.Alert.query.filter_by(id=alert_id, user_id=user.id).first()
+    if not item:
+        return jsonify({"error": "not_found"}), 404
+
+    if request.method == "DELETE":
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({"success": True})
+
+    data = request.get_json(silent=True) or {}
+    if "active" in data:
+        item.active = bool(data["active"])
+    db.session.commit()
+    return jsonify({"success": True, "alert": item.to_dict()})
+
+
+@app.route("/api/dashboard/reports", methods=["GET", "POST"])
+@auth_module.login_required
+def dashboard_reports():
+    user = auth_module.current_user()
+    db = auth_module.db
+
+    if request.method == "POST":
+        data = request.get_json(silent=True) or {}
+        title = data.get("title") or "Rapport Business AI"
+        report = data.get("report")
+        if report is None:
+            return jsonify({"error": "report est requis"}), 400
+
+        count = auth_module.BusinessReport.query.filter_by(user_id=user.id).count()
+        if count >= MAX_BUSINESS_REPORTS:
+            return jsonify({"error": "limit_reached",
+                            "message": f"Limite de {MAX_BUSINESS_REPORTS} rapports sauvegardés atteinte."}), 429
+
+        import json as _json
+        saved = auth_module.BusinessReport(
+            user_id=user.id, title=title[:160],
+            input_json=_json.dumps(data.get("input")) if data.get("input") is not None else None,
+            report_json=_json.dumps(report),
+        )
+        db.session.add(saved)
+        db.session.commit()
+        return jsonify({"success": True, "report": saved.to_dict(include_report=False)})
+
+    items = (auth_module.BusinessReport.query
+             .filter_by(user_id=user.id)
+             .order_by(auth_module.BusinessReport.created_at.desc())
+             .all())
+    return jsonify({"reports": [r.to_dict(include_report=False) for r in items]})
+
+
+@app.route("/api/dashboard/reports/<int:report_id>")
+@auth_module.login_required
+def dashboard_report_detail(report_id):
+    user = auth_module.current_user()
+    item = auth_module.BusinessReport.query.filter_by(id=report_id, user_id=user.id).first()
+    if not item:
+        return jsonify({"error": "not_found"}), 404
+    return jsonify({"report": item.to_dict(include_report=True)})
+
+
+@app.route("/api/dashboard/reports/<int:report_id>", methods=["DELETE"])
+@auth_module.login_required
+def dashboard_delete_report(report_id):
+    user = auth_module.current_user()
+    db = auth_module.db
+    item = auth_module.BusinessReport.query.filter_by(id=report_id, user_id=user.id).first()
+    if not item:
+        return jsonify({"error": "not_found"}), 404
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"success": True})
+
+
+@app.route("/dashboard")
+def dashboard_page():
+    return send_from_directory("static", "dashboard.html")
+
+
 if __name__ == "__main__":
     print("=" * 45)
     print("  PREDIKTA  v4.0  - READY")

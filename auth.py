@@ -204,6 +204,100 @@ class BizUsage(db.Model):
     __table_args__ = (db.UniqueConstraint("user_id", "month", name="uq_bizusage_user_month"),)
 
 
+class SavedPrediction(db.Model):
+    """Prédiction enregistrée par l'utilisateur depuis /predictions (favoris)."""
+    __tablename__ = "saved_predictions"
+
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    state      = db.Column(db.String(4), nullable=False)
+    game       = db.Column(db.String(32), nullable=False)
+    tod        = db.Column(db.String(16), nullable=True)   # midday | evening | all
+    label      = db.Column(db.String(120), nullable=True)  # nom personnalisé optionnel
+    numbers    = db.Column(db.Text, nullable=False)        # JSON : ex. "[1,2,3]" ou {"digits":[...]}
+    source     = db.Column(db.String(32), nullable=True)   # ex: "consensus", "markov", "ml"
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        import json
+        try:
+            numbers = json.loads(self.numbers)
+        except Exception:
+            numbers = self.numbers
+        return {
+            "id": self.id,
+            "state": self.state,
+            "game": self.game,
+            "tod": self.tod,
+            "label": self.label,
+            "numbers": numbers,
+            "source": self.source,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class Alert(db.Model):
+    """Alerte personnalisée (ex: nouveau tirage, numéro chaud/froid) pour un État/jeu."""
+    __tablename__ = "alerts"
+
+    id          = db.Column(db.Integer, primary_key=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    state       = db.Column(db.String(4), nullable=False)
+    game        = db.Column(db.String(32), nullable=False)
+    alert_type  = db.Column(db.String(32), nullable=False)  # new_result | hot_number | cold_number | custom
+    criteria    = db.Column(db.Text, nullable=True)         # JSON libre (ex: numéro surveillé)
+    active      = db.Column(db.Boolean, default=True)
+    last_triggered_at = db.Column(db.DateTime, nullable=True)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        import json
+        try:
+            criteria = json.loads(self.criteria) if self.criteria else None
+        except Exception:
+            criteria = self.criteria
+        return {
+            "id": self.id,
+            "state": self.state,
+            "game": self.game,
+            "alert_type": self.alert_type,
+            "criteria": criteria,
+            "active": self.active,
+            "last_triggered_at": self.last_triggered_at.isoformat() if self.last_triggered_at else None,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class BusinessReport(db.Model):
+    """Rapport Business AI sauvegardé (depuis /bizai)."""
+    __tablename__ = "business_reports"
+
+    id          = db.Column(db.Integer, primary_key=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    title       = db.Column(db.String(160), nullable=False)
+    input_json  = db.Column(db.Text, nullable=True)   # paramètres saisis par l'utilisateur
+    report_json = db.Column(db.Text, nullable=False)  # rapport généré (12 sections)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self, include_report=True):
+        import json
+        out = {
+            "id": self.id,
+            "title": self.title,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+        if include_report:
+            try:
+                out["input"] = json.loads(self.input_json) if self.input_json else None
+            except Exception:
+                out["input"] = None
+            try:
+                out["report"] = json.loads(self.report_json)
+            except Exception:
+                out["report"] = None
+        return out
+
+
 # ── Setup ─────────────────────────────────────────────────────────────────
 def init_app(app):
     db_url = os.environ.get("DATABASE_URL", "")

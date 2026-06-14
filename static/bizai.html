@@ -536,6 +536,7 @@ textarea{resize:vertical;min-height:80px}
         <button class="export-btn" onclick="window.print()" data-i18n="printBtn">🖨️ Imprimer</button>
         <button class="export-btn" onclick="exportPDF()" data-i18n="pdfBtn">📄 Export PDF</button>
         <button class="export-btn" onclick="shareReport()" data-i18n="shareBtn">📤 Partager</button>
+        <button class="export-btn" id="saveReportBtn" onclick="saveReportToDashboard()" data-i18n="saveBtn">💾 Sauvegarder</button>
         <button class="export-btn" onclick="resetWizard()" data-i18n="newAnalysisBtn">🔄 Nouvelle analyse</button>
       </div>
 
@@ -678,6 +679,7 @@ fr:{
   als0:"🔍 Analyse du secteur et du marché...", als1:"👥 Identification de l'audience cible...", als2:"📊 Scoring des canaux marketing...",
   als3:"🌍 Ciblage géographique...", als4:"📅 Construction du plan 30-60-90 jours...", als5:"⚠️ Analyse des risques...", als6:"✅ Finalisation du rapport...",
   printBtn:"🖨️ Imprimer", pdfBtn:"📄 Export PDF", shareBtn:"📤 Partager", newAnalysisBtn:"🔄 Nouvelle analyse",
+  saveBtn:"💾 Sauvegarder", saveSavedBtn:"✅ Sauvegardé", savedMsg:"Rapport sauvegardé dans votre tableau de bord !", saveErrorMsg:"Erreur lors de la sauvegarde.", saveLoginMsg:"Connectez-vous pour sauvegarder ce rapport.",
   pdfCtaTitle:"👑 Rapport PDF Complet", pdfCtaDesc:"Exportez votre analyse en PDF professionnel. Partagez-le avec vos partenaires, investisseurs ou votre équipe.", pdfCtaBtn:"Exporter en PDF →",
   consultTitle:"🤝 Consultation Stratégique", consultDesc:"30 minutes avec un expert PREDIKTA pour approfondir votre analyse et définir votre plan d'action personnalisé.", consultBtn:"Réserver une session →",
   alertsTitle:"📧 Alertes Sectorielles", alertsDesc:"Recevez chaque semaine les tendances de votre secteur, nouvelles niches et opportunités de marché.", alertsPh:"email@exemple.com", alertsOk:"OK",
@@ -736,6 +738,7 @@ en:{
   als0:"🔍 Analyzing industry and market...", als1:"👥 Identifying target audience...", als2:"📊 Scoring marketing channels...",
   als3:"🌍 Geographic targeting...", als4:"📅 Building the 30-60-90 day plan...", als5:"⚠️ Risk analysis...", als6:"✅ Finalizing report...",
   printBtn:"🖨️ Print", pdfBtn:"📄 Export PDF", shareBtn:"📤 Share", newAnalysisBtn:"🔄 New analysis",
+  saveBtn:"💾 Save", saveSavedBtn:"✅ Saved", savedMsg:"Report saved to your dashboard!", saveErrorMsg:"Error while saving.", saveLoginMsg:"Log in to save this report.",
   pdfCtaTitle:"👑 Complete PDF Report", pdfCtaDesc:"Export your analysis as a professional PDF. Share it with your partners, investors or team.", pdfCtaBtn:"Export to PDF →",
   consultTitle:"🤝 Strategic Consultation", consultDesc:"30 minutes with a PREDIKTA expert to deepen your analysis and define your personalized action plan.", consultBtn:"Book a session →",
   alertsTitle:"📧 Industry Alerts", alertsDesc:"Get weekly trends for your industry, new niches and market opportunities.", alertsPh:"email@example.com", alertsOk:"OK",
@@ -794,6 +797,7 @@ es:{
   als0:"🔍 Analizando el sector y el mercado...", als1:"👥 Identificando la audiencia objetivo...", als2:"📊 Puntuando los canales de marketing...",
   als3:"🌍 Segmentación geográfica...", als4:"📅 Construyendo el plan de 30-60-90 días...", als5:"⚠️ Análisis de riesgos...", als6:"✅ Finalizando el informe...",
   printBtn:"🖨️ Imprimir", pdfBtn:"📄 Exportar PDF", shareBtn:"📤 Compartir", newAnalysisBtn:"🔄 Nuevo análisis",
+  saveBtn:"💾 Guardar", saveSavedBtn:"✅ Guardado", savedMsg:"¡Informe guardado en tu panel!", saveErrorMsg:"Error al guardar.", saveLoginMsg:"Inicia sesión para guardar este informe.",
   pdfCtaTitle:"👑 Informe PDF Completo", pdfCtaDesc:"Exporta tu análisis como un PDF profesional. Compártelo con tus socios, inversores o equipo.", pdfCtaBtn:"Exportar a PDF →",
   consultTitle:"🤝 Consultoría Estratégica", consultDesc:"30 minutos con un experto de PREDIKTA para profundizar tu análisis y definir tu plan de acción personalizado.", consultBtn:"Reservar una sesión →",
   alertsTitle:"📧 Alertas Sectoriales", alertsDesc:"Recibe semanalmente las tendencias de tu sector, nuevos nichos y oportunidades de mercado.", alertsPh:"email@ejemplo.com", alertsOk:"OK",
@@ -852,6 +856,7 @@ pt:{
   als0:"🔍 Analisando o setor e o mercado...", als1:"👥 Identificando o público-alvo...", als2:"📊 Avaliando os canais de marketing...",
   als3:"🌍 Segmentação geográfica...", als4:"📅 Construindo o plano de 30-60-90 dias...", als5:"⚠️ Análise de riscos...", als6:"✅ Finalizando o relatório...",
   printBtn:"🖨️ Imprimir", pdfBtn:"📄 Exportar PDF", shareBtn:"📤 Compartilhar", newAnalysisBtn:"🔄 Nova análise",
+  saveBtn:"💾 Salvar", saveSavedBtn:"✅ Salvo", savedMsg:"Relatório salvo no seu painel!", saveErrorMsg:"Erro ao salvar.", saveLoginMsg:"Faça login para salvar este relatório.",
   pdfCtaTitle:"👑 Relatório PDF Completo", pdfCtaDesc:"Exporte sua análise em PDF profissional. Compartilhe com seus parceiros, investidores ou equipe.", pdfCtaBtn:"Exportar para PDF →",
   consultTitle:"🤝 Consultoria Estratégica", consultDesc:"30 minutos com um especialista da PREDIKTA para aprofundar sua análise e definir seu plano de ação personalizado.", consultBtn:"Reservar uma sessão →",
   alertsTitle:"📧 Alertas Setoriais", alertsDesc:"Receba semanalmente as tendências do seu setor, novos nichos e oportunidades de mercado.", alertsPh:"email@exemplo.com", alertsOk:"OK",
@@ -910,6 +915,7 @@ ht:{
   als0:"🔍 K ap analize sektè ak mache a...", als1:"👥 K ap idantifye odyans sib la...", als2:"📊 K ap evalye kanal maketing yo...",
   als3:"🌍 Sib jewografik...", als4:"📅 K ap konstwi plan 30-60-90 jou a...", als5:"⚠️ Analiz risk...", als6:"✅ K ap finalize rapò a...",
   printBtn:"🖨️ Enprime", pdfBtn:"📄 Ekspòte PDF", shareBtn:"📤 Pataje", newAnalysisBtn:"🔄 Nouvo analiz",
+  saveBtn:"💾 Anrejistre", saveSavedBtn:"✅ Anrejistre", savedMsg:"Rapò anrejistre nan tablodbò ou!", saveErrorMsg:"Erè pandan anrejistreman.", saveLoginMsg:"Konekte pou anrejistre rapò sa a.",
   pdfCtaTitle:"👑 Rapò PDF Konplè", pdfCtaDesc:"Ekspòte analiz ou an PDF pwofesyonèl. Pataje li ak patnè, envestisè oswa ekip ou.", pdfCtaBtn:"Ekspòte an PDF →",
   consultTitle:"🤝 Konsiltasyon Estratejik", consultDesc:"30 minit ak yon ekspè PREDIKTA pou pwofondi analiz ou epi defini plan aksyon pèsonalize ou.", consultBtn:"Rezève yon sesyon →",
   alertsTitle:"📧 Alèt Sektoryèl", alertsDesc:"Resevwa chak semèn tandans sektè ou, nouvo nich ak opòtinite mache.", alertsPh:"email@egzanp.com", alertsOk:"OK",
@@ -1082,6 +1088,9 @@ async function runAnalysis(){
       document.getElementById('loadingSection').style.display = 'none';
       document.getElementById('reportSection').style.display  = 'block';
       renderReport(json.report);
+      window.lastBizReport = json.report;
+      window.lastBizInput  = data;
+      resetSaveBtn();
       window.scrollTo({top:0,behavior:'smooth'});
 
       // Archive cette analyse business (historique local, 30 jours) ──────
@@ -1444,6 +1453,9 @@ async function loadExample(type){
       document.getElementById('loadingSection').style.display='none';
       document.getElementById('reportSection').style.display='block';
       renderReport(json.report);
+      window.lastBizReport = json.report;
+      window.lastBizInput  = data;
+      resetSaveBtn();
       window.scrollTo({top:0,behavior:'smooth'});
     },1000);
   }catch(e){ alert('Error: '+e.message); resetWizard(); }
@@ -1457,6 +1469,34 @@ function shareReport(){
   const text = bizT().shareText;
   if(navigator.share) navigator.share({title:'PREDIKTA Business Intelligence',text,url:window.location.href});
   else navigator.clipboard?.writeText(window.location.href).then(()=>alert(bizT().linkCopied));
+}
+
+function resetSaveBtn(){
+  const btn = document.getElementById('saveReportBtn');
+  if(!btn) return;
+  btn.disabled = false;
+  btn.textContent = bizT().saveBtn;
+}
+
+async function saveReportToDashboard(){
+  const btn = document.getElementById('saveReportBtn');
+  const dict = bizT();
+  if(!window.lastBizReport){ return; }
+  try{
+    const r = await fetch('/api/dashboard/reports', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        title: window.lastBizReport.project_name || 'Business Analysis',
+        input: window.lastBizInput,
+        report: window.lastBizReport,
+      }),
+    });
+    if(r.status === 401){ alert(dict.saveLoginMsg); return; }
+    const data = await r.json();
+    if(!r.ok){ alert(data.message || dict.saveErrorMsg); return; }
+    if(btn){ btn.disabled = true; btn.textContent = dict.saveSavedBtn; }
+    alert(dict.savedMsg);
+  }catch(e){ alert(dict.saveErrorMsg); }
 }
 
 async function subscribeBiz(){

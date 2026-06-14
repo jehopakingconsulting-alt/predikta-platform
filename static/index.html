@@ -2108,7 +2108,7 @@ function renderConsensus(d, today){
         <span>#${i+1} — ${['🥇','🥈','🥉','④','⑤','⑥','⑦','⑧','⑨','⑩'][i]||'#'+(i+1)}</span>
         <span style="display:flex;gap:6px">
           <button onclick="copyCombo('${s.combo}')" title="Copier" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted2);padding:0">📋</button>
-          <button onclick="toggleFavCombo('${s.combo}',this)" title="Favori" style="background:none;border:none;cursor:pointer;font-size:.85rem;padding:0">${isFav?'⭐':'☆'}</button>
+          <button onclick="toggleFavCombo('${s.combo}',this,'${state}')" title="Favori" style="background:none;border:none;cursor:pointer;font-size:.85rem;padding:0">${isFav?'⭐':'☆'}</button>
           <button onclick="sharePrediction('${state}','${s.combo}',${s.confidence_pct})" title="Partager" style="background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--muted2);padding:0">📤</button>
         </span>
       </div>
@@ -2182,10 +2182,17 @@ function toggleTransparency(id){
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
-function toggleFavCombo(combo, btn){
+function toggleFavCombo(combo, btn, state){
   const added = window.PREDIKTA?.toggleFav(combo);
   btn.textContent = added ? '⭐' : '☆';
   showToast(added ? '⭐ Ajouté aux favoris' : 'Retiré des favoris');
+  if(added && state){
+    const tod = document.getElementById('todSelect')?.value || null;
+    fetch('/api/dashboard/predictions', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({state, game:'pick3', tod, numbers: combo.split(/[^0-9]+/).filter(Boolean), source:'analyze'}),
+    }).catch(()=>{});
+  }
 }
 
 function getConfLabel(pct){
