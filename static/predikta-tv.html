@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PREDIKTA TV — Tirages en direct & analyses vidéo (bientôt)</title>
+<meta name="description" content="Bientôt disponible : PREDIKTA TV proposera des résumés vidéo des tirages, des analyses commentées et des replays pour Pick 3, Pick 4, Powerball et plus."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/predikta-tv"/>
+<link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/predikta-tv"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--red:#ff5566;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(255,85,102,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
+.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;padding:20px 10px 40px}
+.hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(255,85,102,.15);border:1px solid rgba(255,85,102,.4);color:var(--red);margin-bottom:18px}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#ff5566,#8855ff,#6688ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
+.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--red),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(255,85,102,.3);text-decoration:none;display:inline-block}
+.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+
+.soon-badge{display:inline-block;padding:3px 12px;border-radius:8px;font-size:.68rem;font-weight:700;letter-spacing:1px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-left:8px;vertical-align:middle}
+
+.preview-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 20px;text-align:center;margin-bottom:18px}
+.preview-box .tv{font-size:3.5rem;margin-bottom:14px;opacity:.7}
+.preview-box p{font-size:.85rem;color:var(--muted2);max-width:520px;margin:0 auto;line-height:1.7}
+
+.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
+.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#ff8899;margin-bottom:10px}
+.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
+.sections .sec p:last-child{margin-bottom:0}
+.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
+.sections .sec a:hover{text-decoration:underline}
+
+.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(255,85,102,.07),rgba(136,85,255,.08));border:1px solid rgba(255,85,102,.2);border-radius:20px;margin-top:10px}
+.bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#ff5566,#8855ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
+.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.disclaimer a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="hero">
+  <div class="hero-tag" data-i18n="tag">PREDIKTA TV</div>
+  <h1 data-i18n-html="h1">Les tirages en direct,<br>analysés par IA</h1>
+  <p class="hero-sub" data-i18n="sub">PREDIKTA TV proposera bientôt des résumés vidéo des tirages, des analyses commentées et des replays pour vous aider à comprendre les tendances en un coup d'œil.</p>
+  <div class="hero-cta">
+    <a class="cta-btn-main" href="/results" data-i18n="ctaMain">Voir les résultats du jour</a>
+    <a class="cta-btn-sec" href="/predictions" data-i18n="ctaSec">Voir les prédictions</a>
+  </div>
+</div>
+
+<div class="preview-box">
+  <div class="tv">📺</div>
+  <p data-i18n="previewText">Aperçu de la fonctionnalité : des vidéos courtes générées automatiquement présentant les derniers tirages, les tendances chaud/froid et les nouvelles prédictions de la semaine.</p>
+</div>
+
+<div class="sections" id="sections"></div>
+
+<div class="bottom-cta">
+  <h2 data-i18n="ctaTitle">Ne manquez aucune mise à jour</h2>
+  <p data-i18n="ctaP">Créez votre compte PREDIKTA pour être averti dès le lancement de PREDIKTA TV, et accédez dès maintenant à toutes nos analyses écrites.</p>
+  <div class="bottom-cta-btns">
+    <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer mon compte gratuit</a>
+    <a class="cta-btn-sec" href="/lottery-predictions" data-i18n="ctaBtnLearn">Comprendre nos prédictions</a>
+  </div>
+</div>
+
+<div class="disclaimer" data-i18n-html="disclaimer">⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.</div>
+</div>
+
+<script>
+const T = {
+fr:{ tag:"PREDIKTA TV", h1:"Les tirages en direct,<br>analysés par IA",
+ sub:"PREDIKTA TV proposera bientôt des résumés vidéo des tirages, des analyses commentées et des replays pour vous aider à comprendre les tendances en un coup d'œil.",
+ ctaMain:"Voir les résultats du jour", ctaSec:"Voir les prédictions",
+ previewText:"Aperçu de la fonctionnalité : des vidéos courtes générées automatiquement présentant les derniers tirages, les tendances chaud/froid et les nouvelles prédictions de la semaine.",
+ ctaTitle:"Ne manquez aucune mise à jour", ctaP:"Créez votre compte PREDIKTA pour être averti dès le lancement de PREDIKTA TV, et accédez dès maintenant à toutes nos analyses écrites.",
+ ctaBtnRegister:"Créer mon compte gratuit", ctaBtnLearn:"Comprendre nos prédictions",
+ disclaimer:'⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.',
+ sections:[
+  ["Ce que PREDIKTA TV proposera <span class=\"soon-badge\">BIENTÔT</span>",
+   "<p>PREDIKTA TV sera un espace vidéo dédié à l'analyse des loteries, généré et mis à jour automatiquement à partir de nos données.</p>",
+   ["Résumés vidéo quotidiens des tirages","Analyses commentées des tendances chaud/froid","Replays des derniers tirages par état","Présentation des nouvelles prédictions de la semaine","Explication visuelle du Mode Transparence","Contenus disponibles en plusieurs langues"]],
+  ["En attendant le lancement",
+   "<p>Toutes nos analyses sont déjà disponibles au format texte et graphique sur le site, avec mise à jour quotidienne.</p>",
+   ["Résultats détaillés sur /results","Prédictions IA sur /predictions","Articles explicatifs sur /lottery-predictions","Score de précision sur /accuracy"]]
+ ]},
+
+en:{ tag:"PREDIKTA TV", h1:"Live draws,<br>analyzed by AI",
+ sub:"PREDIKTA TV will soon offer video recaps of draws, commentated analysis and replays to help you spot trends at a glance.",
+ ctaMain:"View today's results", ctaSec:"View predictions",
+ previewText:"Feature preview: short, automatically generated videos covering the latest draws, hot/cold trends and this week's new predictions.",
+ ctaTitle:"Don't miss any updates", ctaP:"Create your PREDIKTA account to be notified as soon as PREDIKTA TV launches, and access all our written analysis right now.",
+ ctaBtnRegister:"Create my free account", ctaBtnLearn:"Understand our predictions",
+ disclaimer:'⚠️ PREDIKTA provides statistical analysis and AI-assisted predictions for informational purposes only. No lottery outcome can be guaranteed. Play responsibly. <a href="/responsible-gaming">Learn more</a>.',
+ sections:[
+  ["What PREDIKTA TV will offer <span class=\"soon-badge\">COMING SOON</span>",
+   "<p>PREDIKTA TV will be a video space dedicated to lottery analysis, automatically generated and updated from our data.</p>",
+   ["Daily video recaps of draws","Commentated hot/cold trend analysis","Replays of the latest draws by state","Presentation of this week's new predictions","Visual explanation of Transparency Mode","Content available in multiple languages"]],
+  ["While you wait for launch",
+   "<p>All our analysis is already available in text and chart form on the site, updated daily.</p>",
+   ["Detailed results at /results","AI predictions at /predictions","Explainer articles at /lottery-predictions","Accuracy score at /accuracy"]]
+ ]},
+
+es:{ tag:"PREDIKTA TV", h1:"Sorteos en directo,<br>analizados por IA",
+ sub:"PREDIKTA TV ofrecerá pronto resúmenes en video de los sorteos, análisis comentados y repeticiones para ayudarte a detectar tendencias de un vistazo.",
+ ctaMain:"Ver resultados de hoy", ctaSec:"Ver predicciones",
+ previewText:"Vista previa de la función: videos cortos generados automáticamente que muestran los últimos sorteos, tendencias frío/caliente y las nuevas predicciones de la semana.",
+ ctaTitle:"No te pierdas ninguna actualización", ctaP:"Crea tu cuenta PREDIKTA para recibir un aviso en cuanto se lance PREDIKTA TV, y accede ya a todos nuestros análisis escritos.",
+ ctaBtnRegister:"Crear mi cuenta gratis", ctaBtnLearn:"Entender nuestras predicciones",
+ disclaimer:'⚠️ PREDIKTA ofrece análisis estadísticos y predicciones asistidas por IA solo con fines informativos. Ningún resultado de lotería puede garantizarse. Juega de forma responsable. <a href="/responsible-gaming">Más información</a>.',
+ sections:[
+  ["Qué ofrecerá PREDIKTA TV <span class=\"soon-badge\">PRÓXIMAMENTE</span>",
+   "<p>PREDIKTA TV será un espacio de video dedicado al análisis de loterías, generado y actualizado automáticamente a partir de nuestros datos.</p>",
+   ["Resúmenes diarios en video de los sorteos","Análisis comentados de tendencias frío/caliente","Repeticiones de los últimos sorteos por estado","Presentación de las nuevas predicciones de la semana","Explicación visual del Modo Transparencia","Contenido disponible en varios idiomas"]],
+  ["Mientras esperas el lanzamiento",
+   "<p>Todos nuestros análisis ya están disponibles en formato texto y gráfico en el sitio, actualizados a diario.</p>",
+   ["Resultados detallados en /results","Predicciones IA en /predictions","Artículos explicativos en /lottery-predictions","Puntuación de precisión en /accuracy"]]
+ ]},
+
+pt:{ tag:"PREDIKTA TV", h1:"Sorteios em tempo real,<br>analisados por IA",
+ sub:"O PREDIKTA TV vai oferecer em breve resumos em vídeo dos sorteios, análises comentadas e replays para ajudar você a identificar tendências rapidamente.",
+ ctaMain:"Ver resultados de hoje", ctaSec:"Ver previsões",
+ previewText:"Prévia do recurso: vídeos curtos gerados automaticamente mostrando os últimos sorteios, tendências quente/frio e as novas previsões da semana.",
+ ctaTitle:"Não perca nenhuma atualização", ctaP:"Crie sua conta PREDIKTA para ser avisado assim que o PREDIKTA TV for lançado, e acesse agora todas as nossas análises escritas.",
+ ctaBtnRegister:"Criar minha conta grátis", ctaBtnLearn:"Entender nossas previsões",
+ disclaimer:'⚠️ A PREDIKTA fornece análises estatísticas e previsões assistidas por IA apenas para fins informativos. Nenhum resultado de loteria pode ser garantido. Jogue com responsabilidade. <a href="/responsible-gaming">Saiba mais</a>.',
+ sections:[
+  ["O que o PREDIKTA TV vai oferecer <span class=\"soon-badge\">EM BREVE</span>",
+   "<p>O PREDIKTA TV será um espaço de vídeo dedicado à análise de loterias, gerado e atualizado automaticamente a partir dos nossos dados.</p>",
+   ["Resumos diários em vídeo dos sorteios","Análises comentadas de tendências quente/frio","Replays dos últimos sorteios por estado","Apresentação das novas previsões da semana","Explicação visual do Modo Transparência","Conteúdo disponível em vários idiomas"]],
+  ["Enquanto espera o lançamento",
+   "<p>Todas as nossas análises já estão disponíveis em formato texto e gráfico no site, atualizadas diariamente.</p>",
+   ["Resultados detalhados em /results","Previsões de IA em /predictions","Artigos explicativos em /lottery-predictions","Pontuação de precisão em /accuracy"]]
+ ]},
+
+ht:{ tag:"PREDIKTA TV", h1:"Tiraj an dirèk,<br>analize pa IA",
+ sub:"PREDIKTA TV pral ofri talè rezime videyo tiraj yo, analiz kòmante ak replay pou ede w wè tandans yo nan yon sèl kout je.",
+ ctaMain:"Gade rezilta jodi a", ctaSec:"Gade prediksyon yo",
+ previewText:"Apèsi karakteristik la: videyo kout ki kreye otomatikman ki montre dènye tiraj yo, tandans cho/frèt ak nouvo prediksyon semèn nan.",
+ ctaTitle:"Pa rate okenn mizajou", ctaP:"Kreye kont PREDIKTA ou pou yo avize w depi PREDIKTA TV lanse, epi jwenn aksè kounye a a tout analiz ekri nou yo.",
+ ctaBtnRegister:"Kreye kont gratis mwen", ctaBtnLearn:"Konprann prediksyon nou yo",
+ disclaimer:'⚠️ PREDIKTA bay analiz estatistik ak prediksyon ki asiste pa IA sèlman pou enfòmasyon. Pa gen rezilta loteri ki garanti. Jwe yon fason responsab. <a href="/responsible-gaming">Aprann plis</a>.',
+ sections:[
+  ["Sa PREDIKTA TV pral ofri <span class=\"soon-badge\">TALÈ</span>",
+   "<p>PREDIKTA TV ap yon espas videyo dedye a analiz lotri, kreye ak mizajou otomatikman apati done nou yo.</p>",
+   ["Rezime videyo chak jou pou tiraj yo","Analiz kòmante tandans cho/frèt","Replay dènye tiraj yo pa eta","Prezantasyon nouvo prediksyon semèn nan","Eksplikasyon vizyèl Mòd Transparans","Kontni disponib nan plizyè lang"]],
+  ["Pandan w ap tann lansman an",
+   "<p>Tout analiz nou yo deja disponib an fòma tèks ak grafik sou sit la, mizajou chak jou.</p>",
+   ["Rezilta detaye sou /results","Prediksyon IA sou /predictions","Atik eksplikatif sou /lottery-predictions","Eskò presizyon sou /accuracy"]]
+ ]},
+};
+
+function renderSections(dict){
+  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
+  <div class="sec">
+    <h2>${h2}</h2>
+    ${html}
+    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+  </div>`).join('');
+}
+
+let curLang = 'fr';
+function applyLang(lang){
+  curLang = T[lang] ? lang : 'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  renderSections(dict);
+  document.documentElement.setAttribute('lang', curLang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
+</body></html>

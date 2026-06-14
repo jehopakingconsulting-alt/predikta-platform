@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Communauté PREDIKTA — Partagez vos analyses (bientôt)</title>
+<meta name="description" content="Bientôt disponible : la communauté PREDIKTA pour échanger sur les stratégies, partager vos résultats et discuter des prédictions avec d'autres joueurs."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/community"/>
+<link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/community"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(255,215,0,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;padding:20px 10px 40px}
+.hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-bottom:18px}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#ffd700,#ff8855,#8855ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
+.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--gold),var(--accent2));color:#04040f;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(255,215,0,.25);text-decoration:none;display:inline-block}
+.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+
+.soon-badge{display:inline-block;padding:3px 12px;border-radius:8px;font-size:.68rem;font-weight:700;letter-spacing:1px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-left:8px;vertical-align:middle}
+
+.preview-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 20px;text-align:center;margin-bottom:18px}
+.preview-box .ppl{font-size:3.5rem;margin-bottom:14px;opacity:.7}
+.preview-box p{font-size:.85rem;color:var(--muted2);max-width:520px;margin:0 auto;line-height:1.7}
+
+.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
+.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#ffd95a;margin-bottom:10px}
+.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
+.sections .sec p:last-child{margin-bottom:0}
+.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
+.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
+.sections .sec a:hover{text-decoration:underline}
+
+.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(255,215,0,.07),rgba(136,85,255,.08));border:1px solid rgba(255,215,0,.2);border-radius:20px;margin-top:10px}
+.bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#ffd700,#8855ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
+.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.disclaimer a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="page">
+<div class="hero">
+  <div class="hero-tag" data-i18n="tag">COMMUNAUTÉ PREDIKTA</div>
+  <h1 data-i18n-html="h1">Bientôt : une communauté<br>de joueurs et d'analystes</h1>
+  <p class="hero-sub" data-i18n="sub">Échangez bientôt avec d'autres utilisateurs PREDIKTA : partagez vos analyses, discutez des tendances et suivez les retours d'expérience de la communauté.</p>
+  <div class="hero-cta">
+    <a class="cta-btn-main" href="/register" data-i18n="ctaMain">Créer mon compte gratuit</a>
+    <a class="cta-btn-sec" href="/predictions" data-i18n="ctaSec">Voir les prédictions</a>
+  </div>
+</div>
+
+<div class="preview-box">
+  <div class="ppl">👥</div>
+  <p data-i18n="previewText">Aperçu de la fonctionnalité : un espace d'échange où les membres pourront commenter les tirages, partager leurs combinaisons favorites et discuter des stratégies par état.</p>
+</div>
+
+<div class="sections" id="sections"></div>
+
+<div class="bottom-cta">
+  <h2 data-i18n="ctaTitle">Soyez prêt à rejoindre la communauté</h2>
+  <p data-i18n="ctaP">Créez votre compte PREDIKTA dès maintenant pour être informé en premier du lancement de l'espace communauté, et accédez déjà à nos outils d'analyse.</p>
+  <div class="bottom-cta-btns">
+    <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer mon compte gratuit</a>
+    <a class="cta-btn-sec" href="/faq" data-i18n="ctaBtnFaq">Voir la FAQ</a>
+  </div>
+</div>
+
+<div class="disclaimer" data-i18n-html="disclaimer">⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.</div>
+</div>
+
+<script>
+const T = {
+fr:{ tag:"COMMUNAUTÉ PREDIKTA", h1:"Bientôt : une communauté<br>de joueurs et d'analystes",
+ sub:"Échangez bientôt avec d'autres utilisateurs PREDIKTA : partagez vos analyses, discutez des tendances et suivez les retours d'expérience de la communauté.",
+ ctaMain:"Créer mon compte gratuit", ctaSec:"Voir les prédictions",
+ previewText:"Aperçu de la fonctionnalité : un espace d'échange où les membres pourront commenter les tirages, partager leurs combinaisons favorites et discuter des stratégies par état.",
+ ctaTitle:"Soyez prêt à rejoindre la communauté", ctaP:"Créez votre compte PREDIKTA dès maintenant pour être informé en premier du lancement de l'espace communauté, et accédez déjà à nos outils d'analyse.",
+ ctaBtnRegister:"Créer mon compte gratuit", ctaBtnFaq:"Voir la FAQ",
+ disclaimer:'⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.',
+ sections:[
+  ["Ce que la communauté proposera <span class=\"soon-badge\">BIENTÔT</span>",
+   "<p>L'espace communauté PREDIKTA sera un lieu d'échange entre utilisateurs, centré sur l'analyse statistique et le partage d'expérience — jamais sur la promesse de gains.</p>",
+   ["Discussions par état et par jeu (Pick 3, Pick 4, Powerball...)","Partage de vos combinaisons et analyses favorites","Commentaires sur les résultats récents","Retours d'expérience sur la précision des prédictions","Badges et niveaux pour les membres actifs","Modération et règles de jeu responsable"]],
+  ["En attendant le lancement",
+   "<p>Pendant le développement de l'espace communauté, vous pouvez déjà profiter de toutes nos analyses et poser vos questions via notre assistant intégré.</p>",
+   ["Assistant PREDIKTA disponible sur chaque page","FAQ détaillée sur /faq","Historique des suggestions sur /track-record","Score de précision sur /accuracy"]]
+ ]},
+
+en:{ tag:"PREDIKTA COMMUNITY", h1:"Coming soon: a community<br>of players & analysts",
+ sub:"Soon you'll be able to connect with other PREDIKTA users: share your analysis, discuss trends and follow the community's feedback.",
+ ctaMain:"Create my free account", ctaSec:"View predictions",
+ previewText:"Feature preview: a discussion space where members can comment on draws, share their favorite combinations and discuss strategies by state.",
+ ctaTitle:"Get ready to join the community", ctaP:"Create your PREDIKTA account now to be the first to know when the community space launches, and access our analysis tools right away.",
+ ctaBtnRegister:"Create my free account", ctaBtnFaq:"View the FAQ",
+ disclaimer:'⚠️ PREDIKTA provides statistical analysis and AI-assisted predictions for informational purposes only. No lottery outcome can be guaranteed. Play responsibly. <a href="/responsible-gaming">Learn more</a>.',
+ sections:[
+  ["What the community will offer <span class=\"soon-badge\">COMING SOON</span>",
+   "<p>The PREDIKTA community space will be a place for users to connect, focused on statistical analysis and shared experience — never on promises of winnings.</p>",
+   ["Discussions by state and game (Pick 3, Pick 4, Powerball...)","Share your favorite combinations and analyses","Comments on recent results","Feedback on prediction accuracy","Badges and levels for active members","Moderation and responsible-play rules"]],
+  ["While you wait for launch",
+   "<p>While the community space is being built, you can already enjoy all our analysis and ask questions via our built-in assistant.</p>",
+   ["PREDIKTA assistant available on every page","Detailed FAQ at /faq","Suggestion history at /track-record","Accuracy score at /accuracy"]]
+ ]},
+
+es:{ tag:"COMUNIDAD PREDIKTA", h1:"Próximamente: una comunidad<br>de jugadores y analistas",
+ sub:"Pronto podrás conectar con otros usuarios de PREDIKTA: comparte tus análisis, debate sobre tendencias y sigue los comentarios de la comunidad.",
+ ctaMain:"Crear mi cuenta gratis", ctaSec:"Ver predicciones",
+ previewText:"Vista previa de la función: un espacio de debate donde los miembros podrán comentar los sorteos, compartir sus combinaciones favoritas y hablar de estrategias por estado.",
+ ctaTitle:"Prepárate para unirte a la comunidad", ctaP:"Crea tu cuenta PREDIKTA ahora para ser de los primeros en saber cuándo se lanza el espacio comunitario, y accede ya a nuestras herramientas de análisis.",
+ ctaBtnRegister:"Crear mi cuenta gratis", ctaBtnFaq:"Ver la FAQ",
+ disclaimer:'⚠️ PREDIKTA ofrece análisis estadísticos y predicciones asistidas por IA solo con fines informativos. Ningún resultado de lotería puede garantizarse. Juega de forma responsable. <a href="/responsible-gaming">Más información</a>.',
+ sections:[
+  ["Qué ofrecerá la comunidad <span class=\"soon-badge\">PRÓXIMAMENTE</span>",
+   "<p>El espacio comunitario de PREDIKTA será un lugar de conexión entre usuarios, centrado en el análisis estadístico y la experiencia compartida, nunca en promesas de premios.</p>",
+   ["Debates por estado y juego (Pick 3, Pick 4, Powerball...)","Comparte tus combinaciones y análisis favoritos","Comentarios sobre resultados recientes","Opiniones sobre la precisión de las predicciones","Insignias y niveles para miembros activos","Moderación y reglas de juego responsable"]],
+  ["Mientras esperas el lanzamiento",
+   "<p>Mientras se desarrolla el espacio comunitario, ya puedes disfrutar de todos nuestros análisis y hacer preguntas a través de nuestro asistente integrado.</p>",
+   ["Asistente PREDIKTA disponible en cada página","FAQ detallada en /faq","Historial de sugerencias en /track-record","Puntuación de precisión en /accuracy"]]
+ ]},
+
+pt:{ tag:"COMUNIDADE PREDIKTA", h1:"Em breve: uma comunidade<br>de jogadores e analistas",
+ sub:"Em breve você poderá se conectar com outros usuários da PREDIKTA: compartilhe suas análises, discuta tendências e acompanhe os comentários da comunidade.",
+ ctaMain:"Criar minha conta grátis", ctaSec:"Ver previsões",
+ previewText:"Prévia do recurso: um espaço de discussão onde os membros poderão comentar sorteios, compartilhar suas combinações favoritas e discutir estratégias por estado.",
+ ctaTitle:"Prepare-se para entrar na comunidade", ctaP:"Crie sua conta PREDIKTA agora para ser um dos primeiros a saber quando o espaço da comunidade for lançado, e acesse já nossas ferramentas de análise.",
+ ctaBtnRegister:"Criar minha conta grátis", ctaBtnFaq:"Ver o FAQ",
+ disclaimer:'⚠️ A PREDIKTA fornece análises estatísticas e previsões assistidas por IA apenas para fins informativos. Nenhum resultado de loteria pode ser garantido. Jogue com responsabilidade. <a href="/responsible-gaming">Saiba mais</a>.',
+ sections:[
+  ["O que a comunidade vai oferecer <span class=\"soon-badge\">EM BREVE</span>",
+   "<p>O espaço da comunidade PREDIKTA será um lugar de conexão entre usuários, focado em análise estatística e experiência compartilhada — nunca em promessas de prêmios.</p>",
+   ["Discussões por estado e jogo (Pick 3, Pick 4, Powerball...)","Compartilhe suas combinações e análises favoritas","Comentários sobre resultados recentes","Feedback sobre a precisão das previsões","Selos e níveis para membros ativos","Moderação e regras de jogo responsável"]],
+  ["Enquanto espera o lançamento",
+   "<p>Enquanto o espaço da comunidade é desenvolvido, você já pode aproveitar todas as nossas análises e fazer perguntas pelo nosso assistente integrado.</p>",
+   ["Assistente PREDIKTA disponível em cada página","FAQ detalhado em /faq","Histórico de sugestões em /track-record","Pontuação de precisão em /accuracy"]]
+ ]},
+
+ht:{ tag:"KOMINOTE PREDIKTA", h1:"Talè: yon kominote<br>jwè ak analis",
+ sub:"Talè ou ap ka konekte ak lòt itilizatè PREDIKTA: pataje analiz ou, pale sou tandans yo epi suiv kòmantè kominote a.",
+ ctaMain:"Kreye kont gratis mwen", ctaSec:"Gade prediksyon yo",
+ previewText:"Apèsi karakteristik la: yon espas diskisyon kote manm yo ka kòmante tiraj yo, pataje konbinezon favorit yo epi pale sou estrateji pa eta.",
+ ctaTitle:"Pare pou antre nan kominote a", ctaP:"Kreye kont PREDIKTA ou kounye a pou w premye moun ki konnen lè espas kominote a lanse, epi jwenn aksè kounye a a zouti analiz nou yo.",
+ ctaBtnRegister:"Kreye kont gratis mwen", ctaBtnFaq:"Gade FAQ",
+ disclaimer:'⚠️ PREDIKTA bay analiz estatistik ak prediksyon ki asiste pa IA sèlman pou enfòmasyon. Pa gen rezilta loteri ki garanti. Jwe yon fason responsab. <a href="/responsible-gaming">Aprann plis</a>.',
+ sections:[
+  ["Sa kominote a pral ofri <span class=\"soon-badge\">TALÈ</span>",
+   "<p>Espas kominote PREDIKTA ap yon kote pou itilizatè konekte, konsantre sou analiz estatistik ak eksperyans pataje — pa janm sou pwomès lo.</p>",
+   ["Diskisyon pa eta ak jwèt (Pick 3, Pick 4, Powerball...)","Pataje konbinezon ak analiz favorit ou","Kòmantè sou rezilta resan","Fidbak sou presizyon prediksyon yo","Badj ak nivo pou manm aktif","Modarasyon ak règ jwe responsab"]],
+  ["Pandan w ap tann lansman an",
+   "<p>Pandan y ap konstwi espas kominote a, ou ka deja pwofite tout analiz nou yo epi poze kesyon atravè asistan entegre nou an.</p>",
+   ["Asistan PREDIKTA disponib sou chak paj","FAQ detaye sou /faq","Istorik sijesyon sou /track-record","Eskò presizyon sou /accuracy"]]
+ ]},
+};
+
+function renderSections(dict){
+  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
+  <div class="sec">
+    <h2>${h2}</h2>
+    ${html}
+    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+  </div>`).join('');
+}
+
+let curLang = 'fr';
+function applyLang(lang){
+  curLang = T[lang] ? lang : 'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-html');
+    if(dict[key] != null) el.innerHTML = dict[key];
+  });
+  renderSections(dict);
+  document.documentElement.setAttribute('lang', curLang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+</script>
+</body></html>

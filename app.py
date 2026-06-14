@@ -826,6 +826,15 @@ def business_ai_page(): return send_from_directory("static", "business-ai.html")
 @app.route("/api")
 def api_info_page(): return send_from_directory("static", "api.html")
 
+@app.route("/world-map")
+def world_map_page(): return send_from_directory("static", "world-map.html")
+
+@app.route("/predikta-tv")
+def predikta_tv_page(): return send_from_directory("static", "predikta-tv.html")
+
+@app.route("/community")
+def community_page(): return send_from_directory("static", "community.html")
+
 @app.route("/nav.js")
 def nav_js():
     resp = make_response(send_from_directory("static", "nav.js"))
