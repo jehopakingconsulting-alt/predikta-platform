@@ -256,6 +256,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 }
 .hot-card-head{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.82rem;color:var(--text)}
 .hot-card-meta{font-size:.62rem;color:var(--muted2)}
+.hot-card-draw{font-size:.68rem;color:var(--muted2);line-height:1.5}
+.hot-card-draw strong{color:var(--text);letter-spacing:1px}
 .hot-card-digits{display:flex;gap:6px;flex-wrap:wrap}
 .hot-card-combo{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;color:var(--gold);letter-spacing:2px}
 .hot-card-lbl{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px}
@@ -1032,9 +1034,15 @@ async function loadHotCta(){
       ).join('');
       const combo = s.top_combo ? `<div class="hot-card-combo">${s.top_combo}</div>` : '';
       const todLbl = s.tod ? (t['tod_'+s.tod]||s.tod) : '';
+      const lastLine = s.last_result
+        ? `<div class="hot-card-draw">${s.state} ${todLbl} Pick3 - ${s.date}: <strong>${s.last_result}</strong></div>` : '';
+      const nextLine = s.top_combo
+        ? `<div class="hot-card-draw">${s.state} ${todLbl} TOP PICK3 - ${s.next_date}: <strong>${s.top_combo}</strong></div>` : '';
       return `<div class="hot-card">
         <div class="hot-card-head">${flag} ${s.state}</div>
         <div class="hot-card-meta">${todLbl}${todLbl&&s.date?' · ':''}${fmtDate(s.date)}</div>
+        ${lastLine}
+        ${nextLine}
         <div class="hot-card-lbl">${t.hotCtaDigits}</div>
         <div class="hot-card-digits">${digits}</div>
         <div class="hot-card-lbl">${t.hotCtaCombo}</div>

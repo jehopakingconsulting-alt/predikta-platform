@@ -498,11 +498,19 @@ def hot_pick3():
             )
             suggestions = analyzer.weighted_suggestions(tdraws, top_n=1)
             top = suggestions[0] if suggestions else None
+            last_draw = tdraws[0]
+            last_date = last_draw["date"]
+            try:
+                next_date = (datetime.strptime(last_date, "%Y-%m-%d").date() + timedelta(days=1)).isoformat()
+            except ValueError:
+                next_date = last_date
             entries.append({
                 "state": code,
                 "name": STATES[code]["name"],
                 "tod": tod,
-                "date": tdraws[0]["date"],
+                "date": last_date,
+                "last_result": f"{last_draw['d1']}{last_draw['d2']}{last_draw['d3']}",
+                "next_date": next_date,
                 "hot_digits": hot_digits[:5],
                 "top_combo": top["combo"] if top else None,
                 "confidence": top["confidence"] if top else None,
