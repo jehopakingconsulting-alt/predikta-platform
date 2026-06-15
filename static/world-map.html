@@ -36,6 +36,22 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .region-chip{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted2);font-size:.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
 .region-chip.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
 
+.view-toggle{display:flex;gap:8px;margin-bottom:14px}
+.view-toggle button{padding:8px 18px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted2);font-size:.78rem;font-weight:700;cursor:pointer}
+.view-toggle button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
+
+.us-tilemap{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(7,1fr);gap:4px;aspect-ratio:12/7;margin-bottom:14px;position:relative}
+.map-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);transition:transform .12s,border-color .12s,opacity .2s;cursor:pointer;position:relative;padding:2px}
+.map-tile:hover{transform:scale(1.08);border-color:var(--green);z-index:5}
+.map-tile.dim{opacity:.18}
+.map-tile .mt-flag{font-size:1.1rem;line-height:1}
+.map-tile .mt-code{font-size:.62rem;font-weight:900;letter-spacing:1px;margin-top:1px}
+.map-tile .mt-tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%) translateY(-6px);background:#10103a;border:1px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:.72rem;white-space:nowrap;color:var(--text);opacity:0;pointer-events:none;transition:opacity .12s;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.map-tile:hover .mt-tip{opacity:1}
+.map-tile .mt-tip .mt-name{font-weight:700;color:#aac0ff}
+.map-tile .mt-tip .mt-meta{color:var(--muted2);font-size:.68rem;margin-top:2px}
+.map-caption{text-align:center;font-size:.76rem;color:var(--muted2);margin-bottom:30px}
+
 .state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:30px}
 .state-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;text-decoration:none;color:var(--text);transition:transform .15s,border-color .15s}
 .state-card:hover{transform:translateY(-2px);border-color:var(--accent)}
@@ -77,13 +93,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 </div>
 <div class="controls" id="regionChips"></div>
 
-<div class="state-grid" id="stateGrid"></div>
-<div class="no-results" id="noResults" style="display:none" data-i18n="noResults">Aucun État trouvé.</div>
-
-<div class="preview-box">
-  <div class="globe">🌍</div>
-  <p data-i18n="previewText">Une véritable carte géographique interactive (zoom, survol, comparaison visuelle) arrive prochainement <span class="soon-badge">BIENTÔT</span>. En attendant, utilisez la recherche ci-dessus pour accéder instantanément à votre État.</p>
+<div class="view-toggle" id="viewToggle">
+  <button class="active" data-view="map" data-i18n="viewMap">🗺️ Carte</button>
+  <button data-view="list" data-i18n="viewList">📋 Liste</button>
 </div>
+
+<div class="us-tilemap" id="tileMap"></div>
+<div class="map-caption" data-i18n="mapCaption">Survolez ou touchez un État pour voir ses statistiques, cliquez pour accéder à ses prédictions.</div>
+
+<div class="state-grid" id="stateGrid" style="display:none"></div>
+<div class="no-results" id="noResults" style="display:none" data-i18n="noResults">Aucun État trouvé.</div>
 
 <div class="bottom-cta">
   <h2 data-i18n="ctaTitle">Prêt à passer au niveau supérieur ?</h2>
@@ -141,6 +160,17 @@ const STATES = [
  {code:"WV",flag:"⛰️",region:"SE",game:"Daily 3",dpd:1},
 ];
 
+// Cartogram-style tile grid (col, row), 1-indexed, 12 cols x 7 rows
+const MAPGRID = {
+ WA:{c:2,r:1}, MN:{c:6,r:1}, VT:{c:11,r:1}, ME:{c:12,r:1},
+ ID:{c:3,r:2}, WI:{c:7,r:2}, MI:{c:8,r:2}, NY:{c:10,r:2}, CT:{c:11,r:2}, NH:{c:12,r:2},
+ CA:{c:2,r:3}, CO:{c:4,r:3}, NE:{c:5,r:3}, IA:{c:6,r:3}, IL:{c:7,r:3}, IN:{c:8,r:3}, OH:{c:9,r:3}, PA:{c:10,r:3}, NJ:{c:11,r:3},
+ AZ:{c:3,r:4}, NM:{c:4,r:4}, KS:{c:5,r:4}, MO:{c:6,r:4}, KY:{c:8,r:4}, WV:{c:9,r:4}, VA:{c:10,r:4}, MD:{c:11,r:4}, DE:{c:12,r:4},
+ OK:{c:5,r:5}, AR:{c:6,r:5}, TN:{c:7,r:5}, NC:{c:9,r:5}, DC:{c:11,r:5},
+ TX:{c:4,r:6}, LA:{c:6,r:6}, MS:{c:7,r:6}, GA:{c:8,r:6}, SC:{c:9,r:6},
+ FL:{c:10,r:7}, PR:{c:12,r:7},
+};
+
 const T = {
 fr:{ tag:"CARTE DE COUVERTURE", h1:"Explorez nos<br>40 marchés couverts",
  sub:"Recherchez votre État ou territoire et accédez en un clic à ses prédictions IA, ses statistiques et son historique de tirages.",
@@ -148,7 +178,8 @@ fr:{ tag:"CARTE DE COUVERTURE", h1:"Explorez nos<br>40 marchés couverts",
  statCovered:"États + DC + PR", statDraws:"Tirages/jour (total)", statGames:"Types de jeux",
  regionAll:"Tous", regionNE:"Nord-Est", regionSE:"Sud-Est", regionMW:"Midwest", regionSW:"Sud-Ouest", regionW:"Ouest", regionTR:"Territoires",
  drawsLabel:"tirage(s)/jour",
- previewText:'Une véritable carte géographique interactive (zoom, survol, comparaison visuelle) arrive prochainement <span class="soon-badge">BIENTÔT</span>. En attendant, utilisez la recherche ci-dessus pour accéder instantanément à votre État.',
+ viewMap:"🗺️ Carte", viewList:"📋 Liste",
+ mapCaption:"Survolez ou touchez un État pour voir ses statistiques, cliquez pour accéder à ses prédictions.",
  ctaTitle:"Prêt à passer au niveau supérieur ?", ctaP:"Créez votre compte PREDIKTA gratuit pour sauvegarder vos États favoris, recevoir des alertes et débloquer les analyses avancées (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Créer mon compte gratuit", ctaBtnPredictions:"Explorer les prédictions",
  disclaimer:'⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.',
@@ -160,7 +191,8 @@ en:{ tag:"COVERAGE MAP", h1:"Explore our<br>40 covered markets",
  statCovered:"States + DC + PR", statDraws:"Draws/day (total)", statGames:"Game types",
  regionAll:"All", regionNE:"Northeast", regionSE:"Southeast", regionMW:"Midwest", regionSW:"Southwest", regionW:"West", regionTR:"Territories",
  drawsLabel:"draw(s)/day",
- previewText:'A true interactive geographic map (zoom, hover, visual comparison) is coming <span class="soon-badge">SOON</span>. Meanwhile, use the search above to jump straight to your state.',
+ viewMap:"🗺️ Map", viewList:"📋 List",
+ mapCaption:"Hover or tap a state to see its stats, click to jump to its predictions.",
  ctaTitle:"Ready for the next level?", ctaP:"Create your free PREDIKTA account to save your favorite states, get alerts and unlock advanced analysis (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Create my free account", ctaBtnPredictions:"Explore predictions",
  disclaimer:'⚠️ PREDIKTA provides statistical analysis and AI-assisted predictions for informational purposes only. No lottery outcome can be guaranteed. Play responsibly. <a href="/responsible-gaming">Learn more</a>.',
@@ -172,7 +204,8 @@ es:{ tag:"MAPA DE COBERTURA", h1:"Explora nuestros<br>40 mercados cubiertos",
  statCovered:"Estados + DC + PR", statDraws:"Sorteos/día (total)", statGames:"Tipos de juego",
  regionAll:"Todos", regionNE:"Noreste", regionSE:"Sureste", regionMW:"Medio Oeste", regionSW:"Suroeste", regionW:"Oeste", regionTR:"Territorios",
  drawsLabel:"sorteo(s)/día",
- previewText:'Un verdadero mapa geográfico interactivo (zoom, hover, comparación visual) llega <span class="soon-badge">PRONTO</span>. Mientras tanto, usa la búsqueda de arriba para ir directo a tu estado.',
+ viewMap:"🗺️ Mapa", viewList:"📋 Lista",
+ mapCaption:"Pasa el cursor o toca un estado para ver sus estadísticas, haz clic para ir a sus predicciones.",
  ctaTitle:"¿Listo para el siguiente nivel?", ctaP:"Crea tu cuenta gratuita de PREDIKTA para guardar tus estados favoritos, recibir alertas y desbloquear análisis avanzados (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Crear mi cuenta gratis", ctaBtnPredictions:"Explorar predicciones",
  disclaimer:'⚠️ PREDIKTA ofrece análisis estadísticos y predicciones asistidas por IA solo con fines informativos. Ningún resultado de lotería puede garantizarse. Juega de forma responsable. <a href="/responsible-gaming">Más información</a>.',
@@ -184,7 +217,8 @@ pt:{ tag:"MAPA DE COBERTURA", h1:"Explore nossos<br>40 mercados cobertos",
  statCovered:"Estados + DC + PR", statDraws:"Sorteios/dia (total)", statGames:"Tipos de jogo",
  regionAll:"Todos", regionNE:"Nordeste", regionSE:"Sudeste", regionMW:"Centro-Oeste", regionSW:"Sudoeste", regionW:"Oeste", regionTR:"Territórios",
  drawsLabel:"sorteio(s)/dia",
- previewText:'Um verdadeiro mapa geográfico interativo (zoom, hover, comparação visual) chega <span class="soon-badge">EM BREVE</span>. Enquanto isso, use a busca acima para ir direto ao seu estado.',
+ viewMap:"🗺️ Mapa", viewList:"📋 Lista",
+ mapCaption:"Passe o cursor ou toque em um estado para ver suas estatísticas, clique para acessar suas previsões.",
  ctaTitle:"Pronto para o próximo nível?", ctaP:"Crie sua conta gratuita PREDIKTA para salvar seus estados favoritos, receber alertas e desbloquear análises avançadas (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Criar minha conta grátis", ctaBtnPredictions:"Explorar previsões",
  disclaimer:'⚠️ A PREDIKTA fornece análises estatísticas e previsões assistidas por IA apenas para fins informativos. Nenhum resultado de loteria pode ser garantido. Jogue com responsabilidade. <a href="/responsible-gaming">Saiba mais</a>.',
@@ -196,7 +230,8 @@ ht:{ tag:"KAT KOUVÈTI", h1:"Eksplore 40<br>mache nou kouvri",
  statCovered:"Eta + DC + PR", statDraws:"Tiraj/jou (total)", statGames:"Kalite jwèt",
  regionAll:"Tout", regionNE:"Nòdès", regionSE:"Sidès", regionMW:"Mitan Lwès", regionSW:"Sidwès", regionW:"Lwès", regionTR:"Teritwa",
  drawsLabel:"tiraj/jou",
- previewText:'Yon vrè kat jewografik entèraktif (zoom, hover, konparezon vizyèl) ap vini <span class="soon-badge">TALÈ</span>. Pandan sa, sèvi ak rechèch anwo a pou ale dirèkteman nan eta ou.',
+ viewMap:"🗺️ Kat", viewList:"📋 Lis",
+ mapCaption:"Pase souri oswa touche yon eta pou wè estatistik li, klike pou ale nan prediksyon li.",
  ctaTitle:"Pare pou pwochen nivo a?", ctaP:"Kreye kont gratis PREDIKTA ou pou anrejistre eta favorit ou, resevwa alèt epi debloke analiz avanse (Markov, Monte Carlo, Machine Learning).",
  ctaBtnRegister:"Kreye kont gratis mwen", ctaBtnPredictions:"Eksplore prediksyon yo",
  disclaimer:'⚠️ PREDIKTA bay analiz estatistik ak prediksyon ki asiste pa IA sèlman pou enfòmasyon. Pa gen rezilta loteri ki garanti. Jwe yon fason responsab. <a href="/responsible-gaming">Aprann plis</a>.',
@@ -254,12 +289,47 @@ function renderGrid(dict){
   `).join('');
 }
 
+function renderTileMap(dict){
+  const search = curSearch.trim().toLowerCase();
+  const tilemap = document.getElementById('tileMap');
+  tilemap.innerHTML = STATES.map(s=>{
+    const pos = MAPGRID[s.code];
+    if(!pos) return '';
+    let dim = false;
+    if(curRegion !== 'ALL' && s.region !== curRegion) dim = true;
+    if(search){
+      const name = (dict.names[s.code]||'').toLowerCase();
+      if(!(s.code.toLowerCase().includes(search) || name.includes(search))) dim = true;
+    }
+    const name = dict.names[s.code]||s.code;
+    return `
+    <a class="map-tile ${dim?'dim':''}" style="grid-column:${pos.c};grid-row:${pos.r}" href="/predictions/${s.code.toLowerCase()}">
+      <span class="mt-flag">${s.flag}</span>
+      <span class="mt-code">${s.code}</span>
+      <span class="mt-tip"><span class="mt-name">${name}</span><br><span class="mt-meta">${s.game} · ${s.dpd} ${dict.drawsLabel}</span></span>
+    </a>`;
+  }).join('');
+}
+
+let curView = 'map';
 function renderAll(){
   const dict = T[curLang];
   renderStats(dict);
   renderChips(dict);
+  renderTileMap(dict);
   renderGrid(dict);
 }
+
+document.getElementById('viewToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  curView = btn.dataset.view;
+  document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.toggle('active', b===btn));
+  document.getElementById('tileMap').style.display = curView==='map' ? '' : 'none';
+  document.querySelector('.map-caption').style.display = curView==='map' ? '' : 'none';
+  document.getElementById('stateGrid').style.display = curView==='list' ? '' : 'none';
+  if(curView==='list') renderGrid(T[curLang]);
+});
 
 function applyLang(lang){
   curLang = T[lang] ? lang : 'fr';
@@ -283,6 +353,7 @@ window.setLang = applyLang;
 
 document.getElementById('searchInput').addEventListener('input', (e)=>{
   curSearch = e.target.value;
+  renderTileMap(T[curLang]);
   renderGrid(T[curLang]);
 });
 
