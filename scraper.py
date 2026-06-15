@@ -284,6 +284,21 @@ def load_csv(state_code: str) -> list[dict]:
 
 # ── Public API ────────────────────────────────────────────────────────────
 
+# Si l'historique disponible (disque + nouvelle recolte) reste sous ce
+# seuil, on complete via lotterypost.com (historique profond) — couvre le
+# cas d'un disque vide/reinitialise (ex: redeploiement Render) ou ne
+# contenant que quelques tirages recents lotteryusa.com.
+MIN_HISTORY_DRAWS = 100
+
+
+def _existing_draw_count(state_code: str) -> int:
+    path = os.path.join(DATA_DIR, f"{state_code.lower()}.csv")
+    if not os.path.exists(path):
+        return 0
+    with open(path, newline="", encoding="utf-8") as f:
+        return sum(1 for _ in csv.DictReader(f))
+
+
 def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
     state_code = state_code.upper()
     if state_code not in STATES:
@@ -309,6 +324,27 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
     # bloque par Cloudflare sur les IP de datacenter).
     if not draws:
         draws = fetch_months(state_code, cfg["slug"], n_months)
+    else:
+        # lotteryusa.com ne renvoie que les ~10-15 derniers tirages par
+        # page. Si l'historique total (disque + nouveaute) est encore
+        # faible, on complete avec un backfill profond lotterypost.com.
+        existing = _existing_draw_count(state_code)
+        seen = {f"{d['date']}_{d['tod']}" for d in draws}
+        if existing + len(seen) < MIN_HISTORY_DRAWS:
+            print(f"  [{state_code}] history low ({existing + len(seen)} < {MIN_HISTORY_DRAWS}) — backfilling via lotterypost.com")
+            # Le backfill cible une fenetre plus large que n_months (souvent
+            # 1 lors des rafraichissements automatiques) pour restaurer un
+            # historique exploitable en un seul cycle.
+            backfill = fetch_months(state_code, cfg["slug"], max(n_months, 12))
+            added = 0
+            for d in backfill:
+                key = f"{d['date']}_{d['tod']}"
+                if key not in seen:
+                    draws.append(d)
+                    seen.add(key)
+                    added += 1
+            if added:
+                print(f"  [{state_code}] +{added} backfilled draws via lotterypost.com")
 
     # Merge extra official-source draws (Morning/Day/Night) when available —
     # lotterypost.com only republishes Midday/Evening for most states.

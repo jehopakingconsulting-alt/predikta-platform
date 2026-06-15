@@ -21,6 +21,9 @@ BASE_URL = "https://www.lotterypost.com"
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data", "games")
 os.makedirs(DATA_DIR, exist_ok=True)
 
+# Voir scraper.MIN_HISTORY_DRAWS — meme garde-fou pour le registre multi-jeux.
+MIN_HISTORY_DRAWS = 100
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml",
@@ -166,8 +169,15 @@ def fetch_game(state: str, game: dict, n_months: int = 3) -> list[dict]:
     except Exception:
         pass
 
+    # lotteryusa.com ne renvoie que les ~10-15 derniers tirages. Si
+    # l'historique sur disque (+ cette recolte) reste faible — disque
+    # vide/reinitialise (ex: redeploiement Render) — on complete avec un
+    # backfill profond lotterypost.com.
     if all_draws:
-        return all_draws
+        existing = load_game_results(state, slug)
+        if len(existing) + len(seen) >= MIN_HISTORY_DRAWS:
+            return all_draws
+        n_months = max(n_months, 12)
 
     now = datetime.now()
     year, month = now.year, now.month
