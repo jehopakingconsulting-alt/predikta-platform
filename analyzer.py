@@ -237,8 +237,9 @@ def backtest_suggestions(draws: list[dict], n: int = 15, min_history: int = 60) 
     return results
 
 
-def full_report(state_code: str) -> dict:
-    draws = load_draws(state_code)
+def full_report(state_code: str, draws: list[dict] = None) -> dict:
+    if draws is None:
+        draws = load_draws(state_code)
     if not draws:
         return {"error": f"No data for {state_code}. Run scraper first."}
 

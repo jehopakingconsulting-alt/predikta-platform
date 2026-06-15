@@ -10,6 +10,7 @@ to compute on every request).
 from datetime import date
 from scraper import STATES, load_csv
 from analyzer import full_report
+from draw_schedule import next_draw_session
 
 BALL_COLORS = [
     '#ff4444', '#ff7722', '#ffcc22', '#88cc22', '#22cc66',
@@ -46,6 +47,7 @@ T = {
         "transOverdue": "en retard", "transHot": "CHAUD", "transCold": "FROID", "transNeutral": "NEUTRE",
         "transMarkov": "Markov (vs dernier tirage)",
         "transDisclaimer": "Ces signaux décrivent l'historique des tirages — ils n'augmentent pas vos chances de gagner et ne garantissent aucun résultat futur.",
+        "nextDraw": "⏰ Prochain tirage", "today": "aujourd'hui", "tomorrow": "demain",
     },
     "en": {
         "title": lambda name, d: f"Pick 3 {name} Predictions Today {d} | PREDIKTA",
@@ -67,6 +69,7 @@ T = {
         "transOverdue": "overdue", "transHot": "HOT", "transCold": "COLD", "transNeutral": "NEUTRAL",
         "transMarkov": "Markov (vs last draw)",
         "transDisclaimer": "These signals describe historical draw patterns — they do not increase your odds of winning or guarantee any future outcome.",
+        "nextDraw": "⏰ Next draw", "today": "today", "tomorrow": "tomorrow",
     },
     "es": {
         "title": lambda name, d: f"Pick 3 {name} — Predicciones de hoy {d} | PREDIKTA",
@@ -88,6 +91,7 @@ T = {
         "transOverdue": "atrasado", "transHot": "CALIENTE", "transCold": "FRÍO", "transNeutral": "NEUTRAL",
         "transMarkov": "Markov (vs último sorteo)",
         "transDisclaimer": "Estas señales describen patrones históricos de los sorteos — no aumentan sus posibilidades de ganar ni garantizan ningún resultado futuro.",
+        "nextDraw": "⏰ Próximo sorteo", "today": "hoy", "tomorrow": "mañana",
     },
     "pt": {
         "title": lambda name, d: f"Pick 3 {name} — Previsões de hoje {d} | PREDIKTA",
@@ -109,6 +113,7 @@ T = {
         "transOverdue": "em atraso", "transHot": "QUENTE", "transCold": "FRIO", "transNeutral": "NEUTRO",
         "transMarkov": "Markov (vs último sorteio)",
         "transDisclaimer": "Esses sinais descrevem padrões históricos dos sorteios — eles não aumentam suas chances de ganhar nem garantem qualquer resultado futuro.",
+        "nextDraw": "⏰ Próximo sorteio", "today": "hoje", "tomorrow": "amanhã",
     },
     "ht": {
         "title": lambda name, d: f"Pick 3 {name} — Prediksyon jodi a {d} | PREDIKTA",
@@ -130,6 +135,7 @@ T = {
         "transOverdue": "an reta", "transHot": "CHO", "transCold": "FRÈT", "transNeutral": "NÈITRAL",
         "transMarkov": "Markov (vs dènye tiraj)",
         "transDisclaimer": "Siyal sa yo dekri modèl istorik tiraj yo — yo pa ogmante chans ou pou genyen ni garanti okenn rezilta nan lavni.",
+        "nextDraw": "⏰ Pwochen tiraj", "today": "jodi a", "tomorrow": "demen",
     },
 }
 
@@ -255,7 +261,18 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
                 f'<div class="card">{t["noData"]}</div>')
         return _page_shell(t["title"](name, today), t["desc"](name, today), canonical, lang, body, alt)
 
-    report = full_report(state_code)
+    # Base the "last draw" / suggestions on the session that's coming up
+    # next (e.g. if it's 6:15 PM and tonight's "Soir" draw is at 6:59 PM,
+    # use the history of "Soir" draws — not just the most recent draw
+    # overall, which could be an earlier "Nuit"/"Matin" session).
+    nxt = next_draw_session(state_code)
+    draws_for_report = draws
+    if nxt:
+        tdraws = [d for d in draws if d.get("tod") == nxt["tod"]]
+        if tdraws:
+            draws_for_report = tdraws
+
+    report = full_report(state_code, draws_for_report)
     last = report["last_draw"]
     balls = "".join(_ball(last[p]) for p in ["d1", "d2", "d3"])
 
@@ -300,9 +317,16 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
     tod = last.get("tod", "")
     tod_label = TOD_T.get(lang, {}).get(tod, tod)
 
+    next_html = ""
+    if nxt:
+        next_tod_label = TOD_T.get(lang, {}).get(nxt["tod"], nxt["tod"])
+        when = t["today"] if nxt["date"] == today else t["tomorrow"]
+        next_html = f'<div class="sub">{t["nextDraw"]}: {next_tod_label} — {when} {nxt["time"]}</div>'
+
     body = f"""<a class="back" href="/predictions{'?lang=' + lang if lang != 'fr' else ''}">{t['backToIndex']}</a>
 <h1>{flag} {t['h1'](name)}</h1>
 <div class="sub">{today} · {report['total_draws']} {t['totalDraws']}</div>
+{next_html}
 
 <div class="card">
   <h2>{t['lastDraw']} — {last['date']} ({tod_label})</h2>
