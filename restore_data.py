@@ -17,18 +17,11 @@ import io
 import json
 import os
 import re
-import urllib.request
+import shutil
+import subprocess
+import tempfile
 
-REPO = "jehopakingconsulting-alt/predikta-platform"
-BRANCH = "main"
-RAW = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/"
-TREE_API = f"https://api.github.com/repos/{REPO}/git/trees/{BRANCH}?recursive=1"
-
-
-def fetch(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "predikta-restore"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return r.read().decode("utf-8")
+REPO_URL = "https://github.com/jehopakingconsulting-alt/predikta-platform.git"
 
 
 def merge_csv(path: str, remote_text: str) -> int:
@@ -79,17 +72,32 @@ def merge_json(path: str, remote_text: str) -> int:
 
 
 def main():
-    tree = json.loads(fetch(TREE_API))["tree"]
-    paths = [t["path"] for t in tree if t["type"] == "blob"]
+    clone_dir = tempfile.mkdtemp(prefix="predikta-restore-")
+    print(f"Cloning {REPO_URL} into {clone_dir} ...")
+    subprocess.run(
+        ["git", "clone", "--depth", "1", REPO_URL, clone_dir],
+        check=True,
+    )
 
-    state_csv = [p for p in paths if re.fullmatch(r"data/[a-z]{2}\.csv", p)]
-    games_json = [p for p in paths if p.startswith("data/games/") and p.endswith(".json")]
+    remote_data_dir = os.path.join(clone_dir, "data")
+
+    state_csv = []
+    games_json = []
+    for root, _dirs, files in os.walk(remote_data_dir):
+        for fname in files:
+            full = os.path.join(root, fname)
+            rel = os.path.relpath(full, clone_dir).replace(os.sep, "/")
+            if re.fullmatch(r"data/[a-z]{2}\.csv", rel):
+                state_csv.append(rel)
+            elif rel.startswith("data/games/") and rel.endswith(".json"):
+                games_json.append(rel)
 
     print(f"Restoring {len(state_csv)} state CSVs + {len(games_json)} game JSON files...")
 
     for path in state_csv:
         try:
-            remote_text = fetch(RAW + path)
+            with open(os.path.join(clone_dir, path), encoding="utf-8") as f:
+                remote_text = f.read()
             total = merge_csv(path, remote_text)
             print(f"  {path} -> {total} draws")
         except Exception as e:
@@ -97,12 +105,14 @@ def main():
 
     for path in games_json:
         try:
-            remote_text = fetch(RAW + path)
+            with open(os.path.join(clone_dir, path), encoding="utf-8") as f:
+                remote_text = f.read()
             total = merge_json(path, remote_text)
             print(f"  {path} -> {total} entries")
         except Exception as e:
             print(f"  {path}: ERROR {e}")
 
+    shutil.rmtree(clone_dir, ignore_errors=True)
     print("Done.")
 
 
