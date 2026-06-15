@@ -786,6 +786,25 @@ def send_hotcold_alert_email(user, state: str, game_label: str, alert_type: str,
     )
 
 
+def send_custom_alert_email(user, state: str, game_label: str, number: str, draw: dict):
+    """Email envoyé lorsqu'un numéro surveillé (alerte personnalisée,
+    alert_type=custom) sort dans un nouveau tirage."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    date_str = draw.get("date", "")
+    tod = draw.get("tod", "")
+    when = f"{date_str} ({tod})" if tod else date_str
+    _send_email(
+        user.email,
+        f"PREDIKTA — Votre numéro {number} est sorti ! ({state} {game_label})",
+        f"Bonjour {user.username},\n\n"
+        f"Le numéro que tu surveilles, {number}, vient de sortir pour "
+        f"{game_label} ({state}) :\n"
+        f"Date : {when}\n\n"
+        f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
+
+
 def record_usage(user_id: int):
     """Incrémente le compteur d'analyses du jour pour un utilisateur."""
     today = date.today().isoformat()

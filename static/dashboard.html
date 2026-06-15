@@ -106,6 +106,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
           <option value="cold_number" data-i18n="atCold">Numéro froid</option>
           <option value="custom" data-i18n="atCustom">Personnalisée</option>
         </select>
+        <input type="text" id="alertCustomNumber" data-i18n-ph="atCustomNumberPh" placeholder="Numéro à surveiller (ex: 123)" maxlength="6" style="max-width:160px; display:none">
         <button id="btnAddAlert" data-i18n="btnAdd">Ajouter</button>
       </div>
       <div class="msg" id="alertMsg"></div>
@@ -127,10 +128,11 @@ fr:{ title:"Mon tableau de bord", subtitle:"Retrouvez vos prédictions favorites
  lockedTitle:"Abonnement requis", lockedText:"Le tableau de bord est réservé aux membres avec un essai actif ou un abonnement payant.", lockedCta:"Voir les plans",
  planLabel:"Votre plan", manageBtn:"Gérer mon abonnement →", daysLeft:"{n} jour(s) restant(s)", trialBadge:"Essai", planActive:"Actif",
  favTitle:"⭐ Prédictions favorites", favHint:"Sauvegardez vos combinaisons préférées depuis la page Prédictions, ou ajoutez-les manuellement ici.",
- alertTitle:"🔔 Alertes", alertHint:"Créez une liste de surveillance par État et par jeu. Un email est envoyé automatiquement dès qu'un nouveau résultat est disponible, ou dès qu'un chiffre devient « chaud » ou « froid » sur les 30 derniers tirages. (Alertes personnalisées : prochainement.)",
+ alertTitle:"🔔 Alertes", alertHint:"Créez une liste de surveillance par État et par jeu. Un email est envoyé automatiquement dès qu'un nouveau résultat est disponible, dès qu'un chiffre devient « chaud » ou « froid » sur les 30 derniers tirages, ou dès qu'un numéro personnalisé que vous surveillez sort.",
  reportTitle:"📊 Rapports Business AI", reportHint:"Vos rapports générés depuis Business AI, sauvegardés pour consultation ultérieure.",
  btnAdd:"Ajouter", btnDelete:"Supprimer", btnView:"Voir", btnHide:"Masquer",
  atNewResult:"Nouveau tirage", atHot:"Numéro chaud", atCold:"Numéro froid", atCustom:"Personnalisée",
+ atCustomNumberPh:"Numéro à surveiller (ex: 123)", invalidNumber:"Merci d'indiquer un numéro valide (chiffres uniquement).",
  emptyFav:"Aucune prédiction sauvegardée pour le moment.", emptyAlert:"Aucune alerte créée pour le moment.", emptyReport:"Aucun rapport sauvegardé pour le moment.",
  added:"Ajouté ✓", deleted:"Supprimé ✓", fillFields:"Merci de remplir État, Jeu et Numéros.",
  active:"Active", inactive:"Inactive", limitReached:"Limite atteinte.",
@@ -139,10 +141,11 @@ en:{ title:"My dashboard", subtitle:"Find your favorite predictions, alerts and 
  lockedTitle:"Subscription required", lockedText:"The dashboard is reserved for members with an active trial or paid plan.", lockedCta:"View plans",
  planLabel:"Your plan", manageBtn:"Manage subscription →", daysLeft:"{n} day(s) left", trialBadge:"Trial", planActive:"Active",
  favTitle:"⭐ Favorite predictions", favHint:"Save your favorite combinations from the Predictions page, or add them manually here.",
- alertTitle:"🔔 Alerts", alertHint:"Build a watchlist by state and game. An email is sent automatically as soon as a new result is available, or as soon as a digit becomes \"hot\" or \"cold\" over the last 30 draws. (Custom alerts coming soon.)",
+ alertTitle:"🔔 Alerts", alertHint:"Build a watchlist by state and game. An email is sent automatically as soon as a new result is available, as soon as a digit becomes \"hot\" or \"cold\" over the last 30 draws, or as soon as a custom number you're watching is drawn.",
  reportTitle:"📊 Business AI reports", reportHint:"Reports generated from Business AI, saved for later review.",
  btnAdd:"Add", btnDelete:"Delete", btnView:"View", btnHide:"Hide",
  atNewResult:"New draw", atHot:"Hot number", atCold:"Cold number", atCustom:"Custom",
+ atCustomNumberPh:"Number to watch (e.g. 123)", invalidNumber:"Please enter a valid number (digits only).",
  emptyFav:"No saved predictions yet.", emptyAlert:"No alerts created yet.", emptyReport:"No saved reports yet.",
  added:"Added ✓", deleted:"Deleted ✓", fillFields:"Please fill in State, Game and Numbers.",
  active:"Active", inactive:"Inactive", limitReached:"Limit reached.",
@@ -151,10 +154,11 @@ es:{ title:"Mi panel", subtitle:"Encuentra tus predicciones favoritas, alertas e
  lockedTitle:"Suscripción requerida", lockedText:"El panel está reservado para miembros con una prueba activa o un plan de pago.", lockedCta:"Ver planes",
  planLabel:"Tu plan", manageBtn:"Gestionar suscripción →", daysLeft:"{n} día(s) restante(s)", trialBadge:"Prueba", planActive:"Activo",
  favTitle:"⭐ Predicciones favoritas", favHint:"Guarda tus combinaciones favoritas desde la página de Predicciones, o añádelas manualmente aquí.",
- alertTitle:"🔔 Alertas", alertHint:"Crea una lista de seguimiento por Estado y juego. Se envía un email automáticamente en cuanto hay un nuevo resultado, o en cuanto un número se vuelve \"caliente\" o \"frío\" en los últimos 30 sorteos. (Alertas personalizadas: próximamente.)",
+ alertTitle:"🔔 Alertas", alertHint:"Crea una lista de seguimiento por Estado y juego. Se envía un email automáticamente en cuanto hay un nuevo resultado, en cuanto un número se vuelve \"caliente\" o \"frío\" en los últimos 30 sorteos, o en cuanto sale un número personalizado que estés vigilando.",
  reportTitle:"📊 Informes de Business AI", reportHint:"Informes generados desde Business AI, guardados para consulta posterior.",
  btnAdd:"Añadir", btnDelete:"Eliminar", btnView:"Ver", btnHide:"Ocultar",
  atNewResult:"Nuevo sorteo", atHot:"Número caliente", atCold:"Número frío", atCustom:"Personalizada",
+ atCustomNumberPh:"Número a vigilar (ej: 123)", invalidNumber:"Por favor indica un número válido (solo dígitos).",
  emptyFav:"Aún no hay predicciones guardadas.", emptyAlert:"Aún no hay alertas creadas.", emptyReport:"Aún no hay informes guardados.",
  added:"Añadido ✓", deleted:"Eliminado ✓", fillFields:"Por favor completa Estado, Juego y Números.",
  active:"Activa", inactive:"Inactiva", limitReached:"Límite alcanzado.",
@@ -163,10 +167,11 @@ pt:{ title:"Meu painel", subtitle:"Encontre suas previsões favoritas, alertas e
  lockedTitle:"Assinatura necessária", lockedText:"O painel é reservado para membros com teste ativo ou plano pago.", lockedCta:"Ver planos",
  planLabel:"Seu plano", manageBtn:"Gerenciar assinatura →", daysLeft:"{n} dia(s) restante(s)", trialBadge:"Teste", planActive:"Ativo",
  favTitle:"⭐ Previsões favoritas", favHint:"Salve suas combinações favoritas a partir da página de Previsões, ou adicione manualmente aqui.",
- alertTitle:"🔔 Alertas", alertHint:"Crie uma lista de monitoramento por Estado e jogo. Um e-mail é enviado automaticamente assim que um novo resultado estiver disponível, ou assim que um número ficar \"quente\" ou \"frio\" nos últimos 30 sorteios. (Alertas personalizados em breve.)",
+ alertTitle:"🔔 Alertas", alertHint:"Crie uma lista de monitoramento por Estado e jogo. Um e-mail é enviado automaticamente assim que um novo resultado estiver disponível, assim que um número ficar \"quente\" ou \"frio\" nos últimos 30 sorteios, ou assim que um número personalizado que você monitora for sorteado.",
  reportTitle:"📊 Relatórios do Business AI", reportHint:"Relatórios gerados pelo Business AI, salvos para consulta posterior.",
  btnAdd:"Adicionar", btnDelete:"Excluir", btnView:"Ver", btnHide:"Ocultar",
  atNewResult:"Novo sorteio", atHot:"Número quente", atCold:"Número frio", atCustom:"Personalizada",
+ atCustomNumberPh:"Número a monitorar (ex: 123)", invalidNumber:"Informe um número válido (somente dígitos).",
  emptyFav:"Nenhuma previsão salva ainda.", emptyAlert:"Nenhum alerta criado ainda.", emptyReport:"Nenhum relatório salvo ainda.",
  added:"Adicionado ✓", deleted:"Excluído ✓", fillFields:"Preencha Estado, Jogo e Números.",
  active:"Ativa", inactive:"Inativa", limitReached:"Limite atingido.",
@@ -175,10 +180,11 @@ ht:{ title:"Tablodbò mwen", subtitle:"Jwenn prediksyon favorit ou, alèt ou ak 
  lockedTitle:"Abònman obligatwa", lockedText:"Tablodbò a rezève pou manm ki gen yon esè aktif oswa yon plan peye.", lockedCta:"Gade plan yo",
  planLabel:"Plan ou", manageBtn:"Jere abònman ou →", daysLeft:"{n} jou ki rete", trialBadge:"Esè", planActive:"Aktif",
  favTitle:"⭐ Prediksyon favorit", favHint:"Anrejistre konbinezon favorit ou nan paj Prediksyon, oswa ajoute yo manyèlman isit la.",
- alertTitle:"🔔 Alèt", alertHint:"Kreye yon lis siveyans pa Eta ak jwèt. Yon imèl ap voye otomatikman kou yon nouvo rezilta disponib, oswa kou yon chif vin \"cho\" oswa \"frèt\" sou 30 dènye tiraj yo. (Alèt pèsonalize ap vini talè.)",
+ alertTitle:"🔔 Alèt", alertHint:"Kreye yon lis siveyans pa Eta ak jwèt. Yon imèl ap voye otomatikman kou yon nouvo rezilta disponib, kou yon chif vin \"cho\" oswa \"frèt\" sou 30 dènye tiraj yo, oswa kou yon nimewo pèsonalize w ap siveye soti.",
  reportTitle:"📊 Rapò Business AI", reportHint:"Rapò ki kreye nan Business AI, anrejistre pou konsiltasyon pita.",
  btnAdd:"Ajoute", btnDelete:"Efase", btnView:"Gade", btnHide:"Kache",
  atNewResult:"Nouvo tiraj", atHot:"Nimewo cho", atCold:"Nimewo frèt", atCustom:"Pèsonalize",
+ atCustomNumberPh:"Nimewo pou siveye (egz: 123)", invalidNumber:"Tanpri antre yon nimewo valab (chif sèlman).",
  emptyFav:"Pa gen prediksyon anrejistre pou kounye a.", emptyAlert:"Pa gen alèt kreye pou kounye a.", emptyReport:"Pa gen rapò anrejistre pou kounye a.",
  added:"Ajoute ✓", deleted:"Efase ✓", fillFields:"Tanpri ranpli Eta, Jwèt ak Nimewo.",
  active:"Aktif", inactive:"Inaktif", limitReached:"Limit rive.",
@@ -193,6 +199,10 @@ function applyLang(lang){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k = el.getAttribute('data-i18n');
     if(typeof dict[k]==='string') el.textContent = dict[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const k = el.getAttribute('data-i18n-ph');
+    if(typeof dict[k]==='string') el.placeholder = dict[k];
   });
   renderFavs(); renderAlerts(); renderReports();
 }
@@ -267,13 +277,17 @@ function renderAlerts(){
   const el = document.getElementById('alertList');
   if(alerts.length===0){ el.innerHTML = `<div class="empty">${dict.emptyAlert}</div>`; return; }
   const typeLabels = {new_result:dict.atNewResult, hot_number:dict.atHot, cold_number:dict.atCold, custom:dict.atCustom};
-  el.innerHTML = alerts.map(a=>`<div class="item">
-      <div class="item-main"><b>${a.state} · ${a.game}</b><span>${typeLabels[a.alert_type]||a.alert_type} · ${new Date(a.created_at).toLocaleDateString()}</span></div>
+  el.innerHTML = alerts.map(a=>{
+    let label = typeLabels[a.alert_type]||a.alert_type;
+    if(a.alert_type==='custom' && a.criteria && a.criteria.number) label += ` (${a.criteria.number})`;
+    return `<div class="item">
+      <div class="item-main"><b>${a.state} · ${a.game}</b><span>${label} · ${new Date(a.created_at).toLocaleDateString()}</span></div>
       <div class="item-actions">
         <label><input type="checkbox" data-alert-toggle="${a.id}" ${a.active?'checked':''}> ${a.active?dict.active:dict.inactive}</label>
         <button class="danger" data-alert-del="${a.id}">${dict.btnDelete}</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   el.querySelectorAll('[data-alert-del]').forEach(btn=>{
     btn.addEventListener('click', ()=>deleteAlert(btn.dataset.alertDel));
   });
@@ -354,24 +368,41 @@ async function deleteFav(id){
   document.getElementById('favMsg').className='msg success';
 }
 
+const alertTypeSelect = document.getElementById('alertType');
+const customNumberInput = document.getElementById('alertCustomNumber');
+function syncCustomNumberVisibility(){
+  customNumberInput.style.display = (alertTypeSelect.value === 'custom') ? '' : 'none';
+}
+alertTypeSelect.addEventListener('change', syncCustomNumberVisibility);
+syncCustomNumberVisibility();
+
 document.getElementById('btnAddAlert').addEventListener('click', async ()=>{
   const dict = T[curLang];
   const msgEl = document.getElementById('alertMsg');
   const state = document.getElementById('alertState').value.trim().toUpperCase();
   const game = document.getElementById('alertGame').value.trim();
-  const alert_type = document.getElementById('alertType').value;
+  const alert_type = alertTypeSelect.value;
   if(!state || !game){
     msgEl.textContent = dict.fillFields; msgEl.className='msg error'; return;
   }
+  let criteria = null;
+  if(alert_type === 'custom'){
+    const number = customNumberInput.value.trim();
+    if(!/^[0-9]{1,6}$/.test(number)){
+      msgEl.textContent = dict.invalidNumber; msgEl.className='msg error'; return;
+    }
+    criteria = { number };
+  }
   try{
     const r = await fetch('/api/dashboard/alerts',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({state, game, alert_type})});
+      body:JSON.stringify({state, game, alert_type, criteria})});
     const data = await r.json();
     if(!r.ok){ msgEl.textContent = data.message || data.error; msgEl.className='msg error'; return; }
     alerts.unshift(data.alert);
     renderAlerts();
     document.getElementById('alertState').value='';
     document.getElementById('alertGame').value='';
+    customNumberInput.value='';
     msgEl.textContent = dict.added; msgEl.className='msg success';
   }catch(e){ msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; }
 });

@@ -311,6 +311,69 @@ def _check_hotcold_alerts():
         db.session.commit()
 
 
+def _check_custom_alerts():
+    """Envoie un email aux utilisateurs ayant une alerte « Personnalisée »
+    (alert_type=custom) dès que le numéro qu'ils surveillent (criteria.number)
+    sort dans un nouveau tirage de leur État/jeu surveillé."""
+    from games_scraper import load_game_results
+    from games_config import STATE_GAMES
+    import json as _json
+
+    db = auth_module.db
+    Alert = auth_module.Alert
+    User = auth_module.User
+
+    alerts = Alert.query.filter_by(active=True, alert_type="custom").all()
+    if not alerts:
+        return
+
+    latest_draw_cache = {}
+    changed = False
+    for alert in alerts:
+        try:
+            criteria = _json.loads(alert.criteria) if alert.criteria else {}
+        except Exception:
+            criteria = {}
+
+        number = str(criteria.get("number") or "").strip()
+        if not number:
+            continue
+
+        state = (alert.state or "").upper()
+        slug = alert.game
+        key = (state, slug)
+        if key not in latest_draw_cache:
+            draws = load_game_results(state, slug)
+            latest_draw_cache[key] = draws[-1] if draws else None
+        draw = latest_draw_cache[key]
+        if not draw:
+            continue
+
+        draw_key = f"{draw.get('date','')}|{draw.get('tod','')}"
+        if criteria.get("last_seen_date") == draw_key:
+            continue
+
+        criteria["last_seen_date"] = draw_key
+        drawn_number = "".join(draw.get("nums") or [])
+        if drawn_number != number:
+            alert.criteria = _json.dumps(criteria)
+            continue
+
+        user = db.session.get(User, alert.user_id)
+        if not user:
+            continue
+
+        game_label = next((g["label"] for g in STATE_GAMES.get(state, []) if g["slug"] == slug), slug)
+        auth_module.send_custom_alert_email(user, state, game_label, number, draw)
+
+        alert.criteria = _json.dumps(criteria)
+        alert.last_triggered_at = datetime.utcnow()
+        changed = True
+
+    if changed:
+        db.session.commit()
+
+
 def _maybe_send_daily_push():
     """Envoie une notification push une fois par jour (au plus), dès que les
     nouveaux résultats du jour sont disponibles après une mise à jour auto."""
@@ -436,6 +499,11 @@ def _auto_update_loop():
             try:
                 with app.app_context():
                     _check_hotcold_alerts()
+            except Exception as ae:
+                print(f"  [alerts] error: {ae}")
+            try:
+                with app.app_context():
+                    _check_custom_alerts()
             except Exception as ae:
                 print(f"  [alerts] error: {ae}")
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
