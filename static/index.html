@@ -1520,8 +1520,11 @@ function t(key){ return T[LANG][key] || T['fr'][key] || key; }
 
 function setLang(lang){
   LANG = lang;
-  // Sync with nav.js global
-  if(window.saveLang) window.saveLang(lang);
+  // Sync with nav.js global (guarded against mutual setLang/saveLang recursion)
+  if(window.saveLang && !window._langSyncGuard){
+    window._langSyncGuard = true;
+    try{ window.saveLang(lang); } finally{ window._langSyncGuard = false; }
+  }
   document.documentElement.setAttribute('data-lang', lang);
   // Update dynamic page text
   const heroTitle = document.getElementById('hero-title');

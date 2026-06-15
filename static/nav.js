@@ -162,8 +162,11 @@ function saveLang(l){
   });
   const tag = document.getElementById('pnav-tagline');
   if(tag) tag.textContent = (NAV_T[l]||NAV_T.en).tagline;
-  // Notify page JS
-  if(typeof window.setLang === 'function') window.setLang(l);
+  // Notify page JS (guarded against mutual setLang/saveLang recursion)
+  if(typeof window.setLang === 'function' && !window._langSyncGuard){
+    window._langSyncGuard = true;
+    try{ window.setLang(l); } finally{ window._langSyncGuard = false; }
+  }
   // Refresh assistant
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
   // Server-rendered SEO prediction pages: reload with ?lang= to refresh content
