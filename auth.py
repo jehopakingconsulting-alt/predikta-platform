@@ -746,6 +746,26 @@ def send_payment_failed_email(user):
     )
 
 
+def send_new_result_alert_email(user, state: str, game_label: str, draw: dict):
+    """Email envoyé lorsqu'un nouveau tirage est disponible pour une alerte
+    « Nouveau tirage » (alert_type=new_result) créée par l'utilisateur."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    nums = ", ".join(draw.get("nums") or [])
+    date_str = draw.get("date", "")
+    tod = draw.get("tod", "")
+    when = f"{date_str} ({tod})" if tod else date_str
+    _send_email(
+        user.email,
+        f"PREDIKTA — Nouveau tirage {state} {game_label}",
+        f"Bonjour {user.username},\n\n"
+        f"Un nouveau tirage est disponible pour {game_label} ({state}) :\n"
+        f"Date : {when}\n"
+        f"Résultat : {nums}\n\n"
+        f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
+
+
 def record_usage(user_id: int):
     """Incrémente le compteur d'analyses du jour pour un utilisateur."""
     today = date.today().isoformat()
