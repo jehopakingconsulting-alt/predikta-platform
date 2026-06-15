@@ -370,6 +370,26 @@ footer{
 .footer-logo{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
 .footer-copy{font-size:.62rem;color:var(--muted)}
 
+/* Comments */
+.comments-section{padding:0 20px 24px;border-top:1px solid var(--border);margin-top:8px}
+.comments-title{font-size:.85rem;font-weight:800;color:var(--text);margin:18px 0 10px}
+.comment-form{display:flex;gap:8px;margin-bottom:14px}
+.comment-input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border2);background:var(--glass2);color:var(--text);font-size:.82rem;resize:none;font-family:inherit}
+.comment-input::placeholder{color:var(--muted)}
+.comment-send{padding:10px 18px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.comment-send:disabled{opacity:.5;cursor:default}
+.comment-login{padding:14px;text-align:center;background:var(--glass2);border:1px solid var(--border2);border-radius:10px;font-size:.82rem;color:var(--muted2);margin-bottom:14px}
+.comment-login a{color:var(--accent);font-weight:700;text-decoration:none}
+.comment-list{display:flex;flex-direction:column;gap:10px}
+.comment-item{background:var(--glass2);border:1px solid var(--border2);border-radius:10px;padding:10px 14px}
+.comment-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.comment-author{font-weight:700;font-size:.78rem;color:var(--text)}
+.comment-date{font-size:.66rem;color:var(--muted)}
+.comment-body{font-size:.8rem;color:var(--muted2);line-height:1.4;white-space:pre-wrap;word-break:break-word}
+.comment-delete{font-size:.68rem;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+.comment-delete:hover{color:#ff5566}
+.comments-empty{text-align:center;color:var(--muted);font-size:.8rem;padding:14px}
+
 /* Responsive */
 @media(max-width:600px){
   .page{padding:16px}
@@ -455,6 +475,15 @@ footer{
   <div class="detail-content" id="detailContent">
     <div class="spinner"></div>
   </div>
+  <div class="comments-section">
+    <div class="comments-title" id="commentsTitle"></div>
+    <div id="commentsLoginBox"></div>
+    <form class="comment-form" id="commentForm" style="display:none">
+      <textarea class="comment-input" id="commentInput" rows="2" maxlength="500"></textarea>
+      <button type="submit" class="comment-send" id="commentSendBtn"></button>
+    </form>
+    <div class="comment-list" id="commentList"></div>
+  </div>
 </div>
 
 <!-- footer injecté par nav.js -->
@@ -464,11 +493,11 @@ footer{
 // TRANSLATIONS
 // ══════════════════════════════════════
 const LANGS = {
-  fr:{title:"Résultats des Loteries USA",sub:"Cash3 · Pick3 · Daily3 · 30 États · Mis à jour quotidiennement",search:"Rechercher un État... ex: New York, Texas, Florida",gridTitle:"Tous les États",today:"Aujourd'hui",yesterday:"Hier",noData:"Aucune donnée",update:"Mettre à jour",noDataMsg:"Aucune donnée disponible pour cet État.",scrapeBtn:"🔄 Charger les données",loading:"Chargement...",draws:"tirages",allStates:"Tous les États",hasData:"Données dispo",todayRes:"Résultats aujourd'hui",tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit"},
-  en:{title:"USA Lottery Results",sub:"Cash3 · Pick3 · Daily3 · 30 States · Updated Daily",search:"Search a State... e.g. New York, Texas, Florida",gridTitle:"All States",today:"Today",yesterday:"Yesterday",noData:"No data",update:"Update",noDataMsg:"No data available for this state.",scrapeBtn:"🔄 Load Data",loading:"Loading...",draws:"draws",allStates:"All States",hasData:"Data available",todayRes:"Today's results",tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night"},
-  es:{title:"Resultados de Lotería USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Actualizado diariamente",search:"Buscar un Estado... ej: New York, Texas, Florida",gridTitle:"Todos los Estados",today:"Hoy",yesterday:"Ayer",noData:"Sin datos",update:"Actualizar",noDataMsg:"No hay datos disponibles para este estado.",scrapeBtn:"🔄 Cargar Datos",loading:"Cargando...",draws:"sorteos",allStates:"Todos los Estados",hasData:"Datos disponibles",todayRes:"Resultados de hoy",tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche"},
-  pt:{title:"Resultados da Loteria USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Atualizado diariamente",search:"Buscar um Estado... ex: New York, Texas, Florida",gridTitle:"Todos os Estados",today:"Hoje",yesterday:"Ontem",noData:"Sem dados",update:"Atualizar",noDataMsg:"Nenhum dado disponível para este estado.",scrapeBtn:"🔄 Carregar Dados",loading:"Carregando...",draws:"sorteios",allStates:"Todos os Estados",hasData:"Dados disponíveis",todayRes:"Resultados de hoje",tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite"},
-  ht:{title:"Rezilta Lotri USA",sub:"Cash3 · Pick3 · 30 Eta · Mete ajou chak jou",search:"Chèche yon Eta... egz: New York, Texas, Florida",gridTitle:"Tout Eta yo",today:"Jodi a",yesterday:"Ayè",noData:"Pa gen done",update:"Mete ajou",noDataMsg:"Pa gen done pou eta sa a.",scrapeBtn:"🔄 Chaje Done",loading:"Ap chaje...",draws:"tiraj",allStates:"Tout Eta yo",hasData:"Done disponib",todayRes:"Rezilta jodi a",tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit"},
+  fr:{title:"Résultats des Loteries USA",sub:"Cash3 · Pick3 · Daily3 · 30 États · Mis à jour quotidiennement",search:"Rechercher un État... ex: New York, Texas, Florida",gridTitle:"Tous les États",today:"Aujourd'hui",yesterday:"Hier",noData:"Aucune donnée",update:"Mettre à jour",noDataMsg:"Aucune donnée disponible pour cet État.",scrapeBtn:"🔄 Charger les données",loading:"Chargement...",draws:"tirages",allStates:"Tous les États",hasData:"Données dispo",todayRes:"Résultats aujourd'hui",tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit",commentsTitle:"💬 Commentaires",commentsPlaceholder:"Partagez votre analyse ou votre ressenti sur ce tirage...",commentsSend:"Publier",commentsLoginMsg:"Connectez-vous pour participer à la discussion.",commentsLoginBtn:"Se connecter",commentsEmpty:"Aucun commentaire pour l'instant. Soyez le premier !",commentsDelete:"Supprimer",commentsJustNow:"À l'instant"},
+  en:{title:"USA Lottery Results",sub:"Cash3 · Pick3 · Daily3 · 30 States · Updated Daily",search:"Search a State... e.g. New York, Texas, Florida",gridTitle:"All States",today:"Today",yesterday:"Yesterday",noData:"No data",update:"Update",noDataMsg:"No data available for this state.",scrapeBtn:"🔄 Load Data",loading:"Loading...",draws:"draws",allStates:"All States",hasData:"Data available",todayRes:"Today's results",tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night",commentsTitle:"💬 Comments",commentsPlaceholder:"Share your analysis or thoughts on this draw...",commentsSend:"Post",commentsLoginMsg:"Log in to join the discussion.",commentsLoginBtn:"Log in",commentsEmpty:"No comments yet. Be the first!",commentsDelete:"Delete",commentsJustNow:"Just now"},
+  es:{title:"Resultados de Lotería USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Actualizado diariamente",search:"Buscar un Estado... ej: New York, Texas, Florida",gridTitle:"Todos los Estados",today:"Hoy",yesterday:"Ayer",noData:"Sin datos",update:"Actualizar",noDataMsg:"No hay datos disponibles para este estado.",scrapeBtn:"🔄 Cargar Datos",loading:"Cargando...",draws:"sorteos",allStates:"Todos los Estados",hasData:"Datos disponibles",todayRes:"Resultados de hoy",tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche",commentsTitle:"💬 Comentarios",commentsPlaceholder:"Comparte tu análisis u opinión sobre este sorteo...",commentsSend:"Publicar",commentsLoginMsg:"Inicia sesión para participar en la conversación.",commentsLoginBtn:"Iniciar sesión",commentsEmpty:"Aún no hay comentarios. ¡Sé el primero!",commentsDelete:"Eliminar",commentsJustNow:"Ahora mismo"},
+  pt:{title:"Resultados da Loteria USA",sub:"Cash3 · Pick3 · Daily3 · 30 Estados · Atualizado diariamente",search:"Buscar um Estado... ex: New York, Texas, Florida",gridTitle:"Todos os Estados",today:"Hoje",yesterday:"Ontem",noData:"Sem dados",update:"Atualizar",noDataMsg:"Nenhum dado disponível para este estado.",scrapeBtn:"🔄 Carregar Dados",loading:"Carregando...",draws:"sorteios",allStates:"Todos os Estados",hasData:"Dados disponíveis",todayRes:"Resultados de hoje",tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite",commentsTitle:"💬 Comentários",commentsPlaceholder:"Compartilhe sua análise ou opinião sobre este sorteio...",commentsSend:"Publicar",commentsLoginMsg:"Faça login para participar da discussão.",commentsLoginBtn:"Entrar",commentsEmpty:"Ainda não há comentários. Seja o primeiro!",commentsDelete:"Excluir",commentsJustNow:"Agora mesmo"},
+  ht:{title:"Rezilta Lotri USA",sub:"Cash3 · Pick3 · 30 Eta · Mete ajou chak jou",search:"Chèche yon Eta... egz: New York, Texas, Florida",gridTitle:"Tout Eta yo",today:"Jodi a",yesterday:"Ayè",noData:"Pa gen done",update:"Mete ajou",noDataMsg:"Pa gen done pou eta sa a.",scrapeBtn:"🔄 Chaje Done",loading:"Ap chaje...",draws:"tiraj",allStates:"Tout Eta yo",hasData:"Done disponib",todayRes:"Rezilta jodi a",tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit",commentsTitle:"💬 Kòmantè",commentsPlaceholder:"Pataje analiz oswa lide w sou tiraj sa a...",commentsSend:"Pibliye",commentsLoginMsg:"Konekte pou patisipe nan diskisyon an.",commentsLoginBtn:"Konekte",commentsEmpty:"Poko gen kòmantè. Se ou ki ka premye a!",commentsDelete:"Efase",commentsJustNow:"Kounye a"},
 };
 let LANG = (window.PREDIKTA_LANG && LANGS[window.PREDIKTA_LANG]) ? window.PREDIKTA_LANG : 'fr';
 function t(k){ return (LANGS[LANG]||LANGS.fr)[k] || k; }
@@ -670,12 +699,120 @@ function openDetail(code){
   document.body.style.overflow = 'hidden';
 
   loadDetailMonth();
+  loadComments();
 }
 
 function closeDetail(){
   document.getElementById('detailOverlay').classList.remove('open');
   document.getElementById('detailPanel').classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// ══════════════════════════════════════
+// COMMENTS
+// ══════════════════════════════════════
+let _currentUser = undefined; // undefined = pas encore vérifié, null = non connecté
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function timeAgo(iso){
+  const diff = (Date.now() - new Date(iso+'Z').getTime()) / 1000;
+  if(diff < 60) return t('commentsJustNow');
+  const mins = Math.floor(diff/60);
+  if(mins < 60) return `${mins}min`;
+  const hrs = Math.floor(mins/60);
+  if(hrs < 24) return `${hrs}h`;
+  const days = Math.floor(hrs/24);
+  return `${days}j`;
+}
+
+async function getCurrentUser(){
+  if(_currentUser !== undefined) return _currentUser;
+  try{
+    const r = await fetch('/api/auth/me');
+    const data = await r.json();
+    _currentUser = data.user || null;
+  }catch(e){
+    _currentUser = null;
+  }
+  return _currentUser;
+}
+
+async function loadComments(){
+  document.getElementById('commentsTitle').textContent = t('commentsTitle');
+  document.getElementById('commentInput').placeholder = t('commentsPlaceholder');
+  document.getElementById('commentSendBtn').textContent = t('commentsSend');
+
+  const user = await getCurrentUser();
+  const form = document.getElementById('commentForm');
+  const loginBox = document.getElementById('commentsLoginBox');
+  if(user){
+    form.style.display = 'flex';
+    loginBox.innerHTML = '';
+  }else{
+    form.style.display = 'none';
+    loginBox.innerHTML = `<div class="comment-login">${t('commentsLoginMsg')} <a href="/login">${t('commentsLoginBtn')}</a></div>`;
+  }
+
+  const list = document.getElementById('commentList');
+  list.innerHTML = '<div class="spinner"></div>';
+  try{
+    const r = await fetch(`/api/comments/${_detailState}`);
+    const data = await r.json();
+    renderComments(data.comments || []);
+  }catch(e){
+    list.innerHTML = '';
+  }
+}
+
+function renderComments(comments){
+  const list = document.getElementById('commentList');
+  if(!comments.length){
+    list.innerHTML = `<div class="comments-empty">${t('commentsEmpty')}</div>`;
+    return;
+  }
+  list.innerHTML = comments.map(c=>`
+    <div class="comment-item">
+      <div class="comment-head">
+        <span class="comment-author">${escapeHtml(c.username)}</span>
+        <span class="comment-date">${timeAgo(c.created_at)}</span>
+      </div>
+      <div class="comment-body">${escapeHtml(c.body)}</div>
+      ${c.is_own ? `<button class="comment-delete" onclick="deleteComment(${c.id})">${t('commentsDelete')}</button>` : ''}
+    </div>`).join('');
+}
+
+document.getElementById('commentForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const input = document.getElementById('commentInput');
+  const body = input.value.trim();
+  if(!body) return;
+  const btn = document.getElementById('commentSendBtn');
+  btn.disabled = true;
+  try{
+    const r = await fetch(`/api/comments/${_detailState}`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({body})
+    });
+    if(r.ok){
+      input.value = '';
+      loadComments();
+    }
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+async function deleteComment(id){
+  try{
+    const r = await fetch(`/api/comments/${id}`, {method:'DELETE'});
+    if(r.ok) loadComments();
+  }catch(e){}
 }
 
 function changeMonth(delta){

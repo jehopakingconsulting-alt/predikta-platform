@@ -1489,6 +1489,75 @@ def api_results_state(state_code):
 
 
 # ═══════════════════════════════════════════════════════════
+# API — COMMUNAUTÉ / COMMENTAIRES
+# ═══════════════════════════════════════════════════════════
+
+COMMENT_MAX_LEN = 500
+
+
+@app.route("/api/comments/<state_code>")
+def api_comments_list(state_code):
+    state_code = state_code.upper()
+    if state_code not in STATES:
+        return jsonify({"error": f"Unknown state: {state_code}"}), 400
+
+    db = auth_module.db
+    user = auth_module.current_user()
+    comments = (
+        db.session.query(auth_module.Comment)
+        .filter_by(state_code=state_code)
+        .order_by(auth_module.Comment.created_at.desc())
+        .limit(50)
+        .all()
+    )
+    out = []
+    for c in comments:
+        d = c.to_dict()
+        d["is_own"] = bool(user and user.id == c.user_id)
+        out.append(d)
+    return jsonify({"comments": out, "total": len(out)})
+
+
+@app.route("/api/comments/<state_code>", methods=["POST"])
+@auth_module.login_required
+def api_comments_post(state_code):
+    state_code = state_code.upper()
+    if state_code not in STATES:
+        return jsonify({"error": f"Unknown state: {state_code}"}), 400
+
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    body = (data.get("body") or "").strip()
+    if not body:
+        return jsonify({"error": "empty", "message": "Le commentaire est vide."}), 400
+    if len(body) > COMMENT_MAX_LEN:
+        return jsonify({"error": "too_long", "message": f"Le commentaire dépasse {COMMENT_MAX_LEN} caractères."}), 400
+
+    db = auth_module.db
+    comment = auth_module.Comment(user_id=user.id, state_code=state_code, body=body)
+    db.session.add(comment)
+    db.session.commit()
+    d = comment.to_dict()
+    d["is_own"] = True
+    return jsonify(d), 201
+
+
+@app.route("/api/comments/<int:comment_id>", methods=["DELETE"])
+@auth_module.login_required
+def api_comments_delete(comment_id):
+    db = auth_module.db
+    user = auth_module.current_user()
+    comment = db.session.get(auth_module.Comment, comment_id)
+    if not comment:
+        return jsonify({"error": "not_found"}), 404
+    if comment.user_id != user.id and not user.is_admin:
+        return jsonify({"error": "forbidden"}), 403
+    db.session.delete(comment)
+    db.session.commit()
+    return jsonify({"ok": True})
+
+
+# ═══════════════════════════════════════════════════════════
 # API — QUICK TOOLS (instantanés, sans calcul ML)
 # ═══════════════════════════════════════════════════════════
 

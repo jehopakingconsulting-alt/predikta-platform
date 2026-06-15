@@ -145,6 +145,28 @@ class User(db.Model):
         }
 
 
+class Comment(db.Model):
+    __tablename__ = "comments"
+
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    state_code = db.Column(db.String(4), nullable=False, index=True)
+    body       = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+
+    user = db.relationship("User")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.user.username if self.user else "?",
+            "avatar_url": self.user.avatar_url if self.user else None,
+            "body": self.body,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "user_id": self.user_id,
+        }
+
+
 class Subscription(db.Model):
     __tablename__ = "subscriptions"
 
