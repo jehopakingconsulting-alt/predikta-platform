@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>PREDIKTA TV — Tirages en direct & analyses vidéo (bientôt)</title>
-<meta name="description" content="Bientôt disponible : PREDIKTA TV proposera des résumés vidéo des tirages, des analyses commentées et des replays pour Pick 3, Pick 4, Powerball et plus."/>
+<title>PREDIKTA TV — Le journal quotidien de la loterie par IA</title>
+<meta name="description" content="Chaque jour, PREDIKTA TV résume automatiquement les derniers tirages de 40 États et territoires américains : numéros gagnants, dates et accès direct aux prédictions IA."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/predikta-tv"/>
 <link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/predikta-tv"/>
-<meta property="og:title" content="PREDIKTA TV — Tirages en direct & analyses vidéo (bientôt)"/>
-<meta property="og:description" content="Bientôt disponible : PREDIKTA TV proposera des résumés vidéo des tirages, des analyses commentées et des replays pour Pick 3, Pick 4, Powerball et plus."/>
+<meta property="og:title" content="PREDIKTA TV — Le journal quotidien de la loterie par IA"/>
+<meta property="og:description" content="Chaque jour, PREDIKTA TV résume automatiquement les derniers tirages de 40 États et territoires américains : numéros gagnants, dates et accès direct aux prédictions IA."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://predikta-tez2.onrender.com/predikta-tv"/>
 <meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
@@ -19,7 +19,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(255,85,102,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
-.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.page{max-width:1080px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
 .hero{text-align:center;padding:20px 10px 40px}
 .hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(255,85,102,.15);border:1px solid rgba(255,85,102,.4);color:var(--red);margin-bottom:18px}
 .hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#ff5566,#8855ff,#6688ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
@@ -33,6 +33,33 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .preview-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:40px 20px;text-align:center;margin-bottom:18px}
 .preview-box .tv{font-size:3.5rem;margin-bottom:14px;opacity:.7}
 .preview-box p{font-size:.85rem;color:var(--muted2);max-width:520px;margin:0 auto;line-height:1.7}
+
+.ticker-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;overflow:hidden;display:flex;align-items:center}
+.ticker-live{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(255,85,102,.15);color:var(--red);font-size:.7rem;font-weight:900;letter-spacing:1px;white-space:nowrap}
+.ticker-live .dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ticker-track{flex:1;overflow:hidden;white-space:nowrap;position:relative}
+.ticker-content{display:inline-flex;gap:32px;padding:10px 0;animation:ticker 60s linear infinite}
+.ticker-content span{font-size:.78rem;color:var(--muted2);white-space:nowrap}
+.ticker-content b{color:var(--text);font-family:'Orbitron',monospace}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.tv-controls{display:flex;gap:10px;margin-bottom:14px}
+.tv-search{flex:1;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.85rem}
+.tv-search::placeholder{color:var(--muted)}
+
+.episode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:30px}
+.ep-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-decoration:none;color:var(--text);transition:transform .15s,border-color .15s}
+.ep-card:hover{transform:translateY(-2px);border-color:var(--red)}
+.ep-card .ep-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ep-card .ep-title{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.ep-card .ep-date{font-size:.66rem;color:var(--muted);text-transform:uppercase}
+.ep-card .ep-today{display:inline-block;font-size:.62rem;font-weight:900;padding:2px 8px;border-radius:6px;background:rgba(255,85,102,.15);border:1px solid rgba(255,85,102,.4);color:var(--red);letter-spacing:1px}
+.ep-card .ep-balls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ep-card .ball{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;padding:0 6px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Orbitron',monospace;font-weight:700;font-size:.8rem}
+.ep-card .ep-game{font-size:.7rem;color:var(--muted2)}
+.ep-card .ep-link{font-size:.74rem;color:#ff8899;font-weight:700;margin-top:8px;display:block}
+.episode-empty{text-align:center;color:var(--muted2);font-size:.85rem;padding:30px}
 
 .sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
 .sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#ff8899;margin-bottom:10px}
@@ -58,18 +85,25 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 <div class="page">
 <div class="hero">
   <div class="hero-tag" data-i18n="tag">PREDIKTA TV</div>
-  <h1 data-i18n-html="h1">Les tirages en direct,<br>analysés par IA</h1>
-  <p class="hero-sub" data-i18n="sub">PREDIKTA TV proposera bientôt des résumés vidéo des tirages, des analyses commentées et des replays pour vous aider à comprendre les tendances en un coup d'œil.</p>
+  <h1 data-i18n-html="h1">Le journal quotidien<br>de la loterie, par IA</h1>
+  <p class="hero-sub" data-i18n="sub">Chaque jour, PREDIKTA TV résume automatiquement les derniers tirages de 40 États et territoires, avant de passer à l'analyse et aux prédictions.</p>
   <div class="hero-cta">
     <a class="cta-btn-main" href="/results" data-i18n="ctaMain">Voir les résultats du jour</a>
     <a class="cta-btn-sec" href="/predictions" data-i18n="ctaSec">Voir les prédictions</a>
   </div>
 </div>
 
-<div class="preview-box">
-  <div class="tv">📺</div>
-  <p data-i18n="previewText">Aperçu de la fonctionnalité : des vidéos courtes générées automatiquement présentant les derniers tirages, les tendances chaud/froid et les nouvelles prédictions de la semaine.</p>
+<div class="ticker-bar">
+  <div class="ticker-live"><span class="dot"></span> <span data-i18n="liveTag">EN DIRECT</span></div>
+  <div class="ticker-track"><div class="ticker-content" id="tickerContent"></div></div>
 </div>
+
+<div class="tv-controls">
+  <input type="text" class="tv-search" id="tvSearch" data-i18n-ph="searchPh" placeholder="Rechercher un État (ex: Florida, FL, Texas...)">
+</div>
+
+<div class="episode-grid" id="episodeGrid"></div>
+<div class="episode-empty" id="episodeEmpty" style="display:none" data-i18n="noResults">Aucun État trouvé.</div>
 
 <div class="sections" id="sections"></div>
 
@@ -87,84 +121,89 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 
 <script>
 const T = {
-fr:{ tag:"PREDIKTA TV", h1:"Les tirages en direct,<br>analysés par IA",
- sub:"PREDIKTA TV proposera bientôt des résumés vidéo des tirages, des analyses commentées et des replays pour vous aider à comprendre les tendances en un coup d'œil.",
+fr:{ tag:"PREDIKTA TV", h1:"Le journal quotidien<br>de la loterie, par IA",
+ sub:"Chaque jour, PREDIKTA TV résume automatiquement les derniers tirages de 40 États et territoires, avant de passer à l'analyse et aux prédictions.",
  ctaMain:"Voir les résultats du jour", ctaSec:"Voir les prédictions",
- previewText:"Aperçu de la fonctionnalité : des vidéos courtes générées automatiquement présentant les derniers tirages, les tendances chaud/froid et les nouvelles prédictions de la semaine.",
- ctaTitle:"Ne manquez aucune mise à jour", ctaP:"Créez votre compte PREDIKTA pour être averti dès le lancement de PREDIKTA TV, et accédez dès maintenant à toutes nos analyses écrites.",
+ liveTag:"EN DIRECT", searchPh:"Rechercher un État (ex: Florida, FL, Texas...)", noResults:"Aucun État trouvé.",
+ lastDraw:"Dernier tirage", today:"AUJOURD'HUI", viewPred:"Voir les prédictions →", noDataYet:"Aucune donnée disponible",
+ ctaTitle:"Ne manquez aucune mise à jour", ctaP:"Créez votre compte PREDIKTA pour recevoir des alertes dès qu'un nouveau tirage est publié, et accédez dès maintenant à toutes nos analyses écrites.",
  ctaBtnRegister:"Créer mon compte gratuit", ctaBtnLearn:"Comprendre nos prédictions",
  disclaimer:'⚠️ PREDIKTA fournit des analyses statistiques et des prédictions assistées par IA à titre informatif uniquement. Aucun résultat de loterie ne peut être garanti. Jouez de manière responsable. <a href="/responsible-gaming">En savoir plus</a>.',
  sections:[
-  ["Ce que PREDIKTA TV proposera <span class=\"soon-badge\">BIENTÔT</span>",
-   "<p>PREDIKTA TV sera un espace vidéo dédié à l'analyse des loteries, généré et mis à jour automatiquement à partir de nos données.</p>",
-   ["Résumés vidéo quotidiens des tirages","Analyses commentées des tendances chaud/froid","Replays des derniers tirages par état","Présentation des nouvelles prédictions de la semaine","Explication visuelle du Mode Transparence","Contenus disponibles en plusieurs langues"]],
-  ["En attendant le lancement",
-   "<p>Toutes nos analyses sont déjà disponibles au format texte et graphique sur le site, avec mise à jour quotidienne.</p>",
-   ["Résultats détaillés sur /results","Prédictions IA sur /predictions","Articles explicatifs sur /lottery-predictions","Score de précision sur /accuracy"]]
+  ["Comment fonctionne PREDIKTA TV",
+   "<p>Ce journal est généré automatiquement à partir des résultats officiels collectés par PREDIKTA pour 40 États et territoires. Dès qu'un nouveau tirage est publié, sa fiche apparaît ci-dessus avec la date et les numéros sortis.</p>",
+   ["Mise à jour automatique après chaque tirage","Aucune vidéo : un résumé texte clair et accessible","Recherche instantanée par État","Chaque fiche renvoie vers l'analyse complète de l'État"]],
+  ["Pour aller plus loin",
+   "<p>Au-delà du résumé quotidien, PREDIKTA propose une analyse complète par algorithmes (Markov, Monte Carlo, Machine Learning, Fourier).</p>",
+   ["Prédictions IA sur /predictions","Articles explicatifs sur /blog","Score de précision sur /accuracy","Alertes personnalisées sur /dashboard"]]
  ]},
 
-en:{ tag:"PREDIKTA TV", h1:"Live draws,<br>analyzed by AI",
- sub:"PREDIKTA TV will soon offer video recaps of draws, commentated analysis and replays to help you spot trends at a glance.",
+en:{ tag:"PREDIKTA TV", h1:"The daily lottery<br>news, by AI",
+ sub:"Every day, PREDIKTA TV automatically recaps the latest draws from 40 states and territories, before moving on to analysis and predictions.",
  ctaMain:"View today's results", ctaSec:"View predictions",
- previewText:"Feature preview: short, automatically generated videos covering the latest draws, hot/cold trends and this week's new predictions.",
- ctaTitle:"Don't miss any updates", ctaP:"Create your PREDIKTA account to be notified as soon as PREDIKTA TV launches, and access all our written analysis right now.",
+ liveTag:"LIVE", searchPh:"Search a state (e.g. Florida, FL, Texas...)", noResults:"No state found.",
+ lastDraw:"Latest draw", today:"TODAY", viewPred:"View predictions →", noDataYet:"No data available yet",
+ ctaTitle:"Don't miss any updates", ctaP:"Create your PREDIKTA account to get alerts as soon as a new draw is published, and access all our written analysis right now.",
  ctaBtnRegister:"Create my free account", ctaBtnLearn:"Understand our predictions",
  disclaimer:'⚠️ PREDIKTA provides statistical analysis and AI-assisted predictions for informational purposes only. No lottery outcome can be guaranteed. Play responsibly. <a href="/responsible-gaming">Learn more</a>.',
  sections:[
-  ["What PREDIKTA TV will offer <span class=\"soon-badge\">COMING SOON</span>",
-   "<p>PREDIKTA TV will be a video space dedicated to lottery analysis, automatically generated and updated from our data.</p>",
-   ["Daily video recaps of draws","Commentated hot/cold trend analysis","Replays of the latest draws by state","Presentation of this week's new predictions","Visual explanation of Transparency Mode","Content available in multiple languages"]],
-  ["While you wait for launch",
-   "<p>All our analysis is already available in text and chart form on the site, updated daily.</p>",
-   ["Detailed results at /results","AI predictions at /predictions","Explainer articles at /lottery-predictions","Accuracy score at /accuracy"]]
+  ["How PREDIKTA TV works",
+   "<p>This news feed is generated automatically from the official results collected by PREDIKTA for 40 states and territories. As soon as a new draw is published, its card appears above with the date and the numbers drawn.</p>",
+   ["Updated automatically after every draw","No video: a clear, accessible text recap","Instant search by state","Each card links to the state's full analysis"]],
+  ["Go further",
+   "<p>Beyond the daily recap, PREDIKTA offers a full multi-algorithm analysis (Markov, Monte Carlo, Machine Learning, Fourier).</p>",
+   ["AI predictions at /predictions","Explainer articles at /blog","Accuracy score at /accuracy","Custom alerts at /dashboard"]]
  ]},
 
-es:{ tag:"PREDIKTA TV", h1:"Sorteos en directo,<br>analizados por IA",
- sub:"PREDIKTA TV ofrecerá pronto resúmenes en video de los sorteos, análisis comentados y repeticiones para ayudarte a detectar tendencias de un vistazo.",
+es:{ tag:"PREDIKTA TV", h1:"El boletín diario<br>de la lotería, por IA",
+ sub:"Cada día, PREDIKTA TV resume automáticamente los últimos sorteos de 40 estados y territorios, antes de pasar al análisis y las predicciones.",
  ctaMain:"Ver resultados de hoy", ctaSec:"Ver predicciones",
- previewText:"Vista previa de la función: videos cortos generados automáticamente que muestran los últimos sorteos, tendencias frío/caliente y las nuevas predicciones de la semana.",
- ctaTitle:"No te pierdas ninguna actualización", ctaP:"Crea tu cuenta PREDIKTA para recibir un aviso en cuanto se lance PREDIKTA TV, y accede ya a todos nuestros análisis escritos.",
+ liveTag:"EN VIVO", searchPh:"Buscar un estado (ej: Florida, FL, Texas...)", noResults:"No se encontró ningún estado.",
+ lastDraw:"Último sorteo", today:"HOY", viewPred:"Ver predicciones →", noDataYet:"Aún no hay datos disponibles",
+ ctaTitle:"No te pierdas ninguna actualización", ctaP:"Crea tu cuenta PREDIKTA para recibir alertas en cuanto se publique un nuevo sorteo, y accede ya a todos nuestros análisis escritos.",
  ctaBtnRegister:"Crear mi cuenta gratis", ctaBtnLearn:"Entender nuestras predicciones",
  disclaimer:'⚠️ PREDIKTA ofrece análisis estadísticos y predicciones asistidas por IA solo con fines informativos. Ningún resultado de lotería puede garantizarse. Juega de forma responsable. <a href="/responsible-gaming">Más información</a>.',
  sections:[
-  ["Qué ofrecerá PREDIKTA TV <span class=\"soon-badge\">PRÓXIMAMENTE</span>",
-   "<p>PREDIKTA TV será un espacio de video dedicado al análisis de loterías, generado y actualizado automáticamente a partir de nuestros datos.</p>",
-   ["Resúmenes diarios en video de los sorteos","Análisis comentados de tendencias frío/caliente","Repeticiones de los últimos sorteos por estado","Presentación de las nuevas predicciones de la semana","Explicación visual del Modo Transparencia","Contenido disponible en varios idiomas"]],
-  ["Mientras esperas el lanzamiento",
-   "<p>Todos nuestros análisis ya están disponibles en formato texto y gráfico en el sitio, actualizados a diario.</p>",
-   ["Resultados detallados en /results","Predicciones IA en /predictions","Artículos explicativos en /lottery-predictions","Puntuación de precisión en /accuracy"]]
+  ["Cómo funciona PREDIKTA TV",
+   "<p>Este boletín se genera automáticamente a partir de los resultados oficiales recopilados por PREDIKTA para 40 estados y territorios. En cuanto se publica un nuevo sorteo, su ficha aparece arriba con la fecha y los números sorteados.</p>",
+   ["Actualización automática tras cada sorteo","Sin video: un resumen de texto claro y accesible","Búsqueda instantánea por estado","Cada ficha enlaza al análisis completo del estado"]],
+  ["Para ir más allá",
+   "<p>Más allá del resumen diario, PREDIKTA ofrece un análisis completo multi-algoritmo (Markov, Monte Carlo, Machine Learning, Fourier).</p>",
+   ["Predicciones IA en /predictions","Artículos explicativos en /blog","Puntuación de precisión en /accuracy","Alertas personalizadas en /dashboard"]]
  ]},
 
-pt:{ tag:"PREDIKTA TV", h1:"Sorteios em tempo real,<br>analisados por IA",
- sub:"O PREDIKTA TV vai oferecer em breve resumos em vídeo dos sorteios, análises comentadas e replays para ajudar você a identificar tendências rapidamente.",
+pt:{ tag:"PREDIKTA TV", h1:"O jornal diário<br>da loteria, por IA",
+ sub:"Todos os dias, o PREDIKTA TV resume automaticamente os últimos sorteios de 40 estados e territórios, antes de passar para a análise e as previsões.",
  ctaMain:"Ver resultados de hoje", ctaSec:"Ver previsões",
- previewText:"Prévia do recurso: vídeos curtos gerados automaticamente mostrando os últimos sorteios, tendências quente/frio e as novas previsões da semana.",
- ctaTitle:"Não perca nenhuma atualização", ctaP:"Crie sua conta PREDIKTA para ser avisado assim que o PREDIKTA TV for lançado, e acesse agora todas as nossas análises escritas.",
+ liveTag:"NO AR", searchPh:"Buscar um estado (ex: Florida, FL, Texas...)", noResults:"Nenhum estado encontrado.",
+ lastDraw:"Último sorteio", today:"HOJE", viewPred:"Ver previsões →", noDataYet:"Ainda sem dados disponíveis",
+ ctaTitle:"Não perca nenhuma atualização", ctaP:"Crie sua conta PREDIKTA para receber alertas assim que um novo sorteio for publicado, e acesse agora todas as nossas análises escritas.",
  ctaBtnRegister:"Criar minha conta grátis", ctaBtnLearn:"Entender nossas previsões",
  disclaimer:'⚠️ A PREDIKTA fornece análises estatísticas e previsões assistidas por IA apenas para fins informativos. Nenhum resultado de loteria pode ser garantido. Jogue com responsabilidade. <a href="/responsible-gaming">Saiba mais</a>.',
  sections:[
-  ["O que o PREDIKTA TV vai oferecer <span class=\"soon-badge\">EM BREVE</span>",
-   "<p>O PREDIKTA TV será um espaço de vídeo dedicado à análise de loterias, gerado e atualizado automaticamente a partir dos nossos dados.</p>",
-   ["Resumos diários em vídeo dos sorteios","Análises comentadas de tendências quente/frio","Replays dos últimos sorteios por estado","Apresentação das novas previsões da semana","Explicação visual do Modo Transparência","Conteúdo disponível em vários idiomas"]],
-  ["Enquanto espera o lançamento",
-   "<p>Todas as nossas análises já estão disponíveis em formato texto e gráfico no site, atualizadas diariamente.</p>",
-   ["Resultados detalhados em /results","Previsões de IA em /predictions","Artigos explicativos em /lottery-predictions","Pontuação de precisão em /accuracy"]]
+  ["Como funciona o PREDIKTA TV",
+   "<p>Este jornal é gerado automaticamente a partir dos resultados oficiais coletados pela PREDIKTA para 40 estados e territórios. Assim que um novo sorteio é publicado, sua ficha aparece acima com a data e os números sorteados.</p>",
+   ["Atualização automática após cada sorteio","Sem vídeo: um resumo em texto claro e acessível","Busca instantânea por estado","Cada ficha leva à análise completa do estado"]],
+  ["Para ir além",
+   "<p>Além do resumo diário, a PREDIKTA oferece uma análise completa multi-algoritmo (Markov, Monte Carlo, Machine Learning, Fourier).</p>",
+   ["Previsões de IA em /predictions","Artigos explicativos em /blog","Pontuação de precisão em /accuracy","Alertas personalizados em /dashboard"]]
  ]},
 
-ht:{ tag:"PREDIKTA TV", h1:"Tiraj an dirèk,<br>analize pa IA",
- sub:"PREDIKTA TV pral ofri talè rezime videyo tiraj yo, analiz kòmante ak replay pou ede w wè tandans yo nan yon sèl kout je.",
+ht:{ tag:"PREDIKTA TV", h1:"Jounal chak jou<br>nan lotri a, pa IA",
+ sub:"Chak jou, PREDIKTA TV rezime otomatikman dènye tiraj yo nan 40 eta ak teritwa, anvan li pase nan analiz ak prediksyon.",
  ctaMain:"Gade rezilta jodi a", ctaSec:"Gade prediksyon yo",
- previewText:"Apèsi karakteristik la: videyo kout ki kreye otomatikman ki montre dènye tiraj yo, tandans cho/frèt ak nouvo prediksyon semèn nan.",
- ctaTitle:"Pa rate okenn mizajou", ctaP:"Kreye kont PREDIKTA ou pou yo avize w depi PREDIKTA TV lanse, epi jwenn aksè kounye a a tout analiz ekri nou yo.",
+ liveTag:"AN DIRÈK", searchPh:"Chèche yon eta (egz: Florida, FL, Texas...)", noResults:"Pa gen eta ki jwenn.",
+ lastDraw:"Dènye tiraj", today:"JODI A", viewPred:"Gade prediksyon yo →", noDataYet:"Poko gen done disponib",
+ ctaTitle:"Pa rate okenn mizajou", ctaP:"Kreye kont PREDIKTA ou pou resevwa alèt depi gen yon nouvo tiraj pibliye, epi jwenn aksè kounye a a tout analiz ekri nou yo.",
  ctaBtnRegister:"Kreye kont gratis mwen", ctaBtnLearn:"Konprann prediksyon nou yo",
  disclaimer:'⚠️ PREDIKTA bay analiz estatistik ak prediksyon ki asiste pa IA sèlman pou enfòmasyon. Pa gen rezilta loteri ki garanti. Jwe yon fason responsab. <a href="/responsible-gaming">Aprann plis</a>.',
  sections:[
-  ["Sa PREDIKTA TV pral ofri <span class=\"soon-badge\">TALÈ</span>",
-   "<p>PREDIKTA TV ap yon espas videyo dedye a analiz lotri, kreye ak mizajou otomatikman apati done nou yo.</p>",
-   ["Rezime videyo chak jou pou tiraj yo","Analiz kòmante tandans cho/frèt","Replay dènye tiraj yo pa eta","Prezantasyon nouvo prediksyon semèn nan","Eksplikasyon vizyèl Mòd Transparans","Kontni disponib nan plizyè lang"]],
-  ["Pandan w ap tann lansman an",
-   "<p>Tout analiz nou yo deja disponib an fòma tèks ak grafik sou sit la, mizajou chak jou.</p>",
-   ["Rezilta detaye sou /results","Prediksyon IA sou /predictions","Atik eksplikatif sou /lottery-predictions","Eskò presizyon sou /accuracy"]]
+  ["Kijan PREDIKTA TV fonksyone",
+   "<p>Jounal sa a kreye otomatikman apati rezilta ofisyèl PREDIKTA kolekte pou 40 eta ak teritwa. Depi yon nouvo tiraj pibliye, fich li parèt anwo a ak dat ak nimewo yo.</p>",
+   ["Mizajou otomatik apre chak tiraj","San videyo: yon rezime an tèks klè","Chèche pa eta nan yon sèl kout je","Chak fich mennen nan analiz konplè eta a"]],
+  ["Pou ale pi lwen",
+   "<p>Anplis rezime chak jou a, PREDIKTA ofri yon analiz konplè multi-algoritm (Markov, Monte Carlo, Machine Learning, Fourier).</p>",
+   ["Prediksyon IA sou /predictions","Atik eksplikatif sou /blog","Eskò presizyon sou /accuracy","Alèt pèsonalize sou /dashboard"]]
  ]},
 };
 
@@ -178,6 +217,61 @@ function renderSections(dict){
 }
 
 let curLang = 'fr';
+let LATEST = null;
+
+function ballsOf(draw){
+  return Object.keys(draw).filter(k=>/^d\d+$/.test(k)).sort().map(k=>draw[k]);
+}
+
+function renderTicker(dict){
+  if(!LATEST) return;
+  const items = Object.values(LATEST).filter(s=>s.has_data && s.latest && s.latest.length)
+    .map(s=>`<span>${s.flag} <b>${s.name}</b> ${ballsOf(s.latest[0]).join('-')}</span>`);
+  if(!items.length) return;
+  document.getElementById('tickerContent').innerHTML = items.join('') + items.join('');
+}
+
+function renderEpisodes(dict){
+  if(!LATEST) return;
+  const grid = document.getElementById('episodeGrid');
+  grid.innerHTML = Object.entries(LATEST).map(([code, s])=>{
+    const ballsHtml = (s.has_data && s.latest && s.latest.length)
+      ? s.latest.map(draw=>`<div class="ep-balls">${ballsOf(draw).map(n=>`<span class="ball">${n}</span>`).join('')}</div>`).join('')
+      : `<div class="ep-balls" style="color:var(--muted2);font-size:.78rem">${dict.noDataYet}</div>`;
+    return `<a class="ep-card" href="/predictions/${code.toLowerCase()}" data-code="${code.toLowerCase()}" data-name="${s.name.toLowerCase()}">
+      <div class="ep-head">
+        <span class="ep-title">${s.flag} ${s.name}</span>
+        ${s.is_today ? `<span class="ep-today">${dict.today}</span>` : ''}
+      </div>
+      <div class="ep-date">${dict.lastDraw}${s.latest_date ? ': '+s.latest_date : ''}</div>
+      ${ballsHtml}
+      <span class="ep-link">${dict.viewPred}</span>
+    </a>`;
+  }).join('');
+  filterEpisodes();
+}
+
+function filterEpisodes(){
+  const q = (document.getElementById('tvSearch').value||'').trim().toLowerCase();
+  const cards = document.querySelectorAll('#episodeGrid .ep-card');
+  let visible = 0;
+  cards.forEach(c=>{
+    const match = !q || c.dataset.code.includes(q) || c.dataset.name.includes(q);
+    c.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  document.getElementById('episodeEmpty').style.display = visible===0 ? '' : 'none';
+}
+
+async function loadLatest(){
+  try{
+    const res = await fetch('/api/results/latest');
+    LATEST = await res.json();
+    renderTicker(T[curLang]);
+    renderEpisodes(T[curLang]);
+  }catch(e){}
+}
+
 function applyLang(lang){
   curLang = T[lang] ? lang : 'fr';
   const dict = T[curLang];
@@ -189,13 +283,21 @@ function applyLang(lang){
     const key = el.getAttribute('data-i18n-html');
     if(dict[key] != null) el.innerHTML = dict[key];
   });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-ph');
+    if(dict[key] != null) el.setAttribute('placeholder', dict[key]);
+  });
   renderSections(dict);
+  renderTicker(dict);
+  renderEpisodes(dict);
   document.documentElement.setAttribute('lang', curLang);
 }
 window.setLang = applyLang;
 window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
+  document.getElementById('tvSearch').addEventListener('input', filterEpisodes);
+  loadLatest();
 });
 </script>
 </body></html>
