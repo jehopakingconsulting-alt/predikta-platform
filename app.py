@@ -92,12 +92,41 @@ def add_security_headers(response):
 # Abonnement anonyme par navigateur (pas de compte utilisateur requis).
 # Les abonnements sont stockés dans data/push_subscriptions.json et les
 # clés VAPID dans data/vapid_private.pem / data/vapid_public.txt (générées
-# une fois via `python -c "from py_vapid import Vapid02; ..."`).
+# automatiquement au premier démarrage si absentes, voir _ensure_vapid_keys).
 _PUSH_SUBS_FILE   = os.path.join("data", "push_subscriptions.json")
 _VAPID_PRIV_FILE  = os.path.join("data", "vapid_private.pem")
 _VAPID_PUB_FILE   = os.path.join("data", "vapid_public.txt")
 _PUSH_LAST_SENT_FILE = os.path.join("data", "push_last_sent.txt")
 _VAPID_CLAIMS = {"sub": os.environ.get("PREDIKTA_VAPID_EMAIL", "mailto:contact@predikta.app")}
+
+
+def _ensure_vapid_keys():
+    """Génère une paire de clés VAPID au premier démarrage si elles n'existent
+    pas encore, et les enregistre sur le disque persistant (data/)."""
+    if os.path.exists(_VAPID_PRIV_FILE) and os.path.exists(_VAPID_PUB_FILE):
+        return
+    try:
+        from py_vapid import Vapid02
+        from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+        import base64
+
+        vapid = Vapid02()
+        vapid.generate_keys()
+
+        os.makedirs("data", exist_ok=True)
+        with open(_VAPID_PRIV_FILE, "wb") as f:
+            f.write(vapid.private_pem())
+
+        raw_pub = vapid.public_key.public_bytes(
+            encoding=Encoding.X962, format=PublicFormat.UncompressedPoint
+        )
+        pub_b64 = base64.urlsafe_b64encode(raw_pub).decode().rstrip("=")
+        with open(_VAPID_PUB_FILE, "w") as f:
+            f.write(pub_b64)
+
+        print("  [push] Clés VAPID générées et enregistrées dans data/")
+    except Exception as e:
+        print(f"  [push] Impossible de générer les clés VAPID: {e}")
 
 
 def _vapid_public_key():
@@ -368,6 +397,7 @@ def start_auto_update():
 # Démarre seulement dans le processus principal (évite le double-lancement
 # avec le reloader Flask en mode debug)
 if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
+    _ensure_vapid_keys()
     start_auto_update()
 
 @app.route("/api/autoupdate/status")
