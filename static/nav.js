@@ -17,6 +17,9 @@ const SERVICES = [
   { href:'/parrainage',  icon:'🎁', key:'referral',   badge:'' },
   { href:'/pro',         icon:'👑', key:'pro',        badge:'PRO' },
   { href:'/account',     icon:'👤', key:'account',    badge:'' },
+  { href:'/world-map',   icon:'🗺️', key:'worldmap',   badge:'' },
+  { href:'/predikta-tv', icon:'📺', key:'predicktatv', badge:'' },
+  { href:'/community',   icon:'💬', key:'community',  badge:'' },
 ];
 
 // ── Traductions ───────────────────────────────────────────────────────────
@@ -25,27 +28,32 @@ const NAV_T = {
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Parrainage', account:'Mon Compte', dashboard:'Tableau de bord', admin:'Admin', lang:'Langue', theme:'Thème', menu:'Menu',
        tagline:'Loterie & Analyse Prédictive',
        footerCopy:'© 2026 PREDIKTA — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#7888bb">Jeu Responsable</a>.',
-       about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog' },
+       about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog',
+       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', dashboard:'Dashboard', admin:'Admin', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Lottery & Predictive Analysis',
        footerCopy:'© 2026 PREDIKTA — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#7888bb">Responsible Gaming</a>.',
-       about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog' },
+       about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog',
+       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', dashboard:'Panel', admin:'Admin', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Lotería & Análisis Predictivo',
        footerCopy:'© 2026 PREDIKTA — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#7888bb">Juego Responsable</a>.',
-       about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog' },
+       about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog',
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', dashboard:'Painel', admin:'Admin', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Loteria & Análise Preditiva',
        footerCopy:'© 2026 PREDIKTA — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#7888bb">Jogo Responsável</a>.',
-       about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog' },
+       about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog',
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', dashboard:'Tablo', admin:'Admin', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Lotri & Analiz Biznis',
        footerCopy:'© 2026 PREDIKTA — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#7888bb">Jwe Responsab</a>.',
-       about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog' },
+       about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog',
+       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote' },
 };
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
@@ -765,7 +773,7 @@ function buildNav(){
   // Prédictions / Archives / Parrainage retirés du header (manque de place) —
   // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
   // le menu mobile et le footer (SERVICES complet).
-  const HEADER_HIDDEN = ['predictions','archives','referral'];
+  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community'];
   const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
