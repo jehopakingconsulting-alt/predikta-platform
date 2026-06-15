@@ -114,7 +114,7 @@ const T = {
     statesNote:(n)=>`Sélectionne jusqu'à ${n} État(s).`, statesNoteAll:"Tous les États sont accessibles avec ton plan.",
     savedOk:"Enregistré ✓", planActivated:"Plan activé ! Ton essai gratuit commence maintenant.",
     tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",
-    redirecting:"Redirection vers le paiement sécurisé Stripe...",},
+    redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
     adminCardTitle:"🛠️ Administration",adminCardDesc:"Manage users, subscriptions and platform stats.",btnAdmin:"Open →",
@@ -128,7 +128,7 @@ const T = {
     statesNote:(n)=>`Select up to ${n} state(s).`, statesNoteAll:"All states are accessible with your plan.",
     savedOk:"Saved ✓", planActivated:"Plan activated! Your free trial starts now.",
     tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",
-    redirecting:"Redirecting to secure Stripe checkout...",},
+    redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
     adminCardTitle:"🛠️ Administración",adminCardDesc:"Gestiona usuarios, suscripciones y estadísticas de la plataforma.",btnAdmin:"Abrir →",
@@ -142,7 +142,7 @@ const T = {
     statesNote:(n)=>`Selecciona hasta ${n} Estado(s).`, statesNoteAll:"Todos los Estados son accesibles con tu plan.",
     savedOk:"Guardado ✓", planActivated:"¡Plan activado! Tu prueba gratuita comienza ahora.",
     tooMany:(n)=>`Puedes seleccionar como máximo ${n} Estado(s).`, notLoggedIn:"Debes iniciar sesión.",
-    redirecting:"Redirigiendo al pago seguro de Stripe...",},
+    redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
     adminCardTitle:"🛠️ Administração",adminCardDesc:"Gerencie usuários, assinaturas e estatísticas da plataforma.",btnAdmin:"Abrir →",
@@ -156,7 +156,7 @@ const T = {
     statesNote:(n)=>`Selecione até ${n} Estado(s).`, statesNoteAll:"Todos os Estados estão acessíveis com seu plano.",
     savedOk:"Salvo ✓", planActivated:"Plano ativado! Seu teste gratuito começa agora.",
     tooMany:(n)=>`Você pode selecionar no máximo ${n} Estado(s).`, notLoggedIn:"Você precisa estar conectado.",
-    redirecting:"Redirecionando para o checkout seguro do Stripe...",},
+    redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
     adminCardTitle:"🛠️ Administrasyon",adminCardDesc:"Jere itilizatè, abònman ak estatistik platfòm lan.",btnAdmin:"Ouvri →",
@@ -170,7 +170,7 @@ const T = {
     statesNote:(n)=>`Chwazi jiska ${n} Eta.`, statesNoteAll:"Tout Eta yo aksesib ak plan ou.",
     savedOk:"Anrejistre ✓", planActivated:"Plan aktive! Esè gratis ou kòmanse kounye a.",
     tooMany:(n)=>`Ou ka chwazi pi plis ${n} Eta.`, notLoggedIn:"Ou dwe konekte.",
-    redirecting:"K ap redirije w nan peman an sekirite Stripe...",},
+    redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
@@ -348,6 +348,28 @@ document.getElementById('btnPortal').addEventListener('click', async ()=>{
   }
 });
 
-loadAccount();
+async function handleCheckoutReturn(){
+  const params = new URLSearchParams(location.search);
+  const checkout = params.get('checkout');
+  if(!checkout) return;
+  history.replaceState(null, '', '/account');
+  const msgEl = document.getElementById('planMsg');
+
+  if(checkout === 'cancel'){
+    msgEl.textContent = T[curLang].checkoutCancel; msgEl.className = 'msg error';
+    return;
+  }
+  if(checkout === 'success'){
+    msgEl.textContent = T[curLang].checkoutProcessing; msgEl.className = 'msg success';
+    // Le webhook Stripe peut mettre quelques secondes à mettre à jour l'abonnement.
+    for(let i=0;i<5;i++){
+      await new Promise(r=>setTimeout(r, 2000));
+      await loadAccount();
+    }
+    msgEl.textContent = T[curLang].checkoutSuccess; msgEl.className = 'msg success';
+  }
+}
+
+loadAccount().then(handleCheckoutReturn);
 </script>
 </body></html>
