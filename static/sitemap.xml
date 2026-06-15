@@ -24,6 +24,13 @@
   <url><loc>https://predikta-tez2.onrender.com/parrainage</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/archives</loc><changefreq>daily</changefreq><priority>0.6</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/bizai</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/chaines-markov-loterie</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/simulation-monte-carlo-loterie</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/guide-predictions-pick3-ia</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/guide-analyse-powerball-ia</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/loterie-floride-predictions</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/blog/loterie-californie-predictions</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/predictions/ar</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/predictions/az</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/predictions/ca</loc><changefreq>daily</changefreq><priority>0.7</priority></url>

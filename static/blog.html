@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Blog — Guides & Analyses Loterie par IA — PREDIKTA</title>
+<meta name="description" content="Le blog PREDIKTA : guides sur les algorithmes (Markov, Monte Carlo), analyses par jeu (Pick 3, Pick 4, Powerball) et par État (Floride, Californie) pour comprendre les prédictions de loterie par IA."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/blog"/>
+<meta property="og:title" content="Blog — Guides & Analyses Loterie par IA — PREDIKTA"/>
+<meta property="og:description" content="Le blog PREDIKTA : guides sur les algorithmes (Markov, Monte Carlo), analyses par jeu (Pick 3, Pick 4, Powerball) et par État (Floride, Californie) pour comprendre les prédictions de loterie par IA."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://predikta-tez2.onrender.com/blog"/>
+<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
+.page{max-width:980px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.subtitle{font-size:.88rem;color:var(--muted2);margin-bottom:40px;max-width:680px;line-height:1.7}
+.cat-title{font-size:.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin:36px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.post-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+.post-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.post-tag{display:inline-block;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:20px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.3);color:#88aaff;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.post-title{font-size:.92rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:8px}
+.post-desc{font-size:.78rem;color:var(--muted2);line-height:1.7}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Blog PREDIKTA</h1>
+  <p class="subtitle">Guides pédagogiques sur les algorithmes utilisés par PREDIKTA (chaînes de Markov, simulations Monte Carlo, Machine Learning), analyses détaillées par jeu (Pick 3, Pick 4, Powerball) et par État (Floride, Californie...). Contenu éducatif, sans garantie de gain.</p>
+
+  <div class="cat-title">📚 Comprendre les algorithmes</div>
+  <div class="grid">
+    <a class="post-card" href="/blog/chaines-markov-loterie">
+      <span class="post-tag">Éducatif</span>
+      <div class="post-title">Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances de tirage</div>
+      <div class="post-desc">Comment les transitions chiffre-à-chiffre permettent de détecter des tendances statistiques dans les tirages Pick 3 / Pick 4.</div>
+    </a>
+    <a class="post-card" href="/blog/simulation-monte-carlo-loterie">
+      <span class="post-tag">Éducatif</span>
+      <div class="post-title">Simulation Monte Carlo et loterie : 50 000 tirages simulés pour affiner les probabilités</div>
+      <div class="post-desc">Le fonctionnement de la simulation Monte Carlo utilisée par PREDIKTA pour estimer les probabilités de chaque combinaison.</div>
+    </a>
+  </div>
+
+  <div class="cat-title">🎯 Guides par jeu</div>
+  <div class="grid">
+    <a class="post-card" href="/blog/guide-predictions-pick3-ia">
+      <span class="post-tag">Guide</span>
+      <div class="post-title">Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3</div>
+      <div class="post-desc">Fréquence par position, retard (gap), tendances chaud/froid et consensus d'algorithmes appliqués au Pick 3 / Cash 3 / Daily 3.</div>
+    </a>
+    <a class="post-card" href="/blog/guide-analyse-powerball-ia">
+      <span class="post-tag">Guide</span>
+      <div class="post-title">Guide complet : comprendre l'analyse Powerball par intelligence artificielle</div>
+      <div class="post-desc">Comment PREDIKTA analyse les boules blanches et le Powerball pour générer des suggestions de grilles.</div>
+    </a>
+  </div>
+
+  <div class="cat-title">🗺️ Analyses par État</div>
+  <div class="grid">
+    <a class="post-card" href="/blog/loterie-floride-predictions">
+      <span class="post-tag">État</span>
+      <div class="post-title">Loterie Floride : résultats et prédictions IA pour Pick 3, Pick 4, Fantasy 5, Lotto et Powerball</div>
+      <div class="post-desc">Tour d'horizon des jeux de la Florida Lottery et de leur analyse par PREDIKTA.</div>
+    </a>
+    <a class="post-card" href="/blog/loterie-californie-predictions">
+      <span class="post-tag">État</span>
+      <div class="post-title">Loterie Californie : résultats et prédictions IA pour Daily 3, Daily 4, Fantasy 5 et SuperLotto Plus</div>
+      <div class="post-desc">Tour d'horizon des jeux de la California Lottery et de leur analyse par PREDIKTA.</div>
+    </a>
+  </div>
+</div>
+</body></html>

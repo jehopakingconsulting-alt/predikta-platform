@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Guide complet : comment PREDIKTA analyse et prédit le Pick 3 — PREDIKTA</title>
+<meta name="description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par PREDIKTA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/blog/guide-predictions-pick3-ia"/>
+<meta property="og:title" content="Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3"/>
+<meta property="og:description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par PREDIKTA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="https://predikta-tez2.onrender.com/blog/guide-predictions-pick3-ia"/>
+<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.page{max-width:760px;margin:0 auto;padding:40px 24px 80px}
+.breadcrumb{font-size:.72rem;color:var(--muted);margin-bottom:18px}
+.breadcrumb a{color:var(--muted2);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent)}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.3}
+.meta{font-size:.72rem;color:var(--muted2);margin-bottom:30px}
+h2{font-size:1.02rem;font-weight:700;color:#aab8ff;margin:30px 0 12px}
+p{font-size:.86rem;color:var(--muted2);line-height:1.85;margin-bottom:14px}
+ul,ol{padding-left:22px;margin-bottom:14px}
+li{font-size:.86rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
+strong{color:var(--text)}
+a.inline{color:#88aaff;text-decoration:none;border-bottom:1px dotted rgba(136,170,255,.4)}
+a.inline:hover{color:#aac0ff}
+.cta-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin:28px 0;text-align:center}
+.cta-box a{display:inline-block;margin-top:10px;padding:10px 22px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;font-weight:700;font-size:.82rem}
+.disclaimer{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;font-size:.76rem;color:var(--muted2);line-height:1.7;margin-top:36px}
+.related{margin-top:36px;padding-top:24px;border-top:1px solid var(--border)}
+.related h3{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.related a{display:block;font-size:.84rem;color:#88aaff;text-decoration:none;margin-bottom:8px}
+.related a:hover{color:#aac0ff}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="/blog">Blog</a> / Guides par jeu</div>
+  <h1>Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3</h1>
+  <div class="meta">Guide PREDIKTA · Pick 3 / Cash 3 / Play 3 / Daily 3</div>
+
+  <p>Le <strong>Pick 3</strong> — aussi appelé Cash 3, Play 3 ou Daily 3 selon l'État — est l'un des jeux de loterie les plus populaires aux États-Unis. Trois chiffres de 0 à 9 sont tirés, généralement deux fois par jour. PREDIKTA propose une analyse dédiée pour 40+ États sur la page <a class="inline" href="/pick3-predictions">Prédictions Pick 3</a>. Voici comment cette analyse fonctionne, étape par étape.</p>
+
+  <h2>1. Fréquence par position</h2>
+  <p>Contrairement à une analyse globale, PREDIKTA étudie la fréquence de chaque chiffre <strong>séparément pour chaque position</strong> (1ère, 2ème, 3ème). Un chiffre peut être « chaud » en première position tout en étant rare en troisième position sur un même État. Cette granularité est essentielle car les distributions ne sont pas toujours identiques entre positions.</p>
+
+  <h2>2. Retard (gap analysis)</h2>
+  <p>Le <strong>retard</strong> mesure depuis combien de tirages un chiffre n'est pas apparu à une position donnée. Un chiffre en retard important par rapport à sa fréquence moyenne historique est signalé — sans qu'il soit pour autant « dû » à sortir, puisque chaque tirage reste indépendant.</p>
+
+  <h2>3. Tendances chaud/froid</h2>
+  <p>PREDIKTA calcule les chiffres <strong>« chauds »</strong> (sortis fréquemment sur la fenêtre récente, par défaut 30 tirages) et <strong>« froids »</strong> (sortis rarement) pour chaque position. Ces tendances sont recalculées automatiquement après chaque mise à jour des résultats, et peuvent être suivies via les <a class="inline" href="/dashboard">alertes hot/cold</a> du tableau de bord.</p>
+
+  <h2>4. Chaînes de Markov (ordre 1, 2, 3)</h2>
+  <p>Les transitions entre chiffres consécutifs sont analysées via des <a class="inline" href="/blog/chaines-markov-loterie">chaînes de Markov</a> d'ordre 1 à 3, afin de détecter des motifs de succession statistiquement significatifs.</p>
+
+  <h2>5. Simulation Monte Carlo (50 000 tirages)</h2>
+  <p>Une <a class="inline" href="/blog/simulation-monte-carlo-loterie">simulation Monte Carlo</a> de 50 000 tirages pondérés est exécutée pour faire converger les distributions de probabilité vers les combinaisons les plus cohérentes avec les tendances observées.</p>
+
+  <h2>6. Machine Learning (XGBoost, Random Forest, Gradient Boosting)</h2>
+  <p>Trois modèles de Machine Learning entraînés sur l'historique de l'État apportent une perspective complémentaire, en apprenant des relations non-linéaires que les modèles statistiques classiques ne capturent pas forcément.</p>
+
+  <h2>7. Analyse de Fourier</h2>
+  <p>L'analyse de Fourier recherche des <strong>cycles périodiques</strong> dans la série temporelle des tirages — par exemple, un chiffre qui aurait tendance à revenir selon un rythme particulier.</p>
+
+  <h2>Le score consensus final</h2>
+  <p>Chacun de ces sept signaux est pondéré selon sa performance historique sur l'État et le jeu analysés, pour produire un <strong>score consensus</strong> par chiffre et par position. Le <strong>Mode Transparence</strong> de PREDIKTA permet de voir le détail de chaque score individuel, sans boîte noire.</p>
+
+  <div class="cta-box">
+    <div style="font-size:.85rem;color:var(--text);font-weight:700">Voir l'analyse Pick 3 pour votre État</div>
+    <p style="margin:8px 0 0">Consultez les prédictions Pick 3 mises à jour quotidiennement pour les 40+ États couverts par PREDIKTA.</p>
+    <a href="/pick3-predictions">🎯 Voir les Prédictions Pick 3</a>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Avertissement :</strong> PREDIKTA est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens.
+  </div>
+
+  <div class="related">
+    <h3>À lire aussi</h3>
+    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances</a>
+    <a class="inline" href="/blog/simulation-monte-carlo-loterie">Simulation Monte Carlo et loterie : 50 000 tirages simulés</a>
+    <a class="inline" href="/blog/guide-analyse-powerball-ia">Guide complet : comprendre l'analyse Powerball par intelligence artificielle</a>
+  </div>
+</div>
+</body></html>

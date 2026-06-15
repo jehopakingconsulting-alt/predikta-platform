@@ -1066,6 +1066,27 @@ def predikta_tv_page(): return send_from_directory("static", "predikta-tv.html")
 @app.route("/community")
 def community_page(): return send_from_directory("static", "community.html")
 
+@app.route("/blog")
+def blog_index_page(): return send_from_directory("static", "blog.html")
+
+@app.route("/blog/chaines-markov-loterie")
+def blog_markov_page(): return send_from_directory("static", "blog-markov.html")
+
+@app.route("/blog/simulation-monte-carlo-loterie")
+def blog_montecarlo_page(): return send_from_directory("static", "blog-montecarlo.html")
+
+@app.route("/blog/guide-predictions-pick3-ia")
+def blog_pick3_guide_page(): return send_from_directory("static", "blog-pick3-guide.html")
+
+@app.route("/blog/guide-analyse-powerball-ia")
+def blog_powerball_guide_page(): return send_from_directory("static", "blog-powerball-guide.html")
+
+@app.route("/blog/loterie-floride-predictions")
+def blog_florida_page(): return send_from_directory("static", "blog-florida.html")
+
+@app.route("/blog/loterie-californie-predictions")
+def blog_california_page(): return send_from_directory("static", "blog-california.html")
+
 @app.route("/nav.js")
 def nav_js():
     resp = make_response(send_from_directory("static", "nav.js"))

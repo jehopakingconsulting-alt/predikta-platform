@@ -11,6 +11,7 @@ Allow: /terms
 Allow: /parrainage
 Allow: /archives
 Allow: /bizai
+Allow: /blog
 
 Disallow: /api/
 Disallow: /data/
