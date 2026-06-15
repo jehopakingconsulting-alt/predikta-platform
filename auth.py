@@ -766,6 +766,26 @@ def send_new_result_alert_email(user, state: str, game_label: str, draw: dict):
     )
 
 
+def send_hotcold_alert_email(user, state: str, game_label: str, alert_type: str, items: list[dict]):
+    """Email envoyé lorsqu'un chiffre devient HOT (alert_type=hot_number) ou
+    COLD (alert_type=cold_number) pour l'État/jeu surveillé par l'utilisateur."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    pos_labels = {"d1": "1ère position", "d2": "2ème position", "d3": "3ème position"}
+    label = "chaud(s)" if alert_type == "hot_number" else "froid(s)"
+    title = "Numéro chaud" if alert_type == "hot_number" else "Numéro froid"
+    lines = "\n".join(f"- Chiffre {it['digit']} ({pos_labels.get(it['pos'], it['pos'])})" for it in items)
+    _send_email(
+        user.email,
+        f"PREDIKTA — {title} détecté pour {state} {game_label}",
+        f"Bonjour {user.username},\n\n"
+        f"De nouveaux chiffres {label} ont été détectés pour {game_label} ({state}) "
+        f"sur les 30 derniers tirages :\n\n"
+        f"{lines}\n\n"
+        f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
+        "À très vite,\nL'équipe PREDIKTA"
+    )
+
+
 def record_usage(user_id: int):
     """Incrémente le compteur d'analyses du jour pour un utilisateur."""
     today = date.today().isoformat()

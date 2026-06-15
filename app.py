@@ -242,6 +242,75 @@ def _check_new_result_alerts():
         db.session.commit()
 
 
+def _check_hotcold_alerts():
+    """Envoie un email aux utilisateurs ayant une alerte active « Numéro
+    chaud » ou « Numéro froid » dès qu'un chiffre devient HOT/COLD pour
+    leur État/jeu surveillé (calculé sur les 30 derniers tirages)."""
+    from games_scraper import load_game_results
+    from games_config import STATE_GAMES
+    import json as _json
+
+    db = auth_module.db
+    Alert = auth_module.Alert
+    User = auth_module.User
+
+    alerts = Alert.query.filter(
+        Alert.active == True,
+        Alert.alert_type.in_(["hot_number", "cold_number"]),
+    ).all()
+    if not alerts:
+        return
+
+    stats_cache = {}
+    changed = False
+    for alert in alerts:
+        state = (alert.state or "").upper()
+        slug = alert.game
+        key = (state, slug)
+        if key not in stats_cache:
+            draws = load_game_results(state, slug)
+            # hot_cold_stats ne s'applique qu'aux jeux à 3 chiffres (pick3)
+            pick3_draws = [d for d in draws if len(d.get("nums") or []) == 3]
+            recent = [{"d1": d["nums"][0], "d2": d["nums"][1], "d3": d["nums"][2]} for d in reversed(pick3_draws[-30:])]
+            stats_cache[key] = hot_cold_stats(recent, window=30) if recent else None
+        stats = stats_cache[key]
+        if not stats:
+            continue
+
+        target_status = "HOT" if alert.alert_type == "hot_number" else "COLD"
+        found = []
+        for pos, digits in stats.items():
+            for digit, info in digits.items():
+                if info.get("status") == target_status:
+                    found.append({"pos": pos, "digit": digit})
+
+        try:
+            criteria = _json.loads(alert.criteria) if alert.criteria else {}
+        except Exception:
+            criteria = {}
+
+        signature = ",".join(sorted(f"{f['pos']}:{f['digit']}" for f in found))
+        if not found or criteria.get("last_signature") == signature:
+            criteria["last_signature"] = signature
+            alert.criteria = _json.dumps(criteria)
+            continue
+
+        user = db.session.get(User, alert.user_id)
+        if not user:
+            continue
+
+        game_label = next((g["label"] for g in STATE_GAMES.get(state, []) if g["slug"] == slug), slug)
+        auth_module.send_hotcold_alert_email(user, state, game_label, alert.alert_type, found)
+
+        criteria["last_signature"] = signature
+        alert.criteria = _json.dumps(criteria)
+        alert.last_triggered_at = datetime.utcnow()
+        changed = True
+
+    if changed:
+        db.session.commit()
+
+
 def _maybe_send_daily_push():
     """Envoie une notification push une fois par jour (au plus), dès que les
     nouveaux résultats du jour sont disponibles après une mise à jour auto."""
@@ -362,6 +431,11 @@ def _auto_update_loop():
             try:
                 with app.app_context():
                     _check_new_result_alerts()
+            except Exception as ae:
+                print(f"  [alerts] error: {ae}")
+            try:
+                with app.app_context():
+                    _check_hotcold_alerts()
             except Exception as ae:
                 print(f"  [alerts] error: {ae}")
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
