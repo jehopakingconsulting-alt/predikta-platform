@@ -54,14 +54,6 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
       <a href="/dashboard" class="action" style="text-decoration:none;display:inline-block" data-i18n="btnDashboard">Ouvrir →</a>
     </div>
 
-    <div class="card" id="adminCard" style="display:none;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
-      <div>
-        <div style="font-weight:700;font-size:.9rem;margin-bottom:4px" data-i18n="adminCardTitle">🛠️ Administration</div>
-        <div class="subtitle" style="margin-bottom:0" data-i18n="adminCardDesc">Gérer les utilisateurs, abonnements et statistiques de la plateforme.</div>
-      </div>
-      <a href="/admin" class="outline" style="text-decoration:none;display:inline-block" data-i18n="btnAdmin">Ouvrir →</a>
-    </div>
-
     <div class="card">
       <div class="row"><b data-i18n="lblUser">Utilisateur</b><span id="username">—</span></div>
       <div class="row"><b data-i18n="lblEmail">Email</b><span id="email">—</span></div>
@@ -103,7 +95,6 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
 const T = {
   fr:{title:"Mon compte",subtitle:"Gère ton abonnement, ton essai gratuit et tes États sélectionnés.",loading:"Chargement...",
     dashboardCardTitle:"📊 Mon tableau de bord",dashboardCardDesc:"Prédictions sauvegardées, alertes et rapports Business AI.",btnDashboard:"Ouvrir →",
-    adminCardTitle:"🛠️ Administration",adminCardDesc:"Gérer les utilisateurs, abonnements et statistiques de la plateforme.",btnAdmin:"Ouvrir →",
     lblUser:"Utilisateur",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Statut",lblDaysLeft:"Temps restant",lblQuota:"Analyses / jour",
     changePlan:"Changer de plan",changePlanNote:"Démarre une nouvelle période d'essai en changeant de plan (paiement requis ensuite).",
     unlimited:"Tous États · illimité",btnChoosePlan:"Activer ce plan",statesTitle:"États sélectionnés",
@@ -117,7 +108,6 @@ const T = {
     redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
-    adminCardTitle:"🛠️ Administration",adminCardDesc:"Manage users, subscriptions and platform stats.",btnAdmin:"Open →",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
     changePlan:"Change plan",changePlanNote:"Starting a new plan begins a new trial period (payment required afterwards).",
     unlimited:"All states · unlimited",btnChoosePlan:"Activate this plan",statesTitle:"Selected states",
@@ -131,7 +121,6 @@ const T = {
     redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
-    adminCardTitle:"🛠️ Administración",adminCardDesc:"Gestiona usuarios, suscripciones y estadísticas de la plataforma.",btnAdmin:"Abrir →",
     lblUser:"Usuario",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estado",lblDaysLeft:"Tiempo restante",lblQuota:"Análisis / día",
     changePlan:"Cambiar de plan",changePlanNote:"Cambiar de plan inicia un nuevo período de prueba (pago requerido después).",
     unlimited:"Todos los Estados · ilimitado",btnChoosePlan:"Activar este plan",statesTitle:"Estados seleccionados",
@@ -145,7 +134,6 @@ const T = {
     redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
-    adminCardTitle:"🛠️ Administração",adminCardDesc:"Gerencie usuários, assinaturas e estatísticas da plataforma.",btnAdmin:"Abrir →",
     lblUser:"Usuário",lblEmail:"Email",lblPlan:"Plano",lblStatus:"Status",lblDaysLeft:"Tempo restante",lblQuota:"Análises / dia",
     changePlan:"Mudar de plano",changePlanNote:"Mudar de plano inicia um novo período de teste (pagamento necessário depois).",
     unlimited:"Todos os Estados · ilimitado",btnChoosePlan:"Ativar este plano",statesTitle:"Estados selecionados",
@@ -159,7 +147,6 @@ const T = {
     redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
-    adminCardTitle:"🛠️ Administrasyon",adminCardDesc:"Jere itilizatè, abònman ak estatistik platfòm lan.",btnAdmin:"Ouvri →",
     lblUser:"Itilizatè",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estati",lblDaysLeft:"Tan ki rete",lblQuota:"Analiz / jou",
     changePlan:"Chanje plan",changePlanNote:"Chanje plan kòmanse yon nouvo peryòd esè (peman obligatwa apre).",
     unlimited:"Tout Eta · san limit",btnChoosePlan:"Aktive plan sa a",statesTitle:"Eta yo chwazi",
@@ -202,7 +189,6 @@ async function loadAccount(){
     const user = data.user;
     document.getElementById('username').textContent = user.username;
     document.getElementById('email').textContent = user.email;
-    if(user.is_admin) document.getElementById('adminCard').style.display = 'flex';
     const sub = user.subscription || {};
     currentSub = sub;
     document.getElementById('plan').textContent = sub.plan_label || '—';
