@@ -236,6 +236,28 @@ class ReferralCommission(db.Model):
         }
 
 
+class ReferralPayout(db.Model):
+    """Versement de commissions de parrainage effectué par un administrateur
+    (hors plateforme : virement, PayPal, etc.). Sert de journal comptable
+    et fait diminuer `User.referral_balance_usd`."""
+    __tablename__ = "referral_payouts"
+
+    id          = db.Column(db.Integer, primary_key=True)
+    referrer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    amount_usd  = db.Column(db.Float, nullable=False)
+    note        = db.Column(db.String(255), nullable=True)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "referrer_id": self.referrer_id,
+            "amount_usd": round(self.amount_usd, 2),
+            "note": self.note,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
 class PasswordResetToken(db.Model):
     __tablename__ = "password_reset_tokens"
 
@@ -472,6 +494,18 @@ def record_referral_commission(referred_user: "User", plan: str, amount_usd: flo
         amount_usd=amount_usd,
         commission_usd=commission,
     ))
+
+
+def record_referral_payout(referrer: "User", amount_usd: float, note: str = None):
+    """Enregistre un versement de commissions effectué par un admin (hors
+    plateforme) et déduit le montant du solde de parrainage de `referrer`."""
+    amount_usd = round(min(amount_usd, referrer.referral_balance_usd or 0), 2)
+    if amount_usd <= 0:
+        return None
+    referrer.referral_balance_usd = round((referrer.referral_balance_usd or 0) - amount_usd, 2)
+    payout = ReferralPayout(referrer_id=referrer.id, amount_usd=amount_usd, note=note)
+    db.session.add(payout)
+    return payout
 
 
 def _apply_referral_rewards(referrer: "User"):

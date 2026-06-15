@@ -95,6 +95,18 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
     </div>
 
     <div class="card">
+      <h2>💰 Commissions de parrainage à verser</h2>
+      <p class="hint">Solde cumulé par parrain. Marquer un versement comme effectué déduit le montant du solde (versement réalisé hors plateforme : virement, PayPal, etc.).</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>ID</th><th>Utilisateur</th><th>Email</th><th>Solde dû</th><th></th></tr></thead>
+          <tbody id="referralsBody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="referralsEmpty" style="display:none">Aucune commission en attente de versement.</div>
+    </div>
+
+    <div class="card">
       <h2>👥 Utilisateurs</h2>
       <p class="hint">Cliquez sur une ligne pour modifier le plan, le statut, prolonger l'essai ou accorder les droits admin.</p>
       <div class="controls">
@@ -154,6 +166,7 @@ async function init(){
   document.getElementById('content').style.display = 'block';
   await loadStats();
   await loadUsers();
+  await loadReferrals();
 }
 
 async function claimAdmin(){
@@ -190,6 +203,9 @@ async function loadStats(){
     <div class="stat-box"><div class="num">${s.new_users_7d}</div><div class="lbl">Nouveaux (7j)</div></div>
     <div class="stat-box"><div class="num">${s.new_users_30d}</div><div class="lbl">Nouveaux (30j)</div></div>
     <div class="stat-box"><div class="num">${s.active_subscriptions}</div><div class="lbl">Abonnements actifs</div></div>
+    <div class="stat-box"><div class="num">$${(s.mrr_usd||0).toFixed(2)}</div><div class="lbl">MRR (payants)</div></div>
+    <div class="stat-box"><div class="num">$${(s.mrr_trial_usd||0).toFixed(2)}</div><div class="lbl">MRR potentiel (essais)</div></div>
+    <div class="stat-box"><div class="num">$${(s.referral_balance_total_usd||0).toFixed(2)}</div><div class="lbl">Commissions dues</div></div>
     <div class="stat-box"><div class="num">${s.total_saved_predictions}</div><div class="lbl">Favoris sauvegardés</div></div>
     <div class="stat-box"><div class="num">${s.total_alerts}</div><div class="lbl">Alertes</div></div>
     <div class="stat-box"><div class="num">${s.total_business_reports}</div><div class="lbl">Rapports Business AI</div></div>
@@ -321,6 +337,47 @@ async function saveUser(id){
   }catch(e){
     msg.className = 'msg error';
     msg.textContent = 'Erreur réseau';
+  }
+}
+
+async function loadReferrals(){
+  const res = await fetch('/api/admin/referrals');
+  if(!res.ok) return;
+  const data = await res.json();
+  const tbody = document.getElementById('referralsBody');
+  const empty = document.getElementById('referralsEmpty');
+  if(!data.referrers.length){
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  tbody.innerHTML = data.referrers.map(r => `
+    <tr>
+      <td>${r.id}</td>
+      <td>${escapeHtml(r.username)}</td>
+      <td>${escapeHtml(r.email)}</td>
+      <td>$${r.referral_balance_usd.toFixed(2)}</td>
+      <td><button onclick="markPayout(${r.id}, ${r.referral_balance_usd})" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-size:.76rem">Marquer versé</button></td>
+    </tr>`).join('');
+}
+
+async function markPayout(id, balance){
+  if(!confirm(`Confirmer le versement de $${balance.toFixed(2)} à l'utilisateur #${id} ?`)) return;
+  try{
+    const res = await fetch(`/api/admin/referrals/${id}/payout`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({}),
+    });
+    const json = await res.json();
+    if(!res.ok){
+      alert(json.error || 'Erreur');
+      return;
+    }
+    await loadStats();
+    await loadReferrals();
+  }catch(e){
+    alert('Erreur réseau');
   }
 }
 

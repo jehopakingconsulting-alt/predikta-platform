@@ -1754,11 +1754,13 @@ def admin_claim():
 @app.route("/api/admin/stats")
 @auth_module.admin_required
 def admin_stats():
+    db = auth_module.db
     User = auth_module.User
     Subscription = auth_module.Subscription
     SavedPrediction = auth_module.SavedPrediction
     Alert = auth_module.Alert
     BusinessReport = auth_module.BusinessReport
+    PLAN_CONFIG = auth_module.PLAN_CONFIG
 
     total_users = User.query.count()
     now = datetime.utcnow()
@@ -1768,6 +1770,8 @@ def admin_stats():
     by_plan = {}
     by_status = {}
     active_count = 0
+    mrr_usd = 0.0
+    mrr_trial_usd = 0.0
     for sub in Subscription.query.all():
         plan_key = sub.plan or "none"
         by_plan[plan_key] = by_plan.get(plan_key, 0) + 1
@@ -1775,12 +1779,24 @@ def admin_stats():
         by_status[status_key] = by_status.get(status_key, 0) + 1
         if sub.is_active():
             active_count += 1
+            price = PLAN_CONFIG.get(sub.plan, {}).get("price_usd", 0)
+            if sub.status == "trial":
+                mrr_trial_usd += price
+            else:
+                mrr_usd += price
+
+    referral_balance_total = db.session.query(
+        db.func.coalesce(db.func.sum(User.referral_balance_usd), 0)
+    ).scalar() or 0
 
     return jsonify({
         "total_users": total_users,
         "new_users_7d": new_7d,
         "new_users_30d": new_30d,
         "active_subscriptions": active_count,
+        "mrr_usd": round(mrr_usd, 2),
+        "mrr_trial_usd": round(mrr_trial_usd, 2),
+        "referral_balance_total_usd": round(referral_balance_total, 2),
         "by_plan": by_plan,
         "by_status": by_status,
         "total_saved_predictions": SavedPrediction.query.count(),
@@ -1899,6 +1915,63 @@ def admin_user_update(user_id):
 
     db.session.commit()
     return jsonify({"success": True, "user": user.to_dict()})
+
+
+@app.route("/api/admin/referrals")
+@auth_module.admin_required
+def admin_referrals_list():
+    """Liste des parrains ayant un solde de commissions à verser."""
+    db = auth_module.db
+    User = auth_module.User
+
+    rows = (User.query
+            .filter(User.referral_balance_usd > 0)
+            .order_by(User.referral_balance_usd.desc())
+            .all())
+
+    total = db.session.query(
+        db.func.coalesce(db.func.sum(User.referral_balance_usd), 0)
+    ).scalar() or 0
+
+    return jsonify({
+        "total_pending_usd": round(total, 2),
+        "referrers": [{
+            "id": u.id,
+            "username": u.username,
+            "email": u.email,
+            "referral_balance_usd": round(u.referral_balance_usd or 0, 2),
+        } for u in rows],
+    })
+
+
+@app.route("/api/admin/referrals/<int:user_id>/payout", methods=["POST"])
+@auth_module.admin_required
+def admin_referrals_payout(user_id):
+    """Enregistre un versement (hors plateforme) des commissions de parrainage
+    dues à l'utilisateur `user_id` et déduit le montant de son solde."""
+    db = auth_module.db
+    User = auth_module.User
+
+    user = db.session.get(User, user_id)
+    if not user:
+        return jsonify({"error": "not_found"}), 404
+
+    data = request.get_json(silent=True) or {}
+    amount = data.get("amount_usd")
+    if amount is None:
+        amount = user.referral_balance_usd or 0
+    try:
+        amount = float(amount)
+    except (TypeError, ValueError):
+        return jsonify({"error": "amount_usd invalide"}), 400
+
+    if amount <= 0 or amount > (user.referral_balance_usd or 0):
+        return jsonify({"error": "amount_usd doit être > 0 et <= au solde disponible"}), 400
+
+    payout = auth_module.record_referral_payout(user, amount, note=data.get("note"))
+    db.session.commit()
+    return jsonify({"success": True, "payout": payout.to_dict() if payout else None,
+                     "referral_balance_usd": round(user.referral_balance_usd or 0, 2)})
 
 
 @app.route("/admin")
