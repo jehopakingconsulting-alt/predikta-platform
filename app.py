@@ -1089,6 +1089,9 @@ def manifest():    return send_from_directory("static", "manifest.json")
 @app.route("/sw.js")
 def sw():          return send_from_directory("static", "sw.js")
 
+@app.route("/og-image.png")
+def og_image():    return send_from_directory("static", "og-image.png")
+
 
 # ═══════════════════════════════════════════════════════════
 # API — HEALTH
