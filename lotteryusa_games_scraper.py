@@ -80,8 +80,13 @@ def fetch_game(state: str, lp_slug: str) -> list[dict]:
     if not state_slug:
         return []
 
-    url = f"{BASE_URL}/{state_slug}/{info['lu_slug']}/"
+    # La page "/year" liste ~50 derniers tirages (vs ~10 sur la page de
+    # base) — voir lotteryusa_scraper.fetch_state pour le rationnel.
+    url = f"{BASE_URL}/{state_slug}/{info['lu_slug']}/year"
     html = fetch_url(url)
+    if not html:
+        url = f"{BASE_URL}/{state_slug}/{info['lu_slug']}/"
+        html = fetch_url(url)
     if not html:
         return []
 

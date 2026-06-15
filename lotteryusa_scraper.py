@@ -125,8 +125,14 @@ def fetch_state(state_code: str) -> list[dict]:
     for variant in cfg.get("variants", {}).values():
         slug = variant["slug"]
         tod = _title_to_tod(variant["title"])
-        url = f"{BASE_URL}/{state_slug}/{slug}/"
+        # La page "/year" liste ~50 derniers tirages (vs ~10-15 sur la page
+        # de base) — couvre un historique bien plus large sans dependre de
+        # lotterypost.com (souvent bloque par Cloudflare sur Render).
+        url = f"{BASE_URL}/{state_slug}/{slug}/year"
         html = fetch_url(url)
+        if not html:
+            url = f"{BASE_URL}/{state_slug}/{slug}/"
+            html = fetch_url(url)
         if not html:
             continue
         for draw in parse_draws(html, tod):
