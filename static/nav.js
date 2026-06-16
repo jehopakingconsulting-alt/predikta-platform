@@ -1126,8 +1126,6 @@ function buildFooter(){
         <a class="pf-link" href="/about">${T.about}</a>
         <a class="pf-link" href="/faq">${T.faq}</a>
         <a class="pf-link" href="/blog">${T.blog}</a>
-        <a class="pf-link" href="/track-record">${T.trackrecord}</a>
-        <a class="pf-link" href="/accuracy">${T.accuracy}</a>
         <a class="pf-link" href="/contact">${T.contact}</a>
         <a class="pf-link" href="/privacy">${T.privacy}</a>
         <a class="pf-link" href="/terms">${T.terms}</a>
