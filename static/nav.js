@@ -29,31 +29,36 @@ const NAV_T = {
        tagline:'Loterie & Analyse Prédictive',
        footerCopy:'© 2026 PREDIKTA — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#7888bb">Jeu Responsable</a>.',
        about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté' },
+       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté',
+       dashboard:'Tableau de Bord', logout:'Se déconnecter', myAccount:'Mon Compte' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Lottery & Predictive Analysis',
        footerCopy:'© 2026 PREDIKTA — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#7888bb">Responsible Gaming</a>.',
        about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community' },
+       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community',
+       dashboard:'Dashboard', logout:'Sign out', myAccount:'My Account' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Lotería & Análisis Predictivo',
        footerCopy:'© 2026 PREDIKTA — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#7888bb">Juego Responsable</a>.',
        about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad' },
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad',
+       dashboard:'Panel de Control', logout:'Cerrar sesión', myAccount:'Mi Cuenta' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Loteria & Análise Preditiva',
        footerCopy:'© 2026 PREDIKTA — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#7888bb">Jogo Responsável</a>.',
        about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade' },
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade',
+       dashboard:'Painel', logout:'Sair', myAccount:'Minha Conta' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Lotri & Analiz Biznis',
        footerCopy:'© 2026 PREDIKTA — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#7888bb">Jwe Responsab</a>.',
        about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote' },
+       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote',
+       dashboard:'Tablo de Bò', logout:'Dekonekte', myAccount:'Kont Mwen' },
 };
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
@@ -781,6 +786,12 @@ function buildNav(){
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
     const badge  = s.badge ? `<span style="margin-left:3px;padding:1px 5px;border-radius:4px;font-size:.5rem;font-weight:900;background:${s.badge==='PRO'?'linear-gradient(90deg,#ffd700,#ff9900)':'rgba(34,232,122,.35)'};color:${s.badge==='PRO'?'#000':'#22e87a'}">${s.badge}</span>` : '';
+    // account link gets a wrapper so initUserMenu() can replace it with a dropdown
+    if(s.key === 'account'){
+      return `<span id="pnav-acct-wrap"><a href="${s.href}" class="pnav-svc${active?' active':''}" data-navsvc="${s.key}">
+        <span>${s.icon}</span><span class="nav-svc-label">${label}</span>${badge}
+      </a></span>`;
+    }
     return `<a href="${s.href}" class="pnav-svc${active?' active':''}" data-navsvc="${s.key}">
       <span>${s.icon}</span><span class="nav-svc-label">${label}</span>${badge}
     </a>`;
@@ -944,6 +955,52 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 .pmob-footer a{font-size:.68rem;color:#4d5a8a;text-decoration:none;transition:color .2s}
 .pmob-footer a:hover{color:#e8eeff}
 
+/* ─── User account dropdown ─── */
+.pnav-user{position:relative;display:inline-flex;flex-shrink:0}
+.pnav-user-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 10px;border-radius:7px;
+  background:transparent;border:1px solid #1a1a45;
+  color:#7888bb;font-size:.73rem;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:all .18s;font-family:'Inter',sans-serif;
+}
+.pnav-user-btn:hover{color:#e8eeff;background:rgba(255,255,255,.05);border-color:#4f6eff}
+.pnav-user-avatar{
+  width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  color:#fff;font-size:.65rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.pnav-user-chevron{font-size:.55rem;transition:transform .2s;color:#4d5a8a}
+.pnav-user.open .pnav-user-chevron{transform:rotate(180deg)}
+.pnav-user-menu{
+  position:absolute;top:calc(100% + 8px);right:0;
+  min-width:190px;
+  background:#0d0d28;border:1px solid #1a1a45;border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+  overflow:hidden;z-index:2000;
+  opacity:0;transform:translateY(-6px) scale(.97);
+  pointer-events:none;transition:opacity .18s,transform .18s;
+}
+.pnav-user.open .pnav-user-menu{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.pnav-user-info{
+  padding:10px 14px 8px;border-bottom:1px solid #1a1a45;
+  font-size:.7rem;color:#4d5a8a;line-height:1.4;
+}
+.pnav-user-info strong{display:block;color:#e8eeff;font-size:.78rem;margin-bottom:1px}
+.pnav-user-menu a,.pnav-user-menu button{
+  display:flex;align-items:center;gap:9px;
+  width:100%;padding:10px 14px;
+  font-size:.78rem;font-weight:600;color:#c0ccee;
+  text-decoration:none;background:transparent;border:none;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:background .15s,color .15s;text-align:left;
+}
+.pnav-user-menu a:hover,.pnav-user-menu button:hover{background:rgba(79,110,255,.12);color:#e8eeff}
+.pnav-user-menu .pnav-logout{color:#ff6b6b}
+.pnav-user-menu .pnav-logout:hover{background:rgba(255,61,46,.12);color:#ff4444}
+.pnav-user-menu-sep{height:1px;background:#1a1a45;margin:4px 0}
+
 /* ─── Footer ─── */
 .predikta-footer{background:#050514;border-top:1px solid #1a1a45;padding:30px 24px;font-family:'Inter',sans-serif;position:relative;z-index:5}
 .pf-inner{max-width:1200px;margin:0 auto}
@@ -1014,6 +1071,7 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
     <div class="pmob-section-title">🌐 ${nt('lang')}</div>
     <div class="pmob-lang">${SUPPORTED.map(ll=>`<button class="plang-btn${ll===l?' active':''}" data-navlang="${ll}" onclick="saveLang('${ll}');closeMobileMenu()">${LANG_FLAGS[ll]} ${ll.toUpperCase()}</button>`).join('')}</div>
   </div>
+  <div id="pmob-user-section" style="display:none;padding:12px 16px;border-bottom:1px solid #1a1a45"></div>
   <div class="pmob-section">
     <div class="pmob-section-title">🚀 Navigation</div>
     ${mobileSvcs}
@@ -1142,6 +1200,85 @@ function watchDynamicContent(){
 }
 
 // ═══════════════════════════════════════════════════════════════════
+// USER ACCOUNT DROPDOWN
+// ═══════════════════════════════════════════════════════════════════
+async function initUserMenu(){
+  let user = null;
+  try{
+    const r = await fetch('/api/auth/me');
+    const d = await r.json();
+    user = d.user || null;
+  }catch(e){ return; }
+  if(!user) return;  // not logged in — keep plain link
+
+  const l  = window.PREDIKTA_LANG;
+  const T  = NAV_T[l] || NAV_T.en;
+  const initial = (user.username || user.email || '?')[0].toUpperCase();
+  const plan = user.subscription?.plan_label ? ` · ${user.subscription.plan_label}` : '';
+
+  // ── Desktop dropdown ──────────────────────────────────────────────
+  const wrap = document.getElementById('pnav-acct-wrap');
+  if(wrap){
+    wrap.innerHTML = `
+<div class="pnav-user" id="pnav-user-dd">
+  <button class="pnav-user-btn" onclick="toggleUserMenu(event)" aria-haspopup="true" aria-expanded="false">
+    <span class="pnav-user-avatar">${initial}</span>
+    <span class="nav-svc-label">${T.myAccount}</span>
+    <span class="pnav-user-chevron">▾</span>
+  </button>
+  <div class="pnav-user-menu" role="menu">
+    <div class="pnav-user-info">
+      <strong>${user.username || user.email}</strong>
+      ${user.email}${plan}
+    </div>
+    <a href="/account" role="menuitem">👤 ${T.myAccount}</a>
+    <a href="/dashboard" role="menuitem">📊 ${T.dashboard}</a>
+    <div class="pnav-user-menu-sep"></div>
+    <button class="pnav-logout" onclick="doNavLogout()" role="menuitem">🚪 ${T.logout}</button>
+  </div>
+</div>`;
+  }
+
+  // ── Mobile user section ───────────────────────────────────────────
+  const mobSec = document.getElementById('pmob-user-section');
+  if(mobSec){
+    mobSec.style.display = '';
+    mobSec.innerHTML = `
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">${initial}</div>
+  <div><div style="font-size:.82rem;font-weight:700;color:#e8eeff">${user.username || user.email}</div>
+  <div style="font-size:.65rem;color:#4d5a8a">${user.email}${plan}</div></div>
+</div>
+<a href="/account" onclick="closeMobileMenu()" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:#c0ccee;font-size:.8rem;font-weight:600;transition:background .15s;border:1px solid transparent" onmouseover="this.style.background='rgba(79,110,255,.12)'" onmouseout="this.style.background=''">👤 ${T.myAccount}</a>
+<a href="/dashboard" onclick="closeMobileMenu()" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:#c0ccee;font-size:.8rem;font-weight:600;transition:background .15s;border:1px solid transparent" onmouseover="this.style.background='rgba(79,110,255,.12)'" onmouseout="this.style.background=''">📊 ${T.dashboard}</a>
+<button onclick="doNavLogout();closeMobileMenu()" style="display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:8px;background:transparent;border:1px solid rgba(255,61,46,.25);color:#ff6b6b;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px">🚪 ${T.logout}</button>`;
+  }
+}
+
+function toggleUserMenu(e){
+  if(e) e.stopPropagation();
+  const dd = document.getElementById('pnav-user-dd');
+  if(!dd) return;
+  const isOpen = dd.classList.toggle('open');
+  dd.querySelector('.pnav-user-btn').setAttribute('aria-expanded', isOpen);
+}
+
+function doNavLogout(){
+  fetch('/api/auth/logout', {method:'POST'})
+    .finally(()=>{ location.href = '/'; });
+}
+
+// close dropdown on outside click
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('pnav-user-dd');
+  if(dd && dd.classList.contains('open') && !dd.contains(e.target)){
+    dd.classList.remove('open');
+    const btn = dd.querySelector('.pnav-user-btn');
+    if(btn) btn.setAttribute('aria-expanded','false');
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════
 // INJECT ALL
 // ═══════════════════════════════════════════════════════════════════
 function inject(){
@@ -1187,6 +1324,9 @@ function inject(){
   wrapResponsiveTables();
   initRevealAnimations();
   watchDynamicContent();
+
+  // 6. USER MENU — async, replaces "Mon Compte" with dropdown if logged in
+  initUserMenu();
 }
 
 if(document.readyState==='loading'){
