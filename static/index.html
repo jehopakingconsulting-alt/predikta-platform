@@ -382,6 +382,19 @@ header{
 .controls-selects #stateSelect{flex:2 1 220px}
 .controls-selects select{flex:1 1 130px}
 
+/* ── Performance banner ── */
+.perf-banner{display:flex;gap:12px;max-width:960px;margin:0 auto 14px;padding:0 16px;flex-wrap:wrap}
+.perf-card{flex:1;min-width:200px;display:flex;align-items:center;gap:12px;
+  padding:12px 16px;border-radius:12px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));
+  border:1px solid rgba(79,110,255,.22);transition:all .2s;color:var(--text)}
+.perf-card:hover{border-color:rgba(79,110,255,.55);background:linear-gradient(135deg,rgba(79,110,255,.15),rgba(136,85,255,.12));transform:translateY(-1px)}
+.perf-icon{font-size:1.4rem;flex-shrink:0}
+.perf-body{display:flex;flex-direction:column;flex:1;gap:2px}
+.perf-title{font-size:.8rem;font-weight:700;color:var(--text)}
+.perf-sub{font-size:.67rem;color:var(--muted2)}
+.perf-arrow{font-size:.9rem;color:var(--accent);font-weight:800;flex-shrink:0}
+
 /* ── Quick state tabs ── */
 .quick-states{
   position:relative;z-index:5;
@@ -989,6 +1002,26 @@ footer{
   </div>
 </div>
 
+<!-- ══ PERFORMANCE BANNER ══ -->
+<div class="perf-banner">
+  <a href="/track-record" class="perf-card">
+    <span class="perf-icon">📈</span>
+    <span class="perf-body">
+      <span class="perf-title" id="perfTitleTrack">Historique des Suggestions</span>
+      <span class="perf-sub" id="perfSubTrack">Résultats réels tirage par tirage</span>
+    </span>
+    <span class="perf-arrow">→</span>
+  </a>
+  <a href="/accuracy" class="perf-card">
+    <span class="perf-icon">🏅</span>
+    <span class="perf-body">
+      <span class="perf-title" id="perfTitleAcc">Accuracy Score</span>
+      <span class="perf-sub" id="perfSubAcc">Taux de réussite sur 7, 30 &amp; 90 jours</span>
+    </span>
+    <span class="perf-arrow">→</span>
+  </a>
+</div>
+
 <!-- ══ QUICK STATE TABS ══ -->
 <div class="quick-states">
   <span class="quick-states-label" id="quickStatesLabel">États populaires</span>
@@ -1334,6 +1367,8 @@ const T = {
     allDraws:"Tous tirages",draw:"Tirage",rank:"Rang",combo:"Combinaison",prob:"Prob.",score:"Score",signal:"Signal",
     tod_Morning:"🌅 Matin",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jour",tod_Evening:"🌆 Soir",tod_Night:"🌙 Nuit",
     quickStates:"États populaires",
+    perfTrackTitle:"Historique des Suggestions",perfTrackSub:"Résultats réels tirage par tirage",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Taux de réussite sur 7, 30 & 90 jours",
     filtersBtn:"Filtres",filtersDowTitle:"Exclure jours de la semaine",filtersDomTitle:"Exclure jours du mois",
     filtersDomHint:"Numéros de jours (1-31) séparés par des virgules",
     filtersReset:"Réinitialiser",filtersApply:"Appliquer",
@@ -1377,6 +1412,8 @@ const T = {
     allDraws:"All draws",draw:"Draw",rank:"Rank",combo:"Combo",prob:"Prob.",score:"Score",signal:"Signal",
     tod_Morning:"🌅 Morning",tod_Midday:"☀️ Midday",tod_Day:"🌤️ Day",tod_Evening:"🌆 Evening",tod_Night:"🌙 Night",
     quickStates:"Popular states",
+    perfTrackTitle:"Suggestions Track Record",perfTrackSub:"Real results draw by draw",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Hit rate over 7, 30 & 90 days",
     filtersBtn:"Filters",filtersDowTitle:"Exclude days of week",filtersDomTitle:"Exclude days of month",
     filtersDomHint:"Day numbers (1-31) separated by commas",
     filtersReset:"Reset",filtersApply:"Apply",
@@ -1420,6 +1457,8 @@ const T = {
     allDraws:"Todos los sorteos",draw:"Sorteo",rank:"Rango",combo:"Combo",prob:"Prob.",score:"Puntaje",signal:"Señal",
     tod_Morning:"🌅 Mañana",tod_Midday:"☀️ Mediodía",tod_Day:"🌤️ Día",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noche",
     quickStates:"Estados populares",
+    perfTrackTitle:"Historial de Sugerencias",perfTrackSub:"Resultados reales sorteo por sorteo",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Tasa de aciertos en 7, 30 y 90 días",
     filtersBtn:"Filtros",filtersDowTitle:"Excluir días de la semana",filtersDomTitle:"Excluir días del mes",
     filtersDomHint:"Números de días (1-31) separados por comas",
     filtersReset:"Restablecer",filtersApply:"Aplicar",
@@ -1463,6 +1502,8 @@ const T = {
     allDraws:"Todos os sorteios",draw:"Sorteio",rank:"Posição",combo:"Combo",prob:"Prob.",score:"Pontuação",signal:"Sinal",
     tod_Morning:"🌅 Manhã",tod_Midday:"☀️ Meio-dia",tod_Day:"🌤️ Dia",tod_Evening:"🌆 Tarde",tod_Night:"🌙 Noite",
     quickStates:"Estados populares",
+    perfTrackTitle:"Histórico de Sugestões",perfTrackSub:"Resultados reais sorteio por sorteio",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Taxa de acerto em 7, 30 e 90 dias",
     filtersBtn:"Filtros",filtersDowTitle:"Excluir dias da semana",filtersDomTitle:"Excluir dias do mês",
     filtersDomHint:"Números de dias (1-31) separados por vírgulas",
     filtersReset:"Redefinir",filtersApply:"Aplicar",
@@ -1506,6 +1547,8 @@ const T = {
     allDraws:"Tout tiraj",draw:"Tiraj",rank:"Ranje",combo:"Konbo",prob:"Pwob.",score:"Nòt",signal:"Siyal",
     tod_Morning:"🌅 Maten",tod_Midday:"☀️ Midi",tod_Day:"🌤️ Jounen",tod_Evening:"🌆 Aswè",tod_Night:"🌙 Nuit",
     quickStates:"Eta popilè",
+    perfTrackTitle:"Istorik Sijesyon yo",perfTrackSub:"Rezilta reyèl tiraj pa tiraj",
+    perfAccTitle:"Accuracy Score",perfAccSub:"To reyisit sou 7, 30 ak 90 jou",
     filtersBtn:"Filtè",filtersDowTitle:"Eskli jou nan semèn",filtersDomTitle:"Eskli jou nan mwa",
     filtersDomHint:"Nimewo jou (1-31) separe ak vigil",
     filtersReset:"Reyajiste",filtersApply:"Aplike",
@@ -1543,6 +1586,10 @@ function setLang(lang){
   if(statsLbl)  statsLbl.textContent  = t('statsTitle');
   const qsLbl = document.getElementById('quickStatesLabel');
   if(qsLbl) qsLbl.textContent = t('quickStates');
+  const ptt = document.getElementById('perfTitleTrack'); if(ptt) ptt.textContent = t('perfTrackTitle');
+  const pts = document.getElementById('perfSubTrack');   if(pts) pts.textContent = t('perfTrackSub');
+  const pat = document.getElementById('perfTitleAcc');   if(pat) pat.textContent = t('perfAccTitle');
+  const pas = document.getElementById('perfSubAcc');     if(pas) pas.textContent = t('perfAccSub');
   // Date filters panel labels
   const fBtnLbl = document.getElementById('btn-filters-label');
   const fDowT   = document.getElementById('filters-dow-title');

@@ -20,6 +20,8 @@ const SERVICES = [
   { href:'/world-map',   icon:'🗺️', key:'worldmap',   badge:'' },
   { href:'/predikta-tv', icon:'📺', key:'predicktatv', badge:'' },
   { href:'/community',   icon:'💬', key:'community',  badge:'' },
+  { href:'/track-record',icon:'📈', key:'trackrecord',badge:'' },
+  { href:'/accuracy',    icon:'🏅', key:'accuracy',   badge:'' },
 ];
 
 // ── Traductions ───────────────────────────────────────────────────────────
@@ -801,7 +803,7 @@ function buildNav(){
   // Prédictions / Archives / Parrainage retirés du header (manque de place) —
   // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
   // le menu mobile et le footer (SERVICES complet).
-  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community'];
+  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community','trackrecord','accuracy'];
   const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;

@@ -94,6 +94,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .hb4{background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.4);color:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
+/* ── Performance banner ── */
+.perf-banner{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.perf-card{flex:1;min-width:200px;display:flex;align-items:center;gap:12px;
+  padding:13px 16px;border-radius:12px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));
+  border:1px solid rgba(79,110,255,.25);transition:all .2s;color:var(--text)}
+.perf-card:hover{border-color:rgba(79,110,255,.6);background:linear-gradient(135deg,rgba(79,110,255,.15),rgba(136,85,255,.13));transform:translateY(-1px)}
+.perf-icon{font-size:1.5rem;flex-shrink:0}
+.perf-body{display:flex;flex-direction:column;flex:1;gap:2px}
+.perf-title{font-size:.82rem;font-weight:700;color:var(--text)}
+.perf-sub{font-size:.68rem;color:var(--muted2)}
+.perf-arrow{font-size:.9rem;color:var(--accent);font-weight:800;flex-shrink:0}
+
 /* ── Trust strip ── */
 .trust-strip{
   display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
@@ -439,6 +452,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Performance banner -->
+  <div class="perf-banner">
+    <a href="/track-record" class="perf-card">
+      <span class="perf-icon">📈</span>
+      <span class="perf-body">
+        <span class="perf-title" id="perfTitleTrack">Historique des Suggestions</span>
+        <span class="perf-sub" id="perfSubTrack">Résultats réels tirage par tirage</span>
+      </span>
+      <span class="perf-arrow">→</span>
+    </a>
+    <a href="/accuracy" class="perf-card">
+      <span class="perf-icon">🏅</span>
+      <span class="perf-body">
+        <span class="perf-title" id="perfTitleAcc">Accuracy Score</span>
+        <span class="perf-sub" id="perfSubAcc">Taux de réussite sur 7, 30 &amp; 90 jours</span>
+      </span>
+      <span class="perf-arrow">→</span>
+    </a>
+  </div>
+
   <!-- Outils Express -->
   <div class="section-label" data-i18n="sectionTools">Outils Express</div>
   <div class="tools-grid">
@@ -632,6 +665,8 @@ const T = {
     heroSub:"Loterie & Analyse Prédictive par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
     tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",
+    perfTrackTitle:"Historique des Suggestions",perfTrackSub:"Résultats réels tirage par tirage",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Taux de réussite sur 7, 30 & 90 jours",
     snapLabel:"Résultats d'aujourd'hui",snapLoadBtn:"🔄 Charger les résultats du jour",
     stat1:"États US couverts",stat2:"Algorithmes actifs",stat3:"Simulations/analyse",stat4:"Langues disponibles",
     sectionTools:"Outils Express",
@@ -699,6 +734,8 @@ const T = {
     heroSub:"Lottery & Predictive Analysis by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
     tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",
+    perfTrackTitle:"Suggestions Track Record",perfTrackSub:"Real results draw by draw",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Hit rate over 7, 30 & 90 days",
     snapLabel:"Today's Results",snapLoadBtn:"🔄 Load today's results",
     stat1:"US States covered",stat2:"Active algorithms",stat3:"Simulations/analysis",stat4:"Languages available",
     sectionTools:"Quick Tools",
@@ -766,6 +803,8 @@ const T = {
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
     tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",
+    perfTrackTitle:"Historial de Sugerencias",perfTrackSub:"Resultados reales sorteo por sorteo",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Tasa de aciertos en 7, 30 y 90 días",
     snapLabel:"Resultados de hoy",snapLoadBtn:"🔄 Cargar resultados de hoy",
     stat1:"Estados de EE.UU. cubiertos",stat2:"Algoritmos activos",stat3:"Simulaciones/análisis",stat4:"Idiomas disponibles",
     sectionTools:"Herramientas Rápidas",
@@ -833,6 +872,8 @@ const T = {
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
     tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",
+    perfTrackTitle:"Histórico de Sugestões",perfTrackSub:"Resultados reais sorteio por sorteio",
+    perfAccTitle:"Accuracy Score",perfAccSub:"Taxa de acerto em 7, 30 e 90 dias",
     snapLabel:"Resultados de hoje",snapLoadBtn:"🔄 Carregar resultados de hoje",
     stat1:"Estados dos EUA cobertos",stat2:"Algoritmos ativos",stat3:"Simulações/análise",stat4:"Idiomas disponíveis",
     sectionTools:"Ferramentas Rápidas",
@@ -900,6 +941,8 @@ const T = {
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
     tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",
+    perfTrackTitle:"Istorik Sijesyon yo",perfTrackSub:"Rezilta reyèl tiraj pa tiraj",
+    perfAccTitle:"Accuracy Score",perfAccSub:"To reyisit sou 7, 30 ak 90 jou",
     snapLabel:"Rezilta jodi a",snapLoadBtn:"🔄 Chaje rezilta jodi a",
     stat1:"Eta Ozetazini kouvri",stat2:"Algoritm aktif",stat3:"Similasyon/analiz",stat4:"Lang disponib",
     sectionTools:"Zouti Rapid",
@@ -985,6 +1028,10 @@ function applyLang(lang){
     if(t[k]!==undefined && typeof t[k]==='string') el.textContent = t[k];
   });
   document.getElementById('snapDate').textContent = new Date().toLocaleDateString(t.locale,{weekday:'long',day:'numeric',month:'long'});
+  const ptt=document.getElementById('perfTitleTrack'); if(ptt) ptt.textContent=t.perfTrackTitle||ptt.textContent;
+  const pts=document.getElementById('perfSubTrack');   if(pts) pts.textContent=t.perfTrackSub||pts.textContent;
+  const pat=document.getElementById('perfTitleAcc');   if(pat) pat.textContent=t.perfAccTitle||pat.textContent;
+  const pas=document.getElementById('perfSubAcc');     if(pas) pas.textContent=t.perfAccSub||pas.textContent;
   loadSnap();
   loadHotCta();
   if(_SNAP_DATA) loadDigitStats(_TOOL_STATE);
