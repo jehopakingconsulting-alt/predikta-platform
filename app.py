@@ -934,6 +934,249 @@ def api_accuracy():
     _ACCURACY_CACHE["data"] = {"ts": time.time(), "data": payload}
     return jsonify(payload)
 
+_TRACK_RECORD4_CACHE = {}
+_ACCURACY4_CACHE = {}
+_CACHE4_TTL = int(os.environ.get("PREDIKTA_TRACK_RECORD_CACHE_SEC", 30 * 60))
+
+
+@app.route("/api/hot-pick4")
+def hot_pick4():
+    """Public endpoint: hottest Pick4 digits/combo per state."""
+    import analyzer4
+    from scraper4 import STATES4, HOT_PICK4_STATES
+
+    try:
+        limit = int(request.args.get("limit", "5"))
+    except ValueError:
+        limit = 5
+    limit = max(1, min(limit, 12))
+
+    entries = []
+    for code in HOT_PICK4_STATES:
+        if code not in STATES4:
+            continue
+        try:
+            draws = analyzer4.load_draws4(code)
+        except Exception:
+            continue
+        if not draws:
+            continue
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        for tod, tdraws in by_tod.items():
+            if not tdraws:
+                continue
+            hot30 = analyzer4.hot_cold4(tdraws, 30)
+            hot_digits = sorted(
+                (dg for dg, v in hot30.items() if v.get("status") == "HOT"),
+                key=lambda dg: hot30[dg]["pct"], reverse=True
+            )
+            suggestions = analyzer4.weighted_suggestions4(tdraws, top_n=1)
+            top = suggestions[0] if suggestions else None
+            last_draw = tdraws[0]
+            last_date = last_draw["date"]
+            try:
+                next_date = (datetime.strptime(last_date, "%Y-%m-%d").date() + timedelta(days=1)).isoformat()
+            except ValueError:
+                next_date = last_date
+            entries.append({
+                "state": code,
+                "name": STATES4[code]["name"],
+                "tod": tod,
+                "date": last_date,
+                "last_result": f"{last_draw['d1']}{last_draw['d2']}{last_draw['d3']}{last_draw['d4']}",
+                "next_date": next_date,
+                "hot_digits": hot_digits[:5],
+                "top_combo": top["combo"] if top else None,
+                "confidence": top["confidence"] if top else None,
+                "score": top["score"] if top else 0,
+            })
+
+    best_by_state = {}
+    for e in entries:
+        cur = best_by_state.get(e["state"])
+        if cur is None or e["score"] > cur["score"]:
+            best_by_state[e["state"]] = e
+
+    ordered = [best_by_state[code] for code in HOT_PICK4_STATES if code in best_by_state]
+    return jsonify(ordered[:limit])
+
+
+@app.route("/api/results-4/<state_code>")
+def api_results4(state_code):
+    """Latest Pick4 results for a state."""
+    from scraper4 import load_csv4, STATES4
+    code = state_code.upper()
+    if code not in STATES4:
+        return jsonify({"error": f"Unknown Pick4 state: {code}"}), 404
+    try:
+        n = int(request.args.get("n", "30"))
+    except ValueError:
+        n = 30
+    draws = load_csv4(code)
+    return jsonify({"state": code, "name": STATES4[code]["name"], "draws": draws[:n]})
+
+
+@app.route("/api/report-4/<state_code>")
+def api_report4(state_code):
+    """Full Pick4 statistical report for a state."""
+    import analyzer4
+    from scraper4 import STATES4
+    code = state_code.upper()
+    if code not in STATES4:
+        return jsonify({"error": f"Unknown Pick4 state: {code}"}), 404
+    report = analyzer4.full_report4(code)
+    return jsonify(report)
+
+
+@app.route("/api/track-record-4")
+def api_track_record4():
+    """Pick4 track record: backtest last N draws per state."""
+    import analyzer4
+    from scraper4 import STATES4, HOT_PICK4_STATES
+
+    try:
+        n = int(request.args.get("n", "15"))
+    except ValueError:
+        n = 15
+    n = max(1, min(n, 30))
+
+    cached = _TRACK_RECORD4_CACHE.get(n)
+    if cached and (time.time() - cached["ts"]) < _CACHE4_TTL:
+        return jsonify(cached["data"])
+
+    out = []
+    grand_n = grand_straight = grand_box = 0
+    for code in HOT_PICK4_STATES:
+        if code not in STATES4:
+            continue
+        draws = analyzer4.load_draws4(code)
+        if not draws:
+            continue
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        tods_out = {}
+        state_n = state_straight = state_box = 0
+        for tod, tdraws in by_tod.items():
+            rows = analyzer4.backtest_suggestions4(tdraws, n=n)
+            if not rows:
+                continue
+            straight = sum(1 for r in rows if r["hit_straight"])
+            box = sum(1 for r in rows if r["hit_box"])
+            tods_out[tod] = {"rows": rows, "n": len(rows), "straight_hits": straight, "box_hits": box}
+            state_n += len(rows)
+            state_straight += straight
+            state_box += box
+
+        if not tods_out:
+            continue
+
+        out.append({
+            "state": code,
+            "name": STATES4[code]["name"],
+            "tods": tods_out,
+            "totals": {"n": state_n, "straight_hits": state_straight, "box_hits": state_box},
+        })
+        grand_n += state_n
+        grand_straight += state_straight
+        grand_box += state_box
+
+    payload = {
+        "states": out,
+        "grand_totals": {"n": grand_n, "straight_hits": grand_straight, "box_hits": grand_box},
+        "updated_at": datetime.now(tz=ZoneInfo("America/New_York")).isoformat(),
+    }
+    _TRACK_RECORD4_CACHE[n] = {"ts": time.time(), "data": payload}
+    return jsonify(payload)
+
+
+@app.route("/api/accuracy-4")
+def api_accuracy4():
+    """Pick4 accuracy score: backtest windows 7/30/90."""
+    import analyzer4
+    from scraper4 import STATES4, HOT_PICK4_STATES
+
+    cached = _ACCURACY4_CACHE.get("data")
+    if cached and (time.time() - cached["ts"]) < _CACHE4_TTL:
+        return jsonify(cached["data"])
+
+    WINDOWS = [7, 30, 90]
+    max_n = max(WINDOWS)
+    out = []
+    grand = {w: {"n": 0, "straight": 0, "box": 0} for w in WINDOWS}
+
+    for code in HOT_PICK4_STATES:
+        if code not in STATES4:
+            continue
+        draws = analyzer4.load_draws4(code)
+        if not draws:
+            continue
+
+        by_tod = defaultdict(list)
+        for d in draws:
+            by_tod[d.get("tod", "")].append(d)
+
+        state_totals = {w: {"n": 0, "straight": 0, "box": 0} for w in WINDOWS}
+        any_data = False
+        for tod, tdraws in by_tod.items():
+            rows = analyzer4.backtest_suggestions4(tdraws, n=max_n)
+            if not rows:
+                continue
+            any_data = True
+            for w in WINDOWS:
+                window_rows = rows[:w]
+                n = len(window_rows)
+                state_totals[w]["n"] += n
+                state_totals[w]["straight"] += sum(1 for r in window_rows if r["hit_straight"])
+                state_totals[w]["box"] += sum(1 for r in window_rows if r["hit_box"])
+
+        if not any_data:
+            continue
+
+        out.append({"state": code, "name": STATES4[code]["name"], "windows": state_totals})
+        for w in WINDOWS:
+            grand[w]["n"] += state_totals[w]["n"]
+            grand[w]["straight"] += state_totals[w]["straight"]
+            grand[w]["box"] += state_totals[w]["box"]
+
+    payload = {
+        "windows": WINDOWS,
+        "baseline": {"straight_pct": 0.01, "box_pct": 0.06},
+        "states": out,
+        "grand_totals": grand,
+        "updated_at": datetime.now(tz=ZoneInfo("America/New_York")).isoformat(),
+    }
+    _ACCURACY4_CACHE["data"] = {"ts": time.time(), "data": payload}
+    return jsonify(payload)
+
+
+@app.route("/api/scrape-4", methods=["POST", "GET"])
+def api_scrape4():
+    """Trigger Pick4 scrape for one or all states."""
+    import scraper4
+
+    state = request.args.get("state", "").upper()
+    if state and state not in scraper4.STATES4:
+        return jsonify({"error": f"Unknown Pick4 state: {state}"}), 400
+
+    def _run():
+        targets = [state] if state else list(scraper4.HOT_PICK4_STATES)
+        for code in targets:
+            draws = scraper4.fetch_state4(code)
+            if draws:
+                scraper4.save_csv4(code, draws)
+
+    t = threading.Thread(target=_run, daemon=True)
+    t.start()
+    return jsonify({"status": "started", "states": [state] if state else list(scraper4.HOT_PICK4_STATES)})
+
+
 @app.route("/track-record")
 def track_record_page(): return send_from_directory("static", "track-record.html")
 
@@ -1001,6 +1244,7 @@ def lottery_predictions_page(): return send_from_directory("static", "lottery-pr
 def pick3_predictions_page(): return send_from_directory("static", "pick3-predictions.html")
 
 @app.route("/pick4-predictions")
+@app.route("/pick4")
 def pick4_predictions_page(): return send_from_directory("static", "pick4-predictions.html")
 
 @app.route("/powerball-analysis")

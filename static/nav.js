@@ -20,8 +20,9 @@ const SERVICES = [
   { href:'/world-map',   icon:'🗺️', key:'worldmap',   badge:'' },
   { href:'/predikta-tv', icon:'📺', key:'predicktatv', badge:'' },
   { href:'/community',   icon:'💬', key:'community',  badge:'' },
-  { href:'/track-record',icon:'📈', key:'trackrecord',badge:'' },
-  { href:'/accuracy',    icon:'🏅', key:'accuracy',   badge:'' },
+  { href:'/track-record',    icon:'📈', key:'trackrecord', badge:'' },
+  { href:'/accuracy',        icon:'🏅', key:'accuracy',    badge:'' },
+  { href:'/pick4-predictions',icon:'4️⃣', key:'pick4',      badge:'NEW' },
 ];
 
 // ── Traductions ───────────────────────────────────────────────────────────
@@ -31,35 +32,35 @@ const NAV_T = {
        tagline:'Loterie & Analyse Prédictive',
        footerCopy:'© 2026 PREDIKTA — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#7888bb">Jeu Responsable</a>.',
        about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté',
+       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté', pick4:'Pick 4 / Cash 4',
        dashboard:'Tableau de Bord', logout:'Se déconnecter', myAccount:'Mon Compte' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Lottery & Predictive Analysis',
        footerCopy:'© 2026 PREDIKTA — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#7888bb">Responsible Gaming</a>.',
        about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community',
+       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community', pick4:'Pick 4 / Cash 4',
        dashboard:'Dashboard', logout:'Sign out', myAccount:'My Account' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Lotería & Análisis Predictivo',
        footerCopy:'© 2026 PREDIKTA — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#7888bb">Juego Responsable</a>.',
        about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad',
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad', pick4:'Pick 4 / Cash 4',
        dashboard:'Panel de Control', logout:'Cerrar sesión', myAccount:'Mi Cuenta' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Loteria & Análise Preditiva',
        footerCopy:'© 2026 PREDIKTA — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#7888bb">Jogo Responsável</a>.',
        about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade',
+       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade', pick4:'Pick 4 / Cash 4',
        dashboard:'Painel', logout:'Sair', myAccount:'Minha Conta' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Lotri & Analiz Biznis',
        footerCopy:'© 2026 PREDIKTA — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#7888bb">Jwe Responsab</a>.',
        about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote',
+       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote', pick4:'Pick 4 / Cash 4',
        dashboard:'Tablo de Bò', logout:'Dekonekte', myAccount:'Kont Mwen' },
 };
 
@@ -808,7 +809,7 @@ function buildNav(){
   // Prédictions / Archives / Parrainage retirés du header (manque de place) —
   // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
   // le menu mobile et le footer (SERVICES complet).
-  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community','trackrecord','accuracy'];
+  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community','trackrecord','accuracy','pick4'];
   const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
@@ -1124,7 +1125,7 @@ function buildFooter(){
     <div class="pf-top">
       <div>
         <div class="pf-col-title">🚀 Services</div>
-        ${SERVICES.filter(s=>!['worldmap','community','trackrecord','accuracy'].includes(s.key)).map(s=>`<a class="pf-link" href="${s.href}">${s.icon} ${(NAV_T[l]||NAV_T.en)[s.key]}</a>`).join('')}
+        ${SERVICES.filter(s=>!['worldmap','community','trackrecord','accuracy','pick4'].includes(s.key)).map(s=>`<a class="pf-link" href="${s.href}">${s.icon} ${(NAV_T[l]||NAV_T.en)[s.key]}</a>`).join('')}
       </div>
       <div>
         <div class="pf-col-title">📋 Informations</div>
@@ -1133,6 +1134,7 @@ function buildFooter(){
         <a class="pf-link" href="/blog">${T.blog}</a>
         <a class="pf-link" href="/track-record">📈 ${T.trackrecord}</a>
         <a class="pf-link" href="/accuracy">🏅 ${T.accuracy}</a>
+        <a class="pf-link" href="/pick4-predictions">4️⃣ ${T.pick4||'Pick 4 / Cash 4'}</a>
         <a class="pf-link" href="/world-map">🗺️ ${T.worldmap}</a>
         <a class="pf-link" href="/community">💬 ${T.community}</a>
         <a class="pf-link" href="/contact">${T.contact}</a>

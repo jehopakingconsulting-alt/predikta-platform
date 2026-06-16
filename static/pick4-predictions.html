@@ -1,194 +1,669 @@
 <!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Prédictions Pick 4 par IA — PREDIKTA</title>
-<meta name="description" content="Analyses Pick 4 (Win 4, Play 4, Daily 4...) par IA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning. Mode Transparence inclus."/>
+<title>Prédictions Pick 4 / Cash 4 par IA — PREDIKTA</title>
+<meta name="description" content="Prédictions Pick 4 (Win 4, Cash 4, Daily 4, Play 4) par IA : fréquence par position, retard, tendances chaud/froid, Markov. Suggestions algorithmiques par état."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/pick4-predictions"/>
-<link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/pick4-predictions"/>
-<meta property="og:title" content="Prédictions Pick 4 par IA — PREDIKTA"/>
-<meta property="og:description" content="Analyses Pick 4 (Win 4, Play 4, Daily 4...) par IA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning. Mode Transparence inclus."/>
-<meta property="og:type" content="website"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/pick4-predictions"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--red:#ff4444;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(79,110,255,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
-.page{max-width:880px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
-.hero{text-align:center;padding:20px 10px 40px}
-.hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:#88aaff;margin-bottom:18px}
-.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
-.hero-sub{font-size:.92rem;color:var(--muted2);max-width:620px;margin:0 auto 24px;line-height:1.7}
-.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.cta-btn-main{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(79,110,255,.35);text-decoration:none;display:inline-block}
-.cta-btn-sec{padding:14px 32px;border-radius:12px;font-size:.88rem;font-weight:700;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block}
+.page{max-width:960px;margin:0 auto;padding:40px 20px 80px;position:relative;z-index:1}
 
-.sections .sec{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:18px}
-.sections .sec h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:#88aaff;margin-bottom:10px}
-.sections .sec p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:8px}
-.sections .sec p:last-child{margin-bottom:0}
-.sections .sec ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:12px}
-.sections .sec li{font-size:.8rem;color:var(--muted2);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
-.sections .sec li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
-.sections .sec a{color:var(--accent);text-decoration:none;font-weight:700}
-.sections .sec a:hover{text-decoration:underline}
+/* Hero */
+.hero{text-align:center;padding:20px 10px 36px}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:#88aaff;margin-bottom:18px}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.3rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px;line-height:1.3}
+.hero-sub{font-size:.9rem;color:var(--muted2);max-width:640px;margin:0 auto 24px;line-height:1.7}
+.hero-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;border:1px solid rgba(79,110,255,.3);color:#88aaff;background:rgba(79,110,255,.08)}
+.badge.gold{border-color:rgba(255,215,0,.3);color:var(--gold);background:rgba(255,215,0,.06)}
 
-.odds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px}
-.odds-card{border:1px solid var(--border);border-radius:12px;background:#04040f;padding:14px;text-align:center}
-.odds-card .lbl{font-size:.7rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.odds-card .val{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;color:var(--gold)}
+/* State selector */
+.selector-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:28px}
+.sel-label{font-size:.8rem;color:var(--muted2);font-weight:600}
+.state-sel{background:var(--card);border:1px solid var(--border);color:var(--text);padding:8px 14px;border-radius:10px;font-size:.85rem;cursor:pointer;outline:none}
+.state-sel:focus{border-color:var(--accent)}
+.tod-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tod-btn{padding:7px 16px;border-radius:8px;font-size:.78rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:.15s}
+.tod-btn.active{background:rgba(79,110,255,.2);border-color:var(--accent);color:#88aaff}
+.refresh-btn{padding:8px 18px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer}
 
-.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:20px;margin-top:10px}
-.bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
-.bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
-.bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+/* Main grid */
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:640px){.main-grid{grid-template-columns:1fr}}
 
-.disclaimer{font-size:.74rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:680px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.card-title{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:900;color:#88aaff;margin-bottom:16px;letter-spacing:.5px}
+.card-full{grid-column:1/-1}
+
+/* Last draw */
+.last-draw-box{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:10px}
+.draw-digit{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,rgba(79,110,255,.2),rgba(136,85,255,.2));border:2px solid rgba(79,110,255,.4);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;color:var(--gold)}
+.draw-meta{font-size:.78rem;color:var(--muted2);text-align:center;margin-top:6px}
+
+/* Suggestions */
+.sugg-list{display:flex;flex-direction:column;gap:8px}
+.sugg-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(79,110,255,.04);border:1px solid rgba(79,110,255,.12);cursor:pointer;transition:.15s}
+.sugg-row:hover{border-color:rgba(79,110,255,.35);background:rgba(79,110,255,.09)}
+.sugg-rank{font-size:.7rem;color:var(--muted);width:18px;font-weight:700;flex-shrink:0}
+.sugg-combo{display:flex;gap:5px}
+.sugg-digit{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;color:var(--text)}
+.sugg-digit.hot{border-color:rgba(255,160,0,.5);color:#ffaa00;background:rgba(255,160,0,.08)}
+.sugg-conf{flex:1;text-align:right;font-size:.7rem;color:var(--muted2)}
+.sugg-score{font-size:.68rem;color:var(--muted);margin-left:4px}
+
+/* Confidence bar */
+.conf-bar-wrap{width:60px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-left:auto}
+.conf-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* Frequency grid */
+.freq-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.freq-cell{padding:8px 6px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);text-align:center}
+.freq-cell .digit{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:700;color:var(--text)}
+.freq-cell .pct{font-size:.65rem;color:var(--muted2);margin-top:2px}
+.freq-cell.hot-cell{border-color:rgba(255,160,0,.4);background:rgba(255,160,0,.06)}
+.freq-cell.cold-cell{border-color:rgba(79,110,255,.3);background:rgba(79,110,255,.05)}
+.hot-label{font-size:.58rem;font-weight:700;color:#ffaa00;margin-top:1px}
+.cold-label{font-size:.58rem;font-weight:700;color:#88aaff;margin-top:1px}
+
+/* Gaps */
+.gap-table{width:100%;border-collapse:collapse;font-size:.78rem}
+.gap-table th{color:var(--muted2);font-weight:600;padding:4px 6px;text-align:left;border-bottom:1px solid var(--border)}
+.gap-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
+.overdue{color:#ffaa00;font-weight:700}
+
+/* Positions */
+.pos-tabs{display:flex;gap:6px;margin-bottom:12px}
+.pos-tab{padding:5px 14px;border-radius:8px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:.15s}
+.pos-tab.active{background:rgba(79,110,255,.18);border-color:var(--accent);color:#88aaff}
+
+/* Backtest */
+.backtest-table{width:100%;border-collapse:collapse;font-size:.75rem}
+.backtest-table th{color:var(--muted2);font-weight:600;padding:4px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.backtest-table td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.04)}
+.hit-s{color:var(--gold);font-weight:700}
+.hit-b{color:var(--green);font-weight:700}
+.miss{color:var(--muted)}
+
+/* Stats summary */
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.stat-chip{padding:8px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);text-align:center;flex:1;min-width:90px}
+.stat-chip .val{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;color:var(--gold)}
+.stat-chip .lbl{font-size:.65rem;color:var(--muted2);margin-top:3px}
+
+/* Loader */
+.loader{display:flex;align-items:center;justify-content:center;gap:8px;padding:40px;color:var(--muted2);font-size:.85rem}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Odds info */
+.odds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.odds-card{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.03);padding:12px;text-align:center}
+.odds-card .lbl{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.odds-card .val{font-family:'Orbitron',monospace;font-weight:900;font-size:1rem;color:var(--gold)}
+
+.disclaimer{font-size:.73rem;color:var(--muted2);line-height:1.7;text-align:center;max-width:700px;margin:24px auto 0;padding:14px 18px;border:1px solid var(--border);border-radius:12px;background:var(--card)}
+.error-msg{color:#ff6666;font-size:.82rem;padding:16px;text-align:center}
+.no-data{color:var(--muted2);font-size:.82rem;padding:16px;text-align:center}
 </style>
 </head>
 <body>
 
 <div class="page">
+
 <div class="hero">
-  <div class="hero-tag" data-i18n="tag">PRÉDICTIONS PICK 4</div>
-  <h1 data-i18n-html="h1">Prédictions Pick 4<br>analysées par IA</h1>
-  <p class="hero-sub" data-i18n="sub">Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyse chaque position du Pick 4 séparément (milliers, centaines, dizaines, unités) avec Markov, Monte Carlo, Machine Learning et analyse de Fourier.</p>
-  <div class="hero-cta">
-    <a class="cta-btn-main" href="/predictions" data-i18n="ctaMain">Voir les prédictions Pick 4 par État</a>
-    <a class="cta-btn-sec" href="/results" data-i18n="ctaSec">Voir les derniers tirages</a>
+  <div class="hero-tag">4️⃣ PICK 4 · CASH 4 · WIN 4 · DAILY 4</div>
+  <h1 id="h1Title">Prédictions Pick 4<br>par Intelligence Artificielle</h1>
+  <p class="hero-sub" id="heroSub">7 algorithmes statistiques adaptés pour les jeux 4 chiffres : fréquence par position, retard (gap), tendances chaud/froid, chaînes de Markov, et scoring composite. Mode Transparence inclus.</p>
+  <div class="hero-badges">
+    <span class="badge">7 Algorithmes</span>
+    <span class="badge">4 Positions</span>
+    <span class="badge">10 000 Combos</span>
+    <span class="badge gold">Mode Transparence</span>
   </div>
 </div>
 
-<div class="sections" id="sections"></div>
+<!-- Selector bar -->
+<div class="selector-bar">
+  <span class="sel-label" id="lblState">État :</span>
+  <select class="state-sel" id="stateSel" onchange="onStateChange()">
+    <option value="NY">🗽 New York — Win 4</option>
+    <option value="FL">🌴 Florida — Pick 4</option>
+    <option value="GA">🍑 Georgia — Cash 4</option>
+    <option value="TX">⭐ Texas — Daily 4</option>
+    <option value="NJ">🏙 New Jersey — Pick 4</option>
+    <option value="PA">🔔 Pennsylvania — Pick 4</option>
+  </select>
+  <div class="tod-tabs" id="todTabs"></div>
+  <button class="refresh-btn" onclick="loadData()" id="refreshBtn">⟳ Actualiser</button>
+</div>
 
-<div class="bottom-cta">
-  <h2 data-i18n="ctaTitle">Prêt à analyser le Pick 4 ?</h2>
-  <p data-i18n="ctaP">Créez un compte gratuit et lancez votre première analyse Pick 4 avec PREDIKTA.</p>
-  <div class="bottom-cta-btns">
-    <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer un compte gratuit</a>
-    <a class="cta-btn-sec" href="/lottery-predictions" data-i18n="ctaBtnAll">Toutes nos prédictions</a>
+<!-- Last draw -->
+<div class="main-grid" id="mainGrid">
+  <div class="card" id="cardLastDraw">
+    <div class="card-title" id="titleLastDraw">DERNIER TIRAGE</div>
+    <div class="loader"><div class="spinner"></div> Chargement...</div>
+  </div>
+
+  <div class="card" id="cardStats">
+    <div class="card-title" id="titleStats">STATISTIQUES</div>
+    <div class="loader"><div class="spinner"></div></div>
+  </div>
+
+  <div class="card card-full" id="cardSugg">
+    <div class="card-title" id="titleSugg">SUGGESTIONS IA — TOP 10</div>
+    <div class="loader"><div class="spinner"></div> Calcul en cours (10 000 combinaisons)...</div>
+  </div>
+
+  <div class="card" id="cardFreq">
+    <div class="card-title" id="titleFreq">FRÉQUENCE PAR POSITION</div>
+    <div class="pos-tabs" id="posTabs"></div>
+    <div id="freqBody"><div class="loader"><div class="spinner"></div></div></div>
+  </div>
+
+  <div class="card" id="cardGap">
+    <div class="card-title" id="titleGap">RETARD (GAP) PAR CHIFFRE</div>
+    <div id="gapBody"><div class="loader"><div class="spinner"></div></div></div>
+  </div>
+
+  <div class="card card-full" id="cardBacktest">
+    <div class="card-title" id="titleBacktest">BACKTEST — 15 DERNIERS TIRAGES</div>
+    <div id="backtestBody"><div class="loader"><div class="spinner"></div></div></div>
+  </div>
+
+  <div class="card card-full">
+    <div class="card-title" id="titleOdds">PROBABILITÉS PICK 4</div>
+    <div class="odds-grid">
+      <div class="odds-card"><div class="lbl" id="oddsLbl1">Exact (Straight)</div><div class="val">1 / 10 000</div></div>
+      <div class="odds-card"><div class="lbl" id="oddsLbl2">Box 24-way (4 chiffres diff.)</div><div class="val">1 / 417</div></div>
+      <div class="odds-card"><div class="lbl" id="oddsLbl3">Box 12-way (2 pairs)</div><div class="val">1 / 833</div></div>
+      <div class="odds-card"><div class="lbl" id="oddsLbl4">Box 6-way (2 paires diff.)</div><div class="val">1 / 1 667</div></div>
+      <div class="odds-card"><div class="lbl" id="oddsLbl5">Box 4-way (triple)</div><div class="val">1 / 2 500</div></div>
+      <div class="odds-card"><div class="lbl" id="oddsLbl6">Quadruple (0000-9999)</div><div class="val">1 / 10 000</div></div>
+    </div>
   </div>
 </div>
 
-<div class="disclaimer" data-i18n="disclaimer">⚠️ Le Pick 4 est un jeu de hasard : la probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href="/responsible-gaming">Jeu Responsable</a>.</div>
-</div>
+<div class="disclaimer" id="disclaimer">⚠️ Le Pick 4 est un jeu de hasard. La probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse statistique. PREDIKTA fournit des outils éducatifs sans garantie de gain. <a href="/responsible-gaming" style="color:var(--accent)">Jeu Responsable</a>.</div>
+
+</div><!-- /page -->
 
 <script>
-const T = {
-fr:{ tag:"PRÉDICTIONS PICK 4", h1:"Prédictions Pick 4<br>analysées par IA",
- sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyse chaque position du Pick 4 séparément (milliers, centaines, dizaines, unités) avec Markov, Monte Carlo, Machine Learning et analyse de Fourier.",
- ctaMain:"Voir les prédictions Pick 4 par État", ctaSec:"Voir les derniers tirages",
- ctaTitle:"Prêt à analyser le Pick 4 ?", ctaP:"Créez un compte gratuit et lancez votre première analyse Pick 4 avec PREDIKTA.",
- ctaBtnRegister:"Créer un compte gratuit", ctaBtnAll:"Toutes nos prédictions",
- disclaimer:"⚠️ Le Pick 4 est un jeu de hasard : la probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href=\"/responsible-gaming\">Jeu Responsable</a>.",
- sections:[
-  ["Le Pick 4 : comment ça marche",
-   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exact (Straight)</div><div class=\"val\">1 / 10 000</div></div><div class=\"odds-card\"><div class=\"lbl\">Groupé (Box, 4 chiffres différents)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinaisons possibles</div><div class=\"val\">0000 – 9999</div></div></div><p>Le Pick 4 consiste à tirer 4 chiffres (0-9) sur 4 positions : milliers, centaines, dizaines et unités. Chaque tirage est indépendant et aléatoire — ces probabilités ne changent jamais, peu importe l'historique.</p>"],
-  ["Notre approche pour le Pick 4",
-   "<p>PREDIKTA analyse chaque position du Pick 4 individuellement : <strong>fréquence historique</strong> de chaque chiffre par position, <strong>retard (gap)</strong> depuis sa dernière sortie, et <strong>tendance récente</strong> (chaud / froid / neutre sur 30 tirages). Ces signaux sont combinés avec les chaînes de <strong>Markov</strong> (quel chiffre suit généralement quel autre), une <strong>simulation Monte Carlo</strong> de 50 000 tirages, des modèles de <strong>Machine Learning</strong> (XGBoost, Random Forest) et une <strong>analyse de Fourier</strong> pour les cycles.</p><p>Le <strong>Mode Transparence</strong> affiche, pour chaque suggestion, le détail position par position et la contribution de chaque modèle au score final.</p>",
-   ["Analyse par position (milliers / centaines / dizaines / unités)","Fréquence historique & retard (gap)","Tendances chaud / froid sur 30 tirages","Markov + Monte Carlo + ML + Fourier","Mode Transparence détaillé"]],
-  ["États avec Pick 4",
-   "<p>Le Pick 4 existe sous différents noms selon l'État : Win 4, Play 4, Daily 4, Pick 4... PREDIKTA couvre la plupart des États proposant ce jeu. Consultez la page <a href=\"/predictions\">Prédictions</a>, choisissez votre État, puis sélectionnez le jeu Pick 4 correspondant pour lancer votre analyse.</p>"]
- ]},
-
-en:{ tag:"PICK 4 PREDICTIONS", h1:"Pick 4 predictions<br>analyzed by AI",
- sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analyzes each Pick 4 position separately (thousands, hundreds, tens, units) using Markov chains, Monte Carlo, Machine Learning and Fourier analysis.",
- ctaMain:"View Pick 4 predictions by state", ctaSec:"View latest draws",
- ctaTitle:"Ready to analyze Pick 4?", ctaP:"Create a free account and run your first Pick 4 analysis with PREDIKTA.",
- ctaBtnRegister:"Create a free account", ctaBtnAll:"All our predictions",
- disclaimer:"⚠️ Pick 4 is a game of chance: the odds of an exact draw remain about 1 in 10,000, regardless of analysis. PREDIKTA provides educational statistical analysis, with no guarantee of winnings. See our <a href=\"/responsible-gaming\">Responsible Gaming</a> page.",
- sections:[
-  ["Pick 4: how it works",
-   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exact (Straight)</div><div class=\"val\">1 / 10,000</div></div><div class=\"odds-card\"><div class=\"lbl\">Box (4 different digits)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Possible combinations</div><div class=\"val\">0000 – 9999</div></div></div><p>Pick 4 draws 4 digits (0-9) across 4 positions: thousands, hundreds, tens and units. Every draw is random and independent — these odds never change, regardless of history.</p>"],
-  ["Our approach to Pick 4",
-   "<p>PREDIKTA analyzes each Pick 4 position individually: <strong>historical frequency</strong> of each digit per position, <strong>overdue status (gap)</strong> since its last appearance, and <strong>recent trend</strong> (hot / cold / neutral over 30 draws). These signals are combined with <strong>Markov chains</strong> (which digit usually follows which), a <strong>50,000-draw Monte Carlo simulation</strong>, <strong>Machine Learning</strong> models (XGBoost, Random Forest) and <strong>Fourier analysis</strong> for cycles.</p><p><strong>Transparency Mode</strong> shows, for each suggestion, a position-by-position breakdown and each model's contribution to the final score.</p>",
-   ["Per-position analysis (thousands / hundreds / tens / units)","Historical frequency & gap analysis","Hot/cold trends over 30 draws","Markov + Monte Carlo + ML + Fourier","Detailed Transparency Mode"]],
-  ["States offering Pick 4",
-   "<p>Pick 4 goes by different names depending on the state: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA covers most states offering this game. Visit the <a href=\"/predictions\">Predictions</a> page, choose your state, then select the matching Pick 4 game to run your analysis.</p>"]
- ]},
-
-es:{ tag:"PREDICCIONES PICK 4", h1:"Predicciones Pick 4<br>analizadas por IA",
- sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analiza cada posición del Pick 4 por separado (millares, centenas, decenas, unidades) usando cadenas de Markov, Monte Carlo, Machine Learning y análisis de Fourier.",
- ctaMain:"Ver predicciones Pick 4 por estado", ctaSec:"Ver últimos sorteos",
- ctaTitle:"¿Listo para analizar el Pick 4?", ctaP:"Crea una cuenta gratuita y ejecuta tu primer análisis Pick 4 con PREDIKTA.",
- ctaBtnRegister:"Crear cuenta gratis", ctaBtnAll:"Todas nuestras predicciones",
- disclaimer:"⚠️ El Pick 4 es un juego de azar: la probabilidad de un sorteo exacto sigue siendo de aproximadamente 1 entre 10.000, sin importar el análisis. PREDIKTA ofrece análisis estadísticos educativos, sin garantía de premio. Ver nuestra página de <a href=\"/responsible-gaming\">Juego Responsable</a>.",
- sections:[
-  ["El Pick 4: cómo funciona",
-   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exacto (Straight)</div><div class=\"val\">1 / 10.000</div></div><div class=\"odds-card\"><div class=\"lbl\">Agrupado (Box, 4 dígitos distintos)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinaciones posibles</div><div class=\"val\">0000 – 9999</div></div></div><p>El Pick 4 consiste en sortear 4 dígitos (0-9) en 4 posiciones: millares, centenas, decenas y unidades. Cada sorteo es independiente y aleatorio: estas probabilidades nunca cambian, sin importar el historial.</p>"],
-  ["Nuestro enfoque para el Pick 4",
-   "<p>PREDIKTA analiza cada posición del Pick 4 individualmente: <strong>frecuencia histórica</strong> de cada dígito por posición, <strong>estado de retraso (gap)</strong> desde su última aparición y <strong>tendencia reciente</strong> (caliente / frío / neutral en los últimos 30 sorteos). Estas señales se combinan con <strong>cadenas de Markov</strong> (qué dígito suele seguir a cuál), una <strong>simulación Monte Carlo</strong> de 50.000 sorteos, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) y <strong>análisis de Fourier</strong> para ciclos.</p><p>El <strong>Modo Transparencia</strong> muestra, para cada sugerencia, el detalle posición por posición y la contribución de cada modelo a la puntuación final.</p>",
-   ["Análisis por posición (millares / centenas / decenas / unidades)","Frecuencia histórica y análisis de retraso","Tendencias caliente/frío en 30 sorteos","Markov + Monte Carlo + ML + Fourier","Modo Transparencia detallado"]],
-  ["Estados con Pick 4",
-   "<p>El Pick 4 recibe distintos nombres según el estado: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA cubre la mayoría de los estados que ofrecen este juego. Visita la página de <a href=\"/predictions\">Predicciones</a>, elige tu estado y luego selecciona el juego Pick 4 correspondiente para ejecutar tu análisis.</p>"]
- ]},
-
-pt:{ tag:"PREVISÕES PICK 4", h1:"Previsões Pick 4<br>analisadas por IA",
- sub:"Win 4, Play 4, Daily 4, Pick 4... A PREDIKTA analisa cada posição do Pick 4 separadamente (milhares, centenas, dezenas, unidades) usando cadeias de Markov, Monte Carlo, Machine Learning e análise de Fourier.",
- ctaMain:"Ver previsões Pick 4 por estado", ctaSec:"Ver últimos sorteios",
- ctaTitle:"Pronto para analisar o Pick 4?", ctaP:"Crie uma conta grátis e faça sua primeira análise Pick 4 com a PREDIKTA.",
- ctaBtnRegister:"Criar conta gratuita", ctaBtnAll:"Todas as nossas previsões",
- disclaimer:"⚠️ O Pick 4 é um jogo de azar: a probabilidade de um sorteio exato continua sendo de aproximadamente 1 em 10.000, independentemente da análise. A PREDIKTA fornece análises estatísticas educativas, sem garantia de prêmio. Veja nossa página de <a href=\"/responsible-gaming\">Jogo Responsável</a>.",
- sections:[
-  ["O Pick 4: como funciona",
-   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Exato (Straight)</div><div class=\"val\">1 / 10.000</div></div><div class=\"odds-card\"><div class=\"lbl\">Agrupado (Box, 4 dígitos diferentes)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Combinações possíveis</div><div class=\"val\">0000 – 9999</div></div></div><p>O Pick 4 consiste em sortear 4 dígitos (0-9) em 4 posições: milhares, centenas, dezenas e unidades. Cada sorteio é independente e aleatório — essas probabilidades nunca mudam, independentemente do histórico.</p>"],
-  ["Nossa abordagem para o Pick 4",
-   "<p>A PREDIKTA analisa cada posição do Pick 4 individualmente: <strong>frequência histórica</strong> de cada dígito por posição, <strong>status de atraso (gap)</strong> desde sua última aparição e <strong>tendência recente</strong> (quente / frio / neutro nos últimos 30 sorteios). Esses sinais são combinados com <strong>cadeias de Markov</strong> (qual dígito geralmente segue qual), uma <strong>simulação Monte Carlo</strong> de 50.000 sorteios, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) e <strong>análise de Fourier</strong> para ciclos.</p><p>O <strong>Modo Transparência</strong> mostra, para cada sugestão, o detalhe posição por posição e a contribuição de cada modelo para a pontuação final.</p>",
-   ["Análise por posição (milhares / centenas / dezenas / unidades)","Frequência histórica e análise de atraso","Tendências quente/frio em 30 sorteios","Markov + Monte Carlo + ML + Fourier","Modo Transparência detalhado"]],
-  ["Estados com Pick 4",
-   "<p>O Pick 4 tem nomes diferentes dependendo do estado: Win 4, Play 4, Daily 4, Pick 4... A PREDIKTA cobre a maioria dos estados que oferecem esse jogo. Visite a página de <a href=\"/predictions\">Previsões</a>, escolha seu estado e selecione o jogo Pick 4 correspondente para executar sua análise.</p>"]
- ]},
-
-ht:{ tag:"PREDIKSYON PICK 4", h1:"Prediksyon Pick 4<br>analize pa AI",
- sub:"Win 4, Play 4, Daily 4, Pick 4... PREDIKTA analize chak pozisyon Pick 4 separeman (mil, santèn, dizèn, inite) ak Markov, Monte Carlo, Machine Learning ak analiz Fourier.",
- ctaMain:"Gade prediksyon Pick 4 pa eta", ctaSec:"Gade dènye tiraj yo",
- ctaTitle:"Pare pou analize Pick 4?", ctaP:"Kreye yon kont gratis epi lanse premye analiz Pick 4 ou ak PREDIKTA.",
- ctaBtnRegister:"Kreye kont gratis", ctaBtnAll:"Tout prediksyon nou yo",
- disclaimer:"⚠️ Pick 4 se yon jwèt aleyatwa: pwobabilite pou yon tiraj egzak rete anviwon 1 sou 10,000, kèlkeswa analiz la. PREDIKTA bay analiz estatistik edikatif, san garanti lo. Gade paj <a href=\"/responsible-gaming\">Jwe Responsab</a> nou an.",
- sections:[
-  ["Pick 4: kijan li fonksyone",
-   "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Egzak (Straight)</div><div class=\"val\">1 / 10,000</div></div><div class=\"odds-card\"><div class=\"lbl\">Gwoupe (Box, 4 chif diferan)</div><div class=\"val\">1 / 417</div></div><div class=\"odds-card\"><div class=\"lbl\">Konbinezon posib</div><div class=\"val\">0000 – 9999</div></div></div><p>Pick 4 se tiraj 4 chif (0-9) sou 4 pozisyon: mil, santèn, dizèn ak inite. Chak tiraj se aleyatwa ak endepandan — pwobabilite sa yo pa janm chanje, kèlkeswa istwa a.</p>"],
-  ["Apwòch nou pou Pick 4",
-   "<p>PREDIKTA analize chak pozisyon Pick 4 endividyèlman: <strong>frekans istorik</strong> chak chif pa pozisyon, <strong>estati reta (gap)</strong> depi dènye fwa li sòti, ak <strong>tandans resan</strong> (cho / frèt / net sou 30 tiraj). Siyal sa yo konbine ak <strong>chenn Markov</strong> (ki chif ki anjeneral vin apre yon lòt), yon <strong>similasyon Monte Carlo</strong> 50,000 tiraj, modèl <strong>Machine Learning</strong> (XGBoost, Random Forest) ak <strong>analiz Fourier</strong> pou sik yo.</p><p><strong>Mòd Transparans</strong> montre, pou chak sijesyon, detay pozisyon pa pozisyon ak kontribisyon chak modèl nan eskò final la.</p>",
-   ["Analiz pa pozisyon (mil / santèn / dizèn / inite)","Frekans istorik ak analiz reta","Tandans cho/frèt sou 30 tiraj","Markov + Monte Carlo + ML + Fourier","Mòd Transparans detaye"]],
-  ["Eta ki gen Pick 4",
-   "<p>Pick 4 gen diferan non selon eta a: Win 4, Play 4, Daily 4, Pick 4... PREDIKTA kouvri pifò eta ki ofri jwèt sa a. Vizite paj <a href=\"/predictions\">Prediksyon</a>, chwazi eta ou, epi seleksyone jwèt Pick 4 ki koresponn pou lanse analiz ou.</p>"]
- ]},
+const STATES4 = {
+  NY:{name:"New York Win 4",   game:"Win 4"},
+  FL:{name:"Florida Pick 4",   game:"Pick 4"},
+  GA:{name:"Georgia Cash 4",   game:"Cash 4"},
+  TX:{name:"Texas Daily 4",    game:"Daily 4"},
+  NJ:{name:"New Jersey Pick 4",game:"Pick 4"},
+  PA:{name:"Pennsylvania Pick 4",game:"Pick 4"},
 };
 
-function renderSections(dict){
-  document.getElementById('sections').innerHTML = dict.sections.map(([h2, html, feats])=>`
-  <div class="sec">
-    <h2>${h2}</h2>
-    ${html}
-    ${feats ? `<ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
-  </div>`).join('');
+const POS_LABELS = {d1:"P1",d2:"P2",d3:"P3",d4:"P4"};
+const POSITIONS = ["d1","d2","d3","d4"];
+
+let CUR_STATE = "NY";
+let CUR_TOD   = null;
+let CUR_POS   = "d1";
+let REPORT    = null;
+let DRAWS     = [];
+
+const T = {
+  fr:{
+    lblState:"État :", titleLastDraw:"DERNIER TIRAGE", titleStats:"STATISTIQUES",
+    titleSugg:"SUGGESTIONS IA — TOP 10", titleFreq:"FRÉQUENCE PAR POSITION",
+    titleGap:"RETARD (GAP)", titleBacktest:"BACKTEST — 15 DERNIERS TIRAGES",
+    titleOdds:"PROBABILITÉS PICK 4", disclaimer:"⚠️ Le Pick 4 est un jeu de hasard. Probabilité exacte ≈ 1/10 000. Aucune garantie de gain.",
+    predicted:"Prédit", actual:"Réel", straight:"Exact", box:"Groupé", digit:"Chiffre",
+    gap:"Retard", avgGap:"Moy.Gap", overdue:"En retard", draws:"tirages",
+    noData:"Aucune donnée disponible — lancez le scraper Pick 4.",
+    loading:"Calcul en cours (10 000 combinaisons)...",
+  },
+  en:{
+    lblState:"State:", titleLastDraw:"LAST DRAW", titleStats:"STATISTICS",
+    titleSugg:"AI SUGGESTIONS — TOP 10", titleFreq:"FREQUENCY BY POSITION",
+    titleGap:"GAP ANALYSIS", titleBacktest:"BACKTEST — LAST 15 DRAWS",
+    titleOdds:"PICK 4 ODDS", disclaimer:"⚠️ Pick 4 is a game of chance. Exact odds ≈ 1/10,000. No guarantee of winnings.",
+    predicted:"Predicted", actual:"Actual", straight:"Straight", box:"Box", digit:"Digit",
+    gap:"Gap", avgGap:"Avg Gap", overdue:"Overdue", draws:"draws",
+    noData:"No data available — run the Pick 4 scraper.",
+    loading:"Computing (10,000 combinations)...",
+  },
+  es:{
+    lblState:"Estado:", titleLastDraw:"ÚLTIMO SORTEO", titleStats:"ESTADÍSTICAS",
+    titleSugg:"SUGERENCIAS IA — TOP 10", titleFreq:"FRECUENCIA POR POSICIÓN",
+    titleGap:"ANÁLISIS DE RETRASO", titleBacktest:"BACKTEST — ÚLTIMOS 15 SORTEOS",
+    titleOdds:"PROBABILIDADES PICK 4", disclaimer:"⚠️ El Pick 4 es un juego de azar. Probabilidad exacta ≈ 1/10.000.",
+    predicted:"Predicho", actual:"Real", straight:"Exacto", box:"Agrupado", digit:"Dígito",
+    gap:"Retraso", avgGap:"Prom.Ret.", overdue:"Atrasado", draws:"sorteos",
+    noData:"Sin datos disponibles.", loading:"Calculando (10.000 combinaciones)...",
+  },
+  pt:{
+    lblState:"Estado:", titleLastDraw:"ÚLTIMO SORTEIO", titleStats:"ESTATÍSTICAS",
+    titleSugg:"SUGESTÕES IA — TOP 10", titleFreq:"FREQUÊNCIA POR POSIÇÃO",
+    titleGap:"ANÁLISE DE ATRASO", titleBacktest:"BACKTEST — ÚLTIMOS 15 SORTEIOS",
+    titleOdds:"PROBABILIDADES PICK 4", disclaimer:"⚠️ O Pick 4 é um jogo de azar. Probabilidade exata ≈ 1/10.000.",
+    predicted:"Previsto", actual:"Real", straight:"Exato", box:"Agrupado", digit:"Dígito",
+    gap:"Atraso", avgGap:"Méd.Atr.", overdue:"Atrasado", draws:"sorteios",
+    noData:"Sem dados disponíveis.", loading:"Calculando (10.000 combinações)...",
+  },
+  ht:{
+    lblState:"Eta:", titleLastDraw:"DÈNYE TIRAJ", titleStats:"ESTATISTIK",
+    titleSugg:"SIJESYON IA — TOP 10", titleFreq:"FREKANS PA POZISYON",
+    titleGap:"ANALIZ RETA", titleBacktest:"BACKTEST — 15 DÈNYE TIRAJ",
+    titleOdds:"PWOBABILITE PICK 4", disclaimer:"⚠️ Pick 4 se yon jwèt chans. Pwobabilite egzak ≈ 1/10 000.",
+    predicted:"Predi", actual:"Reyèl", straight:"Egzak", box:"Gwoup", digit:"Chif",
+    gap:"Reta", avgGap:"Moy.Ret.", overdue:"An reta", draws:"tiraj",
+    noData:"Pa gen done.", loading:"Ap kalkile...",
+  }
+};
+
+function getLang(){
+  const p = document.cookie.match(/predikta_lang=([a-z]+)/);
+  if(p) return p[1];
+  const h = document.documentElement.lang;
+  if(h && T[h]) return h;
+  return (navigator.language||'fr').slice(0,2);
 }
 
-let curLang = 'fr';
-function applyLang(lang){
-  curLang = T[lang] ? lang : 'fr';
-  const dict = T[curLang];
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const key = el.getAttribute('data-i18n');
-    if(dict[key] != null) el.innerHTML = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
-    const key = el.getAttribute('data-i18n-html');
-    if(dict[key] != null) el.innerHTML = dict[key];
-  });
-  renderSections(dict);
-  document.documentElement.setAttribute('lang', curLang);
+function t(key){ const lang = getLang(); return (T[lang]||T.fr)[key] || (T.fr[key] || key); }
+
+function onStateChange(){
+  CUR_STATE = document.getElementById('stateSel').value;
+  CUR_TOD = null;
+  loadData();
 }
-window.setLang = applyLang;
-window.addEventListener('load', ()=>{
-  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
-  applyLang(T[navLang] ? navLang : 'fr');
-});
+
+async function loadData(){
+  document.getElementById('refreshBtn').disabled = true;
+  setLoaders();
+  try {
+    const [repRes, drRes] = await Promise.all([
+      fetch(`/api/report-4/${CUR_STATE}`),
+      fetch(`/api/results-4/${CUR_STATE}?n=120`)
+    ]);
+    REPORT = await repRes.json();
+    const drData = await drRes.json();
+    DRAWS = drData.draws || [];
+
+    if(REPORT.error){
+      showError(REPORT.error);
+      return;
+    }
+
+    // Filter by TOD
+    const allTods = [...new Set(DRAWS.map(d => d.tod))].sort();
+    buildTodTabs(allTods);
+
+    renderAll();
+  } catch(e){
+    showError("Erreur réseau: " + e.message);
+  } finally {
+    document.getElementById('refreshBtn').disabled = false;
+  }
+}
+
+function setLoaders(){
+  const ids = ['cardLastDraw','cardStats','cardSugg','freqBody','gapBody','backtestBody'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const inner = el.id === 'cardLastDraw' || el.id === 'cardStats' || el.id === 'cardSugg'
+      ? el : el;
+    // only clear content containers, not cards
+    if(['freqBody','gapBody','backtestBody'].includes(id)){
+      el.innerHTML = `<div class="loader"><div class="spinner"></div></div>`;
+    }
+  });
+}
+
+function buildTodTabs(tods){
+  const bar = document.getElementById('todTabs');
+  if(!CUR_TOD && tods.length) CUR_TOD = tods[0];
+  bar.innerHTML = tods.map(tod =>
+    `<button class="tod-btn${tod===CUR_TOD?' active':''}" onclick="setTod('${tod}')">${tod}</button>`
+  ).join('');
+}
+
+function setTod(tod){
+  CUR_TOD = tod;
+  document.querySelectorAll('.tod-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent===tod)
+  );
+  renderAll();
+}
+
+function filteredDraws(){
+  if(!CUR_TOD) return DRAWS;
+  return DRAWS.filter(d => d.tod === CUR_TOD);
+}
+
+function renderAll(){
+  const draws = filteredDraws();
+  if(!draws.length){
+    ['cardLastDraw','cardStats','freqBody','gapBody','backtestBody'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.innerHTML = `<div class="no-data">${t('noData')}</div>`;
+    });
+    document.getElementById('cardSugg').innerHTML =
+      `<div class="card-title">${t('titleSugg')}</div><div class="no-data">${t('noData')}</div>`;
+    return;
+  }
+  renderLastDraw(draws[0]);
+  renderStats(draws);
+  renderSuggestions(draws);
+  renderFreq(draws);
+  renderGap(draws);
+  renderBacktest(draws);
+}
+
+function renderLastDraw(d){
+  const el = document.getElementById('cardLastDraw');
+  el.innerHTML = `
+    <div class="card-title">${t('titleLastDraw')}</div>
+    <div class="last-draw-box">
+      <div class="draw-digit">${d.d1}</div>
+      <div class="draw-digit">${d.d2}</div>
+      <div class="draw-digit">${d.d3}</div>
+      <div class="draw-digit">${d.d4}</div>
+    </div>
+    <div class="draw-meta">${d.date} · ${d.tod} · ${STATES4[CUR_STATE]?.game||''}</div>
+  `;
+}
+
+function renderStats(draws){
+  const el = document.getElementById('cardStats');
+  const n = draws.length;
+  // Count all digits
+  const counts = {};
+  for(let i=0;i<10;i++) counts[i]=0;
+  draws.forEach(d => POSITIONS.forEach(p => counts[+d[p]]++));
+  const total = n * 4;
+  const hot = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+  const cold = Object.entries(counts).sort((a,b)=>a[1]-b[1]).slice(0,3).map(e=>e[0]);
+  el.innerHTML = `
+    <div class="card-title">${t('titleStats')}</div>
+    <div class="stats-row">
+      <div class="stat-chip"><div class="val">${n}</div><div class="lbl">${t('draws')}</div></div>
+      <div class="stat-chip"><div class="val" style="color:#ffaa00">${hot.join(' · ')}</div><div class="lbl">🔥 HOT</div></div>
+      <div class="stat-chip"><div class="val" style="color:#88aaff">${cold.join(' · ')}</div><div class="lbl">❄️ COLD</div></div>
+    </div>
+  `;
+}
+
+function computeSuggestions(draws, topN=10){
+  if(!draws || draws.length < 10) return [];
+
+  // Build per-position frequency
+  const freq = {};
+  POSITIONS.forEach(pos => {
+    const cnt = {};
+    for(let i=0;i<10;i++) cnt[i]=0;
+    draws.forEach(d => cnt[+d[pos]]++);
+    const total = draws.length || 1;
+    freq[pos] = {};
+    for(let i=0;i<10;i++) freq[pos][i] = cnt[i]/total*100;
+  });
+
+  // Build gap analysis
+  const lastSeen = {};
+  const gapSums = {};
+  const gapCnts = {};
+  for(let i=0;i<10;i++){ gapSums[i]=0; gapCnts[i]=0; }
+
+  for(let i=draws.length-1;i>=0;i--){
+    const d = draws[i];
+    const idx = draws.length-1-i;
+    POSITIONS.forEach(pos => {
+      const dg = +d[pos];
+      if(lastSeen[dg]===undefined){
+        lastSeen[dg]=idx;
+      } else {
+        const gap = idx-lastSeen[dg];
+        gapSums[dg]+=gap; gapCnts[dg]++;
+        lastSeen[dg]=idx;
+      }
+    });
+  }
+  const gaps = {};
+  for(let i=0;i<10;i++){
+    const avg = gapCnts[i] ? gapSums[i]/gapCnts[i] : null;
+    const cur = draws.length-1-(lastSeen[i]??draws.length-1);
+    gaps[i]={avg, cur, overdue: avg && cur>avg};
+  }
+
+  // Markov per position
+  const markov = {};
+  POSITIONS.forEach(pos => {
+    const mat = {};
+    let prev = null;
+    for(let i=draws.length-1;i>=0;i--){
+      const cur = +draws[i][pos];
+      if(prev!==null){
+        if(!mat[prev]) mat[prev]={};
+        mat[prev][cur]=(mat[prev][cur]||0)+1;
+      }
+      prev=cur;
+    }
+    markov[pos]={};
+    Object.entries(mat).forEach(([from,tos])=>{
+      const tot=Object.values(tos).reduce((a,b)=>a+b,0);
+      markov[pos][from]={};
+      Object.entries(tos).forEach(([to,c])=>markov[pos][from][to]=c/tot*100);
+    });
+  });
+
+  const lastDraw = draws[0];
+  const scores = {};
+
+  for(let d1=0;d1<10;d1++)
+  for(let d2=0;d2<10;d2++)
+  for(let d3=0;d3<10;d3++)
+  for(let d4=0;d4<10;d4++){
+    let score=0;
+    const combo=[d1,d2,d3,d4];
+    POSITIONS.forEach((pos,pi)=>{
+      const dg=combo[pi];
+      score+=freq[pos][dg]/10;
+      const g=gaps[dg];
+      if(g.avg && g.cur>g.avg) score+=Math.min(g.cur/g.avg,3.0);
+      const lastDg=+lastDraw[pos];
+      const mk=markov[pos][lastDg]||{};
+      score+=(mk[dg]||0)/100*5;
+    });
+    scores[`${d1}${d2}${d3}${d4}`]=score;
+  }
+
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]).slice(0,topN);
+  const maxScore=sorted[0][1];
+  return sorted.map(([k,s])=>{
+    const ratio=s/maxScore;
+    const conf=ratio>=.95?"Tendance très forte":ratio>=.85?"Tendance forte":ratio>=.70?"Tendance moyenne":"Tendance faible";
+    return {combo:`${k[0]}-${k[1]}-${k[2]}-${k[3]}`,digits:[k[0],k[1],k[2],k[3]],score:s,confidence:conf};
+  });
+}
+
+function computeHot(draws){
+  const cnt={};for(let i=0;i<10;i++)cnt[i]=0;
+  const recent=draws.slice(0,30);
+  recent.forEach(d=>POSITIONS.forEach(p=>cnt[+d[p]]++));
+  const total=Object.values(cnt).reduce((a,b)=>a+b,1);
+  const avg=total/10;
+  const hot=new Set(),cold=new Set();
+  Object.entries(cnt).forEach(([dg,c])=>{
+    if(c>avg*1.2)hot.add(dg);
+    else if(c<avg*0.8)cold.add(dg);
+  });
+  return{hot,cold};
+}
+
+function renderSuggestions(draws){
+  const el = document.getElementById('cardSugg');
+  el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="loader"><div class="spinner"></div> ${t('loading')}</div>`;
+
+  // Async so spinner shows
+  setTimeout(()=>{
+    const suggs = computeSuggestions(draws, 10);
+    const {hot,cold} = computeHot(draws);
+    const maxScore = suggs[0]?.score||1;
+
+    if(!suggs.length){
+      el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="no-data">${t('noData')}</div>`;
+      return;
+    }
+
+    const rows = suggs.map((s,i)=>{
+      const barW = Math.round(s.score/maxScore*100);
+      const digits = s.digits.map(d=>{
+        const cls = hot.has(d)?'sugg-digit hot':cold.has(d)?'sugg-digit cold':'sugg-digit';
+        return `<div class="${cls}">${d}</div>`;
+      }).join('');
+      return `
+        <div class="sugg-row">
+          <div class="sugg-rank">#${i+1}</div>
+          <div class="sugg-combo">${digits}</div>
+          <div style="flex:1;margin-left:8px">
+            <div style="font-size:.72rem;color:var(--muted2);margin-bottom:3px">${s.confidence}</div>
+            <div class="conf-bar-wrap"><div class="conf-bar" style="width:${barW}%"></div></div>
+          </div>
+          <div class="sugg-score">${s.score.toFixed(2)}</div>
+        </div>`;
+    }).join('');
+
+    el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="sugg-list">${rows}</div>`;
+  }, 20);
+}
+
+function renderFreq(draws){
+  // Build pos tabs
+  const tabsEl = document.getElementById('posTabs');
+  tabsEl.innerHTML = POSITIONS.map(p=>
+    `<button class="pos-tab${p===CUR_POS?' active':''}" onclick="setPosTab('${p}')">${POS_LABELS[p]}</button>`
+  ).join('');
+  renderFreqForPos(draws, CUR_POS);
+}
+
+function setPosTab(pos){
+  CUR_POS = pos;
+  document.querySelectorAll('.pos-tab').forEach(b=>b.classList.toggle('active',b.textContent===POS_LABELS[pos]));
+  renderFreqForPos(filteredDraws(), pos);
+}
+
+function renderFreqForPos(draws, pos){
+  const cnt={};for(let i=0;i<10;i++)cnt[i]=0;
+  draws.forEach(d=>cnt[+d[pos]]++);
+  const total=draws.length||1;
+  const avg=total/10;
+  const {hot,cold}=computeHot(draws);
+
+  const cells=Object.entries(cnt).map(([dg,c])=>{
+    const pct=(c/total*100).toFixed(1);
+    const isHot=hot.has(dg), isCold=cold.has(dg);
+    const cls=isHot?'freq-cell hot-cell':isCold?'freq-cell cold-cell':'freq-cell';
+    const lbl=isHot?'<div class="hot-label">🔥 HOT</div>':isCold?'<div class="cold-label">❄️ COLD</div>':'';
+    return `<div class="${cls}"><div class="digit">${dg}</div><div class="pct">${pct}%</div>${lbl}</div>`;
+  }).join('');
+
+  document.getElementById('freqBody').innerHTML = `
+    <div style="font-size:.72rem;color:var(--muted2);margin-bottom:8px">${POS_LABELS[pos]} sur ${total} tirages</div>
+    <div class="freq-grid">${cells}</div>
+  `;
+  document.getElementById('cardFreq').querySelector('.card-title').textContent = t('titleFreq');
+}
+
+function renderGap(draws){
+  const lastSeen={};
+  const gapSums={};const gapCnts={};
+  for(let i=0;i<10;i++){gapSums[i]=0;gapCnts[i]=0;}
+  for(let i=draws.length-1;i>=0;i--){
+    const d=draws[i];const idx=draws.length-1-i;
+    POSITIONS.forEach(pos=>{
+      const dg=+d[pos];
+      if(lastSeen[dg]===undefined) lastSeen[dg]=idx;
+      else{const g=idx-lastSeen[dg];gapSums[dg]+=g;gapCnts[dg]++;lastSeen[dg]=idx;}
+    });
+  }
+  const rows=[];
+  for(let i=0;i<10;i++){
+    const avg=gapCnts[i]?Math.round(gapSums[i]/gapCnts[i]*10)/10:null;
+    const cur=draws.length-1-(lastSeen[i]??draws.length-1);
+    const od=avg&&cur>avg;
+    rows.push(`<tr>
+      <td><b>${i}</b></td>
+      <td class="${od?'overdue':''}">${cur}</td>
+      <td>${avg??'-'}</td>
+      <td>${od?`<span class="overdue">⚠️</span>`:''}</td>
+    </tr>`);
+  }
+  document.getElementById('gapBody').innerHTML=`
+    <table class="gap-table">
+      <tr><th>${t('digit')}</th><th>${t('gap')}</th><th>${t('avgGap')}</th><th>${t('overdue')}</th></tr>
+      ${rows.join('')}
+    </table>`;
+  document.getElementById('cardGap').querySelector('.card-title').textContent=t('titleGap');
+}
+
+function renderBacktest(draws){
+  if(draws.length < 70){
+    document.getElementById('backtestBody').innerHTML=`<div class="no-data">Historique insuffisant (minimum 70 tirages requis).</div>`;
+    return;
+  }
+  // Quick backtest: 15 draws, use simple scoring (fast)
+  const results=[];
+  for(let i=0;i<Math.min(15,draws.length);i++){
+    const history=draws.slice(i+1);
+    if(history.length<60) break;
+    const suggs=computeSuggestions(history,1);
+    if(!suggs.length) continue;
+    const top=suggs[0];
+    const actual=draws[i];
+    const actualDigits=[actual.d1,actual.d2,actual.d3,actual.d4];
+    const hitS=JSON.stringify(top.digits)===JSON.stringify(actualDigits);
+    const hitB=[...top.digits].sort().join('')===[...actualDigits].sort().join('');
+    results.push({date:actual.date,tod:actual.tod,
+      predicted:top.combo,actual:`${actual.d1}${actual.d2}${actual.d3}${actual.d4}`,
+      hitS,hitB});
+  }
+  const straight=results.filter(r=>r.hitS).length;
+  const box=results.filter(r=>r.hitB).length;
+  const rows=results.map(r=>`<tr>
+    <td>${r.date}</td><td>${r.tod}</td>
+    <td style="font-family:'Orbitron',monospace;font-size:.8rem">${r.predicted}</td>
+    <td style="font-family:'Orbitron',monospace;font-size:.8rem">${r.actual}</td>
+    <td>${r.hitS?'<span class="hit-s">✓ Exact</span>':r.hitB?'<span class="hit-b">✓ Box</span>':'<span class="miss">—</span>'}</td>
+  </tr>`).join('');
+
+  document.getElementById('backtestBody').innerHTML=`
+    <div class="stats-row" style="margin-bottom:12px">
+      <div class="stat-chip"><div class="val">${results.length}</div><div class="lbl">${t('draws')}</div></div>
+      <div class="stat-chip"><div class="val" style="color:var(--gold)">${straight}</div><div class="lbl">${t('straight')}</div></div>
+      <div class="stat-chip"><div class="val" style="color:var(--green)">${box}</div><div class="lbl">${t('box')}</div></div>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="backtest-table">
+      <tr><th>Date</th><th>TOD</th><th>${t('predicted')}</th><th>${t('actual')}</th><th>Résultat</th></tr>
+      ${rows}
+    </table></div>`;
+  document.getElementById('cardBacktest').querySelector('.card-title').textContent=t('titleBacktest');
+}
+
+function showError(msg){
+  ['cardLastDraw','cardStats','cardSugg'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=`<div class="error-msg">${msg}</div>`;
+  });
+  ['freqBody','gapBody','backtestBody'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=`<div class="error-msg">${msg}</div>`;
+  });
+}
+
+// Init
+loadData();
 </script>
-</body></html>
+</body>
+</html>

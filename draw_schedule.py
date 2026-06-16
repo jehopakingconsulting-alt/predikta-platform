@@ -59,6 +59,31 @@ DRAW_SCHEDULE = {
 
 }
 
+DRAW_SCHEDULE_4 = {
+    "CA": [{"tod":"Midday","time":"1:00 PM PT"},   {"tod":"Evening","time":"6:30 PM PT"}],
+    "CT": [{"tod":"Midday","time":"1:57 PM ET"},   {"tod":"Night","time":"10:29 PM ET"}],
+    "DC": [{"tod":"Midday","time":"1:50 PM ET"},   {"tod":"Evening","time":"7:50 PM ET"}],
+    "DE": [{"tod":"Midday","time":"1:58 PM ET"},   {"tod":"Night","time":"7:57 PM ET"}],
+    "FL": [{"tod":"Midday","time":"1:30 PM ET"},   {"tod":"Evening","time":"9:45 PM ET"}],
+    "GA": [{"tod":"Midday","time":"12:29 PM ET"},  {"tod":"Evening","time":"6:59 PM ET"}, {"tod":"Night","time":"11:34 PM ET"}],
+    "IL": [{"tod":"Midday","time":"12:40 PM CT"},  {"tod":"Evening","time":"9:22 PM CT"}],
+    "IN": [{"tod":"Midday","time":"1:20 PM ET"},   {"tod":"Evening","time":"11:00 PM ET"}],
+    "KY": [{"tod":"Midday","time":"1:20 PM ET"},   {"tod":"Evening","time":"11:00 PM ET"}],
+    "MD": [{"tod":"Midday","time":"12:27 PM ET"},  {"tod":"Evening","time":"7:56 PM ET"}],
+    "MI": [{"tod":"Midday","time":"12:59 PM ET"},  {"tod":"Evening","time":"7:29 PM ET"}],
+    "MO": [{"tod":"Midday","time":"12:45 PM CT"},  {"tod":"Evening","time":"8:59 PM CT"}],
+    "NC": [{"tod":"Midday","time":"3:00 PM ET"},   {"tod":"Evening","time":"11:22 PM ET"}],
+    "NJ": [{"tod":"Midday","time":"12:59 PM ET"},  {"tod":"Evening","time":"10:57 PM ET"}],
+    "NY": [{"tod":"Midday","time":"2:30 PM ET"},   {"tod":"Evening","time":"10:30 PM ET"}],
+    "OH": [{"tod":"Midday","time":"12:29 PM ET"},  {"tod":"Evening","time":"7:29 PM ET"}],
+    "PA": [{"tod":"Midday","time":"1:35 PM ET"},   {"tod":"Evening","time":"6:59 PM ET"}],
+    "SC": [{"tod":"Midday","time":"12:59 PM ET"},  {"tod":"Evening","time":"6:59 PM ET"}],
+    "TN": [{"tod":"Midday","time":"12:28 PM CT"},  {"tod":"Evening","time":"6:28 PM CT"}],
+    "TX": [{"tod":"Morning","time":"10:00 AM CT"}, {"tod":"Midday","time":"12:27 PM CT"}, {"tod":"Evening","time":"6:00 PM CT"}, {"tod":"Night","time":"10:12 PM CT"}],
+    "VA": [{"tod":"Midday","time":"1:59 PM ET"},   {"tod":"Night","time":"11:00 PM ET"}],
+    "WI": [{"tod":"Midday","time":"1:30 PM CT"},   {"tod":"Evening","time":"9:00 PM CT"}],
+}
+
 _TZ_ABBREV = {
     "ET": "America/New_York",
     "CT": "America/Chicago",
