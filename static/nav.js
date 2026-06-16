@@ -65,9 +65,14 @@ const NAV_T = {
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
 window.PREDIKTA_AFFILIATE = {
-  thelotter:  'https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  lotterypro: 'https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  jackpot:    'https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  thelotter:   'https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  lotterypro:  'https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  jackpot:     'https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  lottoagent:  'https://www.lottoagent.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  lottoland:   'https://www.lottoland.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  wintrilions: 'https://www.wintrillions.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  multilotto:  'https://www.multilotto.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  lotto:       'https://www.lotto.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
 };
 
 // ── Archive (historique des analyses & recherches) ─────────────────────────
@@ -1135,7 +1140,12 @@ function buildFooter(){
         <div class="pf-col-title">💼 ${T.affil}</div>
         <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.thelotter}" target="_blank" rel="noopener">🎰 TheLotter</a><br>
         <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.lotterypro}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#22cc88,#4499ff)">📊 LotteryPro</a><br>
-        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.jackpot}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#ff9900,#ff6600)">🏆 Jackpot.com</a>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.jackpot}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#ff9900,#ff6600)">🏆 Jackpot.com</a><br>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.lottoagent}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#ffcc00,#ff9900)">🌍 LottoAgent</a><br>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.lottoland}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#e63946,#c1121f)">🗺️ LottoLand</a><br>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.wintrilions}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#00b4d8,#0077b6)">💎 WinTrillions</a><br>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.multilotto}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#2dc653,#1a7431)">🎯 Multilotto</a><br>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.lotto}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#7b2d8b,#4f1a6e)">⭐ Lotto.com</a>
       </div>
       <div>
         <div class="pf-col-title">🌐 ${T.lang}</div>
