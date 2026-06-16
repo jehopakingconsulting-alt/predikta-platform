@@ -1124,13 +1124,17 @@ function buildFooter(){
     <div class="pf-top">
       <div>
         <div class="pf-col-title">🚀 Services</div>
-        ${SERVICES.map(s=>`<a class="pf-link" href="${s.href}">${s.icon} ${(NAV_T[l]||NAV_T.en)[s.key]}</a>`).join('')}
+        ${SERVICES.filter(s=>!['worldmap','community','trackrecord','accuracy'].includes(s.key)).map(s=>`<a class="pf-link" href="${s.href}">${s.icon} ${(NAV_T[l]||NAV_T.en)[s.key]}</a>`).join('')}
       </div>
       <div>
         <div class="pf-col-title">📋 Informations</div>
         <a class="pf-link" href="/about">${T.about}</a>
         <a class="pf-link" href="/faq">${T.faq}</a>
         <a class="pf-link" href="/blog">${T.blog}</a>
+        <a class="pf-link" href="/track-record">📈 ${T.trackrecord}</a>
+        <a class="pf-link" href="/accuracy">🏅 ${T.accuracy}</a>
+        <a class="pf-link" href="/world-map">🗺️ ${T.worldmap}</a>
+        <a class="pf-link" href="/community">💬 ${T.community}</a>
         <a class="pf-link" href="/contact">${T.contact}</a>
         <a class="pf-link" href="/privacy">${T.privacy}</a>
         <a class="pf-link" href="/terms">${T.terms}</a>
