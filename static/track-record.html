@@ -58,6 +58,23 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
 .cta-box{margin-top:40px;text-align:center;padding:32px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:16px}
 .cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:16px}
 .cta-btn{padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#8855ff);color:#fff;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+
+/* ── Filter bar ── */
+.filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;margin-bottom:22px}
+.filter-label{font-size:.63rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap}
+.filter-select{background:#07071e;border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-size:.75rem;padding:6px 10px;cursor:pointer;outline:none;
+  font-family:'Inter',sans-serif;min-width:140px}
+.filter-select:focus{border-color:var(--accent)}
+.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.filter-btn{padding:6px 14px;border-radius:8px;font-size:.73rem;font-weight:700;
+  border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;
+  transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap}
+.filter-btn:hover{border-color:var(--accent);color:var(--text)}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.filter-spinner{font-size:.7rem;color:var(--muted2);margin-left:4px;display:none}
 </style>
 </head>
 <body>
@@ -76,6 +93,19 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
       </ul>
       Ces statistiques mesurent objectivement la performance de l'algorithme face au hasard pur — elles ne garantissent aucun résultat futur. Chaque tirage de loterie reste un événement aléatoire et indépendant.</div>
     <div class="updated" id="updatedLine"></div>
+  </div>
+
+  <!-- Barre de filtres -->
+  <div class="filter-bar">
+    <span class="filter-label" id="flbl-state">État</span>
+    <select class="filter-select" id="filterState" onchange="setStateFilter(this.value)">
+      <option value="all" id="fopt-all">Tous les états</option>
+    </select>
+    <div class="filter-sep"></div>
+    <span class="filter-label" id="flbl-period">Période</span>
+    <button class="filter-btn active" id="fbtn-15" onclick="setPeriod(15)">15 tirages</button>
+    <button class="filter-btn" id="fbtn-30" onclick="setPeriod(30)">30 tirages</button>
+    <span class="filter-spinner" id="filterSpinner">⏳</span>
   </div>
 
   <div id="grandStats" class="grand-stats"></div>
@@ -191,12 +221,29 @@ const T = {
 };
 
 let CUR_LANG = 'fr';
+let CUR_STATE = 'all';
+let CUR_N = 15;
 
 function curT(){ return T[CUR_LANG] || T.fr; }
+
+// i18n for filter labels (embedded in T)
+const FILTER_T = {
+  fr:{ stateAll:'Tous les états', flblState:'État', flblPeriod:'Période',
+       fdraws: n=>`${n} tirages` },
+  en:{ stateAll:'All states',     flblState:'State', flblPeriod:'Period',
+       fdraws: n=>`${n} draws` },
+  es:{ stateAll:'Todos los estados', flblState:'Estado', flblPeriod:'Período',
+       fdraws: n=>`${n} sorteos` },
+  pt:{ stateAll:'Todos os estados',  flblState:'Estado', flblPeriod:'Período',
+       fdraws: n=>`${n} sorteios` },
+  ht:{ stateAll:'Tout eta yo',    flblState:'Eta', flblPeriod:'Peryòd',
+       fdraws: n=>`${n} tiraj` },
+};
 
 function applyLang(lang){
   CUR_LANG = T[lang] ? lang : 'fr';
   const dict = curT();
+  const ft = FILTER_T[CUR_LANG] || FILTER_T.fr;
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n');
     if(dict[key] != null){
@@ -206,6 +253,19 @@ function applyLang(lang){
   });
   document.documentElement.setAttribute('lang', lang);
   document.title = dict.title + " — PREDIKTA";
+
+  // Update filter labels
+  const flblS = document.getElementById('flbl-state');
+  const flblP = document.getElementById('flbl-period');
+  if(flblS) flblS.textContent = ft.flblState;
+  if(flblP) flblP.textContent = ft.flblPeriod;
+  const optAll = document.getElementById('fopt-all');
+  if(optAll) optAll.textContent = ft.stateAll;
+  [15,30].forEach(n=>{
+    const btn = document.getElementById(`fbtn-${n}`);
+    if(btn) btn.textContent = ft.fdraws(n);
+  });
+
   renderData();
 }
 window.setLang = applyLang;
@@ -218,30 +278,68 @@ function fmtAgo(iso){
   return curT().updatedAgo(mins);
 }
 
+function populateStateFilter(){
+  if(!TRACK_DATA) return;
+  const ft = FILTER_T[CUR_LANG] || FILTER_T.fr;
+  const sel = document.getElementById('filterState');
+  // Keep first option (All), rebuild the rest
+  while(sel.options.length > 1) sel.remove(1);
+  TRACK_DATA.states.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.state;
+    opt.textContent = `${s.name} (${s.state})`;
+    sel.appendChild(opt);
+  });
+  sel.value = CUR_STATE;
+}
+
+function setStateFilter(val){
+  CUR_STATE = val;
+  renderData();
+}
+
+function setPeriod(n){
+  if(n === CUR_N) return;
+  CUR_N = n;
+  [15,30].forEach(v=>{
+    const btn = document.getElementById(`fbtn-${v}`);
+    if(btn) btn.classList.toggle('active', v===n);
+  });
+  const spinner = document.getElementById('filterSpinner');
+  if(spinner) spinner.style.display='inline';
+  fetchTrackRecord(n).finally(()=>{ if(spinner) spinner.style.display='none'; });
+}
+
 function renderData(){
   if(!TRACK_DATA) return;
   const t = curT();
   const tod = TOD_T[CUR_LANG] || TOD_T.fr;
-  const conf = CONF_T[CUR_LANG] || CONF_T.fr;
 
   document.getElementById('updatedLine').textContent = fmtAgo(TRACK_DATA.updated_at);
 
-  const gt = TRACK_DATA.grand_totals;
-  const straightRate = gt.n ? (gt.straight_hits / gt.n * 100).toFixed(2) : '0.00';
-  const boxRate = gt.n ? (gt.box_hits / gt.n * 100).toFixed(2) : '0.00';
+  // Apply state filter
+  const states = CUR_STATE === 'all'
+    ? TRACK_DATA.states
+    : TRACK_DATA.states.filter(s => s.state === CUR_STATE);
+
+  // Recompute grand totals from visible states
+  let gn = 0, gs = 0, gb = 0;
+  states.forEach(s=>{ gn += s.totals.n; gs += s.totals.straight_hits; gb += s.totals.box_hits; });
+  const straightRate = gn ? (gs/gn*100).toFixed(2) : '0.00';
+  const boxRate      = gn ? (gb/gn*100).toFixed(2) : '0.00';
   document.getElementById('grandStats').innerHTML = `
-    <div class="gstat"><div class="num">${gt.n}</div><div class="lbl">${t.drawsAnalyzed}</div></div>
-    <div class="gstat"><div class="num">${gt.straight_hits} (${straightRate}%)</div><div class="lbl">${t.exactHits}</div></div>
-    <div class="gstat"><div class="num">${gt.box_hits} (${boxRate}%)</div><div class="lbl">${t.boxHits}</div></div>
+    <div class="gstat"><div class="num">${gn}</div><div class="lbl">${t.drawsAnalyzed}</div></div>
+    <div class="gstat"><div class="num">${gs} (${straightRate}%)</div><div class="lbl">${t.exactHits}</div></div>
+    <div class="gstat"><div class="num">${gb} (${boxRate}%)</div><div class="lbl">${t.boxHits}</div></div>
   `;
 
   const list = document.getElementById('statesList');
-  if(!TRACK_DATA.states.length){
+  if(!states.length){
     list.innerHTML = `<div class="loading">${t.noData}</div>`;
     return;
   }
 
-  list.innerHTML = TRACK_DATA.states.map((s, idx)=>{
+  list.innerHTML = states.map((s, idx)=>{
     const tot = s.totals;
     const sRate = tot.n ? (tot.straight_hits/tot.n*100).toFixed(1) : '0.0';
     const bRate = tot.n ? (tot.box_hits/tot.n*100).toFixed(1) : '0.0';
@@ -267,7 +365,9 @@ function renderData(){
       </div>`;
     }).join('');
 
-    return `<div class="state-card${idx===0?' open':''}">
+    // Auto-expand when a specific state is selected
+    const autoOpen = idx === 0 || CUR_STATE !== 'all';
+    return `<div class="state-card${autoOpen?' open':''}">
       <div class="state-head" onclick="toggleState(this)">
         <span>${s.name} (${s.state})</span>
         <span class="badge">${tot.straight_hits}/${tot.n} ${t.exact} (${sRate}%) · ${tot.box_hits}/${tot.n} ${t.box} (${bRate}%)</span>
@@ -278,14 +378,24 @@ function renderData(){
   }).join('');
 }
 
+function fetchTrackRecord(n){
+  return fetch(`/api/track-record?n=${n}`)
+    .then(r=>r.json())
+    .then(data=>{
+      TRACK_DATA = data;
+      populateStateFilter();
+      renderData();
+    })
+    .catch(()=>{
+      document.getElementById('statesList').innerHTML =
+        `<div class="loading">${curT().noData}</div>`;
+    });
+}
+
 window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
-  fetch('/api/track-record?n=15').then(r=>r.json()).then(data=>{
-    TRACK_DATA = data;
-    applyLang(T[navLang] ? navLang : 'fr');
-  }).catch(()=>{
-    document.getElementById('statesList').innerHTML = `<div class="loading">${curT().noData}</div>`;
-  });
+  CUR_LANG = T[navLang] ? navLang : 'fr';
+  fetchTrackRecord(CUR_N).then(()=>{ applyLang(CUR_LANG); });
 });
 </script>
 </body></html>
