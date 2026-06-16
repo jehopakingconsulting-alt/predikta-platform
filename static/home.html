@@ -154,6 +154,37 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .sc-results::before{background:linear-gradient(90deg,#22e87a,#4f6eff)}
 .sc-allresults::before{background:linear-gradient(90deg,#ffd700,#ff9900)}
 .sc-bizai::before{background:linear-gradient(90deg,#8855ff,#4f6eff)}
+.sc-new-badge{position:absolute;top:12px;right:12px;padding:3px 10px;border-radius:10px;
+  font-size:.6rem;font-weight:800;letter-spacing:1px;
+  background:linear-gradient(135deg,rgba(136,85,255,.3),rgba(79,110,255,.3));
+  border:1px solid rgba(136,85,255,.5);color:#bb88ff}
+
+/* ── BizAI promo banner ── */
+.bizai-promo{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  margin-bottom:32px;padding:22px 28px;border-radius:16px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(136,85,255,.1),rgba(79,110,255,.08),rgba(255,215,0,.04));
+  border:1px solid rgba(136,85,255,.3);transition:all .2s;position:relative;overflow:hidden}
+.bizai-promo::before{content:'';position:absolute;inset:0;
+  background:conic-gradient(from 0deg at 80% 50%,transparent 0deg,rgba(136,85,255,.04) 60deg,transparent 120deg);
+  pointer-events:none}
+.bizai-promo:hover{border-color:rgba(136,85,255,.6);transform:translateY(-1px);
+  box-shadow:0 8px 32px rgba(136,85,255,.12)}
+.bizai-promo-left{flex:1;min-width:200px;position:relative;z-index:1}
+.bizai-promo-tag{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.62rem;font-weight:800;
+  letter-spacing:1.5px;background:rgba(136,85,255,.2);border:1px solid rgba(136,85,255,.4);
+  color:#bb88ff;margin-bottom:10px}
+.bizai-promo-title{font-family:'Orbitron',monospace;font-size:clamp(.9rem,2.5vw,1.1rem);font-weight:900;
+  color:var(--text);margin-bottom:6px}
+.bizai-promo-sub{font-size:.73rem;color:var(--muted2);line-height:1.6}
+.bizai-promo-right{display:flex;align-items:center;gap:20px;flex-shrink:0;position:relative;z-index:1}
+.bizai-promo-stats{display:flex;gap:18px}
+.bps{text-align:center}
+.bps-n{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;
+  background:linear-gradient(135deg,#bb88ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bps-l{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.bizai-promo-cta{padding:11px 22px;border-radius:10px;font-size:.82rem;font-weight:700;
+  background:linear-gradient(135deg,#8855ff,#4f6eff);color:#fff;white-space:nowrap}
+@media(max-width:600px){.bizai-promo-right{width:100%;justify-content:space-between}}
 
 .sc-icon{font-size:2.8rem;margin-bottom:14px;display:block}
 .sc-title{
@@ -552,6 +583,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </a>
 
     <a href="/bizai" class="service-card sc-bizai">
+      <span class="sc-new-badge" data-i18n="bizBadge">🤖 IA</span>
       <span class="sc-icon">🚀</span>
       <div class="sc-title" data-i18n="c4Title">Business Intelligence · Analyse Projet</div>
       <p class="sc-desc" data-i18n="c4Desc">Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.</p>
@@ -589,6 +621,23 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         </div>
         <div class="sc-cta" style="align-self:center" data-i18n="freeTrial">Essai gratuit →</div>
       </div>
+    </div>
+  </a>
+
+  <!-- BizAI promo banner -->
+  <a href="/bizai" class="bizai-promo" id="bizaiPromo">
+    <div class="bizai-promo-left">
+      <span class="bizai-promo-tag" data-i18n="bizPromoTag">🤖 INTELLIGENCE ARTIFICIELLE</span>
+      <div class="bizai-promo-title" data-i18n="bizPromoTitle">Analysez votre projet d'entreprise en 5 minutes</div>
+      <div class="bizai-promo-sub" data-i18n="bizPromoSub">Niche · Audience · 11 canaux marketing · 25 pays · Plan 30-60-90 jours · Risques — Propulsé par IA</div>
+    </div>
+    <div class="bizai-promo-right">
+      <div class="bizai-promo-stats">
+        <div class="bps"><div class="bps-n">11</div><div class="bps-l" data-i18n="bizStat1">Canaux</div></div>
+        <div class="bps"><div class="bps-n">25</div><div class="bps-l" data-i18n="bizStat2">Pays</div></div>
+        <div class="bps"><div class="bps-n">12</div><div class="bps-l" data-i18n="bizStat3">Sections</div></div>
+      </div>
+      <div class="bizai-promo-cta" data-i18n="bizPromoCta">Lancer l'analyse →</div>
     </div>
   </a>
 
@@ -703,6 +752,11 @@ const T = {
     c4Desc:"Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.",
     c4Tag1:"20 Secteurs",c4Tag2:"25 Pays",c4Tag3:"12 Sections",c4Tag4:"Plan 30-60-90j",
     c4Cta:"Analyser mon projet →",
+    bizBadge:"🤖 IA",
+    bizPromoTag:"🤖 INTELLIGENCE ARTIFICIELLE",
+    bizPromoTitle:"Analysez votre projet d'entreprise en 5 minutes",
+    bizPromoSub:"Niche · Audience · 11 canaux marketing · 25 pays · Plan 30-60-90 jours · Risques — Propulsé par IA",
+    bizStat1:"Canaux",bizStat2:"Pays",bizStat3:"Sections",bizPromoCta:"Lancer l'analyse →",
     proTitle:"PREDIKTA PRO, VIP & PREMIUM — Débloquez tout",
     proDesc:"Prédictions illimitées · Jusqu'à 49 États · Alertes email · API Access · Business Intelligence · Export PDF · Support prioritaire",
     proLbl:"PRO / mois",vipLbl:"VIP / mois",eliteLbl:"PREMIUM / mois",freeTrial:"Essai gratuit →",
@@ -772,6 +826,11 @@ const T = {
     c4Desc:"Analyze your business project in 5 minutes: niche, audience, 11 scored marketing channels, targeting for 25 countries, 30-60-90 day plan, risks.",
     c4Tag1:"20 Sectors",c4Tag2:"25 Countries",c4Tag3:"12 Sections",c4Tag4:"30-60-90d Plan",
     c4Cta:"Analyze my project →",
+    bizBadge:"🤖 AI",
+    bizPromoTag:"🤖 ARTIFICIAL INTELLIGENCE",
+    bizPromoTitle:"Analyze your business project in 5 minutes",
+    bizPromoSub:"Niche · Audience · 11 marketing channels · 25 countries · 30-60-90 day plan · Risks — Powered by AI",
+    bizStat1:"Channels",bizStat2:"Countries",bizStat3:"Sections",bizPromoCta:"Launch analysis →",
     proTitle:"PREDIKTA PRO, VIP & PREMIUM — Unlock everything",
     proDesc:"Unlimited predictions · Up to 49 states · Email alerts · API Access · Business Intelligence · PDF export · Priority support",
     proLbl:"PRO / month",vipLbl:"VIP / month",eliteLbl:"PREMIUM / month",freeTrial:"Start free trial →",
@@ -841,6 +900,11 @@ const T = {
     c4Desc:"Analiza tu proyecto empresarial en 5 minutos: nicho, audiencia, 11 canales de marketing evaluados, segmentación en 25 países, plan 30-60-90 días, riesgos.",
     c4Tag1:"20 Sectores",c4Tag2:"25 Países",c4Tag3:"12 Secciones",c4Tag4:"Plan 30-60-90d",
     c4Cta:"Analizar mi proyecto →",
+    bizBadge:"🤖 IA",
+    bizPromoTag:"🤖 INTELIGENCIA ARTIFICIAL",
+    bizPromoTitle:"Analiza tu proyecto empresarial en 5 minutos",
+    bizPromoSub:"Nicho · Audiencia · 11 canales marketing · 25 países · Plan 30-60-90 días · Riesgos — Con IA",
+    bizStat1:"Canales",bizStat2:"Países",bizStat3:"Secciones",bizPromoCta:"Lanzar análisis →",
     proTitle:"PREDIKTA PRO, VIP & PREMIUM — Desbloquea todo",
     proDesc:"Predicciones ilimitadas · Hasta 49 Estados · Alertas por email · Acceso API · Business Intelligence · Exportación PDF · Soporte prioritario",
     proLbl:"PRO / mes",vipLbl:"VIP / mes",eliteLbl:"PREMIUM / mes",freeTrial:"Prueba gratis →",
@@ -910,6 +974,11 @@ const T = {
     c4Desc:"Analise seu projeto de negócio em 5 minutos: nicho, público, 11 canais de marketing avaliados, segmentação em 25 países, plano 30-60-90 dias, riscos.",
     c4Tag1:"20 Setores",c4Tag2:"25 Países",c4Tag3:"12 Seções",c4Tag4:"Plano 30-60-90d",
     c4Cta:"Analisar meu projeto →",
+    bizBadge:"🤖 IA",
+    bizPromoTag:"🤖 INTELIGÊNCIA ARTIFICIAL",
+    bizPromoTitle:"Analise seu projeto de negócio em 5 minutos",
+    bizPromoSub:"Nicho · Público · 11 canais marketing · 25 países · Plano 30-60-90 dias · Riscos — Com IA",
+    bizStat1:"Canais",bizStat2:"Países",bizStat3:"Seções",bizPromoCta:"Iniciar análise →",
     proTitle:"PREDIKTA PRO, VIP & PREMIUM — Desbloqueie tudo",
     proDesc:"Previsões ilimitadas · Até 49 Estados · Alertas por email · Acesso à API · Business Intelligence · Exportação PDF · Suporte prioritário",
     proLbl:"PRO / mês",vipLbl:"VIP / mês",eliteLbl:"PREMIUM / mês",freeTrial:"Teste grátis →",
@@ -979,6 +1048,11 @@ const T = {
     c4Desc:"Analize pwojè biznis ou nan 5 minit: nich, odyans, 11 kanal maketin evalye, sib nan 25 peyi, plan 30-60-90 jou, risk.",
     c4Tag1:"20 Sektè",c4Tag2:"25 Peyi",c4Tag3:"12 Seksyon",c4Tag4:"Plan 30-60-90j",
     c4Cta:"Analize pwojè mwen →",
+    bizBadge:"🤖 IA",
+    bizPromoTag:"🤖 ENTÈLIJANS ATIFISYÈL",
+    bizPromoTitle:"Analize pwojè biznis ou nan 5 minit",
+    bizPromoSub:"Nich · Odyans · 11 kanal maketin · 25 peyi · Plan 30-60-90 jou · Risk — Avèk IA",
+    bizStat1:"Kanal",bizStat2:"Peyi",bizStat3:"Seksyon",bizPromoCta:"Lanse analiz lan →",
     proTitle:"PREDIKTA PRO, VIP & PREMIUM — Debloke tout",
     proDesc:"Prediksyon san limit · Jiska 49 Eta · Alèt imèl · Aksè API · Business Intelligence · Ekspòte PDF · Sipò pyoritè",
     proLbl:"PRO / mwa",vipLbl:"VIP / mwa",eliteLbl:"PREMIUM / mwa",freeTrial:"Eseye gratis →",
