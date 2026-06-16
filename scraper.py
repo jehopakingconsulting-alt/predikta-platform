@@ -325,16 +325,27 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
     if not draws:
         draws = fetch_months(state_code, cfg["slug"], n_months)
     else:
-        # lotteryusa.com ne renvoie que les ~10-15 derniers tirages par
-        # page. Si l'historique total (disque + nouveaute) est encore
-        # faible, on complete avec un backfill profond lotterypost.com.
         existing = _existing_draw_count(state_code)
         seen = {f"{d['date']}_{d['tod']}" for d in draws}
-        if existing + len(seen) < MIN_HISTORY_DRAWS:
-            print(f"  [{state_code}] history low ({existing + len(seen)} < {MIN_HISTORY_DRAWS}) — backfilling via lotterypost.com")
-            # Le backfill cible une fenetre plus large que n_months (souvent
-            # 1 lors des rafraichissements automatiques) pour restaurer un
-            # historique exploitable en un seul cycle.
+        need_backfill = existing + len(seen) < MIN_HISTORY_DRAWS
+
+        # Verifier si certaines sessions attendues sont absentes de lotteryusa.
+        # Ex: GA a 3 sessions (Midday/Evening/Night) mais lotteryusa ne publie
+        # que Evening+Night — Midday doit etre recupere via lotterypost.
+        if not need_backfill:
+            try:
+                from draw_schedule import DRAW_SCHEDULE
+                expected_tods = {s["tod"] for s in DRAW_SCHEDULE.get(state_code, [])}
+                found_tods    = {d["tod"] for d in draws}
+                missing_tods  = expected_tods - found_tods
+                if missing_tods:
+                    print(f"  [{state_code}] sessions manquantes sur lotteryusa: {missing_tods} — backfill lotterypost.com")
+                    need_backfill = True
+            except Exception:
+                pass
+
+        if need_backfill:
+            print(f"  [{state_code}] backfill via lotterypost.com")
             backfill = fetch_months(state_code, cfg["slug"], max(n_months, 12))
             added = 0
             for d in backfill:
@@ -344,7 +355,7 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
                     seen.add(key)
                     added += 1
             if added:
-                print(f"  [{state_code}] +{added} backfilled draws via lotterypost.com")
+                print(f"  [{state_code}] +{added} tirages ajoutés via lotterypost.com")
 
     # Merge extra official-source draws (Morning/Day/Night) when available —
     # lotterypost.com only republishes Midday/Evening for most states.
