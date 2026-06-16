@@ -254,14 +254,43 @@ def fetch_state4(state_code: str, n_months: int = 12) -> list[dict]:
     cfg = STATES4[state_code]
     print(f"  [{state_code}] {cfg['name']} (Pick4) — fetching...")
 
-    existing = _existing_draw_count4(state_code)
-    draws = fetch_months4(state_code, cfg["slug"], max(n_months, 12))
+    # Essayer lotteryusa.com en priorité (pas de Cloudflare, fonctionne sur Render)
+    draws = []
+    try:
+        import lotteryusa4_scraper
+        draws = lotteryusa4_scraper.fetch_state4(state_code)
+        if draws:
+            print(f"  [{state_code}] {len(draws)} Pick4 draws via lotteryusa.com")
+    except Exception as e:
+        print(f"  [{state_code}] lotteryusa4 failed: {e}")
+
+    # Repli sur lotterypost.com si nécessaire
+    if not draws:
+        print(f"  [{state_code}] fallback: lotterypost.com")
+        draws = fetch_months4(state_code, cfg["slug"], max(n_months, 12))
+
+    # Compléter si historique insuffisant
+    if draws:
+        existing = _existing_draw_count4(state_code)
+        seen = {f"{d['date']}_{d['tod']}" for d in draws}
+        if existing + len(seen) < MIN_HISTORY_DRAWS:
+            print(f"  [{state_code}] historique insuffisant — backfill lotterypost.com")
+            backfill = fetch_months4(state_code, cfg["slug"], max(n_months, 12))
+            added = 0
+            for d in backfill:
+                key = f"{d['date']}_{d['tod']}"
+                if key not in seen:
+                    draws.append(d)
+                    seen.add(key)
+                    added += 1
+            if added:
+                print(f"  [{state_code}] +{added} draws ajoutés via lotterypost.com")
 
     if not draws:
         print(f"  [{state_code}] No Pick4 draws found")
         return []
 
-    print(f"  [{state_code}] {len(draws)} Pick4 draws fetched")
+    print(f"  [{state_code}] {len(draws)} Pick4 draws fetched total")
     return draws
 
 

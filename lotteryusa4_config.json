@@ -1,0 +1,95 @@
+{
+  "NY": {
+    "state_slug": "new-york",
+    "variants": {
+      "base":    { "slug": "win-4",         "title": "New York Win 4 Evening" },
+      "midday":  { "slug": "win-4-midday",  "title": "New York Win 4 Midday"  }
+    }
+  },
+  "FL": {
+    "state_slug": "florida",
+    "variants": {
+      "base":    { "slug": "pick-4",         "title": "Florida Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday",  "title": "Florida Pick 4 Midday"  }
+    }
+  },
+  "GA": {
+    "state_slug": "georgia",
+    "variants": {
+      "base":    { "slug": "cash-4",         "title": "Georgia Cash 4 Night"   },
+      "evening": { "slug": "cash-4-evening", "title": "Georgia Cash 4 Evening" }
+    }
+  },
+  "TX": {
+    "state_slug": "texas",
+    "variants": {
+      "base":    { "slug": "daily-4",         "title": "Texas Daily 4 Night"   },
+      "evening": { "slug": "daily-4-evening", "title": "Texas Daily 4 Evening" },
+      "midday":  { "slug": "daily-4-midday",  "title": "Texas Daily 4 Midday"  },
+      "morning": { "slug": "daily-4-morning", "title": "Texas Daily 4 Morning" }
+    }
+  },
+  "NJ": {
+    "state_slug": "new-jersey",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "New Jersey Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "New Jersey Pick 4 Midday"  }
+    }
+  },
+  "PA": {
+    "state_slug": "pennsylvania",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "Pennsylvania Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "Pennsylvania Pick 4 Midday"  }
+    }
+  },
+  "IL": {
+    "state_slug": "illinois",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "Illinois Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "Illinois Pick 4 Midday"  }
+    }
+  },
+  "OH": {
+    "state_slug": "ohio",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "Ohio Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "Ohio Pick 4 Midday"  }
+    }
+  },
+  "NC": {
+    "state_slug": "north-carolina",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "North Carolina Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "North Carolina Pick 4 Midday"  }
+    }
+  },
+  "MD": {
+    "state_slug": "maryland",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "Maryland Pick 4 Evening" },
+      "midday":  { "slug": "pick-4-midday", "title": "Maryland Pick 4 Midday"  }
+    }
+  },
+  "MI": {
+    "state_slug": "michigan",
+    "variants": {
+      "base":    { "slug": "daily-4",        "title": "Michigan Daily 4 Evening" },
+      "midday":  { "slug": "daily-4-midday", "title": "Michigan Daily 4 Midday"  }
+    }
+  },
+  "VA": {
+    "state_slug": "virginia",
+    "variants": {
+      "base":    { "slug": "pick-4",        "title": "Virginia Pick 4 Night"  },
+      "midday":  { "slug": "pick-4-midday", "title": "Virginia Pick 4 Midday" }
+    }
+  },
+  "CA": {
+    "state_slug": "california",
+    "variants": {
+      "base":    { "slug": "daily-4",        "title": "California Daily 4 Evening" },
+      "midday":  { "slug": "daily-4-midday", "title": "California Daily 4 Midday"  }
+    }
+  }
+}
