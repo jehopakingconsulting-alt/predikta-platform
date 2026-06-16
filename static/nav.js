@@ -91,20 +91,40 @@ function archiveGetAll(){
   return purged.sort((a,b)=>b.ts-a.ts);
 }
 
-function archiveAdd(entry){
+function archiveAdd(entry, silent){
+  // silent=true → injected from server sync, skip dedup check and server post
+  let saved = null;
   try{
     let list = [];
     try{ list = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]'); }catch(e){ list = []; }
     const now = Date.now();
+    if(silent){
+      // Server entry: add only if id not already present
+      if(!list.find(e=>e.id===entry.id)){
+        list.unshift(entry);
+        list = archivePurge(list);
+        localStorage.setItem(ARCHIVE_KEY, JSON.stringify(list));
+      }
+      return;
+    }
     // Évite les doublons rapprochés (même type+state+tod dans les 30s)
     const dup = list.find(e => e.type===entry.type && e.state===entry.state && e.tod===entry.tod && (now - e.ts) < 30000);
-    if(dup){ dup.ts = now; }
+    if(dup){ dup.ts = now; saved = dup; }
     else{
-      list.unshift(Object.assign({ id: now+'-'+Math.random().toString(36).slice(2,8), ts: now }, entry));
+      saved = Object.assign({ id: now+'-'+Math.random().toString(36).slice(2,8), ts: now }, entry);
+      list.unshift(saved);
     }
     list = archivePurge(list);
     localStorage.setItem(ARCHIVE_KEY, JSON.stringify(list));
   }catch(e){ /* localStorage indisponible (mode privé, etc.) */ }
+  // Non-blocking server post (fire-and-forget; 401 = not logged in, ignored)
+  if(saved){
+    fetch('/api/dashboard/archives/sync', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({entries:[saved]})
+    }).catch(()=>{});
+  }
 }
 
 function archiveRemove(id){

@@ -407,6 +407,34 @@ class BusinessReport(db.Model):
         return out
 
 
+class UserArchive(db.Model):
+    """Historique des analyses visitées (synchronisé entre appareils pour les utilisateurs connectés)."""
+    __tablename__ = "user_archives"
+
+    id         = db.Column(db.Integer, primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    client_id  = db.Column(db.String(64), nullable=False)   # UUID généré côté client (dédup)
+    ts         = db.Column(db.BigInteger, nullable=False)    # timestamp ms (epoch)
+    type       = db.Column(db.String(20), nullable=False, default="analyze")
+    state      = db.Column(db.String(4), nullable=True)
+    tod        = db.Column(db.String(20), nullable=True)
+    url        = db.Column(db.Text, nullable=True)
+    label      = db.Column(db.String(200), nullable=True)
+
+    __table_args__ = (db.UniqueConstraint("user_id", "client_id", name="uq_user_archive"),)
+
+    def to_dict(self):
+        return {
+            "id": self.client_id,
+            "ts": self.ts,
+            "type": self.type,
+            "state": self.state,
+            "tod": self.tod,
+            "url": self.url,
+            "label": self.label,
+        }
+
+
 # ── Setup ─────────────────────────────────────────────────────────────────
 def init_app(app):
     db_url = os.environ.get("DATABASE_URL", "")

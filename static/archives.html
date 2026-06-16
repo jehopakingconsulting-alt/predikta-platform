@@ -92,7 +92,10 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
   </div>
 
   <div class="archive-toolbar">
-    <div class="archive-count" id="archiveCount"></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="archive-count" id="archiveCount"></div>
+      <span id="syncBadge" style="display:none;font-size:.68rem;color:#22cc88;background:rgba(34,204,136,.12);border:1px solid rgba(34,204,136,.3);padding:2px 8px;border-radius:12px;white-space:nowrap"></span>
+    </div>
     <button class="btn-clear" id="btnClear" data-i18n="btnClear">🗑 Effacer l'historique</button>
   </div>
 
@@ -211,9 +214,49 @@ function fmtTime(ts){
   return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
-function renderArchives(){
+// ── Server sync (utilisateurs connectés) ──────────────────────────────────
+let _serverSynced = false;
+
+async function syncWithServer(){
+  try{
+    const me = await fetch('/api/auth/me').then(r=>r.json());
+    if(!me.user) return;  // non connecté
+
+    // Push localStorage → server + pull server → localStorage
+    const local = window.PredArchive ? window.PredArchive.getAll() : [];
+    const res = await fetch('/api/dashboard/archives/sync', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({entries: local})
+    });
+    if(!res.ok) return;
+
+    const {entries: serverEntries} = await res.json();
+
+    // Merge server entries into localStorage (server is authoritative for missing ids)
+    if(window.PredArchive && serverEntries.length){
+      const localIds = new Set(local.map(e=>e.id));
+      serverEntries.forEach(e=>{ if(!localIds.has(e.id)) window.PredArchive.add(e, true); });
+    }
+
+    _serverSynced = true;
+    // Show sync indicator
+    const badge = document.getElementById('syncBadge');
+    if(badge){ badge.style.display=''; badge.textContent = '☁️ ' + (me.user.username || me.user.email); }
+  }catch(e){}
+}
+
+async function delEntryServer(id){
+  try{ await fetch(`/api/dashboard/archives/${encodeURIComponent(id)}`, {method:'DELETE'}); }catch(e){}
+}
+
+async function clearServer(){
+  try{ await fetch('/api/dashboard/archives', {method:'DELETE'}); }catch(e){}
+}
+
+function renderArchives(list){
   const t = curT();
-  const list = (window.PredArchive ? window.PredArchive.getAll() : []);
+  if(!list) list = (window.PredArchive ? window.PredArchive.getAll() : []);
   const countEl = document.getElementById('archiveCount');
   const listEl = document.getElementById('archiveList');
   const clearBtn = document.getElementById('btnClear');
@@ -266,6 +309,7 @@ function renderArchives(){
 
 function delEntry(id){
   if(window.PredArchive) window.PredArchive.remove(id);
+  if(_serverSynced) delEntryServer(id);
   renderArchives();
 }
 
@@ -274,12 +318,13 @@ document.addEventListener('click', e=>{
     const t = curT();
     if(confirm(t.confirmClear)){
       if(window.PredArchive) window.PredArchive.clear();
+      if(_serverSynced) clearServer();
       renderArchives();
     }
   }
 });
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', async ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
 
@@ -288,6 +333,10 @@ window.addEventListener('load', ()=>{
   const id = days >= 30 ? 'tierElite' : days >= 7 ? 'tierVip' : 'tierFree';
   const el = document.getElementById(id);
   if(el) el.classList.add('active');
+
+  // Sync server ↔ localStorage for logged-in users, then re-render
+  await syncWithServer();
+  renderArchives();
 });
 </script>
 </body></html>

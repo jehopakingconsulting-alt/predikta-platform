@@ -2006,6 +2006,87 @@ def dashboard_delete_report(report_id):
     return jsonify({"success": True})
 
 
+MAX_ARCHIVE_ENTRIES = 200
+
+@app.route("/api/dashboard/archives", methods=["GET"])
+@auth_module.login_required
+def dashboard_archives_get():
+    user = auth_module.current_user()
+    items = (auth_module.UserArchive.query
+             .filter_by(user_id=user.id)
+             .order_by(auth_module.UserArchive.ts.desc())
+             .limit(MAX_ARCHIVE_ENTRIES).all())
+    return jsonify({"entries": [i.to_dict() for i in items]})
+
+
+@app.route("/api/dashboard/archives/sync", methods=["POST"])
+@auth_module.login_required
+def dashboard_archives_sync():
+    """Bulk upsert: client sends its localStorage entries; server merges and returns the full list."""
+    user = auth_module.current_user()
+    db = auth_module.db
+    data = request.get_json(silent=True) or {}
+    entries = data.get("entries", [])
+
+    for e in entries[:MAX_ARCHIVE_ENTRIES]:
+        cid = str(e.get("id", ""))[:64]
+        if not cid:
+            continue
+        existing = auth_module.UserArchive.query.filter_by(user_id=user.id, client_id=cid).first()
+        if not existing:
+            row = auth_module.UserArchive(
+                user_id=user.id, client_id=cid,
+                ts=int(e.get("ts", 0)),
+                type=str(e.get("type", "analyze"))[:20],
+                state=str(e.get("state", "") or "")[:4] or None,
+                tod=str(e.get("tod", "") or "")[:20] or None,
+                url=str(e.get("url", "") or "")[:500] or None,
+                label=str(e.get("label", "") or "")[:200] or None,
+            )
+            db.session.add(row)
+
+    # Enforce cap: keep only the MAX_ARCHIVE_ENTRIES most recent
+    all_ids = (auth_module.UserArchive.query
+               .filter_by(user_id=user.id)
+               .order_by(auth_module.UserArchive.ts.desc())
+               .with_entities(auth_module.UserArchive.id)
+               .all())
+    if len(all_ids) > MAX_ARCHIVE_ENTRIES:
+        to_delete = [r.id for r in all_ids[MAX_ARCHIVE_ENTRIES:]]
+        auth_module.UserArchive.query.filter(
+            auth_module.UserArchive.id.in_(to_delete)).delete(synchronize_session=False)
+
+    db.session.commit()
+
+    items = (auth_module.UserArchive.query
+             .filter_by(user_id=user.id)
+             .order_by(auth_module.UserArchive.ts.desc())
+             .limit(MAX_ARCHIVE_ENTRIES).all())
+    return jsonify({"entries": [i.to_dict() for i in items]})
+
+
+@app.route("/api/dashboard/archives/<client_id>", methods=["DELETE"])
+@auth_module.login_required
+def dashboard_archive_delete(client_id):
+    user = auth_module.current_user()
+    db = auth_module.db
+    row = auth_module.UserArchive.query.filter_by(user_id=user.id, client_id=client_id).first()
+    if row:
+        db.session.delete(row)
+        db.session.commit()
+    return jsonify({"success": True})
+
+
+@app.route("/api/dashboard/archives", methods=["DELETE"])
+@auth_module.login_required
+def dashboard_archives_clear():
+    user = auth_module.current_user()
+    db = auth_module.db
+    auth_module.UserArchive.query.filter_by(user_id=user.id).delete()
+    db.session.commit()
+    return jsonify({"success": True})
+
+
 @app.route("/dashboard")
 def dashboard_page():
     return send_from_directory("static", "dashboard.html")
