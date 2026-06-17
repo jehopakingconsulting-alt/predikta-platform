@@ -471,6 +471,15 @@ def _auto_update_loop():
             _auto_update_state["running"] = True
             scrape_all(n_months=1)   # rafraîchissement léger périodique (1 mois glissant)
 
+            # Rafraîchit les données Pick 4 en même temps
+            try:
+                import scraper4
+                scraper4.scrape_all4(states=scraper4.HOT_PICK4_STATES, n_months=1)
+                _TRACK_RECORD4_CACHE.clear()
+                _ACCURACY4_CACHE.clear()
+            except Exception as e4:
+                print(f"  [auto-update][pick4] error: {e4}")
+
             # Rafraîchit aussi les données "Tous résultats" (/all-results) pour
             # chaque État du registre multi-jeux — sinon elles restent figées.
             try:
