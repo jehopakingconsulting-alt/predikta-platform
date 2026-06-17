@@ -1,84 +1,111 @@
 """
 PREDIKTA — Extra official-source scrapers
-Some states truly run 3-4 daily Pick3 draws (Morning/Day/Evening/Night) but
-lotterypost.com only republishes Midday/Evening. For those states we fetch
-directly from the official state-lottery site so Matin/Jour/Soir/Nuit are
-all available for analysis.
+Some states truly run 3 daily Pick3 draws (Midday/Evening/Night) but
+lotteryusa.com doesn't publish all of them. For those states we fetch
+directly from the official state-lottery API.
 
 Each function returns a list of {date, tod, d1, d2, d3} — same shape as
 scraper.parse_draws — so it can be merged via scraper.save_csv().
 """
 
-import re
 import requests
 import urllib3
-from datetime import datetime
+from datetime import datetime, timezone
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept": "application/json",
+    "Referer": "https://www.galottery.com/en-us/games/draw-games/cash-3/winning-numbers.html",
+}
+
+GA_API = "https://www.galottery.com/api/v2/draw-games/draws/"
 
 
-def _get(url):
+def _get_json(url, params=None):
     try:
-        r = requests.get(url, headers=HEADERS, timeout=20, verify=False)
+        r = requests.get(url, params=params, headers=HEADERS, timeout=20, verify=False)
         if r.status_code == 200:
-            return r.text
+            return r.json()
     except Exception:
         pass
     return None
 
 
-# ── Texas Lottery — official Pick 3 (Morning / Day / Evening / Night) ─────
-def fetch_tx_official():
-    url = "https://www.texaslottery.com/export/sites/lottery/Games/Pick_3/Winning_Numbers/index.html"
-    html = _get(url)
-    if not html:
-        return []
+# ── Georgia — galottery.com official API ──────────────────────────────────
+# lotteryusa.com n'a pas GA Cash 3 Midday.
+# lotterypost.com est bloqué par Cloudflare sur Render.
+# L'API galottery.com (/api/v2/draw-games/draws/) fonctionne sans restriction.
+# Elle retourne max ~50 tirages par appel (paramètre previous-draws).
+# On pagine en chunks de 45 pour couvrir ~90 jours d'historique récent.
+def fetch_ga_cash3(n_chunks: int = 6) -> list[dict]:
+    """
+    Fetch GA Cash 3 (Midday + Evening + Night) from galottery.com official API.
+    Returns list of {date, tod, d1, d2, d3}.
+    """
+    tod_map = {
+        "MIDDAY": "Midday",
+        "EVENING": "Evening",
+        "NIGHT": "Night",
+        "DAY": "Day",
+        "MORNING": "Morning",
+    }
 
     draws = []
-    rows = re.findall(r"<tr[^>]*>(.*?)</tr>", html, re.S)
-    tods = ["Morning", "Day", "Evening", "Night"]
+    seen = set()
 
-    for row in rows:
-        cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
-        if len(cells) < 8:
-            continue
-        # cell[0] = date link
-        date_m = re.search(r">(\d{2}/\d{2}/\d{4})<", cells[0])
-        if not date_m:
-            continue
-        try:
-            iso_date = datetime.strptime(date_m.group(1), "%m/%d/%Y").strftime("%Y-%m-%d")
-        except Exception:
-            continue
+    # Page par offset: previous-draws=0→45→90→...
+    for chunk in range(n_chunks):
+        offset = chunk * 45
+        data = _get_json(GA_API, params={"game-names": "CASH 3", "previous-draws": offset + 30})
+        if not data:
+            break
 
-        # numbers are in cells 1, 3, 5, 7 (Fireball is the cell right after each)
-        for idx, tod in zip([1, 3, 5, 7], tods):
-            if idx >= len(cells):
+        raw_draws = data.get("draws", [])
+        new_this_chunk = 0
+
+        for d in raw_draws:
+            if d.get("status") not in ("CLOSED", "PAYABLE", "RESULTS_AVAILABLE"):
                 continue
-            txt = re.sub(r"&nbsp;", " ", cells[idx])
-            nums = re.findall(r"\d", txt)
-            if len(nums) >= 3:
+            results = d.get("results", [])
+            if not results:
+                continue
+            primary = results[0].get("primary", [])
+            if len(primary) < 3:
+                continue
+
+            ts = d.get("drawTime", 0) / 1000
+            dt = datetime.fromtimestamp(ts, tz=timezone.utc)
+            iso_date = dt.strftime("%Y-%m-%d")
+            tod = tod_map.get(d.get("name", "").upper(), "Evening")
+
+            key = f"{iso_date}_{tod}"
+            if key not in seen:
+                seen.add(key)
                 draws.append({
                     "date": iso_date,
                     "tod": tod,
-                    "d1": nums[0], "d2": nums[1], "d3": nums[2],
+                    "d1": str(primary[0]),
+                    "d2": str(primary[1]),
+                    "d3": str(primary[2]),
                 })
+                new_this_chunk += 1
+
+        if new_this_chunk == 0:
+            break
 
     return draws
 
 
-# ── Registry of states with an official 4-draws/day source ────────────────
-# NOTE: TX is intentionally NOT listed here — once we fixed the TOD parser
-# (lotterypost.com reuses CSS classes for Morning/Day & Evening/Night, the
-# label TEXT distinguishes them), lotterypost itself returns all 4 official
-# Texas draws cleanly, so a second source would only add noise/duplicates.
-EXTRA_SOURCES = {}
+# ── Registry of states with an official extra-source ──────────────────────
+EXTRA_SOURCES = {
+    "GA": fetch_ga_cash3,
+}
 
 
-def fetch_extra(state_code: str):
-    """Return extra (Morning/Day/Night) draws for a state, or [] if none configured."""
+def fetch_extra(state_code: str) -> list[dict]:
+    """Return extra draws for a state from its official source, or [] if none."""
     fn = EXTRA_SOURCES.get(state_code.upper())
     if not fn:
         return []
@@ -87,3 +114,11 @@ def fetch_extra(state_code: str):
     except Exception as e:
         print(f"  [extra:{state_code}] error: {e}")
         return []
+
+
+if __name__ == "__main__":
+    print("Testing GA Cash 3 galottery.com API...")
+    draws = fetch_ga_cash3()
+    print(f"  {len(draws)} draws fetched")
+    for d in draws[-5:]:
+        print(f"  {d['date']} {d['tod']:8s} {d['d1']}-{d['d2']}-{d['d3']}")
