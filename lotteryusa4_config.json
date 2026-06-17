@@ -3,14 +3,14 @@
     "state_slug": "new-york",
     "variants": {
       "base":    { "slug": "win-4",         "title": "New York Win 4 Evening" },
-      "midday":  { "slug": "win-4-midday",  "title": "New York Win 4 Midday"  }
+      "midday":  { "slug": "midday-win-4",   "title": "New York Win 4 Midday"  }
     }
   },
   "FL": {
     "state_slug": "florida",
     "variants": {
       "base":    { "slug": "pick-4",         "title": "Florida Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday",  "title": "Florida Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4",   "title": "Florida Pick 4 Midday"  }
     }
   },
   "GA": {
@@ -24,23 +24,21 @@
     "state_slug": "texas",
     "variants": {
       "base":    { "slug": "daily-4",         "title": "Texas Daily 4 Night"   },
-      "evening": { "slug": "daily-4-evening", "title": "Texas Daily 4 Evening" },
-      "midday":  { "slug": "daily-4-midday",  "title": "Texas Daily 4 Midday"  },
-      "morning": { "slug": "daily-4-morning", "title": "Texas Daily 4 Morning" }
+      "evening": { "slug": "daily-4-evening", "title": "Texas Daily 4 Evening" }
     }
   },
   "NJ": {
     "state_slug": "new-jersey",
     "variants": {
       "base":    { "slug": "pick-4",        "title": "New Jersey Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "New Jersey Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4", "title": "New Jersey Pick 4 Midday"  }
     }
   },
   "PA": {
     "state_slug": "pennsylvania",
     "variants": {
       "base":    { "slug": "pick-4",        "title": "Pennsylvania Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "Pennsylvania Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4", "title": "Pennsylvania Pick 4 Midday"  }
     }
   },
   "IL": {
