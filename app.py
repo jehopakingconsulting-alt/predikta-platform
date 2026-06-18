@@ -495,6 +495,24 @@ def _auto_update_loop():
 
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _LATEST_CACHE["data"] = None
+
+            # Recalibrate dynamic weights for HOT states after each scrape
+            try:
+                from weight_calibrator import calibrate_if_needed
+                from scraper import load_csv
+                HOT_STATES = ["NY", "FL", "GA", "TX", "NJ", "PA", "IL", "OH"]
+                for _st in HOT_STATES:
+                    _draws = load_csv(_st)
+                    if not _draws:
+                        continue
+                    _tods = list({d.get("tod", "Evening") for d in _draws})
+                    for _tod in _tods:
+                        _tod_draws = [d for d in _draws if d.get("tod", "Evening") == _tod]
+                        if len(_tod_draws) >= 70:
+                            calibrate_if_needed(_st, _tod, _tod_draws)
+            except Exception as _we:
+                print(f"  [auto-update][weights] error: {_we}")
+
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             try:
                 _verify_draw_schedule()
@@ -758,7 +776,7 @@ def hot_pick3():
                 (dg for dg, v in hot30.items() if v.get("status") == "HOT"),
                 key=lambda dg: hot30[dg]["pct"], reverse=True
             )
-            suggestions = analyzer.weighted_suggestions(tdraws, top_n=1)
+            suggestions = analyzer.weighted_suggestions(tdraws, top_n=1, state_code=code, tod=tod)
             top = suggestions[0] if suggestions else None
             last_draw = tdraws[0]
             last_date = last_draw["date"]

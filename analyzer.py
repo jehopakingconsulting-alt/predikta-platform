@@ -1,12 +1,23 @@
 """
 Statistical analysis engine for Cash3 / Pick3 draws.
 Computes frequency, gaps, Markov transitions, and weighted probability suggestions.
+Weights are auto-calibrated per state+TOD via weight_calibrator.py.
 """
 
 import json
 import math
 from collections import Counter, defaultdict
 from scraper import load_csv
+
+try:
+    from weight_calibrator import (
+        calibrate_if_needed, load_weights, combo_score as _wc_combo_score,
+        _freq_scores, _gap_scores, _markov_scores, DEFAULT_WEIGHTS
+    )
+    _CALIBRATOR_AVAILABLE = True
+except ImportError:
+    _CALIBRATOR_AVAILABLE = False
+    DEFAULT_WEIGHTS = {"freq": 0.35, "gap": 0.30, "markov": 0.35}
 
 DIGITS = [str(i) for i in range(10)]
 
@@ -108,24 +119,35 @@ def pair_frequencies(draws: list[dict]) -> dict:
     }
 
 
-def weighted_suggestions(draws: list[dict], top_n: int = 5) -> list[dict]:
+def weighted_suggestions(draws: list[dict], top_n: int = 5,
+                         state_code: str = None, tod: str = None) -> list[dict]:
     """
-    Generate top N suggested combinations using:
-    - Per-position frequency weight
-    - Overdue (gap) bonus
-    - Markov next-state probability
+    Generate top N suggested combinations using dynamically calibrated weights.
+    Weights (freq / gap / markov) are auto-tuned per state+TOD based on which
+    component predicted real draws best over the last 40 draws.
     """
     if not draws:
         return []
 
-    last = draws[0]  # most recent draw
+    last = draws[0]
+
+    # ── Load or calibrate weights for this state+TOD ──────────────────────
+    if _CALIBRATOR_AVAILABLE and state_code:
+        weights = calibrate_if_needed(state_code, tod or "all", draws)
+    else:
+        weights = DEFAULT_WEIGHTS.copy()
+
+    W_FREQ   = weights.get("freq",   DEFAULT_WEIGHTS["freq"])
+    W_GAP    = weights.get("gap",    DEFAULT_WEIGHTS["gap"])
+    W_MARKOV = weights.get("markov", DEFAULT_WEIGHTS["markov"])
+
+    # ── Pre-compute scoring tables ─────────────────────────────────────────
+    freq   = {pos: digit_frequencies(draws, pos) for pos in ["d1", "d2", "d3"]}
+    gaps   = gap_analysis(draws)
+    markov = {pos: markov_transitions(draws, pos) for pos in ["d1", "d2", "d3"]}
+    hc     = hot_cold(draws, 30)
 
     scores = {}
-    freq = {pos: digit_frequencies(draws, pos) for pos in ["d1", "d2", "d3"]}
-    gaps = gap_analysis(draws)
-    markov = {pos: markov_transitions(draws, pos) for pos in ["d1", "d2", "d3"]}
-    hc = hot_cold(draws, 30)
-
     for d1 in DIGITS:
         for d2 in DIGITS:
             for d3 in DIGITS:
@@ -133,20 +155,20 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5) -> list[dict]:
                 combo = [d1, d2, d3]
                 positions = ["d1", "d2", "d3"]
 
-                for i, (digit, pos) in enumerate(zip(combo, positions)):
-                    # frequency score (0-10)
-                    score += freq[pos][digit]["pct"] / 10
+                for digit, pos in zip(combo, positions):
+                    # frequency score (0-10), weighted
+                    score += W_FREQ * (freq[pos][digit]["pct"] / 10)
 
-                    # gap bonus: overdue digit gets a boost
+                    # gap bonus: overdue digit gets a boost, weighted
                     g = gaps[digit]
                     if g["avg_gap"] and g["current_gap"] > g["avg_gap"]:
-                        overdure_ratio = g["current_gap"] / g["avg_gap"]
-                        score += min(overdure_ratio, 3.0)
+                        overdue_ratio = g["current_gap"] / g["avg_gap"]
+                        score += W_GAP * min(overdue_ratio, 3.0)
 
-                    # Markov: probability digit follows last draw's digit at same position
+                    # Markov: P(digit | last digit at same position), weighted
                     last_digit = last[pos]
                     mk = markov[pos].get(last_digit, {})
-                    score += mk.get(digit, 0) / 100 * 5
+                    score += W_MARKOV * (mk.get(digit, 0) / 100 * 5)
 
                 scores[(d1, d2, d3)] = score
 
@@ -157,6 +179,7 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5) -> list[dict]:
             "digits": list(c),
             "score": round(s, 3),
             "confidence": confidence_label(s, top[0][1]),
+            "weights_used": weights,
             "breakdown": _suggestion_breakdown(c, freq, gaps, markov, hc, last),
         }
         for c, s in top
@@ -237,7 +260,7 @@ def backtest_suggestions(draws: list[dict], n: int = 15, min_history: int = 60) 
     return results
 
 
-def full_report(state_code: str, draws: list[dict] = None) -> dict:
+def full_report(state_code: str, draws: list[dict] = None, tod: str = None) -> dict:
     if draws is None:
         draws = load_draws(state_code)
     if not draws:
@@ -258,7 +281,7 @@ def full_report(state_code: str, draws: list[dict] = None) -> dict:
         "gaps": gap_analysis(draws),
         "pairs": pair_frequencies(draws),
         "markov_d1": markov_transitions(draws, "d1"),
-        "suggestions": weighted_suggestions(draws, top_n=10),
+        "suggestions": weighted_suggestions(draws, top_n=10, state_code=state_code, tod=tod),
     }
 
 
