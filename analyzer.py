@@ -173,17 +173,20 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5,
                 scores[(d1, d2, d3)] = score
 
     top = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
-    return [
-        {
+    results = []
+    for c, s in top:
+        conf = confidence_label(s, top[0][1])
+        digits = list(c)
+        results.append({
             "combo": f"{c[0]}-{c[1]}-{c[2]}",
-            "digits": list(c),
+            "digits": digits,
             "score": round(s, 3),
-            "confidence": confidence_label(s, top[0][1]),
+            "confidence": conf,
             "weights_used": weights,
+            "bet": bet_recommendation(digits, conf),
             "breakdown": _suggestion_breakdown(c, freq, gaps, markov, hc, last),
-        }
-        for c, s in top
-    ]
+        })
+    return results
 
 
 def _suggestion_breakdown(combo, freq, gaps, markov, hot_cold_map, last_draw):
@@ -211,6 +214,66 @@ def _suggestion_breakdown(combo, freq, gaps, markov, hot_cold_map, last_draw):
             "markov_from": last_digit,
         })
     return out
+
+
+def bet_recommendation(digits: list, confidence: str) -> dict:
+    """
+    Recommend the optimal bet type (Straight / Box 6-way / Box 3-way)
+    based on combo structure and confidence level.
+
+    Odds reference:
+      Straight    : 1/1000  — exact order
+      Box 3-way   : 1/333   — two identical digits (e.g. 1-1-3)
+      Box 6-way   : 1/167   — three different digits (e.g. 1-2-3)
+    """
+    d1, d2, d3 = digits
+    unique = len(set(digits))
+
+    if unique == 1:
+        # All same (e.g. 5-5-5) — no box possible
+        bet_type = "Straight"
+        odds = "1/1000"
+        reason = "Triplet — Straight uniquement"
+        payout_note = "Payout max si exact"
+
+    elif unique == 2:
+        # Two identical (e.g. 1-1-3) — Box 3-way
+        if confidence in ("Tendance très forte", "Tendance forte"):
+            bet_type = "Box 3-way + Straight"
+            odds = "1/333 + 1/1000"
+            reason = "Doublet haute confiance — couvrir Box ET Straight"
+            payout_note = "Box si ordre incorrect, Straight si exact"
+        else:
+            bet_type = "Box 3-way"
+            odds = "1/333"
+            reason = "Doublet confiance moyenne — Box suffisant"
+            payout_note = "Protege contre l'ordre"
+
+    else:
+        # All different — Box 6-way
+        if confidence == "Tendance très forte":
+            bet_type = "Box 6-way + Straight"
+            odds = "1/167 + 1/1000"
+            reason = "Tres haute confiance — couvrir les deux"
+            payout_note = "Box si ordre incorrect, Straight si exact"
+        elif confidence == "Tendance forte":
+            bet_type = "Box 6-way"
+            odds = "1/167"
+            reason = "Bonne confiance — Box 6-way optimal"
+            payout_note = "Meilleur rapport risque/rendement"
+        else:
+            bet_type = "Box 6-way"
+            odds = "1/167"
+            reason = "Confiance moyenne — Box 6-way pour couvrir"
+            payout_note = "Prudence recommandee"
+
+    return {
+        "bet_type": bet_type,
+        "odds": odds,
+        "reason": reason,
+        "payout_note": payout_note,
+        "combo_type": f"{'Triplet' if unique==1 else 'Doublet' if unique==2 else '3 chiffres differents'}",
+    }
 
 
 def confidence_label(score: float, max_score: float) -> str:

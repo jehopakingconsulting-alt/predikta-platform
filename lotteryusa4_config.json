@@ -44,50 +44,46 @@
   "IL": {
     "state_slug": "illinois",
     "variants": {
-      "base":    { "slug": "pick-4",        "title": "Illinois Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "Illinois Pick 4 Midday"  }
+      "base":    { "slug": "pick-4",        "title": "Illinois Pick 4 Evening" }
     }
   },
   "OH": {
     "state_slug": "ohio",
     "variants": {
       "base":    { "slug": "pick-4",        "title": "Ohio Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "Ohio Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4", "title": "Ohio Pick 4 Midday"  }
     }
   },
   "NC": {
     "state_slug": "north-carolina",
     "variants": {
       "base":    { "slug": "pick-4",        "title": "North Carolina Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "North Carolina Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4", "title": "North Carolina Pick 4 Midday"  }
     }
   },
   "MD": {
     "state_slug": "maryland",
     "variants": {
       "base":    { "slug": "pick-4",        "title": "Maryland Pick 4 Evening" },
-      "midday":  { "slug": "pick-4-midday", "title": "Maryland Pick 4 Midday"  }
+      "midday":  { "slug": "midday-pick-4", "title": "Maryland Pick 4 Midday"  }
     }
   },
   "MI": {
     "state_slug": "michigan",
     "variants": {
-      "base":    { "slug": "daily-4",        "title": "Michigan Daily 4 Evening" },
-      "midday":  { "slug": "daily-4-midday", "title": "Michigan Daily 4 Midday"  }
+      "base":    { "slug": "daily-4",       "title": "Michigan Daily 4 Evening" }
     }
   },
   "VA": {
     "state_slug": "virginia",
     "variants": {
-      "base":    { "slug": "pick-4",        "title": "Virginia Pick 4 Night"  },
-      "midday":  { "slug": "pick-4-midday", "title": "Virginia Pick 4 Midday" }
+      "base":    { "slug": "pick-4",        "title": "Virginia Pick 4 Night"  }
     }
   },
   "CA": {
     "state_slug": "california",
     "variants": {
-      "base":    { "slug": "daily-4",        "title": "California Daily 4 Evening" },
-      "midday":  { "slug": "daily-4-midday", "title": "California Daily 4 Midday"  }
+      "base":    { "slug": "daily-4",       "title": "California Daily 4 Evening" }
     }
   }
 }
