@@ -133,15 +133,74 @@ def pair_frequencies(draws: list[dict], top_n: int = 20) -> list[dict]:
 
 # ── Suggestions ───────────────────────────────────────────────────────────
 
-def _number_scores(draws: list[dict], freq_w=0.40, gap_w=0.35, pair_w=0.25) -> dict:
+def markov_next(draws: list[dict]) -> dict:
     """
-    Composite score per number: weighted freq + gap/overdue + pair-affinity.
-    Returns {num_str: score}.
+    Which numbers tend to appear in the draw AFTER a given number appeared?
+    Returns {num: {next_num: transition_prob}}.
     """
+    matrix = defaultdict(Counter)
+    for i in range(len(draws) - 1):
+        curr_nums = set(draws[i]["nums"])
+        next_nums = set(draws[i + 1]["nums"])
+        for cn in curr_nums:
+            for nn in next_nums:
+                matrix[cn][nn] += 1
+    result = {}
+    for num, transitions in matrix.items():
+        total = sum(transitions.values())
+        result[num] = {k: round(v / total, 4) for k, v in transitions.items()}
+    return result
+
+
+def monte_carlo_scores(draws: list[dict], n_sim: int = 5000) -> dict:
+    """
+    Simulate n_sim random draws using historical frequency as weights.
+    Return {num: appearance_rate} — numbers that appear more in simulations
+    than expected are statistically 'favored' by recent patterns.
+    """
+    import random as _rnd
+    freq = number_frequencies(draws)
+    pool = sorted(freq.keys(), key=lambda x: int(x))
+    weights = [freq[n]["count"] for n in pool]
+    pick_n = _pick_n(draws)
+    total_w = sum(weights)
+    probs = [w / total_w for w in weights]
+
+    counter = Counter()
+    rng = _rnd.Random(42)
+    for _ in range(n_sim):
+        sample = rng.choices(pool, weights=probs, k=pick_n * 3)
+        seen = []
+        for s in sample:
+            if s not in seen:
+                seen.append(s)
+            if len(seen) == pick_n:
+                break
+        for n in seen:
+            counter[n] += 1
+
+    mx = max(counter.values()) if counter else 1
+    return {n: counter.get(n, 0) / mx for n in pool}
+
+
+def _number_scores(draws: list[dict], weights: dict = None) -> dict:
+    """
+    Composite score per number: weighted freq + gap/overdue + pair-affinity
+    + Markov next-draw tendency + Monte Carlo simulation signal.
+    weights: dict with keys freq, gap, pair (from calibrator); defaults used if None.
+    """
+    W = weights or {"freq": 0.30, "gap": 0.25, "pair": 0.20}
+    # Remaining weight split between Markov and MC
+    w_markov = 0.15
+    w_mc = 0.10
+
     freq = number_frequencies(draws)
     gaps = gap_analysis(draws)
+    mc = monte_carlo_scores(draws, n_sim=3000)
+    mkv = markov_next(draws)
+    last_nums = set(draws[0]["nums"]) if draws else set()
 
-    # Pair affinity: average pair frequency with the other top-10 numbers
+    # Pair affinity
     pair_counter = Counter()
     for d in draws:
         nums = sorted(d["nums"], key=lambda x: int(x))
@@ -149,7 +208,6 @@ def _number_scores(draws: list[dict], freq_w=0.40, gap_w=0.35, pair_w=0.25) -> d
             for j in range(i + 1, len(nums)):
                 pair_counter[(nums[i], nums[j])] += 1
     max_pair = max(pair_counter.values()) if pair_counter else 1
-
     pair_aff = defaultdict(float)
     for (a, b), cnt in pair_counter.items():
         v = cnt / max_pair
@@ -159,20 +217,31 @@ def _number_scores(draws: list[dict], freq_w=0.40, gap_w=0.35, pair_w=0.25) -> d
     max_freq = max((v["pct"] for v in freq.values()), default=1) or 1
     max_pair_aff = max(pair_aff.values()) if pair_aff else 1
 
+    # Markov: how much is this number favored by the previous draw?
+    markov_aff = defaultdict(float)
+    for prev_num in last_nums:
+        transitions = mkv.get(prev_num, {})
+        for nxt, prob in transitions.items():
+            markov_aff[nxt] += prob
+    max_mkv = max(markov_aff.values()) if markov_aff else 1
+
     scores = {}
     for num in freq:
         f = freq[num]["pct"] / max_freq
         g = gaps.get(num, {}).get("overdue_ratio", 0) / 4.0
         p = pair_aff.get(num, 0) / max_pair_aff
-        scores[num] = freq_w * f + gap_w * g + pair_w * p
+        m = mc.get(num, 0)
+        mk = markov_aff.get(num, 0) / max_mkv
+        scores[num] = (W["freq"] * f + W["gap"] * g + W["pair"] * p
+                       + w_markov * mk + w_mc * m)
     return scores
 
 
-def weighted_suggestions(draws: list[dict], pick_n: int = None, top_n: int = 10) -> list[dict]:
+def weighted_suggestions(draws: list[dict], pick_n: int = None, top_n: int = 10,
+                          state_code: str = None, slug: str = None) -> list[dict]:
     """
     Return top-N suggested combinations of `pick_n` numbers.
-    Strategy: score all numbers, pick best `pick_n` as the primary suggestion,
-    then generate alternatives by swapping in the next-ranked numbers.
+    Uses dynamically calibrated weights when state_code+slug provided.
     """
     if not draws or len(draws) < 20:
         return []
@@ -180,7 +249,16 @@ def weighted_suggestions(draws: list[dict], pick_n: int = None, top_n: int = 10)
     if pick_n is None:
         pick_n = _pick_n(draws)
 
-    scores = _number_scores(draws)
+    # Load calibrated weights if available
+    cal_weights = None
+    if state_code and slug:
+        try:
+            from weight_calibrator_lotto import calibrate_lotto_if_needed
+            cal_weights = calibrate_lotto_if_needed(state_code, slug, draws)
+        except Exception:
+            pass
+
+    scores = _number_scores(draws, weights=cal_weights)
     freq = number_frequencies(draws)
     gaps = gap_analysis(draws)
     hc = hot_cold(draws)
@@ -282,5 +360,7 @@ def full_report(draws: list[dict], state_code: str = "", slug: str = "") -> dict
         "hot_cold_60": hot_cold(draws, 60),
         "gaps": gap_analysis(draws),
         "pairs": pair_frequencies(draws, top_n=20),
-        "suggestions": weighted_suggestions(draws, pick_n=pick_n, top_n=10),
+        "markov_next": {k: dict(list(v.items())[:5]) for k, v in markov_next(draws).items()},
+        "suggestions": weighted_suggestions(draws, pick_n=pick_n, top_n=10,
+                                            state_code=state_code, slug=slug),
     }

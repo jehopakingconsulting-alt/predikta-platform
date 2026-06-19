@@ -529,6 +529,18 @@ def _auto_update_loop():
             except Exception as _we4:
                 print(f"  [auto-update][weights4] error: {_we4}")
 
+            # Recalibrate Cash 5 / Fantasy 5 lotto weights
+            try:
+                from weight_calibrator_lotto import calibrate_lotto_if_needed
+                from games_scraper import load_game_results as _lgr
+                for _lstate, _lgames in LOTTO_GAMES.items():
+                    for _lgame in _lgames:
+                        _ldraws = _lgr(_lstate, _lgame["slug"])
+                        if len(_ldraws) >= 50:
+                            calibrate_lotto_if_needed(_lstate, _lgame["slug"], _ldraws)
+            except Exception as _wel:
+                print(f"  [auto-update][weights_lotto] error: {_wel}")
+
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             try:
                 _verify_draw_schedule()

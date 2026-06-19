@@ -15,6 +15,8 @@
   <url><loc>https://predikta-tez2.onrender.com/lottery-predictions</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/pick3-predictions</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/pick4-predictions</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/cash5</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://predikta-tez2.onrender.com/track-record-4</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/powerball-analysis</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/business-ai</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://predikta-tez2.onrender.com/api</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
