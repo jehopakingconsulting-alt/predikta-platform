@@ -1150,18 +1150,19 @@ async function togglePushNotif(){
     return;
   }
   // Récupère la clé VAPID publique
-  const kRes  = await fetch('/api/push/vapid-key');
+  const kRes  = await fetch('/api/push/vapid-public-key');
   const kData = await kRes.json();
-  const appServerKey = await _urlB64ToUint8Array(kData.publicKey);
+  if(kData.error){ alert('Push non configuré côté serveur.'); return; }
+  const appServerKey = await _urlB64ToUint8Array(kData.key);
   // Abonnement
   const reg = await navigator.serviceWorker.ready;
   const sub = await reg.pushManager.subscribe({
     userVisibleOnly: true, applicationServerKey: appServerKey
   });
-  // Envoie l'abonnement au serveur
+  // Envoie l'abonnement au serveur (format attendu: {subscription: {...}})
   await fetch('/api/push/subscribe', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(sub.toJSON())
+    body: JSON.stringify({ subscription: sub.toJSON() })
   });
   _updatePushBtn();
 }

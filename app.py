@@ -101,8 +101,19 @@ _VAPID_CLAIMS = {"sub": os.environ.get("PREDIKTA_VAPID_EMAIL", "mailto:contact@p
 
 
 def _ensure_vapid_keys():
-    """Génère une paire de clés VAPID au premier démarrage si elles n'existent
-    pas encore, et les enregistre sur le disque persistant (data/)."""
+    """Utilise les clés VAPID depuis les variables d'env (priorité) ou les génère."""
+    os.makedirs("data", exist_ok=True)
+
+    # Priorité : variables d'environnement (Render)
+    env_priv = os.environ.get("VAPID_PRIVATE_KEY", "").strip()
+    env_pub  = os.environ.get("VAPID_PUBLIC_KEY", "").strip()
+    if env_priv and env_pub:
+        with open(_VAPID_PRIV_FILE, "w") as f:
+            f.write(env_priv)
+        with open(_VAPID_PUB_FILE, "w") as f:
+            f.write(env_pub)
+        return
+
     if os.path.exists(_VAPID_PRIV_FILE) and os.path.exists(_VAPID_PUB_FILE):
         return
     try:
@@ -113,7 +124,6 @@ def _ensure_vapid_keys():
         vapid = Vapid02()
         vapid.generate_keys()
 
-        os.makedirs("data", exist_ok=True)
         with open(_VAPID_PRIV_FILE, "wb") as f:
             f.write(vapid.private_pem())
 
@@ -784,16 +794,17 @@ def _draw_watcher_loop():
                                             print(f"  [draw-watcher][track-record][{st}] error: {_tre}")
                                         # Push notification
                                         try:
-                                            from push_notify import send_draw_notification as _send_pn
-                                            _send_pn(
-                                                state=st,
-                                                state_name=STATES.get(st, {}).get("name", st),
-                                                tod=_tod_of_draw,
-                                                d1=str(_new_d["d1"]),
-                                                d2=str(_new_d["d2"]),
-                                                d3=str(_new_d["d3"]),
-                                                tr_result=_tr_result,
-                                            )
+                                            _sn = STATES.get(st, {}).get("name", st)
+                                            _digs = f"{_new_d['d1']}-{_new_d['d2']}-{_new_d['d3']}"
+                                            _tod_icon = "☀️" if _tod_of_draw == "Midday" else "🌙"
+                                            _ptitle = f"🎯 {_sn} {_tod_icon} {_tod_of_draw}: {_digs}"
+                                            if _tr_result and _tr_result.get("hit_straight"):
+                                                _pbody = f"✅ EXACT ! Votre combo #1 était {_tr_result['consensus_top10'][0]}"
+                                            elif _tr_result and _tr_result.get("hit_box"):
+                                                _pbody = f"📦 BOX hit ! Rang #{_tr_result.get('consensus_box_rank','?')} · {_digs}"
+                                            else:
+                                                _pbody = f"Résultat officiel: {_digs}"
+                                            _send_push_to_all(_ptitle, _pbody, f"/results?state={st}")
                                         except Exception as _pe:
                                             print(f"  [draw-watcher][push][{st}] error: {_pe}")
                             except Exception as _se:
@@ -923,25 +934,6 @@ def api_track_record_pending():
         return jsonify({"pending": get_pending_predictions()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-@app.route("/api/push/vapid-key")
-def api_push_vapid_key():
-    from push_notify import VAPID_PUBLIC_KEY
-    return jsonify({"publicKey": VAPID_PUBLIC_KEY})
-
-@app.route("/api/push/subscribe", methods=["POST"])
-def api_push_subscribe():
-    sub = request.get_json(silent=True) or {}
-    from push_notify import add_subscription
-    ok = add_subscription(sub)
-    return jsonify({"ok": ok})
-
-@app.route("/api/push/unsubscribe", methods=["POST"])
-def api_push_unsubscribe():
-    body = request.get_json(silent=True) or {}
-    from push_notify import remove_subscription
-    remove_subscription(body.get("endpoint", ""))
-    return jsonify({"ok": True})
 
 @app.route("/api/scraper/status")
 def api_scraper_status():
