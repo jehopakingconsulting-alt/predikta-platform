@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Analyseur Cash 5 / Fantasy 5 — PREDIKTA</title>
+<meta name="description" content="Analyse statistique Cash 5, Fantasy 5, Take 5 : fréquences, numéros chauds/froids, retards et suggestions TOP PICK par état."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/cash5"/>
+<meta property="og:title" content="Analyseur Cash 5 / Fantasy 5 — PREDIKTA"/>
+<meta property="og:description" content="Fréquences, numéros chauds/froids, retards et suggestions TOP PICK pour Cash 5, Fantasy 5, Take 5."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://predikta-tez2.onrender.com/cash5"/>
+<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#22cc88;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;--green:#22cc88;--red:#ff5566;--hot:#ff7744;--cold:#44aaff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 50% 20%,rgba(34,204,136,.06) 0%,transparent 60%)}
+.page{max-width:1000px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+
+/* Hero */
+.hero{text-align:center;margin-bottom:28px}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.2rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#22cc88,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2)}
+
+/* Selector */
+.selector-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:24px}
+.sel-label{font-size:.63rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap}
+.sel-select{background:#07071e;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.78rem;padding:7px 12px;cursor:pointer;outline:none;font-family:'Inter',sans-serif;min-width:180px}
+.sel-select:focus{border-color:var(--accent)}
+.sel-btn{padding:8px 20px;border-radius:9px;font-size:.78rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#1aaa72);color:#fff;border:none;cursor:pointer;white-space:nowrap}
+.sel-btn:hover{opacity:.88}
+.sel-info{font-size:.68rem;color:var(--muted2);margin-left:auto}
+
+/* Stats bar */
+.stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.stat-chip{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.stat-chip .num{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;color:var(--gold)}
+.stat-chip .lbl{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* Sections */
+.section{margin-bottom:30px}
+.section-title{font-size:.78rem;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* Suggestion cards */
+.sugg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.sugg-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;transition:border-color .2s}
+.sugg-card:hover{border-color:var(--accent)}
+.sugg-card.rank-1{border-color:rgba(255,215,0,.4);background:linear-gradient(135deg,rgba(255,215,0,.04),var(--card))}
+.sugg-card.rank-2{border-color:rgba(200,200,210,.3)}
+.sugg-card.rank-3{border-color:rgba(184,115,51,.3)}
+.sugg-rank{font-size:.6rem;color:var(--muted2);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sugg-balls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ball{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:.72rem;font-weight:900;flex-shrink:0}
+.ball-hot{background:linear-gradient(135deg,#ff7744,#ff4422);color:#fff}
+.ball-warm{background:linear-gradient(135deg,#ff9955,#ee7733);color:#fff}
+.ball-neutral{background:linear-gradient(135deg,#3344aa,#2233cc);color:#cce}
+.ball-cold{background:linear-gradient(135deg,#2255aa,#1144cc);color:#99ccff}
+.ball-due{box-shadow:0 0 0 2px var(--gold)}
+.sugg-conf{font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:5px;display:inline-block;margin-bottom:8px}
+.conf-vh{background:rgba(255,215,0,.14);border:1px solid rgba(255,215,0,.3);color:var(--gold)}
+.conf-h{background:rgba(34,200,122,.13);border:1px solid rgba(34,200,122,.3);color:#22e87a}
+.conf-m{background:rgba(79,110,255,.13);border:1px solid rgba(79,110,255,.3);color:#88aaff}
+.conf-l{background:rgba(150,150,180,.1);border:1px solid rgba(150,150,180,.2);color:var(--muted2)}
+.sugg-breakdown{display:flex;flex-wrap:wrap;gap:4px}
+.bd-chip{font-size:.58rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--muted2)}
+.bd-hot{color:var(--hot)}
+.bd-cold{color:var(--cold)}
+.bd-due{color:var(--gold)}
+
+/* Heatmap */
+.heatmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
+.hm-cell{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 4px;text-align:center;cursor:default;transition:transform .15s}
+.hm-cell:hover{transform:scale(1.06)}
+.hm-num{font-family:'Orbitron',monospace;font-size:.78rem;font-weight:900;color:var(--text)}
+.hm-bar{height:4px;border-radius:2px;margin:4px auto;width:80%}
+.hm-pct{font-size:.58rem;color:var(--muted2)}
+.hm-badge{font-size:.5rem;font-weight:800;border-radius:3px;padding:1px 3px;margin-top:2px;display:inline-block}
+.hm-hot{color:var(--hot)}.hm-cold{color:var(--cold)}.hm-due{color:var(--gold)}
+
+/* Pairs */
+.pairs-grid{display:flex;flex-wrap:wrap;gap:6px}
+.pair-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:.72rem;color:var(--muted2);display:flex;align-items:center;gap:6px}
+.pair-chip .pair-nums{font-family:'Orbitron',monospace;font-size:.68rem;color:var(--text)}
+.pair-chip .pair-pct{font-size:.58rem;color:var(--accent)}
+
+/* Track record */
+table.tr-table{width:100%;border-collapse:collapse;font-size:.73rem}
+table.tr-table th{text-align:left;color:var(--muted);font-weight:600;padding:5px 6px;border-bottom:1px solid var(--border);font-size:.62rem;text-transform:uppercase;letter-spacing:.5px}
+table.tr-table td{padding:5px 6px;border-bottom:1px solid rgba(26,26,69,.5);color:var(--muted2)}
+table.tr-table td.combo{font-family:'Orbitron',monospace;letter-spacing:1px;color:var(--text);font-size:.65rem}
+.hit5{color:var(--gold);font-weight:900}.hit4{color:var(--green);font-weight:700}.hit3{color:#88aaff;font-weight:600}.hit-none{color:var(--muted)}
+
+/* Misc */
+.loading{text-align:center;padding:50px;color:var(--muted2);font-size:.85rem}
+.error-box{background:rgba(255,85,102,.07);border:1px solid rgba(255,85,102,.2);border-radius:10px;padding:14px 18px;color:#ff8899;font-size:.8rem;margin-bottom:20px}
+.last-draw-row{background:rgba(34,204,136,.06);border:1px solid rgba(34,204,136,.2);border-radius:10px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ld-label{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px}
+.ld-date{font-size:.72rem;color:var(--muted2)}
+
+.tab-bar{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.tab-btn{padding:7px 16px;border-radius:8px;font-size:.75rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif}
+.tab-btn:hover{border-color:var(--accent);color:var(--text)}
+.tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.cta-box{margin-top:36px;text-align:center;padding:28px;background:linear-gradient(135deg,rgba(34,204,136,.07),rgba(255,215,0,.05));border:1px solid rgba(34,204,136,.18);border-radius:16px}
+.cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:14px}
+.cta-btn{padding:11px 26px;border-radius:10px;font-size:.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#1aaa72);color:#fff;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <h1>💰 Cash 5 / Fantasy 5 / Take 5</h1>
+    <p class="subtitle" id="heroSub">Analyse statistique : fréquences, numéros chauds/froids, retards et suggestions TOP PICK</p>
+  </div>
+
+  <!-- Selector -->
+  <div class="selector-bar">
+    <span class="sel-label">État</span>
+    <select class="sel-select" id="stateSelect" onchange="onStateChange()">
+      <option value="">Chargement…</option>
+    </select>
+    <span class="sel-label">Jeu</span>
+    <select class="sel-select" id="gameSelect">
+      <option value="">—</option>
+    </select>
+    <button class="sel-btn" onclick="loadAnalysis()">🔍 Analyser</button>
+    <span class="sel-info" id="selInfo"></span>
+  </div>
+
+  <div id="main"><div class="loading">Sélectionnez un état et un jeu, puis cliquez Analyser.</div></div>
+
+  <div class="cta-box">
+    <p>Envie d'analyser Pick 3 ou Pick 4 ?</p>
+    <a href="/analyze" class="cta-btn">Pick 3 →</a>&nbsp;
+    <a href="/pick4-predictions" class="cta-btn" style="background:linear-gradient(135deg,#ffd700,#ff9900);color:#0a0a0a">Pick 4 →</a>
+  </div>
+</div>
+<script>
+// ── State / game catalogue ─────────────────────────────────────────────
+let CATALOGUE = [];   // [{state,name,slug,label,pool,total_draws}]
+let CUR_DATA  = null;
+
+function groupByState(cat){
+  const m = {};
+  cat.forEach(g=>{
+    if(!m[g.state]) m[g.state]={name:g.name, games:[]};
+    m[g.state].games.push(g);
+  });
+  return m;
+}
+
+function onStateChange(){
+  const st = document.getElementById('stateSelect').value;
+  const gameSel = document.getElementById('gameSelect');
+  gameSel.innerHTML = '';
+  const grp = groupByState(CATALOGUE);
+  const entry = grp[st];
+  if(!entry){ gameSel.innerHTML='<option value="">—</option>'; return; }
+  entry.games.forEach(g=>{
+    const opt = document.createElement('option');
+    opt.value = g.slug;
+    opt.textContent = `${g.label} (${g.total_draws} tirages / pool 1-${g.pool})`;
+    gameSel.appendChild(opt);
+  });
+}
+
+async function loadCatalogue(){
+  try{
+    const res = await fetch('/api/cash5/states');
+    CATALOGUE = await res.json();
+    const grp = groupByState(CATALOGUE);
+    const stateSel = document.getElementById('stateSelect');
+    stateSel.innerHTML = '';
+    Object.entries(grp).sort((a,b)=>a[1].name.localeCompare(b[1].name)).forEach(([code,entry])=>{
+      const opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = `${entry.name} (${code})`;
+      stateSel.appendChild(opt);
+    });
+    onStateChange();
+  }catch(e){
+    document.getElementById('stateSelect').innerHTML='<option value="">Erreur chargement</option>';
+  }
+}
+
+// ── Analysis ──────────────────────────────────────────────────────────
+async function loadAnalysis(){
+  const state = document.getElementById('stateSelect').value;
+  const slug  = document.getElementById('gameSelect').value;
+  if(!state||!slug) return;
+  document.getElementById('main').innerHTML='<div class="loading">Analyse en cours…</div>';
+  document.getElementById('selInfo').textContent='';
+  try{
+    const [rep, trk] = await Promise.all([
+      fetch(`/api/cash5/${state}/${slug}`).then(r=>r.json()),
+      fetch(`/api/cash5/${state}/${slug}/track-record?n=15`).then(r=>r.json()),
+    ]);
+    if(rep.error){
+      document.getElementById('main').innerHTML=`<div class="error-box">⚠️ ${rep.error}</div>`;
+      return;
+    }
+    CUR_DATA = {rep, trk};
+    renderAll(rep, trk);
+    document.getElementById('selInfo').textContent=`${rep.total_draws} tirages · pool 1-${rep.pool_size} · pick ${rep.pick_n}`;
+  }catch(e){
+    document.getElementById('main').innerHTML='<div class="error-box">⚠️ Erreur réseau. Réessayez.</div>';
+  }
+}
+
+// ── Rendering ─────────────────────────────────────────────────────────
+function confCls(c){
+  if(c==='Tendance très forte') return 'conf-vh';
+  if(c==='Tendance forte')      return 'conf-h';
+  if(c==='Tendance moyenne')    return 'conf-m';
+  return 'conf-l';
+}
+function confLabel(c){
+  const map={
+    'Tendance très forte':'★★★★★ Tendance Très Forte',
+    'Tendance forte':     '★★★★ Tendance Forte',
+    'Tendance moyenne':   '★★★ Tendance Moyenne',
+    'Tendance faible':    '★★ Tendance Faible',
+  };
+  return map[c]||c;
+}
+
+function ballClass(hc, due){
+  let cls = hc==='HOT' ? 'ball-hot' : hc==='COLD' ? 'ball-cold' : 'ball-neutral';
+  if(due) cls+=' ball-due';
+  return cls;
+}
+
+function renderSuggestions(sugg){
+  if(!sugg||!sugg.length) return '<div class="loading">Pas de suggestions disponibles.</div>';
+  const rankLabel = ['🥇','🥈','🥉'];
+  return `<div class="sugg-grid">${sugg.map((s,i)=>{
+    const hcMap = {};
+    (s.breakdown||[]).forEach(b=>{ hcMap[b.num]={hot_cold:b.hot_cold,overdue:b.overdue}; });
+    const balls = s.nums.map(n=>{
+      const info = hcMap[n]||{};
+      return `<div class="${'ball '+ballClass(info.hot_cold,info.overdue)}" title="${info.hot_cold||''}${info.overdue?' ⏰':''}">${n}</div>`;
+    }).join('');
+    const bdChips = (s.breakdown||[]).map(b=>`
+      <span class="bd-chip ${b.hot_cold==='HOT'?'bd-hot':b.hot_cold==='COLD'?'bd-cold':''} ${b.overdue?'bd-due':''}"
+        title="Retard: ${b.current_gap} tirages (moy: ${b.avg_gap||'?'})">
+        ${b.num}${b.overdue?' ⏰':''}${b.hot_cold==='HOT'?' 🔥':b.hot_cold==='COLD'?' ❄️':''}
+      </span>`).join('');
+    return `<div class="sugg-card ${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">
+      <div class="sugg-rank">${rankLabel[i]||`#${i+1}`}</div>
+      <div class="sugg-balls">${balls}</div>
+      <span class="sugg-conf ${confCls(s.confidence)}">${confLabel(s.confidence)}</span>
+      <div class="sugg-breakdown">${bdChips}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderHeatmap(freq, gaps, hc30){
+  const nums = Object.keys(freq).sort((a,b)=>parseInt(a)-parseInt(b));
+  const maxPct = Math.max(...nums.map(n=>freq[n].pct));
+  return `<div class="heatmap">${nums.map(n=>{
+    const pct = freq[n].pct;
+    const bar_w = maxPct ? Math.round(pct/maxPct*100) : 0;
+    const heat = Math.round(pct/maxPct*255);
+    const barColor = `rgb(${heat},${Math.round(heat*0.6)},${255-heat})`;
+    const g = gaps[n]||{};
+    const hcStatus = (hc30[n]||{}).status||'NEUTRAL';
+    const badge = hcStatus==='HOT'?'<span class="hm-badge hm-hot">🔥</span>'
+                : hcStatus==='COLD'?'<span class="hm-badge hm-cold">❄️</span>':'';
+    const due = g.overdue?'<span class="hm-badge hm-due">⏰</span>':'';
+    return `<div class="hm-cell" title="Numéro ${n}: ${pct}% (${freq[n].count} fois) — Gap actuel: ${g.current_gap||0}, moy: ${g.avg_gap||'?'}">
+      <div class="hm-num">${n}</div>
+      <div class="hm-bar" style="background:${barColor};width:${bar_w}%"></div>
+      <div class="hm-pct">${pct}%</div>
+      ${badge}${due}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderPairs(pairs){
+  if(!pairs||!pairs.length) return '<div class="loading">Pas de données.</div>';
+  return `<div class="pairs-grid">${pairs.map(p=>`
+    <div class="pair-chip">
+      <span class="pair-nums">${p.pair}</span>
+      <span class="pair-pct">${p.count}× (${p.pct}%)</span>
+    </div>`).join('')}</div>`;
+}
+
+function renderTrackRecord(trk){
+  if(!trk||!trk.rows||!trk.rows.length) return '<div class="loading">Pas assez de données.</div>';
+  const sRate = trk.n?(trk.hit3/trk.n*100).toFixed(1):'0.0';
+  const header = `<div class="stats-row" style="margin-bottom:14px">
+    <div class="stat-chip"><div class="num">${trk.n}</div><div class="lbl">Tirages</div></div>
+    <div class="stat-chip"><div class="num" style="color:#88aaff">${trk.hit3} (${sRate}%)</div><div class="lbl">≥ 3 numéros corrects</div></div>
+    <div class="stat-chip"><div class="num" style="color:var(--green)">${trk.hit4}</div><div class="lbl">≥ 4 numéros corrects</div></div>
+    <div class="stat-chip"><div class="num" style="color:var(--gold)">${trk.hit5}</div><div class="lbl">Jackpot (5/5)</div></div>
+  </div>`;
+  const rows = trk.rows.map(r=>{
+    let cls='hit-none', mark='—';
+    if(r.hit_5){ cls='hit5'; mark='★★★ JACKPOT'; }
+    else if(r.hit_4){ cls='hit4'; mark='✓✓✓✓ 4/5'; }
+    else if(r.hit_3){ cls='hit3'; mark='✓✓✓ 3/5'; }
+    return `<tr><td>${r.date}</td><td class="combo">${r.predicted}</td><td class="combo">${r.actual}</td><td>${r.matched}/5</td><td class="${cls}">${mark}</td></tr>`;
+  }).join('');
+  return header + `<table class="tr-table">
+    <thead><tr><th>Date</th><th>Suggestion TOP PICK</th><th>Résultat réel</th><th>Matches</th><th>Résultat</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderAll(rep, trk){
+  const ld = rep.last_draw;
+  const ldBalls = (ld.nums||[]).map(n=>`<div class="ball ball-neutral" style="width:30px;height:30px;font-size:.65rem">${n}</div>`).join('');
+  const ldHtml = `<div class="last-draw-row">
+    <span class="ld-label">Dernier tirage</span>
+    <div style="display:flex;gap:5px">${ldBalls}</div>
+    <span class="ld-date">${ld.date}${ld.tod?' · '+ld.tod:''}</span>
+  </div>`;
+
+  const statsHtml = `<div class="stats-row">
+    <div class="stat-chip"><div class="num">${rep.total_draws}</div><div class="lbl">Tirages analysés</div></div>
+    <div class="stat-chip"><div class="num">${rep.pick_n}</div><div class="lbl">Numéros par tirage</div></div>
+    <div class="stat-chip"><div class="num">1-${rep.pool_size}</div><div class="lbl">Pool de numéros</div></div>
+    <div class="stat-chip"><div class="num">${rep.suggestions?.[0]?.combo||'—'}</div><div class="lbl">TOP PICK #1</div></div>
+  </div>`;
+
+  const tabs = `<div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('suggestions',this)">🎯 Suggestions TOP PICK</button>
+    <button class="tab-btn" onclick="switchTab('heatmap',this)">🌡️ Fréquences</button>
+    <button class="tab-btn" onclick="switchTab('pairs',this)">🔗 Paires fréquentes</button>
+    <button class="tab-btn" onclick="switchTab('track',this)">📈 Track Record</button>
+  </div>
+  <div id="tab-suggestions" class="tab-panel active">${renderSuggestions(rep.suggestions)}</div>
+  <div id="tab-heatmap" class="tab-panel">${renderHeatmap(rep.frequencies, rep.gaps, rep.hot_cold_30)}</div>
+  <div id="tab-pairs" class="tab-panel">${renderPairs(rep.pairs)}</div>
+  <div id="tab-track" class="tab-panel">${renderTrackRecord(trk)}</div>`;
+
+  document.getElementById('main').innerHTML = ldHtml + statsHtml + tabs;
+}
+
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+window.addEventListener('load', loadCatalogue);
+</script>
+</body></html>

@@ -2056,6 +2056,91 @@ def api_games_analyze(state_code, slug):
     auth_module.record_usage(auth_module.current_user().id)
     return jsonify(result)
 
+@app.route("/cash5")
+def cash5_page(): return send_from_directory("static", "cash5.html")
+
+# Multi-ball lotto games supported on the Cash 5 page
+LOTTO_GAMES = {
+    "CA": [{"slug": "fantasy5",      "label": "Fantasy 5",      "pool": 39}],
+    "FL": [{"slug": "fantasy5",      "label": "Fantasy 5",      "pool": 36}],
+    "GA": [{"slug": "fantasy5",      "label": "Fantasy 5",      "pool": 42}],
+    "MI": [{"slug": "fantasy5",      "label": "Fantasy 5",      "pool": 47}],
+    "NC": [{"slug": "cash5",         "label": "Cash 5",         "pool": 43}],
+    "NJ": [{"slug": "cash5",         "label": "Cash 5",         "pool": 45}, {"slug": "jersey-cash-5", "label": "Jersey Cash 5", "pool": 45}],
+    "NY": [{"slug": "take5",         "label": "Take 5",         "pool": 39}, {"slug": "take5-midday",  "label": "Take 5 Midday", "pool": 39}],
+    "OH": [{"slug": "rolling-cash-5","label": "Rolling Cash 5", "pool": 35}],
+    "PA": [{"slug": "cash5",         "label": "Cash 5",         "pool": 43}],
+    "TX": [{"slug": "cash5",         "label": "Cash 5",         "pool": 35}],
+    "VA": [{"slug": "cash5",         "label": "Cash 5",         "pool": 45},
+           {"slug": "bank-a-million","label": "Bank a Million", "pool": 40}],
+    "MA": [{"slug": "masscash",      "label": "Mass Cash",      "pool": 35}],
+    "MD": [{"slug": "bonus-match-5", "label": "Bonus Match 5",  "pool": 39}],
+}
+
+@app.route("/api/cash5/states")
+def api_cash5_states():
+    """Return list of states+games available on the Cash 5 page."""
+    from games_scraper import load_game_results
+    result = []
+    for state_code, games in LOTTO_GAMES.items():
+        state_name = STATES.get(state_code, {}).get("name", state_code)
+        for g in games:
+            draws = load_game_results(state_code, g["slug"])
+            result.append({
+                "state": state_code,
+                "name": state_name,
+                "slug": g["slug"],
+                "label": g["label"],
+                "pool": g["pool"],
+                "total_draws": len(draws),
+            })
+    return jsonify(sorted(result, key=lambda x: (x["name"], x["label"])))
+
+@app.route("/api/cash5/<state_code>/<slug>")
+def api_cash5_report(state_code, slug):
+    """Full statistical report for a multi-ball Cash5/Fantasy5/Take5 game."""
+    import analyzer_lotto
+    from games_scraper import load_game_results
+    code = state_code.upper()
+    draws = load_game_results(code, slug)
+    if not draws:
+        return jsonify({"error": f"No data for {code}/{slug}. Scrape first."}), 200
+    # Exclude digit games (numbers 0-9 only)
+    if all(int(n) <= 9 for d in draws[:20] for n in d.get("nums", []) if n.isdigit()):
+        return jsonify({"error": f"{slug} is a digit game — use the Pick 5 analyzer instead."}), 200
+    result = analyzer_lotto.full_report(draws, state_code=code, slug=slug)
+    result["state_name"] = STATES.get(code, {}).get("name", code)
+    game_info = next((g for g in LOTTO_GAMES.get(code, []) if g["slug"] == slug), {})
+    result["label"] = game_info.get("label", slug)
+    return jsonify(result)
+
+@app.route("/api/cash5/<state_code>/<slug>/track-record")
+def api_cash5_track(state_code, slug):
+    """Backtest track record for a multi-ball game."""
+    import analyzer_lotto
+    from games_scraper import load_game_results
+    code = state_code.upper()
+    try:
+        n = int(request.args.get("n", "15"))
+    except ValueError:
+        n = 15
+    n = max(1, min(n, 30))
+    draws = load_game_results(code, slug)
+    if not draws:
+        return jsonify({"error": "No data"}), 200
+    rows = analyzer_lotto.backtest(draws, n=n)
+    game_info = next((g for g in LOTTO_GAMES.get(code, []) if g["slug"] == slug), {})
+    return jsonify({
+        "state": code,
+        "slug": slug,
+        "label": game_info.get("label", slug),
+        "rows": rows,
+        "hit3": sum(1 for r in rows if r["hit_3"]),
+        "hit4": sum(1 for r in rows if r["hit_4"]),
+        "hit5": sum(1 for r in rows if r["hit_5"]),
+        "n": len(rows),
+    })
+
 # PREDIKTA BUSINESS AI — Routes
 # ═══════════════════════════════════════════════════════════
 
