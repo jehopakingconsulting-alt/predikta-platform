@@ -505,6 +505,38 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- ── Accuracy Score Public ── -->
+  <div id="accuracyBlock" style="margin-bottom:40px;display:none">
+    <div style="text-align:center;font-size:.68rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:3px;margin-bottom:22px">
+      📊 Performance réelle — Track Record Live
+      <span style="display:inline-block;margin-left:10px;background:rgba(34,232,122,.15);border:1px solid rgba(34,232,122,.3);color:#22e87a;font-size:.6rem;padding:2px 8px;border-radius:8px;font-weight:700;vertical-align:middle">VÉRIFIÉ</span>
+    </div>
+
+    <!-- KPI row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px" id="accKpis"></div>
+
+    <!-- Barre de progression box rate -->
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:18px 22px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:.78rem;font-weight:700;color:#e2e8f0">Taux BOX Top 10 (30 derniers jours)</span>
+        <span id="accBoxPct" style="font-size:1.1rem;font-weight:900;color:#22e87a">—</span>
+      </div>
+      <div style="height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden">
+        <div id="accBoxBar" style="height:100%;border-radius:4px;width:0;background:linear-gradient(90deg,#00cc66,#22ff88);transition:width 1.2s cubic-bezier(.4,0,.2,1)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.6rem;color:#475569">
+        <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+      </div>
+    </div>
+
+    <!-- Feed des 4 derniers résultats -->
+    <div id="accFeed" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px"></div>
+
+    <div style="text-align:center;margin-top:16px">
+      <a href="/track-record" style="font-size:.75rem;color:#7c3aed;text-decoration:none;font-weight:600">Voir le Track Record complet →</a>
+    </div>
+  </div>
+
   <!-- Monthly raffle banner -->
   <div class="raffle-banner">
     <div class="raffle-icon">🎁</div>
@@ -1451,6 +1483,56 @@ function populateToolStateSelect(){
 
 // Apply detected language then auto-load snapshot
 applyLang(window.PREDIKTA_LANG || 'fr');
+
+// ── Accuracy Score Public ─────────────────────────────────────────────────
+async function loadAccuracyBlock(){
+  try{
+    const r = await fetch('/api/track-record/live?days=30');
+    const d = await r.json();
+    if(!d || d.n < 3) return; // pas assez de données → ne pas afficher
+    const block = document.getElementById('accuracyBlock');
+    if(!block) return;
+
+    // KPIs
+    const kpis = [
+      { icon:'🎯', val: d.straight_hits, lbl:'EXACT (Straight)', color:'#ffd700' },
+      { icon:'📦', val: d.box_hits,      lbl:'BOX hit Top 10',  color:'#22e87a' },
+      { icon:'📊', val: d.n,             lbl:'Tirages analysés', color:'#88aaff' },
+      { icon:'🏆', val: d.top3_box_rate+'%', lbl:'BOX dans Top 3', color:'#a78bfa' },
+    ];
+    document.getElementById('accKpis').innerHTML = kpis.map(k=>`
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:1.4rem;margin-bottom:6px">${k.icon}</div>
+        <div style="font-size:1.4rem;font-weight:900;color:${k.color}">${k.val}</div>
+        <div style="font-size:.62rem;color:#475569;margin-top:3px;line-height:1.3">${k.lbl}</div>
+      </div>`).join('');
+
+    // Barre BOX
+    const boxPct = d.top10_box_rate || 0;
+    document.getElementById('accBoxPct').textContent = boxPct + '%';
+    setTimeout(()=>{ document.getElementById('accBoxBar').style.width = Math.min(boxPct,100) + '%'; }, 100);
+
+    // Feed 4 derniers résultats vérifiés
+    const recent = (d.recent || []).slice(0,4);
+    document.getElementById('accFeed').innerHTML = recent.map(r=>{
+      const hit = r.hit_straight ? '✅ EXACT' : r.hit_box ? `📦 BOX #${r.consensus_box_rank}` : `❌ #${r.consensus_straight_rank||'—'}`;
+      const hitColor = r.hit_straight ? '#22e87a' : r.hit_box ? '#ffd700' : '#64748b';
+      return `<div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div>
+          <div style="font-size:.72rem;font-weight:700;color:#e2e8f0">${r.state} · ${r.tod}</div>
+          <div style="font-size:.62rem;color:#475569;margin-top:2px">${r.date}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:.85rem;font-weight:800;letter-spacing:2px;color:#fff">${r.actual}</div>
+          <div style="font-size:.65rem;font-weight:700;color:${hitColor};margin-top:2px">${hit}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    block.style.display = 'block';
+  } catch(e){ /* silencieux si pas de données */ }
+}
+loadAccuracyBlock();
 </script>
 </body>
 </html>
