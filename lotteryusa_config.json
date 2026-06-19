@@ -37,6 +37,10 @@
       "base": {
         "slug": "daily-3",
         "title": "CaliforniaDaily 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "CaliforniaDaily 3 Midday"
       }
     }
   },
@@ -93,6 +97,10 @@
       "base": {
         "slug": "play-3",
         "title": "ConnecticutPlay3 Night"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "ConnecticutPlay3 Day"
       }
     }
   },
@@ -123,6 +131,10 @@
       "cash-3-evening": {
         "slug": "cash-3-evening",
         "title": "GeorgiaCash 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "GeorgiaCash 3 Midday"
       }
     }
   },
@@ -134,6 +146,10 @@
       "base": {
         "slug": "pick-3",
         "title": "IowaPick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "IowaPick 3 Midday"
       }
     }
   },
@@ -145,6 +161,10 @@
       "base": {
         "slug": "daily-3",
         "title": "IndianaDaily 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "IndianaDaily 3 Midday"
       }
     }
   },
@@ -156,6 +176,10 @@
       "base": {
         "slug": "daily-3",
         "title": "IllinoisPick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "IllinoisPick 3 Midday"
       }
     }
   },
@@ -238,6 +262,10 @@
       "base": {
         "slug": "pick-3",
         "title": "MainePick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "MainePick 3 Day"
       }
     }
   },
@@ -249,6 +277,10 @@
       "base": {
         "slug": "pick-3",
         "title": "North CarolinaPick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "North CarolinaPick 3 Daytime"
       }
     }
   },
@@ -297,6 +329,10 @@
       "base": {
         "slug": "daily-3",
         "title": "MichiganDaily 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "MichiganDaily 3 Midday"
       }
     }
   },
@@ -323,6 +359,10 @@
       "base": {
         "slug": "pick-3",
         "title": "New HampshirePick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "New HampshirePick 3 Day"
       }
     }
   },
@@ -476,6 +516,10 @@
       "base": {
         "slug": "pick-3",
         "title": "VermontPick 3 Evening"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "VermontPick 3 Day"
       }
     }
   },
@@ -498,6 +542,10 @@
       "base": {
         "slug": "pick-3",
         "title": "VirginiaPick 3 Night"
+      },
+      "midday": {
+        "slug": "midday-3",
+        "title": "VirginiaPick 3 Day"
       }
     }
   },
