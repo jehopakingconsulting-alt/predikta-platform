@@ -506,7 +506,7 @@ header{
 .filters-reset{background:transparent;color:var(--muted2)}
 
 /* ═══════════════════════════
-   VIDEO PLAYER 4K
+   ZYNORIQ TV — YouTube Player
    ═══════════════════════════ */
 .video-section{
   position:relative;z-index:5;
@@ -514,9 +514,7 @@ header{
   background:linear-gradient(180deg,rgba(6,6,22,.98),rgba(8,8,26,.95));
   border-bottom:1px solid var(--border);
 }
-.video-container{
-  max-width:960px;margin:0 auto;
-}
+.video-container{max-width:960px;margin:0 auto;}
 .tv-promo-banner{
   max-width:960px;margin:0 auto 14px;display:flex;align-items:center;gap:10px;
   padding:9px 14px;border-radius:10px;text-decoration:none;
@@ -524,92 +522,67 @@ header{
   border:1px solid rgba(34,232,122,.3);transition:all .2s;
 }
 .tv-promo-banner:hover{border-color:rgba(34,232,122,.6);background:linear-gradient(135deg,rgba(34,232,122,.18),rgba(79,110,255,.15))}
-.tv-promo-live{
-  font-size:.6rem;font-weight:800;letter-spacing:1.5px;color:#22e87a;
-  display:flex;align-items:center;gap:5px;flex-shrink:0;
-}
-.tv-promo-live::before{
-  content:'';width:7px;height:7px;border-radius:50%;background:#22e87a;
-  animation:livePulse 1.5s infinite;
-}
+.tv-promo-live{font-size:.6rem;font-weight:800;letter-spacing:1.5px;color:#22e87a;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.tv-promo-live::before{content:'';width:7px;height:7px;border-radius:50%;background:#22e87a;animation:livePulse 1.5s infinite}
 @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,232,122,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(34,232,122,0)}}
 .tv-promo-text{font-size:.78rem;color:var(--text);font-weight:600;flex:1}
 .tv-promo-arrow{color:var(--accent);font-weight:800;flex-shrink:0}
-.video-title-row{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:14px;flex-wrap:wrap;gap:8px;
-}
-.video-title{
-  font-family:'Orbitron',monospace;font-size:.9rem;
-  color:var(--gold);letter-spacing:1px;
-}
-.quality-badges{display:flex;gap:6px}
-.qbadge{
-  padding:3px 10px;border-radius:6px;font-size:.65rem;font-weight:700;
-  cursor:pointer;transition:all .2s;
-}
-.qbadge.active,.qbadge:hover{background:var(--accent);color:#fff}
-.qbadge:not(.active){background:var(--glass2);border:1px solid var(--border2);color:var(--muted2)}
+.video-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.video-title{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--gold);letter-spacing:1px}
 
-.player-wrap{
-  position:relative;background:#000;border-radius:14px;overflow:hidden;
+/* YouTube iframe wrapper */
+.yt-wrap{
+  position:relative;width:100%;aspect-ratio:16/9;
+  border-radius:14px;overflow:hidden;
   border:1px solid var(--border2);
-  box-shadow:0 0 60px rgba(79,110,255,.15);
-  aspect-ratio:16/9;
+  box-shadow:0 0 60px rgba(20,121,255,.15);
+  background:#000;
 }
-.player-wrap video{width:100%;height:100%;display:block;object-fit:cover}
+.yt-wrap iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:none;display:block;
+}
 
-/* Custom controls overlay */
-.player-controls{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,20,.95));
-  padding:30px 16px 14px;
-  transform:translateY(100%);transition:transform .3s;
-}
-.player-wrap:hover .player-controls{transform:translateY(0)}
-.progress-wrap{
-  width:100%;height:4px;background:rgba(255,255,255,.2);
-  border-radius:2px;cursor:pointer;margin-bottom:10px;position:relative;
-}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;width:0%;transition:width .1s}
-.ctrl-row{display:flex;align-items:center;gap:12px}
-.ctrl-btn{
-  background:none;border:none;color:#fff;cursor:pointer;
-  font-size:1rem;padding:4px;opacity:.85;transition:opacity .2s;
-}
-.ctrl-btn:hover{opacity:1}
-.ctrl-time{font-size:.72rem;color:rgba(255,255,255,.7);flex:1}
-.vol-wrap{display:flex;align-items:center;gap:6px}
-.vol-slider{
-  width:70px;height:3px;appearance:none;background:rgba(255,255,255,.3);
-  border-radius:2px;cursor:pointer;accent-color:var(--accent);
-}
-.player-placeholder{
+/* Coming Soon card (shown when no YouTube ID configured) */
+.yt-coming{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#080818,#0e0e28);
-  color:var(--muted2);gap:16px;
+  background:linear-gradient(135deg,#04112A 0%,#061A35 50%,#04112A 100%);
+  gap:14px;text-align:center;padding:20px;
 }
-.player-placeholder .play-icon{
-  width:72px;height:72px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.8rem;cursor:pointer;
-  box-shadow:0 0 40px rgba(79,110,255,.4);
-  transition:transform .2s;
+.yt-coming-logo{
+  font-family:'Poppins','Orbitron',monospace;font-size:1.5rem;font-weight:900;
+  background:linear-gradient(90deg,#1479FF,#4DA6FF);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:2px;
 }
-.player-placeholder .play-icon:hover{transform:scale(1.1)}
-.now-playing{font-size:.75rem;color:var(--muted2);letter-spacing:1px}
-.video-playlist{
-  margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;
+.yt-coming-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:999px;font-size:.65rem;font-weight:800;
+  letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(20,121,255,.15);border:1px solid rgba(20,121,255,.4);color:#4DA6FF;
+  animation:ytPulse 2s infinite;
 }
+@keyframes ytPulse{0%,100%{border-color:rgba(20,121,255,.4)}50%{border-color:rgba(20,121,255,.9);box-shadow:0 0 12px rgba(20,121,255,.3)}}
+.yt-coming-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#1479FF;animation:livePulse 1.5s infinite}
+.yt-coming-title{font-size:.88rem;font-weight:700;color:#E8F0FE;max-width:420px;line-height:1.5}
+.yt-coming-sub{font-size:.72rem;color:#4DA6FF;opacity:.7}
+.yt-coming-yt{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 20px;border-radius:8px;
+  background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.3);
+  color:#ff6b6b;font-size:.75rem;font-weight:700;
+  text-decoration:none;transition:all .2s;
+}
+.yt-coming-yt:hover{background:rgba(255,0,0,.22);border-color:rgba(255,0,0,.6)}
+
+/* Playlist */
+.video-playlist{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
 .playlist-item{
   padding:6px 14px;border-radius:8px;font-size:.75rem;cursor:pointer;
-  background:var(--glass2);border:1px solid var(--border);color:var(--muted2);
-  transition:all .2s;
+  background:var(--glass2);border:1px solid var(--border);color:var(--muted2);transition:all .2s;
 }
 .playlist-item:hover,.playlist-item.active{
-  background:rgba(79,110,255,.2);border-color:var(--accent);color:var(--text);
+  background:rgba(20,121,255,.2);border-color:#1479FF;color:var(--text);
 }
 
 /* ═══════════════════════════
@@ -1125,7 +1098,7 @@ footer{
 <span id="status"></span>
 </div>
 
-<!-- ══ VIDEO PLAYER 4K ══ -->
+<!-- ══ ZYNORIQ TV — YouTube Player ══ -->
 <div class="video-section">
   <a href="/predikta-tv" class="tv-promo-banner">
     <span class="tv-promo-live">LIVE</span>
@@ -1135,42 +1108,27 @@ footer{
   <div class="video-container">
     <div class="video-title-row">
       <div class="video-title" id="video-section-title">📺 ZYNORIQ TV — Tutoriels & Analyses Live</div>
-      <div class="quality-badges">
-        <span class="qbadge active" onclick="setQuality(this,'4K')">4K</span>
-        <span class="qbadge" onclick="setQuality(this,'1080p')">1080p</span>
-        <span class="qbadge" onclick="setQuality(this,'720p')">720p</span>
+      <a class="yt-coming-yt" href="https://www.youtube.com/@zynoriq" target="_blank" rel="noopener">
+        ▶ Chaîne YouTube
+      </a>
+    </div>
+    <div class="yt-wrap" id="ytWrap">
+      <!-- YouTube iframe — injecté par JS quand un ID est configuré -->
+      <iframe id="ytFrame" style="display:none" allowfullscreen
+        allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture">
+      </iframe>
+      <!-- Coming soon — affiché quand aucun ID YouTube n'est configuré -->
+      <div class="yt-coming" id="ytComing">
+        <div class="yt-coming-logo">ZYNORIQ TV</div>
+        <div class="yt-coming-badge">Bientôt disponible</div>
+        <div class="yt-coming-title" id="ytComingTitle">Tutoriels & Analyses en préparation</div>
+        <div class="yt-coming-sub">Abonnez-vous pour être notifié dès la mise en ligne</div>
+        <a class="yt-coming-yt" href="https://www.youtube.com/@zynoriq" target="_blank" rel="noopener">
+          ▶ S'abonner à la chaîne ZYNORIQ
+        </a>
       </div>
     </div>
-    <div class="player-wrap" id="playerWrap">
-      <!-- Placeholder (replace src with real video URLs) -->
-      <div class="player-placeholder" id="playerPlaceholder">
-        <div class="play-icon" onclick="playVideo()">▶</div>
-        <div class="now-playing" id="nowPlaying">Comment lire les prédictions ZYNORIQ</div>
-        <div style="font-size:.7rem;color:var(--muted)">Cliquez pour lancer · Qualité 4K disponible</div>
-      </div>
-      <video id="mainVideo" style="display:none" controls playsinline>
-        <source src="" type="video/mp4"/>
-      </video>
-      <div class="player-controls" id="playerControls" style="display:none">
-        <div class="progress-wrap" onclick="seekVideo(event)">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="ctrl-row">
-          <button class="ctrl-btn" onclick="togglePlay()" id="playBtn">⏸</button>
-          <span class="ctrl-time" id="timeDisplay">0:00 / 0:00</span>
-          <div class="vol-wrap">
-            🔊 <input type="range" class="vol-slider" min="0" max="1" step=".05" value="1" oninput="setVolume(this.value)"/>
-          </div>
-          <button class="ctrl-btn" onclick="toggleFS()">⛶</button>
-        </div>
-      </div>
-    </div>
-    <div class="video-playlist" id="playlist">
-      <div class="playlist-item active" data-src="" id="nowPlaying" onclick="loadTrack(this)">🎬 Guide Prédictions</div>
-      <div class="playlist-item" data-src="" onclick="loadTrack(this)">📊 Analyse Markov</div>
-      <div class="playlist-item" data-src="" onclick="loadTrack(this)">📊 Analyse Expliquée</div>
-      <div class="playlist-item" data-src="" onclick="loadTrack(this)">💰 Stratégies Gagnantes</div>
-    </div>
+    <div class="video-playlist" id="ytPlaylist"></div>
   </div>
 </div>
 
@@ -1725,49 +1683,51 @@ setInterval(tickerNext, 4000);
 // ═══════════════════════════════════
 // VIDEO PLAYER
 // ═══════════════════════════════════
-function playVideo(){
-  const ph = document.getElementById('playerPlaceholder');
-  const vid = document.getElementById('mainVideo');
-  ph.style.display = 'none';
-  vid.style.display = 'block';
-  vid.play();
-}
-function togglePlay(){
-  const vid = document.getElementById('mainVideo');
-  const btn = document.getElementById('playBtn');
-  if(vid.paused){ vid.play(); btn.textContent='⏸'; }
-  else { vid.pause(); btn.textContent='▶'; }
-}
-function toggleFS(){
-  const wrap = document.getElementById('playerWrap');
-  if(document.fullscreenElement) document.exitFullscreen();
-  else wrap.requestFullscreen();
-}
-function seekVideo(e){
-  const vid = document.getElementById('mainVideo');
-  const bar = e.currentTarget;
-  const pct = e.offsetX / bar.offsetWidth;
-  vid.currentTime = vid.duration * pct;
-}
-function setVolume(v){ document.getElementById('mainVideo').volume = parseFloat(v); }
-function setQuality(el, q){
-  document.querySelectorAll('.qbadge').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-}
-function loadTrack(el){
-  document.querySelectorAll('.playlist-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('nowPlaying').textContent = el.textContent;
-}
-// Update progress bar
-setInterval(()=>{
-  const vid = document.getElementById('mainVideo');
-  if(!vid||vid.paused||!vid.duration) return;
-  const pct = vid.currentTime/vid.duration*100;
-  document.getElementById('progressFill').style.width = pct+'%';
-  const fmt = s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
-  document.getElementById('timeDisplay').textContent = `${fmt(vid.currentTime)} / ${fmt(vid.duration)}`;
-}, 500);
+// ═══════════════════════════════════════════════════
+// ZYNORIQ TV — YouTube Player
+// Pour activer une vidéo : collez l'ID YouTube dans "id"
+// Ex: { id: "dQw4w9WgXcQ", ... }
+// Laissez id:"" pour afficher "Bientôt disponible"
+// ═══════════════════════════════════════════════════
+const YT_VIDEOS = [
+  { id: "", label: "🎬 Guide Prédictions",    title: "Comment lire les prédictions ZYNORIQ" },
+  { id: "", label: "📊 Analyse Markov",        title: "Chaînes de Markov — Analyse détaillée" },
+  { id: "", label: "📊 Analyse Expliquée",     title: "Tous les algorithmes expliqués" },
+  { id: "", label: "💰 Stratégies Gagnantes",  title: "Méthodes avancées & backtesting" },
+];
+
+(function initYTPlayer(){
+  const playlist = document.getElementById('ytPlaylist');
+  const frame    = document.getElementById('ytFrame');
+  const coming   = document.getElementById('ytComing');
+  const comingTitle = document.getElementById('ytComingTitle');
+  if(!playlist) return;
+
+  function loadVideo(idx){
+    const v = YT_VIDEOS[idx];
+    playlist.querySelectorAll('.playlist-item').forEach((el,i)=>
+      el.classList.toggle('active', i===idx));
+    if(v.id){
+      coming.style.display = 'none';
+      frame.style.display  = 'block';
+      frame.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&color=white`;
+    } else {
+      frame.style.display  = 'none';
+      coming.style.display = 'flex';
+      comingTitle.textContent = v.title;
+    }
+  }
+
+  YT_VIDEOS.forEach((v,i)=>{
+    const el = document.createElement('div');
+    el.className = 'playlist-item' + (i===0?' active':'');
+    el.textContent = v.label;
+    el.onclick = ()=> loadVideo(i);
+    playlist.appendChild(el);
+  });
+
+  loadVideo(0);
+})();
 
 // ═══════════════════════════════════
 // API CALLS
