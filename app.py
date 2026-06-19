@@ -161,23 +161,37 @@ def _save_subscriptions(subs):
         json.dump(subs, f, ensure_ascii=False, indent=2)
 
 
-def _send_push_to_all(title: str, body: str, url: str = "/all-results"):
-    """Envoie une notification push à tous les abonnés. Retire automatiquement
-    les abonnements expirés/invalides (HTTP 404/410)."""
+def _send_push_to_all(title: str, body: str, url: str = "/all-results", state: str | None = None):
+    """Envoie une notification push aux abonnés concernés.
+    Si state est fourni, filtre les abonnés qui ont cet état dans leurs préférences
+    (ou qui ont ["ALL"] / liste vide = tous les états)."""
     if webpush is None or not os.path.exists(_VAPID_PRIV_FILE):
         return {"sent": 0, "removed": 0, "error": "push not configured"}
 
     with open(_VAPID_PRIV_FILE) as f:
         private_key = f.read()
 
-    subs = _load_subscriptions()
+    all_subs = _load_subscriptions()
+    # Filtrer par état si précisé
+    if state:
+        st_up = state.upper()
+        subs = []
+        for s in all_subs:
+            prefs = s.get("states") or []
+            if not prefs or "ALL" in prefs or st_up in prefs:
+                subs.append(s)
+    else:
+        subs = all_subs
+
     payload = json.dumps({"title": title, "body": body, "url": url})
     sent, removed, kept = 0, 0, []
 
     for sub in subs:
+        # subscription_info doit contenir endpoint + keys seulement
+        sub_info = {"endpoint": sub["endpoint"], "keys": sub.get("keys", {})}
         try:
             webpush(
-                subscription_info=sub,
+                subscription_info=sub_info,
                 data=payload,
                 vapid_private_key=private_key,
                 vapid_claims=dict(_VAPID_CLAIMS),
@@ -194,7 +208,9 @@ def _send_push_to_all(title: str, body: str, url: str = "/all-results"):
             kept.append(sub)
 
     if removed:
-        _save_subscriptions(kept)
+        # Reconstruire la liste complète sans les morts
+        dead_eps = {s["endpoint"] for s in all_subs if s not in kept and s in subs}
+        _save_subscriptions([s for s in all_subs if s.get("endpoint") not in dead_eps])
     return {"sent": sent, "removed": removed}
 
 
@@ -430,11 +446,34 @@ def api_push_subscribe():
     if not sub or "endpoint" not in sub:
         return jsonify({"error": "Invalid subscription"}), 400
 
+    states = data.get("states") or ["ALL"]  # ["ALL"] = tous les états
+
     subs = _load_subscriptions()
-    if not any(s.get("endpoint") == sub["endpoint"] for s in subs):
-        subs.append(sub)
-        _save_subscriptions(subs)
+    subs = [s for s in subs if s.get("endpoint") != sub["endpoint"]]  # dédoublonne
+    entry = {"endpoint": sub["endpoint"], "keys": sub.get("keys", {}), "states": states}
+    subs.append(entry)
+    _save_subscriptions(subs)
     return jsonify({"message": "Subscribed", "total": len(subs)})
+
+
+@app.route("/api/push/preferences", methods=["POST"])
+def api_push_preferences():
+    """Met à jour les états préférés d'un abonné existant."""
+    data    = request.get_json(silent=True) or {}
+    endpoint = data.get("endpoint", "")
+    states   = data.get("states") or ["ALL"]
+    if not endpoint:
+        return jsonify({"error": "Missing endpoint"}), 400
+    subs = _load_subscriptions()
+    updated = False
+    for s in subs:
+        if s.get("endpoint") == endpoint:
+            s["states"] = states
+            updated = True
+            break
+    if updated:
+        _save_subscriptions(subs)
+    return jsonify({"ok": updated, "states": states})
 
 
 @app.route("/api/push/unsubscribe", methods=["POST"])
@@ -804,7 +843,7 @@ def _draw_watcher_loop():
                                                 _pbody = f"📦 BOX hit ! Rang #{_tr_result.get('consensus_box_rank','?')} · {_digs}"
                                             else:
                                                 _pbody = f"Résultat officiel: {_digs}"
-                                            _send_push_to_all(_ptitle, _pbody, f"/results?state={st}")
+                                            _send_push_to_all(_ptitle, _pbody, f"/results?state={st}", state=st)
                                         except Exception as _pe:
                                             print(f"  [draw-watcher][push][{st}] error: {_pe}")
                             except Exception as _se:

@@ -1106,16 +1106,36 @@ async function _getPushSub(){
   return await reg.pushManager.getSubscription();
 }
 
+// États disponibles (liste complète)
+const _ALL_STATES = [
+  {code:'AR',name:'Arkansas'},{code:'AZ',name:'Arizona'},{code:'CA',name:'California'},
+  {code:'CO',name:'Colorado'},{code:'CT',name:'Connecticut'},{code:'DC',name:'DC'},
+  {code:'DE',name:'Delaware'},{code:'FL',name:'Florida'},{code:'GA',name:'Georgia'},
+  {code:'IA',name:'Iowa'},{code:'ID',name:'Idaho'},{code:'IL',name:'Illinois'},
+  {code:'IN',name:'Indiana'},{code:'KS',name:'Kansas'},{code:'KY',name:'Kentucky'},
+  {code:'LA',name:'Louisiana'},{code:'MD',name:'Maryland'},{code:'ME',name:'Maine'},
+  {code:'MI',name:'Michigan'},{code:'MN',name:'Minnesota'},{code:'MO',name:'Missouri'},
+  {code:'MS',name:'Mississippi'},{code:'NC',name:'N. Carolina'},{code:'NE',name:'Nebraska'},
+  {code:'NH',name:'New Hampshire'},{code:'NJ',name:'New Jersey'},{code:'NM',name:'New Mexico'},
+  {code:'NY',name:'New York'},{code:'OH',name:'Ohio'},{code:'OK',name:'Oklahoma'},
+  {code:'PA',name:'Pennsylvania'},{code:'PR',name:'Puerto Rico'},{code:'SC',name:'S. Carolina'},
+  {code:'TN',name:'Tennessee'},{code:'TX',name:'Texas'},{code:'VA',name:'Virginia'},
+  {code:'VT',name:'Vermont'},{code:'WA',name:'Washington'},{code:'WI',name:'Wisconsin'},
+  {code:'WV',name:'W. Virginia'},
+];
+
+let _pushStates = JSON.parse(localStorage.getItem('_push_states') || '["ALL"]');
+
 async function _updatePushBtn(){
   const btn = document.getElementById('pushBtn');
   if(!btn) return;
-  if(!('PushManager' in window)){
-    btn.style.display = 'none'; return;
-  }
+  if(!('PushManager' in window)){ btn.style.display='none'; return; }
   const sub = await _getPushSub();
   _pushSub = sub;
   if(sub){
-    btn.textContent = '🔔 Alertes ON';
+    const label = _pushStates.includes('ALL') ? '🔔 Alertes ON'
+                  : `🔔 Alertes (${_pushStates.length} État${_pushStates.length>1?'s':''})`;
+    btn.textContent = label;
     btn.style.background = 'linear-gradient(135deg,#7c3aed,#4f46e5)';
     btn.style.color = '#fff';
     btn.style.borderColor = '#7c3aed';
@@ -1134,36 +1154,109 @@ async function togglePushNotif(){
   }
   const existing = await _getPushSub();
   if(existing){
-    // Désabonnement
-    await existing.unsubscribe();
-    await fetch('/api/push/unsubscribe', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({endpoint: existing.endpoint})
-    });
-    _updatePushBtn();
+    // Déjà abonné → ouvrir le modal de préférences
+    _openPushModal(existing);
     return;
   }
-  // Demande de permission
+  // Pas encore abonné → permission + abonnement → puis modal
   const perm = await Notification.requestPermission();
   if(perm !== 'granted'){
     alert('Permission refusée. Activez les notifications dans les paramètres du navigateur.');
     return;
   }
-  // Récupère la clé VAPID publique
   const kRes  = await fetch('/api/push/vapid-public-key');
   const kData = await kRes.json();
   if(kData.error){ alert('Push non configuré côté serveur.'); return; }
   const appServerKey = await _urlB64ToUint8Array(kData.key);
-  // Abonnement
   const reg = await navigator.serviceWorker.ready;
-  const sub = await reg.pushManager.subscribe({
-    userVisibleOnly: true, applicationServerKey: appServerKey
-  });
-  // Envoie l'abonnement au serveur (format attendu: {subscription: {...}})
+  const sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: appServerKey });
   await fetch('/api/push/subscribe', {
     method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ subscription: sub.toJSON() })
+    body: JSON.stringify({ subscription: sub.toJSON(), states: _pushStates })
   });
+  _updatePushBtn();
+  _openPushModal(sub);
+}
+
+function _openPushModal(sub){
+  // Supprimer modal existant
+  document.getElementById('_pushModal')?.remove();
+  const isAll = _pushStates.includes('ALL');
+  const stateRows = _ALL_STATES.map(s=>{
+    const chk = (!isAll && _pushStates.includes(s.code)) ? 'checked' : '';
+    return `<label style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:7px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(124,58,237,.15)'" onmouseout="this.style.background='none'">
+      <input type="checkbox" value="${s.code}" ${chk} style="accent-color:#7c3aed;width:15px;height:15px">
+      <span style="font-size:.85rem">${s.name}</span>
+      <span style="font-size:.72rem;color:#64748b;margin-left:auto">${s.code}</span>
+    </label>`;
+  }).join('');
+
+  const modal = document.createElement('div');
+  modal.id = '_pushModal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)';
+  modal.innerHTML = `
+    <div style="background:#0f0f2a;border:1px solid rgba(124,58,237,.4);border-radius:18px;width:min(480px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:0 24px 80px #000a">
+      <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-weight:800;font-size:1rem;color:#e2e8f0">🔔 Alertes de Tirages</div>
+          <div style="font-size:.75rem;color:#64748b;margin-top:2px">Choisissez les États à surveiller</div>
+        </div>
+        <button onclick="document.getElementById('_pushModal').remove()" style="background:none;border:none;color:#64748b;font-size:1.3rem;cursor:pointer;line-height:1">✕</button>
+      </div>
+      <div style="padding:14px 20px 8px">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 10px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:10px">
+          <input type="checkbox" id="_pushAll" ${isAll?'checked':''} style="accent-color:#7c3aed;width:16px;height:16px"
+            onchange="_togglePushAll(this.checked)">
+          <span style="font-weight:700;color:#a78bfa">🌎 Tous les États (${_ALL_STATES.length})</span>
+        </label>
+      </div>
+      <div id="_pushStateList" style="overflow-y:auto;padding:4px 12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:2px;${isAll?'opacity:.4;pointer-events:none':''}">
+        ${stateRows}
+      </div>
+      <div style="padding:12px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;gap:10px">
+        <button onclick="_savePushPrefs('${sub.endpoint}')" style="flex:1;padding:10px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;border-radius:10px;color:#fff;font-weight:700;cursor:pointer">✅ Enregistrer</button>
+        <button onclick="_unsubscribePush('${sub.endpoint}')" style="padding:10px 16px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:10px;color:#f87171;font-size:.8rem;cursor:pointer">🔕 Désactiver</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+}
+
+function _togglePushAll(checked){
+  const list = document.getElementById('_pushStateList');
+  if(list) list.style.cssText += checked ? ';opacity:.4;pointer-events:none' : ';opacity:1;pointer-events:auto';
+}
+
+async function _savePushPrefs(endpoint){
+  const allChk = document.getElementById('_pushAll');
+  let states;
+  if(allChk?.checked){
+    states = ['ALL'];
+  } else {
+    states = [...document.querySelectorAll('#_pushStateList input:checked')].map(i=>i.value);
+    if(!states.length) states = ['ALL'];
+  }
+  _pushStates = states;
+  localStorage.setItem('_push_states', JSON.stringify(states));
+  await fetch('/api/push/preferences', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ endpoint, states })
+  });
+  document.getElementById('_pushModal')?.remove();
+  _updatePushBtn();
+  _showDrawToast({state_name:'Préférences', tod:'', d1:'✅', d2:'', d3:'', date:'', source:'sauvegardées'});
+}
+
+async function _unsubscribePush(endpoint){
+  const sub = await _getPushSub();
+  if(sub) await sub.unsubscribe();
+  await fetch('/api/push/unsubscribe', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ endpoint })
+  });
+  _pushStates = ['ALL'];
+  localStorage.removeItem('_push_states');
+  document.getElementById('_pushModal')?.remove();
   _updatePushBtn();
 }
 
