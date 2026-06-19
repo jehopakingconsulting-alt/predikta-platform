@@ -1746,21 +1746,30 @@ async function runScrape(){
   }catch(e){ status.textContent='Error'; }
 }
 
+let _loadReportRetry = 0;
 async function loadReport(){
   const state = document.getElementById('stateSelect').value;
   const tod   = document.getElementById('todSelect').value;
+
+  // Afficher spinner avec message de démarrage du serveur au 1er essai
+  const warmMsg = _loadReportRetry > 0
+    ? `<div style="color:var(--muted2);font-size:.8rem;margin-top:8px">⏳ Démarrage serveur… tentative ${_loadReportRetry+1}/3</div>`
+    : '';
   status.textContent = t('analyzing');
   document.getElementById('mainContent').innerHTML =
-    `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">${t('analyzing')}</div></div>`;
+    `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">${t('analyzing')}</div>${warmMsg}</div>`;
   Object.values(currentCharts).forEach(c=>{ try{c.destroy()}catch(e){} });
   currentCharts = {};
   try{
     const dowQS = excludeDow.length ? `&exclude_dow=${excludeDow.join(',')}` : '';
     const domQS = excludeDom.length ? `&exclude_dom=${excludeDom.join(',')}` : '';
     const controller = new AbortController();
-    const fetchTimer = setTimeout(()=>controller.abort(), 30000);
+    // Timeout progressif : 40s → 55s → 70s (le 3e essai laisse le temps au cold start Render)
+    const timeouts = [40000, 55000, 70000];
+    const fetchTimer = setTimeout(()=>controller.abort(), timeouts[Math.min(_loadReportRetry, 2)]);
     const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`, {signal:controller.signal});
     clearTimeout(fetchTimer);
+    _loadReportRetry = 0;
     let data;
     try{ data = await r.json(); }
     catch(_je){
@@ -1815,11 +1824,20 @@ async function loadReport(){
     }
   }catch(e){
     status.textContent='';
-    const msg = e.name==='AbortError' ? '⏱ Délai dépassé (30s) — serveur trop lent.' : `⚠️ ${e.message}`;
+    if(e.name==='AbortError' && _loadReportRetry < 2){
+      // Cold start Render : auto-retry silencieux (max 2 fois)
+      _loadReportRetry++;
+      loadReport();
+      return;
+    }
+    _loadReportRetry = 0;
+    const msg = e.name==='AbortError'
+      ? '⏱ Serveur trop lent à répondre. Patientez quelques secondes et réessayez.'
+      : `⚠️ ${e.message}`;
     document.getElementById('mainContent').innerHTML=
       `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
         ${msg}<br><br>
-        <button class="btn-scrape" onclick="loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+        <button class="btn-scrape" onclick="_loadReportRetry=0;loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
         <button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">📥 Scraper</button>
       </div>`;
   }
