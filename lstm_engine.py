@@ -15,10 +15,10 @@ import numpy as np
 from collections import defaultdict
 
 # ── Hyper-parameters ──────────────────────────────────────────────────────
-SEQ_LEN   = 15       # timesteps fed to the LSTM
-HIDDEN    = 32       # LSTM hidden units
-LR        = 3e-3     # Adam learning rate
-EPOCHS    = 60       # training epochs
+SEQ_LEN   = 10       # timesteps fed to the LSTM
+HIDDEN    = 16       # LSTM hidden units (32→16 : 4x moins de params)
+LR        = 5e-3     # Adam learning rate (plus rapide à converger)
+EPOCHS    = 20       # training epochs (60→20 : 3x plus rapide)
 MIN_DRAWS = 80       # minimum history required to train
 POSITIONS = ["d1", "d2", "d3"]        # Pick 3
 POSITIONS4 = ["d1", "d2", "d3", "d4"] # Pick 4
