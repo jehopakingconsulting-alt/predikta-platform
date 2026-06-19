@@ -22,8 +22,25 @@ def _pool_size(draws: list[dict]) -> int:
 
 
 def _pick_n(draws: list[dict]) -> int:
-    """Infer how many numbers are drawn per draw."""
-    return max(len(d["nums"]) for d in draws) if draws else 5
+    """
+    Infer how many numbers are drawn per draw.
+    Uses the minimum observed draw length — some scrapers merge two draws
+    into one row, doubling the count (e.g. NC cash5: 5→10). The minimum
+    length is always the true pick-N.
+    """
+    if not draws:
+        return 5
+    lengths = [len(d["nums"]) for d in draws if d["nums"]]
+    return min(lengths) if lengths else 5
+
+
+def _normalize_draws(draws: list[dict]) -> list[dict]:
+    """
+    Truncate draw nums to the expected pick_n.
+    Handles cases where scraper merges two draws into one row.
+    """
+    n = _pick_n(draws)
+    return [{**d, "nums": d["nums"][:n]} for d in draws]
 
 
 # ── Core statistics ───────────────────────────────────────────────────────
@@ -151,7 +168,7 @@ def _number_scores(draws: list[dict], freq_w=0.40, gap_w=0.35, pair_w=0.25) -> d
     return scores
 
 
-def weighted_suggestions(draws: list[dict], pick_n: int = 5, top_n: int = 10) -> list[dict]:
+def weighted_suggestions(draws: list[dict], pick_n: int = None, top_n: int = 10) -> list[dict]:
     """
     Return top-N suggested combinations of `pick_n` numbers.
     Strategy: score all numbers, pick best `pick_n` as the primary suggestion,
@@ -159,6 +176,9 @@ def weighted_suggestions(draws: list[dict], pick_n: int = 5, top_n: int = 10) ->
     """
     if not draws or len(draws) < 20:
         return []
+    draws = _normalize_draws(draws)
+    if pick_n is None:
+        pick_n = _pick_n(draws)
 
     scores = _number_scores(draws)
     freq = number_frequencies(draws)
@@ -215,6 +235,7 @@ def backtest(draws: list[dict], n: int = 15, min_history: int = 60) -> list[dict
     data available before that draw, then compare to actual result.
     Records hit_5 (jackpot), hit_4, hit_3 counts.
     """
+    draws = _normalize_draws(draws)
     pick_n = _pick_n(draws)
     results = []
     for i in range(min(n, len(draws))):
@@ -246,6 +267,7 @@ def backtest(draws: list[dict], n: int = 15, min_history: int = 60) -> list[dict
 def full_report(draws: list[dict], state_code: str = "", slug: str = "") -> dict:
     if not draws:
         return {"error": "No data"}
+    draws = _normalize_draws(draws)
     pick_n = _pick_n(draws)
     pool = _pool_size(draws)
     return {

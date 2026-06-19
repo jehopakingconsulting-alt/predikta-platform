@@ -101,35 +101,36 @@ class LSTMModel:
 
         return np.array(logits), caches, h
 
-    def _bptt(self, seq, targets):
+    def _bptt(self, seq, target: int):
         """
-        BPTT for one sequence.
+        BPTT for one sequence — many-to-one: loss computed only at last timestep.
         seq: (T, input_size)
-        targets: (T,) int digit labels
+        target: int digit label for the next draw
         Returns: (loss, grads dict)
         """
         T = len(seq)
         logits, caches, _ = self.forward(seq)
 
         grads = {k: np.zeros_like(getattr(self, k)) for k in self._params}
-        total_loss = 0.0
 
         dh_next = np.zeros(self.H)
         dc_next = np.zeros(self.H)
 
         for t in reversed(range(T)):
-            y_pred = _softmax(logits[t])
-            y_true = np.zeros(self.O)
-            y_true[targets[t]] = 1.0
-            dy = y_pred - y_true
-            total_loss += -np.log(np.clip(y_pred[targets[t]], 1e-9, 1.0))
-
             z, f, i, g, o, c_prev, c_cur, h_cur = caches[t]
 
-            # Output layer gradients
-            grads['Wy'] += np.outer(h_cur, dy)
-            grads['by'] += dy
-            dh = self.Wy @ dy + dh_next
+            if t == T - 1:
+                # Loss only at last step (predict next draw)
+                y_pred = _softmax(logits[t])
+                y_true = np.zeros(self.O)
+                y_true[target] = 1.0
+                dy = y_pred - y_true
+                loss = -np.log(np.clip(y_pred[target], 1e-9, 1.0))
+                grads['Wy'] += np.outer(h_cur, dy)
+                grads['by'] += dy
+                dh = self.Wy @ dy + dh_next
+            else:
+                dh = dh_next
 
             # LSTM cell gradients
             tanh_c = _tanh(c_cur)
@@ -141,21 +142,17 @@ class LSTMModel:
             df = dc * c_prev * f * (1 - f)
             dc_next = dc * f
 
-            # Weight gradients
             for name, dgate in [('Wf', df), ('Wi', di), ('Wg', dg), ('Wo', do)]:
                 grads[name] += np.outer(z, dgate)
             for name, dgate in [('bf', df), ('bi', di), ('bg', dg), ('bo', do)]:
                 grads[name] += dgate
 
-            # Gradient for previous h
-            D = self.I + self.H
             dh_next = (self.Wf @ df + self.Wi @ di + self.Wg @ dg + self.Wo @ do)[self.I:]
 
-        # Clip gradients
         for k in grads:
             np.clip(grads[k], -5, 5, out=grads[k])
 
-        return total_loss / T, grads
+        return loss, grads
 
     def _adam_step(self, grads, lr=LR, beta1=0.9, beta2=0.999, eps=1e-8):
         self._t += 1
@@ -172,13 +169,13 @@ class LSTMModel:
         """
         Train on sequences.
         X: list of (T, input_size) arrays
-        y: list of (T,) int label arrays
+        y: list of int scalar targets (one per sequence)
         """
         indices = list(range(len(X)))
         for epoch in range(epochs):
             np.random.shuffle(indices)
             for idx in indices:
-                loss, grads = self._bptt(X[idx], y[idx])
+                loss, grads = self._bptt(X[idx], int(y[idx]))
                 self._adam_step(grads, lr=lr)
 
     def predict_proba(self, seq):
@@ -230,11 +227,11 @@ def train_and_predict(draws: list[dict], positions: list[str] = None,
             pos_probas[pos] = np.ones(10) / 10   # uniform fallback
             continue
 
-        # Stack targets as flat int sequences
-        y_flat = [yy[0] for yy in y]
+        # Scalar targets (one per sequence — many-to-one LSTM)
+        y_flat = [int(yy[0]) for yy in y]
 
         model = LSTMModel(input_size=1, hidden=HIDDEN, output_size=10)
-        model.train(X, [np.array([yy]) for yy in y_flat], epochs=EPOCHS)
+        model.train(X, y_flat, epochs=EPOCHS)
 
         # Predict: use the last SEQ_LEN draws as input
         last_seq = np.array([int(draws[i][pos]) for i in range(SEQ_LEN-1, -1, -1)],
@@ -306,9 +303,9 @@ def position_probas(draws: list[dict], positions: list[str] = None) -> dict:
             result[pos] = {str(d): 0.1 for d in range(10)}
             continue
 
-        y_flat = [yy[0] for yy in y]
+        y_flat = [int(yy[0]) for yy in y]
         model = LSTMModel(input_size=1, hidden=HIDDEN, output_size=10)
-        model.train(X, [np.array([yy]) for yy in y_flat], epochs=EPOCHS)
+        model.train(X, y_flat, epochs=EPOCHS)
 
         last_seq = np.array([int(draws[i][pos]) for i in range(SEQ_LEN-1, -1, -1)],
                             dtype=np.float32) / 9.0
