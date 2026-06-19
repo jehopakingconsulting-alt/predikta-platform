@@ -1562,8 +1562,10 @@ PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 # États retenus pour le Top 6 Pick3 "les plus chauds" de la page d'accueil.
 HOT_PICK3_STATES = ['NY','FL','GA','TX','NJ','TN']
 
-def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = ()):
-    """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data."""
+def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = (), with_lstm: bool = False):
+    """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data.
+    with_lstm=True uniquement pour le pré-cache background (_warm_popular_reports).
+    """
     draws = load_csv(state)
     if not draws:
         return None
@@ -1583,7 +1585,7 @@ def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), 
         if not draws:
             return None
 
-    result = run_all_models(draws)
+    result = run_all_models(draws, with_lstm=with_lstm)
     result["state"]       = state
     result["state_name"]  = STATES[state]["name"]
     result["tod_filter"]  = tod_filter
@@ -1604,7 +1606,7 @@ def _warm_popular_reports():
         if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
             continue
         try:
-            result = _build_report(state, "all")
+            result = _build_report(state, "all", with_lstm=True)
             if result:
                 _REPORT_CACHE[cache_key] = {"ts": time.time(), "data": {**result, "cached": True}}
         except Exception as e:

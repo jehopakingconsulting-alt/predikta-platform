@@ -644,8 +644,11 @@ def _conf_label(ratio: float) -> str:
 
 # ─── Top-level runner ──────────────────────────────────────────────────────
 
-def run_all_models(draws: list[dict]) -> dict:
-    """Run every model and return combined results."""
+def run_all_models(draws: list[dict], with_lstm: bool = False) -> dict:
+    """Run every model and return combined results.
+    with_lstm=False (défaut) pour les requêtes directes — le LSTM est lourd
+    et s'exécute uniquement en pré-cache background (with_lstm=True).
+    """
     if not draws:
         return {"error": "Pas de données. Lancez le scraper d'abord."}
 
@@ -681,13 +684,15 @@ def run_all_models(draws: list[dict]) -> dict:
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}
 
-    # LSTM sequential engine
+    # LSTM sequential engine — uniquement si with_lstm=True (pré-cache background)
+    # Trop lent pour les requêtes directes sur 0.5 CPU (pur NumPy, 3 positions)
     lstm_preds = []
-    try:
-        import lstm_engine
-        lstm_preds = lstm_engine.train_and_predict(draws, positions=["d1","d2","d3"], top_n=15)
-    except Exception as _le:
-        print(f"  [lstm] skipped: {_le}")
+    if with_lstm:
+        try:
+            import lstm_engine
+            lstm_preds = lstm_engine.train_and_predict(draws, positions=["d1","d2","d3"], top_n=15)
+        except Exception as _le:
+            print(f"  [lstm] skipped: {_le}")
 
     # Hot/cold (last 30 draws) — feeds the consensus breakdown
     hc30 = hot_cold_stats(draws, 30)
