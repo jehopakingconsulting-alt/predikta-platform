@@ -1757,8 +1757,22 @@ async function loadReport(){
   try{
     const dowQS = excludeDow.length ? `&exclude_dow=${excludeDow.join(',')}` : '';
     const domQS = excludeDom.length ? `&exclude_dom=${excludeDom.join(',')}` : '';
-    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`);
-    const data = await r.json();
+    const controller = new AbortController();
+    const fetchTimer = setTimeout(()=>controller.abort(), 30000);
+    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`, {signal:controller.signal});
+    clearTimeout(fetchTimer);
+    let data;
+    try{ data = await r.json(); }
+    catch(_je){
+      status.textContent='';
+      document.getElementById('mainContent').innerHTML=
+        `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
+          ⚠️ Erreur serveur (réponse invalide).<br><br>
+          <button class="btn-scrape" onclick="loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+          <button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">📥 Scraper</button>
+        </div>`;
+      return;
+    }
     status.textContent = '';
 
     // Paywall : compte requis / essai expiré / quota atteint / État non autorisé
@@ -1799,7 +1813,16 @@ async function loadReport(){
         url: `/analyze?state=${encodeURIComponent(state)}&tod=${encodeURIComponent(tod)}`,
       });
     }
-  }catch(e){ status.textContent='Error: '+e.message; }
+  }catch(e){
+    status.textContent='';
+    const msg = e.name==='AbortError' ? '⏱ Délai dépassé (30s) — serveur trop lent.' : `⚠️ ${e.message}`;
+    document.getElementById('mainContent').innerHTML=
+      `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
+        ${msg}<br><br>
+        <button class="btn-scrape" onclick="loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+        <button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">📥 Scraper</button>
+      </div>`;
+  }
 }
 
 // ═══════════════════════════════════
