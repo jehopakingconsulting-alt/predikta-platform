@@ -509,15 +509,17 @@ def ensemble_consensus(
     draws: list[dict],
     hot_cold: dict = None,
     top_n: int = 10,
+    lstm_preds: list[dict] = None,
 ) -> list[dict]:
     """
     Combine all models into a final weighted consensus score.
-    Weights: ML=35%, Markov(1+2+3)=30%, MonteCarlo=20%, Fourier=10%, Gap=5%
+    Weights: ML=28%, LSTM=10%, Markov(1+2+3)=30%, MonteCarlo=20%, Fourier=7%, Gap=5%
+    (LSTM added; ML reduced from 35% to 28% to accommodate.)
     """
     gaps = digit_gap_analysis(draws)
     combo_scores = defaultdict(float)
     combo_components = defaultdict(lambda: {
-        "ml": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
+        "ml": 0.0, "lstm": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
         "monte_carlo": 0.0, "fourier": 0.0, "gap": 0.0,
     })
 
@@ -531,10 +533,11 @@ def ensemble_consensus(
                 combo_components[combo][component] += contrib
                 break
 
+    lstm_preds = lstm_preds or []
     all_combos = set()
 
     # Collect all candidate combos
-    for p in markov1 + markov2 + markov3 + ml_preds + mc_preds:
+    for p in markov1 + markov2 + markov3 + ml_preds + mc_preds + lstm_preds:
         all_combos.add(p["combo"])
 
     # Add Fourier hint combos
@@ -549,17 +552,18 @@ def ensemble_consensus(
         all_combos.add(fc)
 
     for combo in all_combos:
-        idx_score(ml_preds, combo, 0.35, "ml")
-        idx_score(markov1, combo, 0.12, "markov1")
-        idx_score(markov2, combo, 0.10, "markov2")
-        idx_score(markov3, combo, 0.08, "markov3")
-        idx_score(mc_preds, combo, 0.20, "monte_carlo")
+        idx_score(ml_preds,   combo, 0.28, "ml")
+        idx_score(lstm_preds, combo, 0.10, "lstm")
+        idx_score(markov1,    combo, 0.12, "markov1")
+        idx_score(markov2,    combo, 0.10, "markov2")
+        idx_score(markov3,    combo, 0.08, "markov3")
+        idx_score(mc_preds,   combo, 0.20, "monte_carlo")
 
         # Fourier bonus
         parts = combo.split("-")
         if len(parts) == 3 and len(f_digits) == 3:
             matches = sum(1 for pos, key in [("d1",0),("d2",1),("d3",2)] if f_digits.get(pos) == int(parts[key]))
-            fourier_contrib = 0.10 * (matches / 3)
+            fourier_contrib = 0.07 * (matches / 3)
             combo_scores[combo] += fourier_contrib
             combo_components[combo]["fourier"] += fourier_contrib
 
@@ -621,6 +625,7 @@ def _consensus_breakdown(combo: str, components: dict, gaps: dict, hot_cold: dic
         "digits": digits_info,
         "model_contributions": {
             "ml_pct": round(components["ml"] / total * 100, 1),
+            "lstm_pct": round(components.get("lstm", 0.0) / total * 100, 1),
             "markov_pct": round((components["markov1"] + components["markov2"] + components["markov3"]) / total * 100, 1),
             "monte_carlo_pct": round(components["monte_carlo"] / total * 100, 1),
             "fourier_pct": round(components["fourier"] / total * 100, 1),
@@ -677,11 +682,20 @@ def run_all_models(draws: list[dict]) -> dict:
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}
 
+    # LSTM sequential engine
+    lstm_preds = []
+    try:
+        import lstm_engine
+        lstm_preds = lstm_engine.train_and_predict(draws, positions=["d1","d2","d3"], top_n=15)
+    except Exception as _le:
+        print(f"  [lstm] skipped: {_le}")
+
     # Hot/cold (last 30 draws) — feeds the consensus breakdown
     hc30 = hot_cold_stats(draws, 30)
 
-    # Ensemble consensus
-    consensus = ensemble_consensus(m1, m2, m3, ml_preds, mc_preds, fourier, draws, hot_cold=hc30)
+    # Ensemble consensus (LSTM intégré comme source supplémentaire)
+    consensus = ensemble_consensus(m1, m2, m3, ml_preds, mc_preds, fourier, draws,
+                                   hot_cold=hc30, lstm_preds=lstm_preds)
 
     return {
         "markov_order1_top": m1[:10],
@@ -690,6 +704,7 @@ def run_all_models(draws: list[dict]) -> dict:
         "markov_matrix_d1": markov_matrix(draws, "d1"),
         "ml_predictions": ml_preds[:10],
         "ml_trained": predictor.trained,
+        "lstm_predictions": lstm_preds[:10],
         "monte_carlo_top": mc_preds[:10],
         "fourier": fourier,
         "consensus": consensus,

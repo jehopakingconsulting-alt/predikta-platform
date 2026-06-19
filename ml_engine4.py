@@ -457,15 +457,16 @@ def ensemble_consensus4(
     draws: list[dict],
     hot_cold: dict = None,
     top_n: int = 10,
+    lstm_preds: list[dict] = None,
 ) -> list[dict]:
     """
     Combine all models into a final weighted consensus score for Pick 4.
-    Weights: ML=35%, Markov(1+2+3)=30%, MonteCarlo=20%, Fourier=10%, Gap=5%
+    Weights: ML=28%, LSTM=10%, Markov(1+2+3)=30%, MonteCarlo=20%, Fourier=7%, Gap=5%
     """
     gaps = digit_gap_analysis4(draws)
     combo_scores = defaultdict(float)
     combo_components = defaultdict(lambda: {
-        "ml": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
+        "ml": 0.0, "lstm": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
         "monte_carlo": 0.0, "fourier": 0.0, "gap": 0.0,
     })
 
@@ -478,8 +479,9 @@ def ensemble_consensus4(
                 combo_components[combo][component] += contrib
                 break
 
+    lstm_preds = lstm_preds or []
     all_combos = set()
-    for p in markov1 + markov2 + markov3 + ml_preds + mc_preds:
+    for p in markov1 + markov2 + markov3 + ml_preds + mc_preds + lstm_preds:
         all_combos.add(p["combo"])
 
     # Fourier hint combo
@@ -494,8 +496,9 @@ def ensemble_consensus4(
         all_combos.add(fc)
 
     for combo in all_combos:
-        idx_score(ml_preds, combo, 0.35, "ml")
-        idx_score(markov1, combo, 0.12, "markov1")
+        idx_score(ml_preds,   combo, 0.28, "ml")
+        idx_score(lstm_preds, combo, 0.10, "lstm")
+        idx_score(markov1,    combo, 0.12, "markov1")
         idx_score(markov2, combo, 0.10, "markov2")
         idx_score(markov3, combo, 0.08, "markov3")
         idx_score(mc_preds, combo, 0.20, "monte_carlo")
@@ -504,7 +507,7 @@ def ensemble_consensus4(
         parts = combo.split("-")
         if len(parts) == 4 and len(f_digits) == 4:
             matches = sum(1 for pos, key in zip(POSITIONS, range(4)) if f_digits.get(pos) == int(parts[key]))
-            fourier_contrib = 0.10 * (matches / 4)
+            fourier_contrib = 0.07 * (matches / 4)
             combo_scores[combo] += fourier_contrib
             combo_components[combo]["fourier"] += fourier_contrib
 
@@ -557,6 +560,7 @@ def _consensus_breakdown4(combo: str, components: dict, gaps: dict, hot_cold: di
         "digits": digits_info,
         "model_contributions": {
             "ml_pct": round(components["ml"] / total * 100, 1),
+            "lstm_pct": round(components["lstm"] / total * 100, 1),
             "markov_pct": round((components["markov1"] + components["markov2"] + components["markov3"]) / total * 100, 1),
             "monte_carlo_pct": round(components["monte_carlo"] / total * 100, 1),
             "fourier_pct": round(components["fourier"] / total * 100, 1),
@@ -616,11 +620,20 @@ def run_all_models4(draws: list[dict]) -> dict:
     # Fourier
     fourier = {pos: fourier_cycles4(draws, pos) for pos in POSITIONS}
 
+    # LSTM sequential engine
+    lstm_preds = []
+    try:
+        import lstm_engine
+        lstm_preds = lstm_engine.train_and_predict(draws, positions=POSITIONS, top_n=15)
+    except Exception as _le:
+        print(f"  [lstm4] skipped: {_le}")
+
     # Hot/cold
     hc30 = hot_cold_stats4(draws, 30)
 
     # Ensemble consensus
-    consensus = ensemble_consensus4(m1, m2, m3, ml_preds, mc_preds, fourier, draws, hot_cold=hc30)
+    consensus = ensemble_consensus4(m1, m2, m3, ml_preds, mc_preds, fourier, draws,
+                                    hot_cold=hc30, lstm_preds=lstm_preds)
 
     return {
         "markov_order1_top": m1[:10],
