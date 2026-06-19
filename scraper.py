@@ -137,8 +137,10 @@ def parse_draws(html: str) -> list[dict]:
                         tod = "Night"
                     elif "eve" in hay:
                         tod = "Evening"
+                    elif "daytime" in hay:
+                        tod = "Midday"
                     elif "day" in hay or "día" in hay or "dia" in hay:
-                        tod = "Day"
+                        tod = "Midday"
 
             # Main numbers: take ONLY the first ul.resultsnums (ignore Fireball)
             first_ul = drawing.select_one("ul.resultsnums")

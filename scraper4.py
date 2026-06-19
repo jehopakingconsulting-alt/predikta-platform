@@ -131,8 +131,10 @@ def parse_draws4(html: str) -> list[dict]:
                         tod = "Night"
                     elif "eve" in hay:
                         tod = "Evening"
+                    elif "daytime" in hay:
+                        tod = "Midday"
                     elif "day" in hay or "día" in hay or "dia" in hay:
-                        tod = "Day"
+                        tod = "Midday"
 
             # Take only the first ul.resultsnums, expect exactly 4 digits
             first_ul = drawing.select_one("ul.resultsnums")

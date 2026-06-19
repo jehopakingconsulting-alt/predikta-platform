@@ -94,7 +94,8 @@ def parse_game_results(html: str, game_type: str) -> list[dict]:
                     elif "morn" in hay: tod = "Morning"
                     elif "nite" in hay or "night" in hay or "noche" in hay: tod = "Night"
                     elif "eve" in hay: tod = "Evening"
-                    elif "day" in hay or "día" in hay or "dia" in hay: tod = "Day"
+                    elif "daytime" in hay: tod = "Midday"
+                    elif "day" in hay or "día" in hay or "dia" in hay: tod = "Midday"
 
             # All number groups in this drawing
             num_rows = drawing.select("div.resultsnumsrow")
