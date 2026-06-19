@@ -72,6 +72,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .bb-combo{background:rgba(200,100,255,.13);border:1px solid rgba(200,100,255,.35);color:#cc88ff}
 .bet-odds4{font-size:.56rem;color:var(--muted2)}
 
+/* ML Consensus card */
+.pred-card4{
+  background:linear-gradient(135deg,rgba(10,10,34,.9),rgba(16,16,48,.9));
+  border:1px solid var(--border2);border-radius:14px;padding:14px;
+  position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;
+}
+.pred-card4:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(79,110,255,.28)}
+.pred-card4:nth-child(1){border-top:2px solid #ffd700}
+.pred-card4:nth-child(2){border-top:2px solid #c0c0c0}
+.pred-card4:nth-child(3){border-top:2px solid #cd7f32}
+
 /* Frequency grid */
 .freq-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .freq-cell{padding:8px 6px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);text-align:center}
@@ -543,21 +554,29 @@ function computeHot(draws){
   return{hot,cold};
 }
 
+// digit color helper (matches Pick 3 palette)
+const DIG_COLORS = ['#ff6b6b','#ff9966','#ffcc44','#ccff44','#44ff88','#44ffdd','#44bbff','#8866ff','#ff66cc','#ffffff'];
+function bc4(n){ return DIG_COLORS[parseInt(n)] || '#88aaff'; }
+
 function renderSuggestions(draws){
   const el = document.getElementById('cardSugg');
-  el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="loader"><div class="spinner"></div> ${t('loading')}</div>`;
 
-  // Async so spinner shows
+  // Use ML consensus from API when available
+  if(REPORT && REPORT.consensus && REPORT.consensus.length){
+    renderMLConsensus4(el, REPORT.consensus, draws);
+    return;
+  }
+
+  // Fallback: client-side basic scoring
+  el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="loader"><div class="spinner"></div> ${t('loading')}</div>`;
   setTimeout(()=>{
     const suggs = computeSuggestions(draws, 10);
     const {hot,cold} = computeHot(draws);
     const maxScore = suggs[0]?.score||1;
-
     if(!suggs.length){
       el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="no-data">${t('noData')}</div>`;
       return;
     }
-
     const rows = suggs.map((s,i)=>{
       const barW = Math.round(s.score/maxScore*100);
       const digits = s.digits.map(d=>{
@@ -579,9 +598,45 @@ function renderSuggestions(draws){
           ${renderPick4Bet(bet)}
         </div>`;
     }).join('');
-
     el.innerHTML = `<div class="card-title">${t('titleSugg')}</div><div class="sugg-list">${rows}</div>`;
   }, 20);
+}
+
+function renderMLConsensus4(el, consensus, draws){
+  const today = new Date().toLocaleDateString();
+  const cards = consensus.map((s,i)=>{
+    const balls = s.digits.map(n=>
+      `<div style="width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;border:2px solid ${bc4(n)};background:${bc4(n)}22;color:${bc4(n)}">${n}</div>`
+    ).join('');
+    const conf = s.confidence_label || '';
+    const bet = s.bet || pick4BetRec(s.digits.map(String), conf);
+    const medals = ['🥇','🥈','🥉','④','⑤','⑥','⑦','⑧','⑨','⑩'];
+    const bd = s.breakdown;
+    const contrib = bd?.model_contributions;
+    const transHtml = contrib ? `
+      <div style="margin-top:8px;font-size:.6rem;color:var(--muted2);border-top:1px solid rgba(255,255,255,.07);padding-top:6px">
+        ⚙️ ML ${contrib.ml_pct}% · Markov ${contrib.markov_pct}% · Monte Carlo ${contrib.monte_carlo_pct}% · Fourier ${contrib.fourier_pct}% · Gap ${contrib.gap_pct}%
+      </div>` : '';
+    return `
+      <div class="pred-card4">
+        <div style="font-size:.62rem;color:var(--muted2);margin-bottom:8px">${medals[i]||'#'+(i+1)} — ${conf}</div>
+        <div style="display:flex;gap:5px;margin-bottom:8px">${balls}</div>
+        <div style="font-size:.9rem;font-weight:700;letter-spacing:4px;color:#fff;margin-bottom:5px">${s.combo}</div>
+        <div style="height:3px;border-radius:2px;background:rgba(255,255,255,.1);margin-bottom:5px">
+          <div style="height:100%;border-radius:2px;width:${s.confidence_pct}%;background:linear-gradient(90deg,#4f6eff,#8855ff)"></div>
+        </div>
+        <div style="font-size:.58rem;color:var(--muted)">Score: ${s.consensus_score} · ${s.confidence_pct}%</div>
+        ${renderPick4Bet(bet)}
+        ${transHtml}
+      </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="card-title">🏆 CONSENSUS ML — TOP 10 · ${today}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:12px">${cards}</div>
+    <div style="font-size:.65rem;color:var(--muted);margin-top:4px">
+      ⚙️ XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
+    </div>`;
 }
 
 function renderFreq(draws){

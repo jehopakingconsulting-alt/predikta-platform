@@ -1049,14 +1049,29 @@ def api_results4(state_code):
 
 @app.route("/api/report-4/<state_code>")
 def api_report4(state_code):
-    """Full Pick4 statistical report for a state."""
-    import analyzer4
-    from scraper4 import STATES4
+    """Full Pick4 statistical report — uses ml_engine4 for full ML ensemble."""
+    from scraper4 import STATES4, load_csv4
     code = state_code.upper()
     if code not in STATES4:
         return jsonify({"error": f"Unknown Pick4 state: {code}"}), 404
-    report = analyzer4.full_report4(code)
-    return jsonify(report)
+
+    draws = load_csv4(code)
+    if not draws:
+        return jsonify({"error": f"No Pick4 data for {code}. Run scraper first."}), 200
+
+    try:
+        import ml_engine4
+        result = ml_engine4.run_all_models4(draws)
+    except Exception as e:
+        import analyzer4
+        result = analyzer4.full_report4(code, draws)
+        result["ml_error"] = str(e)
+
+    result["state"] = code
+    result["state_name"] = STATES4[code]["name"]
+    result["total_draws"] = len(draws)
+    result["last_draw"] = draws[0] if draws else None
+    return jsonify(result)
 
 
 @app.route("/api/track-record-4")
