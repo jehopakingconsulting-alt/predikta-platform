@@ -404,6 +404,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <a href="/track-record" class="trust-item"><span class="ti-icon">📊</span><span data-i18n="tsTrack">Historique vérifiable</span></a>
     <a href="/pro" class="trust-item"><span class="ti-icon">⭐</span><span data-i18n="tsPlans">Plans Pro & VIP</span></a>
   </div>
+
+  <!-- ── CTA Principal ── -->
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;margin-top:4px">
+    <a href="/register" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:14px;font-size:1rem;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#4f6eff,#7c3aed);box-shadow:0 8px 32px rgba(79,110,255,.4);transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(79,110,255,.55)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(79,110,255,.4)'">
+      🚀 Commencer gratuitement
+    </a>
+    <a href="/analyze" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:14px;font-size:1rem;font-weight:700;text-decoration:none;color:#a78bfa;background:rgba(124,58,237,.12);border:1.5px solid rgba(124,58,237,.35);transition:all .2s" onmouseover="this.style.borderColor='rgba(124,58,237,.7)';this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.borderColor='rgba(124,58,237,.35)';this.style.background='rgba(124,58,237,.12)'">
+      ⚡ Analyser maintenant
+    </a>
+  </div>
+  <div style="margin-top:12px;font-size:.72rem;color:#475569;position:relative;z-index:2">
+    Gratuit · Sans carte bancaire · Résultats en 30 secondes
+  </div>
 </div>
 
 <div class="section">
@@ -454,6 +467,42 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl" data-i18n="stat2">Algorithmes actifs</div></div>
     <div class="stat-item"><div class="stat-num">50K</div><div class="stat-lbl" data-i18n="stat3">Simulations/analyse</div></div>
     <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl" data-i18n="stat4">Langues disponibles</div></div>
+  </div>
+
+  <!-- ── Comment ça marche ── -->
+  <div style="margin-bottom:40px">
+    <div style="text-align:center;font-size:.68rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:3px;margin-bottom:28px">Comment ça marche</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+
+      <div style="background:linear-gradient(135deg,rgba(79,110,255,.07),rgba(79,110,255,.03));border:1px solid rgba(79,110,255,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">1</div>
+        <div style="font-size:2.2rem;margin:10px 0 12px">🎯</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Choisissez votre État</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6">Sélectionnez parmi 44 États US · Pick3, Pick4, Cash3, Daily3 · Midi ou Soir</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(124,58,237,.07),rgba(124,58,237,.03));border:1px solid rgba(124,58,237,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">2</div>
+        <div style="font-size:2.2rem;margin:10px 0 12px">🧠</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">L'IA analyse en 30s</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6">7 algorithmes · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(255,153,0,.03));border:1px solid rgba(255,215,0,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
+        <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#ffd700);color:#000;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">3</div>
+        <div style="font-size:2.2rem;margin:10px 0 12px">🏆</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Jouez le Top 10</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6">Combos classés par confiance · Notif push dès le tirage · Archivez vos prédictions</div>
+      </div>
+
+    </div>
+
+    <!-- Connecteur visuel entre les étapes (desktop) -->
+    <div style="display:flex;justify-content:center;gap:0;margin-top:14px">
+      <a href="/register" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:12px;font-size:.88rem;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#4f6eff,#7c3aed);box-shadow:0 6px 24px rgba(79,110,255,.35);transition:all .2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+        🚀 Démarrer gratuitement — c'est immédiat
+      </a>
+    </div>
   </div>
 
   <!-- Monthly raffle banner -->
