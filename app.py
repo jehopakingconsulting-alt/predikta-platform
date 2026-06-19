@@ -633,12 +633,60 @@ def _initial_warm_loop():
     except Exception as e:
         print(f"  [schedule-check][initial] error: {e}")
 
+_draw_watcher_triggered: dict[str, float] = {}  # "{state}_{tod}" -> epoch secs
+_draw_watcher_lock = threading.Lock()
+
+def _draw_watcher_loop():
+    """
+    Vérifie toutes les 5 minutes quels États viennent de tirer.
+    Déclenche un scraping ciblé (smart_scraper) 15 min après chaque tirage,
+    sans attendre le cycle global de 25 min.
+    """
+    import importlib
+    time.sleep(60)  # laisse le serveur démarrer
+    while True:
+        try:
+            from smart_scraper import get_states_due_now, scrape_state
+            due = get_states_due_now(buffer_min=15, window_min=30)
+            now_epoch = time.time()
+            to_scrape = []
+            with _draw_watcher_lock:
+                for state, tod in due:
+                    key = f"{state}_{tod}"
+                    last = _draw_watcher_triggered.get(key, 0)
+                    # Ne scraper qu'une fois par fenêtre de 45 min
+                    if now_epoch - last > 45 * 60:
+                        _draw_watcher_triggered[key] = now_epoch
+                        to_scrape.append(state)
+
+            if to_scrape:
+                unique_states = list(dict.fromkeys(to_scrape))  # déduplique, conserve ordre
+                print(f"[draw-watcher] Tirages détectés — scraping: {unique_states}")
+                for st in unique_states:
+                    try:
+                        res = scrape_state(st)
+                        if res["added"] > 0:
+                            # Invalide le cache d'analyse pour cet état
+                            keys_to_del = [k for k in _REPORT_CACHE if k.startswith(f"{st.lower()}|")]
+                            for k in keys_to_del:
+                                del _REPORT_CACHE[k]
+                            _LATEST_CACHE["data"] = None
+                            print(f"  [draw-watcher][{st}] +{res['added']} tirages via {res['source']}")
+                    except Exception as e:
+                        print(f"  [draw-watcher][{st}] error: {e}")
+                    time.sleep(1)
+        except Exception as e:
+            print(f"[draw-watcher] error: {e}")
+        time.sleep(5 * 60)  # vérifier toutes les 5 minutes
+
+
 def start_auto_update():
     if os.environ.get("PREDIKTA_DISABLE_AUTOUPDATE") == "1":
         return
     threading.Thread(target=_initial_warm_loop, daemon=True, name="predikta-warm-cache").start()
     t = threading.Thread(target=_auto_update_loop, daemon=True, name="predikta-auto-update")
     t.start()
+    threading.Thread(target=_draw_watcher_loop, daemon=True, name="predikta-draw-watcher").start()
 
 # Démarre seulement dans le processus principal (évite le double-lancement
 # avec le reloader Flask en mode debug)
@@ -653,6 +701,41 @@ def api_autoupdate_status():
         "interval_sec": _AUTO_UPDATE_INTERVAL,
         **_auto_update_state,
     })
+
+@app.route("/api/scraper/status")
+def api_scraper_status():
+    """Stats des sources utilisées par le smart scraper (fiabilité par état)."""
+    try:
+        from smart_scraper import get_source_stats, get_states_due_now
+        due = get_states_due_now(buffer_min=15, window_min=30)
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    with _draw_watcher_lock:
+        triggered = dict(_draw_watcher_triggered)
+    return jsonify({
+        "source_stats": get_source_stats(),
+        "states_due_now": [{"state": s, "tod": t} for s, t in due],
+        "recently_triggered": {k: int(v) for k, v in triggered.items()},
+    })
+
+@app.route("/api/scraper/run", methods=["POST"])
+def api_scraper_run():
+    """Lance un scraping immédiat via smart_scraper pour un ou plusieurs états."""
+    data = request.get_json(silent=True) or {}
+    states = data.get("states") or []
+    if not states:
+        from scraper import STATES
+        states = list(STATES.keys())
+    def _bg():
+        from smart_scraper import scrape_states_batch
+        results = scrape_states_batch(states, delay=0.8)
+        ok = sum(1 for r in results if r.get("ok"))
+        added = sum(r.get("added", 0) for r in results)
+        print(f"[api/scraper/run] {ok}/{len(results)} états OK, +{added} tirages")
+        _REPORT_CACHE.clear()
+        _LATEST_CACHE["data"] = None
+    threading.Thread(target=_bg, daemon=True).start()
+    return jsonify({"status": "started", "states": states, "count": len(states)})
 
 # ── Draw schedule ─────────────────────────────────────────────────────────
 from draw_schedule import DRAW_SCHEDULE, next_draw_session
