@@ -2071,6 +2071,11 @@ document.getElementById('stateSelect')?.addEventListener('change', (e)=>{
 });
 
 // Auto-load widget on page load
+// Ping silencieux dès le chargement pour réveiller Render (cold start)
+// Le serveur met ~15-25s à démarrer sur plan gratuit — on initie ce réveil
+// immédiatement, avant que l'utilisateur clique sur Analyser.
+fetch('/api/health').catch(()=>{});
+
 window.addEventListener('load', ()=>{
   loadTodayWidget();
   renderQuickStates();
