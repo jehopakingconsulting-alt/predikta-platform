@@ -1222,6 +1222,9 @@ def api_scrape4():
 @app.route("/track-record")
 def track_record_page(): return send_from_directory("static", "track-record.html")
 
+@app.route("/track-record-4")
+def track_record4_page(): return send_from_directory("static", "track-record-4.html")
+
 @app.route("/analyze")
 def analyze():         return send_from_directory("static", "index.html")
 

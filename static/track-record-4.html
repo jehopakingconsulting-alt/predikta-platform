@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Historique Pick 4 — PREDIKTA</title>
+<meta name="description" content="Historique des suggestions Pick 4 de PREDIKTA comparées aux tirages réels, par état et par tirage."/>
+<link rel="canonical" href="https://predikta-tez2.onrender.com/track-record-4"/>
+<meta property="og:title" content="Historique Pick 4 — PREDIKTA"/>
+<meta property="og:description" content="Historique des suggestions Pick 4 de PREDIKTA comparées aux tirages réels."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://predikta-tez2.onrender.com/track-record-4"/>
+<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#ffd700;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb;--green:#22cc88;--red:#ff5566}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 70% 30%,rgba(255,215,0,.05) 0%,transparent 60%)}
+.page{max-width:960px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+.hero{text-align:center;margin-bottom:28px}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.2rem,4vw,1.7rem);font-weight:900;background:linear-gradient(135deg,#ffd700,#ff9900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2)}
+
+.method-box{border:1px solid var(--border);border-radius:14px;background:var(--card);padding:18px 20px;margin-bottom:28px;font-size:.78rem;color:var(--muted2);line-height:1.7}
+.method-box h2{font-size:.9rem;color:var(--text);margin-bottom:8px;font-weight:700}
+.method-box ul{margin:8px 0 0 18px}
+.method-box .updated{margin-top:10px;font-size:.7rem;color:var(--green);opacity:.85}
+
+.grand-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.gstat{flex:1;min-width:120px;border:1px solid var(--border);border-radius:12px;background:var(--card);padding:14px;text-align:center}
+.gstat .num{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:var(--gold)}
+.gstat .lbl{font-size:.63rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+
+.state-card{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;background:var(--card)}
+.state-head{padding:14px 18px;font-size:.86rem;font-weight:700;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;user-select:none}
+.state-head:hover{background:#0e0e2a}
+.state-head .badge{font-size:.63rem;color:var(--muted2);font-weight:600}
+.state-icon{font-size:1.2rem;color:var(--muted2);transition:transform .3s;flex-shrink:0}
+.state-card.open .state-icon{transform:rotate(45deg);color:var(--accent)}
+.state-body{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.state-card.open .state-body{max-height:4000px}
+.state-body-inner{padding:0 18px 16px}
+
+.tod-block{margin-top:10px}
+.tod-title{font-size:.7rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+table.track{width:100%;border-collapse:collapse;font-size:.74rem}
+table.track th{text-align:left;color:var(--muted);font-weight:600;padding:5px 6px;border-bottom:1px solid var(--border);font-size:.63rem;text-transform:uppercase;letter-spacing:.5px}
+table.track td{padding:5px 6px;border-bottom:1px solid rgba(26,26,69,.5);color:var(--muted2)}
+table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:var(--text)}
+.hit-straight{color:var(--gold);font-weight:900}
+.hit-box{color:var(--green);font-weight:700}
+.hit-none{color:var(--muted)}
+
+.loading{text-align:center;padding:40px;color:var(--muted2);font-size:.85rem}
+
+.cta-box{margin-top:40px;text-align:center;padding:32px;background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(255,153,0,.06));border:1px solid rgba(255,215,0,.18);border-radius:16px}
+.cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:16px}
+.cta-btn{padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,#ffd700,#ff9900);color:#0a0a0a;border:none;cursor:pointer;text-decoration:none;display:inline-block}
+
+.filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;margin-bottom:22px}
+.filter-label{font-size:.63rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap}
+.filter-select{background:#07071e;border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-size:.75rem;padding:6px 10px;cursor:pointer;outline:none;
+  font-family:'Inter',sans-serif;min-width:140px}
+.filter-select:focus{border-color:var(--accent)}
+.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.filter-btn{padding:6px 14px;border-radius:8px;font-size:.73rem;font-weight:700;
+  border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;
+  transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap}
+.filter-btn:hover{border-color:var(--accent);color:var(--text)}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#0a0a0a}
+.filter-spinner{font-size:.7rem;color:var(--muted2);margin-left:4px;display:none}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <h1 data-i18n="title">Historique Pick 4</h1>
+    <p class="subtitle" data-i18n="subtitle">La transparence avant tout : nos suggestions TOP PICK 4 passées comparées aux résultats réels</p>
+  </div>
+
+  <div class="method-box">
+    <h2 data-i18n="methodTitle">Comment lire ces chiffres ?</h2>
+    <div data-i18n="methodBody">Pour chaque tirage Pick 4 passé, PREDIKTA recalcule la suggestion TOP PICK qu'elle aurait produite avec les données disponibles AVANT ce tirage. Comparaison avec le résultat réel.
+      <ul>
+        <li><strong>Exact (ordre)</strong> — 4 chiffres dans le bon ordre. Probabilité par pur hasard ≈ 0,01% (1 sur 10 000).</li>
+        <li><strong>Box (désordre)</strong> — mêmes 4 chiffres dans n'importe quel ordre. Probabilité ≈ 0,024–0,24% selon les répétitions.</li>
+      </ul>
+      Ces statistiques mesurent la performance de l'algorithme face au hasard — elles ne garantissent aucun résultat futur.</div>
+    <div class="updated" id="updatedLine"></div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label" id="flbl-state">État</span>
+    <select class="filter-select" id="filterState" onchange="setStateFilter(this.value)">
+      <option value="all" id="fopt-all">Tous les états</option>
+    </select>
+    <div class="filter-sep"></div>
+    <span class="filter-label" id="flbl-period">Période</span>
+    <button class="filter-btn active" id="fbtn-15" onclick="setPeriod(15)">15 tirages</button>
+    <button class="filter-btn" id="fbtn-30" onclick="setPeriod(30)">30 tirages</button>
+    <span class="filter-spinner" id="filterSpinner">⏳</span>
+  </div>
+
+  <div id="grandStats" class="grand-stats"></div>
+  <div id="statesList"><div class="loading" data-i18n="loading">Chargement de l'historique…</div></div>
+
+  <div class="cta-box">
+    <p data-i18n="ctaText">Envie d'analyser un état Pick 4 en détail ?</p>
+    <a href="/pick4" class="cta-btn" data-i18n="ctaBtn">Ouvrir l'Analyseur Pick 4 →</a>
+  </div>
+</div>
+<script>
+const TOD_T = {
+  fr:{Morning:"Matin",Midday:"Midi",Day:"Jour",Evening:"Soir",Night:"Nuit"},
+  en:{Morning:"Morning",Midday:"Midday",Day:"Day",Evening:"Evening",Night:"Night"},
+  es:{Morning:"Mañana",Midday:"Mediodía",Day:"Día",Evening:"Tarde",Night:"Noche"},
+  pt:{Morning:"Manhã",Midday:"Meio-dia",Day:"Dia",Evening:"Tarde",Night:"Noite"},
+  ht:{Morning:"Maten",Midday:"Midi",Day:"Jounen",Evening:"Aswè",Night:"Nuit"},
+};
+
+function toggleState(el){
+  el.closest('.state-card').classList.toggle('open');
+}
+
+const T = {
+  fr:{
+    title:"Historique Pick 4",
+    subtitle:"La transparence avant tout : nos suggestions TOP PICK 4 passées comparées aux résultats réels",
+    methodTitle:"Comment lire ces chiffres ?",
+    methodBody:`Pour chaque tirage Pick 4 passé, PREDIKTA recalcule la suggestion TOP PICK qu'elle aurait produite avec les données disponibles AVANT ce tirage. Comparaison avec le résultat réel.
+      <ul>
+        <li><strong>Exact (ordre)</strong> — 4 chiffres dans le bon ordre. Probabilité par pur hasard ≈ 0,01% (1 sur 10 000).</li>
+        <li><strong>Box (désordre)</strong> — mêmes 4 chiffres dans n'importe quel ordre. Probabilité ≈ 0,024–0,24% selon les répétitions.</li>
+      </ul>
+      Ces statistiques mesurent la performance de l'algorithme face au hasard — elles ne garantissent aucun résultat futur.`,
+    loading:"Chargement de l'historique Pick 4…", noData:"Pas encore assez de données pour cet état.",
+    drawsAnalyzed:"Tirages analysés", exactHits:"Coups exacts", boxHits:"Coups box",
+    colDate:"Date", colPredicted:"Suggestion TOP PICK", colActual:"Résultat", colResult:"Résultat",
+    exact:"Exact", box:"Box", none:"—",
+    updatedAgo:m=>m<1?"Mis à jour à l'instant":m<60?`Mis à jour il y a ${m} min`:`Mis à jour il y a ${Math.floor(m/60)} h`,
+    ctaText:"Envie d'analyser un état Pick 4 en détail ?", ctaBtn:"Ouvrir l'Analyseur Pick 4 →",
+  },
+  en:{
+    title:"Pick 4 Track Record",
+    subtitle:"Transparency first: our past TOP PICK 4 suggestions compared to actual results",
+    methodTitle:"How to read these numbers",
+    methodBody:`For each past Pick 4 draw, PREDIKTA recomputes the TOP PICK suggestion it would have generated using only data available BEFORE that draw. We then compare it to what was actually drawn.
+      <ul>
+        <li><strong>Straight (exact order)</strong> — 4 digits in the exact order. Pure-chance probability ≈ 0.01% (1 in 10,000).</li>
+        <li><strong>Box (any order)</strong> — same 4 digits in any order. Probability ≈ 0.024–0.24% depending on repeats.</li>
+      </ul>
+      These statistics objectively measure the algorithm's performance against pure chance — they do not guarantee any future result.`,
+    loading:"Loading Pick 4 track record…", noData:"Not enough data yet for this state.",
+    drawsAnalyzed:"Draws analyzed", exactHits:"Straight hits", boxHits:"Box hits",
+    colDate:"Date", colPredicted:"TOP PICK Suggestion", colActual:"Result", colResult:"Result",
+    exact:"Straight", box:"Box", none:"—",
+    updatedAgo:m=>m<1?"Updated just now":m<60?`Updated ${m} min ago`:`Updated ${Math.floor(m/60)} h ago`,
+    ctaText:"Want to analyze a Pick 4 state in depth?", ctaBtn:"Open Pick 4 Analyzer →",
+  },
+  es:{
+    title:"Historial Pick 4",
+    subtitle:"Transparencia ante todo: nuestras sugerencias TOP PICK 4 pasadas comparadas con los resultados reales",
+    methodTitle:"¿Cómo leer estas cifras?",
+    methodBody:`Para cada sorteo Pick 4 pasado, PREDIKTA recalcula la sugerencia TOP PICK que habría generado usando solo datos disponibles ANTES de ese sorteo.
+      <ul>
+        <li><strong>Exacto (orden)</strong> — 4 dígitos en el orden exacto. Probabilidad por azar puro ≈ 0,01% (1 entre 10.000).</li>
+        <li><strong>Box (cualquier orden)</strong> — los mismos 4 dígitos en cualquier orden. Probabilidad ≈ 0,024–0,24% según repeticiones.</li>
+      </ul>
+      Estas estadísticas no garantizan ningún resultado futuro.`,
+    loading:"Cargando historial Pick 4…", noData:"Aún no hay suficientes datos para este estado.",
+    drawsAnalyzed:"Sorteos analizados", exactHits:"Aciertos exactos", boxHits:"Aciertos box",
+    colDate:"Fecha", colPredicted:"Sugerencia TOP PICK", colActual:"Resultado", colResult:"Resultado",
+    exact:"Exacto", box:"Box", none:"—",
+    updatedAgo:m=>m<1?"Actualizado ahora mismo":m<60?`Actualizado hace ${m} min`:`Actualizado hace ${Math.floor(m/60)} h`,
+    ctaText:"¿Quiere analizar un estado Pick 4?", ctaBtn:"Abrir Analizador Pick 4 →",
+  },
+  pt:{
+    title:"Histórico Pick 4",
+    subtitle:"Transparência antes de tudo: nossas sugestões TOP PICK 4 passadas comparadas aos resultados reais",
+    methodTitle:"Como ler esses números?",
+    methodBody:`Para cada sorteio Pick 4 passado, a PREDIKTA recalcula a sugestão TOP PICK que teria gerado usando apenas dados disponíveis ANTES desse sorteio.
+      <ul>
+        <li><strong>Exato (ordem)</strong> — 4 dígitos na ordem exata. Probabilidade por puro acaso ≈ 0,01% (1 em 10.000).</li>
+        <li><strong>Box (qualquer ordem)</strong> — mesmos 4 dígitos em qualquer ordem. Probabilidade ≈ 0,024–0,24%.</li>
+      </ul>
+      Essas estatísticas não garantem nenhum resultado futuro.`,
+    loading:"Carregando histórico Pick 4…", noData:"Ainda não há dados suficientes para este estado.",
+    drawsAnalyzed:"Sorteios analisados", exactHits:"Acertos exatos", boxHits:"Acertos box",
+    colDate:"Data", colPredicted:"Sugestão TOP PICK", colActual:"Resultado", colResult:"Resultado",
+    exact:"Exato", box:"Box", none:"—",
+    updatedAgo:m=>m<1?"Atualizado agora mesmo":m<60?`Atualizado há ${m} min`:`Atualizado há ${Math.floor(m/60)} h`,
+    ctaText:"Quer analisar um estado Pick 4?", ctaBtn:"Abrir Analisador Pick 4 →",
+  },
+  ht:{
+    title:"Istorik Pick 4",
+    subtitle:"Transparans anvan tout bagay: sijesyon TOP PICK 4 pase nou yo konpare ak rezilta reyèl",
+    methodTitle:"Kijan pou li chif sa yo?",
+    methodBody:`Pou chak tiraj Pick 4 ki sot pase, PREDIKTA rekalkile sijesyon TOP PICK li ta jenere avèk sèlman done ki disponib AVAN tiraj sa a.
+      <ul>
+        <li><strong>Egzak (lòd)</strong> — 4 chif nan lòd egzak la. Pwobabilite o aza ≈ 0,01% (1 sou 10 000).</li>
+        <li><strong>Box (nenpòt lòd)</strong> — menm 4 chif yo nan nenpòt lòd. Pwobabilite ≈ 0,024–0,24%.</li>
+      </ul>
+      Estatistik sa yo pa garanti okenn rezilta nan lavni.`,
+    loading:"N ap chaje istorik Pick 4 la…", noData:"Poko gen ase done pou eta sa a.",
+    drawsAnalyzed:"Tiraj analize", exactHits:"Kout egzak", boxHits:"Kout box",
+    colDate:"Dat", colPredicted:"Sijesyon TOP PICK", colActual:"Rezilta", colResult:"Rezilta",
+    exact:"Egzak", box:"Box", none:"—",
+    updatedAgo:m=>m<1?"Mete ajou kounye a":m<60?`Mete ajou ${m} min pase`:`Mete ajou ${Math.floor(m/60)} è pase`,
+    ctaText:"Ou vle analize yon eta Pick 4?", ctaBtn:"Ouvri Analizè Pick 4 →",
+  },
+};
+
+const FILTER_T = {
+  fr:{ stateAll:'Tous les états', flblState:'État', flblPeriod:'Période', fdraws:n=>`${n} tirages` },
+  en:{ stateAll:'All states',     flblState:'State', flblPeriod:'Period',  fdraws:n=>`${n} draws` },
+  es:{ stateAll:'Todos los estados', flblState:'Estado', flblPeriod:'Período', fdraws:n=>`${n} sorteos` },
+  pt:{ stateAll:'Todos os estados',  flblState:'Estado', flblPeriod:'Período', fdraws:n=>`${n} sorteios` },
+  ht:{ stateAll:'Tout eta yo',    flblState:'Eta', flblPeriod:'Peryòd',  fdraws:n=>`${n} tiraj` },
+};
+
+let CUR_LANG = 'fr', CUR_STATE = 'all', CUR_N = 15;
+let TRACK_DATA = null;
+
+function curT(){ return T[CUR_LANG] || T.fr; }
+
+function applyLang(lang){
+  CUR_LANG = T[lang] ? lang : 'fr';
+  const dict = curT();
+  const ft = FILTER_T[CUR_LANG] || FILTER_T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null){
+      if(key === 'methodBody') el.innerHTML = dict[key];
+      else el.textContent = dict[key];
+    }
+  });
+  document.documentElement.setAttribute('lang', lang);
+  document.title = dict.title + " — PREDIKTA";
+  const flblS = document.getElementById('flbl-state');
+  const flblP = document.getElementById('flbl-period');
+  if(flblS) flblS.textContent = ft.flblState;
+  if(flblP) flblP.textContent = ft.flblPeriod;
+  const optAll = document.getElementById('fopt-all');
+  if(optAll) optAll.textContent = ft.stateAll;
+  [15,30].forEach(n=>{
+    const btn = document.getElementById(`fbtn-${n}`);
+    if(btn) btn.textContent = ft.fdraws(n);
+  });
+  renderData();
+}
+window.setLang = applyLang;
+
+function fmtAgo(iso){
+  if(!iso) return '';
+  const mins = Math.max(0, Math.floor((Date.now()-new Date(iso).getTime())/60000));
+  return curT().updatedAgo(mins);
+}
+
+function populateStateFilter(){
+  if(!TRACK_DATA) return;
+  const sel = document.getElementById('filterState');
+  while(sel.options.length > 1) sel.remove(1);
+  TRACK_DATA.states.forEach(s=>{
+    const opt = document.createElement('option');
+    opt.value = s.state;
+    opt.textContent = `${s.name} (${s.state})`;
+    sel.appendChild(opt);
+  });
+  sel.value = CUR_STATE;
+}
+
+function setStateFilter(val){ CUR_STATE = val; renderData(); }
+
+function setPeriod(n){
+  if(n === CUR_N) return;
+  CUR_N = n;
+  [15,30].forEach(v=>{
+    const btn = document.getElementById(`fbtn-${v}`);
+    if(btn) btn.classList.toggle('active', v===n);
+  });
+  const spinner = document.getElementById('filterSpinner');
+  if(spinner) spinner.style.display='inline';
+  fetchTrackRecord(n).finally(()=>{ if(spinner) spinner.style.display='none'; });
+}
+
+function renderData(){
+  if(!TRACK_DATA) return;
+  const t = curT();
+  const tod = TOD_T[CUR_LANG] || TOD_T.fr;
+
+  document.getElementById('updatedLine').textContent = fmtAgo(TRACK_DATA.updated_at);
+
+  const states = CUR_STATE === 'all'
+    ? TRACK_DATA.states
+    : TRACK_DATA.states.filter(s => s.state === CUR_STATE);
+
+  let gn=0, gs=0, gb=0;
+  states.forEach(s=>{ gn+=s.totals.n; gs+=s.totals.straight_hits; gb+=s.totals.box_hits; });
+  const sRate = gn?(gs/gn*100).toFixed(2):'0.00';
+  const bRate = gn?(gb/gn*100).toFixed(2):'0.00';
+  document.getElementById('grandStats').innerHTML = `
+    <div class="gstat"><div class="num">${gn}</div><div class="lbl">${t.drawsAnalyzed}</div></div>
+    <div class="gstat"><div class="num">${gs} (${sRate}%)</div><div class="lbl">${t.exactHits}</div></div>
+    <div class="gstat"><div class="num">${gb} (${bRate}%)</div><div class="lbl">${t.boxHits}</div></div>
+  `;
+
+  const list = document.getElementById('statesList');
+  if(!states.length){
+    list.innerHTML = `<div class="loading">${t.noData}</div>`;
+    return;
+  }
+
+  list.innerHTML = states.map((s, idx)=>{
+    const tot = s.totals;
+    const sR = tot.n?(tot.straight_hits/tot.n*100).toFixed(1):'0.0';
+    const bR = tot.n?(tot.box_hits/tot.n*100).toFixed(1):'0.0';
+    const tods = Object.entries(s.tods).map(([todKey, data])=>{
+      const todLbl = tod[todKey] || todKey;
+      const rows = data.rows.map(r=>{
+        let cls='hit-none', mark=t.none;
+        if(r.hit_straight){ cls='hit-straight'; mark='★ '+t.exact; }
+        else if(r.hit_box){ cls='hit-box'; mark='✓ '+t.box; }
+        return `<tr>
+          <td>${r.date}</td>
+          <td class="combo">${r.predicted}</td>
+          <td class="combo">${r.actual}</td>
+          <td class="${cls}">${mark}</td>
+        </tr>`;
+      }).join('');
+      return `<div class="tod-block">
+        <div class="tod-title">${todLbl} — ${data.straight_hits}/${data.n} ${t.exact.toLowerCase()}, ${data.box_hits}/${data.n} ${t.box.toLowerCase()}</div>
+        <table class="track">
+          <thead><tr><th>${t.colDate}</th><th>${t.colPredicted}</th><th>${t.colActual}</th><th>${t.colResult}</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+    }).join('');
+
+    const autoOpen = idx===0 || CUR_STATE!=='all';
+    return `<div class="state-card${autoOpen?' open':''}">
+      <div class="state-head" onclick="toggleState(this)">
+        <span>${s.name} (${s.state})</span>
+        <span class="badge">${tot.straight_hits}/${tot.n} ${t.exact} (${sR}%) · ${tot.box_hits}/${tot.n} ${t.box} (${bR}%)</span>
+        <span class="state-icon">+</span>
+      </div>
+      <div class="state-body"><div class="state-body-inner">${tods}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function fetchTrackRecord(n){
+  return fetch(`/api/track-record-4?n=${n}`)
+    .then(r=>r.json())
+    .then(data=>{
+      TRACK_DATA = data;
+      populateStateFilter();
+      renderData();
+    })
+    .catch(()=>{
+      document.getElementById('statesList').innerHTML =
+        `<div class="loading">${curT().noData}</div>`;
+    });
+}
+
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  CUR_LANG = T[navLang] ? navLang : 'fr';
+  fetchTrackRecord(CUR_N).then(()=>{ applyLang(CUR_LANG); });
+});
+</script>
+</body></html>
