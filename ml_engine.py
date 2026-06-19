@@ -10,6 +10,12 @@ warnings.filterwarnings("ignore")
 
 from collections import Counter, defaultdict
 
+try:
+    from analyzer import bet_recommendation as _bet_recommendation
+    _BET_AVAILABLE = True
+except ImportError:
+    _BET_AVAILABLE = False
+
 # ─── Lazy-loaded heavy ML/scientific libraries ─────────────────────────────
 # sklearn, xgboost et scipy représentent à eux seuls une part importante de
 # la mémoire et du temps de démarrage du process (significatif sur le plan
@@ -568,7 +574,7 @@ def ensemble_consensus(
     top = sorted(combo_scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     max_score = top[0][1] if top else 1
 
-    return [
+    result = [
         {
             "combo": combo,
             "digits": [int(x) for x in combo.split("-")],
@@ -579,6 +585,13 @@ def ensemble_consensus(
         }
         for combo, score in top
     ]
+
+    if _BET_AVAILABLE:
+        for item in result:
+            digits = [str(d) for d in item["digits"]]
+            item["bet"] = _bet_recommendation(digits, item.get("confidence_label", ""))
+
+    return result
 
 
 def _consensus_breakdown(combo: str, components: dict, gaps: dict, hot_cold: dict = None) -> dict:

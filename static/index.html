@@ -765,6 +765,13 @@ header{
 .pred-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.1)}
 .pred-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
 .pred-score{font-size:.62rem;color:var(--muted);margin-top:5px}
+.pred-bet{display:flex;align-items:center;gap:6px;margin-top:7px;flex-wrap:wrap}
+.bet-badge{font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:6px;letter-spacing:.5px}
+.bet-box6{background:rgba(34,200,122,.13);border:1px solid rgba(34,200,122,.35);color:#22e87a}
+.bet-box3{background:rgba(79,110,255,.13);border:1px solid rgba(79,110,255,.35);color:#88aaff}
+.bet-straight{background:rgba(255,215,0,.13);border:1px solid rgba(255,215,0,.35);color:#ffd700}
+.bet-combo{background:rgba(200,100,255,.13);border:1px solid rgba(200,100,255,.35);color:#cc88ff}
+.bet-odds{font-size:.58rem;color:var(--muted2)}
 
 /* ═══════════════════════════
    TABS
@@ -2200,6 +2207,7 @@ function renderConsensus(d, today){
       <div class="pred-conf-label ${confClass(confLabel)}">${confLabel}</div>
       <div class="pred-bar"><div class="pred-bar-fill" style="width:${s.confidence_pct}%"></div></div>
       <div class="pred-score">${t('score')}: ${s.consensus_score} · ${s.confidence_pct}%</div>
+      ${renderBetBadge(s.bet)}
       ${renderTransparencyToggle(transId, s.breakdown)}
     </div>`;
   }).join('');
@@ -2219,6 +2227,21 @@ function renderConsensus(d, today){
     <div style="margin-top:10px;font-size:.68rem;color:var(--muted);line-height:1.6">
       ⚙️ XGBoost · Random Forest · Gradient Boosting · Markov 1/2/3 · Monte Carlo 50 000 · Fourier · Gap Analysis
     </div>
+  </div>`;
+}
+
+// ── Bet Recommendation Badge ──
+function renderBetBadge(bet){
+  if(!bet) return '';
+  const type = bet.bet_type || '';
+  let cls = 'bet-box6';
+  if(type.includes('Straight') && !type.includes('Box')) cls = 'bet-straight';
+  else if(type.includes('3-way') && type.includes('Straight')) cls = 'bet-combo';
+  else if(type.includes('6-way') && type.includes('Straight')) cls = 'bet-combo';
+  else if(type.includes('3-way')) cls = 'bet-box3';
+  return `<div class="pred-bet">
+    <span class="bet-badge ${cls}">🎯 ${type}</span>
+    <span class="bet-odds">${bet.odds}</span>
   </div>`;
 }
 
