@@ -2153,6 +2153,131 @@ def api_cash5_track(state_code, slug):
         "n": len(rows),
     })
 
+# ── Pick 5 Digit Game (FL/OH/PA) ─────────────────────────────────────────
+# 5 independent digit positions 0-9, displayed as "d1d2d3-d4d5" format.
+# Uses analyzer_multi.py (n=5), separate from the multi-ball cash5 engine.
+
+PICK5_DIGIT_STATES = {
+    "FL": [
+        {"slug": "pick5",        "label": "Pick 5 Evening", "tod": "Evening"},
+        {"slug": "pick5-midday", "label": "Pick 5 Midday",  "tod": "Midday"},
+    ],
+    "OH": [
+        {"slug": "pick5", "label": "Pick 5 Evening", "tod": "Evening"},
+    ],
+    "PA": [
+        {"slug": "pick5",        "label": "Pick 5 Evening", "tod": "Evening"},
+        {"slug": "pick5-midday", "label": "Pick 5 Midday",  "tod": "Midday"},
+    ],
+}
+
+def _fmt_p5(nums):
+    """Format 5 digits as 'ddd-dd'."""
+    if not nums or len(nums) < 5:
+        return "".join(str(n) for n in nums)
+    return f"{''.join(str(n) for n in nums[:3])}-{''.join(str(n) for n in nums[3:5])}"
+
+def _fmt_p5c2(nums):
+    """Combo 2: swap last two digits for box coverage."""
+    if not nums or len(nums) < 5:
+        return "".join(str(n) for n in nums)
+    return f"{''.join(str(n) for n in nums[:3])}-{nums[4]}{nums[3]}"
+
+@app.route("/pick5")
+def pick5_page():
+    return send_from_directory("static", "pick5.html")
+
+@app.route("/api/pick5/states")
+def api_pick5_states():
+    result = {}
+    for code, games in PICK5_DIGIT_STATES.items():
+        result[code] = games
+    return jsonify(result)
+
+@app.route("/api/pick5/<state_code>/<slug>")
+def api_pick5_report(state_code, slug):
+    import analyzer_multi
+    from games_scraper import load_game_results
+    code = state_code.upper()
+    if code not in PICK5_DIGIT_STATES:
+        return jsonify({"error": f"State {code} not supported for Pick 5"}), 400
+    draws = load_game_results(code, slug)
+    if not draws:
+        return jsonify({"error": "No data"}), 200
+    # Filter to draws that actually have exactly 5 digits (guard against mixed/malformed data)
+    draws = [d for d in draws if len(d.get("nums", [])) == 5]
+    if not draws:
+        return jsonify({"error": "No valid 5-digit draws found"}), 200
+
+    report = analyzer_multi.full_report(draws, n=5)
+
+    # Enrich suggestions with digit field in breakdown
+    suggs = report.get("suggestions", [])
+    for s in suggs:
+        raw_nums = s.get("combo", "").replace("-", "")
+        # combo from analyzer_multi is "d1-d2-d3-d4-d5", rebuild as list
+        nums = s.get("combo", "").split("-")
+        s["combo1_fmt"] = _fmt_p5(nums)
+        s["combo2_fmt"] = _fmt_p5c2(nums)
+        # tag each breakdown entry with digit
+        for i, b in enumerate(s.get("breakdown", [])):
+            b["digit"] = nums[i] if i < len(nums) else "?"
+
+    # Build per-position frequency maps
+    per_pos = {}
+    for pi in range(5):
+        per_pos[f"d{pi+1}"] = analyzer_multi.digit_frequencies(draws, pos=pi, n=5)
+
+    # Backtest with formatted combos
+    backtest_rows = report.get("backtest", [])
+    # If analyzer_multi doesn't include backtest, compute from suggestions
+    # We do a simple last-15-draws comparison
+    def _backtest_p5(draws, n=15, min_hist=60):
+        rows = []
+        for i in range(min(n, len(draws))):
+            history = draws[i+1:]
+            if len(history) < min_hist:
+                break
+            sugg = analyzer_multi.weighted_suggestions(history, n=5, top_n=1)
+            if not sugg:
+                continue
+            top = sugg[0]
+            pred_nums = top["combo"].split("-")
+            act_nums = draws[i]["nums"][:5]
+            pred_fmt = _fmt_p5(pred_nums)
+            act_fmt = _fmt_p5(act_nums)
+            # Check straight hit (exact order)
+            straight = (pred_nums == act_nums)
+            # Check box hit (same digits any order)
+            box = (not straight and sorted(pred_nums) == sorted(act_nums))
+            rows.append({
+                "date": draws[i].get("date", ""),
+                "tod": draws[i].get("tod", ""),
+                "predicted": top["combo"],
+                "predicted_fmt": pred_fmt,
+                "actual": "-".join(act_nums),
+                "actual_fmt": act_fmt,
+                "straight": straight,
+                "box": box,
+            })
+        return rows
+
+    backtest_rows = _backtest_p5(draws)
+
+    game_info = next((g for g in PICK5_DIGIT_STATES.get(code, []) if g["slug"] == slug), {})
+    return jsonify({
+        "state": code,
+        "slug": slug,
+        "label": game_info.get("label", slug),
+        "total_draws": report.get("total_draws", len(draws)),
+        "last_draw": report.get("last_draw", draws[0] if draws else {}),
+        "suggestions": suggs,
+        "per_position_freq": per_pos,
+        "hot_cold": report.get("hot_cold", {}),
+        "backtest": backtest_rows,
+    })
+
+
 # PREDIKTA BUSINESS AI — Routes
 # ═══════════════════════════════════════════════════════════
 

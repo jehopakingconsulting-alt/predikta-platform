@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pick 5 — Loto 5 Chiffres | PREDIKTA</title>
+<meta name="description" content="Analyse et prédictions Pick 5 (5 chiffres) pour Florida, Ohio, Pennsylvania — format XXX-YY — PREDIKTA"/>
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" href="/static/style.css"/>
+<style>
+:root{--accent:#7c3aed;--accent2:#a78bfa;--hot:#ef4444;--cold:#3b82f6;--warn:#f59e0b;--ok:#22c55e;--card-bg:var(--bg2,#1e1e2e)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg,#0f0f1a);color:var(--text,#e2e8f0);min-height:100vh}
+.page-wrap{max-width:900px;margin:0 auto;padding:1rem 1rem 4rem}
+
+/* Hero */
+.hero{text-align:center;padding:2.5rem 1rem 1.5rem;background:linear-gradient(135deg,#1a0a3e 0%,#0f0f1a 100%);border-radius:1rem;margin-bottom:2rem;border:1px solid rgba(124,58,237,.3)}
+.hero h1{font-size:2rem;font-weight:800;background:linear-gradient(90deg,#a78bfa,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:#94a3b8;margin-top:.5rem;font-size:.95rem}
+
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.5rem;align-items:flex-end}
+.ctrl-group{display:flex;flex-direction:column;gap:.3rem}
+.ctrl-group label{font-size:.75rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em}
+select,button{background:var(--card-bg);border:1px solid rgba(124,58,237,.4);color:var(--text);border-radius:.5rem;padding:.5rem .85rem;font-size:.9rem;cursor:pointer}
+select:focus{outline:none;border-color:var(--accent)}
+.btn-analyze{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:none;border-radius:.6rem;padding:.6rem 1.4rem;font-weight:700;font-size:.95rem;cursor:pointer;transition:opacity .2s}
+.btn-analyze:hover{opacity:.85}
+.btn-analyze:disabled{opacity:.5;cursor:not-allowed}
+
+/* Status */
+.status-bar{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);border-radius:.5rem;padding:.6rem 1rem;font-size:.85rem;color:#94a3b8;margin-bottom:1.2rem;display:none}
+.status-bar.show{display:flex;align-items:center;gap:.5rem}
+.spinner{width:1rem;height:1rem;border:2px solid rgba(167,139,250,.3);border-top-color:#a78bfa;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Last Draw Badge */
+.last-draw-card{background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3);border-radius:.75rem;padding:.9rem 1.2rem;margin-bottom:1.5rem;display:none}
+.last-draw-card.show{display:flex;flex-wrap:wrap;gap:.5rem 2rem;align-items:center}
+.ldc-label{font-size:.75rem;color:#7c3aed;font-weight:700;text-transform:uppercase;letter-spacing:.06em;flex-basis:100%}
+.ldc-result{font-size:1.8rem;font-weight:900;letter-spacing:.12em;font-family:monospace;color:#a78bfa}
+.ldc-result .dash{color:#7c3aed;margin:0 .15em}
+.ldc-meta{font-size:.82rem;color:#94a3b8}
+
+/* Next Draw Info */
+.next-draw-banner{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:.6rem;padding:.6rem 1rem;margin-bottom:1.5rem;font-size:.85rem;color:#22c55e;display:none}
+.next-draw-banner.show{display:flex;align-items:center;gap:.6rem}
+
+/* Suggestions Grid */
+.section-title{font-size:1.1rem;font-weight:700;color:#a78bfa;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.suggestions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem;margin-bottom:2rem}
+
+/* Suggestion Card */
+.sugg-card{background:var(--card-bg);border:1px solid rgba(124,58,237,.25);border-radius:.875rem;padding:1rem 1.1rem;position:relative;overflow:hidden}
+.sugg-card.top1{border-color:#7c3aed;box-shadow:0 0 18px rgba(124,58,237,.35)}
+.sugg-card .rank-badge{position:absolute;top:.55rem;right:.7rem;font-size:.7rem;font-weight:800;color:#a78bfa;opacity:.6}
+.sugg-card .card-label{font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem}
+.combo-display{font-family:monospace;font-size:1.6rem;font-weight:900;letter-spacing:.12em;color:#e2e8f0;margin-bottom:.4rem}
+.combo-display .dash{color:#7c3aed;margin:0 .1em}
+.combo2-display{font-family:monospace;font-size:1.1rem;font-weight:700;letter-spacing:.1em;color:#94a3b8;margin-bottom:.6rem}
+.combo2-display .dash{color:#4f46e5;margin:0 .1em}
+.combo2-label{font-size:.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.1rem}
+.conf-pill{display:inline-block;padding:.18rem .55rem;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.04em}
+.conf-pill.tres-forte{background:rgba(124,58,237,.25);color:#a78bfa}
+.conf-pill.forte{background:rgba(79,70,229,.2);color:#818cf8}
+.conf-pill.moyenne{background:rgba(245,158,11,.15);color:#f59e0b}
+.conf-pill.faible{background:rgba(100,116,139,.15);color:#94a3b8}
+
+/* Position digits breakdown */
+.pos-breakdown{display:flex;gap:.35rem;margin-top:.7rem;flex-wrap:wrap}
+.pos-chip{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.05);border-radius:.4rem;padding:.25rem .4rem;min-width:2.2rem}
+.pos-chip .pnum{font-size:1rem;font-weight:800;font-family:monospace}
+.pos-chip .plab{font-size:.55rem;color:#64748b;text-transform:uppercase}
+.pos-chip.hot .pnum{color:#ef4444}
+.pos-chip.cold .pnum{color:#3b82f6}
+.pos-chip.warn .pnum{color:#f59e0b}
+
+/* Frequencies */
+.freq-section{margin-bottom:2rem}
+.freq-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+.pos-col{background:var(--card-bg);border:1px solid rgba(124,58,237,.15);border-radius:.6rem;padding:.6rem .4rem;text-align:center}
+.pos-col h4{font-size:.7rem;color:#7c3aed;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.digit-bar-row{display:flex;align-items:center;gap:.3rem;margin-bottom:.18rem}
+.digit-bar-row .dn{font-size:.75rem;font-family:monospace;font-weight:700;width:1.2rem;text-align:right;color:#94a3b8}
+.digit-bar-row .bar{height:.45rem;border-radius:999px;background:var(--accent);min-width:2px;transition:width .4s}
+.digit-bar-row .dp{font-size:.65rem;color:#64748b;margin-left:.2rem}
+
+/* Track Record */
+.track-section{margin-bottom:2rem}
+.tr-row{display:flex;align-items:center;gap:.75rem;padding:.5rem .75rem;border-radius:.5rem;border:1px solid rgba(124,58,237,.12);margin-bottom:.4rem;font-size:.83rem}
+.tr-row:nth-child(even){background:rgba(255,255,255,.02)}
+.tr-date{color:#64748b;width:6rem;flex-shrink:0}
+.tr-pred{font-family:monospace;font-weight:700;color:#a78bfa;letter-spacing:.08em}
+.tr-actual{font-family:monospace;color:#94a3b8;letter-spacing:.08em}
+.tr-hit{font-size:.75rem;font-weight:700;padding:.12rem .4rem;border-radius:.3rem}
+.tr-hit.str8{background:rgba(34,197,94,.2);color:#22c55e}
+.tr-hit.box{background:rgba(245,158,11,.2);color:#f59e0b}
+.tr-hit.miss{background:rgba(100,116,139,.1);color:#64748b}
+
+/* Tabs */
+.tabs{display:flex;gap:.5rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.tab-btn{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);color:#94a3b8;border-radius:.5rem;padding:.45rem 1rem;font-size:.85rem;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:rgba(124,58,237,.3);border-color:#7c3aed;color:#a78bfa;font-weight:700}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+.no-data{text-align:center;color:#64748b;padding:2rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<div id="predikta-nav"></div>
+<div class="page-wrap">
+
+  <div class="hero">
+    <h1 id="heroTitle">🎯 Pick 5 — Loto 5 Chiffres</h1>
+    <p id="heroSub">Analyse statistique · Format <strong>XXX-YY</strong> · FL · OH · PA</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="ctrl-group">
+      <label id="lblState">État</label>
+      <select id="stateSelect"></select>
+    </div>
+    <div class="ctrl-group">
+      <label id="lblDraw">Tirage</label>
+      <select id="drawSelect"></select>
+    </div>
+    <button class="btn-analyze" id="btnAnalyze" onclick="loadAnalysis()">
+      ⚡ <span id="btnTxt">Analyser</span>
+    </button>
+  </div>
+
+  <!-- Status -->
+  <div class="status-bar" id="statusBar">
+    <div class="spinner"></div>
+    <span id="statusTxt">Chargement...</span>
+  </div>
+
+  <!-- Last Draw -->
+  <div class="last-draw-card" id="lastDrawCard">
+    <span class="ldc-label" id="lblLastDraw">Dernier Tirage</span>
+    <div>
+      <span class="ldc-result" id="lastDrawDisplay"></span>
+      <span class="ldc-meta" id="lastDrawMeta"></span>
+    </div>
+  </div>
+
+  <!-- Next Draw -->
+  <div class="next-draw-banner" id="nextDrawBanner">
+    📅 <span id="nextDrawTxt"></span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="mainTabs" style="display:none">
+    <button class="tab-btn active" data-tab="sugg" id="tabSugg">🎯 Suggestions</button>
+    <button class="tab-btn" data-tab="freq" id="tabFreq">📊 Fréquences</button>
+    <button class="tab-btn" data-tab="track" id="tabTrack">📈 Track Record</button>
+  </div>
+
+  <!-- Panel: Suggestions -->
+  <div class="tab-panel active" id="panel-sugg">
+    <div class="section-title" id="suggTitle">🎯 Suggestions Pick 5</div>
+    <div class="suggestions-grid" id="suggGrid">
+      <div class="no-data" id="noDataSugg">Sélectionnez un état et cliquez Analyser</div>
+    </div>
+  </div>
+
+  <!-- Panel: Frequencies -->
+  <div class="tab-panel" id="panel-freq">
+    <div class="freq-section">
+      <div class="section-title" id="freqTitle">📊 Fréquences par Position</div>
+      <div class="freq-grid" id="freqGrid">
+        <div class="no-data" id="noDataFreq" style="grid-column:1/-1">Aucune donnée</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Track Record -->
+  <div class="tab-panel" id="panel-track">
+    <div class="track-section">
+      <div class="section-title" id="trackTitle">📈 Track Record (15 derniers)</div>
+      <div id="trackList"><div class="no-data" id="noDataTrack">Aucune donnée</div></div>
+    </div>
+  </div>
+
+</div><!-- /.page-wrap -->
+
+<script src="/static/nav.js"></script>
+<script>
+// ── I18N ──────────────────────────────────────────────────────────────────
+const T5 = {
+  fr:{
+    heroTitle:'🎯 Pick 5 — Loto 5 Chiffres',
+    heroSub:'Analyse statistique · Format <strong>XXX-YY</strong> · FL · OH · PA',
+    lblState:'État', lblDraw:'Tirage', btnTxt:'Analyser',
+    lblLastDraw:'Dernier Tirage',
+    nextPre:'Prochain tirage :',
+    suggTitle:'🎯 Suggestions Pick 5',
+    combo1Lbl:'Combinaison 1 (Straight)',
+    combo2Lbl:'Combinaison 2 (Box couverture)',
+    freqTitle:'📊 Fréquences par Position',
+    trackTitle:'📈 Track Record (15 derniers)',
+    tabSugg:'🎯 Suggestions', tabFreq:'📊 Fréquences', tabTrack:'📈 Track Record',
+    statusLoad:'Analyse en cours...',
+    confTresFort:'Tendance très forte', confFort:'Tendance forte',
+    confMoy:'Tendance moyenne', confFaible:'Tendance faible',
+    hitStr8:'Straight', hitBox:'Box', hitMiss:'Manqué',
+    predicted:'Prédit', actual:'Résultat',
+    noData:'Aucune donnée disponible',
+    pos:['Pos 1','Pos 2','Pos 3','Pos 4','Pos 5'],
+  },
+  en:{
+    heroTitle:'🎯 Pick 5 — 5-Digit Lotto',
+    heroSub:'Statistical analysis · Format <strong>XXX-YY</strong> · FL · OH · PA',
+    lblState:'State', lblDraw:'Draw', btnTxt:'Analyze',
+    lblLastDraw:'Last Draw',
+    nextPre:'Next draw:',
+    suggTitle:'🎯 Pick 5 Suggestions',
+    combo1Lbl:'Combo 1 (Straight)',
+    combo2Lbl:'Combo 2 (Box coverage)',
+    freqTitle:'📊 Frequency by Position',
+    trackTitle:'📈 Track Record (last 15)',
+    tabSugg:'🎯 Suggestions', tabFreq:'📊 Frequencies', tabTrack:'📈 Track Record',
+    statusLoad:'Analyzing...',
+    confTresFort:'Very strong trend', confFort:'Strong trend',
+    confMoy:'Average trend', confFaible:'Weak trend',
+    hitStr8:'Straight', hitBox:'Box', hitMiss:'Missed',
+    predicted:'Predicted', actual:'Actual',
+    noData:'No data available',
+    pos:['Pos 1','Pos 2','Pos 3','Pos 4','Pos 5'],
+  },
+  es:{
+    heroTitle:'🎯 Pick 5 — Lotería 5 Dígitos',
+    heroSub:'Análisis estadístico · Formato <strong>XXX-YY</strong> · FL · OH · PA',
+    lblState:'Estado', lblDraw:'Sorteo', btnTxt:'Analizar',
+    lblLastDraw:'Último Sorteo',
+    nextPre:'Próximo sorteo:',
+    suggTitle:'🎯 Sugerencias Pick 5',
+    combo1Lbl:'Combo 1 (Straight)',
+    combo2Lbl:'Combo 2 (Box cobertura)',
+    freqTitle:'📊 Frecuencias por Posición',
+    trackTitle:'📈 Track Record (últimos 15)',
+    tabSugg:'🎯 Sugerencias', tabFreq:'📊 Frecuencias', tabTrack:'📈 Track Record',
+    statusLoad:'Analizando...',
+    confTresFort:'Tendencia muy fuerte', confFort:'Tendencia fuerte',
+    confMoy:'Tendencia media', confFaible:'Tendencia débil',
+    hitStr8:'Straight', hitBox:'Box', hitMiss:'Fallado',
+    predicted:'Predicho', actual:'Real',
+    noData:'Sin datos disponibles',
+    pos:['Pos 1','Pos 2','Pos 3','Pos 4','Pos 5'],
+  },
+  pt:{
+    heroTitle:'🎯 Pick 5 — Loto 5 Dígitos',
+    heroSub:'Análise estatística · Formato <strong>XXX-YY</strong> · FL · OH · PA',
+    lblState:'Estado', lblDraw:'Sorteio', btnTxt:'Analisar',
+    lblLastDraw:'Último Sorteio',
+    nextPre:'Próximo sorteio:',
+    suggTitle:'🎯 Sugestões Pick 5',
+    combo1Lbl:'Combo 1 (Straight)',
+    combo2Lbl:'Combo 2 (Box cobertura)',
+    freqTitle:'📊 Frequências por Posição',
+    trackTitle:'📈 Track Record (últimos 15)',
+    tabSugg:'🎯 Sugestões', tabFreq:'📊 Frequências', tabTrack:'📈 Track Record',
+    statusLoad:'Analisando...',
+    confTresFort:'Tendência muito forte', confFort:'Tendência forte',
+    confMoy:'Tendência média', confFaible:'Tendência fraca',
+    hitStr8:'Straight', hitBox:'Box', hitMiss:'Errado',
+    predicted:'Previsto', actual:'Real',
+    noData:'Nenhum dado disponível',
+    pos:['Pos 1','Pos 2','Pos 3','Pos 4','Pos 5'],
+  },
+  ht:{
+    heroTitle:'🎯 Pick 5 — Loto 5 Chif',
+    heroSub:'Analiz estatistik · Fòma <strong>XXX-YY</strong> · FL · OH · PA',
+    lblState:'Eta', lblDraw:'Tiraj', btnTxt:'Analize',
+    lblLastDraw:'Dènye Tiraj',
+    nextPre:'Pwochen tiraj:',
+    suggTitle:'🎯 Sijesyon Pick 5',
+    combo1Lbl:'Konbo 1 (Straight)',
+    combo2Lbl:'Konbo 2 (Box kouvèti)',
+    freqTitle:'📊 Frekans pa Pozisyon',
+    trackTitle:'📈 Track Record (15 dènye)',
+    tabSugg:'🎯 Sijesyon', tabFreq:'📊 Frekans', tabTrack:'📈 Track Record',
+    statusLoad:'Analiz ap fèt...',
+    confTresFort:'Tandans trè fò', confFort:'Tandans fò',
+    confMoy:'Tandans mwayen', confFaible:'Tandans fèb',
+    hitStr8:'Straight', hitBox:'Box', hitMiss:'Rate',
+    predicted:'Predi', actual:'Aktyèl',
+    noData:'Pa gen done disponib',
+    pos:['Poz 1','Poz 2','Poz 3','Poz 4','Poz 5'],
+  },
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function getLang(){return localStorage.getItem('predikta_lang')||'fr'}
+function t(key){const l=getLang();return (T5[l]||T5.fr)[key]||(T5.fr[key]||key)}
+
+// Format 5 digits as "d1d2d3-d4d5"
+function fmtP5(nums){
+  if(!nums||nums.length<5) return '?????';
+  return `${nums[0]}${nums[1]}${nums[2]}-${nums[3]}${nums[4]}`;
+}
+// Combo 2: swap last 2
+function fmtP5C2(nums){
+  if(!nums||nums.length<5) return '?????';
+  return `${nums[0]}${nums[1]}${nums[2]}-${nums[4]}${nums[3]}`;
+}
+// Build colored display HTML for a 5-digit combo
+function comboHtml(str, cls='combo-display'){
+  // str = "483-72"
+  const parts=str.split('-');
+  if(parts.length===2){
+    return `<div class="${cls}"><span>${parts[0]}</span><span class="dash">-</span><span>${parts[1]}</span></div>`;
+  }
+  return `<div class="${cls}">${str}</div>`;
+}
+
+// ── States ────────────────────────────────────────────────────────────────
+const PICK5_STATES = {
+  FL: [
+    {slug:'pick5',        label:'Pick 5 Evening',  tod:'Evening'},
+    {slug:'pick5-midday', label:'Pick 5 Midday',   tod:'Midday'},
+  ],
+  OH: [
+    {slug:'pick5', label:'Pick 5 Evening', tod:'Evening'},
+  ],
+  PA: [
+    {slug:'pick5',        label:'Pick 5 Evening',  tod:'Evening'},
+    {slug:'pick5-midday', label:'Pick 5 Midday',   tod:'Midday'},
+  ],
+};
+
+const STATE_LABELS = {FL:'Florida',OH:'Ohio',PA:'Pennsylvania'};
+
+// Next draw schedule (ET) — approximate
+const NEXT_DRAW_SCHEDULE = {
+  'FL:pick5':        {days:[1,2,3,4,5,6,7], time:'21:30'},
+  'FL:pick5-midday': {days:[1,2,3,4,5,6,7], time:'13:00'},
+  'OH:pick5':        {days:[1,2,3,4,5,6,7], time:'20:30'},
+  'PA:pick5':        {days:[1,2,3,4,5,6,7], time:'18:30'},
+  'PA:pick5-midday': {days:[1,2,3,4,5,6,7], time:'13:00'},
+};
+
+function nextDrawStr(state, slug){
+  const key=`${state}:${slug}`;
+  const sch=NEXT_DRAW_SCHEDULE[key];
+  if(!sch) return '';
+  const now=new Date();
+  // Compose next draw date by checking today/tomorrow
+  const [hh,mm]=sch.time.split(':').map(Number);
+  const candidate=new Date(now);
+  candidate.setHours(hh,mm,0,0);
+  if(candidate<=now) candidate.setDate(candidate.getDate()+1);
+  const opts={weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'};
+  return `${t('nextPre')} ${candidate.toLocaleDateString(getLang()==='fr'?'fr-FR':'en-US',opts)} ET`;
+}
+
+// ── Init dropdowns ────────────────────────────────────────────────────────
+function initDropdowns(){
+  const stSel=document.getElementById('stateSelect');
+  stSel.innerHTML='';
+  Object.keys(PICK5_STATES).forEach(code=>{
+    const o=document.createElement('option');
+    o.value=code; o.textContent=`${STATE_LABELS[code]} (${code})`;
+    stSel.appendChild(o);
+  });
+  stSel.onchange=populateDraws;
+  populateDraws();
+}
+
+function populateDraws(){
+  const state=document.getElementById('stateSelect').value;
+  const drSel=document.getElementById('drawSelect');
+  drSel.innerHTML='';
+  (PICK5_STATES[state]||[]).forEach(g=>{
+    const o=document.createElement('option');
+    o.value=g.slug; o.textContent=g.label;
+    drSel.appendChild(o);
+  });
+}
+
+// ── Tab logic ────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  initDropdowns();
+  applyLang();
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.onclick=()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    };
+  });
+});
+
+function applyLang(){
+  document.getElementById('heroTitle').textContent=t('heroTitle');
+  document.getElementById('heroSub').innerHTML=t('heroSub');
+  document.getElementById('lblState').textContent=t('lblState');
+  document.getElementById('lblDraw').textContent=t('lblDraw');
+  document.getElementById('btnTxt').textContent=t('btnTxt');
+  document.getElementById('suggTitle').textContent=t('suggTitle');
+  document.getElementById('freqTitle').textContent=t('freqTitle');
+  document.getElementById('trackTitle').textContent=t('trackTitle');
+  document.getElementById('tabSugg').textContent=t('tabSugg');
+  document.getElementById('tabFreq').textContent=t('tabFreq');
+  document.getElementById('tabTrack').textContent=t('tabTrack');
+  document.getElementById('lblLastDraw').textContent=t('lblLastDraw');
+}
+
+// ── Main Analysis ─────────────────────────────────────────────────────────
+let currentData=null;
+
+async function loadAnalysis(){
+  const state=document.getElementById('stateSelect').value;
+  const slug=document.getElementById('drawSelect').value;
+  const btn=document.getElementById('btnAnalyze');
+  const sb=document.getElementById('statusBar');
+  const st=document.getElementById('statusTxt');
+  btn.disabled=true;
+  sb.className='status-bar show';
+  st.textContent=t('statusLoad');
+
+  try{
+    const resp=await fetch(`/api/pick5/${state}/${slug}`);
+    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data=await resp.json();
+    currentData=data;
+    renderAll(data, state, slug);
+  }catch(e){
+    st.textContent='Erreur: '+e.message;
+    setTimeout(()=>{sb.className='status-bar'},3000);
+  }finally{
+    btn.disabled=false;
+    sb.className='status-bar';
+  }
+}
+
+function renderAll(data, state, slug){
+  // Show tabs
+  document.getElementById('mainTabs').style.display='flex';
+
+  // Last Draw
+  const ld=data.last_draw;
+  if(ld&&ld.nums){
+    const fmt=fmtP5(ld.nums);
+    const parts=fmt.split('-');
+    document.getElementById('lastDrawDisplay').innerHTML=
+      `<span>${parts[0]}</span><span class="dash">-</span><span>${parts[1]}</span>`;
+    document.getElementById('lastDrawMeta').textContent=
+      `  ${ld.date||''} ${ld.tod||''} — ${STATE_LABELS[state]||state} ${slug}`;
+    document.getElementById('lastDrawCard').className='last-draw-card show';
+  }
+
+  // Next draw
+  const nxt=nextDrawStr(state,slug);
+  if(nxt){
+    document.getElementById('nextDrawTxt').textContent=nxt;
+    document.getElementById('nextDrawBanner').className='next-draw-banner show';
+  }
+
+  renderSuggestions(data.suggestions||[]);
+  renderFrequencies(data.per_position_freq||{}, data.hot_cold||{});
+  renderTrackRecord(data.backtest||[]);
+}
+
+// ── Suggestions ───────────────────────────────────────────────────────────
+function renderSuggestions(suggs){
+  const grid=document.getElementById('suggGrid');
+  if(!suggs||suggs.length===0){
+    grid.innerHTML=`<div class="no-data">${t('noData')}</div>`;
+    return;
+  }
+  grid.innerHTML=suggs.map((s,i)=>{
+    const nums=s.combo.split('-').filter(Boolean);
+    const c1=fmtP5(nums);
+    const c2=fmtP5C2(nums);
+    const sameC2=(c1===c2);
+
+    // Confidence pill
+    const conf=s.confidence||'';
+    let pillCls='faible', pillTxt=t('confFaible');
+    if(conf.includes('très')||conf.includes('very')||conf.includes('trè')||conf.includes('muito')){
+      pillCls='tres-forte'; pillTxt=t('confTresFort');
+    } else if(conf.includes('fort')||conf.includes('strong')||conf.includes('fuerte')||conf.includes('forte')){
+      pillCls='forte'; pillTxt=t('confFort');
+    } else if(conf.includes('moy')||conf.includes('average')||conf.includes('media')||conf.includes('média')||conf.includes('mwayen')){
+      pillCls='moyenne'; pillTxt=t('confMoy');
+    }
+
+    // Position breakdown
+    const posLabels=t('pos');
+    const breakdown=(s.breakdown||[]).map((b,pi)=>{
+      const st=b.hot_cold||'NEUTRAL';
+      const cls=st==='HOT'?'hot':st==='COLD'?'cold':b.overdue?'warn':'';
+      return `<div class="pos-chip ${cls}"><span class="pnum">${b.digit||nums[pi]||''}</span><span class="plab">${posLabels[pi]||''}</span></div>`;
+    }).join('');
+
+    return `<div class="sugg-card ${i===0?'top1':''}">
+      <span class="rank-badge">#${i+1}</span>
+      <div class="card-label">${t('combo1Lbl')}</div>
+      ${comboHtml(c1,'combo-display')}
+      ${sameC2?'':
+        `<span class="combo2-label">${t('combo2Lbl')}</span>${comboHtml(c2,'combo2-display')}`
+      }
+      <span class="conf-pill ${pillCls}">${pillTxt}</span>
+      ${breakdown?`<div class="pos-breakdown">${breakdown}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── Frequencies ───────────────────────────────────────────────────────────
+function renderFrequencies(perPos, hotCold){
+  const grid=document.getElementById('freqGrid');
+  const posLabels=t('pos');
+  if(!perPos||Object.keys(perPos).length===0){
+    grid.innerHTML=`<div class="no-data" style="grid-column:1/-1">${t('noData')}</div>`;
+    return;
+  }
+  grid.innerHTML=Object.entries(perPos).map(([pos,freqObj],pi)=>{
+    const digits=Object.entries(freqObj).sort((a,b)=>b[1].pct-a[1].pct);
+    const maxPct=digits[0]?digits[0][1].pct:1;
+    const rows=digits.map(([d,v])=>{
+      const w=maxPct>0?Math.max(2,v.pct/maxPct*100):0;
+      return `<div class="digit-bar-row">
+        <span class="dn">${d}</span>
+        <div class="bar" style="width:${w}%"></div>
+        <span class="dp">${v.pct}%</span>
+      </div>`;
+    }).join('');
+    return `<div class="pos-col"><h4>${posLabels[pi]||pos}</h4>${rows}</div>`;
+  }).join('');
+}
+
+// ── Track Record ──────────────────────────────────────────────────────────
+function renderTrackRecord(backtest){
+  const list=document.getElementById('trackList');
+  if(!backtest||backtest.length===0){
+    list.innerHTML=`<div class="no-data">${t('noData')}</div>`;
+    return;
+  }
+  list.innerHTML=backtest.map(row=>{
+    const predFmt=row.predicted_fmt||row.predicted||'-----';
+    const actFmt=row.actual_fmt||row.actual||'-----';
+    let hitCls='miss',hitTxt=t('hitMiss');
+    if(row.straight){hitCls='str8';hitTxt='🏆 '+t('hitStr8');}
+    else if(row.box){hitCls='box';hitTxt='📦 '+t('hitBox');}
+    return `<div class="tr-row">
+      <span class="tr-date">${row.date||''} <small>${row.tod||''}</small></span>
+      <span class="tr-pred">${predFmt}</span>
+      <span style="color:#64748b;font-size:.75rem">${t('actual')}:</span>
+      <span class="tr-actual">${actFmt}</span>
+      <span class="tr-hit ${hitCls}">${hitTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+// Listen for language changes from nav.js
+window.addEventListener('predikta_lang_change',()=>{applyLang();if(currentData)renderAll(currentData,document.getElementById('stateSelect').value,document.getElementById('drawSelect').value);});
+</script>
+</body>
+</html>
