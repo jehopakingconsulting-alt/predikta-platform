@@ -30,9 +30,10 @@ _ENTROPY_FN = None
 def _ensure_sklearn_models():
     global _RF_CLS, _GBM_CLS, _XGB_CLS
     if _RF_CLS is None:
-        from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+        from sklearn.ensemble import RandomForestClassifier
         from xgboost import XGBClassifier
-        _RF_CLS, _GBM_CLS, _XGB_CLS = RandomForestClassifier, GradientBoostingClassifier, XGBClassifier
+        _RF_CLS, _XGB_CLS = RandomForestClassifier, XGBClassifier
+        _GBM_CLS = None
     return _RF_CLS, _GBM_CLS, _XGB_CLS
 
 
@@ -243,15 +244,13 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
 
 class MLPredictor:
     def __init__(self):
-        RandomForestClassifier, GradientBoostingClassifier, XGBClassifier = _ensure_sklearn_models()
+        RandomForestClassifier, _gbm_unused, XGBClassifier = _ensure_sklearn_models()
         self.models = {
-            # n_estimators réduits (200->100, 150->80) — gain ~40-50% sur le
-            # temps d'entraînement avec impact négligeable sur la précision
-            # (Pick3 est quasi-aléatoire, le signal supplémentaire au-delà
-            # de ~80-100 arbres est marginal).
-            "rf":  [RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42, n_jobs=-1) for _ in range(3)],
-            "gbm": [GradientBoostingClassifier(n_estimators=80, max_depth=4, learning_rate=0.05, random_state=42) for _ in range(3)],
-            "xgb": [XGBClassifier(n_estimators=80, max_depth=5, learning_rate=0.05, verbosity=0, random_state=42, n_jobs=-1) for _ in range(3)],
+            # Pick3 est quasi-aléatoire — 40 arbres convergent aussi bien que
+            # 100+. n_jobs=1 évite le thread-overhead sur 0.5 CPU Render.
+            # GBM supprimé (le plus lent, non parallélisable, gain marginal).
+            "rf":  [RandomForestClassifier(n_estimators=40, max_depth=6, random_state=42, n_jobs=1) for _ in range(3)],
+            "xgb": [XGBClassifier(n_estimators=40, max_depth=4, learning_rate=0.1, verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
         }
         self.trained = False
         self.feature_count = 0
@@ -272,7 +271,7 @@ class MLPredictor:
             return {d: 0.1 for d in DIGITS}
 
         probas = []
-        weights = {"rf": 0.35, "gbm": 0.30, "xgb": 0.35}
+        weights = {"rf": 0.50, "xgb": 0.50}
 
         for name, model_list in self.models.items():
             model = model_list[position]
