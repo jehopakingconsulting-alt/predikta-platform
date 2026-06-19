@@ -444,6 +444,11 @@ header{
   box-shadow:0 4px 20px rgba(79,110,255,.35);
 }
 .btn-analyze:hover{background:linear-gradient(135deg,#3a4aee,#6688ff);box-shadow:0 6px 28px rgba(79,110,255,.5)}
+.btn-compare{
+  background:linear-gradient(135deg,#2a1060,#5533bb);
+  color:#cc99ff;font-weight:700;border-color:#7755cc;
+}
+.btn-compare:hover{background:linear-gradient(135deg,#3a1880,#7755ee)}
 .btn-scrape{
   background:linear-gradient(135deg,#0a2218,#1a4a30);
   color:#44ff99;font-weight:600;border-color:#226633;
@@ -455,6 +460,24 @@ header{
 }
 .btn-results:hover{background:rgba(34,232,122,.25)}
 #status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
+/* ── Comparaison Mid/Soir ─────────────────────────────── */
+.cmp-header{text-align:center;margin-bottom:18px}
+.cmp-title{font-size:1.2rem;font-weight:700;color:var(--accent)}
+.cmp-sub{font-size:.8rem;color:var(--muted2);margin-top:4px}
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:640px){.cmp-grid{grid-template-columns:1fr}}
+.cmp-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.cmp-col-title{font-weight:700;font-size:1rem;margin-bottom:4px}
+.cmp-col-meta{font-size:.75rem;color:var(--muted2);margin-bottom:12px}
+.cmp-combos{display:flex;flex-direction:column;gap:6px}
+.cmp-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid transparent}
+.cmp-row.cmp-conv{background:rgba(160,100,255,.12);border-color:rgba(160,100,255,.4)}
+.cmp-rank{font-size:.75rem;color:var(--muted2);min-width:24px}
+.cmp-ball{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);font-weight:700;font-size:.85rem}
+.cmp-ball-gold{background:rgba(255,200,50,.2);border-color:rgba(255,200,50,.6);color:#ffdd55}
+.cmp-conv-badge{font-size:.65rem;background:rgba(160,100,255,.3);color:#cc99ff;border-radius:4px;padding:2px 6px;margin-left:4px}
+.cmp-conv-block{background:rgba(160,100,255,.08);border:1px solid rgba(160,100,255,.3);border-radius:12px;padding:16px;margin-bottom:4px}
+.cmp-conv-title{font-weight:700;font-size:.85rem;color:#cc99ff;margin-bottom:10px}
 @media(max-width:700px){
   .controls-actions > *{flex:1 1 100%}
 }
@@ -1092,6 +1115,7 @@ footer{
     </div>
   </div>
   <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
+  <button class="btn-compare" onclick="compareDraws()" id="btn-compare" title="Comparer Midday vs Evening">⚖ Mid/Soir</button>
   <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
   <a href="/results" class="btn-results">🟢 Résultats du Jour</a>
 </div>
@@ -1924,6 +1948,83 @@ function renderAll(d){
     drawFreqChart(d);
     drawSumChart(d);
   }, 80);
+}
+
+async function compareDraws(){
+  const state = document.getElementById('stateSelect').value;
+  const mc = document.getElementById('mainContent');
+  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">⚖ Comparaison Midday vs Evening en cours…</div></div>`;
+
+  async function fetchTOD(tod){
+    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: AbortSignal.timeout(90000)});
+    return r.json();
+  }
+
+  let mid, eve;
+  try{
+    [mid, eve] = await Promise.all([fetchTOD('midday'), fetchTOD('evening')]);
+  }catch(e){
+    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur lors de la comparaison: ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws()" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button></div>`;
+    return;
+  }
+  if(mid.error || eve.error){
+    mc.innerHTML = `<div class="card" style="color:#ff5533;padding:20px">⚠️ ${mid.error||eve.error}</div>`;
+    return;
+  }
+
+  // Find convergences: combos in top-10 consensus of BOTH TODs
+  const midTop  = (mid.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
+  const eveTop  = (eve.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
+  const convSet = new Set(midTop.filter(c=>eveTop.includes(c)));
+
+  function comboRow(c, rank, other){
+    const key = Array.isArray(c)?c.join('-'):c;
+    const inBoth = convSet.has(key);
+    const balls  = key.split('-').map(n=>`<span class="cmp-ball">${n}</span>`).join('');
+    const badge  = inBoth ? `<span class="cmp-conv-badge">✓ Convergence</span>` : '';
+    return `<div class="cmp-row rank${rank} ${inBoth?'cmp-conv':''}">
+      <span class="cmp-rank">#${rank}</span>${balls}${badge}
+    </div>`;
+  }
+
+  function colHTML(data, tod, combos){
+    const label = tod==='midday' ? '🌤 Midday' : '🌙 Evening';
+    const ld    = data.last_draw;
+    const ldStr = ld ? `${ld.date} · ${ld.numbers?.join('-')||''}` : '—';
+    return `<div class="cmp-col">
+      <div class="cmp-col-title">${label}</div>
+      <div class="cmp-col-meta">Dernier tirage : ${ldStr}</div>
+      <div class="cmp-combos">${combos.map((c,i)=>comboRow(c,i+1)).join('')}</div>
+    </div>`;
+  }
+
+  const convList = [...convSet];
+  const convHTML = convList.length
+    ? convList.map((key,i)=>{
+        const balls = key.split('-').map(n=>`<span class="cmp-ball cmp-ball-gold">${n}</span>`).join('');
+        return `<div class="cmp-row cmp-conv" style="justify-content:center;gap:12px">
+          <span class="cmp-rank">#${i+1}</span>${balls}
+        </div>`;
+      }).join('')
+    : `<div style="color:var(--muted2);font-size:.85rem;padding:12px 0">Aucune convergence dans le Top 10 — les deux tirages divergent aujourd'hui.</div>`;
+
+  mc.innerHTML = `
+    <div class="cmp-header">
+      <div class="cmp-title">⚖ Comparaison Mid/Soir — ${mid.state_name||state}</div>
+      <div class="cmp-sub">Consensus Top 10 · ${(mid.total_draws||0) + (eve.total_draws||0)} tirages analysés</div>
+    </div>
+    <div class="cmp-conv-block">
+      <div class="cmp-conv-title">🎯 Convergences (présentes dans les deux tirages)</div>
+      ${convHTML}
+    </div>
+    <div class="cmp-grid">
+      ${colHTML(mid,'midday',(mid.consensus||[]).slice(0,10))}
+      ${colHTML(eve,'evening',(eve.consensus||[]).slice(0,10))}
+    </div>
+    <div style="text-align:center;margin-top:18px">
+      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Retour à l'analyse complète</button>
+    </div>
+  `;
 }
 
 function updateSidebar(d){
