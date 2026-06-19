@@ -1811,15 +1811,29 @@ async function loadReport(){
     renderAll(data);
     updateSidebar(data);
 
-    // Archive cette analyse (historique local, 30 jours) ────────────────
+    // Archive cette analyse avec snapshot figé des données du moment ────────
     if(window.PredArchive){
       const stateLabel = document.getElementById('stateSelect')
         ?.selectedOptions?.[0]?.textContent?.trim() || state;
+      // Snapshot compact (~2KB) : préserve les prédictions exactes de l'instant
+      const snapshot = {
+        last_draw:         data.last_draw      || null,
+        total_draws:       data.total_draws    || 0,
+        updated_at:        data.updated_at     || null,
+        tod_filter:        tod,
+        consensus:        (data.consensus      || []).slice(0,10),
+        markov_order1_top:(data.markov_order1_top || []).slice(0,10),
+        markov_order2_top:(data.markov_order2_top || []).slice(0,10),
+        ml_predictions:   (data.ml_predictions  || []).slice(0,10),
+        monte_carlo_top:  (data.monte_carlo_top  || []).slice(0,10),
+        hot_cold_30:       data.hot_cold_30    || null,
+      };
       window.PredArchive.add({
         type: 'analyze',
         state, tod,
         label: stateLabel,
         url: `/analyze?state=${encodeURIComponent(state)}&tod=${encodeURIComponent(tod)}`,
+        snapshot,
       });
     }
   }catch(e){

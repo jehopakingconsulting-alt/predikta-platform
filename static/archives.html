@@ -45,6 +45,26 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .archive-del{background:none;border:none;color:var(--muted2);font-size:1rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s}
 .archive-del:hover{color:#ff5533;background:rgba(255,68,68,.1)}
 
+/* Snapshot expand */
+.snap-body{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.snap-body.open{display:block}
+.snap-section{margin-bottom:14px}
+.snap-section-title{font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;color:var(--muted2);margin-bottom:8px}
+.snap-last-draw{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.snap-ball{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;background:rgba(20,121,255,.15);border:2px solid rgba(20,121,255,.4);color:#7aadff}
+.snap-draw-meta{font-size:.7rem;color:var(--muted2)}
+.snap-combos{display:flex;flex-wrap:wrap;gap:6px}
+.snap-combo{background:rgba(20,121,255,.08);border:1px solid rgba(20,121,255,.2);border-radius:8px;padding:4px 10px;font-size:.75rem;font-weight:700;color:var(--text);font-family:'Orbitron',monospace;letter-spacing:.05em}
+.snap-combo.rank1{border-color:rgba(255,215,0,.5);background:rgba(255,215,0,.08);color:#ffd700}
+.snap-combo.rank2{border-color:rgba(192,192,192,.5);color:#bbb}
+.snap-combo.rank3{border-color:rgba(205,127,50,.5);color:#cd7f32}
+.snap-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:10px}
+.snap-updated{font-size:.65rem;color:var(--muted2)}
+.snap-live-btn{font-size:.7rem;font-weight:700;color:var(--accent);text-decoration:none;padding:4px 12px;border:1px solid var(--accent);border-radius:6px;transition:background .2s}
+.snap-live-btn:hover{background:rgba(20,121,255,.1)}
+.archive-item.has-snap{cursor:default;flex-direction:column;align-items:stretch}
+.archive-item.has-snap .archive-header{display:flex;align-items:center;gap:14px;cursor:pointer}
+
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted2)}
 .empty-state .ei{font-size:2.4rem;margin-bottom:14px}
 .empty-state p{font-size:.85rem;margin-bottom:18px}
@@ -288,11 +308,83 @@ function renderArchives(list){
     const items = groups[lbl].map(e=>{
       const icon = TYPE_ICON[e.type] || '🔍';
       const typeLabel = TYPE_LABEL[e.type] || e.type;
+      const todStr = e.tod ? ' · '+(t['tod_'+e.tod]||e.tod) : '';
+
+      // Entrée avec snapshot figé (analyse Pick3)
+      if(e.type==='analyze' && e.snapshot){
+        const s = e.snapshot;
+        const sid = 'snap-'+e.id.replace(/[^a-z0-9]/gi,'');
+
+        // Dernier tirage au moment de l'analyse
+        let lastDrawHtml = '';
+        if(s.last_draw){
+          const ld = s.last_draw;
+          lastDrawHtml = `<div class="snap-section">
+            <div class="snap-section-title">📍 Dernier tirage à l'heure de l'analyse</div>
+            <div class="snap-last-draw">
+              <div class="snap-ball">${ld.d1}</div>
+              <div class="snap-ball">${ld.d2}</div>
+              <div class="snap-ball">${ld.d3}</div>
+              <div class="snap-draw-meta">${ld.date}${ld.tod?' · '+ld.tod:''}</div>
+            </div>
+          </div>`;
+        }
+
+        // Consensus top 10
+        let consensusHtml = '';
+        if(s.consensus && s.consensus.length){
+          const combos = s.consensus.slice(0,10).map((c,i)=>{
+            const cls = i===0?'rank1':i===1?'rank2':i===2?'rank3':'';
+            const combo = c.combo || (c.digits ? c.digits.join('-') : '?');
+            return `<span class="snap-combo ${cls}">#${i+1} ${combo}</span>`;
+          }).join('');
+          consensusHtml = `<div class="snap-section">
+            <div class="snap-section-title">🏆 Prédictions Consensus (figées)</div>
+            <div class="snap-combos">${combos}</div>
+          </div>`;
+        }
+
+        // Markov top 5
+        let markovHtml = '';
+        if(s.markov_order1_top && s.markov_order1_top.length){
+          const combos = s.markov_order1_top.slice(0,5).map(c=>`<span class="snap-combo">${c.combo||'?'}</span>`).join('');
+          markovHtml = `<div class="snap-section">
+            <div class="snap-section-title">🔗 Markov Ordre 1 — Top 5</div>
+            <div class="snap-combos">${combos}</div>
+          </div>`;
+        }
+
+        const updatedStr = s.updated_at ? `Données : ${s.updated_at.slice(0,16).replace('T',' ')}` : '';
+        const totalStr = s.total_draws ? `${s.total_draws} tirages analysés` : '';
+
+        return `<div class="archive-item has-snap">
+          <div class="archive-header" onclick="toggleSnap('${sid}')">
+            <div class="archive-icon">${icon}</div>
+            <div class="archive-info">
+              <div class="archive-title">${e.label || e.state}</div>
+              <div class="archive-meta">${typeLabel}${todStr} · ${fmtTime(e.ts)} · 📸 Snapshot</div>
+            </div>
+            <div class="archive-actions">
+              <span class="archive-go" style="cursor:pointer">▼ Voir</span>
+              <button class="archive-del" title="🗑" onclick="event.stopPropagation();delEntry('${e.id}')">✕</button>
+            </div>
+          </div>
+          <div class="snap-body" id="${sid}">
+            ${lastDrawHtml}${consensusHtml}${markovHtml}
+            <div class="snap-footer">
+              <span class="snap-updated">${[totalStr,updatedStr].filter(Boolean).join(' · ')}</span>
+              <a class="snap-live-btn" href="${e.url}">🔄 Réanalyser live →</a>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      // Entrée simple sans snapshot
       return `<div class="archive-item" onclick="window.location='${e.url}'">
         <div class="archive-icon">${icon}</div>
         <div class="archive-info">
           <div class="archive-title">${e.label || e.state}</div>
-          <div class="archive-meta">${typeLabel}${e.tod?' · '+(t['tod_'+e.tod]||e.tod):''} · ${fmtTime(e.ts)}</div>
+          <div class="archive-meta">${typeLabel}${todStr} · ${fmtTime(e.ts)}</div>
         </div>
         <div class="archive-actions">
           <a class="archive-go" href="${e.url}">${t.open}</a>
@@ -311,6 +403,12 @@ function delEntry(id){
   if(window.PredArchive) window.PredArchive.remove(id);
   if(_serverSynced) delEntryServer(id);
   renderArchives();
+}
+
+function toggleSnap(sid){
+  const el = document.getElementById(sid);
+  if(!el) return;
+  el.classList.toggle('open');
 }
 
 document.addEventListener('click', e=>{
