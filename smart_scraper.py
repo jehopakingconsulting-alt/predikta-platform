@@ -285,21 +285,29 @@ def scrape_state(state: str, sources: list[str] | None = None) -> dict:
     """
     Scrape un état via la chaîne de sources (fallback automatique).
 
-    sources: liste ordonnée parmi ["lotteryusa", "usamega", "lotterypost"]
+    sources: liste ordonnée parmi ["official", "lotteryusa", "usamega", "lotterypost"]
              (None = ordre par défaut)
 
     Retourne: {"state": str, "added": int, "source": str, "total": int, "ok": bool}
     """
     state = state.upper()
     if sources is None:
-        sources = ["lotteryusa", "usamega", "lotterypost"]
+        sources = ["official", "lotteryusa", "usamega", "lotterypost"]
 
     existing = _load_csv(state)
     new_draws: list[dict] = []
     used_source = "none"
 
     for src in sources:
-        if src == "lotteryusa":
+        if src == "official":
+            try:
+                from official_scraper import scrape_official
+                new_draws = scrape_official(state)
+                _record(state, "official", bool(new_draws))
+            except Exception as e:
+                print(f"  [smart][official][{state}] error: {e}")
+                new_draws = []
+        elif src == "lotteryusa":
             new_draws = _scrape_lotteryusa(state)
         elif src == "usamega":
             new_draws = _scrape_usamega(state)

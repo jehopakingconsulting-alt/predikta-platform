@@ -636,48 +636,127 @@ def _initial_warm_loop():
 _draw_watcher_triggered: dict[str, float] = {}  # "{state}_{tod}" -> epoch secs
 _draw_watcher_lock = threading.Lock()
 
+def _seconds_to_next_draw() -> float:
+    """
+    Calcule le nombre de secondes jusqu'au prochain tirage (tous États confondus).
+    Retourne 300 (5 min) si le calcul échoue.
+    """
+    try:
+        from draw_schedule import DRAW_SCHEDULE, _parse_schedule_time
+        from zoneinfo import ZoneInfo
+        from datetime import timezone as _tz, timedelta as _td
+
+        now_utc = datetime.utcnow().replace(tzinfo=_tz.utc)
+        min_delta = None
+
+        for sessions in DRAW_SCHEDULE.values():
+            for session in sessions:
+                try:
+                    hour, minute, tz_name = _parse_schedule_time(session["time"])
+                    tz = ZoneInfo(tz_name)
+                    now_local = now_utc.astimezone(tz)
+                    draw_local = now_local.replace(hour=hour, minute=minute, second=0, microsecond=0)
+                    if draw_local <= now_local:
+                        draw_local += _td(days=1)
+                    delta = (draw_local.astimezone(_tz.utc) - now_utc).total_seconds()
+                    if min_delta is None or delta < min_delta:
+                        min_delta = delta
+                except Exception:
+                    pass
+
+        return max(30.0, min_delta or 300.0)
+    except Exception:
+        return 300.0
+
+
 def _draw_watcher_loop():
     """
-    Vérifie toutes les 5 minutes quels États viennent de tirer.
-    Déclenche un scraping ciblé (smart_scraper) 15 min après chaque tirage,
-    sans attendre le cycle global de 25 min.
+    Polling adaptatif basé sur les horaires de tirage :
+
+    Situation                          → intervalle de polling
+    ─────────────────────────────────────────────────────────
+    > 20 min avant prochain tirage     → 10 min  (veille)
+    5–20 min avant prochain tirage     → 2 min   (pré-tirage)
+    0–15 min après tirage              → 1 min   (post-tirage rapide)
+    15–45 min après tirage             → 3 min   (confirmation)
+    > 45 min après tirage              → 10 min  (calme)
+
+    Source 0 = official_scraper (sites officiels, 1-3 min de latence)
+    puis fallback smart_scraper (lotteryusa → usamega → lotterypost)
     """
-    import importlib
     time.sleep(60)  # laisse le serveur démarrer
+
     while True:
         try:
             from smart_scraper import get_states_due_now, scrape_state
-            due = get_states_due_now(buffer_min=15, window_min=30)
+            from draw_schedule import DRAW_SCHEDULE, _parse_schedule_time
+            from zoneinfo import ZoneInfo
+            from datetime import timezone as _tz, timedelta as _td
+
+            now_utc = datetime.utcnow().replace(tzinfo=_tz.utc)
             now_epoch = time.time()
-            to_scrape = []
+
+            # ── Calcul de la prochaine fenêtre de tirage ────────────────────
+            secs_to_next = _seconds_to_next_draw()
+            min_to_next  = secs_to_next / 60
+
+            # ── États dont le tirage vient de passer (fenêtre post-tirage) ──
+            # Chercher dans 0-45 min après le tirage
+            due_rapid  = get_states_due_now(buffer_min=1,  window_min=15)  # 1-16 min après
+            due_normal = get_states_due_now(buffer_min=16, window_min=29)  # 16-45 min après
+
+            to_scrape_now = []
             with _draw_watcher_lock:
-                for state, tod in due:
+                for state, tod in due_rapid + due_normal:
                     key = f"{state}_{tod}"
                     last = _draw_watcher_triggered.get(key, 0)
-                    # Ne scraper qu'une fois par fenêtre de 45 min
-                    if now_epoch - last > 45 * 60:
+                    # Cycle minimum : 3 min en mode rapide, 45 min en mode normal
+                    min_cycle = 3 * 60 if (state, tod) in due_rapid else 45 * 60
+                    if now_epoch - last > min_cycle:
                         _draw_watcher_triggered[key] = now_epoch
-                        to_scrape.append(state)
+                        to_scrape_now.append((state, (state, tod) in due_rapid))
 
-            if to_scrape:
-                unique_states = list(dict.fromkeys(to_scrape))  # déduplique, conserve ordre
-                print(f"[draw-watcher] Tirages détectés — scraping: {unique_states}")
-                for st in unique_states:
+            # ── Scraping ciblé ──────────────────────────────────────────────
+            if to_scrape_now:
+                unique = list(dict.fromkeys(s for s, _ in to_scrape_now))
+                rapid_set = {s for s, rapid in to_scrape_now if rapid}
+                print(f"[draw-watcher] scraping {unique} (rapide: {list(rapid_set)})")
+                for st in unique:
                     try:
-                        res = scrape_state(st)
+                        # Source 0 = officiel en mode rapide, sinon chaîne complète
+                        src = ["official", "lotteryusa", "usamega"] if st in rapid_set \
+                              else ["lotteryusa", "usamega", "lotterypost"]
+                        res = scrape_state(st, sources=src)
                         if res["added"] > 0:
-                            # Invalide le cache d'analyse pour cet état
-                            keys_to_del = [k for k in _REPORT_CACHE if k.startswith(f"{st.lower()}|")]
+                            keys_to_del = [k for k in list(_REPORT_CACHE.keys())
+                                           if k.startswith(f"{st.lower()}|")]
                             for k in keys_to_del:
-                                del _REPORT_CACHE[k]
+                                _REPORT_CACHE.pop(k, None)
                             _LATEST_CACHE["data"] = None
-                            print(f"  [draw-watcher][{st}] +{res['added']} tirages via {res['source']}")
+                            print(f"  [draw-watcher][{st}] +{res['added']} via {res['source']}")
                     except Exception as e:
                         print(f"  [draw-watcher][{st}] error: {e}")
-                    time.sleep(1)
+                    time.sleep(0.5)
+
+            # ── Intervalle adaptatif ─────────────────────────────────────────
+            if due_rapid:
+                sleep_sec = 60          # post-tirage immédiat → 1 min
+            elif due_normal:
+                sleep_sec = 3 * 60      # post-tirage tardif → 3 min
+            elif min_to_next <= 5:
+                sleep_sec = 2 * 60      # pré-tirage imminent → 2 min
+            elif min_to_next <= 20:
+                sleep_sec = 3 * 60      # pré-tirage proche → 3 min
+            else:
+                sleep_sec = min(10 * 60, max(60, secs_to_next - 20 * 60))
+
+            print(f"[draw-watcher] prochain tirage dans {min_to_next:.0f} min → pause {sleep_sec//60} min")
+
         except Exception as e:
             print(f"[draw-watcher] error: {e}")
-        time.sleep(5 * 60)  # vérifier toutes les 5 minutes
+            sleep_sec = 5 * 60
+
+        time.sleep(sleep_sec)
 
 
 def start_auto_update():
