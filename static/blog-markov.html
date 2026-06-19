@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances — PREDIKTA</title>
-<meta name="description" content="Découvrez comment les chaînes de Markov (ordre 1, 2, 3) permettent à PREDIKTA d'analyser les transitions entre chiffres dans les tirages Pick 3, Pick 4 et autres jeux de loterie."/>
+<title>Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances — ZYNORIQ</title>
+<meta name="description" content="Découvrez comment les chaînes de Markov (ordre 1, 2, 3) permettent à ZYNORIQ d'analyser les transitions entre chiffres dans les tirages Pick 3, Pick 4 et autres jeux de loterie."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/blog/chaines-markov-loterie"/>
-<meta property="og:title" content="Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances"/>
-<meta property="og:description" content="Découvrez comment les chaînes de Markov (ordre 1, 2, 3) permettent à PREDIKTA d'analyser les transitions entre chiffres dans les tirages Pick 3, Pick 4 et autres jeux de loterie."/>
+<meta property="og:title" content="Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances"/>
+<meta property="og:description" content="Découvrez comment les chaînes de Markov (ordre 1, 2, 3) permettent à ZYNORIQ d'analyser les transitions entre chiffres dans les tirages Pick 3, Pick 4 et autres jeux de loterie."/>
 <meta property="og:type" content="article"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/blog/chaines-markov-loterie"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/blog/chaines-markov-loterie"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .page{max-width:760px;margin:0 auto;padding:40px 24px 80px}
@@ -42,13 +42,13 @@ a.inline:hover{color:#aac0ff}
 <body>
 <div class="page">
   <div class="breadcrumb"><a href="/blog">Blog</a> / Éducatif</div>
-  <h1>Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances de tirage</h1>
-  <div class="meta">Guide PREDIKTA · Algorithmes</div>
+  <h1>Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances de tirage</h1>
+  <div class="meta">Guide ZYNORIQ · Algorithmes</div>
 
-  <p>Parmi les sept algorithmes que PREDIKTA combine pour générer ses suggestions, les <strong>chaînes de Markov</strong> occupent une place centrale. Ce modèle mathématique, utilisé en finance, en linguistique et en biologie, permet d'étudier la probabilité qu'un événement survienne en fonction de l'événement précédent. Appliqué à la loterie, il devient un outil pour observer les <strong>transitions entre chiffres</strong> au fil des tirages.</p>
+  <p>Parmi les sept algorithmes que ZYNORIQ combine pour générer ses suggestions, les <strong>chaînes de Markov</strong> occupent une place centrale. Ce modèle mathématique, utilisé en finance, en linguistique et en biologie, permet d'étudier la probabilité qu'un événement survienne en fonction de l'événement précédent. Appliqué à la loterie, il devient un outil pour observer les <strong>transitions entre chiffres</strong> au fil des tirages.</p>
 
   <h2>Le principe d'une chaîne de Markov</h2>
-  <p>Une chaîne de Markov modélise une séquence d'états où la probabilité de passer à l'état suivant ne dépend que de l'état actuel (et, pour les ordres supérieurs, des quelques états précédents). Pour un jeu comme le Pick 3, chaque tirage produit trois chiffres (par exemple 4-7-2). En observant des milliers de tirages historiques, PREDIKTA construit une <strong>matrice de transition</strong> : à chaque chiffre tiré, quelle est la fréquence observée des chiffres qui suivent ?</p>
+  <p>Une chaîne de Markov modélise une séquence d'états où la probabilité de passer à l'état suivant ne dépend que de l'état actuel (et, pour les ordres supérieurs, des quelques états précédents). Pour un jeu comme le Pick 3, chaque tirage produit trois chiffres (par exemple 4-7-2). En observant des milliers de tirages historiques, ZYNORIQ construit une <strong>matrice de transition</strong> : à chaque chiffre tiré, quelle est la fréquence observée des chiffres qui suivent ?</p>
   <p>Si le chiffre 7 est historiquement suivi du chiffre 2 plus souvent que la moyenne attendue, cette transition reçoit un poids légèrement plus élevé dans le score consensus.</p>
 
   <h2>Ordre 1, ordre 2, ordre 3 : quelle différence ?</h2>
@@ -57,11 +57,11 @@ a.inline:hover{color:#aac0ff}
     <li><strong>Markov d'ordre 2</strong> : la transition dépend des deux derniers chiffres (paire N-1, N → chiffre N+1), ce qui capture des motifs plus longs.</li>
     <li><strong>Markov d'ordre 3</strong> : la transition dépend des trois derniers chiffres, pour des motifs encore plus spécifiques — au prix d'un échantillon de données plus dispersé.</li>
   </ul>
-  <p>PREDIKTA calcule les trois ordres en parallèle. Plus l'ordre est élevé, plus le motif est précis, mais moins il dispose d'occurrences historiques pour être statistiquement robuste — c'est pourquoi le score consensus pondère chaque ordre selon sa fiabilité observée sur l'État et le jeu analysés.</p>
+  <p>ZYNORIQ calcule les trois ordres en parallèle. Plus l'ordre est élevé, plus le motif est précis, mais moins il dispose d'occurrences historiques pour être statistiquement robuste — c'est pourquoi le score consensus pondère chaque ordre selon sa fiabilité observée sur l'État et le jeu analysés.</p>
 
   <h2>Pourquoi ce n'est qu'une pièce du puzzle</h2>
   <p>Il est important de le rappeler : <strong>chaque tirage de loterie est, par construction, un événement aléatoire et indépendant</strong>. Les boules ne « se souviennent » pas du tirage précédent. Les chaînes de Markov ne prédisent donc pas l'avenir avec certitude — elles mettent en lumière des <strong>répartitions statistiques historiques</strong>, qui peuvent (ou non) se reproduire.</p>
-  <p>C'est pourquoi PREDIKTA ne se limite jamais à un seul modèle. Le score Markov est combiné avec l'analyse de fréquence par position, le calcul de retard (gap), l'analyse de Fourier, le Machine Learning (XGBoost, Random Forest, Gradient Boosting) et la simulation Monte Carlo, pour obtenir un <strong>consensus pondéré</strong> plus robuste qu'un modèle isolé.</p>
+  <p>C'est pourquoi ZYNORIQ ne se limite jamais à un seul modèle. Le score Markov est combiné avec l'analyse de fréquence par position, le calcul de retard (gap), l'analyse de Fourier, le Machine Learning (XGBoost, Random Forest, Gradient Boosting) et la simulation Monte Carlo, pour obtenir un <strong>consensus pondéré</strong> plus robuste qu'un modèle isolé.</p>
 
   <div class="cta-box">
     <div style="font-size:.85rem;color:var(--text);font-weight:700">Voir les chaînes de Markov en action</div>
@@ -70,14 +70,14 @@ a.inline:hover{color:#aac0ff}
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Avertissement :</strong> PREDIKTA est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Jouez de manière responsable et dans les limites de vos moyens.
+    ⚠️ <strong>Avertissement :</strong> ZYNORIQ est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Jouez de manière responsable et dans les limites de vos moyens.
   </div>
 
   <div class="related">
     <h3>À lire aussi</h3>
     <a class="inline" href="/blog/simulation-monte-carlo-loterie">Simulation Monte Carlo et loterie : 50 000 tirages simulés pour affiner les probabilités</a>
-    <a class="inline" href="/blog/guide-predictions-pick3-ia">Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3</a>
-    <a class="inline" href="/about">À propos des algorithmes PREDIKTA</a>
+    <a class="inline" href="/blog/guide-predictions-pick3-ia">Guide complet : comment ZYNORIQ analyse et prédit les tirages Pick 3</a>
+    <a class="inline" href="/about">À propos des algorithmes ZYNORIQ</a>
   </div>
 </div>
 </body></html>

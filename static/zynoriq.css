@@ -1,0 +1,65 @@
+/* ═══════════════════════════════════════════════════════════
+   ZYNORIQ Intelligence™ — Global Brand Override
+   Colors: #1479FF · #004DFF · #061A35 · #FFFFFF
+   Font: Poppins (Google Fonts)
+   ═══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Brand palette */
+  --z-blue:      #1479FF;
+  --z-deep:      #004DFF;
+  --z-navy:      #061A35;
+  --z-navy2:     #04112A;
+  --z-white:     #FFFFFF;
+  --z-blue-mid:  #0D5AC8;
+  --z-blue-soft: #4DA6FF;
+
+  /* Override app variables */
+  --accent:   #1479FF;
+  --accent2:  #004DFF;
+  --bg:       #061A35;
+  --bg2:      #04112A;
+  --text:     #E8F0FE;
+  --card-bg:  #0A1F42;
+}
+
+/* Global font override */
+body, button, input, select, textarea {
+  font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif !important;
+}
+
+/* Gradient text utility */
+.z-gradient-text {
+  background: linear-gradient(90deg, #1479FF, #004DFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Override purple accent colors site-wide */
+.pnav-logo-name,
+.pnav-logo-svg,
+.pmob-logo,
+.pf-logo {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* Nav accent overrides */
+.pnav-top { background: linear-gradient(180deg, #04112A 0%, rgba(4,17,42,0.97) 100%) !important; }
+.pnav-link:hover, .pnav-link.active { color: #1479FF !important; }
+.tdot.active { background: #1479FF !important; }
+
+/* Button accent */
+.btn-primary,
+button[style*="4f6eff"],
+button[style*="7c3aed"],
+a[style*="4f6eff"] {
+  background: linear-gradient(135deg, #1479FF, #004DFF) !important;
+}
+
+/* Gradient backgrounds — replace purple with blue */
+[style*="linear-gradient(135deg,#7c3aed"] {
+  background: linear-gradient(135deg, #1479FF, #004DFF) !important;
+}

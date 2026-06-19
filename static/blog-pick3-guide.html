@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Guide complet : comment PREDIKTA analyse et prédit le Pick 3 — PREDIKTA</title>
-<meta name="description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par PREDIKTA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<title>Guide complet : comment ZYNORIQ analyse et prédit le Pick 3 — ZYNORIQ</title>
+<meta name="description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par ZYNORIQ : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/blog/guide-predictions-pick3-ia"/>
-<meta property="og:title" content="Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3"/>
-<meta property="og:description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par PREDIKTA : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<meta property="og:title" content="Guide complet : comment ZYNORIQ analyse et prédit les tirages Pick 3"/>
+<meta property="og:description" content="Guide complet sur l'analyse Pick 3 (Cash 3, Play 3, Daily 3) par ZYNORIQ : fréquence par position, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
 <meta property="og:type" content="article"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/blog/guide-predictions-pick3-ia"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/blog/guide-predictions-pick3-ia"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .page{max-width:760px;margin:0 auto;padding:40px 24px 80px}
@@ -42,19 +42,19 @@ a.inline:hover{color:#aac0ff}
 <body>
 <div class="page">
   <div class="breadcrumb"><a href="/blog">Blog</a> / Guides par jeu</div>
-  <h1>Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3</h1>
-  <div class="meta">Guide PREDIKTA · Pick 3 / Cash 3 / Play 3 / Daily 3</div>
+  <h1>Guide complet : comment ZYNORIQ analyse et prédit les tirages Pick 3</h1>
+  <div class="meta">Guide ZYNORIQ · Pick 3 / Cash 3 / Play 3 / Daily 3</div>
 
-  <p>Le <strong>Pick 3</strong> — aussi appelé Cash 3, Play 3 ou Daily 3 selon l'État — est l'un des jeux de loterie les plus populaires aux États-Unis. Trois chiffres de 0 à 9 sont tirés, généralement deux fois par jour. PREDIKTA propose une analyse dédiée pour 40+ États sur la page <a class="inline" href="/pick3-predictions">Prédictions Pick 3</a>. Voici comment cette analyse fonctionne, étape par étape.</p>
+  <p>Le <strong>Pick 3</strong> — aussi appelé Cash 3, Play 3 ou Daily 3 selon l'État — est l'un des jeux de loterie les plus populaires aux États-Unis. Trois chiffres de 0 à 9 sont tirés, généralement deux fois par jour. ZYNORIQ propose une analyse dédiée pour 40+ États sur la page <a class="inline" href="/pick3-predictions">Prédictions Pick 3</a>. Voici comment cette analyse fonctionne, étape par étape.</p>
 
   <h2>1. Fréquence par position</h2>
-  <p>Contrairement à une analyse globale, PREDIKTA étudie la fréquence de chaque chiffre <strong>séparément pour chaque position</strong> (1ère, 2ème, 3ème). Un chiffre peut être « chaud » en première position tout en étant rare en troisième position sur un même État. Cette granularité est essentielle car les distributions ne sont pas toujours identiques entre positions.</p>
+  <p>Contrairement à une analyse globale, ZYNORIQ étudie la fréquence de chaque chiffre <strong>séparément pour chaque position</strong> (1ère, 2ème, 3ème). Un chiffre peut être « chaud » en première position tout en étant rare en troisième position sur un même État. Cette granularité est essentielle car les distributions ne sont pas toujours identiques entre positions.</p>
 
   <h2>2. Retard (gap analysis)</h2>
   <p>Le <strong>retard</strong> mesure depuis combien de tirages un chiffre n'est pas apparu à une position donnée. Un chiffre en retard important par rapport à sa fréquence moyenne historique est signalé — sans qu'il soit pour autant « dû » à sortir, puisque chaque tirage reste indépendant.</p>
 
   <h2>3. Tendances chaud/froid</h2>
-  <p>PREDIKTA calcule les chiffres <strong>« chauds »</strong> (sortis fréquemment sur la fenêtre récente, par défaut 30 tirages) et <strong>« froids »</strong> (sortis rarement) pour chaque position. Ces tendances sont recalculées automatiquement après chaque mise à jour des résultats, et peuvent être suivies via les <a class="inline" href="/dashboard">alertes hot/cold</a> du tableau de bord.</p>
+  <p>ZYNORIQ calcule les chiffres <strong>« chauds »</strong> (sortis fréquemment sur la fenêtre récente, par défaut 30 tirages) et <strong>« froids »</strong> (sortis rarement) pour chaque position. Ces tendances sont recalculées automatiquement après chaque mise à jour des résultats, et peuvent être suivies via les <a class="inline" href="/dashboard">alertes hot/cold</a> du tableau de bord.</p>
 
   <h2>4. Chaînes de Markov (ordre 1, 2, 3)</h2>
   <p>Les transitions entre chiffres consécutifs sont analysées via des <a class="inline" href="/blog/chaines-markov-loterie">chaînes de Markov</a> d'ordre 1 à 3, afin de détecter des motifs de succession statistiquement significatifs.</p>
@@ -69,21 +69,21 @@ a.inline:hover{color:#aac0ff}
   <p>L'analyse de Fourier recherche des <strong>cycles périodiques</strong> dans la série temporelle des tirages — par exemple, un chiffre qui aurait tendance à revenir selon un rythme particulier.</p>
 
   <h2>Le score consensus final</h2>
-  <p>Chacun de ces sept signaux est pondéré selon sa performance historique sur l'État et le jeu analysés, pour produire un <strong>score consensus</strong> par chiffre et par position. Le <strong>Mode Transparence</strong> de PREDIKTA permet de voir le détail de chaque score individuel, sans boîte noire.</p>
+  <p>Chacun de ces sept signaux est pondéré selon sa performance historique sur l'État et le jeu analysés, pour produire un <strong>score consensus</strong> par chiffre et par position. Le <strong>Mode Transparence</strong> de ZYNORIQ permet de voir le détail de chaque score individuel, sans boîte noire.</p>
 
   <div class="cta-box">
     <div style="font-size:.85rem;color:var(--text);font-weight:700">Voir l'analyse Pick 3 pour votre État</div>
-    <p style="margin:8px 0 0">Consultez les prédictions Pick 3 mises à jour quotidiennement pour les 40+ États couverts par PREDIKTA.</p>
+    <p style="margin:8px 0 0">Consultez les prédictions Pick 3 mises à jour quotidiennement pour les 40+ États couverts par ZYNORIQ.</p>
     <a href="/pick3-predictions">🎯 Voir les Prédictions Pick 3</a>
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Avertissement :</strong> PREDIKTA est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens.
+    ⚠️ <strong>Avertissement :</strong> ZYNORIQ est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens.
   </div>
 
   <div class="related">
     <h3>À lire aussi</h3>
-    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances</a>
+    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances</a>
     <a class="inline" href="/blog/simulation-monte-carlo-loterie">Simulation Monte Carlo et loterie : 50 000 tirages simulés</a>
     <a class="inline" href="/blog/guide-analyse-powerball-ia">Guide complet : comprendre l'analyse Powerball par intelligence artificielle</a>
   </div>

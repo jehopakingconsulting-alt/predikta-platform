@@ -1,21 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Analyse Powerball par IA — PREDIKTA</title>
+<title>Analyse Powerball par IA — ZYNORIQ</title>
 <meta name="description" content="Analyse statistique du Powerball par IA : fréquence des numéros, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning. Mode Transparence inclus."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/powerball-analysis"/>
 <link rel="alternate" hreflang="x-default" href="https://predikta-tez2.onrender.com/powerball-analysis"/>
-<meta property="og:title" content="Analyse Powerball par IA — PREDIKTA"/>
+<meta property="og:title" content="Analyse Powerball par IA — ZYNORIQ"/>
 <meta property="og:description" content="Analyse statistique du Powerball par IA : fréquence des numéros, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning. Mode Transparence inclus."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/powerball-analysis"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/powerball-analysis"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(79,110,255,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
@@ -57,7 +57,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 <div class="hero">
   <div class="hero-tag" data-i18n="tag">ANALYSE POWERBALL</div>
   <h1 data-i18n-html="h1">Analyse Powerball<br>par Intelligence Artificielle</h1>
-  <p class="hero-sub" data-i18n="sub">PREDIKTA analyse l'historique des tirages Powerball (5 numéros + Powerball) avec fréquence, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning.</p>
+  <p class="hero-sub" data-i18n="sub">ZYNORIQ analyse l'historique des tirages Powerball (5 numéros + Powerball) avec fréquence, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning.</p>
   <div class="hero-cta">
     <a class="cta-btn-main" href="/predictions" data-i18n="ctaMain">Voir l'analyse Powerball par État</a>
     <a class="cta-btn-sec" href="/results" data-i18n="ctaSec">Voir les derniers tirages</a>
@@ -68,93 +68,93 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 
 <div class="bottom-cta">
   <h2 data-i18n="ctaTitle">Prêt à analyser le Powerball ?</h2>
-  <p data-i18n="ctaP">Créez un compte gratuit et lancez votre première analyse Powerball avec PREDIKTA.</p>
+  <p data-i18n="ctaP">Créez un compte gratuit et lancez votre première analyse Powerball avec ZYNORIQ.</p>
   <div class="bottom-cta-btns">
     <a class="cta-btn-main" href="/register" data-i18n="ctaBtnRegister">Créer un compte gratuit</a>
     <a class="cta-btn-sec" href="/lottery-predictions" data-i18n="ctaBtnAll">Toutes nos prédictions</a>
   </div>
 </div>
 
-<div class="disclaimer" data-i18n="disclaimer">⚠️ Le Powerball est un jeu de hasard : la probabilité de gagner le jackpot est d'environ 1 sur 292 millions, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href="/responsible-gaming">Jeu Responsable</a>.</div>
+<div class="disclaimer" data-i18n="disclaimer">⚠️ Le Powerball est un jeu de hasard : la probabilité de gagner le jackpot est d'environ 1 sur 292 millions, peu importe l'analyse. ZYNORIQ fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href="/responsible-gaming">Jeu Responsable</a>.</div>
 </div>
 
 <script>
 const T = {
 fr:{ tag:"ANALYSE POWERBALL", h1:"Analyse Powerball<br>par Intelligence Artificielle",
- sub:"PREDIKTA analyse l'historique des tirages Powerball (5 numéros + Powerball) avec fréquence, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning.",
+ sub:"ZYNORIQ analyse l'historique des tirages Powerball (5 numéros + Powerball) avec fréquence, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning.",
  ctaMain:"Voir l'analyse Powerball par État", ctaSec:"Voir les derniers tirages",
- ctaTitle:"Prêt à analyser le Powerball ?", ctaP:"Créez un compte gratuit et lancez votre première analyse Powerball avec PREDIKTA.",
+ ctaTitle:"Prêt à analyser le Powerball ?", ctaP:"Créez un compte gratuit et lancez votre première analyse Powerball avec ZYNORIQ.",
  ctaBtnRegister:"Créer un compte gratuit", ctaBtnAll:"Toutes nos prédictions",
- disclaimer:"⚠️ Le Powerball est un jeu de hasard : la probabilité de gagner le jackpot est d'environ 1 sur 292 millions, peu importe l'analyse. PREDIKTA fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href=\"/responsible-gaming\">Jeu Responsable</a>.",
+ disclaimer:"⚠️ Le Powerball est un jeu de hasard : la probabilité de gagner le jackpot est d'environ 1 sur 292 millions, peu importe l'analyse. ZYNORIQ fournit des analyses statistiques éducatives, sans garantie de gain. Voir notre page <a href=\"/responsible-gaming\">Jeu Responsable</a>.",
  sections:[
   ["Le Powerball : comment ça marche",
    "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Numéros blancs</div><div class=\"val\">5 sur 69</div></div><div class=\"odds-card\"><div class=\"lbl\">Powerball (rouge)</div><div class=\"val\">1 sur 26</div></div><div class=\"odds-card\"><div class=\"lbl\">Jackpot</div><div class=\"val\">≈ 1 / 292 M</div></div></div><p>Le Powerball consiste à choisir 5 numéros parmi 69, plus un numéro Powerball parmi 26. C'est l'une des loteries multi-États les plus jouées aux États-Unis, avec des tirages deux fois par semaine. Chaque tirage est indépendant et aléatoire.</p>"],
   ["Notre approche pour le Powerball",
-   "<p>PREDIKTA analyse l'historique complet des tirages Powerball pour calculer la <strong>fréquence d'apparition</strong> de chaque numéro (boules blanches et Powerball), leur <strong>retard (gap)</strong> depuis leur dernière sortie, et leur <strong>tendance récente</strong> (chaud / froid / neutre). Ces données sont combinées avec les chaînes de <strong>Markov</strong>, une <strong>simulation Monte Carlo</strong> de 50 000 tirages, des modèles de <strong>Machine Learning</strong> (XGBoost, Random Forest) et une <strong>analyse de Fourier</strong> pour détecter les cycles.</p><p>Le <strong>Mode Transparence</strong> détaille la contribution de chaque modèle dans le score final de chaque suggestion.</p>",
+   "<p>ZYNORIQ analyse l'historique complet des tirages Powerball pour calculer la <strong>fréquence d'apparition</strong> de chaque numéro (boules blanches et Powerball), leur <strong>retard (gap)</strong> depuis leur dernière sortie, et leur <strong>tendance récente</strong> (chaud / froid / neutre). Ces données sont combinées avec les chaînes de <strong>Markov</strong>, une <strong>simulation Monte Carlo</strong> de 50 000 tirages, des modèles de <strong>Machine Learning</strong> (XGBoost, Random Forest) et une <strong>analyse de Fourier</strong> pour détecter les cycles.</p><p>Le <strong>Mode Transparence</strong> détaille la contribution de chaque modèle dans le score final de chaque suggestion.</p>",
    ["Fréquence des numéros (boules blanches & Powerball)","Retard (gap) & tendances chaud/froid","Markov + Monte Carlo + ML + Fourier","Score de consensus pondéré","Mode Transparence détaillé"]],
   ["Powerball et autres jeux multi-États",
    "<p>Le Powerball est disponible dans la plupart des États américains, ainsi que d'autres jeux multi-États comme <strong>Mega Millions</strong>. Consultez la page <a href=\"/predictions\">Prédictions</a>, choisissez votre État, puis sélectionnez Powerball ou Mega Millions pour lancer votre analyse.</p>"]
  ]},
 
 en:{ tag:"POWERBALL ANALYSIS", h1:"Powerball analysis<br>powered by AI",
- sub:"PREDIKTA analyzes Powerball draw history (5 numbers + Powerball) using frequency, overdue (gap) status, hot/cold trends, Markov chains, Monte Carlo and Machine Learning.",
+ sub:"ZYNORIQ analyzes Powerball draw history (5 numbers + Powerball) using frequency, overdue (gap) status, hot/cold trends, Markov chains, Monte Carlo and Machine Learning.",
  ctaMain:"View Powerball analysis by state", ctaSec:"View latest draws",
- ctaTitle:"Ready to analyze Powerball?", ctaP:"Create a free account and run your first Powerball analysis with PREDIKTA.",
+ ctaTitle:"Ready to analyze Powerball?", ctaP:"Create a free account and run your first Powerball analysis with ZYNORIQ.",
  ctaBtnRegister:"Create a free account", ctaBtnAll:"All our predictions",
- disclaimer:"⚠️ Powerball is a game of chance: the odds of winning the jackpot are about 1 in 292 million, regardless of analysis. PREDIKTA provides educational statistical analysis, with no guarantee of winnings. See our <a href=\"/responsible-gaming\">Responsible Gaming</a> page.",
+ disclaimer:"⚠️ Powerball is a game of chance: the odds of winning the jackpot are about 1 in 292 million, regardless of analysis. ZYNORIQ provides educational statistical analysis, with no guarantee of winnings. See our <a href=\"/responsible-gaming\">Responsible Gaming</a> page.",
  sections:[
   ["Powerball: how it works",
    "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">White balls</div><div class=\"val\">5 of 69</div></div><div class=\"odds-card\"><div class=\"lbl\">Powerball (red)</div><div class=\"val\">1 of 26</div></div><div class=\"odds-card\"><div class=\"lbl\">Jackpot</div><div class=\"val\">≈ 1 / 292M</div></div></div><p>Powerball is played by choosing 5 numbers out of 69, plus one Powerball number out of 26. It's one of the most popular multi-state lotteries in the US, with draws twice a week. Every draw is random and independent.</p>"],
   ["Our approach to Powerball",
-   "<p>PREDIKTA analyzes the full Powerball draw history to compute the <strong>frequency</strong> of each number (white balls and Powerball), their <strong>overdue status (gap)</strong> since their last appearance, and their <strong>recent trend</strong> (hot / cold / neutral). This data is combined with <strong>Markov chains</strong>, a <strong>50,000-draw Monte Carlo simulation</strong>, <strong>Machine Learning</strong> models (XGBoost, Random Forest) and <strong>Fourier analysis</strong> to detect cycles.</p><p><strong>Transparency Mode</strong> shows each model's contribution to the final score of every suggestion.</p>",
+   "<p>ZYNORIQ analyzes the full Powerball draw history to compute the <strong>frequency</strong> of each number (white balls and Powerball), their <strong>overdue status (gap)</strong> since their last appearance, and their <strong>recent trend</strong> (hot / cold / neutral). This data is combined with <strong>Markov chains</strong>, a <strong>50,000-draw Monte Carlo simulation</strong>, <strong>Machine Learning</strong> models (XGBoost, Random Forest) and <strong>Fourier analysis</strong> to detect cycles.</p><p><strong>Transparency Mode</strong> shows each model's contribution to the final score of every suggestion.</p>",
    ["Number frequency (white balls & Powerball)","Gap analysis & hot/cold trends","Markov + Monte Carlo + ML + Fourier","Weighted consensus score","Detailed Transparency Mode"]],
   ["Powerball and other multi-state games",
    "<p>Powerball is available in most US states, along with other multi-state games like <strong>Mega Millions</strong>. Visit the <a href=\"/predictions\">Predictions</a> page, choose your state, then select Powerball or Mega Millions to run your analysis.</p>"]
  ]},
 
 es:{ tag:"ANÁLISIS POWERBALL", h1:"Análisis de Powerball<br>con Inteligencia Artificial",
- sub:"PREDIKTA analiza el historial de sorteos de Powerball (5 números + Powerball) con frecuencia, retraso (gap), tendencias caliente/frío, Markov, Monte Carlo y Machine Learning.",
+ sub:"ZYNORIQ analiza el historial de sorteos de Powerball (5 números + Powerball) con frecuencia, retraso (gap), tendencias caliente/frío, Markov, Monte Carlo y Machine Learning.",
  ctaMain:"Ver análisis de Powerball por estado", ctaSec:"Ver últimos sorteos",
- ctaTitle:"¿Listo para analizar el Powerball?", ctaP:"Crea una cuenta gratuita y ejecuta tu primer análisis de Powerball con PREDIKTA.",
+ ctaTitle:"¿Listo para analizar el Powerball?", ctaP:"Crea una cuenta gratuita y ejecuta tu primer análisis de Powerball con ZYNORIQ.",
  ctaBtnRegister:"Crear cuenta gratis", ctaBtnAll:"Todas nuestras predicciones",
- disclaimer:"⚠️ El Powerball es un juego de azar: la probabilidad de ganar el premio mayor es de aproximadamente 1 entre 292 millones, sin importar el análisis. PREDIKTA ofrece análisis estadísticos educativos, sin garantía de premio. Ver nuestra página de <a href=\"/responsible-gaming\">Juego Responsable</a>.",
+ disclaimer:"⚠️ El Powerball es un juego de azar: la probabilidad de ganar el premio mayor es de aproximadamente 1 entre 292 millones, sin importar el análisis. ZYNORIQ ofrece análisis estadísticos educativos, sin garantía de premio. Ver nuestra página de <a href=\"/responsible-gaming\">Juego Responsable</a>.",
  sections:[
   ["El Powerball: cómo funciona",
    "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Bolas blancas</div><div class=\"val\">5 de 69</div></div><div class=\"odds-card\"><div class=\"lbl\">Powerball (roja)</div><div class=\"val\">1 de 26</div></div><div class=\"odds-card\"><div class=\"lbl\">Premio mayor</div><div class=\"val\">≈ 1 / 292M</div></div></div><p>El Powerball consiste en elegir 5 números entre 69, más un número Powerball entre 26. Es una de las loterías multiestatales más jugadas en EE. UU., con sorteos dos veces por semana. Cada sorteo es independiente y aleatorio.</p>"],
   ["Nuestro enfoque para el Powerball",
-   "<p>PREDIKTA analiza el historial completo de sorteos de Powerball para calcular la <strong>frecuencia</strong> de cada número (bolas blancas y Powerball), su <strong>estado de retraso (gap)</strong> desde su última aparición y su <strong>tendencia reciente</strong> (caliente / frío / neutral). Estos datos se combinan con <strong>cadenas de Markov</strong>, una <strong>simulación Monte Carlo</strong> de 50.000 sorteos, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) y <strong>análisis de Fourier</strong> para detectar ciclos.</p><p>El <strong>Modo Transparencia</strong> muestra la contribución de cada modelo en la puntuación final de cada sugerencia.</p>",
+   "<p>ZYNORIQ analiza el historial completo de sorteos de Powerball para calcular la <strong>frecuencia</strong> de cada número (bolas blancas y Powerball), su <strong>estado de retraso (gap)</strong> desde su última aparición y su <strong>tendencia reciente</strong> (caliente / frío / neutral). Estos datos se combinan con <strong>cadenas de Markov</strong>, una <strong>simulación Monte Carlo</strong> de 50.000 sorteos, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) y <strong>análisis de Fourier</strong> para detectar ciclos.</p><p>El <strong>Modo Transparencia</strong> muestra la contribución de cada modelo en la puntuación final de cada sugerencia.</p>",
    ["Frecuencia de números (bolas blancas y Powerball)","Análisis de retraso y tendencias caliente/frío","Markov + Monte Carlo + ML + Fourier","Puntuación de consenso ponderada","Modo Transparencia detallado"]],
   ["Powerball y otros juegos multiestatales",
    "<p>El Powerball está disponible en la mayoría de los estados de EE. UU., junto con otros juegos multiestatales como <strong>Mega Millions</strong>. Visita la página de <a href=\"/predictions\">Predicciones</a>, elige tu estado y selecciona Powerball o Mega Millions para ejecutar tu análisis.</p>"]
  ]},
 
 pt:{ tag:"ANÁLISE POWERBALL", h1:"Análise de Powerball<br>com Inteligência Artificial",
- sub:"A PREDIKTA analisa o histórico de sorteios do Powerball (5 números + Powerball) com frequência, atraso (gap), tendências quente/frio, Markov, Monte Carlo e Machine Learning.",
+ sub:"A ZYNORIQ analisa o histórico de sorteios do Powerball (5 números + Powerball) com frequência, atraso (gap), tendências quente/frio, Markov, Monte Carlo e Machine Learning.",
  ctaMain:"Ver análise de Powerball por estado", ctaSec:"Ver últimos sorteios",
- ctaTitle:"Pronto para analisar o Powerball?", ctaP:"Crie uma conta grátis e faça sua primeira análise de Powerball com a PREDIKTA.",
+ ctaTitle:"Pronto para analisar o Powerball?", ctaP:"Crie uma conta grátis e faça sua primeira análise de Powerball com a ZYNORIQ.",
  ctaBtnRegister:"Criar conta gratuita", ctaBtnAll:"Todas as nossas previsões",
- disclaimer:"⚠️ O Powerball é um jogo de azar: a probabilidade de ganhar o jackpot é de aproximadamente 1 em 292 milhões, independentemente da análise. A PREDIKTA fornece análises estatísticas educativas, sem garantia de prêmio. Veja nossa página de <a href=\"/responsible-gaming\">Jogo Responsável</a>.",
+ disclaimer:"⚠️ O Powerball é um jogo de azar: a probabilidade de ganhar o jackpot é de aproximadamente 1 em 292 milhões, independentemente da análise. A ZYNORIQ fornece análises estatísticas educativas, sem garantia de prêmio. Veja nossa página de <a href=\"/responsible-gaming\">Jogo Responsável</a>.",
  sections:[
   ["O Powerball: como funciona",
    "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Bolas brancas</div><div class=\"val\">5 de 69</div></div><div class=\"odds-card\"><div class=\"lbl\">Powerball (vermelha)</div><div class=\"val\">1 de 26</div></div><div class=\"odds-card\"><div class=\"lbl\">Jackpot</div><div class=\"val\">≈ 1 / 292M</div></div></div><p>O Powerball consiste em escolher 5 números entre 69, mais um número Powerball entre 26. É uma das loterias multiestaduais mais jogadas nos EUA, com sorteios duas vezes por semana. Cada sorteio é independente e aleatório.</p>"],
   ["Nossa abordagem para o Powerball",
-   "<p>A PREDIKTA analisa o histórico completo de sorteios do Powerball para calcular a <strong>frequência</strong> de cada número (bolas brancas e Powerball), seu <strong>status de atraso (gap)</strong> desde sua última aparição e sua <strong>tendência recente</strong> (quente / frio / neutro). Esses dados são combinados com <strong>cadeias de Markov</strong>, uma <strong>simulação Monte Carlo</strong> de 50.000 sorteios, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) e <strong>análise de Fourier</strong> para detectar ciclos.</p><p>O <strong>Modo Transparência</strong> mostra a contribuição de cada modelo na pontuação final de cada sugestão.</p>",
+   "<p>A ZYNORIQ analisa o histórico completo de sorteios do Powerball para calcular a <strong>frequência</strong> de cada número (bolas brancas e Powerball), seu <strong>status de atraso (gap)</strong> desde sua última aparição e sua <strong>tendência recente</strong> (quente / frio / neutro). Esses dados são combinados com <strong>cadeias de Markov</strong>, uma <strong>simulação Monte Carlo</strong> de 50.000 sorteios, modelos de <strong>Machine Learning</strong> (XGBoost, Random Forest) e <strong>análise de Fourier</strong> para detectar ciclos.</p><p>O <strong>Modo Transparência</strong> mostra a contribuição de cada modelo na pontuação final de cada sugestão.</p>",
    ["Frequência dos números (bolas brancas e Powerball)","Análise de atraso e tendências quente/frio","Markov + Monte Carlo + ML + Fourier","Pontuação de consenso ponderada","Modo Transparência detalhado"]],
   ["Powerball e outros jogos multiestaduais",
    "<p>O Powerball está disponível na maioria dos estados dos EUA, junto com outros jogos multiestaduais como o <strong>Mega Millions</strong>. Visite a página de <a href=\"/predictions\">Previsões</a>, escolha seu estado e selecione Powerball ou Mega Millions para executar sua análise.</p>"]
  ]},
 
 ht:{ tag:"ANALIZ POWERBALL", h1:"Analiz Powerball<br>ak Entelijans Atifisyèl",
- sub:"PREDIKTA analize istwa tiraj Powerball (5 nimewo + Powerball) ak frekans, reta (gap), tandans cho/frèt, Markov, Monte Carlo ak Machine Learning.",
+ sub:"ZYNORIQ analize istwa tiraj Powerball (5 nimewo + Powerball) ak frekans, reta (gap), tandans cho/frèt, Markov, Monte Carlo ak Machine Learning.",
  ctaMain:"Gade analiz Powerball pa eta", ctaSec:"Gade dènye tiraj yo",
- ctaTitle:"Pare pou analize Powerball?", ctaP:"Kreye yon kont gratis epi lanse premye analiz Powerball ou ak PREDIKTA.",
+ ctaTitle:"Pare pou analize Powerball?", ctaP:"Kreye yon kont gratis epi lanse premye analiz Powerball ou ak ZYNORIQ.",
  ctaBtnRegister:"Kreye kont gratis", ctaBtnAll:"Tout prediksyon nou yo",
- disclaimer:"⚠️ Powerball se yon jwèt aleyatwa: pwobabilite pou genyen gwo lo a se anviwon 1 sou 292 milyon, kèlkeswa analiz la. PREDIKTA bay analiz estatistik edikatif, san garanti lo. Gade paj <a href=\"/responsible-gaming\">Jwe Responsab</a> nou an.",
+ disclaimer:"⚠️ Powerball se yon jwèt aleyatwa: pwobabilite pou genyen gwo lo a se anviwon 1 sou 292 milyon, kèlkeswa analiz la. ZYNORIQ bay analiz estatistik edikatif, san garanti lo. Gade paj <a href=\"/responsible-gaming\">Jwe Responsab</a> nou an.",
  sections:[
   ["Powerball: kijan li fonksyone",
    "<div class=\"odds-grid\"><div class=\"odds-card\"><div class=\"lbl\">Boul blan</div><div class=\"val\">5 nan 69</div></div><div class=\"odds-card\"><div class=\"lbl\">Powerball (wouj)</div><div class=\"val\">1 nan 26</div></div><div class=\"odds-card\"><div class=\"lbl\">Gwo lo</div><div class=\"val\">≈ 1 / 292M</div></div></div><p>Powerball se chwazi 5 nimewo nan 69, plis yon nimewo Powerball nan 26. Se youn nan lotri miltieta ki pi jwe Ozetazini, ak tiraj 2 fwa pa semèn. Chak tiraj se aleyatwa ak endepandan.</p>"],
   ["Apwòch nou pou Powerball",
-   "<p>PREDIKTA analize tout istwa tiraj Powerball pou kalkile <strong>frekans</strong> chak nimewo (boul blan ak Powerball), <strong>estati reta (gap)</strong> yo depi dènye fwa yo sòti, ak <strong>tandans resan</strong> yo (cho / frèt / net). Done sa yo konbine ak <strong>chenn Markov</strong>, yon <strong>similasyon Monte Carlo</strong> 50,000 tiraj, modèl <strong>Machine Learning</strong> (XGBoost, Random Forest) ak <strong>analiz Fourier</strong> pou detekte sik yo.</p><p><strong>Mòd Transparans</strong> montre kontribisyon chak modèl nan eskò final chak sijesyon.</p>",
+   "<p>ZYNORIQ analize tout istwa tiraj Powerball pou kalkile <strong>frekans</strong> chak nimewo (boul blan ak Powerball), <strong>estati reta (gap)</strong> yo depi dènye fwa yo sòti, ak <strong>tandans resan</strong> yo (cho / frèt / net). Done sa yo konbine ak <strong>chenn Markov</strong>, yon <strong>similasyon Monte Carlo</strong> 50,000 tiraj, modèl <strong>Machine Learning</strong> (XGBoost, Random Forest) ak <strong>analiz Fourier</strong> pou detekte sik yo.</p><p><strong>Mòd Transparans</strong> montre kontribisyon chak modèl nan eskò final chak sijesyon.</p>",
    ["Frekans nimewo yo (boul blan & Powerball)","Analiz reta ak tandans cho/frèt","Markov + Monte Carlo + ML + Fourier","Eskò konsansis pondere","Mòd Transparans detaye"]],
   ["Powerball ak lòt jwèt miltieta",
    "<p>Powerball disponib nan pifò eta Ozetazini, ansanm ak lòt jwèt miltieta tankou <strong>Mega Millions</strong>. Vizite paj <a href=\"/predictions\">Prediksyon</a>, chwazi eta ou, epi seleksyone Powerball oswa Mega Millions pou lanse analiz ou.</p>"]

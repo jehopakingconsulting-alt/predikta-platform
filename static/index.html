@@ -1,23 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr" data-lang="fr">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="description" content="PREDIKTA — Prédictions de loterie par analyse prédictive. Pick3, Cash3, 44 états US. XGBoost, Markov, Monte Carlo, Fourier."/>
+<meta name="description" content="ZYNORIQ — Prédictions de loterie par analyse prédictive. Pick3, Cash3, 44 états US. XGBoost, Markov, Monte Carlo, Fourier."/>
 <meta name="keywords" content="loterie, lottery, prediction, pick3, cash3, new york, georgia, texas, florida, analyse prédictive"/>
-<meta property="og:title" content="PREDIKTA — World Lottery Analytics"/>
+<meta property="og:title" content="ZYNORIQ — World Lottery Analytics"/>
 <meta property="og:description" content="Prédictions Pick3 par analyse prédictive · 44 états · Markov · Monte Carlo · Fourier · XGBoost"/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/analyze"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/analyze"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="PREDIKTA"/>
+<meta name="twitter:title" content="ZYNORIQ"/>
 <meta name="twitter:description" content="Prédictions de loterie par analyse prédictive"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
-<meta name="theme-color" content="#4f6eff"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
+<meta name="theme-color" content="#1479FF"/>
 <link rel="manifest" href="/manifest.json"/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/analyze"/>
-<title>PREDIKTA — Prédictions Loterie par Analyse Prédictive</title>
+<title>ZYNORIQ — Prédictions Loterie par Analyse Prédictive</title>
 <!-- Google Analytics 4 (remplacez G-XXXXXXXXXX par votre ID) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -39,7 +39,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>
 /* ════════════════════════════════════════════════
-   PREDIKTA — Global Stylesheet
+   ZYNORIQ — Global Stylesheet
    ════════════════════════════════════════════════ */
 :root{
   --bg:#04040f;
@@ -48,8 +48,8 @@
   --card2:#0e0e2a;
   --border:#1a1a45;
   --border2:#252560;
-  --accent:#4f6eff;
-  --accent2:#8855ff;
+  --accent:#1479FF;
+  --accent2:#004DFF;
   --gold:#ffd700;
   --gold2:#ffaa00;
   --hot:#ff3d2e;
@@ -57,7 +57,7 @@
   --green:#22e87a;
   --text:#e8eeff;
   --muted:#4d5a8a;
-  --muted2:#7888bb;
+  --muted2:#1479FF;
   --glass:rgba(255,255,255,.03);
   --glass2:rgba(255,255,255,.06);
   --shadow:0 8px 40px rgba(0,0,50,.6);
@@ -298,7 +298,7 @@ header{
 .logo-name{
   font-family:'Orbitron',monospace;
   font-size:1.5rem;font-weight:900;letter-spacing:3px;
-  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  background:linear-gradient(135deg,#1479FF,#004DFF,#ffd700);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;line-height:1;
 }
@@ -415,7 +415,7 @@ header{
 }
 .qs-btn:hover{border-color:var(--accent);color:var(--accent)}
 .qs-btn.active{
-  background:linear-gradient(135deg,#2a3acc,#4f6eff);
+  background:linear-gradient(135deg,#2a3acc,#1479FF);
   border-color:transparent;color:#fff;
 }
 .controls-bar select,.controls-bar button{
@@ -439,7 +439,7 @@ header{
   text-align:center;white-space:nowrap;
 }
 .btn-analyze{
-  background:linear-gradient(135deg,#2a3acc,#4f6eff);
+  background:linear-gradient(135deg,#2a3acc,#1479FF);
   color:#fff;font-weight:700;border:none;
   box-shadow:0 4px 20px rgba(79,110,255,.35);
 }
@@ -502,7 +502,7 @@ header{
   flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border2);
   font-size:.76rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
 }
-.filters-apply{background:linear-gradient(135deg,#2a3acc,#4f6eff);color:#fff;border:none}
+.filters-apply{background:linear-gradient(135deg,#2a3acc,#1479FF);color:#fff;border:none}
 .filters-reset{background:transparent;color:var(--muted2)}
 
 /* ═══════════════════════════
@@ -845,7 +845,7 @@ header{
 .combo-big{font-size:.95rem;font-weight:700;letter-spacing:3px;color:var(--gold)}
 .score-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
 .score-fill{height:100%;border-radius:3px}
-.fill-a{background:linear-gradient(90deg,#4f6eff,#8855ff)}
+.fill-a{background:linear-gradient(90deg,#1479FF,#004DFF)}
 .fill-b{background:linear-gradient(90deg,#22cc88,#4499ff)}
 .fill-c{background:linear-gradient(90deg,#ff8822,#ffdd22)}
 
@@ -893,7 +893,7 @@ footer{
 }
 .footer-logo{
   font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
-  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  background:linear-gradient(135deg,#1479FF,#004DFF,#ffd700);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   margin-bottom:8px;
 }
@@ -1129,12 +1129,12 @@ footer{
 <div class="video-section">
   <a href="/predikta-tv" class="tv-promo-banner">
     <span class="tv-promo-live">LIVE</span>
-    <span class="tv-promo-text" id="tvPromoText">📺 Le journal PREDIKTA TV du jour est en ligne — 40 États analysés</span>
+    <span class="tv-promo-text" id="tvPromoText">📺 Le journal ZYNORIQ TV du jour est en ligne — 40 États analysés</span>
     <span class="tv-promo-arrow">→</span>
   </a>
   <div class="video-container">
     <div class="video-title-row">
-      <div class="video-title" id="video-section-title">📺 PREDIKTA TV — Tutoriels & Analyses Live</div>
+      <div class="video-title" id="video-section-title">📺 ZYNORIQ TV — Tutoriels & Analyses Live</div>
       <div class="quality-badges">
         <span class="qbadge active" onclick="setQuality(this,'4K')">4K</span>
         <span class="qbadge" onclick="setQuality(this,'1080p')">1080p</span>
@@ -1145,7 +1145,7 @@ footer{
       <!-- Placeholder (replace src with real video URLs) -->
       <div class="player-placeholder" id="playerPlaceholder">
         <div class="play-icon" onclick="playVideo()">▶</div>
-        <div class="now-playing" id="nowPlaying">Comment lire les prédictions PREDIKTA</div>
+        <div class="now-playing" id="nowPlaying">Comment lire les prédictions ZYNORIQ</div>
         <div style="font-size:.7rem;color:var(--muted)">Cliquez pour lancer · Qualité 4K disponible</div>
       </div>
       <video id="mainVideo" style="display:none" controls playsinline>
@@ -1216,11 +1216,11 @@ footer{
       </div>
     </div>
 
-    <!-- ② Newsletter PREDIKTA PRO -->
+    <!-- ② Newsletter ZYNORIQ PRO -->
     <div class="sb-section-label">🎁 Offre Exclusive</div>
     <div class="newsletter-block">
       <div class="nl-icon">⚡</div>
-      <div class="nl-title">PREDIKTA PRO — Gratuit 7 jours</div>
+      <div class="nl-title">ZYNORIQ PRO — Gratuit 7 jours</div>
       <div class="nl-desc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour</div>
       <input class="nl-input" type="email" placeholder="votre@email.com"/>
       <button class="nl-btn" onclick="subscribeNewsletter()">S'abonner Gratuitement</button>
@@ -1229,7 +1229,7 @@ footer{
 
     <!-- ③ Partenaire #1 — compact -->
     <div class="sb-section-label">💼 Partenaires</div>
-    <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+    <a href="https://www.thelotter.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
       <div class="affil-compact-inner">
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0d0d2a,#1a1a44)">🏆</div>
         <div class="affil-compact-body">
@@ -1245,7 +1245,7 @@ footer{
     </a>
 
     <!-- ④ Partenaire #2 — compact -->
-    <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+    <a href="https://www.lotterypro.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
       <div class="affil-compact-inner">
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0a1a0a,#0a3020)">📊</div>
         <div class="affil-compact-body">
@@ -1261,7 +1261,7 @@ footer{
     </a>
 
     <!-- ⑤ Partenaire #3 — compact -->
-    <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
+    <a href="https://www.jackpot.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
       <div class="affil-compact-inner">
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#1a0a0a,#300a0a)">🌍</div>
         <div class="affil-compact-body">
@@ -1284,7 +1284,7 @@ footer{
   <div class="sponsors-label">Nos Partenaires · Publicité · Our Partners · Nuestros Socios</div>
   <div class="sponsors-grid">
 
-    <a href="https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+    <a href="https://www.thelotter.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
       <div class="sponsor-card-head" style="background:linear-gradient(135deg,#0a0a22,#1a1a44)">🏆</div>
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
@@ -1297,7 +1297,7 @@ footer{
       </div>
     </a>
 
-    <a href="https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+    <a href="https://www.lotterypro.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
       <div class="sponsor-card-head" style="background:linear-gradient(135deg,#0a1a0a,#0a2a18)">💎</div>
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
@@ -1310,7 +1310,7 @@ footer{
       </div>
     </a>
 
-    <a href="https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
+    <a href="https://www.jackpot.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
       <div class="sponsor-card-head" style="background:linear-gradient(135deg,#1a0a0a,#2a1000)">🌍</div>
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
@@ -1354,13 +1354,13 @@ const T = {
     repLastSeen:"dernière fois il y a",repDraws:"tirage(s)",
     mlActive:"✓ Actif",mlInactive:"Données insuffisantes",
     statsTitle:"Statistiques",selectState:"Sélectionnez un État",
-    videoTitle:"📺 PREDIKTA TV — Tutoriels & Analyses Live",
-    tvPromoText:"📺 Le journal PREDIKTA TV du jour est en ligne — 40 États analysés",
+    videoTitle:"📺 ZYNORIQ TV — Tutoriels & Analyses Live",
+    tvPromoText:"📺 Le journal ZYNORIQ TV du jour est en ligne — 40 États analysés",
     today:"Aujourd'hui",totalDraws:"tirages analysés",
     updatedAgo:m=>m<1?"Données mises à jour à l'instant":m<60?`Données mises à jour il y a ${m} min`:`Données mises à jour il y a ${Math.floor(m/60)} h`,
     about:"À Propos",privacy:"Confidentialité",terms:"Conditions",
     contact:"Contact",affil:"Affiliations",api:"API",
-    footer:"© 2026 PREDIKTA — Plateforme d'analyse statistique mondiale · Pour divertissement uniquement · Jouer responsable",
+    footer:"© 2026 ZYNORIQ — Plateforme d'analyse statistique mondiale · Pour divertissement uniquement · Jouer responsable",
     noData:"Aucune donnée. Cliquez sur 🔄 Scraper d'abord.",
     confVH:"Tendance Très Forte ★★★★★",confH:"Tendance Forte ★★★★",confM:"Tendance Moyenne ★★★",confL:"Tendance Légère ★★",confVL:"Tendance Faible ★",
     overdue:"EN RETARD",normal:"normal",
@@ -1399,13 +1399,13 @@ const T = {
     repLastSeen:"last seen",repDraws:"draw(s) ago",
     mlActive:"✓ Active",mlInactive:"Insufficient data",
     statsTitle:"Statistics",selectState:"Select a State",
-    videoTitle:"📺 PREDIKTA TV — Tutorials & Live Analysis",
-    tvPromoText:"📺 Today's PREDIKTA TV daily recap is live — 40 states analyzed",
+    videoTitle:"📺 ZYNORIQ TV — Tutorials & Live Analysis",
+    tvPromoText:"📺 Today's ZYNORIQ TV daily recap is live — 40 states analyzed",
     today:"Today",totalDraws:"draws analyzed",
     updatedAgo:m=>m<1?"Data updated just now":m<60?`Data updated ${m} min ago`:`Data updated ${Math.floor(m/60)} h ago`,
     about:"About",privacy:"Privacy",terms:"Terms",
     contact:"Contact",affil:"Affiliates",api:"API",
-    footer:"© 2026 PREDIKTA — Global Statistical Analysis Platform · For entertainment only · Play responsibly",
+    footer:"© 2026 ZYNORIQ — Global Statistical Analysis Platform · For entertainment only · Play responsibly",
     noData:"No data. Click 🔄 Scrape first.",
     confVH:"Very Strong Trend ★★★★★",confH:"Strong Trend ★★★★",confM:"Medium Trend ★★★",confL:"Light Trend ★★",confVL:"Weak Trend ★",
     overdue:"OVERDUE",normal:"normal",
@@ -1444,13 +1444,13 @@ const T = {
     repLastSeen:"vista por última vez hace",repDraws:"sorteo(s)",
     mlActive:"✓ Activo",mlInactive:"Datos insuficientes",
     statsTitle:"Estadísticas",selectState:"Seleccione un Estado",
-    videoTitle:"📺 PREDIKTA TV — Tutoriales y Análisis en Vivo",
-    tvPromoText:"📺 El boletín diario de PREDIKTA TV ya está en línea — 40 estados analizados",
+    videoTitle:"📺 ZYNORIQ TV — Tutoriales y Análisis en Vivo",
+    tvPromoText:"📺 El boletín diario de ZYNORIQ TV ya está en línea — 40 estados analizados",
     today:"Hoy",totalDraws:"sorteos analizados",
     updatedAgo:m=>m<1?"Datos actualizados ahora":m<60?`Datos actualizados hace ${m} min`:`Datos actualizados hace ${Math.floor(m/60)} h`,
     about:"Acerca de",privacy:"Privacidad",terms:"Términos",
     contact:"Contacto",affil:"Afiliados",api:"API",
-    footer:"© 2026 PREDIKTA — Plataforma global de análisis estadístico · Solo entretenimiento · Juegue responsablemente",
+    footer:"© 2026 ZYNORIQ — Plataforma global de análisis estadístico · Solo entretenimiento · Juegue responsablemente",
     noData:"Sin datos. Haga clic en 🔄 Scrapear primero.",
     confVH:"Tendencia Muy Fuerte ★★★★★",confH:"Tendencia Fuerte ★★★★",confM:"Tendencia Media ★★★",confL:"Tendencia Ligera ★★",confVL:"Tendencia Débil ★",
     overdue:"VENCIDA",normal:"normal",
@@ -1489,13 +1489,13 @@ const T = {
     repLastSeen:"visto pela última vez há",repDraws:"sorteio(s)",
     mlActive:"✓ Ativo",mlInactive:"Dados insuficientes",
     statsTitle:"Estatísticas",selectState:"Selecione um Estado",
-    videoTitle:"📺 PREDIKTA TV — Tutoriais e Análises ao Vivo",
-    tvPromoText:"📺 O boletim diário do PREDIKTA TV já está no ar — 40 estados analisados",
+    videoTitle:"📺 ZYNORIQ TV — Tutoriais e Análises ao Vivo",
+    tvPromoText:"📺 O boletim diário do ZYNORIQ TV já está no ar — 40 estados analisados",
     today:"Hoje",totalDraws:"sorteios analisados",
     updatedAgo:m=>m<1?"Dados atualizados agora":m<60?`Dados atualizados há ${m} min`:`Dados atualizados há ${Math.floor(m/60)} h`,
     about:"Sobre",privacy:"Privacidade",terms:"Termos",
     contact:"Contato",affil:"Afiliados",api:"API",
-    footer:"© 2026 PREDIKTA — Plataforma global de análise estatística · Apenas entretenimento · Jogue com responsabilidade",
+    footer:"© 2026 ZYNORIQ — Plataforma global de análise estatística · Apenas entretenimento · Jogue com responsabilidade",
     noData:"Sem dados. Clique em 🔄 Raspar primeiro.",
     confVH:"Tendência Muito Forte ★★★★★",confH:"Tendência Forte ★★★★",confM:"Tendência Média ★★★",confL:"Tendência Leve ★★",confVL:"Tendência Fraca ★",
     overdue:"EM ATRASO",normal:"normal",
@@ -1534,13 +1534,13 @@ const T = {
     repLastSeen:"vi dènye fwa",repDraws:"tiraj",
     mlActive:"✓ Aktif",mlInactive:"Done pa ase",
     statsTitle:"Estatistik",selectState:"Chwazi yon Eta",
-    videoTitle:"📺 PREDIKTA TV — Tutoryo & Analiz Live",
-    tvPromoText:"📺 Jounal PREDIKTA TV jodi a an liy — 40 eta analize",
+    videoTitle:"📺 ZYNORIQ TV — Tutoryo & Analiz Live",
+    tvPromoText:"📺 Jounal ZYNORIQ TV jodi a an liy — 40 eta analize",
     today:"Jodi a",totalDraws:"tiraj analize",
     updatedAgo:m=>m<1?"Done mizajou kounye a":m<60?`Done mizajou sa fè ${m} min`:`Done mizajou sa fè ${Math.floor(m/60)} è`,
     about:"Sou",privacy:"Konfidansyalite",terms:"Tèm",
     contact:"Kontak",affil:"Afilye",api:"API",
-    footer:"© 2026 PREDIKTA — Platfòm analiz mondyal · Pou amizman sèlman · Jwe responsab",
+    footer:"© 2026 ZYNORIQ — Platfòm analiz mondyal · Pou amizman sèlman · Jwe responsab",
     noData:"Pa gen done. Klike sou 🔄 Chache Done anvan.",
     confVH:"Tandans Trè Fò ★★★★★",confH:"Tandans Fò ★★★★",confM:"Tandans Mwayen ★★★",confL:"Tandans Lejè ★★",confVL:"Tandans Fèb ★",
     overdue:"AN RETA",normal:"nòmal",
@@ -1804,10 +1804,10 @@ async function loadReport(){
     // Paywall : compte requis / essai expiré / quota atteint / État non autorisé
     if(r.status === 401 || r.status === 402 || r.status === 403 || r.status === 429){
       const msg = data.message || data.error || 'Accès restreint';
-      let cta = `<a href="/login?next=/analyze" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-weight:700;text-decoration:none;margin-right:10px">Se connecter</a>
+      let cta = `<a href="/login?next=/analyze" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-weight:700;text-decoration:none;margin-right:10px">Se connecter</a>
                  <a href="/register" style="display:inline-block;padding:10px 20px;border-radius:8px;border:1px solid #1a1a45;color:#e8eeff;font-weight:700;text-decoration:none">Créer un compte</a>`;
       if(r.status === 402 || r.status === 429 || r.status === 403){
-        cta = `<a href="/account" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-weight:700;text-decoration:none">Gérer mon abonnement</a>`;
+        cta = `<a href="/account" style="display:inline-block;padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-weight:700;text-decoration:none">Gérer mon abonnement</a>`;
       }
       document.getElementById('mainContent').innerHTML =
         `<div class="card" style="border-color:#1a1a45;padding:24px;text-align:center">`+
@@ -2159,7 +2159,7 @@ function renderInlineBanner(){
 
 // ── Consensus ──
 function sharePrediction(state, combo, conf){
-  const text = `🎯 PREDIKTA — ${state}\n🔢 Combo: ${combo}\n📊 ${t('signal')}: ${conf}%\n🌐 predikta.ai`;
+  const text = `🎯 ZYNORIQ — ${state}\n🔢 Combo: ${combo}\n📊 ${t('signal')}: ${conf}%\n🌐 ZYNORIQ.ai`;
   if(window.shareContent) window.shareContent(text);
   else if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>showToast('📋 Copié !'));
   if(typeof trackEvent==='function') trackEvent('share_prediction','engagement', state);
@@ -2213,7 +2213,7 @@ function renderConsensus(d, today){
   }).join('');
 
   // WhatsApp + Twitter share buttons
-  const shareText = encodeURIComponent(`🎯 PREDIKTA — Top prédiction ${state}: ${d.consensus[0]?.combo} (${d.consensus[0]?.confidence_pct}%)\npredikta.ai`);
+  const shareText = encodeURIComponent(`🎯 ZYNORIQ — Top prédiction ${state}: ${d.consensus[0]?.combo} (${d.consensus[0]?.confidence_pct}%)\nZYNORIQ.ai`);
   const shareRow = `<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
     <button onclick="sharePrediction('${state}','${d.consensus[0]?.combo}',${d.consensus[0]?.confidence_pct})" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:#25d366;cursor:pointer">📱 WhatsApp</button>
     <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(29,161,242,.15);border:1px solid rgba(29,161,242,.3);color:#1da1f2;text-decoration:none">𝕏 Twitter</a>
@@ -2516,7 +2516,7 @@ function drawSumChart(d){
     type:'line',
     data:{labels,datasets:[{
       label:'%',data,
-      borderColor:'#8855ff',backgroundColor:'rgba(136,85,255,.15)',
+      borderColor:'#004DFF',backgroundColor:'rgba(136,85,255,.15)',
       tension:.4,fill:true,pointRadius:2,borderWidth:2
     }]},
     options:{

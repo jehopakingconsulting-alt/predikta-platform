@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Parrainage — PREDIKTA</title>
-<meta name="description" content="Invite tes amis sur PREDIKTA, gagne des commissions sur leurs abonnements et débloque des avantages VIP/PREMIUM grâce au programme de parrainage."/>
+<title>Parrainage — ZYNORIQ</title>
+<meta name="description" content="Invite tes amis sur ZYNORIQ, gagne des commissions sur leurs abonnements et débloque des avantages VIP/PREMIUM grâce au programme de parrainage."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/parrainage"/>
-<meta property="og:title" content="Parrainage — PREDIKTA"/>
-<meta property="og:description" content="Invite tes amis sur PREDIKTA, gagne des commissions sur leurs abonnements et débloque des avantages VIP/PREMIUM grâce au programme de parrainage."/>
+<meta property="og:title" content="Parrainage — ZYNORIQ"/>
+<meta property="og:description" content="Invite tes amis sur ZYNORIQ, gagne des commissions sur leurs abonnements et débloque des avantages VIP/PREMIUM grâce au programme de parrainage."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/parrainage"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/parrainage"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(79,110,255,.07) 0%,transparent 60%)}
@@ -60,10 +60,10 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 <body>
 <div class="page">
   <h1 data-i18n="title">Programme de Parrainage 🎁</h1>
-  <p class="subtitle" data-i18n="subtitle">Invite tes amis sur PREDIKTA et débloque des avantages PREMIUM. Plus tu parraines, plus tu gagnes.</p>
+  <p class="subtitle" data-i18n="subtitle">Invite tes amis sur ZYNORIQ et débloque des avantages PREMIUM. Plus tu parraines, plus tu gagnes.</p>
 
   <div class="card" id="loginPromptCard" style="display:none">
-    <div style="font-weight:700;font-size:.9rem;margin-bottom:12px" data-i18n="loginPrompt">Connecte-toi à ton compte PREDIKTA pour suivre ton parrainage et débloquer tes récompenses automatiquement.</div>
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:12px" data-i18n="loginPrompt">Connecte-toi à ton compte ZYNORIQ pour suivre ton parrainage et débloquer tes récompenses automatiquement.</div>
     <div class="email-form">
       <a id="btnLogin" href="/login?next=/referral" class="share-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" data-i18n="loginBtn">Se connecter</a>
       <button id="btnEmailMode" data-i18n="orEmailMode">Continuer sans compte</button>
@@ -110,11 +110,11 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
   <div class="card">
     <div style="font-weight:700;font-size:.9rem;margin-bottom:14px" data-i18n="rewardsTitle">🏆 Paliers de récompenses</div>
     <ul class="rewards-list">
-      <li><span class="rl-icon">🥉</span><span data-i18n="reward1">3 filleuls inscrits → Badge Ambassadeur PREDIKTA</span><span class="rl-badge locked" id="badge1" data-i18n="badgeLocked">Verrouillé</span></li>
+      <li><span class="rl-icon">🥉</span><span data-i18n="reward1">3 filleuls inscrits → Badge Ambassadeur ZYNORIQ</span><span class="rl-badge locked" id="badge1" data-i18n="badgeLocked">Verrouillé</span></li>
       <li><span class="rl-icon">🥈</span><span data-i18n="reward2">10 filleuls → 7 jours d'accès VIP offerts</span><span class="rl-badge locked" id="badge2" data-i18n="badgeLocked">Verrouillé</span></li>
       <li><span class="rl-icon">🥇</span><span data-i18n="reward3">25 filleuls → 30 jours d'accès PREMIUM offerts</span><span class="rl-badge locked" id="badge3" data-i18n="badgeLocked">Verrouillé</span></li>
     </ul>
-    <div class="notice" id="noticeEl" data-i18n="noticeText">Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes PREDIKTA. Connecte-toi ou crée un compte pour en bénéficier.</div>
+    <div class="notice" id="noticeEl" data-i18n="noticeText">Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes ZYNORIQ. Connecte-toi ou crée un compte pour en bénéficier.</div>
   </div>
 
   <div class="card">
@@ -132,20 +132,20 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 <script>
 const T = {
   fr:{
-    title:"Programme de Parrainage 🎁", subtitle:"Invite tes amis sur PREDIKTA et débloque des avantages PREMIUM. Plus tu parraines, plus tu gagnes.",
+    title:"Programme de Parrainage 🎁", subtitle:"Invite tes amis sur ZYNORIQ et débloque des avantages PREMIUM. Plus tu parraines, plus tu gagnes.",
     emailLabel:"Entre ton email pour récupérer ton code de parrainage :", emailPlaceholder:"ton@email.com", btnGetCode:"Obtenir mon code",
     statReferrals:"Filleuls inscrits", statCode:"Ton code", linkLabel:"Ton lien de parrainage :", btnCopy:"📋 Copier", btnCopied:"✅ Copié !",
     shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Partager",
     rewardsTitle:"🏆 Paliers de récompenses",
-    reward1:"3 filleuls inscrits → Badge Ambassadeur PREDIKTA",
+    reward1:"3 filleuls inscrits → Badge Ambassadeur ZYNORIQ",
     reward2:"10 filleuls → 7 jours d'accès VIP offerts",
     reward3:"25 filleuls → 30 jours d'accès PREMIUM offerts",
     badgeLocked:"Verrouillé", badgeUnlocked:"Débloqué ✓",
-    noticeText:"Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes PREDIKTA. Connecte-toi ou crée un compte pour en bénéficier.",
+    noticeText:"Ce mode sans compte permet de suivre ton compteur de filleuls, mais les récompenses (badge, jours VIP/PREMIUM offerts) sont appliquées automatiquement uniquement aux comptes ZYNORIQ. Connecte-toi ou crée un compte pour en bénéficier.",
     noticeTextAccount:"Tes récompenses (badge Ambassadeur, jours VIP/PREMIUM bonus) sont appliquées automatiquement à ton compte dès qu'un palier est atteint.",
-    loginPrompt:"Connecte-toi à ton compte PREDIKTA pour suivre ton parrainage et débloquer tes récompenses automatiquement.",
+    loginPrompt:"Connecte-toi à ton compte ZYNORIQ pour suivre ton parrainage et débloquer tes récompenses automatiquement.",
     loginBtn:"Se connecter", orEmailMode:"Continuer sans compte",
-    invalidEmail:"Email invalide", shareText:"🎰 Découvre PREDIKTA, l'analyse prédictive de loterie ! Inscris-toi avec mon lien :",
+    invalidEmail:"Email invalide", shareText:"🎰 Découvre ZYNORIQ, l'analyse prédictive de loterie ! Inscris-toi avec mon lien :",
     statBalance:"Gains cumulés",
     commissionTitle:"💰 Commissions de parrainage",
     commissionPro:"Plan PRO : 25% de commission récurrente",
@@ -155,20 +155,20 @@ const T = {
     commissionNotice:"Pour chaque paiement effectué par un filleul, tu reçois automatiquement un pourcentage en gains de parrainage, crédité sur ton compte.",
   },
   en:{
-    title:"Referral Program 🎁", subtitle:"Invite your friends to PREDIKTA and unlock PREMIUM perks. The more you refer, the more you earn.",
+    title:"Referral Program 🎁", subtitle:"Invite your friends to ZYNORIQ and unlock PREMIUM perks. The more you refer, the more you earn.",
     emailLabel:"Enter your email to get your referral code:", emailPlaceholder:"your@email.com", btnGetCode:"Get my code",
     statReferrals:"Referred sign-ups", statCode:"Your code", linkLabel:"Your referral link:", btnCopy:"📋 Copy", btnCopied:"✅ Copied!",
     shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Share",
     rewardsTitle:"🏆 Reward tiers",
-    reward1:"3 referrals → PREDIKTA Ambassador Badge",
+    reward1:"3 referrals → ZYNORIQ Ambassador Badge",
     reward2:"10 referrals → 7 days of free VIP access",
     reward3:"25 referrals → 30 days of free PREMIUM access",
     badgeLocked:"Locked", badgeUnlocked:"Unlocked ✓",
-    noticeText:"This account-free mode tracks your referral count, but rewards (badge, bonus VIP/PREMIUM days) are applied automatically only to PREDIKTA accounts. Log in or create an account to benefit.",
+    noticeText:"This account-free mode tracks your referral count, but rewards (badge, bonus VIP/PREMIUM days) are applied automatically only to ZYNORIQ accounts. Log in or create an account to benefit.",
     noticeTextAccount:"Your rewards (Ambassador badge, bonus VIP/PREMIUM days) are applied automatically to your account as soon as a tier is reached.",
-    loginPrompt:"Log in to your PREDIKTA account to track your referrals and unlock rewards automatically.",
+    loginPrompt:"Log in to your ZYNORIQ account to track your referrals and unlock rewards automatically.",
     loginBtn:"Log in", orEmailMode:"Continue without an account",
-    invalidEmail:"Invalid email", shareText:"🎰 Check out PREDIKTA, predictive lottery analysis! Sign up with my link:",
+    invalidEmail:"Invalid email", shareText:"🎰 Check out ZYNORIQ, predictive lottery analysis! Sign up with my link:",
     statBalance:"Total earnings",
     commissionTitle:"💰 Referral commissions",
     commissionPro:"PRO plan: 25% recurring commission",
@@ -178,20 +178,20 @@ const T = {
     commissionNotice:"For every payment made by a referral, you automatically earn a percentage as referral earnings, credited to your account.",
   },
   es:{
-    title:"Programa de Referidos 🎁", subtitle:"Invita a tus amigos a PREDIKTA y desbloquea ventajas PREMIUM. Cuantos más refieras, más ganas.",
+    title:"Programa de Referidos 🎁", subtitle:"Invita a tus amigos a ZYNORIQ y desbloquea ventajas PREMIUM. Cuantos más refieras, más ganas.",
     emailLabel:"Ingresa tu email para obtener tu código de referido:", emailPlaceholder:"tu@email.com", btnGetCode:"Obtener mi código",
     statReferrals:"Referidos inscritos", statCode:"Tu código", linkLabel:"Tu enlace de referido:", btnCopy:"📋 Copiar", btnCopied:"✅ ¡Copiado!",
     shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Compartir",
     rewardsTitle:"🏆 Niveles de recompensas",
-    reward1:"3 referidos → Insignia Embajador PREDIKTA",
+    reward1:"3 referidos → Insignia Embajador ZYNORIQ",
     reward2:"10 referidos → 7 días de acceso VIP gratis",
     reward3:"25 referidos → 30 días de acceso PREMIUM gratis",
     badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
-    noticeText:"Este modo sin cuenta rastrea tu contador de referidos, pero las recompensas (insignia, días VIP/PREMIUM extra) se aplican automáticamente solo a las cuentas PREDIKTA. Inicia sesión o crea una cuenta para beneficiarte.",
+    noticeText:"Este modo sin cuenta rastrea tu contador de referidos, pero las recompensas (insignia, días VIP/PREMIUM extra) se aplican automáticamente solo a las cuentas ZYNORIQ. Inicia sesión o crea una cuenta para beneficiarte.",
     noticeTextAccount:"Tus recompensas (insignia Embajador, días VIP/PREMIUM extra) se aplican automáticamente a tu cuenta en cuanto alcanzas un nivel.",
-    loginPrompt:"Inicia sesión en tu cuenta PREDIKTA para rastrear tus referidos y desbloquear recompensas automáticamente.",
+    loginPrompt:"Inicia sesión en tu cuenta ZYNORIQ para rastrear tus referidos y desbloquear recompensas automáticamente.",
     loginBtn:"Iniciar sesión", orEmailMode:"Continuar sin cuenta",
-    invalidEmail:"Email inválido", shareText:"🎰 ¡Descubre PREDIKTA, análisis predictivo de lotería! Regístrate con mi enlace:",
+    invalidEmail:"Email inválido", shareText:"🎰 ¡Descubre ZYNORIQ, análisis predictivo de lotería! Regístrate con mi enlace:",
     statBalance:"Ganancias acumuladas",
     commissionTitle:"💰 Comisiones de referidos",
     commissionPro:"Plan PRO: 25% de comisión recurrente",
@@ -201,20 +201,20 @@ const T = {
     commissionNotice:"Por cada pago realizado por un referido, recibes automáticamente un porcentaje como ganancia de referido, acreditado en tu cuenta.",
   },
   pt:{
-    title:"Programa de Indicações 🎁", subtitle:"Convide seus amigos para a PREDIKTA e desbloqueie vantagens PREMIUM. Quanto mais você indicar, mais ganha.",
+    title:"Programa de Indicações 🎁", subtitle:"Convide seus amigos para a ZYNORIQ e desbloqueie vantagens PREMIUM. Quanto mais você indicar, mais ganha.",
     emailLabel:"Digite seu email para obter seu código de indicação:", emailPlaceholder:"seu@email.com", btnGetCode:"Obter meu código",
     statReferrals:"Indicados cadastrados", statCode:"Seu código", linkLabel:"Seu link de indicação:", btnCopy:"📋 Copiar", btnCopied:"✅ Copiado!",
     shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Compartilhar",
     rewardsTitle:"🏆 Níveis de recompensa",
-    reward1:"3 indicações → Selo Embaixador PREDIKTA",
+    reward1:"3 indicações → Selo Embaixador ZYNORIQ",
     reward2:"10 indicações → 7 dias de acesso VIP grátis",
     reward3:"25 indicações → 30 dias de acesso PREMIUM grátis",
     badgeLocked:"Bloqueado", badgeUnlocked:"Desbloqueado ✓",
-    noticeText:"Este modo sem conta rastreia seu contador de indicações, mas as recompensas (selo, dias VIP/PREMIUM extras) são aplicadas automaticamente apenas a contas PREDIKTA. Faça login ou crie uma conta para se beneficiar.",
+    noticeText:"Este modo sem conta rastreia seu contador de indicações, mas as recompensas (selo, dias VIP/PREMIUM extras) são aplicadas automaticamente apenas a contas ZYNORIQ. Faça login ou crie uma conta para se beneficiar.",
     noticeTextAccount:"Suas recompensas (selo Embaixador, dias VIP/PREMIUM extras) são aplicadas automaticamente à sua conta assim que você atinge um nível.",
-    loginPrompt:"Faça login na sua conta PREDIKTA para acompanhar suas indicações e desbloquear recompensas automaticamente.",
+    loginPrompt:"Faça login na sua conta ZYNORIQ para acompanhar suas indicações e desbloquear recompensas automaticamente.",
     loginBtn:"Entrar", orEmailMode:"Continuar sem conta",
-    invalidEmail:"Email inválido", shareText:"🎰 Conheça a PREDIKTA, análise preditiva de loteria! Cadastre-se com meu link:",
+    invalidEmail:"Email inválido", shareText:"🎰 Conheça a ZYNORIQ, análise preditiva de loteria! Cadastre-se com meu link:",
     statBalance:"Ganhos acumulados",
     commissionTitle:"💰 Comissões de indicação",
     commissionPro:"Plano PRO: 25% de comissão recorrente",
@@ -224,20 +224,20 @@ const T = {
     commissionNotice:"Para cada pagamento feito por um indicado, você ganha automaticamente uma porcentagem como ganho de indicação, creditada na sua conta.",
   },
   ht:{
-    title:"Pwogram Parennaj 🎁", subtitle:"Envite zanmi ou yo sou PREDIKTA epi debloke avantaj PREMIUM. Plis ou parenn, plis ou genyen.",
+    title:"Pwogram Parennaj 🎁", subtitle:"Envite zanmi ou yo sou ZYNORIQ epi debloke avantaj PREMIUM. Plis ou parenn, plis ou genyen.",
     emailLabel:"Antre imèl ou pou jwenn kòd parennaj ou:", emailPlaceholder:"imel@ou.com", btnGetCode:"Jwenn kòd mwen",
     statReferrals:"Filèl enskri", statCode:"Kòd ou", linkLabel:"Lyen parennaj ou:", btnCopy:"📋 Kopye", btnCopied:"✅ Kopye!",
     shareWA:"💬 WhatsApp", shareFB:"📘 Facebook", shareGen:"🔗 Pataje",
     rewardsTitle:"🏆 Nivo rekonpans",
-    reward1:"3 filèl enskri → Badj Anbasadè PREDIKTA",
+    reward1:"3 filèl enskri → Badj Anbasadè ZYNORIQ",
     reward2:"10 filèl → 7 jou aksè VIP gratis",
     reward3:"25 filèl → 30 jou aksè PREMIUM gratis",
     badgeLocked:"Bloke", badgeUnlocked:"Debloke ✓",
-    noticeText:"Mòd sa a san kont swiv konpteur filèl ou, men rekonpans yo (badj, jou VIP/PREMIUM bonis) aplike otomatikman sèlman sou kont PREDIKTA. Konekte oswa kreye yon kont pou benefisye.",
+    noticeText:"Mòd sa a san kont swiv konpteur filèl ou, men rekonpans yo (badj, jou VIP/PREMIUM bonis) aplike otomatikman sèlman sou kont ZYNORIQ. Konekte oswa kreye yon kont pou benefisye.",
     noticeTextAccount:"Rekonpans ou yo (badj Anbasadè, jou VIP/PREMIUM bonis) aplike otomatikman sou kont ou kou ou rive nan yon nivo.",
-    loginPrompt:"Konekte sou kont PREDIKTA ou pou swiv parennaj ou epi debloke rekonpans yo otomatikman.",
+    loginPrompt:"Konekte sou kont ZYNORIQ ou pou swiv parennaj ou epi debloke rekonpans yo otomatikman.",
     loginBtn:"Konekte", orEmailMode:"Kontinye san kont",
-    invalidEmail:"Imèl envalid", shareText:"🎰 Dekouvri PREDIKTA, analiz prediktif lotri! Enskri ak lyen mwen an:",
+    invalidEmail:"Imèl envalid", shareText:"🎰 Dekouvri ZYNORIQ, analiz prediktif lotri! Enskri ak lyen mwen an:",
     statBalance:"Total ou genyen",
     commissionTitle:"💰 Komisyon parennaj",
     commissionPro:"Plan PRO: 25% komisyon recurrent",
@@ -261,7 +261,7 @@ function applyLang(lang){
     if(dict[key]) el.placeholder = dict[key];
   });
   document.documentElement.setAttribute('lang', lang);
-  document.title = dict.title.replace(' 🎁','') + " — PREDIKTA";
+  document.title = dict.title.replace(' 🎁','') + " — ZYNORIQ";
   refreshDashboard();
 }
 window.setLang = applyLang;

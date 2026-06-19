@@ -1,6 +1,6 @@
-/**
- * PREDIKTA — Navigation Universelle v4.0
- * Corrigé : Langue toujours visible · Home flottant · ↑ dès 80px · Assistant PREDIKTA
+﻿/**
+ * ZYNORIQ Intelligence™ — Navigation Universelle v5.0
+ * Corrigé : Langue toujours visible · Home flottant · ↑ dès 80px · Assistant ZYNORIQ
  */
 (function(){
 'use strict';
@@ -32,51 +32,51 @@ const SERVICES = [
 const NAV_T = {
   fr:{ home:'Accueil', analyze:'Analyser', results:'Résultats', allresults:'Tous Résultats', predictions:'Prédictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Parrainage', account:'Mon Compte', lang:'Langue', theme:'Thème', menu:'Menu',
-       tagline:'Loterie & Analyse Prédictive',
-       footerCopy:'© 2026 PREDIKTA — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#7888bb">Jeu Responsable</a>.',
+       tagline:'Intelligence au-delà de la prédiction',
+       footerCopy:'© 2026 ZYNORIQ Intelligence™ — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#1479FF">Jeu Responsable</a>.',
        about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', trackrecord4:'Historique Pick 4', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Carte du Monde', predicktatv:'PREDIKTA TV', community:'Communauté', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chiffres',
+       worldmap:'Carte du Monde', predicktatv:'ZYNORIQ TV', community:'Communauté', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chiffres',
        dashboard:'Tableau de Bord', logout:'Se déconnecter', myAccount:'Mon Compte' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', lang:'Language', theme:'Theme', menu:'Menu',
-       tagline:'Lottery & Predictive Analysis',
-       footerCopy:'© 2026 PREDIKTA — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#7888bb">Responsible Gaming</a>.',
+       tagline:'Intelligence Beyond Prediction',
+       footerCopy:'© 2026 ZYNORIQ Intelligence™ — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#1479FF">Responsible Gaming</a>.',
        about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', trackrecord4:'Pick 4 Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'World Map', predicktatv:'PREDIKTA TV', community:'Community', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / 5-Digit Lotto',
+       worldmap:'World Map', predicktatv:'ZYNORIQ TV', community:'Community', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / 5-Digit Lotto',
        dashboard:'Dashboard', logout:'Sign out', myAccount:'My Account' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', lang:'Idioma', theme:'Tema', menu:'Menú',
-       tagline:'Lotería & Análisis Predictivo',
-       footerCopy:'© 2026 PREDIKTA — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#7888bb">Juego Responsable</a>.',
+       tagline:'Inteligencia Más Allá de la Predicción',
+       footerCopy:'© 2026 ZYNORIQ Intelligence™ — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#1479FF">Juego Responsable</a>.',
        about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', trackrecord4:'Historial Pick 4', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidad', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Lotería 5 Dígitos',
+       worldmap:'Mapa Mundial', predicktatv:'ZYNORIQ TV', community:'Comunidad', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Lotería 5 Dígitos',
        dashboard:'Panel de Control', logout:'Cerrar sesión', myAccount:'Mi Cuenta' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', lang:'Idioma', theme:'Tema', menu:'Menu',
-       tagline:'Loteria & Análise Preditiva',
-       footerCopy:'© 2026 PREDIKTA — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#7888bb">Jogo Responsável</a>.',
+       tagline:'Inteligência Além da Previsão',
+       footerCopy:'© 2026 ZYNORIQ Intelligence™ — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#1479FF">Jogo Responsável</a>.',
        about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', trackrecord4:'Histórico Pick 4', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Mapa Mundial', predicktatv:'PREDIKTA TV', community:'Comunidade', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Dígitos',
+       worldmap:'Mapa Mundial', predicktatv:'ZYNORIQ TV', community:'Comunidade', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Dígitos',
        dashboard:'Painel', logout:'Sair', myAccount:'Minha Conta' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', lang:'Lang', theme:'Tèm', menu:'Meni',
-       tagline:'Lotri & Analiz Biznis',
-       footerCopy:'© 2026 PREDIKTA — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#7888bb">Jwe Responsab</a>.',
+       tagline:'Entèlijans Anlà Prediksyon',
+       footerCopy:'© 2026 ZYNORIQ Intelligence™ — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#1479FF">Jwe Responsab</a>.',
        about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', trackrecord4:'Istorik Pick 4', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog',
-       worldmap:'Kat Mondyal', predicktatv:'PREDIKTA TV', community:'Kominote', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chif',
+       worldmap:'Kat Mondyal', predicktatv:'ZYNORIQ TV', community:'Kominote', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chif',
        dashboard:'Tablo de Bò', logout:'Dekonekte', myAccount:'Kont Mwen' },
 };
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
 window.PREDIKTA_AFFILIATE = {
-  thelotter:   'https://www.thelotter.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  lotterypro:  'https://www.lotterypro.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  jackpot:     'https://www.jackpot.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  lottoagent:  'https://www.lottoagent.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  lottoland:   'https://www.lottoland.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  wintrilions: 'https://www.wintrillions.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  multilotto:  'https://www.multilotto.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
-  lotto:       'https://www.lotto.com/?utm_source=predikta&utm_medium=affiliate&utm_campaign=nav',
+  thelotter:   'https://www.thelotter.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  lotterypro:  'https://www.lotterypro.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  jackpot:     'https://www.jackpot.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  lottoagent:  'https://www.lottoagent.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  lottoland:   'https://www.lottoland.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  wintrilions: 'https://www.wintrillions.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  multilotto:  'https://www.multilotto.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
+  lotto:       'https://www.lotto.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
 };
 
 // ── Archive (historique des analyses & recherches) ─────────────────────────
@@ -234,7 +234,7 @@ function getFavs(){ return JSON.parse(localStorage.getItem('predikta_favs')||'[]
 function toggleFav(code){ let f=getFavs(),i=f.indexOf(code); i>=0?f.splice(i,1):f.push(code); localStorage.setItem('predikta_favs',JSON.stringify(f)); return i<0; }
 function isFav(code){ return getFavs().includes(code); }
 window.PREDIKTA = { toggleFav, isFav, getFavs, affiliate: window.PREDIKTA_AFFILIATE };
-function shareContent(text,url){ url=url||location.href; if(navigator.share){navigator.share({title:'PREDIKTA',text,url}).catch(()=>{});}else{window.open(`https://wa.me/?text=${encodeURIComponent(text+'\n'+url)}`,'_blank');} }
+function shareContent(text,url){ url=url||location.href; if(navigator.share){navigator.share({title:'ZYNORIQ',text,url}).catch(()=>{});}else{window.open(`https://wa.me/?text=${encodeURIComponent(text+'\n'+url)}`,'_blank');} }
 window.shareContent = shareContent;
 
 // ── Mobile menu ───────────────────────────────────────────────────────────
@@ -257,10 +257,10 @@ document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeMobileMen
 // ═══════════════════════════════════════════════════════════════════
 const ASSIST_T = {
   fr:{
-    title:'Assistant PREDIKTA',
+    title:'Assistant ZYNORIQ',
     subtitle:'Je suis là pour vous aider !',
     placeholder:'Posez votre question...',
-    greeting:'Bonjour ! 👋 Je suis votre assistant PREDIKTA. Comment puis-je vous aider aujourd\'hui ?',
+    greeting:'Bonjour ! 👋 Je suis votre Assistant ZYNORIQ. Comment puis-je vous aider aujourd\'hui ?',
     quickTitle:'Questions rapides :',
     quick:['Comment voir les résultats ?','Comment analyser un État ?','Qu\'est-ce que Business Intelligence ?','Comment changer la langue ?','Comment s\'abonner PRO ?','Où voir Powerball/Mega ?'],
     notFound:'Je ne comprends pas bien votre question. Essayez : "résultats", "analyser", "langue", "PRO", ou cliquez sur une question rapide ci-dessous.',
@@ -268,10 +268,10 @@ const ASSIST_T = {
     close:'Fermer',
   },
   en:{
-    title:'PREDIKTA Assistant',
+    title:'ZYNORIQ Assistant',
     subtitle:'I\'m here to help!',
     placeholder:'Ask your question...',
-    greeting:'Hello! 👋 I\'m your PREDIKTA assistant. How can I help you today?',
+    greeting:'Hello! 👋 I\'m your ZYNORIQ Assistant. How can I help you today?',
     quickTitle:'Quick questions:',
     quick:['How to see results?','How to analyze a state?','What is Business Intelligence?','How to change language?','How to subscribe PRO?','Where to see Powerball/Mega?'],
     notFound:'I didn\'t quite understand. Try: "results", "analyze", "language", "PRO", or click a quick question below.',
@@ -279,10 +279,10 @@ const ASSIST_T = {
     close:'Close',
   },
   es:{
-    title:'Asistente PREDIKTA',
+    title:'Asistente ZYNORIQ',
     subtitle:'¡Estoy aquí para ayudarte!',
     placeholder:'Haz tu pregunta...',
-    greeting:'¡Hola! 👋 Soy tu asistente PREDIKTA. ¿Cómo puedo ayudarte hoy?',
+    greeting:'¡Hola! 👋 Soy tu Asistente ZYNORIQ. ¿Cómo puedo ayudarte hoy?',
     quickTitle:'Preguntas rápidas:',
     quick:['¿Cómo ver resultados?','¿Cómo analizar un estado?','¿Qué es Business Intelligence?','¿Cómo cambiar idioma?','¿Cómo suscribirse PRO?','¿Dónde ver Powerball/Mega?'],
     notFound:'No entendí bien. Prueba: "resultados", "analizar", "idioma", "PRO" o haz clic en una pregunta rápida.',
@@ -290,10 +290,10 @@ const ASSIST_T = {
     close:'Cerrar',
   },
   pt:{
-    title:'Assistente PREDIKTA',
+    title:'Assistente ZYNORIQ',
     subtitle:'Estou aqui para ajudar!',
     placeholder:'Faça sua pergunta...',
-    greeting:'Olá! 👋 Sou seu assistente PREDIKTA. Como posso ajudá-lo hoje?',
+    greeting:'Olá! 👋 Sou seu Assistente ZYNORIQ. Como posso ajudá-lo hoje?',
     quickTitle:'Perguntas rápidas:',
     quick:['Como ver resultados?','Como analisar um estado?','O que é Business Intelligence?','Como mudar idioma?','Como assinar PRO?','Onde ver Powerball/Mega?'],
     notFound:'Não entendi bem. Tente: "resultados", "analisar", "idioma", "PRO" ou clique numa pergunta rápida.',
@@ -301,10 +301,10 @@ const ASSIST_T = {
     close:'Fechar',
   },
   ht:{
-    title:'Asistan PREDIKTA',
+    title:'Asistan ZYNORIQ',
     subtitle:'Mwen isit la pou ede ou!',
     placeholder:'Poze kesyon ou...',
-    greeting:'Bonjou! 👋 Mwen se asistan PREDIKTA ou. Kijan mwen ka ede ou jodi a?',
+    greeting:'Bonjou! 👋 Mwen se Asistan ZYNORIQ ou. Kijan mwen ka ede ou jodi a?',
     quickTitle:'Kesyon rapid:',
     quick:['Kijan pou wè rezilta?','Kijan pou analize yon eta?','Sa Business Intelligence ye?','Kijan pou chanje lang?','Kijan pou abòne PRO?','Kote pou wè Powerball/Mega?'],
     notFound:'Mwen pa konprann. Eseye: "rezilta", "analize", "lang", "PRO" oswa klike sou yon kesyon rapid.',
@@ -317,13 +317,13 @@ const ASSIST_T = {
 const KB = {
   fr:[
     { kw:['résultat','résultats','tirage','aujourd','dernier','yesterday','aujourd\'hui'],
-      answer:'Pour voir les résultats du jour :\n\n🎱 <a href="/results" style="color:#4f6eff">Hub Résultats (Pick3)</a> — tous les 44 États\n🏆 <a href="/all-results" style="color:#4f6eff">Tous les Jeux</a> — Pick2, Pick4, Lotto, Powerball...',
+      answer:'Pour voir les résultats du jour :\n\n🎱 <a href="/results" style="color:#1479FF">Hub Résultats (Pick3)</a> — tous les 44 États\n🏆 <a href="/all-results" style="color:#1479FF">Tous les Jeux</a> — Pick2, Pick4, Lotto, Powerball...',
       quick:[{t:'Voir Hub Résultats',href:'/results'},{t:'Voir Tous les Jeux',href:'/all-results'}] },
     { kw:['analyser','analyse','prédiction','prédire','analyse','pick3','cash3','numéro','chiffre'],
-      answer:'Pour analyser et obtenir des prédictions :\n\n⚡ <a href="/analyze" style="color:#4f6eff">Analyseur Prédictif Loterie</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Choisissez la période (3 mois à 5 ans)\n→ Cliquez ⚡ Analyser\n\n7 algorithmes génèrent vos prédictions en quelques secondes.',
+      answer:'Pour analyser et obtenir des prédictions :\n\n⚡ <a href="/analyze" style="color:#1479FF">Analyseur Prédictif Loterie</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Choisissez la période (3 mois à 5 ans)\n→ Cliquez ⚡ Analyser\n\n7 algorithmes génèrent vos prédictions en quelques secondes.',
       quick:[{t:'Ouvrir l\'Analyseur',href:'/analyze'}] },
     { kw:['business','entreprise','projet','startup','pme','marketing','lancer','marché','niche'],
-      answer:'PREDIKTA Business Intelligence analyse votre projet en 4 étapes :\n\n🚀 <a href="/bizai" style="color:#4f6eff">Ouvrir Business Intelligence</a>\n→ Étape 1 : Nom, secteur, stade\n→ Étape 2 : Produit, prix, audience\n→ Étape 3 : Géographie, langues\n→ Étape 4 : Budget, objectifs\n\nRapport 12 sections généré en 30 secondes !',
+      answer:'ZYNORIQ Business Intelligence analyse votre projet en 4 étapes :\n\n🚀 <a href="/bizai" style="color:#1479FF">Ouvrir Business Intelligence</a>\n→ Étape 1 : Nom, secteur, stade\n→ Étape 2 : Produit, prix, audience\n→ Étape 3 : Géographie, langues\n→ Étape 4 : Budget, objectifs\n\nRapport 12 sections généré en 30 secondes !',
       quick:[{t:'Lancer Business Intelligence',href:'/bizai'}] },
     { kw:['langue','langage','traduire','translation','french','english','español','créole','kreyol','ht','fr','en','es','pt'],
       answer:'Pour changer la langue, utilisez les boutons en haut à droite de chaque page :\n\n🇫🇷 FR · 🇺🇸 EN · 🇪🇸 ES · 🇧🇷 PT · 🇭🇹 HT\n\nLa langue est sauvegardée automatiquement sur toutes les pages.',
@@ -332,27 +332,27 @@ const KB = {
       answer:'Nos plans :\n\n👑 PRO — $19.99/mois (4 États, 1 analyse/jour, 3 jours d\'essai)\n💎 VIP — $49.99/mois (20 États, 7 analyses/jour, 7 jours d\'essai)\n⭐ PREMIUM — $99.99/mois (Tous les États, analyses illimitées, 7 jours d\'essai)\n\nUn compte et un abonnement actif sont requis pour lancer des analyses.',
       quick:[{t:'Voir les Plans',href:'/register'}] },
     { kw:['powerball','mega','million','jackpot','lotto','pick4','pick5','pick2','tous jeux','all'],
-      answer:'Pour voir Powerball, Mega Millions et TOUS les jeux :\n\n🏆 <a href="/all-results" style="color:#4f6eff">Page Tous les Résultats</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Tous les jeux s\'affichent : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
+      answer:'Pour voir Powerball, Mega Millions et TOUS les jeux :\n\n🏆 <a href="/all-results" style="color:#1479FF">Page Tous les Résultats</a>\n→ Sélectionnez votre État (NY, GA, TX, FL...)\n→ Tous les jeux s\'affichent : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
       quick:[{t:'Voir Tous les Jeux',href:'/all-results'}] },
     { kw:['accueil','home','retour','page principale','début'],
-      answer:'Pour revenir à la page d\'accueil :\n\n🏠 Cliquez sur le logo <strong>PREDIKTA</strong> en haut à gauche\n🏠 Ou cliquez sur le bouton <strong>🏠</strong> flottant en bas à gauche\n🏠 Ou allez sur <a href="/" style="color:#4f6eff">predikta.io</a>',
+      answer:'Pour revenir à la page d\'accueil :\n\n🏠 Cliquez sur le logo <strong>ZYNORIQ</strong> en haut à gauche\n🏠 Ou cliquez sur le bouton <strong>🏠</strong> flottant en bas à gauche\n🏠 Ou allez sur <a href="/" style="color:#1479FF">zynoriq.com</a>',
       quick:[{t:'Aller à l\'Accueil',href:'/'}] },
     { kw:['état','state','new york','georgia','texas','florida','ny','ga','tx','fl'],
-      answer:'PREDIKTA couvre 44 États US + Puerto Rico :\n\n🗽 New York · 🍑 Georgia · ⭐ Texas · 🌴 Florida · ☀️ California...\n\nDans l\'Analyseur, utilisez le sélecteur d\'État en haut pour choisir votre État.',
+      answer:'ZYNORIQ couvre 44 États US + Puerto Rico :\n\n🗽 New York · 🍑 Georgia · ⭐ Texas · 🌴 Florida · ☀️ California...\n\nDans l\'Analyseur, utilisez le sélecteur d\'État en haut pour choisir votre État.',
       quick:[{t:'Voir les États',href:'/results'}] },
     { kw:['installer','pwa','app','mobile','téléphone','android','iphone'],
-      answer:'PREDIKTA est une PWA — installez-la sur votre téléphone !\n\n📱 Android : Menu ⋮ → "Ajouter à l\'écran d\'accueil"\n🍎 iPhone : Bouton Partager → "Sur l\'écran d\'accueil"\n\nFonctionne comme une vraie app, sans App Store !',
+      answer:'ZYNORIQ est une PWA — installez-la sur votre téléphone !\n\n📱 Android : Menu ⋮ → "Ajouter à l\'écran d\'accueil"\n🍎 iPhone : Bouton Partager → "Sur l\'écran d\'accueil"\n\nFonctionne comme une vraie app, sans App Store !',
       quick:[] },
   ],
   en:[
     { kw:['result','results','draw','today','latest','yesterday'],
-      answer:'To see today\'s results:\n\n🎱 <a href="/results" style="color:#4f6eff">Results Hub (Pick3)</a> — all 44 states\n🏆 <a href="/all-results" style="color:#4f6eff">All Games</a> — Pick2, Pick4, Lotto, Powerball...',
+      answer:'To see today\'s results:\n\n🎱 <a href="/results" style="color:#1479FF">Results Hub (Pick3)</a> — all 44 states\n🏆 <a href="/all-results" style="color:#1479FF">All Games</a> — Pick2, Pick4, Lotto, Powerball...',
       quick:[{t:'Results Hub',href:'/results'},{t:'All Games',href:'/all-results'}] },
     { kw:['analyze','predict','prediction','pick3','cash3','number','digit'],
-      answer:'To analyze and get predictions:\n\n⚡ <a href="/analyze" style="color:#4f6eff">Predictive Lottery Analyzer</a>\n→ Select your State (NY, GA, TX, FL...)\n→ Choose period (3 months to 5 years)\n→ Click ⚡ Analyze\n\n7 algorithms generate predictions in seconds.',
+      answer:'To analyze and get predictions:\n\n⚡ <a href="/analyze" style="color:#1479FF">Predictive Lottery Analyzer</a>\n→ Select your State (NY, GA, TX, FL...)\n→ Choose period (3 months to 5 years)\n→ Click ⚡ Analyze\n\n7 algorithms generate predictions in seconds.',
       quick:[{t:'Open Analyzer',href:'/analyze'}] },
     { kw:['business','project','startup','marketing','launch','market','niche'],
-      answer:'PREDIKTA Business Intelligence analyzes your project in 4 steps:\n\n🚀 <a href="/bizai" style="color:#4f6eff">Open Business Intelligence</a>\n→ 12-section report in 30 seconds\n→ Market analysis · Target audience · 11 marketing channels\n→ 30-60-90 day action plan',
+      answer:'ZYNORIQ Business Intelligence analyzes your project in 4 steps:\n\n🚀 <a href="/bizai" style="color:#1479FF">Open Business Intelligence</a>\n→ 12-section report in 30 seconds\n→ Market analysis · Target audience · 11 marketing channels\n→ 30-60-90 day action plan',
       quick:[{t:'Launch Business Intelligence',href:'/bizai'}] },
     { kw:['language','translate','french','english','spanish','creole','lang'],
       answer:'To change language, use the buttons at the top right of every page:\n\n🇫🇷 FR · 🇺🇸 EN · 🇪🇸 ES · 🇧🇷 PT · 🇭🇹 HT\n\nYour language preference is saved automatically.',
@@ -361,10 +361,10 @@ const KB = {
       answer:'Our plans:\n\n👑 PRO — $19.99/mo (4 states, 1 analysis/day, 3-day trial)\n💎 VIP — $49.99/mo (20 states, 7 analyses/day, 7-day trial)\n⭐ PREMIUM — $99.99/mo (All states, unlimited analyses, 7-day trial)\n\nAn account with an active subscription is required to run analyses.',
       quick:[{t:'See Plans',href:'/register'}] },
     { kw:['powerball','mega','million','jackpot','lotto','pick4','pick5','all games'],
-      answer:'For Powerball, Mega Millions and ALL games:\n\n🏆 <a href="/all-results" style="color:#4f6eff">All Results Page</a>\n→ Select your State\n→ All games shown: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
+      answer:'For Powerball, Mega Millions and ALL games:\n\n🏆 <a href="/all-results" style="color:#1479FF">All Results Page</a>\n→ Select your State\n→ All games shown: Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions',
       quick:[{t:'See All Games',href:'/all-results'}] },
     { kw:['home','back','main page','start'],
-      answer:'To go back home:\n\n🏠 Click the <strong>PREDIKTA</strong> logo (top left)\n🏠 Or click the floating <strong>🏠</strong> button (bottom left)\n🏠 Or visit <a href="/" style="color:#4f6eff">predikta.io</a>',
+      answer:'To go back home:\n\n🏠 Click the <strong>ZYNORIQ</strong> logo (top left)\n🏠 Or click the floating <strong>🏠</strong> button (bottom left)\n🏠 Or visit <a href="/" style="color:#1479FF">zynoriq.com</a>',
       quick:[{t:'Go Home',href:'/'}] },
   ],
 };
@@ -392,12 +392,12 @@ function buildAssistantHTML(){
   return `
 <style>
 /* ═══════════════════════════════════
-   PREDIKTA ASSISTANT
+   ZYNORIQ Assistant
    ═══════════════════════════════════ */
 #passt-bubble{
   position:fixed;bottom:80px;left:22px;z-index:9000;
   width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   display:flex;align-items:center;justify-content:center;
   font-size:1.4rem;cursor:pointer;
   box-shadow:0 4px 20px rgba(79,110,255,.5);
@@ -432,14 +432,14 @@ function buildAssistantHTML(){
 }
 .passt-avatar{
   width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   display:flex;align-items:center;justify-content:center;font-size:1.1rem;
 }
 .passt-header-text{}
 .passt-header-title{font-size:.82rem;font-weight:800;color:#e8eeff;display:block}
 .passt-header-sub{font-size:.62rem;color:#22e87a;display:flex;align-items:center;gap:5px}
 .passt-header-sub::before{content:'';width:6px;height:6px;border-radius:50%;background:#22e87a;flex-shrink:0}
-.passt-close{margin-left:auto;background:none;border:none;color:#7888bb;font-size:1.1rem;cursor:pointer;transition:color .2s}
+.passt-close{margin-left:auto;background:none;border:none;color:#1479FF;font-size:1.1rem;cursor:pointer;transition:color .2s}
 .passt-close:hover{color:#e8eeff}
 
 .passt-messages{
@@ -454,7 +454,7 @@ function buildAssistantHTML(){
 .passt-msg.user{ align-self:flex-end;flex-direction:row-reverse; }
 .passt-msg-avatar{
   width:26px;height:26px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   display:flex;align-items:center;justify-content:center;font-size:.8rem;
 }
 .passt-msg-bubble{
@@ -464,13 +464,13 @@ function buildAssistantHTML(){
   background:#0e0e2a;border:1px solid #1a1a45;color:#e8eeff;border-radius:4px 12px 12px 12px;
 }
 .passt-msg.user .passt-msg-bubble{
-  background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;border-radius:12px 4px 12px 12px;
+  background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;border-radius:12px 4px 12px 12px;
 }
 .passt-msg-bubble a{color:#88aaff}
 
 /* Typing indicator */
 .passt-typing{display:flex;gap:4px;padding:8px 12px;background:#0e0e2a;border:1px solid #1a1a45;border-radius:4px 12px 12px 12px;width:fit-content}
-.passt-typing span{width:6px;height:6px;border-radius:50%;background:#4f6eff;animation:typingBounce 1.2s infinite}
+.passt-typing span{width:6px;height:6px;border-radius:50%;background:#1479FF;animation:typingBounce 1.2s infinite}
 .passt-typing span:nth-child(2){animation-delay:.2s}
 .passt-typing span:nth-child(3){animation-delay:.4s}
 @keyframes typingBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
@@ -485,28 +485,28 @@ function buildAssistantHTML(){
 .passt-msg-qbtn:hover{background:rgba(79,110,255,.3)}
 
 .passt-quick-area{
-  padding:8px 12px;border-top:1px solid #1a1a45;
+  padding:8px 12px;border-top:1px solid #0D3A7A;
   display:flex;flex-wrap:wrap;gap:5px;max-height:90px;overflow-y:auto;
 }
 .passt-quick{
   padding:4px 10px;border-radius:8px;font-size:.68rem;font-weight:600;cursor:pointer;
-  background:#0e0e2a;border:1px solid #1a1a45;color:#7888bb;transition:all .2s;
+  background:#0e0e2a;border:1px solid #1a1a45;color:#1479FF;transition:all .2s;
 }
-.passt-quick:hover{border-color:#4f6eff;color:#e8eeff}
+.passt-quick:hover{border-color:#1479FF;color:#e8eeff}
 
 .passt-input-area{
-  display:flex;gap:8px;padding:10px 12px;border-top:1px solid #1a1a45;background:#060616;
+  display:flex;gap:8px;padding:10px 12px;border-top:1px solid #0D3A7A;background:#060616;
 }
 #passt-input{
   flex:1;padding:8px 12px;border-radius:20px;border:1px solid #1a1a45;
   background:#0e0e2a;color:#e8eeff;font-size:.78rem;outline:none;
   font-family:'Inter',sans-serif;
 }
-#passt-input:focus{border-color:#4f6eff}
+#passt-input:focus{border-color:#1479FF}
 #passt-input::placeholder{color:#4d5a8a}
 #passt-send{
   width:34px;height:34px;border-radius:50%;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   color:#fff;border:none;cursor:pointer;font-size:.9rem;
   display:flex;align-items:center;justify-content:center;
   transition:transform .2s;flex-shrink:0;
@@ -515,7 +515,7 @@ function buildAssistantHTML(){
 </style>
 
 <!-- Bubble -->
-<button id="passt-bubble" onclick="toggleAssistant()" title="Assistant PREDIKTA">
+<button id="passt-bubble" onclick="toggleAssistant()" title="Assistant ZYNORIQ">
   💬
   <span id="passt-notif">1</span>
 </button>
@@ -644,7 +644,7 @@ function buildFloatingButtons(){
   box-shadow:0 4px 16px rgba(0,0,30,.5);
   transition:all .25s;text-decoration:none;
 }
-#pfloat-home:hover{background:linear-gradient(135deg,#4f6eff,#8855ff);border-color:#4f6eff;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
+#pfloat-home:hover{background:linear-gradient(135deg,#1479FF,#004DFF);border-color:#1479FF;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
 #pfloat-home .pfh-tooltip{
   position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
   background:#1a1a40;border:1px solid #252560;color:#e8eeff;
@@ -655,17 +655,17 @@ function buildFloatingButtons(){
 #pfloat-home:hover .pfh-tooltip{opacity:1}
 
 /* Back to top */
-#predikta-btt{
+#zynoriq-btt{
   position:fixed;bottom:22px;right:22px;z-index:8000;
   width:46px;height:46px;border-radius:12px;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   color:#fff;font-size:1.1rem;font-weight:900;border:none;cursor:pointer;
   opacity:0;transform:translateY(16px);transition:all .3s;
   box-shadow:0 4px 16px rgba(79,110,255,.4);
   display:flex;align-items:center;justify-content:center;
 }
-#predikta-btt.visible{opacity:1;transform:translateY(0)}
-#predikta-btt:hover{box-shadow:0 6px 24px rgba(79,110,255,.6);transform:translateY(-3px)}
+#zynoriq-btt.visible{opacity:1;transform:translateY(0)}
+#zynoriq-btt:hover{box-shadow:0 6px 24px rgba(20,121,255,.6);transform:translateY(-3px)}
 
 /* Notifications flottant */
 #pfloat-notif{
@@ -678,7 +678,7 @@ function buildFloatingButtons(){
   box-shadow:0 4px 16px rgba(0,0,30,.5);
   transition:all .25s;
 }
-#pfloat-notif:hover{background:linear-gradient(135deg,#4f6eff,#8855ff);border-color:#4f6eff;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
+#pfloat-notif:hover{background:linear-gradient(135deg,#1479FF,#004DFF);border-color:#1479FF;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
 #pfloat-notif.subscribed{background:linear-gradient(135deg,#22e87a,#0e9e55);border-color:#22e87a;color:#04200f}
 #pfloat-notif .pfn-tooltip{
   position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
@@ -700,12 +700,12 @@ function buildFloatingButtons(){
   <span class="pfn-tooltip" id="pfn-tooltip">Activer les alertes</span>
 </button>
 
-<button id="predikta-btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
+<button id="zynoriq-btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Retour en haut">↑</button>
 `;
 }
 
 function initFloating(){
-  const btt = document.getElementById('predikta-btt');
+  const btt = document.getElementById('zynoriq-btt');
   if(!btt) return;
   window.addEventListener('scroll', ()=>{
     btt.classList.toggle('visible', window.scrollY > 80); // visible dès 80px
@@ -844,7 +844,7 @@ function buildNav(){
   return `
 <style>
 /* ══════════════════════════════════════
-   PREDIKTA GLOBAL POLISH — scroll, reveal, responsive
+   ZYNORIQ GLOBAL POLISH — scroll, reveal, responsive
    ══════════════════════════════════════ */
 html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -865,31 +865,31 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 }
 
 /* ══════════════════════════════════════
-   PREDIKTA NAV v4.0 — Langue toujours visible
+   ZYNORIQ Intelligence™ NAV v5.0
    ══════════════════════════════════════ */
 #predikta-nav{
   position:sticky;top:0;z-index:1000;
-  background:rgba(4,4,20,.97);
-  border-bottom:1px solid #1a1a45;
+  background:rgba(6,26,53,.97);
+  border-bottom:1px solid #0D3A7A;
   backdrop-filter:blur(24px);
   -webkit-backdrop-filter:blur(24px);
-  font-family:'Inter',sans-serif;
+  font-family:'Poppins','Inter',sans-serif;
 }
 .pnav-top{max-width:1440px;margin:0 auto;display:flex;align-items:center;height:56px;padding:0 16px;gap:8px}
 
 /* Logo HOME */
 .pnav-home{
   display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0;
-  padding-right:14px;border-right:1px solid #1a1a45;margin-right:8px;height:100%;
+  padding-right:14px;border-right:1px solid #0D3A7A;margin-right:8px;height:100%;
 }
 .pnav-logo-svg{width:32px;height:32px}
 .pnav-logo-name{
-  font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;letter-spacing:2px;
-  background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);
+  font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:2.5px;
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   display:block;line-height:1;white-space:nowrap;
 }
-.pnav-logo-tag{font-size:.48rem;color:#4d5a8a;letter-spacing:.5px;display:block;margin-top:2px}
+.pnav-logo-tag{font-size:.44rem;color:#1460A8;letter-spacing:.8px;display:block;margin-top:2px;text-transform:uppercase}
 
 /* Services */
 .pnav-services{
@@ -901,17 +901,17 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
   position:relative;
   display:flex;align-items:center;gap:4px;
   padding:6px 10px;border-radius:7px;
-  text-decoration:none;color:#7888bb;font-size:.73rem;font-weight:600;
+  text-decoration:none;color:#1479FF;font-size:.73rem;font-weight:600;
   border:1px solid transparent;white-space:nowrap;transition:all .18s;flex-shrink:0;
 }
 .pnav-svc::after{
   content:'';position:absolute;left:10px;right:10px;bottom:-1px;height:2px;border-radius:2px;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   transform:scaleX(0);transition:transform .18s;
 }
 .pnav-svc:hover{color:#e8eeff;background:rgba(255,255,255,.05);border-color:#1a1a45}
 .pnav-svc:hover::after{transform:scaleX(1)}
-.pnav-svc.active{background:#4f6eff;color:#fff;border-color:#4f6eff}
+.pnav-svc.active{background:#1479FF;color:#fff;border-color:#1479FF}
 .pnav-svc.active::after{transform:scaleX(1);background:#ffd700}
 
 /* RIGHT CONTROLS */
@@ -925,7 +925,7 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
   cursor:pointer;border:1px solid #1a1a45;background:transparent;color:#4d5a8a;
   transition:all .18s;white-space:nowrap;
 }
-.plang-btn.active,.plang-btn:hover{background:#4f6eff;border-color:#4f6eff;color:#fff}
+.plang-btn.active,.plang-btn:hover{background:#1479FF;border-color:#1479FF;color:#fff}
 .plang-flag{font-size:.85rem}
 .plang-code{display:none} /* masqué par défaut, visible sur desktop */
 
@@ -971,14 +971,14 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 }
 #pnav-mobile.open{transform:translateX(0)}
 .pmob-header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid #1a1a45;flex-shrink:0}
-.pmob-logo{font-family:'Orbitron',monospace;font-size:.9rem;font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pmob-logo{font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:2px;background:linear-gradient(135deg,#1479FF,#004DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .pmob-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid #1a1a45;cursor:pointer;color:#e8eeff;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .pmob-close:hover{background:rgba(255,61,46,.2)}
 .pmob-section{padding:12px 16px;border-bottom:1px solid #1a1a45;flex-shrink:0}
 .pmob-section-title{font-size:.58rem;font-weight:800;color:#4d5a8a;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
-.pmob-svc{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;text-decoration:none;color:#7888bb;font-size:.82rem;font-weight:600;border:1px solid transparent;transition:all .2s;margin-bottom:4px}
+.pmob-svc{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;text-decoration:none;color:#1479FF;font-size:.82rem;font-weight:600;border:1px solid transparent;transition:all .2s;margin-bottom:4px}
 .pmob-svc:hover,.pmob-svc.active{color:#e8eeff;background:rgba(79,110,255,.15);border-color:#1a1a45}
-.pmob-svc.active{background:#4f6eff;color:#fff}
+.pmob-svc.active{background:#1479FF;color:#fff}
 .pmob-lang{display:flex;gap:5px;flex-wrap:wrap}
 .pmob-lang .plang-btn{padding:8px 12px;font-size:.72rem;flex:1;text-align:center;justify-content:center}
 .pmob-lang .plang-code{display:inline}
@@ -992,13 +992,13 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
   display:flex;align-items:center;gap:5px;
   padding:5px 10px;border-radius:7px;
   background:transparent;border:1px solid #1a1a45;
-  color:#7888bb;font-size:.73rem;font-weight:600;
+  color:#1479FF;font-size:.73rem;font-weight:600;
   cursor:pointer;white-space:nowrap;transition:all .18s;font-family:'Inter',sans-serif;
 }
-.pnav-user-btn:hover{color:#e8eeff;background:rgba(255,255,255,.05);border-color:#4f6eff}
+.pnav-user-btn:hover{color:#e8eeff;background:rgba(255,255,255,.05);border-color:#1479FF}
 .pnav-user-avatar{
   width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(135deg,#4f6eff,#8855ff);
+  background:linear-gradient(135deg,#1479FF,#004DFF);
   color:#fff;font-size:.65rem;font-weight:800;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
@@ -1033,16 +1033,16 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 .pnav-user-menu-sep{height:1px;background:#1a1a45;margin:4px 0}
 
 /* ─── Footer ─── */
-.predikta-footer{background:#050514;border-top:1px solid #1a1a45;padding:30px 24px;font-family:'Inter',sans-serif;position:relative;z-index:5}
+.zynoriq-footer{background:#04112A;border-top:1px solid #0D3A7A;padding:30px 24px;font-family:'Poppins','Inter',sans-serif;position:relative;z-index:5}
 .pf-inner{max-width:1200px;margin:0 auto}
 .pf-top{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
 .pf-col-title{font-size:.6rem;font-weight:800;color:#4d5a8a;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
-.pf-link{display:block;font-size:.72rem;color:#7888bb;text-decoration:none;margin-bottom:7px;transition:color .2s}
+.pf-link{display:block;font-size:.72rem;color:#1479FF;text-decoration:none;margin-bottom:7px;transition:color .2s}
 .pf-link:hover{color:#e8eeff}
-.pf-affil-btn{display:inline-block;padding:5px 12px;border-radius:6px;font-size:.68rem;font-weight:700;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;text-decoration:none;margin-bottom:5px;transition:opacity .2s}
+.pf-affil-btn{display:inline-block;padding:5px 12px;border-radius:6px;font-size:.68rem;font-weight:700;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;text-decoration:none;margin-bottom:5px;transition:opacity .2s}
 .pf-affil-btn:hover{opacity:.85}
-.pf-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid #1a1a45;flex-wrap:wrap;gap:10px}
-.pf-logo{font-family:'Orbitron',monospace;font-size:.82rem;font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pf-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid #0D3A7A;flex-wrap:wrap;gap:10px}
+.pf-logo{font-family:'Poppins',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:2px;background:linear-gradient(135deg,#1479FF,#004DFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 #pfooter-copy{font-size:.6rem;color:#2d3055}
 .pf-lang-mini{display:flex;gap:3px;flex-wrap:wrap}
 @media(max-width:700px){.pf-top{grid-template-columns:1fr 1fr}}
@@ -1052,26 +1052,23 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 <nav id="predikta-nav">
   <div class="pnav-top">
     <a class="pnav-home" href="/">
-      <svg class="pnav-logo-svg" viewBox="0 0 48 48" fill="none">
+      <svg class="pnav-logo-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="nlg" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#4f6eff"/><stop offset="50%" stop-color="#8855ff"/><stop offset="100%" stop-color="#ffd700"/>
+          <linearGradient id="zg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#1479FF"/>
+            <stop offset="100%" stop-color="#004DFF"/>
           </linearGradient>
-          <linearGradient id="nlg2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#ffd700"/><stop offset="100%" stop-color="#ff9900"/>
+          <linearGradient id="zg2" x1="40" y1="0" x2="0" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#4DA6FF" stop-opacity=".7"/>
+            <stop offset="100%" stop-color="#0038CC" stop-opacity=".7"/>
           </linearGradient>
         </defs>
-        <circle cx="24" cy="24" r="22" stroke="url(#nlg)" stroke-width="1.5" fill="none" opacity=".5"/>
-        <circle cx="24" cy="24" r="15" stroke="url(#nlg)" stroke-width="1" fill="none" opacity=".3"/>
-        <circle cx="24" cy="24" r="7" fill="url(#nlg)" opacity=".9"/>
-        <line x1="24" y1="2" x2="24" y2="9" stroke="url(#nlg)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="24" y1="39" x2="24" y2="46" stroke="url(#nlg)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="2" y1="24" x2="9" y2="24" stroke="url(#nlg)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="39" y1="24" x2="46" y2="24" stroke="url(#nlg)" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M24 19l1.4 2.8h2.8l-2.3 1.8.9 2.9L24 24.9l-2.8 1.6.9-2.9-2.3-1.8h2.8z" fill="url(#nlg2)"/>
+        <!-- Z ribbon symbol -->
+        <path d="M6 7 L34 7 Q36 7 36 9 L36 13 Q36 15 34 15 L14 15 L34 25 Q36 26 36 28 L36 31 Q36 33 34 33 L6 33 Q4 33 4 31 L4 27 Q4 25 6 25 L26 25 L6 15 Q4 14 4 12 L4 9 Q4 7 6 7 Z" fill="url(#zg1)"/>
+        <path d="M14 15 L26 25" stroke="url(#zg2)" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
       <div>
-        <span class="pnav-logo-name">PREDIKTA</span>
+        <span class="pnav-logo-name">ZYNORIQ</span>
         <span class="pnav-logo-tag" id="pnav-tagline">${nt('tagline')}</span>
       </div>
     </a>
@@ -1095,7 +1092,7 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 
 <div id="pnav-mobile">
   <div class="pmob-header">
-    <div class="pmob-logo">PREDIKTA</div>
+    <div class="pmob-logo">ZYNORIQ</div>
     <button class="pmob-close" onclick="closeMobileMenu()">✕</button>
   </div>
   <div class="pmob-section">
@@ -1108,7 +1105,7 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
     ${mobileSvcs}
   </div>
   <div class="pmob-section" style="display:flex;gap:8px">
-    <button style="flex:1;padding:10px;border-radius:9px;border:1px solid #1a1a45;background:transparent;color:#7888bb;font-size:.74rem;font-weight:600;cursor:pointer" onclick="toggleTheme();closeMobileMenu()">${_dark?'☀️ Mode Clair':'🌙 Mode Sombre'}</button>
+    <button style="flex:1;padding:10px;border-radius:9px;border:1px solid #1a1a45;background:transparent;color:#1479FF;font-size:.74rem;font-weight:600;cursor:pointer" onclick="toggleTheme();closeMobileMenu()">${_dark?'☀️ Mode Clair':'🌙 Mode Sombre'}</button>
     <button style="flex:1;padding:10px;border-radius:9px;border:1px solid rgba(79,110,255,.3);background:rgba(79,110,255,.1);color:#88aaff;font-size:.74rem;font-weight:600;cursor:pointer" onclick="closeAssistant();window.setTimeout(()=>toggleAssistant(),100);closeMobileMenu()">💬 Assistant</button>
   </div>
   <div class="pmob-footer">
@@ -1123,7 +1120,7 @@ function buildFooter(){
   const l = window.PREDIKTA_LANG;
   const T = NAV_T[l] || NAV_T.en;
   return `
-<footer class="predikta-footer">
+<footer class="zynoriq-footer">
   <div class="pf-inner">
     <div class="pf-top">
       <div>
@@ -1172,7 +1169,7 @@ function buildFooter(){
       </div>
     </div>
     <div class="pf-bottom">
-      <div class="pf-logo">PREDIKTA</div>
+      <div class="pf-logo">ZYNORIQ</div>
       <div id="pfooter-copy">${(NAV_T[l]||NAV_T.en).footerCopy}</div>
       <div style="font-size:.6rem;color:#2d3055">v4.0 · ${new Date().getFullYear()}</div>
     </div>
@@ -1189,7 +1186,7 @@ function initRevealAnimations(){
   const selector = '.page>.hero, .page>.sec, .sec, .card, .plan-card, .state-card, .stat-box, .preview-box, .bottom-cta';
   const els = Array.from(document.querySelectorAll(selector)).filter(el=>{
     if(el.classList.contains('pr-reveal')) return false;
-    if(el.closest('#predikta-nav,#pnav-mobile,.predikta-footer,#passt-panel,#passt-bubble')) return false;
+    if(el.closest('#predikta-nav,#pnav-mobile,.zynoriq-footer,#passt-panel,#passt-bubble')) return false;
     return true;
   });
   if(!els.length) return;
@@ -1287,7 +1284,7 @@ async function initUserMenu(){
     mobSec.style.display = '';
     mobSec.innerHTML = `
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#4f6eff,#8855ff);color:#fff;font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">${initial}</div>
+  <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-size:.85rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0">${initial}</div>
   <div><div style="font-size:.82rem;font-weight:700;color:#e8eeff">${user.username || user.email}</div>
   <div style="font-size:.65rem;color:#4d5a8a">${user.email}${plan}</div></div>
 </div>
@@ -1328,10 +1325,19 @@ function inject(){
   applyTheme();
 
   // Clean old elements
-  ['#predikta-nav','#pnav-overlay','#pnav-mobile','#predikta-btt',
+  ['#predikta-nav','#pnav-overlay','#pnav-mobile','#zynoriq-btt',
    '#pfloat-home','#pfloat-notif','#passt-bubble','#passt-panel'].forEach(sel=>{
     document.querySelectorAll(sel).forEach(el=>el.remove());
   });
+
+  // 0. Inject ZYNORIQ global CSS (Poppins + brand colors)
+  if(!document.getElementById('zynoriq-css')){
+    const zLink = document.createElement('link');
+    zLink.id = 'zynoriq-css';
+    zLink.rel = 'stylesheet';
+    zLink.href = '/static/zynoriq.css';
+    document.head.appendChild(zLink);
+  }
 
   // 1. Inject NAV
   const navDiv = document.createElement('div');
@@ -1351,7 +1357,7 @@ function inject(){
   document.body.appendChild(assistDiv);
 
   // 4. Inject FOOTER (replace existing or append)
-  const existingFooter = document.querySelector('footer.predikta-footer, footer[data-pfooter]');
+  const existingFooter = document.querySelector('footer.zynoriq-footer, footer[data-pfooter]');
   if(existingFooter){
     const newF = document.createElement('div');
     newF.innerHTML = buildFooter();

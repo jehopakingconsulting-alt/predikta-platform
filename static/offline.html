@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Hors ligne — PREDIKTA</title>
+<title>Hors ligne — ZYNORIQ</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#04040f;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted2:#7888bb}
+:root{--bg:#04040f;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--text:#e8eeff;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(79,110,255,.06) 0%,transparent 60%)}
 .icon{font-size:3.5rem;margin-bottom:20px;animation:float 4s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.logo{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;background:linear-gradient(135deg,#4f6eff,#8855ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px}
+.logo{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;background:linear-gradient(135deg,#1479FF,#004DFF,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px}
 h1{font-size:clamp(1.2rem,4vw,1.6rem);font-weight:700;margin-bottom:10px}
 p{font-size:.84rem;color:var(--muted2);max-width:380px;line-height:1.7;margin-bottom:28px}
 .btn{padding:13px 32px;border-radius:12px;font-size:.85rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(79,110,255,.35)}
@@ -22,7 +22,7 @@ p{font-size:.84rem;color:var(--muted2);max-width:380px;line-height:1.7;margin-bo
 </head>
 <body>
 <div class="icon">📡</div>
-<div class="logo">PREDIKTA</div>
+<div class="logo">ZYNORIQ</div>
 <h1>Vous êtes hors ligne</h1>
 <p>Vérifiez votre connexion internet. Les données déjà chargées restent disponibles dans le cache.</p>
 <button class="btn" onclick="tryReconnect()">🔄 Réessayer</button>

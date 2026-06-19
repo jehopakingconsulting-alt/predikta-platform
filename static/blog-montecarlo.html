@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Simulation Monte Carlo et loterie : 50 000 tirages simulés — PREDIKTA</title>
-<meta name="description" content="Comment fonctionne la simulation Monte Carlo utilisée par PREDIKTA : 50 000 tirages simulés par analyse pour estimer la probabilité de chaque combinaison de loterie."/>
+<title>Simulation Monte Carlo et loterie : 50 000 tirages simulés — ZYNORIQ</title>
+<meta name="description" content="Comment fonctionne la simulation Monte Carlo utilisée par ZYNORIQ : 50 000 tirages simulés par analyse pour estimer la probabilité de chaque combinaison de loterie."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/blog/simulation-monte-carlo-loterie"/>
 <meta property="og:title" content="Simulation Monte Carlo et loterie : 50 000 tirages simulés pour affiner les probabilités"/>
-<meta property="og:description" content="Comment fonctionne la simulation Monte Carlo utilisée par PREDIKTA : 50 000 tirages simulés par analyse pour estimer la probabilité de chaque combinaison de loterie."/>
+<meta property="og:description" content="Comment fonctionne la simulation Monte Carlo utilisée par ZYNORIQ : 50 000 tirages simulés par analyse pour estimer la probabilité de chaque combinaison de loterie."/>
 <meta property="og:type" content="article"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/blog/simulation-monte-carlo-loterie"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/blog/simulation-monte-carlo-loterie"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .page{max-width:760px;margin:0 auto;padding:40px 24px 80px}
@@ -43,12 +43,12 @@ a.inline:hover{color:#aac0ff}
 <div class="page">
   <div class="breadcrumb"><a href="/blog">Blog</a> / Éducatif</div>
   <h1>Simulation Monte Carlo et loterie : 50 000 tirages simulés pour affiner les probabilités</h1>
-  <div class="meta">Guide PREDIKTA · Algorithmes</div>
+  <div class="meta">Guide ZYNORIQ · Algorithmes</div>
 
-  <p>La <strong>méthode Monte Carlo</strong> est une technique de simulation numérique utilisée dans des domaines aussi variés que la finance, la physique nucléaire ou la météorologie. Son principe : plutôt que de calculer une probabilité de façon purement théorique, on fait tourner un très grand nombre de simulations aléatoires et on observe la distribution des résultats obtenus. PREDIKTA exécute <strong>50 000 simulations</strong> à chaque analyse pour affiner ses estimations.</p>
+  <p>La <strong>méthode Monte Carlo</strong> est une technique de simulation numérique utilisée dans des domaines aussi variés que la finance, la physique nucléaire ou la météorologie. Son principe : plutôt que de calculer une probabilité de façon purement théorique, on fait tourner un très grand nombre de simulations aléatoires et on observe la distribution des résultats obtenus. ZYNORIQ exécute <strong>50 000 simulations</strong> à chaque analyse pour affiner ses estimations.</p>
 
-  <h2>Comment PREDIKTA applique Monte Carlo à la loterie</h2>
-  <p>Pour un jeu donné (Pick 3, Pick 4, Powerball...), PREDIKTA construit d'abord une distribution de probabilités pour chaque position, basée sur l'historique des tirages de l'État sélectionné (fréquence, retard, tendances chaud/froid). Ensuite, l'algorithme <strong>tire aléatoirement 50 000 combinaisons</strong> selon ces distributions pondérées, plutôt que selon une distribution uniforme pure.</p>
+  <h2>Comment ZYNORIQ applique Monte Carlo à la loterie</h2>
+  <p>Pour un jeu donné (Pick 3, Pick 4, Powerball...), ZYNORIQ construit d'abord une distribution de probabilités pour chaque position, basée sur l'historique des tirages de l'État sélectionné (fréquence, retard, tendances chaud/froid). Ensuite, l'algorithme <strong>tire aléatoirement 50 000 combinaisons</strong> selon ces distributions pondérées, plutôt que selon une distribution uniforme pure.</p>
   <p>Le résultat est un classement des combinaisons et chiffres qui apparaissent le plus fréquemment dans ces 50 000 simulations pondérées — une façon de « stress-tester » statistiquement les tendances observées avant de les intégrer au score consensus final.</p>
 
   <h2>Pourquoi simuler plutôt que calculer directement ?</h2>
@@ -56,7 +56,7 @@ a.inline:hover{color:#aac0ff}
 
   <h2>Les limites à garder en tête</h2>
   <p>Monte Carlo affine une estimation à partir de données historiques — il ne « prédit » rien au sens strict. <strong>Chaque tirage réel reste un événement indépendant et aléatoire</strong>, généré par un tirage physique ou un générateur certifié, sans mémoire des tirages précédents. La simulation aide à visualiser quelles combinaisons sont statistiquement cohérentes avec les tendances historiques observées — pas à garantir un résultat futur.</p>
-  <p>C'est pourquoi PREDIKTA combine systématiquement Monte Carlo avec les chaînes de Markov, l'analyse de Fourier, le Machine Learning et l'analyse de fréquence/gap, dans un score consensus pondéré et transparent (Mode Transparence).</p>
+  <p>C'est pourquoi ZYNORIQ combine systématiquement Monte Carlo avec les chaînes de Markov, l'analyse de Fourier, le Machine Learning et l'analyse de fréquence/gap, dans un score consensus pondéré et transparent (Mode Transparence).</p>
 
   <div class="cta-box">
     <div style="font-size:.85rem;color:var(--text);font-weight:700">Voir la simulation Monte Carlo en action</div>
@@ -65,14 +65,14 @@ a.inline:hover{color:#aac0ff}
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Avertissement :</strong> PREDIKTA est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Jouez de manière responsable et dans les limites de vos moyens.
+    ⚠️ <strong>Avertissement :</strong> ZYNORIQ est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Jouez de manière responsable et dans les limites de vos moyens.
   </div>
 
   <div class="related">
     <h3>À lire aussi</h3>
-    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances</a>
+    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances</a>
     <a class="inline" href="/blog/guide-analyse-powerball-ia">Guide complet : comprendre l'analyse Powerball par intelligence artificielle</a>
-    <a class="inline" href="/about">À propos des algorithmes PREDIKTA</a>
+    <a class="inline" href="/about">À propos des algorithmes ZYNORIQ</a>
   </div>
 </div>
 </body></html>

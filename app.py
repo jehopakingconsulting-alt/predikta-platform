@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Flask Server  v2.0
+﻿"""
+ZYNORIQ Intelligence™ — Flask Server  v2.0
 """
 
 from flask import Flask, jsonify, request, send_from_directory, make_response
@@ -397,7 +397,7 @@ def _maybe_send_daily_push():
         with open(_PUSH_LAST_SENT_FILE, "w") as f:
             f.write(today)
         _send_push_to_all(
-            "🎰 PREDIKTA — Nouveaux résultats !",
+            "🎰 ZYNORIQ — Nouveaux résultats !",
             "Les tirages du jour sont disponibles. Consulte tes prédictions maintenant.",
             "/all-results",
         )
@@ -447,7 +447,7 @@ def api_push_send():
     if not secret or request.args.get("secret") != secret:
         return jsonify({"error": "Forbidden"}), 403
 
-    title = request.args.get("title", "🎰 PREDIKTA")
+    title = request.args.get("title", "🎰 ZYNORIQ")
     body  = request.args.get("body", "Les résultats du jour sont disponibles !")
     url   = request.args.get("url", "/all-results")
     result = _send_push_to_all(title, body, url)
@@ -842,7 +842,7 @@ _TRACK_RECORD_CACHE_TTL = int(os.environ.get("PREDIKTA_TRACK_RECORD_CACHE_SEC", 
 def api_track_record():
     """
     Transparency endpoint: for each state/tod, replay the last N draws and
-    show what PREDIKTA's TOP PICK would have suggested (using only data
+    show what ZYNORIQ's TOP PICK would have suggested (using only data
     available before that draw) vs. what was actually drawn.
     """
     import analyzer
@@ -917,7 +917,7 @@ ACCURACY_WINDOWS = [7, 30, 90]
 @app.route("/api/accuracy")
 def api_accuracy():
     """
-    PREDIKTA Accuracy Score: for each state, replay the last 7/30/90 draws
+    ZYNORIQ Accuracy Score: for each state, replay the last 7/30/90 draws
     per draw-time and compute straight & box hit rates vs. the random-chance
     baseline (~0.1% straight, ~0.6% box for Pick 3).
     """
@@ -2278,7 +2278,7 @@ def api_pick5_report(state_code, slug):
     })
 
 
-# PREDIKTA BUSINESS AI — Routes
+# ZYNORIQ BUSINESS AI — Routes
 # ═══════════════════════════════════════════════════════════
 
 @app.route("/bizai")
@@ -2868,7 +2868,7 @@ def admin_page():
 
 if __name__ == "__main__":
     print("=" * 45)
-    print("  PREDIKTA  v4.0  - READY")
+    print("  ZYNORIQ Intelligence  v4.0  - READY")
     print("=" * 45)
     print("  Home        : http://localhost:5000")
     print("  Analyzer    : http://localhost:5000/analyze")

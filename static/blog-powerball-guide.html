@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Guide complet : comprendre l'analyse Powerball par IA — PREDIKTA</title>
-<meta name="description" content="Guide complet sur l'analyse Powerball par PREDIKTA : fréquence des boules blanches et du Powerball, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<title>Guide complet : comprendre l'analyse Powerball par IA — ZYNORIQ</title>
+<meta name="description" content="Guide complet sur l'analyse Powerball par ZYNORIQ : fréquence des boules blanches et du Powerball, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/blog/guide-analyse-powerball-ia"/>
 <meta property="og:title" content="Guide complet : comprendre l'analyse Powerball par intelligence artificielle"/>
-<meta property="og:description" content="Guide complet sur l'analyse Powerball par PREDIKTA : fréquence des boules blanches et du Powerball, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
+<meta property="og:description" content="Guide complet sur l'analyse Powerball par ZYNORIQ : fréquence des boules blanches et du Powerball, retard (gap), tendances chaud/froid, Markov, Monte Carlo et Machine Learning."/>
 <meta property="og:type" content="article"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/blog/guide-analyse-powerball-ia"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://ZYNORIQ-tez2.onrender.com/blog/guide-analyse-powerball-ia"/>
+<meta property="og:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://ZYNORIQ-tez2.onrender.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .page{max-width:760px;margin:0 auto;padding:40px 24px 80px}
@@ -43,21 +43,21 @@ a.inline:hover{color:#aac0ff}
 <div class="page">
   <div class="breadcrumb"><a href="/blog">Blog</a> / Guides par jeu</div>
   <h1>Guide complet : comprendre l'analyse Powerball par intelligence artificielle</h1>
-  <div class="meta">Guide PREDIKTA · Powerball</div>
+  <div class="meta">Guide ZYNORIQ · Powerball</div>
 
-  <p>Le <strong>Powerball</strong> est l'une des loteries multi-États les plus suivies aux États-Unis : 5 boules blanches tirées parmi 69, plus une boule rouge « Powerball » tirée parmi 26. PREDIKTA propose une analyse statistique dédiée sur la page <a class="inline" href="/powerball-analysis">Analyse Powerball</a>. Voici comment cette analyse est construite.</p>
+  <p>Le <strong>Powerball</strong> est l'une des loteries multi-États les plus suivies aux États-Unis : 5 boules blanches tirées parmi 69, plus une boule rouge « Powerball » tirée parmi 26. ZYNORIQ propose une analyse statistique dédiée sur la page <a class="inline" href="/powerball-analysis">Analyse Powerball</a>. Voici comment cette analyse est construite.</p>
 
   <h2>Deux ensembles de chiffres, deux analyses distinctes</h2>
-  <p>Le Powerball combine deux tirages indépendants : les <strong>5 boules blanches</strong> (1 à 69) et la <strong>boule rouge Powerball</strong> (1 à 26). PREDIKTA traite ces deux ensembles séparément, car ils n'ont pas la même plage de valeurs ni la même dynamique statistique.</p>
+  <p>Le Powerball combine deux tirages indépendants : les <strong>5 boules blanches</strong> (1 à 69) et la <strong>boule rouge Powerball</strong> (1 à 26). ZYNORIQ traite ces deux ensembles séparément, car ils n'ont pas la même plage de valeurs ni la même dynamique statistique.</p>
 
   <h2>Fréquence et retard (gap) par boule</h2>
-  <p>Pour chacun des 69 numéros blancs et des 26 numéros rouges, PREDIKTA calcule la <strong>fréquence historique d'apparition</strong> et le <strong>retard</strong> (nombre de tirages depuis la dernière sortie). Ces deux métriques sont la base de l'analyse chaud/froid.</p>
+  <p>Pour chacun des 69 numéros blancs et des 26 numéros rouges, ZYNORIQ calcule la <strong>fréquence historique d'apparition</strong> et le <strong>retard</strong> (nombre de tirages depuis la dernière sortie). Ces deux métriques sont la base de l'analyse chaud/froid.</p>
 
   <h2>Chaînes de Markov appliquées aux numéros</h2>
   <p>Comme pour le Pick 3, des <a class="inline" href="/blog/chaines-markov-loterie">chaînes de Markov</a> sont calculées pour détecter d'éventuelles transitions statistiquement significatives entre tirages successifs — toujours en gardant à l'esprit que chaque tirage Powerball est un événement indépendant.</p>
 
   <h2>Simulation Monte Carlo sur l'espace des combinaisons</h2>
-  <p>L'espace des combinaisons possibles pour 5 numéros parmi 69 est immense (plus de 11 millions de combinaisons). La <a class="inline" href="/blog/simulation-monte-carlo-loterie">simulation Monte Carlo</a> de PREDIKTA exécute 50 000 tirages pondérés selon les distributions de fréquence/retard calculées, afin d'identifier les numéros qui ressortent le plus souvent dans ces simulations pondérées.</p>
+  <p>L'espace des combinaisons possibles pour 5 numéros parmi 69 est immense (plus de 11 millions de combinaisons). La <a class="inline" href="/blog/simulation-monte-carlo-loterie">simulation Monte Carlo</a> de ZYNORIQ exécute 50 000 tirages pondérés selon les distributions de fréquence/retard calculées, afin d'identifier les numéros qui ressortent le plus souvent dans ces simulations pondérées.</p>
 
   <h2>Machine Learning et analyse de Fourier</h2>
   <p>Les modèles XGBoost, Random Forest et Gradient Boosting sont entraînés sur l'historique des tirages Powerball pour détecter des relations non-linéaires, tandis que l'analyse de Fourier recherche des cycles périodiques dans la série temporelle des numéros sortis.</p>
@@ -72,14 +72,14 @@ a.inline:hover{color:#aac0ff}
   </div>
 
   <div class="disclaimer">
-    ⚠️ <strong>Avertissement :</strong> PREDIKTA est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Powerball n'est pas affilié à PREDIKTA.
+    ⚠️ <strong>Avertissement :</strong> ZYNORIQ est un outil d'analyse statistique à des fins éducatives et de divertissement. Les prédictions ne garantissent aucun gain. Chaque tirage de loterie est un événement aléatoire et indépendant. Jouez de manière responsable et dans les limites de vos moyens. Powerball n'est pas affilié à ZYNORIQ.
   </div>
 
   <div class="related">
     <h3>À lire aussi</h3>
-    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment PREDIKTA analyse les tendances</a>
+    <a class="inline" href="/blog/chaines-markov-loterie">Les chaînes de Markov et la loterie : comment ZYNORIQ analyse les tendances</a>
     <a class="inline" href="/blog/simulation-monte-carlo-loterie">Simulation Monte Carlo et loterie : 50 000 tirages simulés</a>
-    <a class="inline" href="/blog/guide-predictions-pick3-ia">Guide complet : comment PREDIKTA analyse et prédit les tirages Pick 3</a>
+    <a class="inline" href="/blog/guide-predictions-pick3-ia">Guide complet : comment ZYNORIQ analyse et prédit les tirages Pick 3</a>
   </div>
 </div>
 </body></html>

@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Prédictions Pick 4 / Cash 4 par IA — PREDIKTA</title>
+<title>Prédictions Pick 4 / Cash 4 par IA — ZYNORIQ</title>
 <meta name="description" content="Prédictions Pick 4 (Win 4, Cash 4, Daily 4, Play 4) par IA : fréquence par position, retard, tendances chaud/froid, Markov. Suggestions algorithmiques par état."/>
 <link rel="canonical" href="https://predikta-tez2.onrender.com/pick4-predictions"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <script src="/nav.js" defer></script>
 <style>
-:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#4f6eff;--accent2:#8855ff;--gold:#ffd700;--green:#22e87a;--red:#ff4444;--text:#e8eeff;--muted:#4d5a8a;--muted2:#7888bb}
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--green:#22e87a;--red:#ff4444;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(79,110,255,.08) 0%,transparent 60%),radial-gradient(ellipse 50% 30% at 70% 70%,rgba(136,85,255,.07) 0%,transparent 60%)}
@@ -211,7 +211,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
   </div>
 </div>
 
-<div class="disclaimer" id="disclaimer">⚠️ Le Pick 4 est un jeu de hasard. La probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse statistique. PREDIKTA fournit des outils éducatifs sans garantie de gain. <a href="/responsible-gaming" style="color:var(--accent)">Jeu Responsable</a>.</div>
+<div class="disclaimer" id="disclaimer">⚠️ Le Pick 4 est un jeu de hasard. La probabilité d'un tirage exact reste d'environ 1 sur 10 000, peu importe l'analyse statistique. ZYNORIQ fournit des outils éducatifs sans garantie de gain. <a href="/responsible-gaming" style="color:var(--accent)">Jeu Responsable</a>.</div>
 
 </div><!-- /page -->
 
@@ -623,7 +623,7 @@ function renderMLConsensus4(el, consensus, draws){
         <div style="display:flex;gap:5px;margin-bottom:8px">${balls}</div>
         <div style="font-size:.9rem;font-weight:700;letter-spacing:4px;color:#fff;margin-bottom:5px">${s.combo}</div>
         <div style="height:3px;border-radius:2px;background:rgba(255,255,255,.1);margin-bottom:5px">
-          <div style="height:100%;border-radius:2px;width:${s.confidence_pct}%;background:linear-gradient(90deg,#4f6eff,#8855ff)"></div>
+          <div style="height:100%;border-radius:2px;width:${s.confidence_pct}%;background:linear-gradient(90deg,#1479FF,#004DFF)"></div>
         </div>
         <div style="font-size:.58rem;color:var(--muted)">Score: ${s.consensus_score} · ${s.confidence_pct}%</div>
         ${renderPick4Bet(bet)}
