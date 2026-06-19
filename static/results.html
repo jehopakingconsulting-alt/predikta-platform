@@ -140,6 +140,7 @@ header{
   animation:livePulse 1.5s ease-in-out infinite;flex-shrink:0;
 }
 @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,232,122,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(34,232,122,0)}}
+@keyframes _ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}60%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
 .live-text{color:#22e87a;font-weight:700;flex-shrink:0}
 .live-scroll{flex:1;overflow:hidden;white-space:nowrap}
 .live-scroll span{color:var(--muted2)}
@@ -1079,6 +1080,99 @@ function formatSchedule(schedule){
   if(!schedule || !schedule.length) return '';
   return schedule.map(s=>`${s.tod}: ${s.time}`).join(' · ');
 }
+
+// ── Prochain tirage : calcul du temps restant ─────────────────────────────
+function _parseDrawTime(timeStr){
+  // timeStr ex: "12:30 PM ET", "1:30 PM ET", "6:59 PM CT"
+  const m = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  if(!m) return null;
+  let h = parseInt(m[1]), min = parseInt(m[2]);
+  const ap = m[3].toUpperCase();
+  if(ap==='PM' && h!==12) h += 12;
+  if(ap==='AM' && h===12) h = 0;
+  // Détecte la timezone (ET/CT/MT/PT)
+  const tzMatch = timeStr.match(/\b(ET|CT|MT|PT)\b/i);
+  const offsets = {ET:-5, CT:-6, MT:-7, PT:-8}; // heure standard (approx)
+  const tzOff   = offsets[(tzMatch?.[1]||'ET').toUpperCase()] ?? -5;
+  // Heure locale actuelle
+  const now     = new Date();
+  const utcNow  = now.getTime() + now.getTimezoneOffset()*60000;
+  const drawMs  = new Date(utcNow + tzOff*3600000);
+  drawMs.setHours(h, min, 0, 0);
+  let diff = drawMs - (utcNow + tzOff*3600000);
+  if(diff < -30*60000) diff += 86400000; // tirage déjà passé → demain
+  return diff; // ms
+}
+
+function _nextDraw(schedule){
+  if(!schedule?.length) return null;
+  let best = null;
+  for(const s of schedule){
+    const ms = _parseDrawTime(s.time);
+    if(ms == null) continue;
+    if(ms < 0) continue; // passé
+    if(best===null || ms < best.ms) best = {tod: s.tod, time: s.time, ms};
+  }
+  return best;
+}
+
+function _fmtCountdown(ms){
+  const h = Math.floor(ms/3600000);
+  const m = Math.floor((ms%3600000)/60000);
+  if(h > 0) return `${h}h ${m}m`;
+  return `${m} min`;
+}
+
+// Injecte les CTA dans les cartes après rendu
+function _injectDrawCTAs(){
+  if(!_statesData) return;
+  document.querySelectorAll('.state-card[data-code]').forEach(card=>{
+    const code = card.dataset.code;
+    const v    = _statesData[code];
+    if(!v?.schedule) return;
+    const next = _nextDraw(v.schedule);
+    if(!next || next.ms > 3*3600000) return; // > 3h → pas de CTA
+    // Évite doublon
+    if(card.querySelector('._draw-cta')) return;
+    const urgent  = next.ms < 30*60000;  // < 30 min
+    const soonish = next.ms < 90*60000;  // < 90 min
+    const label   = _fmtCountdown(next.ms);
+    const cta = document.createElement('div');
+    cta.className = '_draw-cta';
+    cta.style.cssText = 'padding:0 12px 10px';
+    cta.innerHTML = urgent
+      ? `<a href="/analyze?state=${code}&tod=${next.tod}" onclick="event.stopPropagation()"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#dc2626,#ef4444);animation:_ctaPulse 1.5s infinite;letter-spacing:.3px">
+          🔴 TIRAGE DANS ${label} — Analyser ${code} ${next.tod}
+        </a>`
+      : `<a href="/analyze?state=${code}&tod=${next.tod}" onclick="event.stopPropagation()"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;border-radius:10px;font-size:.72rem;font-weight:700;text-decoration:none;color:#a78bfa;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.3)">
+          ⚡ Analyser ${code} ${next.tod} — dans ${label}
+        </a>`;
+    card.appendChild(cta);
+  });
+}
+
+// Ajoute data-code aux cartes pour pouvoir les retrouver
+const _origRenderGrid = renderGrid;
+function renderGrid(data, filterFn){
+  _origRenderGrid(data, filterFn);
+  // Injecte data-code sur chaque carte après rendu
+  setTimeout(()=>{
+    document.querySelectorAll('.state-card').forEach(card=>{
+      const onclick = card.getAttribute('onclick')||'';
+      const m = onclick.match(/openDetail\('(\w+)'\)/);
+      if(m) card.dataset.code = m[1];
+    });
+    _injectDrawCTAs();
+  }, 50);
+}
+
+// Rafraîchit les CTA toutes les minutes (countdown live)
+setInterval(()=>{
+  document.querySelectorAll('._draw-cta').forEach(el=>el.remove());
+  _injectDrawCTAs();
+}, 60000);
 
 // ══════════════════════════════════════
 // AUTO-REFRESH LIVE TICKER
