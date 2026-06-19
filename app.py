@@ -513,6 +513,22 @@ def _auto_update_loop():
             except Exception as _we:
                 print(f"  [auto-update][weights] error: {_we}")
 
+            # Recalibrate Pick 4 dynamic weights
+            try:
+                from weight_calibrator4 import calibrate4_if_needed
+                from scraper4 import load_csv4, HOT_PICK4_STATES
+                for _st4 in HOT_PICK4_STATES:
+                    _draws4 = load_csv4(_st4)
+                    if not _draws4:
+                        continue
+                    _tods4 = list({d.get("tod", "Evening") for d in _draws4})
+                    for _tod4 in _tods4:
+                        _tod_draws4 = [d for d in _draws4 if d.get("tod", "Evening") == _tod4]
+                        if len(_tod_draws4) >= 70:
+                            calibrate4_if_needed(_st4, _tod4, _tod_draws4)
+            except Exception as _we4:
+                print(f"  [auto-update][weights4] error: {_we4}")
+
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             try:
                 _verify_draw_schedule()

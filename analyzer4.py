@@ -7,6 +7,11 @@ import math
 from collections import Counter, defaultdict
 from scraper4 import load_csv4
 
+try:
+    from weight_calibrator4 import calibrate4_if_needed as _calib4
+except ImportError:
+    _calib4 = None
+
 DIGITS = [str(i) for i in range(10)]
 POSITIONS = ["d1", "d2", "d3", "d4"]
 
@@ -104,16 +109,26 @@ def pair_frequencies4(draws: list[dict]) -> dict:
     }
 
 
-def weighted_suggestions4(draws: list[dict], top_n: int = 5) -> list[dict]:
+def weighted_suggestions4(draws: list[dict], top_n: int = 5,
+                          state_code: str = None, tod: str = None) -> list[dict]:
     """
     Generate top N suggested 4-digit combinations using:
     - Per-position frequency weight
     - Overdue (gap) bonus
     - Markov next-state probability
+    Weights are dynamically calibrated per state+TOD when available.
     Iterates all 10^4 = 10,000 combinations.
     """
     if not draws:
         return []
+
+    # Load dynamically calibrated weights if available
+    W = {"freq": 0.34, "gap": 0.28, "markov": 0.38}
+    if _calib4 and state_code:
+        try:
+            W = _calib4(state_code, tod or "all", draws)
+        except Exception:
+            pass
 
     last = draws[0]
 
@@ -122,27 +137,31 @@ def weighted_suggestions4(draws: list[dict], top_n: int = 5) -> list[dict]:
     markov = {pos: markov_transitions4(draws, pos) for pos in POSITIONS}
     hc = hot_cold4(draws, 30)
 
+    # Pre-compute raw component scores per digit/position for speed
+    freq_s = {pos: {d: freq[pos][d]["pct"] / 10 for d in DIGITS} for pos in POSITIONS}
+    gap_s = {}
+    for d in DIGITS:
+        g = gaps[d]
+        if g["avg_gap"] and g["current_gap"] > g["avg_gap"]:
+            gap_s[d] = min(g["current_gap"] / g["avg_gap"], 3.0)
+        else:
+            gap_s[d] = 0.0
+    markov_s = {}
+    for pos in POSITIONS:
+        last_digit = last[pos]
+        mk = markov[pos].get(last_digit, {})
+        markov_s[pos] = {d: mk.get(d, 0) / 100 * 5 for d in DIGITS}
+
     scores = {}
     for d1 in DIGITS:
         for d2 in DIGITS:
             for d3 in DIGITS:
                 for d4 in DIGITS:
-                    score = 0.0
                     combo = [d1, d2, d3, d4]
-
-                    for digit, pos in zip(combo, POSITIONS):
-                        score += freq[pos][digit]["pct"] / 10
-
-                        g = gaps[digit]
-                        if g["avg_gap"] and g["current_gap"] > g["avg_gap"]:
-                            overdue_ratio = g["current_gap"] / g["avg_gap"]
-                            score += min(overdue_ratio, 3.0)
-
-                        last_digit = last[pos]
-                        mk = markov[pos].get(last_digit, {})
-                        score += mk.get(digit, 0) / 100 * 5
-
-                    scores[(d1, d2, d3, d4)] = score
+                    f = sum(freq_s[pos][dg] for dg, pos in zip(combo, POSITIONS))
+                    g = sum(gap_s[dg] for dg in combo)
+                    m = sum(markov_s[pos][dg] for dg, pos in zip(combo, POSITIONS))
+                    scores[(d1, d2, d3, d4)] = W["freq"] * f + W["gap"] * g + W["markov"] * m
 
     top = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_n]
     return [
@@ -236,7 +255,7 @@ def full_report4(state_code: str, draws: list[dict] = None) -> dict:
         "gaps": gap_analysis4(draws),
         "pairs": pair_frequencies4(draws),
         "markov_d1": markov_transitions4(draws, "d1"),
-        "suggestions": weighted_suggestions4(draws, top_n=10),
+        "suggestions": weighted_suggestions4(draws, top_n=10, state_code=state_code),
     }
 
 
