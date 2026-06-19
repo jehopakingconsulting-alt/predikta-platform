@@ -677,7 +677,7 @@ def run_all_models(draws: list[dict]) -> dict:
         ml_preds = predictor.predict_top(X_last, top_n=15)
 
     # Monte Carlo
-    mc_preds = monte_carlo(draws, n_simulations=50000)
+    mc_preds = monte_carlo(draws, n_simulations=8000)
 
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}

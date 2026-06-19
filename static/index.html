@@ -1765,7 +1765,7 @@ async function loadReport(){
     const domQS = excludeDom.length ? `&exclude_dom=${excludeDom.join(',')}` : '';
     const controller = new AbortController();
     // Timeout progressif : 40s → 55s → 70s (le 3e essai laisse le temps au cold start Render)
-    const timeouts = [40000, 55000, 70000];
+    const timeouts = [40000, 60000, 90000];
     const fetchTimer = setTimeout(()=>controller.abort(), timeouts[Math.min(_loadReportRetry, 2)]);
     const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`, {signal:controller.signal});
     clearTimeout(fetchTimer);

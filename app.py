@@ -458,7 +458,7 @@ def api_push_send():
 # Au lieu de cliquer manuellement sur "Mettre à jour", un thread de fond
 # rafraîchit périodiquement les résultats de tous les États (LotteryPost &
 # autres sources configurées dans scraper.py).
-_AUTO_UPDATE_INTERVAL = int(os.environ.get("PREDIKTA_AUTOUPDATE_SEC", 15 * 60))  # 15 min par défaut
+_AUTO_UPDATE_INTERVAL = int(os.environ.get("PREDIKTA_AUTOUPDATE_SEC", 25 * 60))  # 25 min par défaut
 _auto_update_state = {"last_run": None, "last_status": "idle", "running": False}
 
 
@@ -1552,7 +1552,7 @@ def api_contact():
 # le même rapport à chaque clic. Invalidé automatiquement après quelques
 # minutes ou dès qu'un nouveau scraping change les données.
 _REPORT_CACHE = {}
-_REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 10 * 60))  # 10 min
+_REPORT_CACHE_TTL = int(os.environ.get("PREDIKTA_REPORT_CACHE_SEC", 30 * 60))  # 30 min
 
 # États les plus consultés — pré-calculés en arrière-plan après chaque
 # scraping pour que le 1er clic utilisateur tombe déjà en cache (évite
