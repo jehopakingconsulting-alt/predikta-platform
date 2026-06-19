@@ -322,42 +322,12 @@ def fetch_state(state_code: str, n_months: int = 12) -> list[dict]:
     except Exception as e:
         print(f"  [{state_code}] lotteryusa.com fetch failed: {e}")
 
-    # Repli sur lotterypost.com (historique plus profond, mais souvent
-    # bloque par Cloudflare sur les IP de datacenter).
+    # Fallback: si lotteryusa.com n'a rien retourné, essayer lotterypost.com.
+    # NOTE: lotterypost.com est bloqué par Cloudflare sur les IP de datacenter
+    # (Render) — ce repli ne fonctionne qu'en local ou sur des IP résidentielles.
+    # Sur Render, lotteryusa.com est la seule source fiable.
     if not draws:
         draws = fetch_months(state_code, cfg["slug"], n_months)
-    else:
-        existing = _existing_draw_count(state_code)
-        seen = {f"{d['date']}_{d['tod']}" for d in draws}
-        need_backfill = existing + len(seen) < MIN_HISTORY_DRAWS
-
-        # Verifier si certaines sessions attendues sont absentes de lotteryusa.
-        # Ex: GA a 3 sessions (Midday/Evening/Night) mais lotteryusa ne publie
-        # que Evening+Night — Midday doit etre recupere via lotterypost.
-        if not need_backfill:
-            try:
-                from draw_schedule import DRAW_SCHEDULE
-                expected_tods = {s["tod"] for s in DRAW_SCHEDULE.get(state_code, [])}
-                found_tods    = {d["tod"] for d in draws}
-                missing_tods  = expected_tods - found_tods
-                if missing_tods:
-                    print(f"  [{state_code}] sessions manquantes sur lotteryusa: {missing_tods} — backfill lotterypost.com")
-                    need_backfill = True
-            except Exception:
-                pass
-
-        if need_backfill:
-            print(f"  [{state_code}] backfill via lotterypost.com")
-            backfill = fetch_months(state_code, cfg["slug"], max(n_months, 12))
-            added = 0
-            for d in backfill:
-                key = f"{d['date']}_{d['tod']}"
-                if key not in seen:
-                    draws.append(d)
-                    seen.add(key)
-                    added += 1
-            if added:
-                print(f"  [{state_code}] +{added} tirages ajoutés via lotterypost.com")
 
     # Merge extra official-source draws (Morning/Day/Night) when available —
     # lotterypost.com only republishes Midday/Evening for most states.

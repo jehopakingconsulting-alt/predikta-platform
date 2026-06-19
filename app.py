@@ -458,8 +458,51 @@ def api_push_send():
 # Au lieu de cliquer manuellement sur "Mettre à jour", un thread de fond
 # rafraîchit périodiquement les résultats de tous les États (LotteryPost &
 # autres sources configurées dans scraper.py).
-_AUTO_UPDATE_INTERVAL = int(os.environ.get("PREDIKTA_AUTOUPDATE_SEC", 30 * 60))  # 30 min par défaut
+_AUTO_UPDATE_INTERVAL = int(os.environ.get("PREDIKTA_AUTOUPDATE_SEC", 15 * 60))  # 15 min par défaut
 _auto_update_state = {"last_run": None, "last_status": "idle", "running": False}
+
+
+def _retry_stale_states():
+    """
+    After each scrape cycle, detect states whose latest CSV draw is >18h old
+    despite daily draws being expected, and immediately retry scraping them.
+    Prevents permanently stuck draws when lotteryusa.com is temporarily slow.
+    """
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+    import csv as _csv
+
+    now_et = datetime.now(ZoneInfo("America/New_York"))
+    stale_threshold = now_et - timedelta(hours=18)
+    stale_threshold_str = stale_threshold.strftime("%Y-%m-%d")
+
+    stale = []
+    for code in STATES:
+        path = os.path.join("data", f"{code.lower()}.csv")
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, newline="", encoding="utf-8") as f:
+                rows = list(_csv.DictReader(f))
+            if not rows:
+                continue
+            latest_date = max(r["date"] for r in rows)
+            if latest_date <= stale_threshold_str:
+                stale.append(code)
+        except Exception:
+            continue
+
+    if stale:
+        print(f"  [stale-retry] {len(stale)} états bloqués: {stale} — re-scrape immédiat")
+        for code in stale:
+            try:
+                draws = fetch_state(code, n_months=1)
+                if draws:
+                    save_csv(code, draws)
+                    print(f"  [stale-retry] [{code}] {len(draws)} tirages récupérés")
+            except Exception as e:
+                print(f"  [stale-retry] [{code}] erreur: {e}")
+            time.sleep(0.5)
 
 def _auto_update_loop():
     # Laisse le serveur démarrer et passer le health-check avant de lancer
@@ -470,6 +513,12 @@ def _auto_update_loop():
         try:
             _auto_update_state["running"] = True
             scrape_all(n_months=1)   # rafraîchissement léger périodique (1 mois glissant)
+
+            # Re-scrape ciblé pour les états avec des tirages bloqués (>18h sans mise à jour)
+            try:
+                _retry_stale_states()
+            except Exception as _se:
+                print(f"  [stale-retry] error: {_se}")
 
             # Rafraîchit les données Pick 4 en même temps
             try:

@@ -11,8 +11,13 @@ scraper.parse_draws — so it can be merged via scraper.save_csv().
 import requests
 import urllib3
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# GA draws are in Eastern Time — use ET to avoid the UTC+1 day bug
+# (e.g. Night draw at 11:34 PM ET = 03:34 UTC next day → wrong date if UTC used)
+_EASTERN = ZoneInfo("America/New_York")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -76,7 +81,7 @@ def fetch_ga_cash3(n_chunks: int = 6) -> list[dict]:
                 continue
 
             ts = d.get("drawTime", 0) / 1000
-            dt = datetime.fromtimestamp(ts, tz=timezone.utc)
+            dt = datetime.fromtimestamp(ts, tz=_EASTERN)
             iso_date = dt.strftime("%Y-%m-%d")
             tod = tod_map.get(d.get("name", "").upper(), "Evening")
 
