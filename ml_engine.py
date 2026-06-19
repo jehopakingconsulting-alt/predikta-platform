@@ -30,10 +30,9 @@ _ENTROPY_FN = None
 def _ensure_sklearn_models():
     global _RF_CLS, _GBM_CLS, _XGB_CLS
     if _RF_CLS is None:
-        from sklearn.ensemble import RandomForestClassifier
+        from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
         from xgboost import XGBClassifier
-        _RF_CLS, _XGB_CLS = RandomForestClassifier, XGBClassifier
-        _GBM_CLS = None
+        _RF_CLS, _GBM_CLS, _XGB_CLS = RandomForestClassifier, GradientBoostingClassifier, XGBClassifier
     return _RF_CLS, _GBM_CLS, _XGB_CLS
 
 
@@ -244,12 +243,10 @@ def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
 
 class MLPredictor:
     def __init__(self):
-        RandomForestClassifier, _gbm_unused, XGBClassifier = _ensure_sklearn_models()
+        RandomForestClassifier, GradientBoostingClassifier, XGBClassifier = _ensure_sklearn_models()
         self.models = {
-            # Pick3 est quasi-aléatoire — 40 arbres convergent aussi bien que
-            # 100+. n_jobs=1 évite le thread-overhead sur 0.5 CPU Render.
-            # GBM supprimé (le plus lent, non parallélisable, gain marginal).
             "rf":  [RandomForestClassifier(n_estimators=40, max_depth=6, random_state=42, n_jobs=1) for _ in range(3)],
+            "gbm": [GradientBoostingClassifier(n_estimators=40, max_depth=3, learning_rate=0.1, random_state=42) for _ in range(3)],
             "xgb": [XGBClassifier(n_estimators=40, max_depth=4, learning_rate=0.1, verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
         }
         self.trained = False
@@ -271,7 +268,7 @@ class MLPredictor:
             return {d: 0.1 for d in DIGITS}
 
         probas = []
-        weights = {"rf": 0.50, "xgb": 0.50}
+        weights = {"rf": 0.35, "gbm": 0.30, "xgb": 0.35}
 
         for name, model_list in self.models.items():
             model = model_list[position]
@@ -679,7 +676,7 @@ def run_all_models(draws: list[dict], with_lstm: bool = False) -> dict:
         ml_preds = predictor.predict_top(X_last, top_n=15)
 
     # Monte Carlo
-    mc_preds = monte_carlo(draws, n_simulations=8000)
+    mc_preds = monte_carlo(draws, n_simulations=50000)
 
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}
