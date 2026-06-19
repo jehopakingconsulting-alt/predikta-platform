@@ -700,30 +700,55 @@ def _draw_watcher_loop():
             secs_to_next = _seconds_to_next_draw()
             min_to_next  = secs_to_next / 60
 
+            # ── Sauvegarder les prédictions PRÉ-TIRAGE (fenêtre -10 à -2 min) ─
+            try:
+                from draw_schedule import DRAW_SCHEDULE as _DS, _parse_schedule_time as _PST
+                from zoneinfo import ZoneInfo as _ZI
+                from live_track_record import save_prediction as _save_pred, get_pending_predictions
+                _pre_saved = {f"{p['state']}_{p['tod']}_{p['date']}" for p in get_pending_predictions()}
+                for _st, _sessions in _DS.items():
+                    for _sess in _sessions:
+                        try:
+                            _h, _m, _tzn = _PST(_sess["time"])
+                            _tz = _ZI(_tzn)
+                            _nl = now_utc.astimezone(_tz)
+                            _dl = _nl.replace(hour=_h, minute=_m, second=0, microsecond=0)
+                            if _dl <= _nl:
+                                _dl += timedelta(days=1)
+                            _mins_to = (_dl.astimezone(timezone.utc) - now_utc).total_seconds() / 60
+                            _today = now_utc.strftime("%Y-%m-%d")
+                            _pkey  = f"{_st}_{_sess['tod']}_{_today}"
+                            # Fenêtre pré-tirage : 10 → 2 min avant
+                            if 2 <= _mins_to <= 10 and _pkey not in _pre_saved:
+                                _rep = _build_report(_st, _sess["tod"])
+                                if _rep:
+                                    _save_pred(_st, _sess["tod"], _rep)
+                        except Exception:
+                            pass
+            except Exception as _lte:
+                print(f"[draw-watcher][pre-draw-save] error: {_lte}")
+
             # ── États dont le tirage vient de passer (fenêtre post-tirage) ──
-            # Chercher dans 0-45 min après le tirage
-            due_rapid  = get_states_due_now(buffer_min=1,  window_min=15)  # 1-16 min après
-            due_normal = get_states_due_now(buffer_min=16, window_min=29)  # 16-45 min après
+            due_rapid  = get_states_due_now(buffer_min=1,  window_min=15)
+            due_normal = get_states_due_now(buffer_min=16, window_min=29)
 
             to_scrape_now = []
             with _draw_watcher_lock:
                 for state, tod in due_rapid + due_normal:
                     key = f"{state}_{tod}"
                     last = _draw_watcher_triggered.get(key, 0)
-                    # Cycle minimum : 3 min en mode rapide, 45 min en mode normal
                     min_cycle = 3 * 60 if (state, tod) in due_rapid else 45 * 60
                     if now_epoch - last > min_cycle:
                         _draw_watcher_triggered[key] = now_epoch
                         to_scrape_now.append((state, (state, tod) in due_rapid))
 
-            # ── Scraping ciblé ──────────────────────────────────────────────
+            # ── Scraping ciblé + vérification Track Record ──────────────────
             if to_scrape_now:
                 unique = list(dict.fromkeys(s for s, _ in to_scrape_now))
                 rapid_set = {s for s, rapid in to_scrape_now if rapid}
                 print(f"[draw-watcher] scraping {unique} (rapide: {list(rapid_set)})")
                 for st in unique:
                     try:
-                        # Source 0 = officiel en mode rapide, sinon chaîne complète
                         src = ["official", "lotteryusa", "usamega"] if st in rapid_set \
                               else ["lotteryusa", "usamega", "lotterypost"]
                         res = scrape_state(st, sources=src)
@@ -734,6 +759,19 @@ def _draw_watcher_loop():
                                 _REPORT_CACHE.pop(k, None)
                             _LATEST_CACHE["data"] = None
                             print(f"  [draw-watcher][{st}] +{res['added']} via {res['source']}")
+                            # ── Vérification Track Record Live ──────────────
+                            try:
+                                from live_track_record import record_result as _rec_res
+                                from scraper import load_csv as _lcsv
+                                _draws = _lcsv(st)
+                                if _draws:
+                                    # Prendre les tirages ajoutés (les plus récents)
+                                    _tod_map = {s_tod: s_tod for _, s_tod in due_rapid + due_normal if _ == st}
+                                    for _new_d in _draws[:res["added"]]:
+                                        _tod_of_draw = _new_d.get("tod", "Evening")
+                                        _rec_res(st, _tod_of_draw, _new_d)
+                            except Exception as _tre:
+                                print(f"  [draw-watcher][track-record][{st}] error: {_tre}")
                     except Exception as e:
                         print(f"  [draw-watcher][{st}] error: {e}")
                     time.sleep(0.5)
@@ -780,6 +818,29 @@ def api_autoupdate_status():
         "interval_sec": _AUTO_UPDATE_INTERVAL,
         **_auto_update_state,
     })
+
+@app.route("/api/track-record/live")
+def api_track_record_live():
+    """
+    Track record PROSPECTIF — prédictions sauvegardées AVANT chaque tirage
+    puis comparées au résultat réel. Différent du backtest /api/track-record.
+    """
+    state = request.args.get("state") or None
+    days  = min(90, max(1, int(request.args.get("days", 30))))
+    try:
+        from live_track_record import get_stats
+        return jsonify(get_stats(state=state, days=days))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/track-record/live/pending")
+def api_track_record_pending():
+    """Prédictions sauvegardées en attente de vérification (pré-tirage)."""
+    try:
+        from live_track_record import get_pending_predictions
+        return jsonify({"pending": get_pending_predictions()})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/api/scraper/status")
 def api_scraper_status():

@@ -59,6 +59,35 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
 .cta-box p{font-size:.85rem;color:var(--muted2);margin-bottom:16px}
 .cta-btn{padding:12px 28px;border-radius:10px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,var(--accent),#004DFF);color:#fff;border:none;cursor:pointer;text-decoration:none;display:inline-block}
 
+/* ── Live Track Record ── */
+.live-tr-block{border:1px solid rgba(34,204,136,.35);border-radius:16px;background:linear-gradient(135deg,rgba(34,204,136,.06),rgba(79,110,255,.04));padding:20px;margin-bottom:28px}
+.live-tr-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.live-tr-title{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--green)}
+.live-badge{font-size:.6rem;background:rgba(34,204,136,.2);color:var(--green);border:1px solid rgba(34,204,136,.4);border-radius:6px;padding:2px 8px;font-weight:800;letter-spacing:1px;animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.6}}
+.live-tr-sub{font-size:.72rem;color:var(--muted2);margin-left:auto}
+.live-kpi-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.live-kpi{flex:1;min-width:90px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.live-kpi .kv{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:var(--gold)}
+.live-kpi .kl{font-size:.6rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.live-kpi.green .kv{color:var(--green)}
+.live-recent{display:flex;flex-direction:column;gap:6px}
+.live-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.02);border:1px solid var(--border);font-size:.73rem;flex-wrap:wrap}
+.live-row.hit-s{border-color:rgba(255,215,0,.4);background:rgba(255,215,0,.06)}
+.live-row.hit-b{border-color:rgba(34,204,136,.3);background:rgba(34,204,136,.04)}
+.live-state{font-weight:800;color:var(--text);min-width:30px}
+.live-tod{color:var(--muted2);min-width:52px;font-size:.65rem}
+.live-combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:var(--muted2);min-width:60px}
+.live-arrow{color:var(--muted);font-size:.8rem}
+.live-actual{font-family:'Orbitron',monospace;letter-spacing:2px;color:var(--text);font-weight:700;min-width:60px}
+.live-result{margin-left:auto;font-size:.7rem;font-weight:800}
+.live-result.rs{color:var(--gold)}
+.live-result.rb{color:var(--green)}
+.live-result.rn{color:var(--muted)}
+.live-rank{font-size:.65rem;color:var(--muted2);margin-left:4px}
+.live-empty{text-align:center;padding:20px;color:var(--muted2);font-size:.78rem}
+.live-building{text-align:center;padding:16px;color:var(--muted2);font-size:.78rem;font-style:italic}
+
 /* ── Filter bar ── */
 .filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   background:var(--card);border:1px solid var(--border);border-radius:12px;
@@ -82,6 +111,19 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
   <div class="hero">
     <h1 data-i18n="title">Historique des Suggestions</h1>
     <p class="subtitle" data-i18n="subtitle">La transparence avant tout : nos suggestions TOP PICK passées comparées aux résultats réels</p>
+  </div>
+
+  <!-- ── LIVE TRACK RECORD ── -->
+  <div class="live-tr-block" id="liveTrBlock">
+    <div class="live-tr-header">
+      <span class="live-tr-title">📡 Track Record Live</span>
+      <span class="live-badge">TEMPS RÉEL</span>
+      <span class="live-tr-sub" id="liveTrSub">Chargement…</span>
+    </div>
+    <div class="live-kpi-row" id="liveTrKpi"></div>
+    <div class="live-recent" id="liveTrRecent">
+      <div class="live-building">⏳ Les données s'accumulent au fil des tirages…<br>Chaque prédiction générée avant un tirage est vérifiée automatiquement.</div>
+    </div>
   </div>
 
   <div class="method-box">
@@ -118,6 +160,75 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
   </div>
 </div>
 <script>
+// ── Live Track Record ────────────────────────────────────────────────────
+async function loadLiveTrackRecord(){
+  try{
+    const r = await fetch('/api/track-record/live?days=30');
+    const d = await r.json();
+    renderLiveTR(d);
+  }catch(e){
+    document.getElementById('liveTrSub').textContent = 'Indisponible';
+  }
+}
+
+function renderLiveTR(d){
+  const sub  = document.getElementById('liveTrSub');
+  const kpi  = document.getElementById('liveTrKpi');
+  const rec  = document.getElementById('liveTrRecent');
+
+  sub.textContent = `${d.n} vérifications · 30 derniers jours`;
+
+  if(d.n === 0){
+    kpi.innerHTML = '';
+    rec.innerHTML = `<div class="live-building">
+      ⏳ Aucune vérification encore — les prédictions sont sauvegardées automatiquement 5-10 min avant chaque tirage, puis comparées au résultat réel.<br><br>
+      Les données s'accumuleront au fil des tirages d'aujourd'hui.
+    </div>`;
+    return;
+  }
+
+  kpi.innerHTML = `
+    <div class="live-kpi">
+      <div class="kv">${d.n}</div>
+      <div class="kl">Tirages vérifiés</div>
+    </div>
+    <div class="live-kpi ${d.straight_rate >= 5 ? 'green' : ''}">
+      <div class="kv">${d.straight_rate}%</div>
+      <div class="kl">Exact (ordre)</div>
+    </div>
+    <div class="live-kpi ${d.box_rate >= 15 ? 'green' : ''}">
+      <div class="kv">${d.box_rate}%</div>
+      <div class="kl">Box (désordre)</div>
+    </div>
+    <div class="live-kpi green">
+      <div class="kv">${d.top10_box_rate}%</div>
+      <div class="kl">Dans le Top 10</div>
+    </div>
+  `;
+
+  const todT = {Morning:'Matin',Midday:'Midi',Evening:'Soir',Night:'Nuit'};
+  const rows = (d.recent || []).slice(0,10).map(r=>{
+    const pred = (r.consensus_top10 || ['?'])[0];
+    const cls  = r.hit_straight ? 'hit-s' : (r.hit_box ? 'hit-b' : '');
+    const res  = r.hit_straight
+      ? `<span class="live-result rs">✅ EXACT</span><span class="live-rank">#${r.consensus_straight_rank}</span>`
+      : r.hit_box
+        ? `<span class="live-result rb">📦 BOX</span><span class="live-rank">#${r.consensus_box_rank}</span>`
+        : `<span class="live-result rn">❌</span>`;
+    return `<div class="live-row ${cls}">
+      <span class="live-state">${r.state}</span>
+      <span class="live-tod">${todT[r.tod]||r.tod}</span>
+      <span class="live-combo">${pred.replace(/-/g,'·')}</span>
+      <span class="live-arrow">→</span>
+      <span class="live-actual">${(r.actual||'').replace(/-/g,'·')}</span>
+      ${res}
+      <span style="font-size:.62rem;color:var(--muted2);margin-left:auto">${r.date}</span>
+    </div>`;
+  }).join('');
+
+  rec.innerHTML = rows || `<div class="live-empty">Aucun résultat récent</div>`;
+}
+
 const TOD_T = {
   fr:{Morning:"Matin",Midday:"Midi",Day:"Jour",Evening:"Soir",Night:"Nuit"},
   en:{Morning:"Morning",Midday:"Midday",Day:"Day",Evening:"Evening",Night:"Night"},
@@ -396,6 +507,7 @@ window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   CUR_LANG = T[navLang] ? navLang : 'fr';
   fetchTrackRecord(CUR_N).then(()=>{ applyLang(CUR_LANG); });
+  loadLiveTrackRecord();
 });
 </script>
 </body></html>
