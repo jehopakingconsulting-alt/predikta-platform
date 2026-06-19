@@ -425,6 +425,7 @@ footer{
       <button class="qf-btn" onclick="quickFilter('today',this)">🟢 Résultats d'aujourd'hui</button>
       <button class="qf-btn" onclick="quickFilter('south',this)">🌴 Sud</button>
       <button class="qf-btn" onclick="quickFilter('northeast',this)">🗽 Nord-Est</button>
+      <button class="qf-btn" id="pushBtn" onclick="togglePushNotif()" title="Recevoir une notif dès qu'un tirage tombe">🔔 Alertes</button>
     </div>
   </div>
 
@@ -910,21 +911,89 @@ function renderDetailDays(days){
   document.getElementById('detailContent').innerHTML = html;
 }
 
-// ── Auto-update silencieux : rafraîchit les données sans clic manuel ──────
-// Le serveur scrape déjà périodiquement en arrière-plan (LotteryPost & autres
-// sources). Ici on recharge simplement l'affichage à intervalle régulier et
-// quand l'État détaillé change, pour que l'utilisateur voie toujours les
-// données les plus fraîches.
-let _autoRefreshTimer = null;
-function startAutoRefresh(){
-  if(_autoRefreshTimer) return;
-  _autoRefreshTimer = setInterval(()=>{
-    loadAll();
-    if(_detailState) loadDetailMonth();
-  }, 5 * 60 * 1000); // toutes les 5 minutes
+// ── SSE Live Stream : réception instantanée des nouveaux tirages ──────────
+let _sseConn = null;
+let _sseFallbackTimer = null;
+
+function _showDrawToast(d){
+  // Crée un toast en bas-droite
+  let wrap = document.getElementById('_toastWrap');
+  if(!wrap){
+    wrap = document.createElement('div');
+    wrap.id = '_toastWrap';
+    wrap.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column-reverse;gap:10px;pointer-events:none';
+    document.body.appendChild(wrap);
+  }
+  const digits = `${d.d1}-${d.d2}-${d.d3}`;
+  const todIcon = d.tod === 'Midday' ? '☀️' : '🌙';
+  const toast = document.createElement('div');
+  toast.style.cssText = 'background:#1e1e2e;border:1.5px solid #7c3aed;border-radius:12px;padding:12px 18px;color:#e2e8f0;font-size:13px;box-shadow:0 8px 32px #0008;max-width:280px;animation:_toastIn .25s ease;pointer-events:auto';
+  toast.innerHTML = `<div style="font-weight:700;color:#a78bfa;margin-bottom:4px">🎯 Nouveau tirage !</div>
+    <div>${d.state_name || d.state} ${todIcon} ${d.tod}</div>
+    <div style="font-size:22px;font-weight:800;letter-spacing:4px;color:#fff;margin:6px 0">${digits}</div>
+    <div style="font-size:11px;color:#94a3b8">${d.date} · via ${d.source||'auto'}</div>`;
+  // Ajouter style keyframe si manquant
+  if(!document.getElementById('_toastStyle')){
+    const s = document.createElement('style');
+    s.id = '_toastStyle';
+    s.textContent = '@keyframes _toastIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}';
+    document.head.appendChild(s);
+  }
+  wrap.appendChild(toast);
+  // Cliquer ferme le toast
+  toast.onclick = () => toast.remove();
+  // Auto-remove après 8 secondes
+  setTimeout(() => toast.remove(), 8000);
 }
-document.addEventListener('DOMContentLoaded', startAutoRefresh);
-if(document.readyState !== 'loading') startAutoRefresh();
+
+function _refreshStateCard(state){
+  // Met à jour uniquement la carte de l'état concerné sans recharger tout
+  if(!_statesData) return;
+  fetch(`/api/results/latest?n=3`)
+    .then(r=>r.json())
+    .then(latest=>{
+      if(!latest[state]) return;
+      // Fusionne dans les données existantes
+      _statesData[state] = Object.assign({}, _statesData[state], { draws: latest[state] });
+      renderGrid(_statesData, getActiveFilterFn());
+    })
+    .catch(()=> loadAll()); // fallback complet si endpoint absent
+}
+
+function startLiveStream(){
+  if(_sseConn){ try{ _sseConn.close(); }catch(e){} }
+  clearTimeout(_sseFallbackTimer);
+
+  const es = new EventSource('/api/results/stream');
+  _sseConn = es;
+
+  es.addEventListener('new_draw', e => {
+    try{
+      const d = JSON.parse(e.data);
+      _showDrawToast(d);
+      _refreshStateCard(d.state);
+      if(_detailState === d.state) loadDetailMonth();
+    }catch(err){}
+  });
+
+  es.onopen = () => {
+    // SSE connecté : annule le fallback polling si actif
+    clearTimeout(_sseFallbackTimer);
+    console.log('[SSE] connecté au flux de tirages');
+  };
+
+  es.onerror = () => {
+    es.close();
+    _sseConn = null;
+    // Reconnexion automatique après 15 s
+    _sseFallbackTimer = setTimeout(startLiveStream, 15000);
+    // Pendant l'absence de SSE, un seul refresh immédiat
+    loadAll();
+  };
+}
+
+document.addEventListener('DOMContentLoaded', startLiveStream);
+if(document.readyState !== 'loading') startLiveStream();
 
 async function scrapeDetail(){
   if(!_detailState) return;
@@ -1020,6 +1089,86 @@ setInterval(()=>{
 
 // Keyboard: ESC closes panel
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDetail(); });
+
+// ── Push Notifications ────────────────────────────────────────────────────
+let _pushSub = null;
+
+async function _urlB64ToUint8Array(base64String){
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const b64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw = atob(b64);
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+
+async function _getPushSub(){
+  if(!('serviceWorker' in navigator) || !('PushManager' in window)) return null;
+  const reg = await navigator.serviceWorker.ready;
+  return await reg.pushManager.getSubscription();
+}
+
+async function _updatePushBtn(){
+  const btn = document.getElementById('pushBtn');
+  if(!btn) return;
+  if(!('PushManager' in window)){
+    btn.style.display = 'none'; return;
+  }
+  const sub = await _getPushSub();
+  _pushSub = sub;
+  if(sub){
+    btn.textContent = '🔔 Alertes ON';
+    btn.style.background = 'linear-gradient(135deg,#7c3aed,#4f46e5)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#7c3aed';
+  } else {
+    btn.textContent = '🔔 Alertes';
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+}
+
+async function togglePushNotif(){
+  if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+    alert('Votre navigateur ne supporte pas les notifications push.');
+    return;
+  }
+  const existing = await _getPushSub();
+  if(existing){
+    // Désabonnement
+    await existing.unsubscribe();
+    await fetch('/api/push/unsubscribe', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({endpoint: existing.endpoint})
+    });
+    _updatePushBtn();
+    return;
+  }
+  // Demande de permission
+  const perm = await Notification.requestPermission();
+  if(perm !== 'granted'){
+    alert('Permission refusée. Activez les notifications dans les paramètres du navigateur.');
+    return;
+  }
+  // Récupère la clé VAPID publique
+  const kRes  = await fetch('/api/push/vapid-key');
+  const kData = await kRes.json();
+  const appServerKey = await _urlB64ToUint8Array(kData.publicKey);
+  // Abonnement
+  const reg = await navigator.serviceWorker.ready;
+  const sub = await reg.pushManager.subscribe({
+    userVisibleOnly: true, applicationServerKey: appServerKey
+  });
+  // Envoie l'abonnement au serveur
+  await fetch('/api/push/subscribe', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(sub.toJSON())
+  });
+  _updatePushBtn();
+}
+
+// Initialise le bouton au chargement
+document.addEventListener('DOMContentLoaded', _updatePushBtn);
+if(document.readyState !== 'loading') _updatePushBtn();
 
 // Init
 setLang(LANG);

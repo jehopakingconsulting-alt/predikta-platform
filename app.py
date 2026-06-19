@@ -2,14 +2,14 @@
 ZYNORIQ Intelligence™ — Flask Server  v2.0
 """
 
-from flask import Flask, jsonify, request, send_from_directory, make_response
+from flask import Flask, jsonify, request, send_from_directory, make_response, Response, stream_with_context
 from flask.json.provider import DefaultJSONProvider
 try:
     from flask_compress import Compress
 except ImportError:
     Compress = None
 import numpy as np
-import os, json, re, threading, time
+import os, json, re, threading, time, queue
 from collections import Counter, defaultdict
 from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
@@ -759,19 +759,45 @@ def _draw_watcher_loop():
                                 _REPORT_CACHE.pop(k, None)
                             _LATEST_CACHE["data"] = None
                             print(f"  [draw-watcher][{st}] +{res['added']} via {res['source']}")
-                            # ── Vérification Track Record Live ──────────────
+                            # ── Broadcast SSE + Track Record Live ───────────
                             try:
-                                from live_track_record import record_result as _rec_res
                                 from scraper import load_csv as _lcsv
                                 _draws = _lcsv(st)
                                 if _draws:
-                                    # Prendre les tirages ajoutés (les plus récents)
-                                    _tod_map = {s_tod: s_tod for _, s_tod in due_rapid + due_normal if _ == st}
                                     for _new_d in _draws[:res["added"]]:
                                         _tod_of_draw = _new_d.get("tod", "Evening")
-                                        _rec_res(st, _tod_of_draw, _new_d)
-                            except Exception as _tre:
-                                print(f"  [draw-watcher][track-record][{st}] error: {_tre}")
+                                        # SSE → tous les clients connectés
+                                        _broadcast_sse("new_draw", {
+                                            "state":      st,
+                                            "state_name": STATES.get(st, {}).get("name", st),
+                                            "tod":        _tod_of_draw,
+                                            "d1": _new_d["d1"], "d2": _new_d["d2"], "d3": _new_d["d3"],
+                                            "date":       _new_d["date"],
+                                            "source":     res["source"],
+                                        })
+                                        # Track Record Live
+                                        _tr_result = None
+                                        try:
+                                            from live_track_record import record_result as _rec_res
+                                            _tr_result = _rec_res(st, _tod_of_draw, _new_d)
+                                        except Exception as _tre:
+                                            print(f"  [draw-watcher][track-record][{st}] error: {_tre}")
+                                        # Push notification
+                                        try:
+                                            from push_notify import send_draw_notification as _send_pn
+                                            _send_pn(
+                                                state=st,
+                                                state_name=STATES.get(st, {}).get("name", st),
+                                                tod=_tod_of_draw,
+                                                d1=str(_new_d["d1"]),
+                                                d2=str(_new_d["d2"]),
+                                                d3=str(_new_d["d3"]),
+                                                tr_result=_tr_result,
+                                            )
+                                        except Exception as _pe:
+                                            print(f"  [draw-watcher][push][{st}] error: {_pe}")
+                            except Exception as _se:
+                                print(f"  [draw-watcher][sse+tr][{st}] error: {_se}")
                     except Exception as e:
                         print(f"  [draw-watcher][{st}] error: {e}")
                     time.sleep(0.5)
@@ -819,6 +845,62 @@ def api_autoupdate_status():
         **_auto_update_state,
     })
 
+# ── SSE — Server-Sent Events broadcaster ─────────────────────────────────
+_sse_subscribers: list[queue.Queue] = []
+_sse_lock = threading.Lock()
+
+def _broadcast_sse(event_type: str, data: dict):
+    """Pousse un événement SSE à tous les clients connectés."""
+    payload = json.dumps(data, ensure_ascii=False, default=str)
+    with _sse_lock:
+        dead = []
+        for q in _sse_subscribers:
+            try:
+                q.put_nowait({"event": event_type, "payload": payload})
+            except queue.Full:
+                dead.append(q)
+        for q in dead:
+            try: _sse_subscribers.remove(q)
+            except ValueError: pass
+
+@app.route("/api/results/stream")
+def api_results_stream():
+    """
+    SSE endpoint — pousse les nouveaux tirages en temps réel vers le navigateur.
+    Événements :
+      connected   → confirmation de connexion
+      new_draw    → {state, tod, d1, d2, d3, date, state_name}
+      heartbeat   → keep-alive toutes les 25 s
+    """
+    def generate():
+        client_q = queue.Queue(maxsize=30)
+        with _sse_lock:
+            _sse_subscribers.append(client_q)
+        try:
+            yield "data: {\"type\":\"connected\"}\n\n"
+            while True:
+                try:
+                    msg = client_q.get(timeout=25)
+                    yield f"event: {msg['event']}\ndata: {msg['payload']}\n\n"
+                except queue.Empty:
+                    yield ": heartbeat\n\n"
+        except GeneratorExit:
+            pass
+        finally:
+            with _sse_lock:
+                try: _sse_subscribers.remove(client_q)
+                except ValueError: pass
+
+    return Response(
+        stream_with_context(generate()),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",   # désactive le buffering Nginx / Render
+            "Connection": "keep-alive",
+        }
+    )
+
 @app.route("/api/track-record/live")
 def api_track_record_live():
     """
@@ -841,6 +923,25 @@ def api_track_record_pending():
         return jsonify({"pending": get_pending_predictions()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/push/vapid-key")
+def api_push_vapid_key():
+    from push_notify import VAPID_PUBLIC_KEY
+    return jsonify({"publicKey": VAPID_PUBLIC_KEY})
+
+@app.route("/api/push/subscribe", methods=["POST"])
+def api_push_subscribe():
+    sub = request.get_json(silent=True) or {}
+    from push_notify import add_subscription
+    ok = add_subscription(sub)
+    return jsonify({"ok": ok})
+
+@app.route("/api/push/unsubscribe", methods=["POST"])
+def api_push_unsubscribe():
+    body = request.get_json(silent=True) or {}
+    from push_notify import remove_subscription
+    remove_subscription(body.get("endpoint", ""))
+    return jsonify({"ok": True})
 
 @app.route("/api/scraper/status")
 def api_scraper_status():
