@@ -1669,6 +1669,9 @@ def results_page(): return send_from_directory("static", "results.html")
 @app.route("/pro")
 def pro_page():    return send_from_directory("static", "pro.html")
 
+@app.route("/onboarding")
+def onboarding_page(): return send_from_directory("static", "onboarding.html")
+
 @app.route("/about")
 def about_page():  return send_from_directory("static", "about.html")
 

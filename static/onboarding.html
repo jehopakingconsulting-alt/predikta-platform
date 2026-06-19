@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bienvenue sur PREDIKTA 🎯</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#04040f;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 20% 20%,rgba(79,110,255,.1) 0%,transparent 60%),
+             radial-gradient(ellipse 50% 40% at 80% 70%,rgba(124,58,237,.08) 0%,transparent 60%)}
+
+.wrap{width:100%;max-width:560px;position:relative;z-index:1}
+
+/* Progress bar */
+.progress-bar{display:flex;align-items:center;gap:0;margin-bottom:40px;justify-content:center}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;transition:all .3s;flex-shrink:0}
+.step-dot.done{background:linear-gradient(135deg,#22e87a,#00cc66);color:#000}
+.step-dot.active{background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;box-shadow:0 0 20px rgba(124,58,237,.5)}
+.step-dot.pending{background:rgba(255,255,255,.06);color:#475569;border:1.5px solid rgba(255,255,255,.1)}
+.step-line{flex:1;height:2px;max-width:60px;background:rgba(255,255,255,.06);transition:background .3s}
+.step-line.done{background:linear-gradient(90deg,#22e87a,#4f6eff)}
+
+/* Cards */
+.card{background:rgba(11,11,34,.95);border:1px solid rgba(79,110,255,.2);border-radius:20px;padding:36px;text-align:center;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card-icon{font-size:3rem;margin-bottom:16px}
+.card-title{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;background:linear-gradient(135deg,#6688ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.card-sub{font-size:.85rem;color:#64748b;line-height:1.7;margin-bottom:28px}
+
+/* State selector */
+.state-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px;max-height:280px;overflow-y:auto}
+.state-btn{padding:8px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;font-size:.7rem;font-weight:700;color:#94a3b8;transition:all .2s;text-align:center}
+.state-btn:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.1);color:#c4b5fd}
+.state-btn.selected{border-color:#7c3aed;background:rgba(124,58,237,.2);color:#a78bfa;box-shadow:0 0 12px rgba(124,58,237,.25)}
+
+/* TOD selector */
+.tod-row{display:flex;gap:10px;margin-bottom:24px;justify-content:center}
+.tod-btn{flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);cursor:pointer;font-size:.8rem;font-weight:700;color:#94a3b8;transition:all .2s}
+.tod-btn:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.1)}
+.tod-btn.selected{border-color:#7c3aed;background:rgba(124,58,237,.2);color:#a78bfa}
+
+/* Main button */
+.btn-main{width:100%;padding:14px;border-radius:14px;border:none;font-size:.95rem;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;box-shadow:0 6px 24px rgba(79,110,255,.35);transition:all .2s;letter-spacing:.3px}
+.btn-main:hover{box-shadow:0 8px 32px rgba(79,110,255,.5);transform:translateY(-1px)}
+.btn-main:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-skip{display:block;margin-top:14px;font-size:.72rem;color:#475569;cursor:pointer;background:none;border:none;text-decoration:underline}
+.btn-skip:hover{color:#94a3b8}
+
+/* Step 3 — checklist */
+.check-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left}
+.check-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.check-icon{font-size:1.2rem;flex-shrink:0}
+.check-body{flex:1}
+.check-body strong{font-size:.82rem;font-weight:700;color:#e2e8f0;display:block}
+.check-body span{font-size:.7rem;color:#475569}
+.check-status{font-size:.8rem;font-weight:800;color:#22e87a;flex-shrink:0}
+
+/* Step 1 welcome */
+.welcome-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.wb{padding:4px 14px;border-radius:20px;font-size:.7rem;font-weight:600}
+.wb1{background:rgba(34,232,122,.1);border:1px solid rgba(34,232,122,.3);color:#22e87a}
+.wb2{background:rgba(79,110,255,.1);border:1px solid rgba(79,110,255,.3);color:#88aaff}
+.wb3{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:#ffd700}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Progress -->
+  <div class="progress-bar" id="progressBar">
+    <div class="step-dot active" id="dot1">1</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-dot pending" id="dot2">2</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-dot pending" id="dot3">3</div>
+  </div>
+
+  <!-- Step 1 : Bienvenue -->
+  <div class="card" id="step1">
+    <div class="card-icon">🎯</div>
+    <div class="card-title">Bienvenue sur PREDIKTA !</div>
+    <div class="card-sub">Votre compte est prêt. En 2 minutes, on configure votre expérience pour que vous ayez les meilleures prédictions dès ce soir.</div>
+    <div class="welcome-badges">
+      <span class="wb wb1">✅ Compte activé</span>
+      <span class="wb wb2">⚡ 7 algorithmes actifs</span>
+      <span class="wb wb3">🔔 Alertes disponibles</span>
+    </div>
+    <button class="btn-main" onclick="goStep(2)">Commencer la configuration →</button>
+  </div>
+
+  <!-- Step 2 : Choisir État + TOD -->
+  <div class="card" id="step2" style="display:none">
+    <div class="card-icon">🗺️</div>
+    <div class="card-title">Votre État favori</div>
+    <div class="card-sub">Choisissez l'État que vous jouez le plus. On pré-configurera vos analyses pour ce marché.</div>
+
+    <div class="state-grid" id="stateGrid"></div>
+
+    <div class="tod-row">
+      <button class="tod-btn selected" id="todMidday" onclick="selectTod('Midday')">☀️ Midday</button>
+      <button class="tod-btn" id="todEvening" onclick="selectTod('Evening')">🌙 Evening</button>
+    </div>
+
+    <button class="btn-main" id="btnStep2" onclick="goStep(3)">Confirmer mon État →</button>
+    <button class="btn-skip" onclick="skipState()">Passer cette étape</button>
+  </div>
+
+  <!-- Step 3 : Récap + actions -->
+  <div class="card" id="step3" style="display:none">
+    <div class="card-icon">🚀</div>
+    <div class="card-title">Vous êtes prêt !</div>
+    <div class="card-sub" id="step3Sub">Voici ce que vous pouvez faire maintenant :</div>
+
+    <div class="check-list">
+      <div class="check-item">
+        <span class="check-icon">🧠</span>
+        <div class="check-body">
+          <strong>Lancer votre première analyse</strong>
+          <span>Résultats en 30 secondes avec le Top 10 des combos</span>
+        </div>
+        <span class="check-status">→</span>
+      </div>
+      <div class="check-item">
+        <span class="check-icon">🔔</span>
+        <div class="check-body">
+          <strong>Activer les alertes push</strong>
+          <span>Notification instantanée dès que votre tirage tombe</span>
+        </div>
+        <span class="check-status" id="pushStatus">→</span>
+      </div>
+      <div class="check-item">
+        <span class="check-icon">📊</span>
+        <div class="check-body">
+          <strong>Consulter les résultats live</strong>
+          <span>44 États · Mis à jour en temps réel</span>
+        </div>
+        <span class="check-status">→</span>
+      </div>
+    </div>
+
+    <button class="btn-main" id="btnAnalyze" onclick="launchAnalysis()">⚡ Lancer ma première analyse</button>
+    <button class="btn-skip" onclick="location.href='/results'">Aller aux résultats d'abord</button>
+  </div>
+
+</div>
+
+<script>
+const STATES = [
+  {code:'NY',name:'New York',flag:'🗽'},{code:'FL',name:'Florida',flag:'🌴'},
+  {code:'GA',name:'Georgia',flag:'🍑'},{code:'TX',name:'Texas',flag:'⭐'},
+  {code:'NJ',name:'New Jersey',flag:'🌊'},{code:'TN',name:'Tennessee',flag:'🎸'},
+  {code:'CA',name:'California',flag:'☀️'},{code:'PA',name:'Pennsylvania',flag:'🔔'},
+  {code:'IL',name:'Illinois',flag:'🏙️'},{code:'OH',name:'Ohio',flag:'🌻'},
+  {code:'VA',name:'Virginia',flag:'🦅'},{code:'NC',name:'N. Carolina',flag:'🏔️'},
+  {code:'MD',name:'Maryland',flag:'🦀'},{code:'MI',name:'Michigan',flag:'🚗'},
+  {code:'MA',name:'Massachusetts',flag:'🦞'},{code:'CT',name:'Connecticut',flag:'⚓'},
+  {code:'MO',name:'Missouri',flag:'🎶'},{code:'LA',name:'Louisiana',flag:'🎺'},
+  {code:'AR',name:'Arkansas',flag:'💎'},{code:'SC',name:'S. Carolina',flag:'🌴'},
+  {code:'KY',name:'Kentucky',flag:'🐎'},{code:'IN',name:'Indiana',flag:'🏎️'},
+  {code:'CO',name:'Colorado',flag:'🏔️'},{code:'WI',name:'Wisconsin',flag:'🧀'},
+  {code:'MN',name:'Minnesota',flag:'❄️'},{code:'WV',name:'W. Virginia',flag:'⛰️'},
+  {code:'DE',name:'Delaware',flag:'💙'},{code:'DC',name:'DC',flag:'🏛️'},
+];
+
+let _state = localStorage.getItem('_ob_state') || '';
+let _tod   = localStorage.getItem('_ob_tod')   || 'Midday';
+
+// Render state grid
+document.getElementById('stateGrid').innerHTML = STATES.map(s=>`
+  <button class="state-btn${_state===s.code?' selected':''}" id="sb_${s.code}" onclick="selectState('${s.code}')">
+    <div style="font-size:1.1rem">${s.flag}</div>
+    <div>${s.code}</div>
+  </button>`).join('');
+
+if(_tod === 'Evening'){
+  document.getElementById('todEvening').classList.add('selected');
+  document.getElementById('todMidday').classList.remove('selected');
+}
+
+function selectState(code){
+  document.querySelectorAll('.state-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('sb_'+code)?.classList.add('selected');
+  _state = code;
+  localStorage.setItem('_ob_state', code);
+}
+
+function selectTod(tod){
+  _tod = tod;
+  localStorage.setItem('_ob_tod', tod);
+  document.getElementById('todMidday').classList.toggle('selected', tod==='Midday');
+  document.getElementById('todEvening').classList.toggle('selected', tod==='Evening');
+}
+
+function skipState(){
+  _state = 'NY'; _tod = 'Midday';
+  goStep(3);
+}
+
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('step'+i).style.display = i===n ? 'block' : 'none';
+  });
+  // Progress dots
+  [1,2,3].forEach(i=>{
+    const dot = document.getElementById('dot'+i);
+    dot.className = 'step-dot ' + (i < n ? 'done' : i===n ? 'active' : 'pending');
+    dot.textContent = i < n ? '✓' : i;
+  });
+  [1,2].forEach(i=>{
+    document.getElementById('line'+i).className = 'step-line' + (i < n ? ' done' : '');
+  });
+
+  if(n===3) _setupStep3();
+}
+
+function _setupStep3(){
+  const name = STATES.find(s=>s.code===_state)?.name || _state;
+  const todIcon = _tod==='Midday' ? '☀️' : '🌙';
+  document.getElementById('step3Sub').textContent =
+    `${name} ${todIcon} ${_tod} · Voici ce que vous pouvez faire maintenant :`;
+  // Check si push déjà actif
+  if('PushManager' in window){
+    navigator.serviceWorker.ready.then(reg=>reg.pushManager.getSubscription()).then(sub=>{
+      if(sub) document.getElementById('pushStatus').textContent = '✅';
+    });
+  }
+}
+
+function launchAnalysis(){
+  const url = _state
+    ? `/analyze?state=${_state}&tod=${_tod}`
+    : '/analyze';
+  location.href = url;
+}
+
+// Si retour de Stripe (checkout=success), marquer l'abonnement
+const params = new URLSearchParams(location.search);
+if(params.get('checkout')==='success'){
+  // Badge "Abonnement activé"
+  const badge = document.createElement('div');
+  badge.style.cssText = 'text-align:center;margin-bottom:20px;padding:8px 20px;background:rgba(34,232,122,.12);border:1px solid rgba(34,232,122,.3);border-radius:12px;font-size:.78rem;font-weight:700;color:#22e87a';
+  badge.textContent = '✅ Abonnement activé — bienvenue dans PREDIKTA PRO !';
+  document.querySelector('.wrap').prepend(badge);
+}
+
+// Afficher step 2 si on vient de s'inscrire (pas de Stripe)
+if(!params.get('checkout')){
+  // Déjà sur step 1, rien à faire
+}
+</script>
+</body>
+</html>

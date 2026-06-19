@@ -203,7 +203,7 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
 
     // Fallback : démarre directement l'essai gratuit (sans Stripe)
     await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
-    setTimeout(()=>{ location.href='/account'; }, 900);
+    setTimeout(()=>{ location.href='/onboarding'; }, 900);
   }catch(e){
     msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
   }

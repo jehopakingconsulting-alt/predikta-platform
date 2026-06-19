@@ -137,7 +137,7 @@ def create_checkout_session():
         customer=customer_id,
         mode="subscription",
         line_items=[{"price": price_id, "quantity": 1}],
-        success_url=f"{base_url}/account?checkout=success",
+        success_url=f"{base_url}/onboarding?checkout=success",
         cancel_url=f"{base_url}/account?checkout=cancel",
         client_reference_id=str(user.id),
         metadata={"predikta_user_id": str(user.id), "plan": plan},
