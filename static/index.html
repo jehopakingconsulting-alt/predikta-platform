@@ -1835,29 +1835,24 @@ async function loadReport(){
     renderAll(data);
     updateSidebar(data);
 
-    // Archive cette analyse avec snapshot figé des données du moment ────────
+    // Archive cette analyse avec snapshot COMPLET figé ────────────────────
     if(window.PredArchive){
       const stateLabel = document.getElementById('stateSelect')
         ?.selectedOptions?.[0]?.textContent?.trim() || state;
-      // Snapshot compact (~2KB) : préserve les prédictions exactes de l'instant
-      const snapshot = {
-        last_draw:         data.last_draw      || null,
-        total_draws:       data.total_draws    || 0,
-        updated_at:        data.updated_at     || null,
-        tod_filter:        tod,
-        consensus:        (data.consensus      || []).slice(0,10),
-        markov_order1_top:(data.markov_order1_top || []).slice(0,10),
-        markov_order2_top:(data.markov_order2_top || []).slice(0,10),
-        ml_predictions:   (data.ml_predictions  || []).slice(0,10),
-        monte_carlo_top:  (data.monte_carlo_top  || []).slice(0,10),
-        hot_cold_30:       data.hot_cold_30    || null,
-      };
+      const archiveId = Date.now() + '-' + Math.random().toString(36).slice(2,8);
+      // Stocker le data complet séparément (pour renderAll() fidèle)
+      try{
+        localStorage.setItem('predikta_fullsnap_' + archiveId, JSON.stringify(data));
+      }catch(qe){
+        console.warn('[archive] localStorage quota dépassé — snapshot complet non sauvegardé');
+      }
       window.PredArchive.add({
+        id: archiveId,
         type: 'analyze',
         state, tod,
         label: stateLabel,
         url: `/analyze?state=${encodeURIComponent(state)}&tod=${encodeURIComponent(tod)}`,
-        snapshot,
+        has_fullsnap: true,
       });
     }
   }catch(e){
@@ -2197,8 +2192,62 @@ window.addEventListener('load', ()=>{
   const sel = document.getElementById('stateSelect');
   if(sel) populateTodOptions(sel.value);
 
-  // Ouverture directe depuis les Archives (?state=XX&tod=YYY)
   const params = new URLSearchParams(location.search);
+
+  // ── Restauration Archive complète (?archive=ID) ─────────────────────────
+  const archiveId = params.get('archive');
+  if(archiveId){
+    const raw = localStorage.getItem('predikta_fullsnap_' + archiveId);
+    if(raw){
+      try{
+        const frozenData = JSON.parse(raw);
+        // Récupérer la meta de l'entrée archive pour l'horodatage
+        const entries = window.PredArchive ? window.PredArchive.getAll() : [];
+        const entry   = entries.find(e=>e.id===archiveId);
+        const ts      = entry ? new Date(entry.ts).toLocaleString() : '';
+        const todLabel= entry && entry.tod ? (' · ' + (entry.tod==='midday'?'Midday':'Evening')) : '';
+
+        // Sélectionner l'état dans le menu (cosmétique)
+        if(frozenData.state && sel){
+          const opt = [...sel.options].find(o=>o.value===frozenData.state);
+          if(opt) sel.value = frozenData.state;
+        }
+
+        // Bannière archive figée
+        const mc = document.getElementById('mainContent');
+        const banner = `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;
+          background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.4);margin-bottom:16px;flex-wrap:wrap">
+          <span style="font-size:1.1rem">📁</span>
+          <div style="flex:1">
+            <div style="font-weight:700;color:#ffcc55;font-size:.85rem">Archive figée${todLabel}</div>
+            <div style="font-size:.72rem;color:var(--muted2)">Données exactes du ${ts} — non mises à jour</div>
+          </div>
+          <button onclick="loadReport()" style="padding:6px 14px;border-radius:8px;border:1px solid rgba(255,170,0,.4);
+            background:rgba(255,170,0,.1);color:#ffcc55;cursor:pointer;font-size:.75rem;font-weight:700">
+            🔄 Réanalyser live
+          </button>
+        </div>`;
+
+        renderAll(frozenData);
+        updateSidebar(frozenData);
+        // Injecter la bannière en haut du contenu rendu
+        mc.insertAdjacentHTML('afterbegin', banner);
+      }catch(e){
+        console.warn('[archive] Erreur chargement snapshot:', e);
+      }
+    } else {
+      // Snapshot non trouvé (autre appareil / expiré) — recharger live
+      const qState = params.get('state');
+      if(qState && sel){
+        const opt = [...sel.options].find(o=>o.value===qState.toUpperCase());
+        if(opt){ sel.value = qState.toUpperCase(); populateTodOptions(sel.value); }
+      }
+      loadReport();
+    }
+    return;
+  }
+
+  // ── Ouverture directe depuis les Archives (?state=XX&tod=YYY) ───────────
   const qState = params.get('state');
   if(qState && sel){
     const opt = [...sel.options].find(o=>o.value===qState.toUpperCase());
