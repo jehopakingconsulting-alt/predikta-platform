@@ -572,7 +572,8 @@ async function loadAll(){
     loadConfidenceBadges();
   } catch(e){
     document.getElementById('statesGrid').innerHTML =
-      `<div style="grid-column:1/-1;text-align:center;color:#ff5533;padding:40px">Erreur de chargement. Vérifiez que le serveur est démarré.</div>`;
+      `<div style="grid-column:1/-1;text-align:center;color:#ff5533;padding:40px">Erreur: ${e.message || e}</div>`;
+    console.error('[loadAll] error:', e);
   }
 }
 
