@@ -1775,9 +1775,6 @@ def contact_page(): return send_from_directory("static", "contact.html")
 @app.route("/archives")
 def archives_page(): return send_from_directory("static", "archives.html")
 
-@app.route("/admin")
-def admin_page(): return send_from_directory("static", "admin.html")
-
 @app.route("/api/admin/system")
 def api_admin_system():
     """Dashboard admin — métriques système en temps réel. Protégé par ADMIN_TOKEN."""
