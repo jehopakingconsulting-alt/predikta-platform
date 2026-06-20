@@ -720,7 +720,7 @@ def _send_email(to: str, subject: str, body: str, html_body: str = None):
 
     msg = EmailMessage()
     msg["Subject"] = subject
-    msg["From"] = os.environ.get("SMTP_FROM", "no-reply@predikta.app")
+    msg["From"] = os.environ.get("SMTP_FROM", "noreply@zynoriq.com")
     msg["To"] = to
     msg.set_content(body)
     if html_body:
@@ -767,7 +767,8 @@ def send_welcome_email(user):
         f"1. Lancer ta première analyse → {base_url}/analyze\n"
         f"2. Consulter les résultats live → {base_url}/results\n"
         f"3. Choisir ton plan → {base_url}/pro\n\n"
-        "À très vite,\nL'équipe ZYNORIQ"
+        "À très vite,\nL'équipe ZYNORIQ\n\n"
+        "Support : support@zynoriq.com"
     )
 
     html = f"""<!DOCTYPE html>
@@ -858,10 +859,14 @@ def send_welcome_email(user):
   <!-- Footer -->
   <tr><td style="background:#06061a;border:1px solid #1a1a45;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center">
     <p style="font-size:.68rem;color:#334155;margin:0 0 6px">Tu reçois cet email car tu viens de créer un compte sur ZYNORIQ.</p>
-    <p style="font-size:.68rem;color:#334155;margin:0">
+    <p style="font-size:.68rem;color:#334155;margin:0 0 6px">
       <a href="{base_url}/results" style="color:#4f9eff;text-decoration:none">Résultats</a> &nbsp;·&nbsp;
       <a href="{base_url}/analyze" style="color:#4f9eff;text-decoration:none">Analyser</a> &nbsp;·&nbsp;
       <a href="{base_url}/pro" style="color:#4f9eff;text-decoration:none">Plans & Tarifs</a>
+    </p>
+    <p style="font-size:.68rem;color:#334155;margin:6px 0 0">
+      Questions ? <a href="mailto:support@zynoriq.com" style="color:#4f9eff;text-decoration:none">support@zynoriq.com</a>
+      &nbsp;·&nbsp; <a href="mailto:privacy@zynoriq.com" style="color:#4f9eff;text-decoration:none">privacy@zynoriq.com</a>
     </p>
   </td></tr>
 

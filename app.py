@@ -111,7 +111,7 @@ _PUSH_SUBS_FILE   = os.path.join("data", "push_subscriptions.json")
 _VAPID_PRIV_FILE  = os.path.join("data", "vapid_private.pem")
 _VAPID_PUB_FILE   = os.path.join("data", "vapid_public.txt")
 _PUSH_LAST_SENT_FILE = os.path.join("data", "push_last_sent.txt")
-_VAPID_CLAIMS = {"sub": os.environ.get("PREDIKTA_VAPID_EMAIL", "mailto:contact@predikta.app")}
+_VAPID_CLAIMS = {"sub": os.environ.get("PREDIKTA_VAPID_EMAIL", "mailto:contact@zynoriq.com")}
 
 
 def _ensure_vapid_keys():

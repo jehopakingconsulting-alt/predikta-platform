@@ -23,7 +23,7 @@ MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgm7B9x8Fz81jABcc+
 zuXN/J7z8Ol7PIPW9y2Qa/0y3sBuQulqKXsia1ptdWFJQvwDEtQQOkGW
 -----END PRIVATE KEY-----""")
 
-VAPID_CLAIMS = {"sub": "mailto:admin@predikta.app"}
+VAPID_CLAIMS = {"sub": "mailto:contact@zynoriq.com"}
 
 # ── Stockage abonnements ──────────────────────────────────────────────────────
 
