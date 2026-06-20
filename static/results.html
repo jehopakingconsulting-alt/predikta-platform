@@ -665,6 +665,17 @@ function renderGrid(data, filterFn=null){
   }
 
   grid.innerHTML = filtered.map(([code,v])=>renderStateCard(code,v)).join('');
+
+  // Post-render: injecte data-code + CTAs + confidence badges
+  setTimeout(()=>{
+    document.querySelectorAll('.state-card').forEach(card=>{
+      const onclick = card.getAttribute('onclick')||'';
+      const m = onclick.match(/openDetail\('(\w+)'\)/);
+      if(m) card.dataset.code = m[1];
+    });
+    if(typeof _injectDrawCTAs === 'function') _injectDrawCTAs();
+    if(Object.keys(_confData).length && typeof _injectConfBadges === 'function') _injectConfBadges();
+  }, 50);
 }
 
 function renderStateCard(code, v){
@@ -1217,20 +1228,6 @@ function _injectDrawCTAs(){
 }
 
 // Ajoute data-code aux cartes pour pouvoir les retrouver
-const _origRenderGrid = renderGrid;
-function renderGrid(data, filterFn){
-  _origRenderGrid(data, filterFn);
-  // Injecte data-code sur chaque carte après rendu
-  setTimeout(()=>{
-    document.querySelectorAll('.state-card').forEach(card=>{
-      const onclick = card.getAttribute('onclick')||'';
-      const m = onclick.match(/openDetail\('(\w+)'\)/);
-      if(m) card.dataset.code = m[1];
-    });
-    _injectDrawCTAs();
-    if(Object.keys(_confData).length) _injectConfBadges();
-  }, 50);
-}
 
 // Rafraîchit les CTA toutes les minutes (countdown live)
 setInterval(()=>{
