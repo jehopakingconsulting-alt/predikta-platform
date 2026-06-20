@@ -1960,6 +1960,13 @@ def nav_js():
     return resp
 
 
+@app.route("/pwa-prompt.js")
+def pwa_prompt_js():
+    resp = make_response(send_from_directory("static", "pwa-prompt.js"))
+    resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
+    return resp
+
+
 # ═══════════════════════════════════════════════════════════
 # SEO & PWA
 # ═══════════════════════════════════════════════════════════
