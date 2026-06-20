@@ -229,6 +229,19 @@ header{
 }
 .card-view-btn:hover{background:rgba(79,110,255,.15)}
 
+/* ── Confidence badge ── */
+.conf-strip{
+  padding:7px 14px;border-top:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  background:rgba(255,255,255,.015);
+}
+.conf-combo{font-family:'Orbitron',monospace;font-size:.7rem;font-weight:900;color:#e2e8f0;letter-spacing:.06em}
+.conf-bar-wrap{flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden;min-width:40px}
+.conf-bar-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.conf-pct{font-size:.62rem;font-weight:800;min-width:28px;text-align:right}
+.conf-cta{font-size:.6rem;color:#4f9eff;font-weight:700;cursor:pointer;white-space:nowrap;opacity:.8}
+.conf-cta:hover{opacity:1}
+
 /* ── Detail Panel (slide-in) ── */
 .detail-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;
@@ -556,10 +569,57 @@ async function loadAll(){
     window._allData = _statesData;
     updateLiveTicker(_statesData);
     renderGrid(_statesData);
+    loadConfidenceBadges();
   } catch(e){
     document.getElementById('statesGrid').innerHTML =
       `<div style="grid-column:1/-1;text-align:center;color:#ff5533;padding:40px">Erreur de chargement. Vérifiez que le serveur est démarré.</div>`;
   }
+}
+
+// ── Confidence badges ──────────────────────────────────────────────────────
+let _confData = {};
+
+async function loadConfidenceBadges(){
+  try{
+    const r = await fetch('/api/confidence/summary');
+    if(!r.ok) return;
+    _confData = await r.json();
+    _injectConfBadges();
+  }catch(e){}
+}
+
+function _confColor(pct){
+  if(pct >= 85) return '#22e87a';
+  if(pct >= 70) return '#4f9eff';
+  if(pct >= 50) return '#a78bfa';
+  return '#64748b';
+}
+
+function _injectConfBadges(){
+  // Essaie les deux clés possibles : STATE_Tod et STATE_tod (Evening/Midday)
+  Object.entries(_confData).forEach(([key, c])=>{
+    // key ex: "NY_Midday" or "NY_Evening"
+    const parts = key.split('_');
+    const state = parts[0];
+    const el = document.getElementById('conf_' + state);
+    if(!el || el.dataset.filled) return; // prend le premier TOD trouvé
+    const pct  = c.pct ?? 0;
+    const col  = _confColor(pct);
+    const combo = c.combo || '?';
+    el.dataset.filled = '1';
+    el.style.display  = '';
+    el.innerHTML = `
+      <span class="conf-combo">🎯 ${combo}</span>
+      <div class="conf-bar-wrap"><div class="conf-bar-fill" style="width:0;background:${col}" data-w="${pct}"></div></div>
+      <span class="conf-pct" style="color:${col}">${Math.round(pct)}%</span>
+      <span class="conf-cta" onclick="event.stopPropagation();location.href='/analyze?state=${state}&tod=${parts[1]||'Evening'}'">Analyser →</span>`;
+  });
+  // Anime les barres
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.conf-bar-fill[data-w]').forEach(bar=>{
+      bar.style.width = bar.dataset.w + '%';
+    });
+  });
 }
 
 function updateLiveTicker(data){
@@ -659,6 +719,7 @@ function renderStateCard(code, v){
       <div class="card-date">${dateStr}</div>
       ${drawsHtml}
     </div>
+    <div id="conf_${code}" class="conf-strip" style="display:none"></div>
     <div class="card-footer">
       <span class="card-schedule">${formatSchedule(v.schedule)}</span>
       <button class="card-view-btn" onclick="event.stopPropagation();openDetail('${code}')">Historique →</button>
@@ -1166,6 +1227,7 @@ function renderGrid(data, filterFn){
       if(m) card.dataset.code = m[1];
     });
     _injectDrawCTAs();
+    if(Object.keys(_confData).length) _injectConfBadges();
   }, 50);
 }
 

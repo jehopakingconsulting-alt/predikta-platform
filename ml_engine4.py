@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Ultra-advanced ML prediction engine for Pick 4 / Cash 4 / Win 4 / Daily 4.
+﻿"""
+ZYNORIQ — Ultra-advanced ML prediction engine for Pick 4 / Cash 4 / Win 4 / Daily 4.
 Models: Random Forest, Gradient Boosting, XGBoost, Markov (orders 1-3),
         Fourier cycle analysis, Monte Carlo simulation, Ensemble consensus.
 Adapted from ml_engine.py for 4-digit draws (10 000 possible combos).

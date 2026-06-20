@@ -9,7 +9,7 @@ try:
 except ImportError:
     Compress = None
 import numpy as np
-import os, json, re, threading, time, queue
+import os, json, re, threading, time, queue, hmac
 from collections import Counter, defaultdict
 from datetime import datetime, date, timedelta
 from zoneinfo import ZoneInfo
@@ -40,7 +40,12 @@ app.json_provider_class = NumpyJSONProvider
 app.json = NumpyJSONProvider(app)
 
 # ── Secret key (sessions / cookies signés) ────────────────────────────────
-app.secret_key = os.environ.get("PREDIKTA_SECRET_KEY", "dev-insecure-predikta-key-change-me")
+_secret_key = os.environ.get("PREDIKTA_SECRET_KEY")
+if not _secret_key:
+    import secrets as _secrets
+    _secret_key = _secrets.token_hex(32)
+    print("[WARNING] PREDIKTA_SECRET_KEY not set — using a random key; sessions will not survive restarts")
+app.secret_key = _secret_key
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
 
@@ -79,6 +84,15 @@ def add_security_headers(response):
     response.headers["Referrer-Policy"]          = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"]       = "geolocation=(), microphone=()"
     response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https:; "
+        "connect-src 'self' https://www.google-analytics.com; "
+        "frame-ancestors 'self';"
+    )
     # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
     # cache court (5 min) pour limiter les requêtes répétées sans bloquer
     # les déploiements de correctifs.
@@ -157,6 +171,10 @@ def _load_subscriptions():
 
 def _save_subscriptions(subs):
     os.makedirs("data", exist_ok=True)
+    # Write backup before overwriting to prevent data loss on crash
+    if os.path.exists(_PUSH_SUBS_FILE):
+        import shutil
+        shutil.copy2(_PUSH_SUBS_FILE, _PUSH_SUBS_FILE + ".bak")
     with open(_PUSH_SUBS_FILE, "w", encoding="utf-8") as f:
         json.dump(subs, f, ensure_ascii=False, indent=2)
 
@@ -493,7 +511,8 @@ def api_push_unsubscribe():
 def api_push_send():
     """Déclenchement manuel/admin (protégé par PREDIKTA_ADMIN_SECRET)."""
     secret = os.environ.get("PREDIKTA_ADMIN_SECRET")
-    if not secret or request.args.get("secret") != secret:
+    provided = request.args.get("secret", "")
+    if not secret or not hmac.compare_digest(provided, secret):
         return jsonify({"error": "Forbidden"}), 403
 
     title = request.args.get("title", "🎰 ZYNORIQ")
@@ -831,6 +850,17 @@ def _draw_watcher_loop():
                                             _tr_result = _rec_res(st, _tod_of_draw, _new_d)
                                         except Exception as _tre:
                                             print(f"  [draw-watcher][track-record][{st}] error: {_tre}")
+                                        # ML Feedback — recalibration des poids si nécessaire
+                                        try:
+                                            def _recalib(_st=st, _tod=_tod_of_draw, _draws=_draws):
+                                                from weight_calibrator import calibrate_if_needed
+                                                from scraper import load_csv as _lc2
+                                                _tod_draws = [d for d in _lc2(_st) if d.get("tod") == _tod]
+                                                if len(_tod_draws) >= 70:
+                                                    calibrate_if_needed(_st, _tod, _tod_draws)
+                                            threading.Thread(target=_recalib, daemon=True).start()
+                                        except Exception as _mle:
+                                            print(f"  [draw-watcher][ml-feedback][{st}] error: {_mle}")
                                         # Push notification
                                         try:
                                             _sn = STATES.get(st, {}).get("name", st)
@@ -973,6 +1003,62 @@ def api_track_record_pending():
         return jsonify({"pending": get_pending_predictions()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/confidence/summary")
+def api_confidence_summary():
+    """
+    Retourne le top combo + confidence_pct pour chaque état déjà en cache.
+    Zéro calcul ML — lecture seule du _REPORT_CACHE.
+    Clé de réponse : { "NY_Midday": { combo, pct, label, models, cached_ago_min }, ... }
+    """
+    import time as _t
+    now = _t.time()
+    out = {}
+    for cache_key, entry in list(_REPORT_CACHE.items()):
+        data = entry.get("data", {})
+        consensus = data.get("consensus") or []
+        if not consensus:
+            continue
+        top = consensus[0]
+        # Nombre de modèles ML qui ont voté pour ce combo
+        breakdown = top.get("breakdown", {})
+        model_contribs = breakdown.get("model_weights", {}) if breakdown else {}
+        models_count = sum(1 for v in model_contribs.values() if v > 0) if model_contribs else None
+        out[cache_key] = {
+            "combo":     top.get("combo"),
+            "pct":       top.get("confidence_pct"),
+            "label":     top.get("confidence_label"),
+            "models":    models_count,
+            "cached_ago_min": round((now - entry["ts"]) / 60, 1),
+        }
+    return jsonify(out)
+
+@app.route("/api/archive/verdicts")
+def api_archive_verdicts():
+    """Verdicts du track record live indexés par STATE_Tod_YYYY-MM-DD."""
+    try:
+        import json as _json
+        _log_path = os.path.join("data", "live_track_record.json")
+        try:
+            with open(_log_path, encoding="utf-8") as _f:
+                _log = _json.load(_f)
+        except Exception:
+            _log = []
+        verdicts = {}
+        for r in (_log if isinstance(_log, list) else []):
+            k = f"{r.get('state','').upper()}_{r.get('tod','')}_{r.get('date','')}"
+            verdicts[k] = {
+                "actual":            r.get("actual"),
+                "hit_straight":      r.get("hit_straight", False),
+                "hit_box":           r.get("hit_box", False),
+                "consensus_rank":    r.get("consensus_straight_rank"),
+                "box_rank":          r.get("consensus_box_rank"),
+                "top10":             r.get("consensus_top10", [])[:3],
+                "verified_at":       r.get("verified_at"),
+            }
+        return jsonify(verdicts)
+    except Exception as e:
+        return jsonify({}), 200  # fail silently — archive page still works
 
 @app.route("/api/scraper/status")
 def api_scraper_status():
@@ -1310,6 +1396,11 @@ def api_track_record():
         "updated_at": datetime.now(tz=ZoneInfo("America/New_York")).isoformat(),
     }
     _TRACK_RECORD_CACHE[cache_key] = {"ts": time.time(), "data": payload}
+    # Evict expired entries to prevent unbounded memory growth
+    now_ts = time.time()
+    expired = [k for k, v in _TRACK_RECORD_CACHE.items() if now_ts - v["ts"] > _TRACK_RECORD_CACHE_TTL]
+    for k in expired:
+        _TRACK_RECORD_CACHE.pop(k, None)
     return jsonify(payload)
 
 
@@ -1684,6 +1775,105 @@ def contact_page(): return send_from_directory("static", "contact.html")
 @app.route("/archives")
 def archives_page(): return send_from_directory("static", "archives.html")
 
+@app.route("/admin")
+def admin_page(): return send_from_directory("static", "admin.html")
+
+@app.route("/api/admin/system")
+def api_admin_system():
+    """Dashboard admin — métriques système en temps réel. Protégé par ADMIN_TOKEN."""
+    _token = os.environ.get("ADMIN_TOKEN", "")
+    _req_token = request.headers.get("X-Admin-Token", "") or request.args.get("token", "")
+    if not _token or not hmac.compare_digest(_req_token, _token):
+        return jsonify({"error": "unauthorized"}), 401
+
+    import time as _time
+
+    # Push subscribers
+    try:
+        with open(_PUSH_SUBS_FILE, encoding="utf-8") as _f:
+            _subs = json.load(_f)
+        push_count = len(_subs) if isinstance(_subs, list) else 0
+    except Exception:
+        push_count = 0
+
+    # SSE connections
+    with _sse_lock:
+        sse_count = len(_sse_subscribers)
+
+    # Report cache
+    cache_size = len(_REPORT_CACHE)
+    cache_keys = list(_REPORT_CACHE.keys())[:20]
+
+    # Draw watcher — derniers tirages reçus
+    with _draw_watcher_lock:
+        triggered = dict(_draw_watcher_triggered)
+
+    recent_draws = sorted(
+        [{"key": k, "ts": int(v), "ago_min": round((_time.time() - v) / 60, 1)}
+         for k, v in triggered.items()],
+        key=lambda x: x["ts"], reverse=True
+    )[:20]
+
+    # Scraper source stats
+    try:
+        from smart_scraper import get_source_stats, get_states_due_now
+        source_stats = get_source_stats()
+        states_due = [{"state": s, "tod": t} for s, t in get_states_due_now(buffer_min=15, window_min=30)]
+    except Exception as _e:
+        source_stats = {}
+        states_due = []
+
+    # Live track record pending
+    try:
+        from live_track_record import get_pending_predictions
+        pending_preds = len(get_pending_predictions())
+    except Exception:
+        pending_preds = 0
+
+    # Uptime approx (process start time)
+    try:
+        import psutil, os as _os
+        _proc = psutil.Process(_os.getpid())
+        uptime_sec = int(_time.time() - _proc.create_time())
+    except Exception:
+        uptime_sec = None
+
+    # ML calibration stats
+    try:
+        import glob as _glob
+        _w_dir = os.path.join("data", "weights")
+        _w_files = _glob.glob(os.path.join(_w_dir, "*.json"))
+        calib_entries = []
+        for _wf in sorted(_w_files)[:30]:
+            try:
+                with open(_wf, encoding="utf-8") as _f:
+                    _wd = json.load(_f)
+                _m = _wd.get("meta", {})
+                calib_entries.append({
+                    "key": os.path.basename(_wf).replace(".json", ""),
+                    "weights": _wd.get("weights", {}),
+                    "draw_count": _m.get("draw_count"),
+                    "window": _m.get("window"),
+                    "avg_rank": _m.get("avg_rank_percentile", {}),
+                })
+            except Exception:
+                pass
+    except Exception:
+        calib_entries = []
+
+    return jsonify({
+        "ts": _time.time(),
+        "push_subscribers": push_count,
+        "sse_connections": sse_count,
+        "report_cache_entries": cache_size,
+        "pending_predictions": pending_preds,
+        "recent_draws": recent_draws,
+        "states_due_now": states_due,
+        "source_stats": source_stats,
+        "uptime_sec": uptime_sec,
+        "ml_calibrations": calib_entries,
+    })
+
 @app.route("/parrainage")
 def referral_page(): return send_from_directory("static", "referral.html")
 
@@ -2010,6 +2200,10 @@ def api_report():
         return jsonify({"error": f"No draws left for {state} after applying filters."}), 200
 
     _REPORT_CACHE[cache_key] = {"ts": now, "data": {**result, "cached": True}}
+    # Evict expired entries to prevent unbounded memory growth
+    _expired_r = [k for k, v in _REPORT_CACHE.items() if now - v["ts"] > _REPORT_CACHE_TTL]
+    for k in _expired_r:
+        _REPORT_CACHE.pop(k, None)
     auth_module.record_usage(auth_module.current_user().id)
     return jsonify(result)
 
@@ -3039,7 +3233,8 @@ def admin_claim():
     db = auth_module.db
     secret = os.environ.get("PREDIKTA_ADMIN_SECRET")
     data = request.get_json(silent=True) or {}
-    if not secret or data.get("secret") != secret:
+    provided = data.get("secret") or ""
+    if not secret or not hmac.compare_digest(provided, secret):
         return jsonify({"error": "Forbidden"}), 403
     user = auth_module.current_user()
     user.is_admin = True

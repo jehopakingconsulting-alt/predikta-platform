@@ -233,7 +233,7 @@ window.toggleTheme = toggleTheme;
 function getFavs(){ return JSON.parse(localStorage.getItem('predikta_favs')||'[]'); }
 function toggleFav(code){ let f=getFavs(),i=f.indexOf(code); i>=0?f.splice(i,1):f.push(code); localStorage.setItem('predikta_favs',JSON.stringify(f)); return i<0; }
 function isFav(code){ return getFavs().includes(code); }
-window.PREDIKTA = { toggleFav, isFav, getFavs, affiliate: window.PREDIKTA_AFFILIATE };
+window.ZYNORIQ = { toggleFav, isFav, getFavs, affiliate: window.PREDIKTA_AFFILIATE };
 function shareContent(text,url){ url=url||location.href; if(navigator.share){navigator.share({title:'ZYNORIQ',text,url}).catch(()=>{});}else{window.open(`https://wa.me/?text=${encodeURIComponent(text+'\n'+url)}`,'_blank');} }
 window.shareContent = shareContent;
 

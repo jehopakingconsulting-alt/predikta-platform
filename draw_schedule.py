@@ -1,5 +1,5 @@
-"""
-PREDIKTA — per-state draw schedule (times-of-day + clock times) and helpers
+﻿"""
+ZYNORIQ — per-state draw schedule (times-of-day + clock times) and helpers
 to figure out, right now, which session ("Matin"/"Midi"/"Soir"/"Nuit" etc.)
 is the next one coming up for a given state.
 

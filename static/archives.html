@@ -65,6 +65,14 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .archive-item.has-snap{cursor:default;flex-direction:column;align-items:stretch}
 .archive-item.has-snap .archive-header{display:flex;align-items:center;gap:14px;cursor:pointer}
 
+/* Verdict badges */
+.vbadge{display:inline-flex;align-items:center;gap:4px;font-size:.6rem;font-weight:800;padding:2px 7px;border-radius:5px;letter-spacing:.03em;flex-shrink:0}
+.vbadge-straight{background:rgba(34,232,122,.15);color:#22e87a;border:1px solid rgba(34,232,122,.4)}
+.vbadge-box{background:rgba(255,160,0,.12);color:#ffaa00;border:1px solid rgba(255,160,0,.35)}
+.vbadge-miss{background:rgba(255,68,68,.1);color:#ff6655;border:1px solid rgba(255,68,68,.3)}
+.verdict-row{font-size:.65rem;color:var(--muted2);margin-top:3px}
+.verdict-row b{color:#88aaff}
+
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted2)}
 .empty-state .ei{font-size:2.4rem;margin-bottom:14px}
 .empty-state p{font-size:.85rem;margin-bottom:18px}
@@ -234,6 +242,39 @@ function fmtTime(ts){
   return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
 
+// ── Verdicts du track record ──────────────────────────────────────────────
+let _verdicts = {};
+
+async function loadVerdicts(){
+  try{
+    const r = await fetch('/api/archive/verdicts');
+    if(r.ok) _verdicts = await r.json();
+  }catch(e){}
+}
+
+function _verdictKey(entry){
+  const d = new Date(entry.ts);
+  const date = d.getFullYear() + '-'
+    + String(d.getMonth()+1).padStart(2,'0') + '-'
+    + String(d.getDate()).padStart(2,'0');
+  return `${(entry.state||'').toUpperCase()}_${entry.tod||''}_${date}`;
+}
+
+function _verdictBadge(entry){
+  const v = _verdicts[_verdictKey(entry)];
+  if(!v) return '';
+  const actual = v.actual ? `<span class="verdict-row">Résultat réel : <b>${v.actual}</b> · prédit : <b>${(v.top10||[])[0]||'?'}</b></span>` : '';
+  if(v.hit_straight){
+    return `<span class="vbadge vbadge-straight">✅ EXACT</span>${actual}`;
+  } else if(v.hit_box){
+    const rk = v.box_rank ? ` #${v.box_rank}` : '';
+    return `<span class="vbadge vbadge-box">📦 BOX${rk}</span>${actual}`;
+  } else if(v.actual){
+    return `<span class="vbadge vbadge-miss">❌ MANQUÉ</span>${actual}`;
+  }
+  return '';
+}
+
 // ── Server sync (utilisateurs connectés) ──────────────────────────────────
 let _serverSynced = false;
 
@@ -319,11 +360,14 @@ function renderArchives(list){
         const snapBadge = hasSnap
           ? `<span style="font-size:.6rem;padding:1px 6px;border-radius:4px;background:rgba(255,200,50,.15);color:#ffcc55;border:1px solid rgba(255,200,50,.3)">📸 Figé</span>`
           : '';
+        const vBadge = _verdictBadge(e);
+        const vExtra = vBadge ? `<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px">${vBadge}</div>` : '';
         return `<div class="archive-item" onclick="window.location='${snapUrl}'">
           <div class="archive-icon">${icon}</div>
           <div class="archive-info">
             <div class="archive-title">${e.label || e.state} ${snapBadge}</div>
             <div class="archive-meta">${typeLabel}${todStr} · ${fmtTime(e.ts)}</div>
+            ${vExtra}
           </div>
           <div class="archive-actions">
             <a class="archive-go" href="${snapUrl}" onclick="event.stopPropagation()">${t.open}</a>
@@ -387,7 +431,7 @@ window.addEventListener('load', async ()=>{
   if(el) el.classList.add('active');
 
   // Sync server ↔ localStorage for logged-in users, then re-render
-  await syncWithServer();
+  await Promise.all([syncWithServer(), loadVerdicts()]);
   renderArchives();
 });
 </script>

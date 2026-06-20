@@ -1,5 +1,5 @@
-"""
-PREDIKTA — lotteryusa.com scraper pour Pick 4 / Cash 4 / Win 4 / Daily 4
+﻿"""
+ZYNORIQ — lotteryusa.com scraper pour Pick 4 / Cash 4 / Win 4 / Daily 4
 Miroir de lotteryusa_scraper.py mais pour les jeux 4 chiffres.
 lotteryusa.com n'est pas derrière Cloudflare — fonctionne depuis Render.
 """

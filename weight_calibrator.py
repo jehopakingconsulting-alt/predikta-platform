@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Dynamic Weight Calibrator
+﻿"""
+ZYNORIQ — Dynamic Weight Calibrator
 For each state + time-of-day, runs a mini-backtest over the last N draws
 and measures how well each scoring component (freq, gap, markov) predicts
 real results. Weights are then set proportionally to performance and saved
@@ -135,7 +135,7 @@ def _markov_scores(draws: list[dict]) -> dict[str, dict[str, float]]:
         last_digit = last_draw[pos]
         transitions = matrix.get(last_digit, Counter())
         total = sum(transitions.values()) or 1
-        result[pos] = {digit: (transitions[digit] / total * 5) for digit in DIGITS}
+        result[pos] = {digit: (transitions[digit] / total * 10) for digit in DIGITS}
     return result
 
 

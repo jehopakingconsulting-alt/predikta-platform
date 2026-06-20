@@ -1,4 +1,4 @@
-"""Verification complete de PREDIKTA AI."""
+﻿"""Verification complete de ZYNORIQ AI."""
 import os, re, json, sys
 import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -16,7 +16,7 @@ WARN = "[WARN]"
 MISS = "[MISS]"
 
 print("=" * 60)
-print("  PREDIKTA AI — VERIFICATION FINALE COMPLETE")
+print("  ZYNORIQ AI — VERIFICATION FINALE COMPLETE")
 print("=" * 60)
 
 # ── TRADUCTIONS ──────────────────────────────────────────────
@@ -95,7 +95,7 @@ print("\n--- PAGES LEGALES & CONTENU ---")
 legal_files = {
     "privacy.html": ["RGPD","confidentialité","données"],
     "terms.html":   ["responsabilité","loterie","jeux"],
-    "about.html":   ["PREDIKTA","algorithme","mission"],
+    "about.html":   ["ZYNORIQ","algorithme","mission"],
     "faq.html":     ["prédictions","données","abonnement"],
     "contact.html": ["/api/contact","email","formulaire"],
 }
@@ -189,7 +189,7 @@ todo += [
     "Integrer Stripe/PayPal pour les paiements PRO/ELITE",
     "Configurer SMTP pour l'envoi reel des emails newsletter",
     "Acheter le domaine (predikta.io recommande) et deployer",
-    "Mettre les vraies videos dans le lecteur PREDIKTA TV",
+    "Mettre les vraies videos dans le lecteur ZYNORIQ TV",
     "Remplacer localhost:5000 par votre vrai domaine dans sitemap.xml et robots.txt",
 ]
 

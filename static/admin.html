@@ -106,6 +106,53 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
       <div class="empty" id="referralsEmpty" style="display:none">Aucune commission en attente de versement.</div>
     </div>
 
+    <!-- ── Monitoring système ─────────────────────────────────────── -->
+    <div class="card" id="systemCard">
+      <h2>⚙️ Monitoring Système <span id="sysRefreshLabel" style="font-size:.65rem;font-weight:400;color:var(--muted2);margin-left:8px"></span></h2>
+      <p class="hint">Connexions live, cache, scraper, tirages reçus — auto-refresh 30s.</p>
+
+      <div class="stats-row" id="sysKpiRow" style="margin-bottom:16px">
+        <div class="stat-box"><div class="num" id="sysPush">—</div><div class="lbl">Push subs</div></div>
+        <div class="stat-box"><div class="num" id="sysSSE">—</div><div class="lbl">SSE live</div></div>
+        <div class="stat-box"><div class="num" id="sysCache">—</div><div class="lbl">Cache entries</div></div>
+        <div class="stat-box"><div class="num" id="sysPred">—</div><div class="lbl">Prédictions en attente</div></div>
+        <div class="stat-box"><div class="num" id="sysDue">—</div><div class="lbl">États à scraper</div></div>
+        <div class="stat-box"><div class="num" id="sysUptime">—</div><div class="lbl">Uptime</div></div>
+      </div>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <!-- Derniers tirages -->
+        <div style="flex:1;min-width:260px">
+          <div style="font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:8px">Derniers tirages détectés</div>
+          <div id="sysDrawsList" style="font-size:.74rem;display:flex;flex-direction:column;gap:5px"></div>
+        </div>
+        <!-- États imminents -->
+        <div style="flex:1;min-width:220px">
+          <div style="font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:8px">Tirages imminents (≤30 min)</div>
+          <div id="sysDueList" style="display:flex;flex-wrap:wrap;gap:6px;font-size:.72rem"></div>
+        </div>
+      </div>
+
+      <!-- Source stats compact -->
+      <div style="margin-top:16px">
+        <div style="font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:8px">Sources scraper</div>
+        <div id="sysSourceGrid" style="display:flex;flex-wrap:wrap;gap:6px;font-size:.7rem"></div>
+      </div>
+
+      <!-- ML calibrations -->
+      <div style="margin-top:16px">
+        <div style="font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--muted2);margin-bottom:8px">🧠 Poids ML calibrés (freq / gap / markov)</div>
+        <div id="sysCalibGrid" style="display:flex;flex-wrap:wrap;gap:6px;font-size:.68rem"></div>
+      </div>
+
+      <!-- Actions -->
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="sysScrapeAll(this)" style="padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;font-size:.74rem;font-weight:700">🔄 Scrape global</button>
+        <a href="/api/admin/system" target="_blank" style="padding:7px 14px;border-radius:8px;border:1px solid var(--border);color:var(--muted2);font-size:.74rem;text-decoration:none">JSON brut</a>
+        <span id="sysActionMsg" style="font-size:.72rem;color:var(--green);align-self:center"></span>
+      </div>
+    </div>
+
     <div class="card">
       <h2>👥 Utilisateurs</h2>
       <p class="hint">Cliquez sur une ligne pour modifier le plan, le statut, prolonger l'essai ou accorder les droits admin.</p>
@@ -167,6 +214,8 @@ async function init(){
   await loadStats();
   await loadUsers();
   await loadReferrals();
+  loadSystemStats();
+  setInterval(loadSystemStats, 30000);
 }
 
 async function claimAdmin(){
@@ -383,6 +432,85 @@ async function markPayout(id, balance){
 
 function escapeHtml(s){
   return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ── Monitoring système ──────────────────────────────────────────────────
+function _fmtUptime(sec){
+  if(sec==null) return '?';
+  const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60);
+  return h ? `${h}h${m}m` : `${m}m`;
+}
+
+async function loadSystemStats(){
+  try{
+    const r = await fetch('/api/admin/system');
+    if(!r.ok) return;
+    const d = await r.json();
+
+    document.getElementById('sysPush').textContent   = d.push_subscribers ?? '?';
+    document.getElementById('sysSSE').textContent    = d.sse_connections ?? '?';
+    document.getElementById('sysCache').textContent  = d.report_cache_entries ?? '?';
+    document.getElementById('sysPred').textContent   = d.pending_predictions ?? '?';
+    document.getElementById('sysDue').textContent    = (d.states_due_now||[]).length;
+    document.getElementById('sysUptime').textContent = _fmtUptime(d.uptime_sec);
+    document.getElementById('sysRefreshLabel').textContent = 'mis à jour ' + new Date().toLocaleTimeString('fr-FR');
+
+    // Derniers tirages
+    const draws = (d.recent_draws||[]).slice(0,8);
+    document.getElementById('sysDrawsList').innerHTML = draws.length
+      ? draws.map(x=>`<div style="display:flex;justify-content:space-between;padding:4px 8px;background:rgba(255,255,255,.03);border-radius:6px">
+          <b style="color:#e2e8f0">${x.key}</b>
+          <span style="color:#475569">${x.ago_min} min ago</span>
+        </div>`).join('')
+      : '<span style="color:#475569">Aucun tirage depuis le démarrage</span>';
+
+    // États imminents
+    const due = d.states_due_now || [];
+    document.getElementById('sysDueList').innerHTML = due.length
+      ? due.map(x=>`<span style="padding:3px 9px;border-radius:5px;background:rgba(255,160,0,.1);border:1px solid rgba(255,160,0,.3);color:#ffaa00;font-weight:700">${x.state}·${x.tod}</span>`).join('')
+      : '<span style="color:#475569">Aucun</span>';
+
+    // ML calibrations
+    const calibs = d.ml_calibrations || [];
+    document.getElementById('sysCalibGrid').innerHTML = calibs.length
+      ? calibs.map(c=>{
+          const w = c.weights || {};
+          const freq  = Math.round((w.freq||0)*100);
+          const gap   = Math.round((w.gap||0)*100);
+          const markov= Math.round((w.markov||0)*100);
+          const dominant = freq>=gap && freq>=markov ? 'freq' : gap>=markov ? 'gap' : 'markov';
+          const col = dominant==='freq'?'#4f9eff':dominant==='gap'?'#ffaa00':'#a78bfa';
+          return `<span style="padding:3px 9px;border-radius:5px;border:1px solid ${col}33;background:${col}11;color:#cbd5e1" title="freq=${freq}% gap=${gap}% markov=${markov}% · ${c.draw_count} tirages">
+            <b style="color:${col}">${c.key}</b> <span style="opacity:.6">${freq}/${gap}/${markov}</span>
+          </span>`;
+        }).join('')
+      : '<span style="color:#475569">Aucune calibration encore — se remplit après les premiers tirages</span>';
+
+    // Sources
+    const ss = d.source_stats || {};
+    const entries = Object.entries(ss).sort((a,b)=>a[0].localeCompare(b[0]));
+    document.getElementById('sysSourceGrid').innerHTML = entries.length
+      ? entries.map(([st,s])=>{
+          const src = (s.source||'?').includes('official') ? 'off' : 'lu';
+          const err = s.consecutive_errors > 0;
+          const ago = s.last_scrape_ago_sec;
+          const agoStr = ago!=null ? (ago<120?`${ago}s`:`${Math.round(ago/60)}m`) : '?';
+          const col = err ? '#ff6655' : ago>1800 ? '#ffaa00' : '#22e87a';
+          return `<span style="padding:3px 8px;border-radius:5px;border:1px solid ${col}33;background:${col}11;color:${col};font-weight:700" title="${st} · ${s.source||'?'} · ${agoStr} ago">${st}<span style="font-weight:400;opacity:.7"> ${src} ${agoStr}</span></span>`;
+        }).join('')
+      : '<span style="color:#475569">Aucune donnée</span>';
+  }catch(e){}
+}
+
+async function sysScrapeAll(btn){
+  btn.disabled=true; btn.textContent='⏳…';
+  try{
+    const r = await fetch('/api/scraper/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({states:[]})});
+    const d = await r.json();
+    document.getElementById('sysActionMsg').textContent = `✅ Scrape lancé (${d.count} états)`;
+    setTimeout(()=>{ document.getElementById('sysActionMsg').textContent=''; },5000);
+  }catch(e){ document.getElementById('sysActionMsg').textContent='❌ Erreur'; }
+  btn.disabled=false; btn.textContent='🔄 Scrape global';
 }
 
 let searchDebounce;

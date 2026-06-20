@@ -1,4 +1,4 @@
-// PREDIKTA — PWA Install Prompt
+﻿// ZYNORIQ — PWA Install Prompt
 // Affiche un mini-modal après 2 pages visitées, une seule fois, si non installé
 
 (function(){
@@ -48,7 +48,7 @@
     modal.innerHTML = `
       <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4f6eff,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.4rem">🎯</div>
       <div style="flex:1;min-width:0">
-        <div style="font-weight:800;font-size:.88rem;color:#e2e8f0;margin-bottom:3px">Installer PREDIKTA</div>
+        <div style="font-weight:800;font-size:.88rem;color:#e2e8f0;margin-bottom:3px">Installer ZYNORIQ</div>
         <div style="font-size:.72rem;color:#64748b;line-height:1.4">Accès rapide · Notifs push · Fonctionne hors-ligne</div>
         <div style="display:flex;gap:8px;margin-top:10px">
           <button id="_pwaInstall" style="padding:6px 16px;border-radius:8px;border:none;background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;font-size:.75rem;font-weight:700;cursor:pointer">Installer →</button>
@@ -91,7 +91,7 @@
       modal.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;width:min(360px,calc(100vw - 32px));background:#0f0f2a;border:1.5px solid rgba(124,58,237,.4);border-radius:16px;padding:18px 20px;box-shadow:0 16px 60px rgba(0,0,0,.6);text-align:center';
       modal.innerHTML = `
         <div style="font-size:1.5rem;margin-bottom:8px">📲</div>
-        <div style="font-weight:800;font-size:.88rem;color:#e2e8f0;margin-bottom:6px">Installer PREDIKTA sur iPhone</div>
+        <div style="font-weight:800;font-size:.88rem;color:#e2e8f0;margin-bottom:6px">Installer ZYNORIQ sur iPhone</div>
         <div style="font-size:.72rem;color:#64748b;line-height:1.5">Appuyez sur <strong style="color:#88aaff">⬆️ Partager</strong> puis <strong style="color:#88aaff">Sur l'écran d'accueil</strong></div>
         <button onclick="this.closest('#_pwaModal').remove();localStorage.setItem('${KEY_DISMISSED}','1')" style="margin-top:12px;padding:6px 18px;border-radius:8px;border:none;background:rgba(124,58,237,.2);color:#a78bfa;font-size:.72rem;cursor:pointer">OK, compris</button>`;
       document.body.appendChild(modal);

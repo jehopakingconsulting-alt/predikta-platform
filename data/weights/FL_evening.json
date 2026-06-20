@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "freq": 0.3455,
+    "gap": 0.2689,
+    "markov": 0.3855
+  },
+  "meta": {
+    "state": "FL",
+    "tod": "Evening",
+    "draw_count": 378,
+    "window": 40,
+    "avg_rank_percentile": {
+      "freq": 0.4505,
+      "gap": 0.3506,
+      "markov": 0.5026
+    }
+  }
+}

@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Facturation Stripe (Phase 2b)
+﻿"""
+ZYNORIQ — Facturation Stripe (Phase 2b)
 ==========================================
 Gère les abonnements payants PRO / VIP / PREMIUM / BUSINESS via Stripe
 Checkout + Customer Portal, et synchronise l'état de l'abonnement (essai,

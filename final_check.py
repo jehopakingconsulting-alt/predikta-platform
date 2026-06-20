@@ -1,5 +1,5 @@
-"""
-PREDIKTA AI — Verification Finale Corrigée
+﻿"""
+ZYNORIQ AI — Verification Finale Corrigée
 """
 import sys, io, json, re, os
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -64,16 +64,16 @@ print("="*55)
 
 res = read("static/results.html")
 
-# Favorites — used via window.PREDIKTA.toggleFav (from nav.js)
-has_fav_nav  = 'PREDIKTA' in res or 'toggleFav' in res or 'isFav' in res
+# Favorites — used via window.ZYNORIQ.toggleFav (from nav.js)
+has_fav_nav  = 'ZYNORIQ' in res or 'toggleFav' in res or 'isFav' in res
 has_fav_navjs = 'toggleFav' in read("static/nav.js")
 if has_fav_navjs:
-    ok("Favoris dans results.html — via window.PREDIKTA (nav.js) ✓")
+    ok("Favoris dans results.html — via window.ZYNORIQ (nav.js) ✓")
 else:
     fail("Favoris — manquant dans nav.js")
 
 # results.html — ajouter bouton favori sur les cards état
-if 'fav' in res.lower() or 'PREDIKTA.toggle' in res:
+if 'fav' in res.lower() or 'ZYNORIQ.toggle' in res:
     ok("results.html — Bouton favoris sur les cartes états")
 else:
     warn("results.html — Bouton favoris sur cartes non implémenté (cosmétique, non bloquant)")
@@ -197,7 +197,7 @@ print(f"  ⚠️   WARN : {WARN}/{total}  (non bloquants)")
 print(f"  ❌  FAIL : {FAIL}/{total}")
 print(f"\n  SCORE : {score}%")
 if FAIL == 0:
-    print("\n  🚀  PREDIKTA AI — PRÊT POUR LE DÉPLOIEMENT")
+    print("\n  🚀  ZYNORIQ AI — PRÊT POUR LE DÉPLOIEMENT")
     if WARN:
         print(f"  ℹ️   {WARN} avertissement(s) mineur(s) → voir ci-dessus")
 else:

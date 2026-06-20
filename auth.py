@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Comptes utilisateurs, abonnements & paywall
+﻿"""
+ZYNORIQ — Comptes utilisateurs, abonnements & paywall
 ========================================================
 Phase 2a : système de comptes (nom d'utilisateur + email + mot de passe),
 plans payants PRO / VIP / ELITE avec essai gratuit, quotas quotidiens et
@@ -19,6 +19,7 @@ import json
 import secrets
 import string
 import smtplib
+import html as _html
 from email.message import EmailMessage
 from datetime import datetime, date, timedelta
 
@@ -70,7 +71,7 @@ PLAN_ORDER = ["pro", "vip", "elite", "business"]
 
 # ── Programme de parrainage (Phase 2) ───────────────────────────────────────
 # Paliers basés sur le nombre de filleuls inscrits (referral_count) :
-#  - 3  filleuls  -> badge Ambassadeur PREDIKTA
+#  - 3  filleuls  -> badge Ambassadeur ZYNORIQ
 #  - 10 filleuls  -> 7 jours d'accès VIP offerts
 #  - 25 filleuls  -> 30 jours d'accès PREMIUM (elite) offerts
 REFERRAL_MILESTONES = {
@@ -707,10 +708,10 @@ def subscription_required(f):
     return wrapper
 
 
-def _send_email(to: str, subject: str, body: str):
-    """Envoie un email texte si le SMTP est configuré
-    (variables d'env SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/SMTP_FROM).
-    En l'absence de configuration (dev local), le message est juste loggé."""
+def _send_email(to: str, subject: str, body: str, html_body: str = None):
+    """Envoie un email (texte + HTML optionnel) si le SMTP est configuré.
+    Variables d'env : SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / SMTP_FROM.
+    Sans config SMTP, le message est loggé (dev local)."""
     smtp_host = os.environ.get("SMTP_HOST")
     if not smtp_host:
         text = f"[auth] (email non envoye, SMTP non configure) A: {to} | Sujet: {subject}\n{body}"
@@ -722,6 +723,8 @@ def _send_email(to: str, subject: str, body: str):
     msg["From"] = os.environ.get("SMTP_FROM", "no-reply@predikta.app")
     msg["To"] = to
     msg.set_content(body)
+    if html_body:
+        msg.add_alternative(html_body, subtype="html")
 
     smtp_port = int(os.environ.get("SMTP_PORT", "587"))
     smtp_user = os.environ.get("SMTP_USER")
@@ -732,126 +735,236 @@ def _send_email(to: str, subject: str, body: str):
             if smtp_user and smtp_pass:
                 server.login(smtp_user, smtp_pass)
             server.send_message(msg)
+        print(f"[auth] Email envoyé à {to} : {subject}")
     except Exception as e:
         print(f"[auth] Échec envoi email ({subject}) à {to}: {e}")
 
 
 def send_password_reset_email(user, token: str):
     """Envoie l'email de réinitialisation de mot de passe."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     reset_link = f"{base_url}/reset-password?token={token}"
 
     _send_email(
         user.email,
-        "PREDIKTA — Réinitialisation de votre mot de passe",
+        "ZYNORIQ — Réinitialisation de votre mot de passe",
         "Bonjour,\n\n"
-        "Une demande de réinitialisation de mot de passe a été effectuée pour votre compte PREDIKTA.\n"
+        "Une demande de réinitialisation de mot de passe a été effectuée pour votre compte ZYNORIQ.\n"
         f"Cliquez sur ce lien pour choisir un nouveau mot de passe (valable 1 heure) :\n{reset_link}\n\n"
         "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email."
     )
 
 
 def send_welcome_email(user):
-    """Email de confirmation d'inscription, envoyé juste après la création du compte."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    """Email de bienvenue HTML envoyé juste après la création du compte."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
+    name = _html.escape(user.username or "là")
+
+    plain = (
+        f"Bonjour {name},\n\n"
+        "Bienvenue sur ZYNORIQ — ta plateforme d'analyse prédictive Pick 3 !\n\n"
+        "3 choses à faire maintenant :\n"
+        f"1. Lancer ta première analyse → {base_url}/analyze\n"
+        f"2. Consulter les résultats live → {base_url}/results\n"
+        f"3. Choisir ton plan → {base_url}/pro\n\n"
+        "À très vite,\nL'équipe ZYNORIQ"
+    )
+
+    html = f"""<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bienvenue sur ZYNORIQ</title>
+</head>
+<body style="margin:0;padding:0;background:#04040f;font-family:'Helvetica Neue',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#04040f;padding:40px 0">
+<tr><td align="center">
+<table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%">
+
+  <!-- Header -->
+  <tr><td style="background:linear-gradient(135deg,#0d0d2e,#1a0a3d);border-radius:16px 16px 0 0;padding:36px 40px;text-align:center;border:1px solid #1a1a45;border-bottom:none">
+    <div style="font-size:2.2rem;margin-bottom:8px">🎯</div>
+    <div style="font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;letter-spacing:.08em;background:linear-gradient(135deg,#6688ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">ZYNORIQ</div>
+    <div style="font-size:.75rem;color:#4d5a8a;letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Analyse prédictive Pick 3</div>
+  </td></tr>
+
+  <!-- Body -->
+  <tr><td style="background:#08081f;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:36px 40px">
+    <p style="font-size:1.05rem;font-weight:700;color:#e2e8f0;margin:0 0 8px">Bonjour {name} 👋</p>
+    <p style="font-size:.88rem;color:#64748b;margin:0 0 28px;line-height:1.7">
+      Ton compte ZYNORIQ est actif. Tu as maintenant accès aux prédictions ML Pick 3 pour 43 États américains, mises à jour en temps réel.
+    </p>
+
+    <!-- 3 étapes -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px">
+      <tr>
+        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
+          <div style="font-size:1.2rem;margin-bottom:6px">⚡</div>
+          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Lancer une analyse</div>
+          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">7 algorithmes ML en 30 secondes · Top 10 combos classés par confiance</div>
+        </td>
+      </tr>
+      <tr><td height="10"></td></tr>
+      <tr>
+        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
+          <div style="font-size:1.2rem;margin-bottom:6px">🔴</div>
+          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Résultats live</div>
+          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">43 États · Mis à jour automatiquement dès que le tirage tombe</div>
+        </td>
+      </tr>
+      <tr><td height="10"></td></tr>
+      <tr>
+        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
+          <div style="font-size:1.2rem;margin-bottom:6px">🔔</div>
+          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Alertes push</div>
+          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">Notification instantanée sur ton téléphone dès que ton État tire</div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- CTA principal -->
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td align="center">
+        <a href="{base_url}/onboarding" style="display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#ffffff;font-weight:800;font-size:.9rem;text-decoration:none;letter-spacing:.3px">
+          🚀 Démarrer maintenant →
+        </a>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- Separateur confiance -->
+  <tr><td style="background:#0a0a20;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:20px 40px">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" style="padding:0 8px">
+          <div style="font-size:1.1rem">🎯</div>
+          <div style="font-size:.65rem;font-weight:800;color:#22e87a;margin-top:4px">7 MODÈLES ML</div>
+        </td>
+        <td align="center" style="padding:0 8px">
+          <div style="font-size:1.1rem">📊</div>
+          <div style="font-size:.65rem;font-weight:800;color:#4f9eff;margin-top:4px">43 ÉTATS</div>
+        </td>
+        <td align="center" style="padding:0 8px">
+          <div style="font-size:1.1rem">⚡</div>
+          <div style="font-size:.65rem;font-weight:800;color:#a78bfa;margin-top:4px">TEMPS RÉEL</div>
+        </td>
+        <td align="center" style="padding:0 8px">
+          <div style="font-size:1.1rem">🔔</div>
+          <div style="font-size:.65rem;font-weight:800;color:#ffd700;margin-top:4px">ALERTES PUSH</div>
+        </td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <!-- Footer -->
+  <tr><td style="background:#06061a;border:1px solid #1a1a45;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center">
+    <p style="font-size:.68rem;color:#334155;margin:0 0 6px">Tu reçois cet email car tu viens de créer un compte sur ZYNORIQ.</p>
+    <p style="font-size:.68rem;color:#334155;margin:0">
+      <a href="{base_url}/results" style="color:#4f9eff;text-decoration:none">Résultats</a> &nbsp;·&nbsp;
+      <a href="{base_url}/analyze" style="color:#4f9eff;text-decoration:none">Analyser</a> &nbsp;·&nbsp;
+      <a href="{base_url}/pro" style="color:#4f9eff;text-decoration:none">Plans & Tarifs</a>
+    </p>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body></html>"""
+
     _send_email(
         user.email,
-        "Bienvenue sur PREDIKTA 🎉",
-        f"Bonjour {user.username},\n\n"
-        "Bienvenue sur PREDIKTA, ta plateforme d'analyse prédictive de loterie !\n\n"
-        "Ton compte a bien été créé. Choisis ton plan pour démarrer ta période d'essai gratuite :\n"
-        f"{base_url}/pricing\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        f"Bienvenue sur ZYNORIQ, {name} 🎯",
+        plain,
+        html_body=html,
     )
 
 
 def send_trial_ending_email(user, sub):
     """Email de rappel envoyé lorsque la période d'essai arrive à échéance."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     cfg = PLAN_CONFIG.get(sub.plan, {})
     plan_label = cfg.get("label", sub.plan or "")
     _send_email(
         user.email,
-        "PREDIKTA — Ton essai gratuit se termine bientôt",
+        "ZYNORIQ — Ton essai gratuit se termine bientôt",
         f"Bonjour {user.username},\n\n"
         f"Ta période d'essai gratuite du plan {plan_label} se termine dans moins de 24 heures.\n"
         "Pour continuer à profiter de tes analyses et prédictions sans interruption, "
         "ajoute un moyen de paiement dès maintenant :\n"
         f"{base_url}/account\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        "À très vite,\nL'équipe ZYNORIQ"
     )
 
 
 def send_payment_failed_email(user):
     """Email envoyé lorsqu'un paiement Stripe échoue (invoice.payment_failed)."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     _send_email(
         user.email,
-        "PREDIKTA — Échec de paiement",
+        "ZYNORIQ — Échec de paiement",
         f"Bonjour {user.username},\n\n"
-        "Le paiement de ton abonnement PREDIKTA a échoué.\n"
+        "Le paiement de ton abonnement ZYNORIQ a échoué.\n"
         "Pour éviter toute interruption de ton accès, merci de mettre à jour ton moyen de paiement :\n"
         f"{base_url}/account\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        "À très vite,\nL'équipe ZYNORIQ"
     )
 
 
 def send_new_result_alert_email(user, state: str, game_label: str, draw: dict):
     """Email envoyé lorsqu'un nouveau tirage est disponible pour une alerte
     « Nouveau tirage » (alert_type=new_result) créée par l'utilisateur."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     nums = ", ".join(draw.get("nums") or [])
     date_str = draw.get("date", "")
     tod = draw.get("tod", "")
     when = f"{date_str} ({tod})" if tod else date_str
     _send_email(
         user.email,
-        f"PREDIKTA — Nouveau tirage {state} {game_label}",
+        f"ZYNORIQ — Nouveau tirage {state} {game_label}",
         f"Bonjour {user.username},\n\n"
         f"Un nouveau tirage est disponible pour {game_label} ({state}) :\n"
         f"Date : {when}\n"
         f"Résultat : {nums}\n\n"
         f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        "À très vite,\nL'équipe ZYNORIQ"
     )
 
 
 def send_hotcold_alert_email(user, state: str, game_label: str, alert_type: str, items: list[dict]):
     """Email envoyé lorsqu'un chiffre devient HOT (alert_type=hot_number) ou
     COLD (alert_type=cold_number) pour l'État/jeu surveillé par l'utilisateur."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     pos_labels = {"d1": "1ère position", "d2": "2ème position", "d3": "3ème position"}
     label = "chaud(s)" if alert_type == "hot_number" else "froid(s)"
     title = "Numéro chaud" if alert_type == "hot_number" else "Numéro froid"
     lines = "\n".join(f"- Chiffre {it['digit']} ({pos_labels.get(it['pos'], it['pos'])})" for it in items)
     _send_email(
         user.email,
-        f"PREDIKTA — {title} détecté pour {state} {game_label}",
+        f"ZYNORIQ — {title} détecté pour {state} {game_label}",
         f"Bonjour {user.username},\n\n"
         f"De nouveaux chiffres {label} ont été détectés pour {game_label} ({state}) "
         f"sur les 30 derniers tirages :\n\n"
         f"{lines}\n\n"
         f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        "À très vite,\nL'équipe ZYNORIQ"
     )
 
 
 def send_custom_alert_email(user, state: str, game_label: str, number: str, draw: dict):
     """Email envoyé lorsqu'un numéro surveillé (alerte personnalisée,
     alert_type=custom) sort dans un nouveau tirage."""
-    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://predikta-tez2.onrender.com")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
     date_str = draw.get("date", "")
     tod = draw.get("tod", "")
     when = f"{date_str} ({tod})" if tod else date_str
     _send_email(
         user.email,
-        f"PREDIKTA — Votre numéro {number} est sorti ! ({state} {game_label})",
+        f"ZYNORIQ — Votre numéro {number} est sorti ! ({state} {game_label})",
         f"Bonjour {user.username},\n\n"
         f"Le numéro que tu surveilles, {number}, vient de sortir pour "
         f"{game_label} ({state}) :\n"
         f"Date : {when}\n\n"
         f"Consulte l'analyse complète :\n{base_url}/results?state={state.lower()}\n\n"
-        "À très vite,\nL'équipe PREDIKTA"
+        "À très vite,\nL'équipe ZYNORIQ"
     )
 
 
@@ -937,12 +1050,29 @@ def bizai_quota_status(user) -> dict:
     }
 
 
+# ── Rate limiter léger en mémoire (sans dépendance externe) ──────────────────
+import time as _time
+_rl_store: dict = {}  # {(ip, endpoint): [timestamps]}
+
+def _rate_limit(max_calls: int, window_sec: int) -> bool:
+    """Returns True (blocked) if the caller IP exceeds max_calls in window_sec."""
+    ip = request.remote_addr or "unknown"
+    key = (ip, request.endpoint)
+    now = _time.time()
+    calls = [t for t in _rl_store.get(key, []) if now - t < window_sec]
+    calls.append(now)
+    _rl_store[key] = calls
+    return len(calls) > max_calls
+
+
 # ── Blueprint : routes d'authentification & compte ──────────────────────────
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    if _rate_limit(5, 60):
+        return jsonify({"error": "Trop de tentatives, réessaie dans 1 minute."}), 429
     data = request.get_json(silent=True) or {}
     username = (data.get("username") or "").strip()
     email    = (data.get("email") or "").strip().lower()
@@ -992,6 +1122,8 @@ def register():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
+    if _rate_limit(10, 60):
+        return jsonify({"error": "Trop de tentatives, réessaie dans 1 minute."}), 429
     data = request.get_json(silent=True) or {}
     identifier = (data.get("email") or data.get("username") or "").strip().lower()
     password   = data.get("password") or ""
@@ -1082,6 +1214,8 @@ def forgot_password():
     """Demande de réinitialisation : génère un token valable 1h et envoie
     le lien par email. Réponse identique que l'email existe ou non, pour
     ne pas révéler quels emails sont enregistrés."""
+    if _rate_limit(3, 300):
+        return jsonify({"error": "Trop de tentatives, réessaie dans 5 minutes."}), 429
     data = request.get_json(silent=True) or {}
     email = (data.get("email") or "").strip().lower()
 

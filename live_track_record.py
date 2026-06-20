@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Live Track Record (prospectif)
+﻿"""
+ZYNORIQ — Live Track Record (prospectif)
 
 Flux :
   1. PRÉ-TIRAGE  (5-10 min avant)  → save_prediction()  sauvegarde le Top 10 ML

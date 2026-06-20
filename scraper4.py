@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Pick 4 / Cash 4 / Win 4 / Daily 4 Scraper
+﻿"""
+ZYNORIQ — Pick 4 / Cash 4 / Win 4 / Daily 4 Scraper
 Mirrors scraper.py but for 4-digit draw games.
 CSV format: date, tod, d1, d2, d3, d4
 """

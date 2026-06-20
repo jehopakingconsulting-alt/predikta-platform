@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Extra official-source scrapers
+﻿"""
+ZYNORIQ — Extra official-source scrapers
 Some states truly run 3 daily Pick3 draws (Midday/Evening/Night) but
 lotteryusa.com doesn't publish all of them. For those states we fetch
 directly from the official state-lottery API.

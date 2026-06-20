@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Dynamic Weight Calibrator for Pick 4
+﻿"""
+ZYNORIQ — Dynamic Weight Calibrator for Pick 4
 Per state + time-of-day, backtests the last N draws and measures how well
 each scoring component (freq, gap, markov) ranks real combos vs. random.
 Weights are saved to data/weights4/{STATE}_{TOD}.json and consumed by

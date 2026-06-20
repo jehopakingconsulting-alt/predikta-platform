@@ -1,5 +1,5 @@
-"""
-PREDIKTA — one-time data restoration script.
+﻿"""
+ZYNORIQ — one-time data restoration script.
 
 Run this on the production instance (Render Web Shell, in ~/project/src).
 It merges the deep draw history committed in git (main branch on GitHub)

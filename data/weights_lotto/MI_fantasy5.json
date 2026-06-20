@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "freq": 0.3437,
+    "gap": 0.3086,
+    "pair": 0.3476
+  },
+  "meta": {
+    "state": "MI",
+    "slug": "fantasy5",
+    "draw_count": 350,
+    "window": 30,
+    "avg_rank": {
+      "freq": 0.5189,
+      "gap": 0.4659,
+      "pair": 0.5248
+    }
+  }
+}

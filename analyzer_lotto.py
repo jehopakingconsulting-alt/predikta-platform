@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Multi-ball lotto analyzer (Cash 5, Fantasy 5, Take 5, etc.)
+﻿"""
+ZYNORIQ — Multi-ball lotto analyzer (Cash 5, Fantasy 5, Take 5, etc.)
 Handles games where 5 (or N) distinct numbers are drawn from a pool (e.g. 1-43).
 Numbers are unordered and without replacement — position analysis doesn't apply.
 

@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "freq": 0.3587,
+    "gap": 0.2927,
+    "markov": 0.3486
+  },
+  "meta": {
+    "state": "NY",
+    "tod": "Evening",
+    "draw_count": 378,
+    "window": 40,
+    "avg_rank_percentile": {
+      "freq": 0.4953,
+      "gap": 0.4043,
+      "markov": 0.4814
+    }
+  }
+}

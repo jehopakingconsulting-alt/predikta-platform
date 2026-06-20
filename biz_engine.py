@@ -1,5 +1,5 @@
-"""
-PREDIKTA BUSINESS AI — Project Analysis Engine
+﻿"""
+ZYNORIQ BUSINESS AI — Project Analysis Engine
 Generates a complete 12-section business intelligence report
 from a structured project questionnaire.
 """

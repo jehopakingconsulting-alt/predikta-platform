@@ -2402,7 +2402,7 @@ function renderConsensus(d, today){
     const cClass    = confClass(confLabel);       // conf-1 … conf-5
     const barClass  = cClass.replace('conf-','conf-bar-'); // conf-bar-1 … conf-bar-5
     const rankClass = i < 3 ? `rank-${i+1}` : '';
-    const isFav     = window.PREDIKTA?.isFav(s.combo);
+    const isFav     = window.ZYNORIQ?.isFav(s.combo);
     const transId   = `trans-${state}-${i}`;
     const rankBadge = i === 0 ? `<span class="rank-badge rank-badge-1">🥇 #1 — MEILLEUR</span>`
                     : i === 1 ? `<span class="rank-badge rank-badge-2">🥈 #2</span>`
@@ -2507,7 +2507,7 @@ function toggleTransparency(id){
 }
 
 function toggleFavCombo(combo, btn, state){
-  const added = window.PREDIKTA?.toggleFav(combo);
+  const added = window.ZYNORIQ?.toggleFav(combo);
   btn.textContent = added ? '⭐' : '☆';
   showToast(added ? '⭐ Ajouté aux favoris' : 'Retiré des favoris');
   if(added && state){

@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Lightweight LSTM prediction engine (pure NumPy, no TensorFlow/PyTorch).
+﻿"""
+ZYNORIQ — Lightweight LSTM prediction engine (pure NumPy, no TensorFlow/PyTorch).
 Captures long-range sequential dependencies in Pick 3/4 digit sequences.
 
 Architecture per position:

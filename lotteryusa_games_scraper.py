@@ -1,5 +1,5 @@
-"""
-PREDIKTA — lotteryusa.com generic multi-game scraper.
+﻿"""
+ZYNORIQ — lotteryusa.com generic multi-game scraper.
 
 Same c-draw-card structure as lotteryusa_scraper.py (used for Pick3/Cash3),
 but generalized to any game: main numbers come from <li class="c-ball ...">,

@@ -1,5 +1,5 @@
-"""
-Supprime toutes les références "AI/IA" des fichiers publics de PREDIKTA.
+﻿"""
+Supprime toutes les références "AI/IA" des fichiers publics de ZYNORIQ.
 Remplace par des termes neutres et professionnels.
 """
 import os, re, sys
@@ -9,13 +9,13 @@ ROOT = "C:/Users/PC/Downloads/lottery-analyzer/static"
 
 REPLACEMENTS = [
     # Titre principal
-    ("PREDIKTA AI",                    "PREDIKTA"),
-    ("PREDIKTA — AI",                  "PREDIKTA"),
+    ("ZYNORIQ AI",                    "ZYNORIQ"),
+    ("ZYNORIQ — AI",                  "ZYNORIQ"),
 
     # Business AI → Business Intelligence
     ("Business AI",                    "Business Intelligence"),
     ("business AI",                    "Business Intelligence"),
-    ("PREDIKTA Business AI",           "PREDIKTA Business"),
+    ("ZYNORIQ Business AI",           "ZYNORIQ Business"),
     ("predikta-business-ai",           "predikta-business"),
     ("bizai.html",                     "bizai.html"),  # garder l'URL technique
 
@@ -57,8 +57,8 @@ REPLACEMENTS = [
     ("Powered by AI",                  "Powered by Advanced Analytics"),
 
     # Assistant
-    ("Assistant IA",                   "Assistant PREDIKTA"),
-    ("assistant IA",                   "assistant PREDIKTA"),
+    ("Assistant IA",                   "Assistant ZYNORIQ"),
+    ("assistant IA",                   "assistant ZYNORIQ"),
 
     # Descriptions techniques (garder termes neutres)
     ("algorithmes IA",                 "algorithmes"),

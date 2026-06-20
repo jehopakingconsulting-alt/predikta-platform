@@ -1,5 +1,5 @@
-"""
-PREDIKTA — lotteryusa.com scraper
+﻿"""
+ZYNORIQ — lotteryusa.com scraper
 
 lotterypost.com est bloqué par Cloudflare sur les IP de datacenter (Render).
 lotteryusa.com n'est pas derrière Cloudflare et publie les memes resultats

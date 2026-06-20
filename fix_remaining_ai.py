@@ -1,12 +1,12 @@
-"""Corrige les dernières occurrences visibles de IA/AI."""
+﻿"""Corrige les dernières occurrences visibles de IA/AI."""
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
 fixes = [
     # home.html meta description
     ("static/home.html",
-     'PREDIKTA — Plateforme mondiale : prédictions loterie IA, résultats en direct 44 États, analyse Business complète.',
-     'PREDIKTA — Plateforme mondiale : prédictions avancées, résultats en direct 44 États, analyse Business complète.'),
+     'ZYNORIQ — Plateforme mondiale : prédictions loterie IA, résultats en direct 44 États, analyse Business complète.',
+     'ZYNORIQ — Plateforme mondiale : prédictions avancées, résultats en direct 44 États, analyse Business complète.'),
     # bizai.html meta
     ("static/bizai.html",
      "avec l'IA :",

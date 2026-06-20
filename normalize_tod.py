@@ -1,5 +1,5 @@
-"""
-PREDIKTA — one-time data normalization script.
+﻿"""
+ZYNORIQ — one-time data normalization script.
 
 Several states (CT, DE, ID, ME, NC, NH, NM, PA, PR, VA, VT, TX) have their
 midday/afternoon draw session labeled "Day" in DRAW_SCHEDULE (app.py) and in

@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "freq": 0.3497,
+    "gap": 0.3007,
+    "pair": 0.3496
+  },
+  "meta": {
+    "state": "NC",
+    "slug": "cash5",
+    "draw_count": 350,
+    "window": 30,
+    "avg_rank": {
+      "freq": 0.5166,
+      "gap": 0.4441,
+      "pair": 0.5164
+    }
+  }
+}

@@ -1,5 +1,5 @@
-"""
-PREDIKTA AI — Deep Verification Script
+﻿"""
+ZYNORIQ AI — Deep Verification Script
 Verifies translations, code integrity, and functional endpoints.
 """
 import sys, io, json, re, os
@@ -425,7 +425,7 @@ score = round(PASS/total*100) if total else 0
 print(f"\n  SCORE GLOBAL : {score}%")
 
 if FAIL == 0 and WARN <= 3:
-    print("\n  🚀 PREDIKTA AI EST PRÊT POUR LE DÉPLOIEMENT")
+    print("\n  🚀 ZYNORIQ AI EST PRÊT POUR LE DÉPLOIEMENT")
 elif FAIL == 0:
     print(f"\n  ✅ Prêt — {WARN} avertissement(s) mineur(s) à surveiller")
 else:

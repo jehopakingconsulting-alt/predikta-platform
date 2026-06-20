@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Push Notifications (Web Push / VAPID)
+﻿"""
+ZYNORIQ — Push Notifications (Web Push / VAPID)
 
 Stockage des abonnements : data/push_subscriptions.json
 """

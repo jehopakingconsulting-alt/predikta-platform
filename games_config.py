@@ -1,5 +1,5 @@
-"""
-PREDIKTA AI — Complete Games Registry
+﻿"""
+ZYNORIQ AI — Complete Games Registry
 All lottery games per state from lotterypost.com
 """
 
@@ -176,7 +176,7 @@ STATE_GAMES = {
     ],
 
     # ── États supplémentaires (jeu quotidien principal Pick3/Cash3) ────────
-    # Ajoutés pour que TOUS les États suivis par PREDIKTA apparaissent sur
+    # Ajoutés pour que TOUS les États suivis par ZYNORIQ apparaissent sur
     # la page "Tous les Résultats", pas seulement les 14 États vedettes.
     "AR": [{"slug": "cash3", "label": "Cash 3", "type": "pick3", "dpd": 2}],
     "AZ": [{"slug": "pick3", "label": "Pick 3", "type": "pick3", "dpd": 1}],

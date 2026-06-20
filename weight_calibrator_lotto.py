@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Dynamic Weight Calibrator for multi-ball lotto games
+﻿"""
+ZYNORIQ — Dynamic Weight Calibrator for multi-ball lotto games
 (Cash 5, Fantasy 5, Take 5, etc.)
 
 For each state+slug, runs a rank-based backtest over the last N draws and

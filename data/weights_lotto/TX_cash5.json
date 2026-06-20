@@ -1,0 +1,18 @@
+{
+  "weights": {
+    "freq": 0.341,
+    "gap": 0.3152,
+    "pair": 0.3438
+  },
+  "meta": {
+    "state": "TX",
+    "slug": "cash5",
+    "draw_count": 300,
+    "window": 10,
+    "avg_rank": {
+      "freq": 0.3774,
+      "gap": 0.349,
+      "pair": 0.3806
+    }
+  }
+}

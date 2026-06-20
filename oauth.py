@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Connexion via fournisseurs externes (OAuth / OIDC)
+﻿"""
+ZYNORIQ — Connexion via fournisseurs externes (OAuth / OIDC)
 ================================================================
 Phase : Google Sign-In (Authlib). Facebook / Microsoft pourront être
 ajoutés plus tard sur le même modèle.

@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Generic digit-game analyzer (Pick3 / Pick4 / Pick5).
+﻿"""
+ZYNORIQ — Generic digit-game analyzer (Pick3 / Pick4 / Pick5).
 
 Generalizes the statistical engine from analyzer.py (frequency, hot/cold,
 gaps, Markov transitions, weighted suggestions) to an arbitrary number of

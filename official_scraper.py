@@ -1,9 +1,12 @@
-"""
-PREDIKTA — Official State Lottery Scrapers
+﻿"""
+ZYNORIQ — Official State Lottery Scrapers
 Source directe : sites officiels des loteries d'État.
 
 Latence : 1-3 min après tirage (vs 10-20 min pour les agrégateurs).
-États couverts : NY, FL, GA, TX, PA, NJ, OH, IL, NC, MD
+États couverts : NY, FL, GA, TX, PA, NJ, OH, IL, NC, MD,
+                 TN, VA, SC, KY, IN, MI, CT, WI, MN, LA,
+                 MO, CO, AR, WV, DE, MS, KS, OK, NM, ID,
+                 IA, NE, ME, VT, NH, WA, AZ, CA, DC, PR (40 états)
 
 Ces scrapers sont appelés en SOURCE 0 dans smart_scraper.py,
 avant lotteryusa / usamega / lotterypost.
@@ -444,6 +447,345 @@ def _parse_date(raw: str) -> str | None:
 # REGISTRY — mapping état → fonction de scraping officiel
 # ══════════════════════════════════════════════════════════════════════════
 
+# ══════════════════════════════════════════════════════════════════════════
+# HELPER — JSON + HTML fallback en une ligne
+# ══════════════════════════════════════════════════════════════════════════
+
+def _scrape(state: str, html_urls: list[str], json_urls: list[str] = None,
+            json_key: str = None, date_field: str = "drawDate",
+            nums_field: str = "winningNumbers", tod_field: str = "drawTime") -> list[dict]:
+    """
+    Helper générique : essaie chaque URL JSON puis chaque URL HTML.
+    Retourne dès qu'on a au moins un tirage.
+    """
+    draws = []
+
+    # 1. JSON endpoints
+    for url in (json_urls or []):
+        data = _get(url, json=True)
+        if not data:
+            continue
+        entries = data
+        if json_key:
+            entries = data.get(json_key, []) if isinstance(data, dict) else data
+        elif isinstance(data, dict):
+            # Cherche la première clé liste
+            for v in data.values():
+                if isinstance(v, list):
+                    entries = v
+                    break
+        for entry in (entries if isinstance(entries, list) else [entries]):
+            try:
+                date_str = _parse_date(str(entry.get(date_field, entry.get("DrawDate", entry.get("date", "")))))
+                raw_nums = str(entry.get(nums_field, entry.get("WinningNumbers", entry.get("numbers", ""))))
+                nums = re.findall(r'\b\d\b', raw_nums) or re.findall(r'\d', raw_nums)
+                tod_raw = str(entry.get(tod_field, entry.get("DrawTime", entry.get("period", "Evening"))))
+                if date_str and len(nums) >= 3:
+                    draws.append({"date": date_str, "tod": _classify_tod(tod_raw),
+                                  "d1": nums[0], "d2": nums[1], "d3": nums[2]})
+            except Exception:
+                pass
+        if draws:
+            return draws
+
+    # 2. HTML pages
+    for url in html_urls:
+        html = _get(url)
+        if html:
+            draws = _parse_generic_html(html, state)
+            if draws:
+                return draws
+
+    return draws
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# TENNESSEE — tnlottery.com (Cash 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_tn() -> list[dict]:
+    return _scrape("TN",
+        html_urls=["https://tnlottery.com/winningnumbers/",
+                   "https://tnlottery.com/games/cash-3/"],
+        json_urls=["https://tnlottery.com/api/games/cash3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# VIRGINIA — valottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_va() -> list[dict]:
+    return _scrape("VA",
+        html_urls=["https://www.valottery.com/data/winning-numbers",
+                   "https://www.valottery.com/games/pick3"],
+        json_urls=["https://www.valottery.com/api/Numbers/GetDrawingsByGame?gameTypeId=pick3&count=20"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# SOUTH CAROLINA — sceducationlottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_sc() -> list[dict]:
+    return _scrape("SC",
+        html_urls=["https://www.sceducationlottery.com/play/draw-games/pick-3",
+                   "https://www.sceducationlottery.com/winning-numbers/pick-3"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# KENTUCKY — kylottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ky() -> list[dict]:
+    return _scrape("KY",
+        html_urls=["https://www.kylottery.com/apps/draw_games/pick3/",
+                   "https://www.kylottery.com/winning-numbers/pick-3"],
+        json_urls=["https://www.kylottery.com/api/games/pick3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# INDIANA — hoosierlottery.com (Daily 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_in() -> list[dict]:
+    return _scrape("IN",
+        html_urls=["https://www.hoosierlottery.com/games/daily3",
+                   "https://www.hoosierlottery.com/winning-numbers/"],
+        json_urls=["https://www.hoosierlottery.com/api/games/daily3/results"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MICHIGAN — michiganlottery.com (Daily 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_mi() -> list[dict]:
+    return _scrape("MI",
+        html_urls=["https://www.michiganlottery.com/games/daily-3",
+                   "https://www.michiganlottery.com/winning-numbers/"],
+        json_urls=["https://www.michiganlottery.com/api/game/results?gameName=daily-3&count=10"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# CONNECTICUT — ctlottery.org (Play3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ct() -> list[dict]:
+    return _scrape("CT",
+        html_urls=["https://www.ctlottery.org/winning-numbers/",
+                   "https://www.ctlottery.org/games/play3/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# WISCONSIN — wilottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_wi() -> list[dict]:
+    return _scrape("WI",
+        html_urls=["https://www.wilottery.com/lotto-games/pick3.aspx",
+                   "https://www.wilottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MINNESOTA — mnlottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_mn() -> list[dict]:
+    return _scrape("MN",
+        html_urls=["https://www.mnlottery.com/games/pick3/",
+                   "https://www.mnlottery.com/winning_numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# LOUISIANA — louisianalottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_la() -> list[dict]:
+    return _scrape("LA",
+        html_urls=["https://www.louisianalottery.com/games/pick-3",
+                   "https://www.louisianalottery.com/winning-numbers/"],
+        json_urls=["https://www.louisianalottery.com/api/games/pick3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MISSOURI — molottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_mo() -> list[dict]:
+    return _scrape("MO",
+        html_urls=["https://www.molottery.com/drawgames/pick3.do",
+                   "https://www.molottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# COLORADO — coloradolottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_co() -> list[dict]:
+    return _scrape("CO",
+        html_urls=["https://www.coloradolottery.com/en/games/pick-3/",
+                   "https://www.coloradolottery.com/en/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# ARKANSAS — myarkansaslottery.com (Cash 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ar() -> list[dict]:
+    return _scrape("AR",
+        html_urls=["https://www.myarkansaslottery.com/games/cash-3",
+                   "https://www.myarkansaslottery.com/winning-numbers/"],
+        json_urls=["https://www.myarkansaslottery.com/api/games/cash3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# WEST VIRGINIA — wvlottery.com (Daily 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_wv() -> list[dict]:
+    return _scrape("WV",
+        html_urls=["https://www.wvlottery.com/game/daily-3/",
+                   "https://www.wvlottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# DELAWARE — delottery.com (Play 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_de() -> list[dict]:
+    return _scrape("DE",
+        html_urls=["https://www.delottery.com/winning-numbers",
+                   "https://www.delottery.com/games/play3"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MISSISSIPPI — mslottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ms() -> list[dict]:
+    return _scrape("MS",
+        html_urls=["https://www.mslottery.com/en-us/games/drawgames/pick-3.html",
+                   "https://www.mslottery.com/en-us/winning-numbers.html"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# KANSAS — kslottery.net (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ks() -> list[dict]:
+    return _scrape("KS",
+        html_urls=["https://www.kslottery.net/Games/Pick3",
+                   "https://www.kslottery.net/winningnumbers/"],
+        json_urls=["https://www.kslottery.net/api/games/pick3/results"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# OKLAHOMA — lottery.ok.gov (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ok() -> list[dict]:
+    return _scrape("OK",
+        html_urls=["https://www.lottery.ok.gov/games/pick3.html",
+                   "https://www.lottery.ok.gov/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW MEXICO — nmlottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_nm() -> list[dict]:
+    return _scrape("NM",
+        html_urls=["https://www.nmlottery.com/games/pick-3",
+                   "https://www.nmlottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# IDAHO — idaholottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_id() -> list[dict]:
+    return _scrape("ID",
+        html_urls=["https://www.idaholottery.com/games/idaho-pick-3/",
+                   "https://www.idaholottery.com/results/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# IOWA — ialottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ia() -> list[dict]:
+    return _scrape("IA",
+        html_urls=["https://ialottery.com/games/pick3",
+                   "https://ialottery.com/winning-numbers/"],
+        json_urls=["https://ialottery.com/api/games/pick3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEBRASKA — nelottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ne() -> list[dict]:
+    return _scrape("NE",
+        html_urls=["https://www.nelottery.com/lotto/results/?game=12",
+                   "https://www.nelottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# MAINE — mainelottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_me() -> list[dict]:
+    return _scrape("ME",
+        html_urls=["https://www.mainelottery.com/games/pick3",
+                   "https://www.mainelottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# VERMONT — vtlottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_vt() -> list[dict]:
+    return _scrape("VT",
+        html_urls=["https://www.vtlottery.com/games/pick3",
+                   "https://www.vtlottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# NEW HAMPSHIRE — nhlottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_nh() -> list[dict]:
+    return _scrape("NH",
+        html_urls=["https://www.nhlottery.com/Games/Pick3",
+                   "https://www.nhlottery.com/winning-numbers/"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# WASHINGTON — walottery.com (Daily Game)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_wa() -> list[dict]:
+    return _scrape("WA",
+        html_urls=["https://www.walottery.com/WinningNumbers/DailyGame.aspx",
+                   "https://www.walottery.com/WinningNumbers/"],
+        json_urls=["https://www.walottery.com/api/WinningNumbers/DailyGame"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# ARIZONA — arizonalottery.com (Pick 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_az() -> list[dict]:
+    return _scrape("AZ",
+        html_urls=["https://www.arizonalottery.com/play/draw-games/pick/",
+                   "https://www.arizonalottery.com/winning-numbers/"],
+        json_urls=["https://www.arizonalottery.com/api/games/pick3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# CALIFORNIA — calottery.com (Daily 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_ca() -> list[dict]:
+    draws = _scrape("CA",
+        html_urls=[],
+        json_urls=["https://www.calottery.com/api/DrawGameApi/DrawGamePastDrawResults/9/1/20"])
+    if not draws:
+        draws = _scrape("CA",
+            html_urls=["https://www.calottery.com/draw-games/daily-3"])
+    return draws
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# WASHINGTON DC — dclottery.com (DC-3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_dc() -> list[dict]:
+    return _scrape("DC",
+        html_urls=["https://dclottery.com/games/dc3",
+                   "https://dclottery.com/winning-numbers/"],
+        json_urls=["https://dclottery.com/api/games/dc3/results/latest"])
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# PUERTO RICO — puertoricololottery.com (Pega 3)
+# ══════════════════════════════════════════════════════════════════════════
+def scrape_pr() -> list[dict]:
+    return _scrape("PR",
+        html_urls=["https://www.puertoricololottery.com/pega3",
+                   "https://loteriapr.com/pega3/",
+                   "https://www.loteriapr.com/resultados/"])
+
+
 OFFICIAL_SCRAPERS: dict[str, callable] = {
     "NY": scrape_ny,
     "FL": scrape_fl,
@@ -455,6 +797,37 @@ OFFICIAL_SCRAPERS: dict[str, callable] = {
     "IL": scrape_il,
     "NC": scrape_nc,
     "MD": scrape_md,
+    # Nouveaux scrapers officiels
+    "TN": scrape_tn,
+    "VA": scrape_va,
+    "SC": scrape_sc,
+    "KY": scrape_ky,
+    "IN": scrape_in,
+    "MI": scrape_mi,
+    "CT": scrape_ct,
+    "WI": scrape_wi,
+    "MN": scrape_mn,
+    "LA": scrape_la,
+    "MO": scrape_mo,
+    "CO": scrape_co,
+    "AR": scrape_ar,
+    "WV": scrape_wv,
+    "DE": scrape_de,
+    "MS": scrape_ms,
+    "KS": scrape_ks,
+    "OK": scrape_ok,
+    "NM": scrape_nm,
+    "ID": scrape_id,
+    "IA": scrape_ia,
+    "NE": scrape_ne,
+    "ME": scrape_me,
+    "VT": scrape_vt,
+    "NH": scrape_nh,
+    "WA": scrape_wa,
+    "AZ": scrape_az,
+    "CA": scrape_ca,
+    "DC": scrape_dc,
+    "PR": scrape_pr,
 }
 
 

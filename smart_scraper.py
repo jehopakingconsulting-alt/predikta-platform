@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Smart Multi-Source Scraper
+﻿"""
+ZYNORIQ — Smart Multi-Source Scraper
 Chaîne de sources avec fallback automatique pour tous les États.
 
 Ordre de priorité :

@@ -1,5 +1,5 @@
-"""
-PREDIKTA AI — Multi-Game Scraper
+﻿"""
+ZYNORIQ AI — Multi-Game Scraper
 Fetches ALL lottery games per state from lotterypost.com
 Handles Pick2, Pick3, Pick4, Pick5, Pick6, Powerball, Mega Millions, etc.
 """

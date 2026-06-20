@@ -1,5 +1,5 @@
-"""
-PREDIKTA — Universal Lottery Scraper
+﻿"""
+ZYNORIQ — Universal Lottery Scraper
 Source: Sources publiques de résultats de loterie (données factuelles)
 Supports 30+ US states · Pick3 / Cash3 / Daily3 / Play3
 Fetches years of historical data via monthly pagination.

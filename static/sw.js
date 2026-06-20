@@ -95,7 +95,7 @@ self.addEventListener('push', event => {
     }
   } catch (e) {}
 
-  const title   = payload.title || 'PREDIKTA';
+  const title   = payload.title || 'ZYNORIQ';
   const body    = payload.body  || 'Nouveaux résultats disponibles !';
   const url     = (payload.data && payload.data.url) || '/results';
 
