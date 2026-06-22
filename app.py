@@ -58,9 +58,15 @@ app.register_blueprint(auth_module.auth_bp)
 import billing as billing_module
 app.register_blueprint(billing_module.billing_bp)
 
+# ── ZYNORIQ MEMORY™ ──────────────────────────────────────────────────────
+import memory_engine as _mem
+
 # ── Connexion via Google / Facebook / Microsoft (OAuth) ───────────────────
 import oauth as oauth_module
 oauth_module.init_app(app)
+
+# Init Memory tables after auth DB is ready
+_mem.init_memory(app, auth_module.db)
 app.register_blueprint(oauth_module.oauth_bp)
 
 # ── Compression (gzip/br) — réduit fortement le poids des pages HTML/JS
@@ -3695,6 +3701,14 @@ def api_copilot():
     _cps.save_history(user_id, msg, reply or "", mode, page, lang, used_ai)
     _cps.log_request(user_id, mode, page, latency, "ok" if reply else "fallback")
 
+    # ── Save to Memory™ DB ──
+    if user_id:
+        try:
+            _mem.save_conversation(user_id, msg, reply or "", mode, page, lang, used_ai)
+            _mem.track_activity(user_id, "copilot", page=page)
+        except Exception:
+            pass
+
     return jsonify({
         "reply": reply or _cps.fallback_reply(lang, 'default'),
         "disclaimer": is_lottery,
@@ -3851,6 +3865,112 @@ def copilot_js():
     resp = make_response(send_from_directory("static", "copilot.js"))
     resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
     return resp
+
+
+# ═══════════════════════════════════════════════════════════
+# ZYNORIQ MEMORY™ — API Endpoints
+# ═══════════════════════════════════════════════════════════
+@app.route("/memory")
+def memory_page():
+    return send_from_directory("static", "memory.html")
+
+
+@app.route("/api/memory/profile")
+@auth_module.login_required
+def api_memory_profile():
+    user = auth_module.current_user()
+    profile = _mem.get_profile(user.id)
+    return jsonify({"profile": profile})
+
+
+@app.route("/api/memory/profile", methods=["POST"])
+@auth_module.login_required
+def api_memory_profile_update():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    _mem.save_profile(user.id, data)
+    return jsonify({"success": True})
+
+
+@app.route("/api/memory/conversations")
+@auth_module.login_required
+def api_memory_conversations():
+    user = auth_module.current_user()
+    limit = min(100, int(request.args.get("limit", "20")))
+    convos = _mem.get_conversations(user.id, limit=limit)
+    return jsonify({"conversations": convos})
+
+
+@app.route("/api/memory/recommendations")
+@auth_module.login_required
+def api_memory_recommendations():
+    user = auth_module.current_user()
+    lang = request.args.get("lang", "fr")
+    recs = _mem.get_recommendations(user.id, lang=lang)
+    return jsonify({"recommendations": recs})
+
+
+@app.route("/api/memory/dashboard")
+@auth_module.login_required
+def api_memory_dashboard():
+    user = auth_module.current_user()
+    lang = request.args.get("lang", "fr")
+    ctx = _mem.get_dashboard_context(user.id, lang=lang)
+    return jsonify(ctx)
+
+
+@app.route("/api/memory/preferences")
+@auth_module.login_required
+def api_memory_preferences():
+    user = auth_module.current_user()
+    prefs = _mem.get_preferences(user.id)
+    return jsonify({"preferences": prefs})
+
+
+@app.route("/api/memory/preferences", methods=["POST"])
+@auth_module.login_required
+def api_memory_preferences_update():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    current = _mem.get_preferences(user.id)
+    current.update(data)
+    _mem.save_preferences(user.id, current)
+    return jsonify({"success": True})
+
+
+@app.route("/api/memory/export")
+@auth_module.login_required
+def api_memory_export():
+    user = auth_module.current_user()
+    data = _mem.export_memory(user.id)
+    return jsonify(data)
+
+
+@app.route("/api/memory/clear", methods=["POST"])
+@auth_module.login_required
+def api_memory_clear():
+    user = auth_module.current_user()
+    _mem.clear_memory(user.id)
+    return jsonify({"success": True})
+
+
+@app.route("/api/memory/track", methods=["POST"])
+@auth_module.login_required
+def api_memory_track():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    prefs = _mem.get_preferences(user.id)
+    if not prefs.get("track_activities", True):
+        return jsonify({"skipped": True})
+    _mem.track_activity(
+        user.id,
+        activity_type=data.get("type", "page_visit"),
+        page=data.get("page", "/"),
+        state=data.get("state"),
+        game=data.get("game"),
+        details=data.get("details"),
+    )
+    return jsonify({"success": True})
 
 
 if __name__ == "__main__":

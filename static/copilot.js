@@ -689,13 +689,31 @@ function injectCSS(){
   document.head.appendChild(style);
 }
 
+// ── Memory™ Activity Tracking ────────────────────────────────────────────
+function trackPageVisit(){
+  try {
+    const ctx = gatherPageContext();
+    fetch('/api/memory/track', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type: 'page_visit',
+        page: location.pathname,
+        state: ctx.state || null,
+        game: ctx.game || null,
+      }),
+    }).catch(()=>{});
+  } catch(e){}
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────
 function init(){
   injectCSS();
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', inject);
+    document.addEventListener('DOMContentLoaded', ()=>{ inject(); trackPageVisit(); });
   } else {
     inject();
+    trackPageVisit();
   }
 }
 

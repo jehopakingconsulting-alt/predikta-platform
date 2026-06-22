@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Memory Center™ — ZYNORIQ</title>
+<meta name="description" content="ZYNORIQ Memory Center™ — Gérez votre profil intelligent, vos préférences et votre mémoire personnalisée."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--green:#22e87a;--red:#ff3d2e;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#1479FF,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:32px}
+.section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.section::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+.section-title{font-size:.9rem;font-weight:800;color:var(--text);margin-bottom:16px}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat-card{flex:1;min-width:120px;background:rgba(20,121,255,.08);border:1px solid rgba(20,121,255,.2);border-radius:10px;padding:14px;text-align:center}
+.stat-num{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:var(--accent)}
+.stat-label{font-size:.68rem;color:var(--muted2);margin-top:4px}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(26,26,69,.5)}
+.pref-label{font-size:.82rem;color:var(--text)}
+.pref-desc{font-size:.68rem;color:var(--muted2)}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .slider{position:absolute;inset:0;border-radius:12px;background:#1a1a45;transition:.3s}
+.toggle .slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:.3s}
+.toggle input:checked+.slider{background:var(--accent)}
+.toggle input:checked+.slider::before{transform:translateX(20px);background:#fff}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{padding:4px 12px;border-radius:16px;font-size:.72rem;font-weight:600;background:rgba(20,121,255,.12);border:1px solid rgba(20,121,255,.25);color:#88aaff}
+.convo-item{padding:10px 0;border-bottom:1px solid rgba(26,26,69,.4)}
+.convo-q{font-size:.8rem;font-weight:600;color:var(--text)}
+.convo-a{font-size:.72rem;color:var(--muted2);margin-top:4px;line-height:1.5}
+.convo-meta{font-size:.62rem;color:var(--muted);margin-top:4px}
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{padding:10px 20px;border-radius:10px;font-size:.78rem;font-weight:700;cursor:pointer;border:1px solid var(--border);transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none}
+.btn-danger{background:rgba(255,61,46,.1);border-color:rgba(255,61,46,.3);color:var(--red)}
+.btn-danger:hover{background:rgba(255,61,46,.2)}
+.btn-outline{background:transparent;color:var(--muted2)}
+.btn-outline:hover{border-color:var(--accent);color:var(--text)}
+.rec-card{background:rgba(20,121,255,.06);border:1px solid rgba(20,121,255,.2);border-radius:10px;padding:14px;margin-bottom:10px}
+.rec-title{font-size:.82rem;font-weight:700;color:var(--text)}
+.rec-desc{font-size:.72rem;color:var(--muted2);margin-top:4px;line-height:1.5}
+.rec-action{display:inline-block;margin-top:8px;font-size:.72rem;font-weight:700;color:var(--accent);text-decoration:none}
+.empty{font-size:.8rem;color:var(--muted);text-align:center;padding:20px}
+#loading{text-align:center;padding:40px;color:var(--muted)}
+@media(max-width:600px){.stat-row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>🧠 Memory Center™</h1>
+  <p class="subtitle" id="mc-subtitle">Votre profil intelligent — consultez, modifiez ou effacez votre mémoire ZYNORIQ.</p>
+
+  <div id="loading">Chargement...</div>
+  <div id="content" style="display:none">
+
+    <!-- Stats -->
+    <div class="section">
+      <div class="section-title">📊 Vue d'ensemble</div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num" id="s-visits">0</div><div class="stat-label">Visites</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-convos">0</div><div class="stat-label">Conversations</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-analyses">0</div><div class="stat-label">Analyses</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-level">—</div><div class="stat-label">Niveau</div></div>
+      </div>
+    </div>
+
+    <!-- Favorite States -->
+    <div class="section">
+      <div class="section-title">⭐ États favoris</div>
+      <div class="tag-list" id="fav-states"></div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="section">
+      <div class="section-title">💡 Recommandations personnalisées</div>
+      <div id="recs"></div>
+    </div>
+
+    <!-- Conversations -->
+    <div class="section">
+      <div class="section-title">💬 Dernières conversations Copilot</div>
+      <div id="convos"></div>
+    </div>
+
+    <!-- Preferences -->
+    <div class="section">
+      <div class="section-title">⚙️ Préférences de mémoire</div>
+      <div id="prefs"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="section">
+      <div class="section-title">🔒 Gestion des données</div>
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="exportMemory()">📥 Exporter mes données</button>
+        <button class="btn btn-danger" onclick="clearMemory()">🗑️ Effacer toute ma mémoire</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PREF_LABELS = {
+  track_conversations: {label:'Mémoriser les conversations', desc:'Le Copilot retient vos échanges pour des réponses contextuelles.'},
+  track_activities: {label:'Suivre l\'activité', desc:'Mémorise les pages visitées et analyses lancées.'},
+  track_searches: {label:'Mémoriser les recherches', desc:'Garde un historique de vos recherches récentes.'},
+  personalized_recommendations: {label:'Recommandations personnalisées', desc:'Suggestions basées sur votre utilisation.'},
+  personalized_dashboard: {label:'Dashboard personnalisé', desc:'Contenu adapté à chaque connexion.'},
+};
+
+async function loadMemory(){
+  try{
+    const [profR, convR, recR] = await Promise.all([
+      fetch('/api/memory/profile').then(r=>r.json()),
+      fetch('/api/memory/conversations?limit=10').then(r=>r.json()),
+      fetch('/api/memory/recommendations').then(r=>r.json()),
+    ]);
+
+    const profile = profR.profile || {};
+    const convos = convR.conversations || [];
+    const recs = recR.recommendations || [];
+
+    // Stats
+    document.getElementById('s-visits').textContent = profile.visit_count || 0;
+    document.getElementById('s-convos').textContent = convos.length;
+    document.getElementById('s-analyses').textContent = (profile.recent_analyses||[]).length;
+    const levels = {new:'Nouveau',active:'Actif',regular:'Régulier',power_user:'Power User'};
+    document.getElementById('s-level').textContent = levels[profile.usage_frequency] || 'Nouveau';
+
+    // Favorite states
+    const favEl = document.getElementById('fav-states');
+    const favs = profile.favorite_states || [];
+    favEl.innerHTML = favs.length ? favs.map(s=>`<span class="tag">${s}</span>`).join('') : '<div class="empty">Aucun État favori encore — commencez à analyser !</div>';
+
+    // Recommendations
+    const recsEl = document.getElementById('recs');
+    recsEl.innerHTML = recs.length ? recs.map(r=>`
+      <div class="rec-card">
+        <div class="rec-title">${r.title}</div>
+        <div class="rec-desc">${r.description}</div>
+        <a href="${r.action}" class="rec-action">→ ${r.title}</a>
+      </div>
+    `).join('') : '<div class="empty">Pas de recommandations pour le moment.</div>';
+
+    // Conversations
+    const convEl = document.getElementById('convos');
+    convEl.innerHTML = convos.length ? convos.slice(-10).map(c=>`
+      <div class="convo-item">
+        <div class="convo-q">❓ ${c.question}</div>
+        <div class="convo-a">${(c.answer||'').substring(0,200)}${c.answer?.length>200?'...':''}</div>
+        <div class="convo-meta">${c.mode} · ${c.page} · ${c.ts?.split('T')[0]||''}</div>
+      </div>
+    `).join('') : '<div class="empty">Aucune conversation encore — ouvrez le Copilot !</div>';
+
+    // Preferences
+    const prefsR = await fetch('/api/memory/preferences').then(r=>r.json());
+    const prefs = prefsR.preferences || {};
+    const prefsEl = document.getElementById('prefs');
+    prefsEl.innerHTML = Object.entries(PREF_LABELS).map(([k,v])=>`
+      <div class="pref-row">
+        <div><div class="pref-label">${v.label}</div><div class="pref-desc">${v.desc}</div></div>
+        <label class="toggle"><input type="checkbox" ${prefs[k]!==false?'checked':''} onchange="togglePref('${k}',this.checked)"/><span class="slider"></span></label>
+      </div>
+    `).join('');
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('content').style.display = '';
+  } catch(e){
+    document.getElementById('loading').textContent = 'Erreur de chargement. Connectez-vous d\'abord.';
+  }
+}
+
+async function togglePref(key, val){
+  const body = {};
+  body[key] = val;
+  await fetch('/api/memory/preferences', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body),
+  });
+}
+
+async function exportMemory(){
+  const r = await fetch('/api/memory/export');
+  const data = await r.json();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'zynoriq_memory_export.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+
+async function clearMemory(){
+  if(!confirm('Effacer toute votre mémoire ZYNORIQ ? Cette action est irréversible.')) return;
+  await fetch('/api/memory/clear', {method:'POST'});
+  alert('Mémoire effacée.');
+  location.reload();
+}
+
+loadMemory();
+</script>
+</body></html>
