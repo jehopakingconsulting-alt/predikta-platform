@@ -207,6 +207,7 @@ function saveLang(l){
   // Refresh assistant + copilot
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
   if(window._copilotLangRefresh) window._copilotLangRefresh(l);
+  if(_cachedUser) initUserMenu();
   // Server-rendered SEO prediction pages: reload with ?lang= to refresh content
   if(typeof window.setLang !== 'function' && location.pathname.startsWith('/predictions')){
     const url = new URL(location.href);
@@ -1244,12 +1245,14 @@ function watchDynamicContent(){
 // ═══════════════════════════════════════════════════════════════════
 // USER ACCOUNT DROPDOWN
 // ═══════════════════════════════════════════════════════════════════
+let _cachedUser = null;
 async function initUserMenu(){
-  let user = null;
-  try{
+  let user = _cachedUser;
+  if(!user) try{
     const r = await fetch('/api/auth/me');
     const d = await r.json();
     user = d.user || null;
+    _cachedUser = user;
   }catch(e){ return; }
   if(!user) return;  // not logged in — keep plain link
 
@@ -1263,7 +1266,7 @@ async function initUserMenu(){
   if(wrap){
     wrap.innerHTML = `
 <div class="pnav-user" id="pnav-user-dd">
-  <button class="pnav-user-btn" onclick="toggleUserMenu(event)" aria-haspopup="true" aria-expanded="false">
+  <button class="pnav-user-btn" id="pnav-user-toggle" aria-haspopup="true" aria-expanded="false">
     <span class="pnav-user-avatar">${initial}</span>
     <span class="nav-svc-label">${T.myAccount} ▾</span>
   </button>
@@ -1274,14 +1277,25 @@ async function initUserMenu(){
     </div>
     <a href="/account" role="menuitem">👤 ${T.myAccount}</a>
     <a href="/dashboard" role="menuitem">📊 ${T.dashboard}</a>
-    <a href="/analyze" role="menuitem">⚡ ${T.analyze}</a>
+    <a href="/analyze" role="menuitem">⚡ ${T.analyze || 'Analyze'}</a>
     <a href="/memory" role="menuitem">🧠 Memory Center</a>
     <a href="/studio" role="menuitem">🎨 Studio</a>
     <a href="/pro" role="menuitem">👑 PRO</a>
     <div class="pnav-user-menu-sep"></div>
-    <button class="pnav-logout" onclick="doNavLogout()" role="menuitem">🚪 ${T.logout}</button>
+    <button class="pnav-logout" id="pnav-logout-btn" role="menuitem">🚪 ${T.logout}</button>
   </div>
 </div>`;
+    // Bind events via addEventListener (not inline onclick — IIFE scope safe)
+    document.getElementById('pnav-user-toggle').addEventListener('click', function(e){
+      e.stopPropagation();
+      const dd = document.getElementById('pnav-user-dd');
+      if(!dd) return;
+      const isOpen = dd.classList.toggle('open');
+      this.setAttribute('aria-expanded', isOpen);
+    });
+    document.getElementById('pnav-logout-btn').addEventListener('click', function(){
+      fetch('/api/auth/logout', {method:'POST'}).finally(()=>{ location.href = '/'; });
+    });
   }
 
   // ── Mobile user section ───────────────────────────────────────────
