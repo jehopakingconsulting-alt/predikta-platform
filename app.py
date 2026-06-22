@@ -60,6 +60,7 @@ app.register_blueprint(billing_module.billing_bp)
 
 # ── ZYNORIQ MEMORY™ ──────────────────────────────────────────────────────
 import memory_engine as _mem
+import agents_engine as _agents
 
 # ── Connexion via Google / Facebook / Microsoft (OAuth) ───────────────────
 import oauth as oauth_module
@@ -3973,9 +3974,100 @@ def api_memory_track():
     return jsonify({"success": True})
 
 
+# ═══════════════════════════════════════════════════════════
+# ZYNORIQ AGENTS™ — Specialized AI Agents API
+# ═══════════════════════════════════════════════════════════
+@app.route("/api/agents")
+def api_agents_list():
+    lang = request.args.get("lang", "fr")
+    return jsonify({"agents": _agents.get_agent_info(lang)})
+
+
+@app.route("/api/agents/run", methods=["POST"])
+def api_agents_run():
+    data = request.get_json(silent=True) or {}
+    agent_id = data.get("agent")
+    message = (data.get("message") or "").strip()
+    lang = data.get("lang", "fr")
+    page = data.get("page", "/")
+    page_context = data.get("context", {})
+    history = data.get("history", [])
+
+    if not message:
+        return jsonify({"error": "Empty message"}), 400
+    if agent_id not in _agents.AGENTS:
+        return jsonify({"error": f"Unknown agent: {agent_id}"}), 400
+
+    user = auth_module.current_user() if hasattr(auth_module, 'current_user') else None
+    user_id = user.id if user else 0
+    plan = None
+    if user and user.subscription:
+        plan = user.subscription.plan
+
+    # Quota check (shared with Copilot)
+    allowed, remaining, limit = _cps.check_quota(user_id, plan)
+    if not allowed:
+        return jsonify({
+            "error": "quota_exceeded",
+            "quota": {"remaining": 0, "limit": limit},
+        }), 429
+
+    # Build context
+    page_context["url"] = page
+    page_context["plan"] = plan or "free"
+    _enrich_context(page_context, page)
+    context_text = _cps.build_page_context(page_context)
+
+    # Run agent
+    reply, latency, error = _agents.run_agent(agent_id, message, context_text, lang, history)
+    _cps.consume_quota(user_id)
+
+    if error and not reply:
+        return jsonify({"error": error, "agent": agent_id}), 500
+
+    # Save to memory
+    if user_id:
+        try:
+            _mem.save_conversation(user_id, f"[{agent_id}] {message}", reply or "", "agent", page, lang, True)
+        except Exception:
+            pass
+
+    is_lottery = agent_id in ("lottery_expert", "statistician", "accuracy_analyst", "coach", "risk_analyst")
+
+    return jsonify({
+        "reply": reply or "Agent could not generate a response.",
+        "agent": agent_id,
+        "agent_name": _agents.AGENTS[agent_id]["name"],
+        "agent_icon": _agents.AGENTS[agent_id]["icon"],
+        "disclaimer": is_lottery,
+        "latency_ms": round(latency),
+        "quota": {"remaining": max(0, remaining - 1), "limit": limit},
+    })
+
+
+@app.route("/api/agents/multi", methods=["POST"])
+def api_agents_multi():
+    data = request.get_json(silent=True) or {}
+    agent_ids = data.get("agents", [])
+    message = (data.get("message") or "").strip()
+    lang = data.get("lang", "fr")
+    page = data.get("page", "/")
+    page_context = data.get("context", {})
+
+    if not message or not agent_ids:
+        return jsonify({"error": "Missing message or agents"}), 400
+
+    page_context["url"] = page
+    _enrich_context(page_context, page)
+    context_text = _cps.build_page_context(page_context)
+
+    results = _agents.run_multi_agent(agent_ids[:3], message, context_text, lang)
+    return jsonify({"results": results})
+
+
 if __name__ == "__main__":
     print("=" * 45)
-    print("  ZYNORIQ Intelligence  v4.0  - READY")
+    print("  ZYNORIQ Intelligence  v5.0  - READY")
     print("=" * 45)
     print("  Home        : http://localhost:5000")
     print("  Analyzer    : http://localhost:5000/analyze")

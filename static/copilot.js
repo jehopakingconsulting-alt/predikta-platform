@@ -253,6 +253,7 @@ function inject(){
       </div>
     </div>
     <div id="copilot-modes" class="cp-modes"></div>
+    <div id="copilot-agents" class="cp-agents"></div>
     <div id="copilot-messages" class="cp-messages"></div>
     <div id="copilot-suggestions" class="cp-suggestions"></div>
     <div class="cp-actions-bar">
@@ -277,7 +278,43 @@ function inject(){
   renderModes();
   renderMessages();
   renderSuggestions();
+  loadAgents();
 }
+
+// ── Agents ───────────────────────────────────────────────────────────────
+let _agents = [];
+let _activeAgent = null;
+
+function loadAgents(){
+  fetch('/api/agents?lang='+(window.PREDIKTA_LANG||'fr'))
+    .then(r=>r.json())
+    .then(data=>{
+      _agents = data.agents || [];
+      renderAgents();
+    }).catch(()=>{});
+}
+
+function renderAgents(){
+  const c = document.getElementById('copilot-agents');
+  if(!c || !_agents.length) return;
+  c.innerHTML = _agents.map(a => `
+    <button class="cp-agent-btn ${_activeAgent===a.id?'active':''}" onclick="window._cpSetAgent('${a.id}')" title="${a.description}">
+      ${a.icon} ${a.name}
+    </button>
+  `).join('');
+}
+
+window._cpSetAgent = function(id){
+  if(_activeAgent === id){ _activeAgent = null; } else { _activeAgent = id; }
+  renderAgents();
+  if(_activeAgent){
+    const a = _agents.find(x=>x.id===id);
+    if(a) _messages.push({role:'bot', text:`**${a.icon} ${a.name}** active. Posez votre question, cet agent specialise va analyser vos donnees.`});
+  } else {
+    _messages.push({role:'bot', text:'Agent desactive. Retour au mode Copilot standard.'});
+  }
+  renderMessages();
+};
 
 // ── Actions ──────────────────────────────────────────────────────────────
 function toggle(){
@@ -374,23 +411,25 @@ window._cpSend = function(text){
   renderSuggestions();
 
   const ctx = gatherPageContext();
+  const lang = window.PREDIKTA_LANG || 'fr';
+  const hist = _messages.slice(-10).map(m => ({role: m.role === 'bot' ? 'assistant' : 'user', content: m.text}));
 
-  fetch('/api/copilot', {
+  // Route to Agent or Copilot
+  const endpoint = _activeAgent ? '/api/agents/run' : '/api/copilot';
+  const payload = _activeAgent
+    ? { agent: _activeAgent, message: text, page: location.pathname, lang, history: hist, context: ctx }
+    : { message: text, mode: _mode, page: location.pathname, lang, history: hist, context: ctx };
+
+  fetch(endpoint, {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      message: text,
-      mode: _mode,
-      page: location.pathname,
-      lang: window.PREDIKTA_LANG || 'fr',
-      history: _messages.slice(-10).map(m => ({role: m.role === 'bot' ? 'assistant' : 'user', content: m.text})),
-      context: ctx,
-    }),
+    body: JSON.stringify(payload),
   })
   .then(r => r.json())
   .then(data => {
     _thinking = false;
-    _messages.push({ role:'bot', text: data.reply || data.error || 'Erreur.' });
+    const prefix = data.agent_icon ? `${data.agent_icon} **${data.agent_name}**\n\n` : '';
+    _messages.push({ role:'bot', text: prefix + (data.reply || data.error || 'Erreur.') });
     if(data.disclaimer){
       _messages.push({ role:'bot', text: t('disclaimer') });
     }
@@ -574,6 +613,22 @@ function injectCSS(){
 .cp-mode-btn.active{
   background:linear-gradient(135deg,#1479FF,#004DFF);
   border-color:#1479FF;color:#fff;
+}
+
+/* Agents */
+.cp-agents{
+  display:flex;gap:4px;padding:6px 16px;flex-shrink:0;overflow-x:auto;
+  border-bottom:1px solid rgba(26,26,69,.4);
+}
+.cp-agent-btn{
+  padding:4px 10px;border-radius:14px;font-size:.62rem;font-weight:700;
+  border:1px solid rgba(255,215,0,.2);background:rgba(255,215,0,.05);
+  color:#8892b0;cursor:pointer;white-space:nowrap;transition:all .2s;
+}
+.cp-agent-btn:hover{border-color:#ffd700;color:#ffd700}
+.cp-agent-btn.active{
+  background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,170,0,.15));
+  border-color:#ffd700;color:#ffd700;
 }
 
 /* Messages */
