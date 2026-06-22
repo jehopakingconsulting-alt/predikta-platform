@@ -778,10 +778,10 @@ def send_verification_email(user):
 
     plain = (
         f"Bonjour {name},\n\n"
-        "Verifie ton adresse email pour activer ton compte ZYNORIQ.\n\n"
+        "Vérifie ton adresse email pour activer ton compte ZYNORIQ.\n\n"
         f"Clique ici : {verify_url}\n\n"
         "Ce lien expire dans 24 heures.\n\n"
-        "L'equipe ZYNORIQ Intelligence"
+        "L'équipe ZYNORIQ Intelligence™"
     )
     html_body = f"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/></head>
@@ -795,20 +795,20 @@ def send_verification_email(user):
   </td></tr>
   <tr><td style="background:#08081f;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:28px 36px;text-align:center">
     <p style="font-size:1.05rem;font-weight:700;color:#ffffff;margin:0 0 12px">Bonjour {name} !</p>
-    <p style="font-size:.88rem;color:#a0aec0;margin:0 0 24px;line-height:1.7">Verifie ton adresse email pour activer ton compte ZYNORIQ et acceder a toutes les fonctionnalites.</p>
+    <p style="font-size:.88rem;color:#a0aec0;margin:0 0 24px;line-height:1.7">V&eacute;rifie ton adresse email pour activer ton compte ZYNORIQ et acc&eacute;der &agrave; toutes les fonctionnalit&eacute;s.</p>
     <a href="{verify_url}" style="display:inline-block;padding:14px 40px;border-radius:12px;background:linear-gradient(135deg,#22e87a,#0e9e55);color:#ffffff;font-weight:800;font-size:.95rem;text-decoration:none;letter-spacing:.3px">
-      Verifier mon email
+      V&eacute;rifier mon email
     </a>
     <p style="font-size:.72rem;color:#4d5a8a;margin-top:20px">Ce lien expire dans 24 heures.</p>
   </td></tr>
   <tr><td style="background:#06061a;border:1px solid #1a1a45;border-top:none;border-radius:0 0 16px 16px;padding:16px 36px;text-align:center">
-    <p style="font-size:.62rem;color:#334155">Si tu n'as pas cree de compte sur ZYNORIQ, ignore cet email.</p>
+    <p style="font-size:.62rem;color:#334155">Si tu n'as pas cr&eacute;&eacute; de compte sur ZYNORIQ, ignore cet email.</p>
   </td></tr>
 </table>
 </td></tr></table>
 </body></html>"""
 
-    _send_email(user.email, "ZYNORIQ — Verifie ton adresse email", plain, html_body=html_body)
+    _send_email(user.email, "ZYNORIQ — Vérifie ton adresse email", plain, html_body=html_body)
 
 
 def send_welcome_email(user):
@@ -1239,9 +1239,10 @@ def verify_email():
 
     user = User.query.filter_by(email_verify_token=token).first()
     if not user:
-        return """<html><body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
-        <h2 style="color:#ff3d2e">Lien invalide ou expire.</h2>
-        <p>Connecte-toi et demande un nouveau lien de verification.</p>
+        return """<html><head><meta charset="UTF-8"/><title>ZYNORIQ — Erreur</title></head>
+        <body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
+        <h2 style="color:#ff3d2e">Lien invalide ou expiré.</h2>
+        <p>Connecte-toi et demande un nouveau lien de vérification.</p>
         <a href="/login" style="color:#1479FF">Se connecter</a>
         </body></html>""", 400
 
@@ -1251,10 +1252,11 @@ def verify_email():
 
     send_welcome_email(user)
 
-    return f"""<html><body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
-    <h2 style="color:#22e87a">Email verifie avec succes !</h2>
+    return f"""<html><head><meta charset="UTF-8"/><title>ZYNORIQ — Email vérifié</title></head>
+    <body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
+    <h2 style="color:#22e87a">Email vérifié avec succès !</h2>
     <p>Bienvenue sur ZYNORIQ, {_html.escape(user.username)} !</p>
-    <a href="/analyze" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:12px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-weight:700;text-decoration:none">Commencer a analyser</a>
+    <a href="/analyze" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:12px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-weight:700;text-decoration:none">Commencer à analyser</a>
     </body></html>"""
 
 
