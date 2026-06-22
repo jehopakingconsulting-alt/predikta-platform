@@ -768,13 +768,22 @@ def send_welcome_email(user):
 
     plain = (
         f"Bonjour {name},\n\n"
-        "Bienvenue sur ZYNORIQ — ta plateforme d'analyse prédictive Pick 3 !\n\n"
-        "3 choses à faire maintenant :\n"
-        f"1. Lancer ta première analyse → {base_url}/analyze\n"
-        f"2. Consulter les résultats live → {base_url}/results\n"
-        f"3. Choisir ton plan → {base_url}/pro\n\n"
-        "À très vite,\nL'équipe ZYNORIQ\n\n"
-        "Support : support@zynoriq.com"
+        "Bienvenue sur ZYNORIQ Intelligence™ !\n\n"
+        "Ta plateforme d'analyse prédictive couvre :\n"
+        "• Pick 3 / Cash 3 / Daily 3 — 44+ États\n"
+        "• Pick 4 / Cash 4 — Prédictions & résultats\n"
+        "• Pick 5 / Cash 5 / Fantasy 5\n"
+        "• Powerball & Mega Millions — Jackpots nationaux\n\n"
+        "Selon ton plan, tu bénéficies de :\n"
+        "• Prédictions consensus (7 modèles ML)\n"
+        "• Combos Straight, Box, Double, Triple\n"
+        "• Analyses de tendances, écarts & fréquences\n"
+        "• Alertes push en temps réel\n\n"
+        f"Démarrer → {base_url}/onboarding\n"
+        f"Résultats → {base_url}/results\n"
+        f"Plans & Tarifs → {base_url}/pro\n\n"
+        "L'équipe ZYNORIQ Intelligence™\n"
+        "support@zynoriq.com"
     )
 
     html = f"""<!DOCTYPE html>
@@ -787,76 +796,115 @@ def send_welcome_email(user):
 <tr><td align="center">
 <table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;width:100%">
 
-  <!-- Header -->
+  <!-- Header with Logo -->
   <tr><td style="background:linear-gradient(135deg,#0d0d2e,#1a0a3d);border-radius:16px 16px 0 0;padding:36px 40px;text-align:center;border:1px solid #1a1a45;border-bottom:none">
-    <div style="font-size:2.2rem;margin-bottom:8px">🎯</div>
-    <div style="font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;letter-spacing:.08em;background:linear-gradient(135deg,#6688ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">ZYNORIQ</div>
-    <div style="font-size:.75rem;color:#4d5a8a;letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Analyse prédictive Pick 3</div>
+    <img src="{base_url}/static/zynoriq-hero.png" alt="ZYNORIQ Intelligence" style="width:100%;max-width:500px;border-radius:12px;margin-bottom:16px" />
+    <div style="font-family:'Courier New',monospace;font-size:1.8rem;font-weight:900;letter-spacing:.08em;color:#1479FF">ZYNORIQ</div>
+    <div style="font-family:'Courier New',monospace;font-size:.7rem;font-weight:700;letter-spacing:.15em;color:#ffd700;text-transform:uppercase;margin-top:4px">Intelligence Beyond Prediction</div>
   </td></tr>
 
   <!-- Body -->
   <tr><td style="background:#08081f;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:36px 40px">
-    <p style="font-size:1.05rem;font-weight:700;color:#e2e8f0;margin:0 0 8px">Bonjour {name} 👋</p>
-    <p style="font-size:.88rem;color:#64748b;margin:0 0 28px;line-height:1.7">
-      Ton compte ZYNORIQ est actif. Tu as maintenant accès aux prédictions ML Pick 3 pour 43 États américains, mises à jour en temps réel.
+    <p style="font-size:1.15rem;font-weight:800;color:#ffffff;margin:0 0 8px">Bonjour {name} 👋</p>
+    <p style="font-size:.92rem;color:#a0aec0;margin:0 0 24px;line-height:1.8">
+      Ton compte <strong style="color:#1479FF">ZYNORIQ Intelligence™</strong> est actif. Bienvenue dans la plateforme d'analyse prédictive la plus complète.
     </p>
 
-    <!-- 3 étapes -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px">
-      <tr>
-        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
-          <div style="font-size:1.2rem;margin-bottom:6px">⚡</div>
-          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Lancer une analyse</div>
-          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">7 algorithmes ML en 30 secondes · Top 10 combos classés par confiance</div>
-        </td>
-      </tr>
-      <tr><td height="10"></td></tr>
-      <tr>
-        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
-          <div style="font-size:1.2rem;margin-bottom:6px">🔴</div>
-          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Résultats live</div>
-          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">43 États · Mis à jour automatiquement dès que le tirage tombe</div>
-        </td>
-      </tr>
-      <tr><td height="10"></td></tr>
-      <tr>
-        <td style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:16px 20px;vertical-align:top">
-          <div style="font-size:1.2rem;margin-bottom:6px">🔔</div>
-          <div style="font-size:.8rem;font-weight:800;color:#e2e8f0;margin-bottom:4px">Alertes push</div>
-          <div style="font-size:.72rem;color:#4d5a8a;line-height:1.5">Notification instantanée sur ton téléphone dès que ton État tire</div>
-        </td>
-      </tr>
-    </table>
+    <!-- Jeux couverts -->
+    <div style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:20px;margin-bottom:16px">
+      <div style="font-size:.85rem;font-weight:800;color:#ffffff;margin-bottom:12px">🎰 Jeux couverts — 44+ États</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding:4px 0"><span style="color:#22e87a;font-weight:800;font-size:.82rem">🎯 Pick 3</span><span style="color:#8892b0;font-size:.75rem"> — Cash 3, Daily 3, Numbers</span></td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0"><span style="color:#4f9eff;font-weight:800;font-size:.82rem">4️⃣ Pick 4</span><span style="color:#8892b0;font-size:.75rem"> — Cash 4, Win 4, Daily 4</span></td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0"><span style="color:#a78bfa;font-weight:800;font-size:.82rem">5️⃣ Pick 5</span><span style="color:#8892b0;font-size:.75rem"> — Cash 5, Fantasy 5, Take 5</span></td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0"><span style="color:#ffd700;font-weight:800;font-size:.82rem">💰 Lotto</span><span style="color:#8892b0;font-size:.75rem"> — Powerball, Mega Millions, Cash4Life</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Ce que tu obtiens -->
+    <div style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:12px;padding:20px;margin-bottom:16px">
+      <div style="font-size:.85rem;font-weight:800;color:#ffffff;margin-bottom:12px">⚡ Selon ton plan tu bénéficies de :</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ Prédictions consensus — <strong style="color:#ffffff">7 modèles ML</strong></td></tr>
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ Combos <strong style="color:#22e87a">Straight</strong>, <strong style="color:#4f9eff">Box</strong>, <strong style="color:#ffd700">Double</strong>, <strong style="color:#a78bfa">Triple</strong></td></tr>
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ Tendances, écarts & fréquences en temps réel</td></tr>
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ Alertes push instantanées par État</td></tr>
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ Track Record vérifié — résultats vs prédictions</td></tr>
+        <tr><td style="padding:3px 0;color:#a0aec0;font-size:.8rem">✅ ZYNORIQ Copilot™ — assistant IA intégré</td></tr>
+      </table>
+    </div>
 
     <!-- CTA principal -->
-    <table width="100%" cellpadding="0" cellspacing="0">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px">
       <tr><td align="center">
-        <a href="{base_url}/onboarding" style="display:inline-block;padding:14px 36px;border-radius:12px;background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#ffffff;font-weight:800;font-size:.9rem;text-decoration:none;letter-spacing:.3px">
+        <a href="{base_url}/onboarding" style="display:inline-block;padding:16px 40px;border-radius:12px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#ffffff;font-weight:800;font-size:.95rem;text-decoration:none;letter-spacing:.3px">
           🚀 Démarrer maintenant →
         </a>
       </td></tr>
     </table>
+
+    <!-- Plans -->
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="25%" align="center" style="padding:8px 4px">
+          <div style="background:#0d0d2e;border:1px solid #1a1a45;border-radius:10px;padding:12px 6px;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:#4f9eff">PRO</div>
+            <div style="font-size:.82rem;font-weight:900;color:#ffffff;margin-top:2px">$19.99</div>
+            <div style="font-size:.6rem;color:#8892b0">/mois</div>
+          </div>
+        </td>
+        <td width="25%" align="center" style="padding:8px 4px">
+          <div style="background:#0d0d2e;border:1px solid #ffd700;border-radius:10px;padding:12px 6px;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:#ffd700">VIP</div>
+            <div style="font-size:.82rem;font-weight:900;color:#ffffff;margin-top:2px">$49.99</div>
+            <div style="font-size:.6rem;color:#8892b0">/mois</div>
+          </div>
+        </td>
+        <td width="25%" align="center" style="padding:8px 4px">
+          <div style="background:#0d0d2e;border:1px solid #a78bfa;border-radius:10px;padding:12px 6px;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:#a78bfa">PREMIUM</div>
+            <div style="font-size:.82rem;font-weight:900;color:#ffffff;margin-top:2px">$99.99</div>
+            <div style="font-size:.6rem;color:#8892b0">/mois</div>
+          </div>
+        </td>
+        <td width="25%" align="center" style="padding:8px 4px">
+          <div style="background:#0d0d2e;border:1px solid #22e87a;border-radius:10px;padding:12px 6px;text-align:center">
+            <div style="font-size:.7rem;font-weight:800;color:#22e87a">BUSINESS</div>
+            <div style="font-size:.82rem;font-weight:900;color:#ffffff;margin-top:2px">$199.99</div>
+            <div style="font-size:.6rem;color:#8892b0">/mois</div>
+          </div>
+        </td>
+      </tr>
+    </table>
   </td></tr>
 
-  <!-- Separateur confiance -->
+  <!-- Stats bar -->
   <tr><td style="background:#0a0a20;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:20px 40px">
     <table width="100%" cellpadding="0" cellspacing="0">
       <tr>
-        <td align="center" style="padding:0 8px">
+        <td align="center" style="padding:0 6px">
           <div style="font-size:1.1rem">🎯</div>
-          <div style="font-size:.65rem;font-weight:800;color:#22e87a;margin-top:4px">7 MODÈLES ML</div>
+          <div style="font-size:.62rem;font-weight:800;color:#22e87a;margin-top:4px">7 MODÈLES ML</div>
         </td>
-        <td align="center" style="padding:0 8px">
+        <td align="center" style="padding:0 6px">
           <div style="font-size:1.1rem">📊</div>
-          <div style="font-size:.65rem;font-weight:800;color:#4f9eff;margin-top:4px">43 ÉTATS</div>
+          <div style="font-size:.62rem;font-weight:800;color:#4f9eff;margin-top:4px">44+ ÉTATS</div>
         </td>
-        <td align="center" style="padding:0 8px">
+        <td align="center" style="padding:0 6px">
           <div style="font-size:1.1rem">⚡</div>
-          <div style="font-size:.65rem;font-weight:800;color:#a78bfa;margin-top:4px">TEMPS RÉEL</div>
+          <div style="font-size:.62rem;font-weight:800;color:#a78bfa;margin-top:4px">TEMPS RÉEL</div>
         </td>
-        <td align="center" style="padding:0 8px">
-          <div style="font-size:1.1rem">🔔</div>
-          <div style="font-size:.65rem;font-weight:800;color:#ffd700;margin-top:4px">ALERTES PUSH</div>
+        <td align="center" style="padding:0 6px">
+          <div style="font-size:1.1rem">🤖</div>
+          <div style="font-size:.62rem;font-weight:800;color:#ffd700;margin-top:4px">COPILOT™ IA</div>
         </td>
       </tr>
     </table>
@@ -864,16 +912,18 @@ def send_welcome_email(user):
 
   <!-- Footer -->
   <tr><td style="background:#06061a;border:1px solid #1a1a45;border-top:none;border-radius:0 0 16px 16px;padding:20px 40px;text-align:center">
-    <p style="font-size:.68rem;color:#334155;margin:0 0 6px">Tu reçois cet email car tu viens de créer un compte sur ZYNORIQ.</p>
-    <p style="font-size:.68rem;color:#334155;margin:0 0 6px">
-      <a href="{base_url}/results" style="color:#4f9eff;text-decoration:none">Résultats</a> &nbsp;·&nbsp;
-      <a href="{base_url}/analyze" style="color:#4f9eff;text-decoration:none">Analyser</a> &nbsp;·&nbsp;
-      <a href="{base_url}/pro" style="color:#4f9eff;text-decoration:none">Plans & Tarifs</a>
+    <p style="font-size:.7rem;color:#4d5a8a;margin:0 0 6px">Tu reçois cet email car tu viens de créer un compte sur ZYNORIQ.</p>
+    <p style="font-size:.7rem;color:#4d5a8a;margin:0 0 6px">
+      <a href="{base_url}/results" style="color:#1479FF;text-decoration:none;font-weight:600">Résultats</a> &nbsp;·&nbsp;
+      <a href="{base_url}/analyze" style="color:#1479FF;text-decoration:none;font-weight:600">Analyser</a> &nbsp;·&nbsp;
+      <a href="{base_url}/pro" style="color:#1479FF;text-decoration:none;font-weight:600">Plans & Tarifs</a> &nbsp;·&nbsp;
+      <a href="{base_url}/about" style="color:#1479FF;text-decoration:none;font-weight:600">À Propos</a>
     </p>
-    <p style="font-size:.68rem;color:#334155;margin:6px 0 0">
-      Questions ? <a href="mailto:support@zynoriq.com" style="color:#4f9eff;text-decoration:none">support@zynoriq.com</a>
-      &nbsp;·&nbsp; <a href="mailto:privacy@zynoriq.com" style="color:#4f9eff;text-decoration:none">privacy@zynoriq.com</a>
+    <p style="font-size:.68rem;color:#4d5a8a;margin:6px 0 0">
+      <a href="mailto:support@zynoriq.com" style="color:#1479FF;text-decoration:none">support@zynoriq.com</a>
+      &nbsp;·&nbsp; <a href="mailto:privacy@zynoriq.com" style="color:#1479FF;text-decoration:none">privacy@zynoriq.com</a>
     </p>
+    <p style="font-size:.58rem;color:#334155;margin:10px 0 0;line-height:1.5">© 2026 ZYNORIQ Intelligence™ — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard.</p>
   </td></tr>
 
 </table>
