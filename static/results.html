@@ -7,20 +7,20 @@
 <meta name="description" content="Résultats quotidiens Pick3, Cash3, Daily3 — 44 états américains. Mis à jour chaque jour. Historique jusqu'à 2 ans."/>
 <meta name="theme-color" content="#1479FF"/>
 <link rel="manifest" href="/manifest.json"/>
-<link rel="canonical" href="https://predikta-tez2.onrender.com/results"/>
+<link rel="canonical" href="https://www.zynoriq.com/results"/>
 <meta property="og:title" content="ZYNORIQ — Résultats Loteries USA · 44 États"/>
 <meta property="og:description" content="Résultats quotidiens Pick3, Cash3, Daily3 — 44 états américains. Mis à jour chaque jour. Historique jusqu'à 2 ans."/>
 <meta property="og:type" content="website"/>
-<meta property="og:url" content="https://predikta-tez2.onrender.com/results"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:url" content="https://www.zynoriq.com/results"/>
+<meta property="og:image" content="https://www.zynoriq.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://www.zynoriq.com/og-image.png"/>
 <!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
 <script>
   window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js',new Date()); gtag('config','G-XXXXXXXXXX',{anonymize_ip:true});
+  gtag('js',new Date()); gtag('config','G-PLACEHOLDER',{anonymize_ip:true});
   function trackEvent(a,c,l){gtag('event',a,{event_category:c,event_label:l});}
 </script>
 <!-- PWA -->
@@ -572,8 +572,8 @@ async function loadAll(){
     loadConfidenceBadges();
   } catch(e){
     document.getElementById('statesGrid').innerHTML =
-      `<div style="grid-column:1/-1;text-align:center;color:#ff5533;padding:40px">Erreur: ${e.message || e}</div>`;
-    console.error('[loadAll] error:', e);
+      `<div style="grid-column:1/-1;text-align:center;color:#ff5533;padding:40px">Erreur de chargement. Vérifiez que le serveur est démarré.</div>`;
+    console.error('[loadAll]', e);
   }
 }
 
@@ -1425,3 +1425,5 @@ loadAll();
 </script>
 </body>
 </html>
+
+

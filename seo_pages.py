@@ -186,9 +186,9 @@ def _page_shell(title, desc, canonical, lang, body, alt_links=""):
 <meta property="og:description" content="{desc}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="{canonical}"/>
-<meta property="og:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta property="og:image" content="https://www.zynoriq.com/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://predikta-tez2.onrender.com/og-image.png"/>
+<meta name="twitter:image" content="https://www.zynoriq.com/og-image.png"/>
 {alt_links}
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>

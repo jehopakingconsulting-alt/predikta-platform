@@ -82,7 +82,7 @@ def _get(obj, key, default=None):
 
 
 def _site_url() -> str:
-    return os.environ.get("PREDIKTA_SITE_URL", "https://predikta-tez2.onrender.com")
+    return os.environ.get("PREDIKTA_SITE_URL", "https://www.zynoriq.com")
 
 
 billing_bp = Blueprint("billing", __name__, url_prefix="/api/billing")
