@@ -1361,10 +1361,7 @@ function inject(){
   initFloating();
   initPushNotif();
 
-  // 3. Inject ASSISTANT
-  const assistDiv = document.createElement('div');
-  assistDiv.innerHTML = buildAssistantHTML();
-  document.body.appendChild(assistDiv);
+  // 3. ASSISTANT — replaced by ZYNORIQ COPILOT™ (copilot.js)
 
   // 4. Inject FOOTER (replace existing or append)
   const existingFooter = document.querySelector('footer.zynoriq-footer, footer[data-pfooter]');

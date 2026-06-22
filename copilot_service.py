@@ -19,13 +19,54 @@ COPILOT_QUOTAS = {
     "enterprise": 10000,
 }
 
-# In-memory usage tracker: {user_id: {"date": "YYYY-MM-DD", "count": N}}
+# File-backed usage tracker (persists across restarts)
+_USAGE_FILE = os.path.join("data", "copilot_usage.json")
 _usage = {}
 _usage_lock = threading.Lock()
 
-# In-memory history: {user_id: [entries]}  (max 50 per user)
+def _load_usage():
+    global _usage
+    try:
+        if os.path.exists(_USAGE_FILE):
+            with open(_USAGE_FILE, "r") as f:
+                _usage = json.load(f)
+    except Exception:
+        _usage = {}
+
+def _save_usage():
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open(_USAGE_FILE, "w") as f:
+            json.dump(_usage, f)
+    except Exception:
+        pass
+
+_load_usage()
+
+# File-backed history (persists across restarts)
+_HISTORY_FILE = os.path.join("data", "copilot_history.json")
 _history = defaultdict(list)
 _history_lock = threading.Lock()
+
+def _load_history():
+    global _history
+    try:
+        if os.path.exists(_HISTORY_FILE):
+            with open(_HISTORY_FILE, "r") as f:
+                raw = json.load(f)
+                _history = defaultdict(list, {k: v for k, v in raw.items()})
+    except Exception:
+        _history = defaultdict(list)
+
+def _save_history():
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open(_HISTORY_FILE, "w") as f:
+            json.dump(dict(_history), f)
+    except Exception:
+        pass
+
+_load_history()
 
 # Logs
 _logs = []
@@ -38,11 +79,12 @@ def check_quota(user_id, plan):
     """Returns (allowed: bool, remaining: int, limit: int)."""
     limit = COPILOT_QUOTAS.get(plan, COPILOT_QUOTAS.get(None, 5))
     today = date.today().isoformat()
+    uid = str(user_id)
     with _usage_lock:
-        entry = _usage.get(user_id, {})
+        entry = _usage.get(uid, {})
         if entry.get("date") != today:
             entry = {"date": today, "count": 0}
-            _usage[user_id] = entry
+            _usage[uid] = entry
         remaining = max(0, limit - entry["count"])
         return remaining > 0, remaining, limit
 
@@ -50,17 +92,20 @@ def check_quota(user_id, plan):
 def consume_quota(user_id):
     """Increment usage counter for today."""
     today = date.today().isoformat()
+    uid = str(user_id)
     with _usage_lock:
-        entry = _usage.get(user_id, {})
+        entry = _usage.get(uid, {})
         if entry.get("date") != today:
             entry = {"date": today, "count": 0}
         entry["count"] += 1
-        _usage[user_id] = entry
+        _usage[uid] = entry
+        _save_usage()
 
 
 # ── History Service ───────────────────────────────────────────────────────
 def save_history(user_id, question, answer, mode, page, lang, used_ai):
-    """Save a conversation entry (in-memory, max 50 per user)."""
+    """Save a conversation entry (file-backed, max 50 per user)."""
+    uid = str(user_id)
     entry = {
         "ts": datetime.utcnow().isoformat(),
         "question": question[:500],
@@ -71,16 +116,17 @@ def save_history(user_id, question, answer, mode, page, lang, used_ai):
         "ai": used_ai,
     }
     with _history_lock:
-        h = _history[user_id]
+        h = _history[uid]
         h.append(entry)
         if len(h) > 50:
-            _history[user_id] = h[-50:]
+            _history[uid] = h[-50:]
+        _save_history()
 
 
 def get_history(user_id, limit=20):
     """Return last N history entries for a user."""
     with _history_lock:
-        return list(_history.get(user_id, []))[-limit:]
+        return list(_history.get(str(user_id), []))[-limit:]
 
 
 # ── Log Service ───────────────────────────────────────────────────────────

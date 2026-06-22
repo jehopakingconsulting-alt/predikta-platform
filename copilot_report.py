@@ -165,14 +165,34 @@ REPORT_QUOTAS = {
     "elite": 500, "premium": 50,
     "business": 500, "enterprise": 10000,
 }
-# Quotas are monthly for reports
+# File-backed monthly report quotas
+_REPORT_USAGE_FILE = os.path.join("data", "copilot_report_usage.json")
 _report_usage = {}
 _report_lock = threading.Lock()
+
+def _load_report_usage():
+    global _report_usage
+    try:
+        if os.path.exists(_REPORT_USAGE_FILE):
+            with open(_REPORT_USAGE_FILE, "r") as f:
+                _report_usage = json.load(f)
+    except Exception:
+        _report_usage = {}
+
+def _save_report_usage():
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open(_REPORT_USAGE_FILE, "w") as f:
+            json.dump(_report_usage, f)
+    except Exception:
+        pass
+
+_load_report_usage()
 
 def check_report_quota(user_id, plan):
     limit = REPORT_QUOTAS.get(plan, 1)
     month = datetime.utcnow().strftime("%Y-%m")
-    key = (user_id, month)
+    key = f"{user_id}_{month}"
     with _report_lock:
         count = _report_usage.get(key, 0)
         remaining = max(0, limit - count)
@@ -180,9 +200,10 @@ def check_report_quota(user_id, plan):
 
 def consume_report_quota(user_id):
     month = datetime.utcnow().strftime("%Y-%m")
-    key = (user_id, month)
+    key = f"{user_id}_{month}"
     with _report_lock:
         _report_usage[key] = _report_usage.get(key, 0) + 1
+        _save_report_usage()
 
 
 # ── Temp file management ─────────────────────────────────────────────────
