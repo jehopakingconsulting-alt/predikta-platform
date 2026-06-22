@@ -814,7 +814,7 @@ function buildNav(){
   // Prédictions / Archives / Parrainage retirés du header (manque de place) —
   // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
   // le menu mobile et le footer (SERVICES complet).
-  const HEADER_HIDDEN = ['predictions','archives','referral','worldmap','predicktatv','community','trackrecord','trackrecord4','accuracy','pick4','cash5','pick5'];
+  const HEADER_HIDDEN = ['results','predictions','archives','referral','worldmap','predicktatv','community','trackrecord','trackrecord4','accuracy','pick4','cash5','pick5','memory'];
   const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
