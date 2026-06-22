@@ -3802,16 +3802,21 @@ def api_copilot_report():
         context_text = _cps.build_page_context(page_context)
         analysis, _, _ = _cps.call_claude(prompt, "analyst", lang, [], context_text)
 
-    filepath = _cpr.generate_report(
-        report_type=report_type,
-        lang=lang,
-        data=page_context,
-        analysis_text=analysis or "",
-        user_plan=plan,
-    )
+    try:
+        filepath = _cpr.generate_report(
+            report_type=report_type,
+            lang=lang,
+            data=page_context,
+            analysis_text=analysis or "",
+            user_plan=plan,
+        )
+    except Exception as e:
+        print(f"[copilot/report] PDF generation error: {e}")
+        import traceback; traceback.print_exc()
+        return jsonify({"error": f"PDF generation error: {str(e)[:100]}"}), 500
 
     if not filepath:
-        return jsonify({"error": "PDF generation failed"}), 500
+        return jsonify({"error": "PDF library not available (fpdf2)"}), 500
 
     _cpr.consume_report_quota(user_id)
     token = _cpr.register_file(filepath, user_id)

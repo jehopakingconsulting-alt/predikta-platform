@@ -242,55 +242,60 @@ def get_file(token, user_id):
         return entry["path"]
 
 
+def _safe(text):
+    """Strip emojis and non-latin1 chars for PDF compatibility."""
+    if not text:
+        return ""
+    out = []
+    for ch in str(text):
+        try:
+            ch.encode('latin-1')
+            out.append(ch)
+        except UnicodeEncodeError:
+            out.append(' ')
+    return ''.join(out).strip()
+
+
 # ── PDF Generator ─────────────────────────────────────────────────────────
 class ZynoriqPDF(FPDF):
     def __init__(self, lang='fr', report_type='prediction'):
         super().__init__()
         self.lang = lang
         self.report_type = report_type
-        self._title_text = t_report(lang, report_type)
+        self._title_text = _safe(t_report(lang, report_type))
         self.set_auto_page_break(auto=True, margin=25)
-        # Use built-in fonts with latin encoding
         self.add_page()
 
     def header(self):
-        # Brand bar
         self.set_fill_color(8, 8, 31)
         self.rect(0, 0, 210, 28, 'F')
-        # Logo text
         self.set_font('Helvetica', 'B', 18)
         self.set_text_color(20, 121, 255)
         self.set_xy(15, 6)
         self.cell(0, 10, 'ZYNORIQ', ln=False)
-        # Subtitle
         self.set_font('Helvetica', '', 7)
         self.set_text_color(77, 90, 138)
         self.set_xy(15, 16)
         self.cell(0, 5, 'Intelligence Beyond Prediction')
-        # Report type on right
         self.set_font('Helvetica', 'B', 9)
         self.set_text_color(255, 215, 0)
         self.set_xy(-80, 10)
-        self.cell(65, 8, self._title_text, align='R')
+        self.cell(65, 8, _safe(self._title_text), align='R')
         self.ln(20)
 
     def footer(self):
         self.set_y(-20)
-        # Disclaimer
         self.set_font('Helvetica', 'I', 6)
         self.set_text_color(100, 100, 120)
-        disclaimer = t(self.lang, 'disclaimer')
-        self.multi_cell(0, 3, disclaimer, align='C')
-        # Page number
+        self.multi_cell(0, 3, _safe(t(self.lang, 'disclaimer')), align='C')
         self.set_font('Helvetica', '', 7)
         self.set_text_color(77, 90, 138)
-        page_text = f"{t(self.lang, 'page')} {self.page_no()}/{{nb}}"
-        self.cell(0, 5, page_text, align='C')
+        self.cell(0, 5, f"{_safe(t(self.lang, 'page'))} {self.page_no()}/{{nb}}", align='C')
 
     def section_title(self, title):
         self.set_font('Helvetica', 'B', 12)
         self.set_text_color(20, 121, 255)
-        self.cell(0, 10, title, ln=True)
+        self.cell(0, 10, _safe(title), ln=True)
         self.set_draw_color(20, 121, 255)
         self.line(self.get_x(), self.get_y(), self.get_x() + 60, self.get_y())
         self.ln(4)
@@ -298,18 +303,17 @@ class ZynoriqPDF(FPDF):
     def body_text(self, text):
         self.set_font('Helvetica', '', 9)
         self.set_text_color(50, 50, 70)
-        # Handle markdown-like bold
-        clean = text.replace('**', '').replace('*', '').replace('•', '-')
+        clean = _safe(text.replace('**', '').replace('*', '').replace('•', '-'))
         self.multi_cell(0, 5, clean)
         self.ln(3)
 
     def key_value(self, key, value):
         self.set_font('Helvetica', 'B', 9)
         self.set_text_color(20, 121, 255)
-        self.cell(50, 6, f"{key}:", ln=False)
+        self.cell(50, 6, _safe(f"{key}:"), ln=False)
         self.set_font('Helvetica', '', 9)
         self.set_text_color(50, 50, 70)
-        self.cell(0, 6, str(value), ln=True)
+        self.cell(0, 6, _safe(str(value)), ln=True)
 
     def table_row(self, cells, header=False):
         if header:
@@ -322,7 +326,7 @@ class ZynoriqPDF(FPDF):
             self.set_text_color(50, 50, 70)
         w = 180 / max(len(cells), 1)
         for c in cells:
-            self.cell(w, 7, str(c)[:30], border=1, fill=True)
+            self.cell(w, 7, _safe(str(c))[:30], border=1, fill=True)
         self.ln()
 
     def confidence_badge(self, pct):
