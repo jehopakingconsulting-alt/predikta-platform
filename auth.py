@@ -726,15 +726,21 @@ def _send_email(to: str, subject: str, body: str, html_body: str = None):
     if html_body:
         msg.add_alternative(html_body, subtype="html")
 
-    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_port = int(os.environ.get("SMTP_PORT", "465"))
     smtp_user = os.environ.get("SMTP_USER")
     smtp_pass = os.environ.get("SMTP_PASS")
     try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
-            server.starttls()
-            if smtp_user and smtp_pass:
-                server.login(smtp_user, smtp_pass)
-            server.send_message(msg)
+        if smtp_port == 465:
+            with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10) as server:
+                if smtp_user and smtp_pass:
+                    server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+        else:
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+                server.starttls()
+                if smtp_user and smtp_pass:
+                    server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
         print(f"[auth] Email envoyé à {to} : {subject}")
     except Exception as e:
         print(f"[auth] Échec envoi email ({subject}) à {to}: {e}")
