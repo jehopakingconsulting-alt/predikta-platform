@@ -1300,18 +1300,19 @@ async function initUserMenu(){
   }
 }
 
-function toggleUserMenu(e){
+window.toggleUserMenu = function(e){
   if(e) e.stopPropagation();
   const dd = document.getElementById('pnav-user-dd');
   if(!dd) return;
   const isOpen = dd.classList.toggle('open');
-  dd.querySelector('.pnav-user-btn').setAttribute('aria-expanded', isOpen);
-}
+  const btn = dd.querySelector('.pnav-user-btn');
+  if(btn) btn.setAttribute('aria-expanded', isOpen);
+};
 
-function doNavLogout(){
+window.doNavLogout = function(){
   fetch('/api/auth/logout', {method:'POST'})
     .finally(()=>{ location.href = '/'; });
-}
+};
 
 // close dropdown on outside click
 document.addEventListener('click', function(e){
