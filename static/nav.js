@@ -1414,21 +1414,24 @@ function inject(){
   initRevealAnimations();
   watchDynamicContent();
 
-  // 6. USER MENU — bind static dropdown click immediately
-  const acctBtn = document.getElementById('pnav-acct-btn');
-  if(acctBtn){
-    acctBtn.addEventListener('click', function(e){
+  // 6. USER MENU — event delegation (bullet-proof, works regardless of timing)
+  document.addEventListener('click', function(e){
+    // Toggle dropdown
+    const btn = e.target.closest('#pnav-acct-btn');
+    if(btn){
       e.preventDefault();
       e.stopPropagation();
-      const dd = acctBtn.closest('.pnav-user');
-      if(dd) dd.classList.toggle('open');
-    });
-  }
-  // Close on outside click
-  document.addEventListener('click', function(e){
-    const dd = document.getElementById('pnav-user-dd-static');
-    if(dd && dd.classList.contains('open') && !dd.contains(e.target)){
-      dd.classList.remove('open');
+      const dd = btn.closest('.pnav-user');
+      if(dd){
+        dd.classList.toggle('open');
+        console.log('[nav] dropdown toggled:', dd.classList.contains('open'));
+      }
+      return;
+    }
+    // Close on outside click
+    const openDD = document.querySelector('.pnav-user.open');
+    if(openDD && !openDD.contains(e.target)){
+      openDD.classList.remove('open');
     }
   });
 
