@@ -30,7 +30,7 @@ select:focus,input:focus{border-color:var(--accent)}
 .ai-toggle{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--muted2);margin-bottom:16px}
 .ai-toggle input{width:auto;margin:0}
 .output{background:#0c0c28;border:1px solid var(--border);border-radius:12px;padding:20px;min-height:200px;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text)}
-.output:empty::before{content:'Le contenu genere apparaitra ici...';color:var(--muted)}
+.output:empty::before{content:attr(data-placeholder);color:var(--muted)}
 .actions{display:flex;gap:8px;margin-top:12px}
 .act-btn{padding:8px 16px;border-radius:8px;font-size:.72rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .2s}
 .act-btn:hover{border-color:var(--accent);color:var(--text)}
@@ -40,45 +40,43 @@ select:focus,input:focus{border-color:var(--accent)}
 <body>
 <div class="page">
   <h1>🎨 ZYNORIQ Studio™</h1>
-  <p class="subtitle">Creez des contenus professionnels a partir de vos donnees ZYNORIQ.</p>
+  <p class="subtitle" id="st-subtitle"></p>
 
   <div class="grid">
-    <!-- Left: content types -->
     <div class="panel">
-      <div class="panel-title">Type de contenu</div>
+      <div class="panel-title" id="st-type-title"></div>
       <div id="typesList"></div>
     </div>
 
-    <!-- Right: config + output -->
     <div>
       <div class="panel">
-        <div class="panel-title">Configuration</div>
+        <div class="panel-title" id="st-config-title"></div>
         <div class="row">
           <div>
-            <label>Etat</label>
-            <select id="stState"><option value="">-- Choisir --</option></select>
+            <label id="st-lbl-state"></label>
+            <select id="stState"><option value="" id="st-choose"></option></select>
           </div>
           <div>
-            <label>Tirage</label>
+            <label id="st-lbl-tod"></label>
             <select id="stTod">
-              <option value="Midday">Midi</option>
-              <option value="Evening">Soir</option>
-              <option value="">Tous</option>
+              <option value="Midday" id="st-midday"></option>
+              <option value="Evening" id="st-evening"></option>
+              <option value="" id="st-all"></option>
             </select>
           </div>
         </div>
         <div class="ai-toggle">
           <input type="checkbox" id="stAi"/>
-          <span>🤖 Amelioration par IA (utilise Claude)</span>
+          <span id="st-ai-label"></span>
         </div>
-        <button class="gen-btn" id="genBtn" onclick="generate()">🚀 Generer le contenu</button>
+        <button class="gen-btn" id="genBtn" onclick="generate()"></button>
       </div>
 
       <div class="panel" style="margin-top:16px">
-        <div class="panel-title">Resultat</div>
-        <div class="output" id="stOutput"></div>
+        <div class="panel-title" id="st-result-title"></div>
+        <div class="output" id="stOutput" data-placeholder=""></div>
         <div class="actions">
-          <button class="act-btn" onclick="copyOutput()">📋 Copier</button>
+          <button class="act-btn" onclick="copyOutput()" id="st-copy-btn"></button>
           <button class="act-btn" onclick="shareTwitter()">🐦 Twitter</button>
           <button class="act-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
         </div>
@@ -88,25 +86,51 @@ select:focus,input:focus{border-color:var(--accent)}
 </div>
 
 <script>
+const ST_T = {
+  fr:{subtitle:"Creez des contenus professionnels a partir de vos donnees ZYNORIQ.",typeTitle:"Type de contenu",config:"Configuration",state:"Etat",tod:"Tirage",choose:"-- Choisir --",midday:"Midi",evening:"Soir",all:"Tous",aiLabel:"🤖 Amelioration par IA (utilise Claude)",genBtn:"🚀 Generer le contenu",genWait:"⏳ Generation...",result:"Resultat",copy:"📋 Copier",copied:"Copie !",placeholder:"Le contenu genere apparaitra ici..."},
+  en:{subtitle:"Create professional content from your ZYNORIQ data.",typeTitle:"Content type",config:"Configuration",state:"State",tod:"Draw",choose:"-- Choose --",midday:"Midday",evening:"Evening",all:"All",aiLabel:"🤖 AI enhancement (uses Claude)",genBtn:"🚀 Generate content",genWait:"⏳ Generating...",result:"Result",copy:"📋 Copy",copied:"Copied!",placeholder:"Generated content will appear here..."},
+  es:{subtitle:"Cree contenidos profesionales a partir de sus datos ZYNORIQ.",typeTitle:"Tipo de contenido",config:"Configuracion",state:"Estado",tod:"Sorteo",choose:"-- Elegir --",midday:"Mediodia",evening:"Noche",all:"Todos",aiLabel:"🤖 Mejora por IA (usa Claude)",genBtn:"🚀 Generar contenido",genWait:"⏳ Generando...",result:"Resultado",copy:"📋 Copiar",copied:"Copiado!",placeholder:"El contenido generado aparecera aqui..."},
+  pt:{subtitle:"Crie conteudos profissionais a partir dos seus dados ZYNORIQ.",typeTitle:"Tipo de conteudo",config:"Configuracao",state:"Estado",tod:"Sorteio",choose:"-- Escolher --",midday:"Meio-dia",evening:"Noite",all:"Todos",aiLabel:"🤖 Melhoria por IA (usa Claude)",genBtn:"🚀 Gerar conteudo",genWait:"⏳ Gerando...",result:"Resultado",copy:"📋 Copiar",copied:"Copiado!",placeholder:"O conteudo gerado aparecera aqui..."},
+  ht:{subtitle:"Kreye kontni pwofesyonel a pati done ZYNORIQ ou.",typeTitle:"Tip kontni",config:"Konfigirasyon",state:"Eta",tod:"Tiraj",choose:"-- Chwazi --",midday:"Midi",evening:"Swa",all:"Tout",aiLabel:"🤖 Amelyorasyon pa IA (itilize Claude)",genBtn:"🚀 Jenere kontni",genWait:"⏳ Jenerasyon...",result:"Rezilta",copy:"📋 Kopye",copied:"Kopye!",placeholder:"Kontni jenere a ap paret la a..."},
+};
+function stt(k){return (ST_T[window.PREDIKTA_LANG]||ST_T.en)[k]||ST_T.en[k]||k;}
+
+function applyStudioLang(){
+  document.getElementById('st-subtitle').textContent = stt('subtitle');
+  document.getElementById('st-type-title').textContent = stt('typeTitle');
+  document.getElementById('st-config-title').textContent = stt('config');
+  document.getElementById('st-lbl-state').textContent = stt('state');
+  document.getElementById('st-lbl-tod').textContent = stt('tod');
+  document.getElementById('st-choose').textContent = stt('choose');
+  document.getElementById('st-midday').textContent = stt('midday');
+  document.getElementById('st-evening').textContent = stt('evening');
+  document.getElementById('st-all').textContent = stt('all');
+  document.getElementById('st-ai-label').textContent = stt('aiLabel');
+  document.getElementById('genBtn').textContent = stt('genBtn');
+  document.getElementById('st-result-title').textContent = stt('result');
+  document.getElementById('st-copy-btn').textContent = stt('copy');
+  document.getElementById('stOutput').dataset.placeholder = stt('placeholder');
+}
+
 const STATES_LIST = ["NY","FL","GA","TX","CA","PA","NJ","OH","IL","NC","MD","TN","VA","SC","KY","IN","MI","CT","WI","MN","LA","MO","CO","AR","WV","DE","MS","KS","OK","NM","ID","IA","NE","ME","VT","NH","WA","AZ","DC","PR"];
 let _selectedType = 'daily_summary';
 let _lastContent = '';
 
-// Load states
 const sel = document.getElementById('stState');
 STATES_LIST.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
 
-// Load content types
-fetch('/api/studio/types?lang='+(window.PREDIKTA_LANG||'fr'))
-  .then(r=>r.json())
-  .then(d=>{
-    const el = document.getElementById('typesList');
-    el.innerHTML = (d.types||[]).map(t=>`
-      <button class="type-btn ${t.id===_selectedType?'active':''}" onclick="selectType('${t.id}',this)">
-        <span class="type-icon">${t.icon}</span> ${t.name}
-      </button>
-    `).join('');
-  });
+function loadTypes(){
+  fetch('/api/studio/types?lang='+(window.PREDIKTA_LANG||'fr'))
+    .then(r=>r.json())
+    .then(d=>{
+      const el = document.getElementById('typesList');
+      el.innerHTML = (d.types||[]).map(t=>`
+        <button class="type-btn ${t.id===_selectedType?'active':''}" onclick="selectType('${t.id}',this)">
+          <span class="type-icon">${t.icon}</span> ${t.name}
+        </button>
+      `).join('');
+    });
+}
 
 function selectType(id, btn){
   _selectedType = id;
@@ -117,7 +141,7 @@ function selectType(id, btn){
 async function generate(){
   const btn = document.getElementById('genBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ Generation...';
+  btn.textContent = stt('genWait');
   document.getElementById('stOutput').textContent = '';
 
   const state = document.getElementById('stState').value;
@@ -136,7 +160,7 @@ async function generate(){
   });
   const data = await resp.json();
   btn.disabled = false;
-  btn.textContent = '🚀 Generer le contenu';
+  btn.textContent = stt('genBtn');
 
   _lastContent = data.content || data.error || 'Erreur';
   document.getElementById('stOutput').textContent = _lastContent;
@@ -145,7 +169,7 @@ async function generate(){
 function copyOutput(){
   if(_lastContent && navigator.clipboard){
     navigator.clipboard.writeText(_lastContent);
-    alert('Copie !');
+    alert(stt('copied'));
   }
 }
 function shareTwitter(){
@@ -154,5 +178,10 @@ function shareTwitter(){
 function shareWhatsApp(){
   if(_lastContent) window.open('https://wa.me/?text='+encodeURIComponent(_lastContent),'_blank');
 }
+
+// Init + lang change hook
+applyStudioLang();
+loadTypes();
+window.setLang = function(l){ window.PREDIKTA_LANG = l; applyStudioLang(); loadTypes(); };
 </script>
 </body></html>

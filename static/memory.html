@@ -55,50 +55,44 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
   <h1>🧠 Memory Center™</h1>
   <p class="subtitle" id="mc-subtitle">Votre profil intelligent — consultez, modifiez ou effacez votre mémoire ZYNORIQ.</p>
 
-  <div id="loading">Chargement...</div>
+  <div id="loading" data-i18n="loading"></div>
   <div id="content" style="display:none">
 
-    <!-- Stats -->
     <div class="section">
-      <div class="section-title">📊 Vue d'ensemble</div>
+      <div class="section-title" id="mc-overview"></div>
       <div class="stat-row">
-        <div class="stat-card"><div class="stat-num" id="s-visits">0</div><div class="stat-label">Visites</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-convos">0</div><div class="stat-label">Conversations</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-analyses">0</div><div class="stat-label">Analyses</div></div>
-        <div class="stat-card"><div class="stat-num" id="s-level">—</div><div class="stat-label">Niveau</div></div>
+        <div class="stat-card"><div class="stat-num" id="s-visits">0</div><div class="stat-label" id="mc-lbl-visits"></div></div>
+        <div class="stat-card"><div class="stat-num" id="s-convos">0</div><div class="stat-label" id="mc-lbl-convos"></div></div>
+        <div class="stat-card"><div class="stat-num" id="s-analyses">0</div><div class="stat-label" id="mc-lbl-analyses"></div></div>
+        <div class="stat-card"><div class="stat-num" id="s-level">—</div><div class="stat-label" id="mc-lbl-level"></div></div>
       </div>
     </div>
 
-    <!-- Favorite States -->
     <div class="section">
-      <div class="section-title">⭐ États favoris</div>
+      <div class="section-title" id="mc-fav-title"></div>
       <div class="tag-list" id="fav-states"></div>
     </div>
 
-    <!-- Recommendations -->
     <div class="section">
-      <div class="section-title">💡 Recommandations personnalisées</div>
+      <div class="section-title" id="mc-recs-title"></div>
       <div id="recs"></div>
     </div>
 
-    <!-- Conversations -->
     <div class="section">
-      <div class="section-title">💬 Dernières conversations Copilot</div>
+      <div class="section-title" id="mc-convos-title"></div>
       <div id="convos"></div>
     </div>
 
-    <!-- Preferences -->
     <div class="section">
-      <div class="section-title">⚙️ Préférences de mémoire</div>
+      <div class="section-title" id="mc-prefs-title"></div>
       <div id="prefs"></div>
     </div>
 
-    <!-- Actions -->
     <div class="section">
-      <div class="section-title">🔒 Gestion des données</div>
+      <div class="section-title" id="mc-data-title"></div>
       <div class="btn-row">
-        <button class="btn btn-outline" onclick="exportMemory()">📥 Exporter mes données</button>
-        <button class="btn btn-danger" onclick="clearMemory()">🗑️ Effacer toute ma mémoire</button>
+        <button class="btn btn-outline" onclick="exportMemory()" id="mc-export-btn"></button>
+        <button class="btn btn-danger" onclick="clearMemory()" id="mc-clear-btn"></button>
       </div>
     </div>
 
@@ -106,12 +100,45 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weig
 </div>
 
 <script>
+const MC_T = {
+  fr:{loading:"Chargement...",subtitle:"Votre profil intelligent — consultez, modifiez ou effacez votre memoire ZYNORIQ.",overview:"📊 Vue d'ensemble",visits:"Visites",convos:"Conversations",analyses:"Analyses",level:"Niveau",favTitle:"⭐ Etats favoris",recsTitle:"💡 Recommandations personnalisees",convosTitle:"💬 Dernieres conversations Copilot",prefsTitle:"⚙️ Preferences de memoire",dataTitle:"🔒 Gestion des donnees",exportBtn:"📥 Exporter mes donnees",clearBtn:"🗑️ Effacer toute ma memoire",clearConfirm:"Effacer toute votre memoire ZYNORIQ ? Cette action est irreversible.",cleared:"Memoire effacee.",noFav:"Aucun Etat favori encore — commencez a analyser !",noRecs:"Pas de recommandations pour le moment.",noConvos:"Aucune conversation encore — ouvrez le Copilot !",errorLoad:"Erreur de chargement. Connectez-vous d'abord.",new:"Nouveau",active:"Actif",regular:"Regulier",power_user:"Power User",
+    pref_convos:"Memoriser les conversations",pref_convos_d:"Le Copilot retient vos echanges pour des reponses contextuelles.",pref_activities:"Suivre l'activite",pref_activities_d:"Memorise les pages visitees et analyses lancees.",pref_searches:"Memoriser les recherches",pref_searches_d:"Garde un historique de vos recherches recentes.",pref_recs:"Recommandations personnalisees",pref_recs_d:"Suggestions basees sur votre utilisation.",pref_dash:"Dashboard personnalise",pref_dash_d:"Contenu adapte a chaque connexion."},
+  en:{loading:"Loading...",subtitle:"Your smart profile — view, edit or clear your ZYNORIQ memory.",overview:"📊 Overview",visits:"Visits",convos:"Conversations",analyses:"Analyses",level:"Level",favTitle:"⭐ Favorite States",recsTitle:"💡 Personalized Recommendations",convosTitle:"💬 Latest Copilot Conversations",prefsTitle:"⚙️ Memory Preferences",dataTitle:"🔒 Data Management",exportBtn:"📥 Export my data",clearBtn:"🗑️ Clear all my memory",clearConfirm:"Clear all your ZYNORIQ memory? This action is irreversible.",cleared:"Memory cleared.",noFav:"No favorite states yet — start analyzing!",noRecs:"No recommendations yet.",noConvos:"No conversations yet — open the Copilot!",errorLoad:"Loading error. Please log in first.",new:"New",active:"Active",regular:"Regular",power_user:"Power User",
+    pref_convos:"Remember conversations",pref_convos_d:"Copilot remembers your exchanges for contextual responses.",pref_activities:"Track activity",pref_activities_d:"Records pages visited and analyses launched.",pref_searches:"Remember searches",pref_searches_d:"Keeps a history of your recent searches.",pref_recs:"Personalized recommendations",pref_recs_d:"Suggestions based on your usage.",pref_dash:"Personalized dashboard",pref_dash_d:"Content adapted on each login."},
+  es:{loading:"Cargando...",subtitle:"Su perfil inteligente — consulte, modifique o borre su memoria ZYNORIQ.",overview:"📊 Resumen",visits:"Visitas",convos:"Conversaciones",analyses:"Analisis",level:"Nivel",favTitle:"⭐ Estados favoritos",recsTitle:"💡 Recomendaciones personalizadas",convosTitle:"💬 Ultimas conversaciones Copilot",prefsTitle:"⚙️ Preferencias de memoria",dataTitle:"🔒 Gestion de datos",exportBtn:"📥 Exportar mis datos",clearBtn:"🗑️ Borrar toda mi memoria",clearConfirm:"Borrar toda su memoria ZYNORIQ? Esta accion es irreversible.",cleared:"Memoria borrada.",noFav:"Ningun Estado favorito aun — comience a analizar!",noRecs:"Sin recomendaciones por ahora.",noConvos:"Sin conversaciones aun — abra el Copilot!",errorLoad:"Error de carga. Inicie sesion primero.",new:"Nuevo",active:"Activo",regular:"Regular",power_user:"Power User",
+    pref_convos:"Memorizar conversaciones",pref_convos_d:"El Copilot retiene sus intercambios.",pref_activities:"Seguir actividad",pref_activities_d:"Memoriza paginas visitadas y analisis.",pref_searches:"Memorizar busquedas",pref_searches_d:"Guarda historial de busquedas.",pref_recs:"Recomendaciones personalizadas",pref_recs_d:"Sugerencias basadas en su uso.",pref_dash:"Dashboard personalizado",pref_dash_d:"Contenido adaptado en cada conexion."},
+  pt:{loading:"Carregando...",subtitle:"Seu perfil inteligente — consulte, modifique ou apague sua memoria ZYNORIQ.",overview:"📊 Visao geral",visits:"Visitas",convos:"Conversas",analyses:"Analises",level:"Nivel",favTitle:"⭐ Estados favoritos",recsTitle:"💡 Recomendacoes personalizadas",convosTitle:"💬 Ultimas conversas Copilot",prefsTitle:"⚙️ Preferencias de memoria",dataTitle:"🔒 Gestao de dados",exportBtn:"📥 Exportar meus dados",clearBtn:"🗑️ Apagar toda minha memoria",clearConfirm:"Apagar toda sua memoria ZYNORIQ? Esta acao e irreversivel.",cleared:"Memoria apagada.",noFav:"Nenhum Estado favorito ainda — comece a analisar!",noRecs:"Sem recomendacoes por enquanto.",noConvos:"Nenhuma conversa ainda — abra o Copilot!",errorLoad:"Erro de carregamento. Faca login primeiro.",new:"Novo",active:"Ativo",regular:"Regular",power_user:"Power User",
+    pref_convos:"Memorizar conversas",pref_convos_d:"O Copilot retém suas trocas.",pref_activities:"Rastrear atividade",pref_activities_d:"Memoriza paginas visitadas.",pref_searches:"Memorizar buscas",pref_searches_d:"Guarda historico de buscas.",pref_recs:"Recomendacoes personalizadas",pref_recs_d:"Sugestoes baseadas no seu uso.",pref_dash:"Dashboard personalizado",pref_dash_d:"Conteudo adaptado a cada login."},
+  ht:{loading:"Chajman...",subtitle:"Pwofil entelijan ou — konsilte, modifye oswa efase memwa ZYNORIQ ou.",overview:"📊 Apesi jeneral",visits:"Vizit",convos:"Konvesasyon",analyses:"Analiz",level:"Nivo",favTitle:"⭐ Eta prefere",recsTitle:"💡 Rekomandasyon pèsonalize",convosTitle:"💬 Dènye konvesasyon Copilot",prefsTitle:"⚙️ Preferans memwa",dataTitle:"🔒 Jesyon done",exportBtn:"📥 Ekspòte done mwen",clearBtn:"🗑️ Efase tout memwa mwen",clearConfirm:"Efase tout memwa ZYNORIQ ou? Aksyon sa a pa ka defèt.",cleared:"Memwa efase.",noFav:"Pa gen Eta prefere anko — kòmanse analize!",noRecs:"Pa gen rekòmandasyon pou kounya.",noConvos:"Pa gen konvesasyon anko — ouvri Copilot la!",errorLoad:"Erè chajman. Konekte anvan.",new:"Nouvo",active:"Aktif",regular:"Regilye",power_user:"Power User",
+    pref_convos:"Memorize konvesasyon",pref_convos_d:"Copilot kenbe echanj ou yo.",pref_activities:"Swiv aktivite",pref_activities_d:"Memorize paj vizite yo.",pref_searches:"Memorize rechèch",pref_searches_d:"Kenbe istwa rechèch ou.",pref_recs:"Rekomandasyon pèsonalize",pref_recs_d:"Sijesyon baze sou itilizasyon ou.",pref_dash:"Dashboard pèsonalize",pref_dash_d:"Kontni adapte a chak koneksyon."},
+};
+function mct(k){return (MC_T[window.PREDIKTA_LANG]||MC_T.en)[k]||MC_T.en[k]||k;}
+
+function applyMemLang(){
+  document.getElementById('loading').textContent = mct('loading');
+  document.getElementById('mc-subtitle').textContent = mct('subtitle');
+  document.getElementById('mc-overview').textContent = mct('overview');
+  document.getElementById('mc-lbl-visits').textContent = mct('visits');
+  document.getElementById('mc-lbl-convos').textContent = mct('convos');
+  document.getElementById('mc-lbl-analyses').textContent = mct('analyses');
+  document.getElementById('mc-lbl-level').textContent = mct('level');
+  document.getElementById('mc-fav-title').textContent = mct('favTitle');
+  document.getElementById('mc-recs-title').textContent = mct('recsTitle');
+  document.getElementById('mc-convos-title').textContent = mct('convosTitle');
+  document.getElementById('mc-prefs-title').textContent = mct('prefsTitle');
+  document.getElementById('mc-data-title').textContent = mct('dataTitle');
+  document.getElementById('mc-export-btn').textContent = mct('exportBtn');
+  document.getElementById('mc-clear-btn').textContent = mct('clearBtn');
+}
+applyMemLang();
+window.setLang = function(l){ window.PREDIKTA_LANG = l; applyMemLang(); loadMemory(); };
+
 const PREF_LABELS = {
-  track_conversations: {label:'Mémoriser les conversations', desc:'Le Copilot retient vos échanges pour des réponses contextuelles.'},
-  track_activities: {label:'Suivre l\'activité', desc:'Mémorise les pages visitées et analyses lancées.'},
-  track_searches: {label:'Mémoriser les recherches', desc:'Garde un historique de vos recherches récentes.'},
-  personalized_recommendations: {label:'Recommandations personnalisées', desc:'Suggestions basées sur votre utilisation.'},
-  personalized_dashboard: {label:'Dashboard personnalisé', desc:'Contenu adapté à chaque connexion.'},
+  track_conversations: {label:()=>mct('pref_convos'), desc:()=>mct('pref_convos_d')},
+  track_activities: {label:()=>mct('pref_activities'), desc:()=>mct('pref_activities_d')},
+  track_searches: {label:()=>mct('pref_searches'), desc:()=>mct('pref_searches_d')},
+  personalized_recommendations: {label:()=>mct('pref_recs'), desc:()=>mct('pref_recs_d')},
+  personalized_dashboard: {label:()=>mct('pref_dash'), desc:()=>mct('pref_dash_d')},
 };
 
 async function loadMemory(){
@@ -130,13 +157,12 @@ async function loadMemory(){
     document.getElementById('s-visits').textContent = profile.visit_count || 0;
     document.getElementById('s-convos').textContent = convos.length;
     document.getElementById('s-analyses').textContent = (profile.recent_analyses||[]).length;
-    const levels = {new:'Nouveau',active:'Actif',regular:'Régulier',power_user:'Power User'};
-    document.getElementById('s-level').textContent = levels[profile.usage_frequency] || 'Nouveau';
+    document.getElementById('s-level').textContent = mct(profile.usage_frequency || 'new');
 
     // Favorite states
     const favEl = document.getElementById('fav-states');
     const favs = profile.favorite_states || [];
-    favEl.innerHTML = favs.length ? favs.map(s=>`<span class="tag">${s}</span>`).join('') : '<div class="empty">Aucun État favori encore — commencez à analyser !</div>';
+    favEl.innerHTML = favs.length ? favs.map(s=>`<span class="tag">${s}</span>`).join('') : `<div class="empty">${mct('noFav')}</div>`;
 
     // Recommendations
     const recsEl = document.getElementById('recs');
@@ -146,7 +172,7 @@ async function loadMemory(){
         <div class="rec-desc">${r.description}</div>
         <a href="${r.action}" class="rec-action">→ ${r.title}</a>
       </div>
-    `).join('') : '<div class="empty">Pas de recommandations pour le moment.</div>';
+    `).join('') : `<div class="empty">${mct('noRecs')}</div>`;
 
     // Conversations
     const convEl = document.getElementById('convos');
@@ -156,7 +182,7 @@ async function loadMemory(){
         <div class="convo-a">${(c.answer||'').substring(0,200)}${c.answer?.length>200?'...':''}</div>
         <div class="convo-meta">${c.mode} · ${c.page} · ${c.ts?.split('T')[0]||''}</div>
       </div>
-    `).join('') : '<div class="empty">Aucune conversation encore — ouvrez le Copilot !</div>';
+    `).join('') : `<div class="empty">${mct('noConvos')}</div>`;
 
     // Preferences
     const prefsR = await fetch('/api/memory/preferences').then(r=>r.json());
@@ -164,7 +190,7 @@ async function loadMemory(){
     const prefsEl = document.getElementById('prefs');
     prefsEl.innerHTML = Object.entries(PREF_LABELS).map(([k,v])=>`
       <div class="pref-row">
-        <div><div class="pref-label">${v.label}</div><div class="pref-desc">${v.desc}</div></div>
+        <div><div class="pref-label">${v.label()}</div><div class="pref-desc">${v.desc()}</div></div>
         <label class="toggle"><input type="checkbox" ${prefs[k]!==false?'checked':''} onchange="togglePref('${k}',this.checked)"/><span class="slider"></span></label>
       </div>
     `).join('');
@@ -172,7 +198,7 @@ async function loadMemory(){
     document.getElementById('loading').style.display = 'none';
     document.getElementById('content').style.display = '';
   } catch(e){
-    document.getElementById('loading').textContent = 'Erreur de chargement. Connectez-vous d\'abord.';
+    document.getElementById('loading').textContent = mct('errorLoad');
   }
 }
 
@@ -196,9 +222,9 @@ async function exportMemory(){
 }
 
 async function clearMemory(){
-  if(!confirm('Effacer toute votre mémoire ZYNORIQ ? Cette action est irréversible.')) return;
+  if(!confirm(mct('clearConfirm'))) return;
   await fetch('/api/memory/clear', {method:'POST'});
-  alert('Mémoire effacée.');
+  alert(mct('cleared'));
   location.reload();
 }
 
