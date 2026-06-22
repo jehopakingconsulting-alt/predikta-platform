@@ -108,6 +108,9 @@ class User(db.Model):
 
     is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
 
+    email_verified = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+    email_verify_token = db.Column(db.String(64), nullable=True)
+
     # Programme de parrainage (Phase 2 — basé sur les comptes)
     ref_code         = db.Column(db.String(12), nullable=True)
     referred_by_id   = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
@@ -460,6 +463,8 @@ def init_app(app):
         _ensure_column(db, "users", "referral_rewards", "TEXT")
         _ensure_column(db, "users", "referral_balance_usd", "FLOAT DEFAULT 0")
         _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "email_verified", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "email_verify_token", "VARCHAR(64)")
 
 
 def _ensure_column(db, table, column, ddl_type):
@@ -759,6 +764,51 @@ def send_password_reset_email(user, token: str):
         f"Cliquez sur ce lien pour choisir un nouveau mot de passe (valable 1 heure) :\n{reset_link}\n\n"
         "Si vous n'êtes pas à l'origine de cette demande, ignorez cet email."
     )
+
+
+def send_verification_email(user):
+    """Send email verification link after registration."""
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
+    token = secrets.token_urlsafe(32)
+    user.email_verify_token = token
+    db.session.commit()
+
+    name = _html.escape(user.username or "")
+    verify_url = f"{base_url}/api/auth/verify-email?token={token}"
+
+    plain = (
+        f"Bonjour {name},\n\n"
+        "Verifie ton adresse email pour activer ton compte ZYNORIQ.\n\n"
+        f"Clique ici : {verify_url}\n\n"
+        "Ce lien expire dans 24 heures.\n\n"
+        "L'equipe ZYNORIQ Intelligence"
+    )
+    html_body = f"""<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/></head>
+<body style="margin:0;padding:0;background:#04040f;font-family:'Helvetica Neue',Arial,sans-serif">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#04040f;padding:40px 0">
+<tr><td align="center">
+<table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%">
+  <tr><td style="background:linear-gradient(135deg,#0d0d2e,#1a0a3d);border-radius:16px 16px 0 0;padding:28px 36px;text-align:center;border:1px solid #1a1a45;border-bottom:none">
+    <div style="font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;color:#1479FF">ZYNORIQ</div>
+    <div style="font-size:.65rem;color:#ffd700;letter-spacing:.12em;text-transform:uppercase;margin-top:4px">Intelligence Beyond Prediction</div>
+  </td></tr>
+  <tr><td style="background:#08081f;border:1px solid #1a1a45;border-top:none;border-bottom:none;padding:28px 36px;text-align:center">
+    <p style="font-size:1.05rem;font-weight:700;color:#ffffff;margin:0 0 12px">Bonjour {name} !</p>
+    <p style="font-size:.88rem;color:#a0aec0;margin:0 0 24px;line-height:1.7">Verifie ton adresse email pour activer ton compte ZYNORIQ et acceder a toutes les fonctionnalites.</p>
+    <a href="{verify_url}" style="display:inline-block;padding:14px 40px;border-radius:12px;background:linear-gradient(135deg,#22e87a,#0e9e55);color:#ffffff;font-weight:800;font-size:.95rem;text-decoration:none;letter-spacing:.3px">
+      Verifier mon email
+    </a>
+    <p style="font-size:.72rem;color:#4d5a8a;margin-top:20px">Ce lien expire dans 24 heures.</p>
+  </td></tr>
+  <tr><td style="background:#06061a;border:1px solid #1a1a45;border-top:none;border-radius:0 0 16px 16px;padding:16px 36px;text-align:center">
+    <p style="font-size:.62rem;color:#334155">Si tu n'as pas cree de compte sur ZYNORIQ, ignore cet email.</p>
+  </td></tr>
+</table>
+</td></tr></table>
+</body></html>"""
+
+    _send_email(user.email, "ZYNORIQ — Verifie ton adresse email", plain, html_body=html_body)
 
 
 def send_welcome_email(user):
@@ -1174,11 +1224,50 @@ def register():
 
     db.session.commit()
 
-    send_welcome_email(user)
+    send_verification_email(user)
 
     session["user_id"] = user.id
     session.permanent = True
-    return jsonify({"success": True, "user": user.to_dict()})
+    return jsonify({"success": True, "user": user.to_dict(), "email_verification_sent": True})
+
+
+@auth_bp.route("/verify-email")
+def verify_email():
+    token = request.args.get("token", "")
+    if not token:
+        return "<h2>Lien invalide.</h2>", 400
+
+    user = User.query.filter_by(email_verify_token=token).first()
+    if not user:
+        return """<html><body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
+        <h2 style="color:#ff3d2e">Lien invalide ou expire.</h2>
+        <p>Connecte-toi et demande un nouveau lien de verification.</p>
+        <a href="/login" style="color:#1479FF">Se connecter</a>
+        </body></html>""", 400
+
+    user.email_verified = True
+    user.email_verify_token = None
+    db.session.commit()
+
+    send_welcome_email(user)
+
+    return f"""<html><body style="background:#04040f;color:#e8eeff;font-family:sans-serif;text-align:center;padding:60px">
+    <h2 style="color:#22e87a">Email verifie avec succes !</h2>
+    <p>Bienvenue sur ZYNORIQ, {_html.escape(user.username)} !</p>
+    <a href="/analyze" style="display:inline-block;margin-top:20px;padding:14px 32px;border-radius:12px;background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff;font-weight:700;text-decoration:none">Commencer a analyser</a>
+    </body></html>"""
+
+
+@auth_bp.route("/resend-verification", methods=["POST"])
+@login_required
+def resend_verification():
+    user = current_user()
+    if user.email_verified:
+        return jsonify({"message": "Email deja verifie."})
+    if _rate_limit(2, 300):
+        return jsonify({"error": "Attends 5 minutes avant de redemander."}), 429
+    send_verification_email(user)
+    return jsonify({"success": True, "message": "Email de verification renvoye."})
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -1195,6 +1284,9 @@ def login():
 
     if not user or not user.check_password(password):
         return jsonify({"error": "Identifiants incorrects"}), 401
+
+    if not user.email_verified and not user.oauth_provider:
+        return jsonify({"error": "email_not_verified", "message": "Verifie ton email avant de te connecter. Consulte ta boite de reception."}), 403
 
     session["user_id"] = user.id
     session.permanent = True
