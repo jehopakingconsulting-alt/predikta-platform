@@ -328,69 +328,116 @@ def _auto_learn(user_id, activity_type, page, state, game):
 # RECOMMENDATION ENGINE
 # ═══════════════════════════════════════════════════════════════════════════
 def get_recommendations(user_id, lang="fr"):
-    """Generate personalized recommendations based on user memory."""
+    """Generate personalized recommendations based on ML-like behavior scoring."""
     profile = get_profile(user_id)
     recs = []
+    scores = {}  # {rec_type: float score 0-1}
 
     fav_states = profile.get("favorite_states", [])
     recent_analyses = profile.get("recent_analyses", [])
+    recent_searches = profile.get("recent_searches", [])
     visit_count = profile.get("visit_count", 0)
     plan = profile.get("plan")
+    usage = profile.get("usage_frequency", "new")
+    fav_games = profile.get("favorite_games", [])
 
-    # New states to explore
-    all_states = ["NY","FL","GA","TX","CA","PA","NJ","OH","IL","NC","MD","TN","VA","SC"]
-    unexplored = [s for s in all_states if s not in fav_states][:3]
+    # ── Behavior-weighted scoring ──────────────────────────────────
+    # Score each recommendation based on user behavior patterns
+
+    # 1. Explore new states — higher score if user has few favorites
+    all_top_states = ["NY","FL","GA","TX","CA","PA","NJ","OH","IL","NC","MD","TN","VA","SC","MI","CT","WI","LA","CO"]
+    unexplored = [s for s in all_top_states if s not in fav_states][:3]
     if unexplored:
+        explore_score = max(0.3, 1.0 - len(fav_states) * 0.08)
+        scores["explore_states"] = explore_score
         recs.append({
             "type": "explore_states",
             "title": _rt(lang, "explore_states"),
             "description": _rt(lang, "explore_states_desc").format(states=", ".join(unexplored)),
             "action": "/results",
-            "priority": "medium",
+            "score": explore_score,
         })
 
-    # Suggest analysis if none recent
+    # 2. First analysis — very high if no analyses
     if not recent_analyses:
+        scores["first_analysis"] = 1.0
         recs.append({
             "type": "first_analysis",
             "title": _rt(lang, "first_analysis"),
             "description": _rt(lang, "first_analysis_desc"),
             "action": "/analyze",
-            "priority": "high",
+            "score": 1.0,
         })
-
-    # Suggest upgrade if free
-    if not plan or plan == "free":
+    elif len(recent_analyses) < 5:
+        scores["more_analyses"] = 0.7
         recs.append({
-            "type": "upgrade",
-            "title": _rt(lang, "upgrade"),
-            "description": _rt(lang, "upgrade_desc"),
-            "action": "/pro",
-            "priority": "low",
+            "type": "more_analyses",
+            "title": _rt(lang, "first_analysis"),
+            "description": _rt(lang, "first_analysis_desc"),
+            "action": "/analyze",
+            "score": 0.7,
         })
 
-    # Power user: suggest Business AI
-    if visit_count >= 20 and "business" not in [a.get("game") for a in recent_analyses]:
+    # 3. Upgrade — weighted by engagement level
+    if not plan or plan == "free":
+        upgrade_score = min(0.9, visit_count * 0.03 + len(recent_analyses) * 0.05)
+        if upgrade_score > 0.2:
+            scores["upgrade"] = upgrade_score
+            recs.append({
+                "type": "upgrade",
+                "title": _rt(lang, "upgrade"),
+                "description": _rt(lang, "upgrade_desc"),
+                "action": "/pro",
+                "score": upgrade_score,
+            })
+
+    # 4. Business AI — for engaged users who haven't tried it
+    biz_used = any("bizai" in (a.get("page") or "") for a in recent_analyses + recent_searches)
+    if visit_count >= 10 and not biz_used:
+        biz_score = min(0.8, 0.3 + visit_count * 0.02)
+        scores["try_business"] = biz_score
         recs.append({
             "type": "try_business",
             "title": _rt(lang, "try_business"),
             "description": _rt(lang, "try_business_desc"),
             "action": "/bizai",
-            "priority": "medium",
+            "score": biz_score,
         })
 
-    # Suggest Copilot if not used much
+    # 5. Copilot — for users who haven't tried it much
     convos = get_conversations(user_id, limit=5)
     if len(convos) < 3:
+        copilot_score = max(0.4, 0.8 - len(convos) * 0.15)
         recs.append({
             "type": "try_copilot",
             "title": _rt(lang, "try_copilot"),
             "description": _rt(lang, "try_copilot_desc"),
             "action": "#copilot",
-            "priority": "medium",
+            "score": copilot_score,
         })
 
-    return sorted(recs, key=lambda r: {"high": 0, "medium": 1, "low": 2}.get(r["priority"], 1))
+    # 6. Pick 4 — if user only uses Pick 3
+    if fav_games and "pick3" in str(fav_games).lower() and "pick4" not in str(fav_games).lower():
+        recs.append({
+            "type": "try_pick4",
+            "title": _rt(lang, "try_pick4") if "try_pick4" in (_REC_T.get(lang) or {}) else "Try Pick 4",
+            "description": _rt(lang, "try_pick4_desc") if "try_pick4_desc" in (_REC_T.get(lang) or {}) else "Expand to Pick 4 predictions and results.",
+            "action": "/pick4-predictions",
+            "score": 0.5,
+        })
+
+    # 7. Memory Center — for users who don't know it exists
+    if visit_count >= 5 and not any(s.get("page") == "/memory" for s in recent_searches):
+        recs.append({
+            "type": "memory_center",
+            "title": "Memory Center",
+            "description": _rt(lang, "try_copilot_desc"),
+            "action": "/memory",
+            "score": 0.35,
+        })
+
+    # Sort by score (ML-weighted, highest first)
+    return sorted(recs, key=lambda r: r.get("score", 0.5), reverse=True)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

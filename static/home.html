@@ -420,6 +420,99 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 </div>
 
+<!-- ══ ZYNORIQ MEMORY™ — Personalized Dashboard ══ -->
+<div id="memoryDashboard" class="section" style="display:none">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+    <span style="font-size:1.6rem">🧠</span>
+    <div>
+      <div id="mdGreeting" style="font-size:1rem;font-weight:800;color:#e8eeff"></div>
+      <div id="mdSubtext" style="font-size:.75rem;color:#4d5a8a;margin-top:2px"></div>
+    </div>
+  </div>
+  <!-- Stats row -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px" id="mdStats"></div>
+  <!-- Favorite states -->
+  <div id="mdFavStates" style="margin-bottom:16px"></div>
+  <!-- Recommendations -->
+  <div id="mdRecs"></div>
+</div>
+
+<style>
+.md-stat{flex:1;min-width:100px;background:rgba(20,121,255,.08);border:1px solid rgba(20,121,255,.2);border-radius:10px;padding:12px;text-align:center}
+.md-stat-num{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;color:#1479FF}
+.md-stat-label{font-size:.62rem;color:#4d5a8a;margin-top:2px}
+.md-tag{display:inline-block;padding:4px 12px;border-radius:14px;font-size:.7rem;font-weight:600;background:rgba(20,121,255,.1);border:1px solid rgba(20,121,255,.2);color:#88aaff;margin:2px 4px 2px 0;text-decoration:none;transition:all .2s}
+.md-tag:hover{background:rgba(20,121,255,.2);color:#e8eeff}
+.md-rec{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.15);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.md-rec-icon{font-size:1.2rem;flex-shrink:0}
+.md-rec-text{flex:1}
+.md-rec-title{font-size:.78rem;font-weight:700;color:#e8eeff}
+.md-rec-desc{font-size:.68rem;color:#4d5a8a;margin-top:2px;line-height:1.5}
+.md-rec-action{font-size:.7rem;font-weight:700;color:#1479FF;text-decoration:none;flex-shrink:0}
+@media(max-width:480px){.md-stat{min-width:80px;padding:8px}}
+</style>
+
+<script>
+(function(){
+  const MDT = {
+    fr:{since:'Depuis votre derniere visite',visits:'Visites',convos:'Conversations',analyses:'Analyses',level:'Niveau',favTitle:'Vos Etats favoris',new:'Nouveau',active:'Actif',regular:'Regulier',power_user:'Power User',recsTitle:'Recommandations pour vous'},
+    en:{since:'Since your last visit',visits:'Visits',convos:'Conversations',analyses:'Analyses',level:'Level',favTitle:'Your favorite States',new:'New',active:'Active',regular:'Regular',power_user:'Power User',recsTitle:'Recommendations for you'},
+    es:{since:'Desde su ultima visita',visits:'Visitas',convos:'Conversaciones',analyses:'Analisis',level:'Nivel',favTitle:'Sus Estados favoritos',new:'Nuevo',active:'Activo',regular:'Regular',power_user:'Power User',recsTitle:'Recomendaciones para usted'},
+    pt:{since:'Desde sua ultima visita',visits:'Visitas',convos:'Conversacoes',analyses:'Analises',level:'Nivel',favTitle:'Seus Estados favoritos',new:'Novo',active:'Ativo',regular:'Regular',power_user:'Power User',recsTitle:'Recomendacoes para voce'},
+    ht:{since:'Depi denye vizit ou',visits:'Vizit',convos:'Konvesasyon',analyses:'Analiz',level:'Nivo',favTitle:'Eta prefere ou yo',new:'Nouvo',active:'Aktif',regular:'Regilye',power_user:'Power User',recsTitle:'Rekomandasyon pou ou'},
+  };
+  function mt(k){return (MDT[window.PREDIKTA_LANG]||MDT.en)[k]||k;}
+
+  fetch('/api/memory/dashboard?lang='+(window.PREDIKTA_LANG||'fr'))
+    .then(r=>{if(!r.ok) throw 0; return r.json();})
+    .then(d=>{
+      if(!d.greeting_name) return;
+      const el = document.getElementById('memoryDashboard');
+      el.style.display = '';
+
+      document.getElementById('mdGreeting').textContent = (document.getElementById('heroGreeting')?.textContent?.split('—')[0]?.trim()||'') + ', ' + d.greeting_name + ' !';
+      document.getElementById('mdSubtext').textContent = mt('since');
+
+      // Stats
+      const analyses = (d.recent_analyses||[]).length;
+      const convos = (d.recommendations||[]).length;
+      const levelKey = d.usage_level||'new';
+      document.getElementById('mdStats').innerHTML = `
+        <div class="md-stat"><div class="md-stat-num">${d.visit_count||0}</div><div class="md-stat-label">${mt('visits')}</div></div>
+        <div class="md-stat"><div class="md-stat-num">${analyses}</div><div class="md-stat-label">${mt('analyses')}</div></div>
+        <div class="md-stat"><div class="md-stat-num">${mt(levelKey)}</div><div class="md-stat-label">${mt('level')}</div></div>
+      `;
+
+      // Favorite states
+      const favs = d.favorite_states||[];
+      if(favs.length){
+        document.getElementById('mdFavStates').innerHTML = `
+          <div style="font-size:.72rem;font-weight:700;color:#4d5a8a;margin-bottom:6px">${mt('favTitle')}</div>
+          ${favs.map(s=>`<a href="/analyze?state=${s}" class="md-tag">${s}</a>`).join('')}
+        `;
+      }
+
+      // Recommendations
+      const recs = d.recommendations||[];
+      if(recs.length){
+        document.getElementById('mdRecs').innerHTML = `
+          <div style="font-size:.72rem;font-weight:700;color:#ffd700;margin-bottom:8px">${mt('recsTitle')}</div>
+          ${recs.slice(0,3).map(r=>`
+            <div class="md-rec">
+              <div class="md-rec-icon">💡</div>
+              <div class="md-rec-text">
+                <div class="md-rec-title">${r.title}</div>
+                <div class="md-rec-desc">${r.description}</div>
+              </div>
+              <a href="${r.action}" class="md-rec-action">→</a>
+            </div>
+          `).join('')}
+        `;
+      }
+    }).catch(()=>{});
+})();
+</script>
+
 <div class="section">
 
   <!-- Quick links (Prédictions / Archives / Parrainage + Analyser / Scraper / Filtres) -->
