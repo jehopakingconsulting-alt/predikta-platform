@@ -99,7 +99,7 @@ def add_security_headers(response):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: https:; "
-        "connect-src 'self' https://www.google-analytics.com; "
+        "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net; "
         "frame-ancestors 'self';"
     )
     # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
