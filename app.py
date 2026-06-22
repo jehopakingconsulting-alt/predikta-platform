@@ -61,6 +61,8 @@ app.register_blueprint(billing_module.billing_bp)
 # ── ZYNORIQ MEMORY™ ──────────────────────────────────────────────────────
 import memory_engine as _mem
 import agents_engine as _agents
+import intelligence_graph as _igraph
+import studio_engine as _studio
 
 # ── Connexion via Google / Facebook / Microsoft (OAuth) ───────────────────
 import oauth as oauth_module
@@ -4063,6 +4065,107 @@ def api_agents_multi():
 
     results = _agents.run_multi_agent(agent_ids[:3], message, context_text, lang)
     return jsonify({"results": results})
+
+
+# ═══════════════════════════════════════════════════════════
+# ZYNORIQ INTELLIGENCE GRAPH™ — Knowledge Graph API
+# ═══════════════════════════════════════════════════════════
+@app.route("/api/graph/state/<state_code>")
+def api_graph_state(state_code):
+    code = state_code.upper()
+    if code not in STATES:
+        return jsonify({"error": f"Unknown state: {code}"}), 404
+    draws = load_csv(code)
+    report = None
+    for k, v in _REPORT_CACHE.items():
+        if isinstance(k, tuple) and len(k) >= 1 and k[0] == code:
+            report = v.get("data")
+            break
+    graph = _igraph.build_state_graph(code, draws, report)
+    return jsonify(graph)
+
+
+@app.route("/api/graph/cross")
+def api_graph_cross():
+    codes = (request.args.get("states") or "NY,FL,GA,TX").split(",")
+    states_data = {}
+    for code in codes[:10]:
+        c = code.strip().upper()
+        if c in STATES:
+            states_data[c] = {"draws": load_csv(c)}
+    graph = _igraph.build_cross_state_graph(states_data)
+    return jsonify(graph)
+
+
+@app.route("/api/graph/entity/<entity_type>/<entity_id>")
+def api_graph_entity(entity_type, entity_id):
+    state = request.args.get("state", "NY").upper()
+    draws = load_csv(state) if state in STATES else []
+    connections = _igraph.get_entity_connections(entity_type, entity_id, draws)
+    return jsonify({"entity": entity_id, "type": entity_type, "connections": connections})
+
+
+# ═══════════════════════════════════════════════════════════
+# ZYNORIQ STUDIO™ — Content Creation API
+# ═══════════════════════════════════════════════════════════
+@app.route("/api/studio/types")
+def api_studio_types():
+    lang = request.args.get("lang", "fr")
+    return jsonify({"types": _studio.get_content_types(lang)})
+
+
+@app.route("/api/studio/generate", methods=["POST"])
+def api_studio_generate():
+    data = request.get_json(silent=True) or {}
+    content_type = data.get("type", "daily_summary")
+    lang = data.get("lang", "fr")
+    context = data.get("context", {})
+    use_ai = data.get("ai", False)
+
+    # Enrich with server data
+    state = context.get("state")
+    if state and state.upper() in STATES:
+        draws = load_csv(state.upper())
+        context["total_draws"] = len(draws)
+        if draws:
+            last = draws[0]
+            context["last_draw_date"] = last.get("date", "")
+            context["last_draw_numbers"] = f"{last.get('d1','')}-{last.get('d2','')}-{last.get('d3','')}"
+
+        # Hot/cold from frequency
+        from collections import Counter as _C
+        freq = _C()
+        for d in draws[:30]:
+            for p in ["d1", "d2", "d3"]:
+                v = str(d.get(p, ""))
+                if v:
+                    freq[v] += 1
+        if freq:
+            total = sum(freq.values()) or 1
+            hot = [d for d, c in freq.most_common() if c / total > 0.12][:3]
+            cold = [d for d, c in freq.most_common()[::-1] if c / total < 0.08][:3]
+            context["hot_digits"] = ", ".join(hot) or "—"
+            context["cold_digits"] = ", ".join(cold) or "—"
+
+    # Get predictions from cache
+    if state:
+        for k, v in _REPORT_CACHE.items():
+            if isinstance(k, tuple) and len(k) >= 1 and k[0] == state.upper():
+                report = v.get("data", {})
+                top = report.get("top", [])[:5]
+                context["predictions"] = [
+                    {"combo": s.get("combo", ""), "confidence": round(s.get("pct", 0), 1)}
+                    for s in top
+                ]
+                break
+
+    result = _studio.generate_content(content_type, lang, context, use_ai)
+    return jsonify(result)
+
+
+@app.route("/studio")
+def studio_page():
+    return send_from_directory("static", "studio.html")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ZYNORIQ Studio™ — Création de Contenus</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--accent2:#004DFF;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.page{max-width:960px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;background:linear-gradient(135deg,#1479FF,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{font-size:.85rem;color:var(--muted2);margin-bottom:32px}
+.grid{display:grid;grid-template-columns:300px 1fr;gap:24px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px}
+.panel::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+.panel-title{font-size:.85rem;font-weight:800;color:var(--text);margin-bottom:16px}
+.type-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;width:100%;margin-bottom:8px;font-size:.8rem;font-weight:600;transition:all .2s;text-align:left;font-family:'Inter',sans-serif}
+.type-btn:hover{border-color:var(--accent);color:var(--text)}
+.type-btn.active{background:rgba(20,121,255,.1);border-color:var(--accent);color:var(--accent)}
+.type-icon{font-size:1.2rem}
+label{display:block;font-size:.72rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+select,input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#0c0c28;color:var(--text);font-size:.84rem;font-family:'Inter',sans-serif;outline:none;margin-bottom:14px}
+select:focus,input:focus{border-color:var(--accent)}
+.row{display:flex;gap:12px;margin-bottom:14px}
+.row>*{flex:1}
+.gen-btn{width:100%;padding:14px;border-radius:12px;font-size:.9rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer;transition:opacity .2s;margin-bottom:12px}
+.gen-btn:hover{opacity:.85}
+.gen-btn:disabled{opacity:.5;cursor:wait}
+.ai-toggle{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--muted2);margin-bottom:16px}
+.ai-toggle input{width:auto;margin:0}
+.output{background:#0c0c28;border:1px solid var(--border);border-radius:12px;padding:20px;min-height:200px;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text)}
+.output:empty::before{content:'Le contenu genere apparaitra ici...';color:var(--muted)}
+.actions{display:flex;gap:8px;margin-top:12px}
+.act-btn{padding:8px 16px;border-radius:8px;font-size:.72rem;font-weight:700;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .2s}
+.act-btn:hover{border-color:var(--accent);color:var(--text)}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>🎨 ZYNORIQ Studio™</h1>
+  <p class="subtitle">Creez des contenus professionnels a partir de vos donnees ZYNORIQ.</p>
+
+  <div class="grid">
+    <!-- Left: content types -->
+    <div class="panel">
+      <div class="panel-title">Type de contenu</div>
+      <div id="typesList"></div>
+    </div>
+
+    <!-- Right: config + output -->
+    <div>
+      <div class="panel">
+        <div class="panel-title">Configuration</div>
+        <div class="row">
+          <div>
+            <label>Etat</label>
+            <select id="stState"><option value="">-- Choisir --</option></select>
+          </div>
+          <div>
+            <label>Tirage</label>
+            <select id="stTod">
+              <option value="Midday">Midi</option>
+              <option value="Evening">Soir</option>
+              <option value="">Tous</option>
+            </select>
+          </div>
+        </div>
+        <div class="ai-toggle">
+          <input type="checkbox" id="stAi"/>
+          <span>🤖 Amelioration par IA (utilise Claude)</span>
+        </div>
+        <button class="gen-btn" id="genBtn" onclick="generate()">🚀 Generer le contenu</button>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <div class="panel-title">Resultat</div>
+        <div class="output" id="stOutput"></div>
+        <div class="actions">
+          <button class="act-btn" onclick="copyOutput()">📋 Copier</button>
+          <button class="act-btn" onclick="shareTwitter()">🐦 Twitter</button>
+          <button class="act-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STATES_LIST = ["NY","FL","GA","TX","CA","PA","NJ","OH","IL","NC","MD","TN","VA","SC","KY","IN","MI","CT","WI","MN","LA","MO","CO","AR","WV","DE","MS","KS","OK","NM","ID","IA","NE","ME","VT","NH","WA","AZ","DC","PR"];
+let _selectedType = 'daily_summary';
+let _lastContent = '';
+
+// Load states
+const sel = document.getElementById('stState');
+STATES_LIST.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+
+// Load content types
+fetch('/api/studio/types?lang='+(window.PREDIKTA_LANG||'fr'))
+  .then(r=>r.json())
+  .then(d=>{
+    const el = document.getElementById('typesList');
+    el.innerHTML = (d.types||[]).map(t=>`
+      <button class="type-btn ${t.id===_selectedType?'active':''}" onclick="selectType('${t.id}',this)">
+        <span class="type-icon">${t.icon}</span> ${t.name}
+      </button>
+    `).join('');
+  });
+
+function selectType(id, btn){
+  _selectedType = id;
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+async function generate(){
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Generation...';
+  document.getElementById('stOutput').textContent = '';
+
+  const state = document.getElementById('stState').value;
+  const tod = document.getElementById('stTod').value;
+  const ai = document.getElementById('stAi').checked;
+
+  const resp = await fetch('/api/studio/generate', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      type: _selectedType,
+      lang: window.PREDIKTA_LANG || 'fr',
+      ai: ai,
+      context: { state: state, tod: tod, state_code: state, state_name: state },
+    }),
+  });
+  const data = await resp.json();
+  btn.disabled = false;
+  btn.textContent = '🚀 Generer le contenu';
+
+  _lastContent = data.content || data.error || 'Erreur';
+  document.getElementById('stOutput').textContent = _lastContent;
+}
+
+function copyOutput(){
+  if(_lastContent && navigator.clipboard){
+    navigator.clipboard.writeText(_lastContent);
+    alert('Copie !');
+  }
+}
+function shareTwitter(){
+  if(_lastContent) window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(_lastContent.substring(0,280)),'_blank');
+}
+function shareWhatsApp(){
+  if(_lastContent) window.open('https://wa.me/?text='+encodeURIComponent(_lastContent),'_blank');
+}
+</script>
+</body></html>
