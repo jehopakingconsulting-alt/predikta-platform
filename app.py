@@ -3508,47 +3508,165 @@ _COPILOT_RESPONSES = {
     },
 }
 
+_COPILOT_SYSTEM_PROMPTS = {
+    'lottery': """Tu es ZYNORIQ Copilot™, l'assistant IA officiel de la plateforme ZYNORIQ Intelligence™ — la plateforme d'analyse prédictive de loteries la plus avancée.
+
+PLATEFORME:
+- 44+ États américains couverts (Pick 3, Pick 4, Pick 5, Powerball, Mega Millions)
+- 7 modèles ML : XGBoost, Random Forest, Gradient Boosting, Markov 1/2/3, Monte Carlo 50K, Fourier, Gap Analysis
+- Score consensus pondéré par performance historique de chaque modèle
+- Mises à jour en temps réel, alertes push, track record vérifié
+
+TERMES CLÉS:
+- Straight = ordre exact (1/1000). Box = n'importe quel ordre (1/167 six-way, 1/333 three-way)
+- Chaud = chiffre fréquent. Froid = chiffre rare. En retard = écart > moyenne
+- Double = 2 chiffres identiques. Triple = 3 identiques
+- Confiance = % de consensus entre les 7 modèles
+
+RÈGLES:
+- Réponds dans la langue de l'utilisateur
+- Sois concis (max 200 mots) mais précis et utile
+- Utilise le markdown (**gras**, *italique*, listes •)
+- Ne promets JAMAIS de gains. Les loteries sont des jeux de hasard
+- Si on te demande des numéros spécifiques, redirige vers /analyze
+- Mentionne les fonctionnalités de la plateforme quand pertinent""",
+
+    'business': """Tu es ZYNORIQ Copilot™ en mode Business Intelligence. Tu aides les entrepreneurs et chefs d'entreprise avec :
+- Analyse de viabilité de projets
+- Plans stratégiques 30-60-90 jours
+- Identification des risques et opportunités
+- Analyse concurrentielle
+- Recommandations budgétaires et KPIs
+
+RÈGLES:
+- Réponds dans la langue de l'utilisateur
+- Sois concis (max 250 mots) mais actionnable
+- Structure tes réponses avec des sections claires
+- Donne des conseils pratiques, pas vagues
+- Mentionne ZYNORIQ Business Intelligence (/bizai) pour les analyses approfondies""",
+
+    'analyst': """Tu es ZYNORIQ Copilot™ en mode Data Analyst. Tu aides à comprendre :
+- Les données statistiques (fréquences, écarts, distributions)
+- Les performances des modèles ML
+- Les tendances historiques par état/position
+- L'interprétation des scores de confiance et accuracy
+- Les métriques de la plateforme
+
+RÈGLES:
+- Réponds dans la langue de l'utilisateur
+- Sois précis avec les chiffres et pourcentages
+- Explique les concepts statistiques simplement
+- Max 200 mots""",
+
+    'coach': """Tu es ZYNORIQ Copilot™ en mode Coach. Tu guides les utilisateurs pour :
+- Optimiser leur utilisation de la plateforme
+- Comprendre les stratégies Straight vs Box
+- Interpréter les analyses et tendances
+- Jouer de manière responsable (budget, limites)
+- Naviguer les différentes fonctionnalités
+
+RÈGLES:
+- Ton amical et encourageant
+- Réponds dans la langue de l'utilisateur
+- Insiste toujours sur le jeu responsable
+- Sois concis (max 200 mots)
+- TOUJOURS rappeler que la loterie est un jeu de hasard""",
+}
+
+def _call_claude(message, mode, lang, history, page):
+    """Call Claude API via Anthropic SDK. Returns (reply, used_ai)."""
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        return None, False
+
+    try:
+        import httpx
+        system = _COPILOT_SYSTEM_PROMPTS.get(mode, _COPILOT_SYSTEM_PROMPTS['lottery'])
+        system += f"\n\nContexte: l'utilisateur est sur la page {page}. Langue préférée: {lang}."
+
+        messages = []
+        for h in (history or [])[-8:]:
+            role = h.get("role", "user")
+            if role == "assistant":
+                messages.append({"role": "assistant", "content": h.get("content", "")})
+            else:
+                messages.append({"role": "user", "content": h.get("content", "")})
+
+        if not messages or messages[-1]["role"] != "user":
+            messages.append({"role": "user", "content": message})
+
+        resp = httpx.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={
+                "x-api-key": api_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            },
+            json={
+                "model": "claude-haiku-4-5-20251001",
+                "max_tokens": 512,
+                "system": system,
+                "messages": messages,
+            },
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            text = data.get("content", [{}])[0].get("text", "")
+            return text, True
+        else:
+            print(f"[copilot] Claude API error {resp.status_code}: {resp.text[:200]}")
+            return None, False
+    except Exception as e:
+        print(f"[copilot] Claude API exception: {e}")
+        return None, False
+
+
 @app.route("/api/copilot", methods=["POST"])
 def api_copilot():
     data = request.get_json(silent=True) or {}
-    msg = (data.get("message") or "").strip().lower()
+    msg = (data.get("message") or "").strip()
     mode = data.get("mode", "lottery")
     lang = data.get("lang", "fr")
     page = data.get("page", "/")
+    history = data.get("history", [])
 
     if not msg:
         return jsonify({"error": "Empty message"}), 400
 
-    responses = _COPILOT_RESPONSES.get(lang, _COPILOT_RESPONSES.get('en', {}))
-    is_lottery = mode == 'lottery' or any(kw in msg for kw in _COPILOT_LOTTERY_KEYWORDS)
+    is_lottery = mode == 'lottery' or any(kw in msg.lower() for kw in _COPILOT_LOTTERY_KEYWORDS)
     disclaimer = is_lottery
 
-    # Route to appropriate response
-    reply = None
-    if mode == 'business' or 'business' in msg or 'projet' in msg or 'project' in msg:
-        reply = responses.get('business', responses.get('default'))
-    elif mode == 'coach' or 'coach' in msg or 'conseil' in msg or 'strateg' in msg or 'tip' in msg:
-        reply = responses.get('coach', responses.get('default'))
-    elif any(w in msg for w in ('chaud','froid','hot','cold','fréquence','frequency')):
-        reply = responses.get('hot_cold')
-    elif any(w in msg for w in ('écart','gap','retard','overdue','en retard','dû','due')):
-        reply = responses.get('gap')
-    elif any(w in msg for w in ('prédiction','prediction','pourquoi','numéro','number','combo','confiance','confidence','consensus')):
-        reply = responses.get('prediction')
-    elif any(w in msg for w in ('box','straight','mise','bet','way')):
-        reply = responses.get('box_straight')
-    elif any(w in msg for w in ('somme','sum','distribution','cloche','bell')):
-        reply = responses.get('sum')
-    elif any(w in msg for w in ('modèle','model','algorithme','algorithm','ml','xgboost','markov','monte carlo','fourier','random forest')):
-        reply = responses.get('models')
-    elif any(w in msg for w in ('tendance','trend','30 jour','30 day','derniers','last','recent')):
-        reply = responses.get('hot_cold')
-    elif any(w in msg for w in ('score','accuracy','performance','précision','precision','historique','history','compare')):
-        reply = responses.get('prediction')
-    else:
-        reply = responses.get('default')
+    # Try Claude API first
+    reply, used_ai = _call_claude(msg, mode, lang, history, page)
 
-    return jsonify({"reply": reply or responses.get('default',''), "disclaimer": disclaimer, "mode": mode})
+    # Fallback to templates if Claude unavailable
+    if not reply:
+        msg_lower = msg.lower()
+        responses = _COPILOT_RESPONSES.get(lang, _COPILOT_RESPONSES.get('en', {}))
+        if mode == 'business' or 'business' in msg_lower or 'projet' in msg_lower:
+            reply = responses.get('business', responses.get('default'))
+        elif mode == 'coach' or 'coach' in msg_lower or 'conseil' in msg_lower:
+            reply = responses.get('coach', responses.get('default'))
+        elif any(w in msg_lower for w in ('chaud','froid','hot','cold')):
+            reply = responses.get('hot_cold')
+        elif any(w in msg_lower for w in ('écart','gap','retard','overdue')):
+            reply = responses.get('gap')
+        elif any(w in msg_lower for w in ('prédiction','prediction','pourquoi','numéro')):
+            reply = responses.get('prediction')
+        elif any(w in msg_lower for w in ('box','straight')):
+            reply = responses.get('box_straight')
+        elif any(w in msg_lower for w in ('modèle','model','ml','xgboost','markov')):
+            reply = responses.get('models')
+        else:
+            reply = responses.get('default')
+
+    return jsonify({
+        "reply": reply or "Je suis ZYNORIQ Copilot™. Comment puis-je vous aider ?",
+        "disclaimer": disclaimer,
+        "mode": mode,
+        "ai": used_ai,
+    })
 
 
 # ═══════════════════════════════════════════════════════════
