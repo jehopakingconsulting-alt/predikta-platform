@@ -37,13 +37,23 @@ p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
 .tech-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .tech-chip{padding:5px 14px;border-radius:20px;font-size:.72rem;font-weight:600;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.3);color:#88aaff}
 .disclaimer{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:12px;padding:16px;font-size:.76rem;color:var(--muted2);line-height:1.7}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.team-grid{grid-template-columns:1fr 1fr}}
+.hero-banner{position:relative;border-radius:16px;overflow:hidden;margin-bottom:32px;border:1px solid var(--border)}
+.hero-banner img{width:100%;display:block;object-fit:cover;max-height:420px}
+.hero-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 0%,transparent 40%)}
+.hero-caption{position:absolute;bottom:16px;left:24px;z-index:2}
+.hero-caption span{font-family:'Orbitron',monospace;font-size:.7rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}.team-grid{grid-template-columns:1fr 1fr}.hero-banner img{max-height:220px}}
 </style>
 </head>
 <body>
 <div class="page">
   <h1 data-i18n="title">À Propos de ZYNORIQ</h1>
   <p class="subtitle" data-i18n="subtitle">La plateforme mondiale d'analyse prédictive pour l'analyse des loteries</p>
+
+  <div class="hero-banner">
+    <img src="/static/zynoriq-hero.png" alt="ZYNORIQ Intelligence — Intelligence Beyond Prediction" loading="eager"/>
+    <div class="hero-caption"><span>Intelligence Beyond Prediction</span></div>
+  </div>
 
   <div class="stats-grid">
     <div class="stat"><div class="stat-num">44+</div><div class="stat-label" data-i18n="statStates">États couverts</div></div>
