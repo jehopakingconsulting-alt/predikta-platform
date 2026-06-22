@@ -656,18 +656,19 @@ function buildFloatingButtons(){
 }
 #pfloat-home:hover .pfh-tooltip{opacity:1}
 
-/* Back to top */
+/* Back to top — positioned above Copilot FAB */
 #zynoriq-btt{
-  position:fixed;bottom:22px;right:22px;z-index:8000;
-  width:46px;height:46px;border-radius:12px;
+  position:fixed;bottom:82px;right:28px;z-index:8000;
+  width:42px;height:42px;border-radius:50%;
   background:linear-gradient(135deg,#1479FF,#004DFF);
-  color:#fff;font-size:1.1rem;font-weight:900;border:none;cursor:pointer;
+  color:#fff;font-size:1rem;font-weight:900;border:none;cursor:pointer;
   opacity:0;transform:translateY(16px);transition:all .3s;
   box-shadow:0 4px 16px rgba(79,110,255,.4);
   display:flex;align-items:center;justify-content:center;
 }
 #zynoriq-btt.visible{opacity:1;transform:translateY(0)}
 #zynoriq-btt:hover{box-shadow:0 6px 24px rgba(20,121,255,.6);transform:translateY(-3px)}
+@media(max-width:480px){#zynoriq-btt{bottom:140px;right:16px}}
 
 /* Notifications flottant */
 #pfloat-notif{
