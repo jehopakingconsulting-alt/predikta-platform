@@ -3766,6 +3766,80 @@ def api_copilot_logs():
     return jsonify({"logs": _cps.get_logs(100)})
 
 
+# ── PDF Report Generation ────────────────────────────────────────────────
+import copilot_report as _cpr
+
+@app.route("/api/copilot/report", methods=["POST"])
+def api_copilot_report():
+    data = request.get_json(silent=True) or {}
+    report_type = data.get("report_type", "prediction")
+    lang = data.get("lang", "fr")
+    page_context = data.get("context", {})
+    analysis = data.get("analysis", "")
+
+    if report_type not in _cpr.REPORT_TYPES:
+        return jsonify({"error": f"Invalid report type: {report_type}"}), 400
+
+    user = auth_module.current_user() if hasattr(auth_module, 'current_user') else None
+    user_id = user.id if user else 0
+    plan = None
+    if user and user.subscription:
+        plan = user.subscription.plan
+
+    allowed, remaining, limit = _cpr.check_report_quota(user_id, plan)
+    if not allowed:
+        return jsonify({"error": "quota_exceeded", "limit": limit, "remaining": 0}), 429
+
+    # Enrich context with server data
+    page = data.get("page", "/")
+    page_context["url"] = page
+    page_context["plan"] = plan or "free"
+    _enrich_context(page_context, page)
+
+    # Generate AI analysis if not provided
+    if not analysis and os.environ.get("ANTHROPIC_API_KEY"):
+        prompt = f"Generate a professional {report_type} report analysis for the following data. Be structured: summary, key findings, recommendations, next action. Max 400 words."
+        context_text = _cps.build_page_context(page_context)
+        analysis, _, _ = _cps.call_claude(prompt, "analyst", lang, [], context_text)
+
+    filepath = _cpr.generate_report(
+        report_type=report_type,
+        lang=lang,
+        data=page_context,
+        analysis_text=analysis or "",
+        user_plan=plan,
+    )
+
+    if not filepath:
+        return jsonify({"error": "PDF generation failed"}), 500
+
+    _cpr.consume_report_quota(user_id)
+    token = _cpr.register_file(filepath, user_id)
+
+    return jsonify({
+        "success": True,
+        "download_url": f"/api/copilot/report/download/{token}",
+        "report_type": report_type,
+        "quota": {"remaining": max(0, remaining - 1), "limit": limit},
+    })
+
+
+@app.route("/api/copilot/report/download/<token>")
+def api_copilot_report_download(token):
+    user = auth_module.current_user() if hasattr(auth_module, 'current_user') else None
+    user_id = user.id if user else 0
+    filepath = _cpr.get_file(token, user_id)
+    if not filepath or not os.path.exists(filepath):
+        return jsonify({"error": "Report not found or expired"}), 404
+    filename = os.path.basename(filepath)
+    return send_from_directory(
+        os.path.dirname(os.path.abspath(filepath)),
+        filename,
+        as_attachment=True,
+        download_name=filename,
+    )
+
+
 # ═══════════════════════════════════════════════════════════
 @app.route("/copilot.js")
 def copilot_js():

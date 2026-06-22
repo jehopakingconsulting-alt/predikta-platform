@@ -184,6 +184,7 @@ function getSuggestions(){
 // ── Render helpers ───────────────────────────────────────────────────────
 function md(text){
   return text
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/\n/g, '<br>');
@@ -254,6 +255,10 @@ function inject(){
     <div id="copilot-modes" class="cp-modes"></div>
     <div id="copilot-messages" class="cp-messages"></div>
     <div id="copilot-suggestions" class="cp-suggestions"></div>
+    <div class="cp-actions-bar">
+      <button class="cp-action-btn" onclick="window._cpGenerateReport()" id="cp-report-btn">📄 PDF Report</button>
+      <button class="cp-action-btn" onclick="window._cpCopySummary()">📋 Copy</button>
+    </div>
     <div class="cp-input-bar">
       <input type="text" id="copilot-input" placeholder="${t('placeholder')}" autocomplete="off"/>
       <button id="copilot-send" onclick="window._cpSendInput()">${t('send')}</button>
@@ -409,6 +414,72 @@ window._cpSendInput = function(){
   if(!text) return;
   inp.value = '';
   window._cpSend(text);
+};
+
+// ── PDF Report Generation ────────────────────────────────────────────────
+window._cpGenerateReport = function(){
+  const btn = document.getElementById('cp-report-btn');
+  if(!btn || btn.disabled) return;
+  btn.disabled = true;
+  btn.textContent = '⏳ ...';
+
+  const ctx = gatherPageContext();
+  const lastBotMsg = _messages.filter(m => m.role === 'bot').slice(-1)[0];
+  const analysis = lastBotMsg ? lastBotMsg.text : '';
+
+  // Detect report type from mode
+  const typeMap = {lottery:'prediction', business:'business', analyst:'accuracy', coach:'trend'};
+  const reportType = typeMap[_mode] || 'prediction';
+
+  fetch('/api/copilot/report', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      report_type: reportType,
+      lang: window.PREDIKTA_LANG || 'fr',
+      page: location.pathname,
+      context: ctx,
+      analysis: analysis,
+    }),
+  })
+  .then(r => r.json())
+  .then(data => {
+    btn.disabled = false;
+    btn.textContent = '📄 PDF Report';
+    if(data.error === 'quota_exceeded'){
+      _messages.push({ role:'bot', text: `⚠️ Limite de rapports atteinte (${data.limit}/mois). Passe au plan supérieur.` });
+    } else if(data.download_url){
+      _messages.push({ role:'bot', text: `✅ **Rapport PDF généré !**\n\n[📥 Télécharger le rapport](${data.download_url})\n\nQuota: ${data.quota.remaining}/${data.quota.limit} rapports restants ce mois.` });
+      // Auto-download
+      const a = document.createElement('a');
+      a.href = data.download_url;
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } else {
+      _messages.push({ role:'bot', text: '❌ Erreur lors de la génération du rapport.' });
+    }
+    renderMessages();
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = '📄 PDF Report';
+    _messages.push({ role:'bot', text: '❌ Erreur de connexion.' });
+    renderMessages();
+  });
+};
+
+// ── Copy Summary ─────────────────────────────────────────────────────────
+window._cpCopySummary = function(){
+  const botMsgs = _messages.filter(m => m.role === 'bot').map(m => m.text);
+  const text = botMsgs.join('\n\n');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(() => {
+      _messages.push({ role:'bot', text: '✅ Résumé copié dans le presse-papiers.' });
+      renderMessages();
+    });
+  }
 };
 
 // ── Refresh on lang change ───────────────────────────────────────────────
@@ -575,12 +646,28 @@ function injectCSS(){
 }
 #copilot-send:hover{opacity:.85}
 
+/* Actions bar */
+.cp-actions-bar{
+  display:flex;gap:6px;padding:8px 16px;flex-shrink:0;
+  border-top:1px solid rgba(26,26,69,.6);
+}
+.cp-action-btn{
+  flex:1;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:700;
+  border:1px solid rgba(20,121,255,.3);background:rgba(20,121,255,.08);
+  color:#88aaff;cursor:pointer;transition:all .2s;text-align:center;
+}
+.cp-action-btn:hover{background:rgba(20,121,255,.2);color:#e8eeff;border-color:#1479FF}
+.cp-action-btn:disabled{opacity:.5;cursor:wait}
+
 /* Disclaimer */
 .cp-disclaimer{
   padding:8px 16px 10px;font-size:.6rem;color:#334155;
   text-align:center;flex-shrink:0;line-height:1.5;
   border-top:1px solid rgba(26,26,69,.3);
 }
+
+/* Links in messages */
+.cp-msg-bubble a{color:#1479FF;text-decoration:underline}
 
 /* Scrollbar */
 .cp-messages::-webkit-scrollbar{width:4px}
