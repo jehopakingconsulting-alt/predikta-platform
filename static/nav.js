@@ -1265,8 +1265,7 @@ async function initUserMenu(){
 <div class="pnav-user" id="pnav-user-dd">
   <button class="pnav-user-btn" onclick="toggleUserMenu(event)" aria-haspopup="true" aria-expanded="false">
     <span class="pnav-user-avatar">${initial}</span>
-    <span class="nav-svc-label">${T.myAccount}</span>
-    <span class="pnav-user-chevron">▾</span>
+    <span class="nav-svc-label">${T.myAccount} ▾</span>
   </button>
   <div class="pnav-user-menu" role="menu">
     <div class="pnav-user-info">
@@ -1275,6 +1274,10 @@ async function initUserMenu(){
     </div>
     <a href="/account" role="menuitem">👤 ${T.myAccount}</a>
     <a href="/dashboard" role="menuitem">📊 ${T.dashboard}</a>
+    <a href="/analyze" role="menuitem">⚡ ${T.analyze}</a>
+    <a href="/memory" role="menuitem">🧠 Memory Center</a>
+    <a href="/studio" role="menuitem">🎨 Studio</a>
+    <a href="/pro" role="menuitem">👑 PRO</a>
     <div class="pnav-user-menu-sep"></div>
     <button class="pnav-logout" onclick="doNavLogout()" role="menuitem">🚪 ${T.logout}</button>
   </div>
