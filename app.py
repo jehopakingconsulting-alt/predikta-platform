@@ -3474,6 +3474,91 @@ def admin_page():
     return send_from_directory("static", "admin.html")
 
 
+# ═══════════════════════════════════════════════════════════
+# ZYNORIQ COPILOT™ — MVP API
+# ═══════════════════════════════════════════════════════════
+_COPILOT_LOTTERY_KEYWORDS = {
+    'chaud','froid','hot','cold','tendance','trend','retard','overdue','gap',
+    'fréquence','frequency','position','somme','sum','pair','impair','even','odd',
+    'double','triple','markov','monte carlo','fourier','xgboost','prédiction',
+    'prediction','numéro','number','combo','straight','box','analyse','analyze',
+}
+_COPILOT_RESPONSES = {
+    'fr':{
+        'hot_cold': "**Chiffres Chauds / Froids** — Les chiffres \"chauds\" sont ceux tirés le plus souvent dans les 30 derniers tirages. Les \"froids\" apparaissent rarement. ZYNORIQ pondère ces fréquences par position (P1/P2/P3) pour affiner les suggestions.",
+        'gap': "**Analyse des Écarts** — Un chiffre \"en retard\" a un écart actuel supérieur à sa moyenne historique. Le badge 🔥 99% signifie qu'il dépasse 99% de ses écarts habituels — statistiquement, il est \"dû\".",
+        'prediction': "**Comment fonctionnent les prédictions** — ZYNORIQ combine 7 modèles ML (XGBoost, Random Forest, Gradient Boosting, Markov 1/2/3, Monte Carlo 50K, Fourier, Gap Analysis). Le score consensus pondère chaque modèle par sa précision historique sur votre état.",
+        'box_straight': "**Straight vs Box** — Straight = les 3 chiffres dans l'ordre exact (probabilité 1/1000). Box = les 3 chiffres dans n'importe quel ordre (1/167 pour 6-way, 1/333 pour 3-way). Le gain Straight est plus élevé, mais le Box offre plus de chances.",
+        'sum': "**Distribution des Sommes** — La somme des 3 chiffres (0-27) suit une courbe en cloche. Les sommes 13-14 sont les plus fréquentes. ZYNORIQ identifie quand certaines sommes sont en retard par rapport à leur moyenne.",
+        'models': "**Nos 7 Modèles ML**\n• **XGBoost** — Gradient boosting optimisé\n• **Random Forest** — Ensemble d'arbres de décision\n• **Gradient Boosting** — Boosting séquentiel\n• **Markov 1/2/3** — Chaînes de transitions\n• **Monte Carlo** — 50,000 simulations\n• **Fourier** — Détection de cycles\n• **Gap Analysis** — Chiffres en retard",
+        'default': "Je suis ZYNORIQ Copilot™. Je peux vous aider à comprendre les prédictions, les tendances, les modèles ML et les stratégies. Essayez de me demander :\n• Pourquoi ces numéros ?\n• Qu'est-ce que le score de confiance ?\n• Comment fonctionne Markov ?",
+        'business': "**ZYNORIQ Business Intelligence** analyse votre projet avec des modèles IA : scoring de viabilité, analyse concurrentielle, plan 30-60-90 jours, identification des risques, et recommandations budgétaires. Soumettez votre projet via /bizai.",
+        'coach': "**Conseils de Coach** :\n1. Ne jouez jamais plus que ce que vous pouvez perdre\n2. Utilisez le mode Box pour de meilleures chances\n3. Consultez les tendances sur 30+ tirages\n4. Diversifiez entre Straight et Box\n5. Suivez les chiffres en retard (écarts élevés)",
+    },
+    'en':{
+        'hot_cold': "**Hot / Cold Digits** — \"Hot\" digits are drawn most often in the last 30 draws. \"Cold\" appear rarely. ZYNORIQ weights these frequencies by position (P1/P2/P3) to refine suggestions.",
+        'gap': "**Gap Analysis** — An \"overdue\" digit has a current gap above its historical average. The 🔥 99% badge means it exceeds 99% of its usual gaps — statistically, it's \"due\".",
+        'prediction': "**How predictions work** — ZYNORIQ combines 7 ML models (XGBoost, Random Forest, Gradient Boosting, Markov 1/2/3, Monte Carlo 50K, Fourier, Gap Analysis). The consensus score weights each model by its historical accuracy on your state.",
+        'box_straight': "**Straight vs Box** — Straight = exact order (1/1000 odds). Box = any order (1/167 for 6-way, 1/333 for 3-way). Straight pays more, Box offers better odds.",
+        'sum': "**Sum Distribution** — The sum of 3 digits (0-27) follows a bell curve. Sums 13-14 are most frequent. ZYNORIQ identifies when certain sums are overdue vs their average.",
+        'models': "**Our 7 ML Models**\n• **XGBoost** — Optimized gradient boosting\n• **Random Forest** — Decision tree ensemble\n• **Gradient Boosting** — Sequential boosting\n• **Markov 1/2/3** — Transition chains\n• **Monte Carlo** — 50,000 simulations\n• **Fourier** — Cycle detection\n• **Gap Analysis** — Overdue digits",
+        'default': "I'm ZYNORIQ Copilot™. I can help you understand predictions, trends, ML models and strategies. Try asking:\n• Why these numbers?\n• What is the confidence score?\n• How does Markov work?",
+        'business': "**ZYNORIQ Business Intelligence** analyzes your project with AI models: viability scoring, competitive analysis, 30-60-90 day plan, risk identification, and budget recommendations. Submit your project via /bizai.",
+        'coach': "**Coach Tips**:\n1. Never play more than you can afford to lose\n2. Use Box mode for better chances\n3. Check trends over 30+ draws\n4. Diversify between Straight and Box\n5. Follow overdue digits (high gaps)",
+    },
+}
+
+@app.route("/api/copilot", methods=["POST"])
+def api_copilot():
+    data = request.get_json(silent=True) or {}
+    msg = (data.get("message") or "").strip().lower()
+    mode = data.get("mode", "lottery")
+    lang = data.get("lang", "fr")
+    page = data.get("page", "/")
+
+    if not msg:
+        return jsonify({"error": "Empty message"}), 400
+
+    responses = _COPILOT_RESPONSES.get(lang, _COPILOT_RESPONSES.get('en', {}))
+    is_lottery = mode == 'lottery' or any(kw in msg for kw in _COPILOT_LOTTERY_KEYWORDS)
+    disclaimer = is_lottery
+
+    # Route to appropriate response
+    reply = None
+    if mode == 'business' or 'business' in msg or 'projet' in msg or 'project' in msg:
+        reply = responses.get('business', responses.get('default'))
+    elif mode == 'coach' or 'coach' in msg or 'conseil' in msg or 'strateg' in msg or 'tip' in msg:
+        reply = responses.get('coach', responses.get('default'))
+    elif any(w in msg for w in ('chaud','froid','hot','cold','fréquence','frequency')):
+        reply = responses.get('hot_cold')
+    elif any(w in msg for w in ('écart','gap','retard','overdue','en retard','dû','due')):
+        reply = responses.get('gap')
+    elif any(w in msg for w in ('prédiction','prediction','pourquoi','numéro','number','combo','confiance','confidence','consensus')):
+        reply = responses.get('prediction')
+    elif any(w in msg for w in ('box','straight','mise','bet','way')):
+        reply = responses.get('box_straight')
+    elif any(w in msg for w in ('somme','sum','distribution','cloche','bell')):
+        reply = responses.get('sum')
+    elif any(w in msg for w in ('modèle','model','algorithme','algorithm','ml','xgboost','markov','monte carlo','fourier','random forest')):
+        reply = responses.get('models')
+    elif any(w in msg for w in ('tendance','trend','30 jour','30 day','derniers','last','recent')):
+        reply = responses.get('hot_cold')
+    elif any(w in msg for w in ('score','accuracy','performance','précision','precision','historique','history','compare')):
+        reply = responses.get('prediction')
+    else:
+        reply = responses.get('default')
+
+    return jsonify({"reply": reply or responses.get('default',''), "disclaimer": disclaimer, "mode": mode})
+
+
+# ═══════════════════════════════════════════════════════════
+@app.route("/copilot.js")
+def copilot_js():
+    resp = make_response(send_from_directory("static", "copilot.js"))
+    resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
+    return resp
+
+
 if __name__ == "__main__":
     print("=" * 45)
     print("  ZYNORIQ Intelligence  v4.0  - READY")

@@ -203,8 +203,9 @@ function saveLang(l){
     window._langSyncGuard = true;
     try{ window.setLang(l); } finally{ window._langSyncGuard = false; }
   }
-  // Refresh assistant
+  // Refresh assistant + copilot
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
+  if(window._copilotLangRefresh) window._copilotLangRefresh(l);
   // Server-rendered SEO prediction pages: reload with ?lang= to refresh content
   if(typeof window.setLang !== 'function' && location.pathname.startsWith('/predictions')){
     const url = new URL(location.href);
@@ -1337,6 +1338,15 @@ function inject(){
     zLink.rel = 'stylesheet';
     zLink.href = '/static/zynoriq.css';
     document.head.appendChild(zLink);
+  }
+
+  // 0b. Inject ZYNORIQ COPILOT™
+  if(!document.getElementById('copilot-script')){
+    const cpScript = document.createElement('script');
+    cpScript.id = 'copilot-script';
+    cpScript.src = '/copilot.js';
+    cpScript.defer = true;
+    document.head.appendChild(cpScript);
   }
 
   // 1. Inject NAV
