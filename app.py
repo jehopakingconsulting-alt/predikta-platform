@@ -3508,6 +3508,8 @@ _COPILOT_RESPONSES = {
     },
 }
 
+import copilot_service as _cps
+
 _COPILOT_SYSTEM_PROMPTS = {
     'lottery': """Tu es ZYNORIQ Copilot™, l'assistant IA officiel de la plateforme ZYNORIQ Intelligence™ — la plateforme d'analyse prédictive de loteries la plus avancée.
 
@@ -3630,23 +3632,49 @@ def api_copilot():
     lang = data.get("lang", "fr")
     page = data.get("page", "/")
     history = data.get("history", [])
+    page_context = data.get("context", {})
 
     if not msg:
         return jsonify({"error": "Empty message"}), 400
 
+    # ── Identify user & plan ──
+    user = auth_module.current_user() if hasattr(auth_module, 'current_user') else None
+    user_id = user.id if user else 0
+    plan = None
+    if user and user.subscription:
+        plan = user.subscription.plan
+
+    # ── Quota check ──
+    allowed, remaining, limit = _cps.check_quota(user_id, plan)
+    if not allowed:
+        return jsonify({
+            "reply": _cps.fallback_reply(lang, 'quota', limit=limit),
+            "disclaimer": False, "mode": mode, "ai": False,
+            "quota": {"remaining": 0, "limit": limit},
+        })
+
+    # ── Build page context text ──
+    page_context["url"] = page
+    page_context["plan"] = plan or "free"
+
+    # Server-side data enrichment: inject real data based on page
+    _enrich_context(page_context, page)
+
+    context_text = _cps.build_page_context(page_context)
+
+    # ── Lottery keyword detection ──
     is_lottery = mode == 'lottery' or any(kw in msg.lower() for kw in _COPILOT_LOTTERY_KEYWORDS)
-    disclaimer = is_lottery
 
-    # Try Claude API first
-    reply, used_ai = _call_claude(msg, mode, lang, history, page)
+    # ── Call Claude with real context ──
+    reply, used_ai, latency = _cps.call_claude(msg, mode, lang, history, context_text)
 
-    # Fallback to templates if Claude unavailable
+    # ── Fallback if Claude unavailable ──
     if not reply:
         msg_lower = msg.lower()
         responses = _COPILOT_RESPONSES.get(lang, _COPILOT_RESPONSES.get('en', {}))
-        if mode == 'business' or 'business' in msg_lower or 'projet' in msg_lower:
+        if mode == 'business' or 'business' in msg_lower:
             reply = responses.get('business', responses.get('default'))
-        elif mode == 'coach' or 'coach' in msg_lower or 'conseil' in msg_lower:
+        elif mode == 'coach' or 'coach' in msg_lower:
             reply = responses.get('coach', responses.get('default'))
         elif any(w in msg_lower for w in ('chaud','froid','hot','cold')):
             reply = responses.get('hot_cold')
@@ -3660,13 +3688,82 @@ def api_copilot():
             reply = responses.get('models')
         else:
             reply = responses.get('default')
+        latency = 0
+
+    # ── Consume quota & save history ──
+    _cps.consume_quota(user_id)
+    _cps.save_history(user_id, msg, reply or "", mode, page, lang, used_ai)
+    _cps.log_request(user_id, mode, page, latency, "ok" if reply else "fallback")
 
     return jsonify({
-        "reply": reply or "Je suis ZYNORIQ Copilot™. Comment puis-je vous aider ?",
-        "disclaimer": disclaimer,
+        "reply": reply or _cps.fallback_reply(lang, 'default'),
+        "disclaimer": is_lottery,
         "mode": mode,
         "ai": used_ai,
+        "quota": {"remaining": max(0, remaining - 1), "limit": limit},
     })
+
+
+def _enrich_context(ctx, page):
+    """Inject real server-side data into context based on current page."""
+    try:
+        state = ctx.get("state")
+
+        # Results page: inject latest draws for selected state
+        if "/results" in page or "/all-results" in page:
+            if state and state.upper() in STATES:
+                draws = load_csv(state.upper())[:10]
+                ctx["latest_draws"] = draws
+
+        # Analyze page: inject report cache if available
+        if "/analyze" in page and state:
+            cache_key_candidates = [
+                k for k in _REPORT_CACHE
+                if isinstance(k, tuple) and len(k) >= 1 and k[0] == state.upper()
+            ]
+            if cache_key_candidates:
+                cached = _REPORT_CACHE.get(cache_key_candidates[0])
+                if cached:
+                    report = cached.get("data", {})
+                    top = report.get("top", [])[:5]
+                    ctx["predictions"] = [
+                        {"combo": s.get("combo", ""), "confidence": round(s.get("pct", 0), 1)}
+                        for s in top
+                    ]
+                    hc = report.get("hot_cold", {})
+                    if hc:
+                        ctx["hot_digits"] = hc.get("hot", [])
+                        ctx["cold_digits"] = hc.get("cold", [])
+
+        # Accuracy / Track Record
+        if "/accuracy" in page or "/track-record" in page:
+            acc_cached = _ACCURACY_CACHE.get("data")
+            if acc_cached:
+                acc_data = acc_cached.get("data", {})
+                ctx["accuracy"] = {
+                    "grand_totals": acc_data.get("grand_totals", {}),
+                    "best_states": acc_data.get("best_states", []),
+                }
+    except Exception as e:
+        print(f"[copilot] enrich error: {e}")
+
+
+@app.route("/api/copilot/history")
+def api_copilot_history():
+    user = auth_module.current_user() if hasattr(auth_module, 'current_user') else None
+    if not user:
+        return jsonify({"error": "Login required"}), 401
+    entries = _cps.get_history(user.id, limit=20)
+    return jsonify({"history": entries})
+
+
+@app.route("/api/copilot/logs")
+def api_copilot_logs():
+    _token = os.environ.get("ADMIN_TOKEN", "")
+    _req = request.headers.get("X-Admin-Token", "") or request.args.get("token", "")
+    if not _token or not hmac.compare_digest(_req, _token):
+        return jsonify({"error": "unauthorized"}), 401
+    return jsonify({"logs": _cps.get_logs(100)})
 
 
 # ═══════════════════════════════════════════════════════════

@@ -301,12 +301,74 @@ window._cpClear = function(){
   renderSuggestions();
 };
 
+// ── Context Gathering Service ─────────────────────────────────────────
+function gatherPageContext(){
+  const ctx = {};
+  const p = location.pathname;
+
+  // State detection
+  const stateEl = document.querySelector('[data-state]');
+  if(stateEl) ctx.state = stateEl.dataset.state;
+  if(!ctx.state && window._allData){
+    const keys = Object.keys(window._allData);
+    if(keys.length === 1) ctx.state = keys[0];
+  }
+  // From URL param
+  const urlState = new URLSearchParams(location.search).get('state');
+  if(urlState) ctx.state = urlState;
+
+  // Game / TOD detection
+  const todEl = document.querySelector('.tod-active, [data-tod].active');
+  if(todEl) ctx.tod = todEl.dataset.tod || todEl.textContent.trim();
+
+  // Predictions on page (from consensus cards)
+  const predCards = document.querySelectorAll('.combo-card, .pred-card, [data-combo]');
+  if(predCards.length){
+    ctx.predictions = Array.from(predCards).slice(0,5).map((c,i) => ({
+      combo: c.dataset.combo || c.querySelector('.combo-text,.combo')?.textContent?.trim() || '',
+      confidence: parseFloat(c.querySelector('.conf-pct,.pct')?.textContent) || 0,
+      rank: i+1,
+    }));
+  }
+
+  // Hot/cold digits
+  const hotEl = document.querySelectorAll('.digit-hot, .hot-digit');
+  const coldEl = document.querySelectorAll('.digit-cold, .cold-digit');
+  if(hotEl.length) ctx.hot_digits = Array.from(hotEl).map(e => e.textContent.trim()).join(', ');
+  if(coldEl.length) ctx.cold_digits = Array.from(coldEl).map(e => e.textContent.trim()).join(', ');
+
+  // Accuracy data
+  const accEl = document.querySelector('[data-straight-rate]');
+  if(accEl) ctx.accuracy = {
+    straight_rate: accEl.dataset.straightRate,
+    box_rate: accEl.dataset.boxRate,
+  };
+
+  // Active filters
+  const activeFilters = document.querySelectorAll('.qf-btn.active, .filter-btn.active');
+  if(activeFilters.length){
+    ctx.filters = Array.from(activeFilters).map(b => b.textContent.trim());
+  }
+
+  // Business AI project
+  const bizName = document.querySelector('#projectName, [data-project-name]');
+  const bizScore = document.querySelector('#projectScore, [data-project-score]');
+  if(bizName) ctx.business = {
+    name: bizName.value || bizName.textContent?.trim(),
+    score: bizScore?.textContent?.trim() || '',
+  };
+
+  return ctx;
+}
+
 window._cpSend = function(text){
   if(!text || _thinking) return;
   _messages.push({ role:'user', text });
   _thinking = true;
   renderMessages();
   renderSuggestions();
+
+  const ctx = gatherPageContext();
 
   fetch('/api/copilot', {
     method:'POST',
@@ -317,6 +379,7 @@ window._cpSend = function(text){
       page: location.pathname,
       lang: window.PREDIKTA_LANG || 'fr',
       history: _messages.slice(-10).map(m => ({role: m.role === 'bot' ? 'assistant' : 'user', content: m.text})),
+      context: ctx,
     }),
   })
   .then(r => r.json())
@@ -325,6 +388,10 @@ window._cpSend = function(text){
     _messages.push({ role:'bot', text: data.reply || data.error || 'Erreur.' });
     if(data.disclaimer){
       _messages.push({ role:'bot', text: t('disclaimer') });
+    }
+    // Show quota remaining
+    if(data.quota && data.quota.remaining <= 3 && data.quota.remaining > 0){
+      _messages.push({ role:'bot', text: `⚠️ ${data.quota.remaining}/${data.quota.limit} questions restantes aujourd'hui.` });
     }
     renderMessages();
   })
