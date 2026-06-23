@@ -2008,16 +2008,22 @@ async function toggleComparePairs(){
   if(panel.style.display !== 'none'){ panel.style.display='none'; return; }
   const state = document.getElementById('stateSelect').value;
   const meta = await fetchStatesMeta();
-  const tods = (meta[state]||{}).tods || [];
-  if(tods.length < 2){
+  const stMeta = meta[state]||{};
+  const schedTods = (stMeta.schedule||[]).map(s=>s.tod);
+  const dataTods = new Set(stMeta.tods || []);
+  const allTods = schedTods.length >= 2 ? schedTods : [...dataTods];
+  if(allTods.length < 2){
     panel.innerHTML = `<div style="padding:10px;color:#ff9966;font-size:.82rem">Cet état n'a qu'un seul tirage.</div>`;
     panel.style.display='block'; return;
   }
   const pairs = [];
-  for(let i=0;i<tods.length;i++) for(let j=i+1;j<tods.length;j++) pairs.push([tods[i],tods[j]]);
-  panel.innerHTML = pairs.map(([a,b])=>
-    `<button onclick="compareDraws('${a}','${b}')">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)}</button>`
-  ).join('');
+  for(let i=0;i<allTods.length;i++) for(let j=i+1;j<allTods.length;j++) pairs.push([allTods[i],allTods[j]]);
+  panel.innerHTML = pairs.map(([a,b])=>{
+    const ok = dataTods.has(a) && dataTods.has(b);
+    return ok
+      ? `<button onclick="compareDraws('${a}','${b}')">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)}</button>`
+      : `<button disabled style="opacity:.4;cursor:default">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)} — scraper d'abord</button>`;
+  }).join('');
   panel.style.display='block';
 }
 document.addEventListener('click',e=>{
@@ -2047,7 +2053,13 @@ async function compareDraws(todA, todB){
     return;
   }
   if(dA.error || dB.error){
-    mc.innerHTML = `<div class="card" style="color:#ff5533;padding:20px">⚠️ ${dA.error||dB.error}</div>`;
+    const missing = dA.error ? labelA : labelB;
+    mc.innerHTML = `<div class="card" style="padding:24px;text-align:center">
+      <div style="font-size:1.1rem;color:#ff9966;margin-bottom:12px">⚠️ Données insuffisantes</div>
+      <div style="color:var(--muted2);font-size:.9rem;margin-bottom:16px">Pas assez de tirages pour <strong>${missing}</strong>. Cliquez d'abord sur <strong>Scraper</strong> pour récupérer les données, puis réessayez.</div>
+      <button class="btn-scrape" onclick="runScrape()" style="padding:8px 18px;border-radius:8px;margin-right:8px">🔄 Scraper</button>
+      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Retour à l'analyse</button>
+    </div>`;
     return;
   }
 
