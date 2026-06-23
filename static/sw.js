@@ -3,7 +3,7 @@
  * Offline cache for PWA installability
  */
 
-const CACHE_NAME = 'zynoriq-v3';
+const CACHE_NAME = 'zynoriq-v4';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE = [
