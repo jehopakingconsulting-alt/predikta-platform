@@ -270,10 +270,21 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
     if nxt:
         tdraws = [d for d in draws if d.get("tod") == nxt["tod"]]
         if tdraws:
-            draws_for_report = tdraws
+            latest_tod_date = max(d["date"] for d in tdraws)
+            days_old = (date.today() - date.fromisoformat(latest_tod_date)).days
+            draws_for_report = tdraws if days_old <= 7 else draws
 
     report = full_report(state_code, draws_for_report)
     last = report["last_draw"]
+    last_date_age = (date.today() - date.fromisoformat(last["date"])).days
+    stale_warning = ""
+    if last_date_age > 3:
+        stale_warning = (
+            '<div class="card" style="border-color:#aa6600;color:#ffcc66;padding:12px;margin-bottom:16px;font-size:.85rem">'
+            f'⚠️ Données non à jour (dernier tirage : {last["date"]}). '
+            f'Rendez-vous sur <a href="/analyze" style="color:#44aaff">Analyser</a> et cliquez Scraper pour rafraîchir.'
+            '</div>'
+        )
     balls = "".join(_ball(last[p]) for p in ["d1", "d2", "d3"])
 
     hot = [d for d, v in report["hot_cold_30"].items() if v["status"] == "HOT"]
@@ -327,7 +338,7 @@ def render_prediction_page(state_code: str, base_url: str, lang: str = "fr") -> 
 <h1>{flag} {t['h1'](name)}</h1>
 <div class="sub">{today} · {report['total_draws']} {t['totalDraws']}</div>
 {next_html}
-
+{stale_warning}
 <div class="card">
   <h2>{t['lastDraw']} — {last['date']} ({tod_label})</h2>
   <div>{balls}</div>
