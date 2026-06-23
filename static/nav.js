@@ -1127,11 +1127,11 @@ function buildFooter(){
   <div class="pf-inner">
     <div class="pf-top">
       <div>
-        <div class="pf-col-title">🚀 Services</div>
+        <div class="pf-col-title">${{fr:'Services',en:'Services',es:'Servicios',pt:'Serviços',ht:'Sèvis'}[l]||'Services'}</div>
         ${SERVICES.filter(s=>!['worldmap','community','trackrecord','trackrecord4','accuracy','pick4','cash5','pick5'].includes(s.key)).map(s=>`<a class="pf-link" href="${s.href}">${s.icon} ${(NAV_T[l]||NAV_T.en)[s.key]}</a>`).join('')}
       </div>
       <div>
-        <div class="pf-col-title">📋 Informations</div>
+        <div class="pf-col-title">${{fr:'Informations',en:'Information',es:'Información',pt:'Informações',ht:'Enfòmasyon'}[l]||'Information'}</div>
         <a class="pf-link" href="/about">${T.about}</a>
         <a class="pf-link" href="/faq">${T.faq}</a>
         <a class="pf-link" href="/blog">${T.blog}</a>
@@ -1164,10 +1164,10 @@ function buildFooter(){
         <div class="pf-lang-mini" style="margin-bottom:14px">
           ${SUPPORTED.map(ll=>`<button class="plang-btn${ll===l?' active':''}" data-navlang="${ll}" onclick="saveLang('${ll}')" style="padding:5px 10px">${LANG_FLAGS[ll]} ${ll.toUpperCase()}</button>`).join('')}
         </div>
-        <div class="pf-col-title" style="margin-top:10px">👑 Plans</div>
-        <a class="pf-link" href="/register?plan=pro" style="color:#6688ff;font-weight:700">PRO — $19.99/mois</a>
-        <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $49.99/mois</a>
-        <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">PREMIUM — $99.99/mois</a>
+        <div class="pf-col-title" style="margin-top:10px">👑 ${{fr:'Plans',en:'Plans',es:'Planes',pt:'Planos',ht:'Plan'}[l]||'Plans'}</div>
+        <a class="pf-link" href="/register?plan=pro" style="color:#6688ff;font-weight:700">PRO — $19.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
+        <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $49.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
+        <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">PREMIUM — $99.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
         <a class="pf-link" href="/api/health" target="_blank" style="color:#22e87a">● API Status</a>
       </div>
     </div>
