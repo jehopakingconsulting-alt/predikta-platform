@@ -1580,6 +1580,7 @@ def api_results4(state_code):
 
 
 @app.route("/api/report-4/<state_code>")
+@auth_module.subscription_required
 def api_report4(state_code):
     """Full Pick4 statistical report — uses ml_engine4 for full ML ensemble."""
     from scraper4 import STATES4, load_csv4

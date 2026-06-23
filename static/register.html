@@ -198,10 +198,13 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
           location.href = coData.checkout_url;
           return;
         }
+        // Stripe configuré mais checkout échoué — rediriger vers /account
+        setTimeout(()=>{ location.href='/account'; }, 900);
+        return;
       }
     }catch(e){}
 
-    // Fallback : démarre directement l'essai gratuit (sans Stripe)
+    // Stripe non configuré (dev local) : essai gratuit direct
     await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
     setTimeout(()=>{ location.href='/onboarding'; }, 900);
   }catch(e){
