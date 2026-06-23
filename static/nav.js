@@ -1280,7 +1280,7 @@ async function initUserMenu(){
   if(wrap){
     wrap.innerHTML = `
 <div class="pnav-user" id="pnav-user-dd">
-  <button class="pnav-user-btn" id="pnav-user-toggle" aria-haspopup="true" aria-expanded="false">
+  <button class="pnav-user-btn" id="pnav-acct-btn" aria-haspopup="true" aria-expanded="false">
     <span class="pnav-user-avatar">${initial}</span>
     <span class="nav-svc-label">${T.myAccount} ▾</span>
   </button>
@@ -1299,17 +1299,7 @@ async function initUserMenu(){
     <button class="pnav-logout" id="pnav-logout-btn" role="menuitem">🚪 ${T.logout}</button>
   </div>
 </div>`;
-    // Bind events via addEventListener (not inline onclick — IIFE scope safe)
-    document.getElementById('pnav-user-toggle').addEventListener('click', function(e){
-      e.stopPropagation();
-      const dd = document.getElementById('pnav-user-dd');
-      if(!dd) return;
-      const isOpen = dd.classList.toggle('open');
-      this.setAttribute('aria-expanded', isOpen);
-    });
-    document.getElementById('pnav-logout-btn').addEventListener('click', function(){
-      fetch('/api/auth/logout', {method:'POST'}).finally(()=>{ location.href = '/'; });
-    });
+    // Events handled by document-level delegation (step 6 in inject())
   }
 
   // ── Mobile user section ───────────────────────────────────────────
@@ -1416,16 +1406,20 @@ function inject(){
 
   // 6. USER MENU — event delegation (bullet-proof, works regardless of timing)
   document.addEventListener('click', function(e){
-    // Toggle dropdown
-    const btn = e.target.closest('#pnav-acct-btn');
-    if(btn){
+    // Toggle dropdown (matches both static and async-replaced button)
+    const btn = e.target.closest('#pnav-acct-btn, .pnav-user-btn');
+    if(btn && btn.closest('.pnav-user')){
       e.preventDefault();
       e.stopPropagation();
       const dd = btn.closest('.pnav-user');
-      if(dd){
-        dd.classList.toggle('open');
-        console.log('[nav] dropdown toggled:', dd.classList.contains('open'));
-      }
+      dd.classList.toggle('open');
+      return;
+    }
+    // Logout button
+    const logoutBtn = e.target.closest('.pnav-logout, #pnav-logout-btn');
+    if(logoutBtn){
+      e.preventDefault();
+      fetch('/api/auth/logout', {method:'POST'}).finally(()=>{ location.href = '/'; });
       return;
     }
     // Close on outside click
