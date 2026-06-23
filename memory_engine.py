@@ -298,6 +298,7 @@ def _auto_learn(user_id, activity_type, page, state, game):
 
         # Track recent analyses
         if activity_type == "analysis":
+            profile["analysis_count"] = profile.get("analysis_count", 0) + 1
             recent = profile.get("recent_analyses", [])
             recent.append({"state": state, "game": game, "ts": datetime.utcnow().isoformat()})
             profile["recent_analyses"] = recent[-20:]
@@ -451,6 +452,7 @@ def get_dashboard_context(user_id, lang="fr"):
     ctx = {
         "greeting_name": "",
         "visit_count": profile.get("visit_count", 0),
+        "analysis_count": profile.get("analysis_count", 0),
         "usage_level": profile.get("usage_frequency", "new"),
         "favorite_states": profile.get("favorite_states", []),
         "recent_analyses": profile.get("recent_analyses", [])[-5:],

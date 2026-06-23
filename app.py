@@ -2218,7 +2218,12 @@ def api_report():
     _expired_r = [k for k, v in _REPORT_CACHE.items() if now - v["ts"] > _REPORT_CACHE_TTL]
     for k in _expired_r:
         _REPORT_CACHE.pop(k, None)
-    auth_module.record_usage(auth_module.current_user().id)
+    user = auth_module.current_user()
+    auth_module.record_usage(user.id)
+    try:
+        _mem.track_activity(user.id, "analysis", state=state, game="pick3")
+    except Exception:
+        pass
     return jsonify(result)
 
 
