@@ -449,6 +449,20 @@ header{
   color:#cc99ff;font-weight:700;border-color:#7755cc;
 }
 .btn-compare:hover{background:linear-gradient(135deg,#3a1880,#7755ee)}
+.compare-wrap{display:inline-block}
+.compare-pairs-panel{
+  position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#1a1040;border:1px solid #5533bb;border-radius:10px;
+  padding:6px;min-width:180px;z-index:200;
+  box-shadow:0 8px 30px rgba(0,0,0,.6);
+}
+.compare-pairs-panel button{
+  display:block;width:100%;padding:8px 12px;margin:2px 0;
+  background:transparent;border:none;border-radius:6px;
+  color:#cc99ff;font-size:.82rem;font-weight:600;cursor:pointer;
+  text-align:left;white-space:nowrap;
+}
+.compare-pairs-panel button:hover{background:rgba(85,51,187,.4)}
 .btn-scrape{
   background:linear-gradient(135deg,#0a2218,#1a4a30);
   color:#44ff99;font-weight:600;border-color:#226633;
@@ -1125,7 +1139,10 @@ footer{
 <div class="controls-row controls-actions">
   <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
   <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
-  <button class="btn-compare" onclick="compareDraws()" id="btn-compare" title="Comparer Midday vs Evening">⚖ Mid/Soir</button>
+  <div class="compare-wrap" id="compare-wrap" style="position:relative">
+    <button class="btn-compare" onclick="toggleComparePairs()" id="btn-compare">⚖ <span id="btn-compare-label">Comparer</span></button>
+    <div class="compare-pairs-panel" id="compare-pairs-panel" style="display:none"></div>
+  </div>
   <div class="filters-wrap">
     <button class="btn-filters" id="btn-filters" onclick="toggleFiltersPanel()">
       📅 <span id="btn-filters-label">Filtres</span><span class="filters-badge" id="filters-badge" style="display:none">0</span>
@@ -1983,34 +2000,62 @@ function renderAll(d){
   }, 80);
 }
 
-async function compareDraws(){
+const _TOD_ICONS = {Morning:'🌅',Midday:'☀️',Day:'🌤️',Evening:'🌆',Night:'🌙'};
+function _todShort(tod){ return {Morning:'Matin',Midday:'Midi',Day:'Jour',Evening:'Soir',Night:'Nuit'}[tod]||tod; }
+
+async function toggleComparePairs(){
+  const panel = document.getElementById('compare-pairs-panel');
+  if(panel.style.display !== 'none'){ panel.style.display='none'; return; }
+  const state = document.getElementById('stateSelect').value;
+  const meta = await fetchStatesMeta();
+  const tods = (meta[state]||{}).tods || [];
+  if(tods.length < 2){
+    panel.innerHTML = `<div style="padding:10px;color:#ff9966;font-size:.82rem">Cet état n'a qu'un seul tirage.</div>`;
+    panel.style.display='block'; return;
+  }
+  const pairs = [];
+  for(let i=0;i<tods.length;i++) for(let j=i+1;j<tods.length;j++) pairs.push([tods[i],tods[j]]);
+  panel.innerHTML = pairs.map(([a,b])=>
+    `<button onclick="compareDraws('${a}','${b}')">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)}</button>`
+  ).join('');
+  panel.style.display='block';
+}
+document.addEventListener('click',e=>{
+  const wrap=document.getElementById('compare-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    document.getElementById('compare-pairs-panel').style.display='none';
+  }
+});
+
+async function compareDraws(todA, todB){
+  document.getElementById('compare-pairs-panel').style.display='none';
   const state = document.getElementById('stateSelect').value;
   const mc = document.getElementById('mainContent');
-  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">⚖ Comparaison Midday vs Evening en cours…</div></div>`;
+  const labelA = `${_TOD_ICONS[todA]||''} ${_todShort(todA)}`, labelB = `${_TOD_ICONS[todB]||''} ${_todShort(todB)}`;
+  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">⚖ Comparaison ${labelA} vs ${labelB} en cours…</div></div>`;
 
   async function fetchTOD(tod){
     const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: AbortSignal.timeout(90000)});
     return r.json();
   }
 
-  let mid, eve;
+  let dA, dB;
   try{
-    [mid, eve] = await Promise.all([fetchTOD('midday'), fetchTOD('evening')]);
+    [dA, dB] = await Promise.all([fetchTOD(todA), fetchTOD(todB)]);
   }catch(e){
-    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur lors de la comparaison: ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws()" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button></div>`;
+    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur : ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button></div>`;
     return;
   }
-  if(mid.error || eve.error){
-    mc.innerHTML = `<div class="card" style="color:#ff5533;padding:20px">⚠️ ${mid.error||eve.error}</div>`;
+  if(dA.error || dB.error){
+    mc.innerHTML = `<div class="card" style="color:#ff5533;padding:20px">⚠️ ${dA.error||dB.error}</div>`;
     return;
   }
 
-  // Find convergences: combos in top-10 consensus of BOTH TODs
-  const midTop  = (mid.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
-  const eveTop  = (eve.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
-  const convSet = new Set(midTop.filter(c=>eveTop.includes(c)));
+  const topA = (dA.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
+  const topB = (dB.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
+  const convSet = new Set(topA.filter(c=>topB.includes(c)));
 
-  function comboRow(c, rank, other){
+  function comboRow(c, rank){
     const key = Array.isArray(c)?c.join('-'):c;
     const inBoth = convSet.has(key);
     const balls  = key.split('-').map(n=>`<span class="cmp-ball">${n}</span>`).join('');
@@ -2020,8 +2065,7 @@ async function compareDraws(){
     </div>`;
   }
 
-  function colHTML(data, tod, combos){
-    const label = tod==='midday' ? '🌤 Midday' : '🌙 Evening';
+  function colHTML(data, label, combos){
     const ld    = data.last_draw;
     const ldStr = ld ? `${ld.date} · ${ld.numbers?.join('-')||''}` : '—';
     return `<div class="cmp-col">
@@ -2043,16 +2087,16 @@ async function compareDraws(){
 
   mc.innerHTML = `
     <div class="cmp-header">
-      <div class="cmp-title">⚖ Comparaison Mid/Soir — ${mid.state_name||state}</div>
-      <div class="cmp-sub">Consensus Top 10 · ${(mid.total_draws||0) + (eve.total_draws||0)} tirages analysés</div>
+      <div class="cmp-title">⚖ ${labelA} vs ${labelB} — ${dA.state_name||state}</div>
+      <div class="cmp-sub">Consensus Top 10 · ${(dA.total_draws||0) + (dB.total_draws||0)} tirages analysés</div>
     </div>
     <div class="cmp-conv-block">
       <div class="cmp-conv-title">🎯 Convergences (présentes dans les deux tirages)</div>
       ${convHTML}
     </div>
     <div class="cmp-grid">
-      ${colHTML(mid,'midday',(mid.consensus||[]).slice(0,10))}
-      ${colHTML(eve,'evening',(eve.consensus||[]).slice(0,10))}
+      ${colHTML(dA, labelA, (dA.consensus||[]).slice(0,10))}
+      ${colHTML(dB, labelB, (dB.consensus||[]).slice(0,10))}
     </div>
     <div style="text-align:center;margin-top:18px">
       <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Retour à l'analyse complète</button>
