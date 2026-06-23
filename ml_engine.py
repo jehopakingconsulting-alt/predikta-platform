@@ -184,7 +184,15 @@ def fourier_cycles(draws: list[dict], position: str) -> dict:
     dominant_idx = np.argmax(pos_freqs) + 1
     dominant_period = int(round(1 / abs(freqs[dominant_idx]))) if freqs[dominant_idx] != 0 else None
 
-    # Predict based on cycle: look back `period` steps
+    # Validate: cycle must repeat at least 3 times in the dataset
+    # and peak must be significantly above noise floor
+    if dominant_period:
+        n_repeats = len(seq) / dominant_period
+        noise_floor = np.median(pos_freqs)
+        peak_strength = pos_freqs[dominant_idx - 1] / (noise_floor + 1e-9)
+        if n_repeats < 3 or peak_strength < 2.0:
+            dominant_period = None
+
     predicted = None
     if dominant_period and dominant_period < len(seq):
         cycle_vals = seq[-dominant_period:]
@@ -199,15 +207,16 @@ def fourier_cycles(draws: list[dict], position: str) -> dict:
 
 # ─── Monte Carlo Simulation ────────────────────────────────────────────────
 
-def monte_carlo(draws: list[dict], n_simulations: int = 50000) -> list[dict]:
+def monte_carlo(draws: list[dict], n_simulations: int = 0) -> list[dict]:
     """
     Simulate N future draws using empirical per-position distributions.
     Returns top combos by frequency.
 
-    Vectorized with numpy: drawing all N samples per position in one call
-    instead of looping in Python (was the single biggest CPU cost in
-    /api/report — ~50k Python-level rng.choice calls).
+    n_simulations=0 → adaptive: scales with dataset size for better
+    accuracy on large datasets without wasting CPU on small ones.
     """
+    if n_simulations <= 0:
+        n_simulations = min(max(len(draws) * 200, 20000), 100000)
     if not draws:
         return []
 
@@ -245,9 +254,9 @@ class MLPredictor:
     def __init__(self):
         RandomForestClassifier, GradientBoostingClassifier, XGBClassifier = _ensure_sklearn_models()
         self.models = {
-            "rf":  [RandomForestClassifier(n_estimators=40, max_depth=6, random_state=42, n_jobs=1) for _ in range(3)],
-            "gbm": [GradientBoostingClassifier(n_estimators=40, max_depth=3, learning_rate=0.1, random_state=42) for _ in range(3)],
-            "xgb": [XGBClassifier(n_estimators=40, max_depth=4, learning_rate=0.1, verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
+            "rf":  [RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42, n_jobs=1) for _ in range(3)],
+            "gbm": [GradientBoostingClassifier(n_estimators=80, max_depth=5, learning_rate=0.08, random_state=42) for _ in range(3)],
+            "xgb": [XGBClassifier(n_estimators=80, max_depth=5, learning_rate=0.08, verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
         }
         self.trained = False
         self.feature_count = 0
@@ -676,7 +685,7 @@ def run_all_models(draws: list[dict], with_lstm: bool = False) -> dict:
         ml_preds = predictor.predict_top(X_last, top_n=15)
 
     # Monte Carlo
-    mc_preds = monte_carlo(draws, n_simulations=50000)
+    mc_preds = monte_carlo(draws)
 
     # Fourier
     fourier = {pos: fourier_cycles(draws, pos) for pos in ["d1", "d2", "d3"]}

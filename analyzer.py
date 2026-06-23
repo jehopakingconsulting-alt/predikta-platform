@@ -163,7 +163,7 @@ def weighted_suggestions(draws: list[dict], top_n: int = 5,
                     g = gaps[digit]
                     if g["avg_gap"] and g["current_gap"] > g["avg_gap"]:
                         overdue_ratio = g["current_gap"] / g["avg_gap"]
-                        score += W_GAP * min(overdue_ratio, 3.0)
+                        score += W_GAP * math.log1p(overdue_ratio)
 
                     # Markov: P(digit | last digit at same position), weighted
                     last_digit = last[pos]
