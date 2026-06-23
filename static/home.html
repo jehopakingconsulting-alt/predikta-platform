@@ -188,6 +188,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 @media(max-width:600px){.bizai-promo-right{width:100%;justify-content:space-between}}
 
 .sc-icon{font-size:2.8rem;margin-bottom:14px;display:block}
+.sc-img{width:100%;height:140px;border-radius:10px;object-fit:cover;margin-bottom:14px;opacity:.85;transition:opacity .3s}
+.service-card:hover .sc-img{opacity:1}
 .sc-title{
   font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
   color:var(--text);margin-bottom:8px;
@@ -570,21 +572,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
       <div style="background:linear-gradient(135deg,rgba(79,110,255,.07),rgba(79,110,255,.03));border:1px solid rgba(79,110,255,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">1</div>
-        <div style="font-size:2.2rem;margin:10px 0 12px">🎯</div>
+        <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=280&h=140&fit=crop&q=80" alt="Choose State" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
         <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Choisissez votre État</div>
         <div style="font-size:.78rem;color:#64748b;line-height:1.6">Sélectionnez parmi 44 États US · Pick3, Pick4, Cash3, Daily3 · Midi ou Soir</div>
       </div>
 
       <div style="background:linear-gradient(135deg,rgba(124,58,237,.07),rgba(124,58,237,.03));border:1px solid rgba(124,58,237,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">2</div>
-        <div style="font-size:2.2rem;margin:10px 0 12px">🧠</div>
+        <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=280&h=140&fit=crop&q=80" alt="AI Analysis" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
         <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">L'IA analyse en 30s</div>
         <div style="font-size:.78rem;color:#64748b;line-height:1.6">7 algorithmes · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus</div>
       </div>
 
       <div style="background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(255,153,0,.03));border:1px solid rgba(255,215,0,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#ffd700);color:#000;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">3</div>
-        <div style="font-size:2.2rem;margin:10px 0 12px">🏆</div>
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=280&h=140&fit=crop&q=80" alt="Play Top 10" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
         <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Jouez le Top 10</div>
         <div style="font-size:.78rem;color:#64748b;line-height:1.6">Combos classés par confiance · Notif push dès le tirage · Archivez vos prédictions</div>
       </div>
@@ -719,7 +721,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="services-grid">
 
     <a href="/analyze" class="service-card sc-lottery">
-      <span class="sc-icon">⚡</span>
+      <img class="sc-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=300&fit=crop&q=80" alt="Predictive Analytics" loading="lazy"/>
       <div class="sc-title" data-i18n="c1Title">Analyseur Prédictif Loterie</div>
       <p class="sc-desc" data-i18n="c1Desc">Prédictions Pick3/Cash3 par 7 algorithmes combinés : XGBoost, Random Forest, Markov, Monte Carlo, Fourier, Gap Analysis et consensus pondéré.</p>
       <div class="sc-tags">
@@ -732,7 +734,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </a>
 
     <a href="/all-results" class="service-card sc-allresults">
-      <span class="sc-icon">🏆</span>
+      <img class="sc-img" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=300&fit=crop&q=80" alt="Results Dashboard" loading="lazy"/>
       <div class="sc-title" data-i18n="c2Title">Résultats Complets</div>
       <p class="sc-desc" data-i18n="c2Desc">Tous les jeux de chaque État : Pick2, Pick3, Pick4, Pick5, Lotto, Powerball, Mega Millions. Navigation jour par jour. Mise à jour quotidienne.</p>
       <div class="sc-tags">
@@ -745,7 +747,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </a>
 
     <a href="/results" class="service-card sc-results">
-      <span class="sc-icon">🎱</span>
+      <img class="sc-img" src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=600&h=300&fit=crop&q=80" alt="US States Map" loading="lazy"/>
       <div class="sc-title" data-i18n="c3Title">Hub Résultats · 44 États</div>
       <p class="sc-desc" data-i18n="c3Desc">Vue d'ensemble de tous les états avec leurs derniers tirages. Recherche instantanée, filtres par région, historique jusqu'à 2 ans en arrière.</p>
       <div class="sc-tags">
@@ -759,7 +761,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
     <a href="/bizai" class="service-card sc-bizai">
       <span class="sc-new-badge" data-i18n="bizBadge">🤖 IA</span>
-      <span class="sc-icon">🚀</span>
+      <img class="sc-img" src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=300&fit=crop&q=80" alt="Business Intelligence" loading="lazy"/>
       <div class="sc-title" data-i18n="c4Title">Business Intelligence · Analyse Projet</div>
       <p class="sc-desc" data-i18n="c4Desc">Analysez votre projet d'entreprise en 5 minutes : niche, audience, 11 canaux marketing scorés, ciblage 25 pays, plan 30-60-90 jours, risques.</p>
       <div class="sc-tags">
