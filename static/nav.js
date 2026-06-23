@@ -37,35 +37,35 @@ const NAV_T = {
        footerCopy:'© 2026 ZYNORIQ Intelligence™ — Analyses statistiques éducatives, sans garantie de gain. La loterie est un jeu de hasard (18+). Non affilié aux loteries officielles. <a href="/responsible-gaming" style="color:#1479FF">Jeu Responsable</a>.',
        about:'À Propos', faq:'FAQ', contact:'Contact', privacy:'Confidentialité', terms:'CGU', affil:'Affiliés', trackrecord:'Historique des Suggestions', trackrecord4:'Historique Pick 4', respgaming:'Jeu Responsable', accuracy:'Accuracy Score', blog:'Blog',
        worldmap:'Carte du Monde', predicktatv:'ZYNORIQ TV', community:'Communauté', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chiffres', memory:'Memory Center',
-       dashboard:'Tableau de Bord', logout:'Se déconnecter', myAccount:'Mon Compte' },
+       dashboard:'Tableau de Bord', logout:'Se déconnecter', login:'Se connecter', myAccount:'Mon Compte' },
   en:{ home:'Home', analyze:'Analyze', results:'Results', allresults:'All Results', predictions:'Predictions',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archives', referral:'Referral', account:'My Account', lang:'Language', theme:'Theme', menu:'Menu',
        tagline:'Intelligence Beyond Prediction',
        footerCopy:'© 2026 ZYNORIQ Intelligence™ — Educational statistical analysis, no guaranteed winnings. Lottery is gambling (18+). Not affiliated with any official lottery. <a href="/responsible-gaming" style="color:#1479FF">Responsible Gaming</a>.',
        about:'About', faq:'FAQ', contact:'Contact', privacy:'Privacy', terms:'Terms', affil:'Affiliates', trackrecord:'Track Record', trackrecord4:'Pick 4 Track Record', respgaming:'Responsible Gaming', accuracy:'Accuracy Score', blog:'Blog',
        worldmap:'World Map', predicktatv:'ZYNORIQ TV', community:'Community', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / 5-Digit Lotto', memory:'Memory Center',
-       dashboard:'Dashboard', logout:'Sign out', myAccount:'My Account' },
+       dashboard:'Dashboard', logout:'Sign out', login:'Sign in', myAccount:'My Account' },
   es:{ home:'Inicio', analyze:'Analizar', results:'Resultados', allresults:'Todos', predictions:'Predicciones',
        bizai:'Business Intelligence', pro:'PRO', archives:'Archivos', referral:'Referidos', account:'Mi Cuenta', lang:'Idioma', theme:'Tema', menu:'Menú',
        tagline:'Inteligencia Más Allá de la Predicción',
        footerCopy:'© 2026 ZYNORIQ Intelligence™ — Análisis estadístico educativo, sin garantía de premio. La lotería es un juego de azar (18+). No afiliado a loterías oficiales. <a href="/responsible-gaming" style="color:#1479FF">Juego Responsable</a>.',
        about:'Acerca de', faq:'FAQ', contact:'Contacto', privacy:'Privacidad', terms:'Términos', affil:'Afiliados', trackrecord:'Historial de Sugerencias', trackrecord4:'Historial Pick 4', respgaming:'Juego Responsable', accuracy:'Accuracy Score', blog:'Blog',
        worldmap:'Mapa Mundial', predicktatv:'ZYNORIQ TV', community:'Comunidad', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Lotería 5 Dígitos', memory:'Memory Center',
-       dashboard:'Panel de Control', logout:'Cerrar sesión', myAccount:'Mi Cuenta' },
+       dashboard:'Panel de Control', logout:'Cerrar sesión', login:'Iniciar sesión', myAccount:'Mi Cuenta' },
   pt:{ home:'Início', analyze:'Analisar', results:'Resultados', allresults:'Todos', predictions:'Previsões',
        bizai:'Business Intelligence', pro:'PRO', archives:'Arquivos', referral:'Indicações', account:'Minha Conta', lang:'Idioma', theme:'Tema', menu:'Menu',
        tagline:'Inteligência Além da Previsão',
        footerCopy:'© 2026 ZYNORIQ Intelligence™ — Análise estatística educativa, sem garantia de prêmio. A loteria é um jogo de azar (18+). Não afiliado a loterias oficiais. <a href="/responsible-gaming" style="color:#1479FF">Jogo Responsável</a>.',
        about:'Sobre', faq:'FAQ', contact:'Contato', privacy:'Privacidade', terms:'Termos', affil:'Afiliados', trackrecord:'Histórico de Sugestões', trackrecord4:'Histórico Pick 4', respgaming:'Jogo Responsável', accuracy:'Accuracy Score', blog:'Blog',
        worldmap:'Mapa Mundial', predicktatv:'ZYNORIQ TV', community:'Comunidade', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Dígitos', memory:'Memory Center',
-       dashboard:'Painel', logout:'Sair', myAccount:'Minha Conta' },
+       dashboard:'Painel', logout:'Sair', login:'Entrar', myAccount:'Minha Conta' },
   ht:{ home:'Akèy', analyze:'Analize', results:'Rezilta', allresults:'Tout Rezilta', predictions:'Prediksyon',
        bizai:'Business Intelligence', pro:'PRO', archives:'Achiv', referral:'Parennaj', account:'Kont Mwen', lang:'Lang', theme:'Tèm', menu:'Meni',
        tagline:'Entèlijans Anlà Prediksyon',
        footerCopy:'© 2026 ZYNORIQ Intelligence™ — Analiz statistik edikatif, san garanti lo. Lotri se jwèt chans (18+). Pa afilye ak lotri ofisyèl. <a href="/responsible-gaming" style="color:#1479FF">Jwe Responsab</a>.',
        about:'Sou nou', faq:'FAQ', contact:'Kontak', privacy:'Konfidans', terms:'Tèm', affil:'Afilye', trackrecord:'Istorik Sijesyon', trackrecord4:'Istorik Pick 4', respgaming:'Jwe Responsab', accuracy:'Accuracy Score', blog:'Blog',
        worldmap:'Kat Mondyal', predicktatv:'ZYNORIQ TV', community:'Kominote', pick4:'Pick 4 / Cash 4', cash5:'Cash 5 / Fantasy 5', pick5:'Pick 5 / Loto 5 Chif', memory:'Memory Center',
-       dashboard:'Tablo de Bò', logout:'Dekonekte', myAccount:'Kont Mwen' },
+       dashboard:'Tablo de Bò', logout:'Dekonekte', login:'Konekte', myAccount:'Kont Mwen' },
 };
 
 // ── Affiliés UTM ──────────────────────────────────────────────────────────
@@ -1081,19 +1081,7 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
     <div class="pnav-right">
       <!-- MON COMPTE DROPDOWN — outside pnav-services to avoid overflow clip -->
       <span id="pnav-acct-wrap">
-        <div class="pnav-user" id="pnav-user-dd-static">
-          <button class="pnav-user-btn" id="pnav-acct-btn">${(NAV_T[l]||NAV_T.en).myAccount||'Account'} ▾</button>
-          <div class="pnav-user-menu" role="menu">
-            <a href="/account" role="menuitem">👤 ${(NAV_T[l]||NAV_T.en).myAccount}</a>
-            <a href="/dashboard" role="menuitem">📊 ${(NAV_T[l]||NAV_T.en).dashboard||'Dashboard'}</a>
-            <a href="/analyze" role="menuitem">⚡ ${(NAV_T[l]||NAV_T.en).analyze||'Analyze'}</a>
-            <a href="/memory" role="menuitem">🧠 Memory Center</a>
-            <a href="/studio" role="menuitem">🎨 Studio</a>
-            <a href="/pro" role="menuitem">👑 PRO</a>
-            <div class="pnav-user-menu-sep"></div>
-            <button class="pnav-logout" role="menuitem">🚪 ${(NAV_T[l]||NAV_T.en).logout||'Logout'}</button>
-          </div>
-        </div>
+        <a href="/login" class="pnav-svc" data-navsvc="account">🔑 ${(NAV_T[l]||NAV_T.en).login||'Sign in'}</a>
       </span>
       <!-- LANGUE — TOUJOURS VISIBLE -->
       <div class="plang-switcher">${langBtns}</div>
@@ -1269,7 +1257,15 @@ async function initUserMenu(){
     user = d.user || null;
     _cachedUser = user;
   }catch(e){ return; }
-  if(!user) return;  // not logged in — keep plain link
+  if(!user){
+    const l = window.PREDIKTA_LANG;
+    const T = NAV_T[l] || NAV_T.en;
+    const wrap = document.getElementById('pnav-acct-wrap');
+    if(wrap) wrap.innerHTML = `<a href="/login" class="pnav-svc" data-navsvc="account">🔑 ${T.login}</a>`;
+    const mobSec = document.getElementById('pmob-user-section');
+    if(mobSec){ mobSec.style.display=''; mobSec.innerHTML = `<a href="/login" onclick="closeMobileMenu()" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;text-decoration:none;color:#44ff99;font-size:.8rem;font-weight:600;border:1px solid rgba(34,232,122,.3)">🔑 ${T.login}</a>`; }
+    return;
+  }
 
   const l  = window.PREDIKTA_LANG;
   const T  = NAV_T[l] || NAV_T.en;
