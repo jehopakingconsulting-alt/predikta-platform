@@ -2036,27 +2036,42 @@ document.addEventListener('click',e=>{
 async function compareDraws(todA, todB){
   document.getElementById('compare-pairs-panel').style.display='none';
   const state = document.getElementById('stateSelect').value;
+  const months = document.getElementById('monthsSelect').value;
   const mc = document.getElementById('mainContent');
   const labelA = `${_TOD_ICONS[todA]||''} ${_todShort(todA)}`, labelB = `${_TOD_ICONS[todB]||''} ${_todShort(todB)}`;
-  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div style="color:var(--muted2)">⚖ Comparaison ${labelA} vs ${labelB} en cours…</div></div>`;
+  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div id="cmp-status" style="color:var(--muted2)">⚖ Analyse ${labelA}…</div></div>`;
 
-  async function fetchTOD(tod){
-    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: AbortSignal.timeout(90000)});
-    if(!r.ok){
-      const txt = await r.text().catch(()=>'');
-      return {error: `HTTP ${r.status} pour ${tod}: ${txt.slice(0,100)}`};
+  async function fetchTOD(tod, label){
+    const statusEl = document.getElementById('cmp-status');
+    if(statusEl) statusEl.textContent = `⚖ Analyse ${label}…`;
+    const controller = new AbortController();
+    const timer = setTimeout(()=>controller.abort(), 60000);
+    try{
+      const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: controller.signal});
+      clearTimeout(timer);
+      if(!r.ok){
+        const txt = await r.text().catch(()=>'');
+        return {error: `HTTP ${r.status} pour ${label}: ${txt.slice(0,120)}`};
+      }
+      return r.json();
+    }catch(err){
+      clearTimeout(timer);
+      throw err;
     }
-    return r.json();
   }
 
   let dA, dB;
   try{
-    mc.querySelector('div[style]').textContent = `⚖ Analyse ${labelA}…`;
-    dA = await fetchTOD(todA);
-    mc.querySelector('div[style]').textContent = `⚖ Analyse ${labelB}…`;
-    dB = await fetchTOD(todB);
+    dA = await fetchTOD(todA, labelA);
+    dB = await fetchTOD(todB, labelB);
   }catch(e){
-    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur : ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button><br><br><small style="color:var(--muted2)">Astuce : cliquez d'abord Scraper, puis Analyser pour chaque tirage individuellement avant de comparer.</small></div>`;
+    const msg = e.name==='AbortError' ? 'Timeout — le serveur met trop de temps.' : e.message;
+    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
+      <div style="margin-bottom:12px">⚠️ ${msg}</div>
+      <button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Analyse simple</button>
+      <div style="color:var(--muted2);font-size:.8rem;margin-top:12px">Astuce : analysez d'abord chaque tirage individuellement (sélectionnez le TOD puis Analyser), ensuite comparez.</div>
+    </div>`;
     return;
   }
   if(dA.error || dB.error){
