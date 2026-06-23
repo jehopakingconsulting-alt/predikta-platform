@@ -822,24 +822,9 @@ function buildNav(){
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
     const badge  = s.badge ? `<span style="margin-left:3px;padding:1px 5px;border-radius:4px;font-size:.5rem;font-weight:900;background:${s.badge==='PRO'?'linear-gradient(90deg,#ffd700,#ff9900)':'rgba(34,232,122,.35)'};color:${s.badge==='PRO'?'#000':'#22e87a'}">${s.badge}</span>` : '';
     if(s.key === 'account'){
-      return `<span id="pnav-acct-wrap">
-        <div class="pnav-user" id="pnav-user-dd-static">
-          <button class="pnav-user-btn" id="pnav-acct-btn" style="cursor:pointer">
-            <span class="pnav-user-avatar">👤</span>
-            <span class="nav-svc-label">${label} ▾</span>
-          </button>
-          <div class="pnav-user-menu" role="menu" id="pnav-static-menu">
-            <a href="/account" role="menuitem">👤 ${label}</a>
-            <a href="/dashboard" role="menuitem">📊 ${(NAV_T[l]||NAV_T.en).dashboard || 'Dashboard'}</a>
-            <a href="/analyze" role="menuitem">⚡ ${(NAV_T[l]||NAV_T.en).analyze || 'Analyze'}</a>
-            <a href="/memory" role="menuitem">🧠 Memory Center</a>
-            <a href="/studio" role="menuitem">🎨 Studio</a>
-            <a href="/pro" role="menuitem">👑 PRO</a>
-            <div class="pnav-user-menu-sep"></div>
-            <a href="/login" role="menuitem" id="pnav-login-link">🔑 Login</a>
-          </div>
-        </div>
-      </span>`;
+      return `<span id="pnav-acct-wrap"><a href="${s.href}" class="pnav-svc${active?' active':''}" data-navsvc="${s.key}">
+        <span>${s.icon}</span><span class="nav-svc-label">${label}</span>${badge}
+      </a></span>`;
     }
     return `<a href="${s.href}" class="pnav-svc${active?' active':''}" data-navsvc="${s.key}">
       <span>${s.icon}</span><span class="nav-svc-label">${label}</span>${badge}
