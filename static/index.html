@@ -2042,14 +2042,21 @@ async function compareDraws(todA, todB){
 
   async function fetchTOD(tod){
     const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: AbortSignal.timeout(90000)});
+    if(!r.ok){
+      const txt = await r.text().catch(()=>'');
+      return {error: `HTTP ${r.status} pour ${tod}: ${txt.slice(0,100)}`};
+    }
     return r.json();
   }
 
   let dA, dB;
   try{
-    [dA, dB] = await Promise.all([fetchTOD(todA), fetchTOD(todB)]);
+    mc.querySelector('div[style]').textContent = `⚖ Analyse ${labelA}…`;
+    dA = await fetchTOD(todA);
+    mc.querySelector('div[style]').textContent = `⚖ Analyse ${labelB}…`;
+    dB = await fetchTOD(todB);
   }catch(e){
-    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur : ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button></div>`;
+    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">⚠️ Erreur : ${e.message}<br><br><button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px">🔄 Réessayer</button><br><br><small style="color:var(--muted2)">Astuce : cliquez d'abord Scraper, puis Analyser pour chaque tirage individuellement avant de comparer.</small></div>`;
     return;
   }
   if(dA.error || dB.error){
