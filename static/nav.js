@@ -837,6 +837,9 @@ function buildNav(){
       <span class="plang-flag">${LANG_FLAGS[ll]}</span><span class="plang-code">${ll.toUpperCase()}</span>
     </button>`
   ).join('');
+  const langSelect = `<select class="plang-select" onchange="saveLang(this.value)">
+    ${SUPPORTED.map(ll=>`<option value="${ll}"${ll===l?' selected':''}>${LANG_FLAGS[ll]} ${ll.toUpperCase()}</option>`).join('')}
+  </select>`;
 
   const mobileSvcs = SERVICES.map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
@@ -920,8 +923,14 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
 /* RIGHT CONTROLS */
 .pnav-right{display:flex;align-items:center;gap:5px;flex-shrink:0;padding-left:10px;border-left:1px solid #1a1a45;margin-left:4px}
 
-/* LANG — TOUJOURS VISIBLE */
+/* LANG */
 .plang-switcher{display:flex;gap:3px;align-items:center}
+.plang-mobile{display:none}
+.plang-select{
+  background:#0a0e2a;color:#e8eeff;border:1px solid #1a1a45;border-radius:8px;
+  padding:5px 8px;font-size:.75rem;font-weight:700;cursor:pointer;
+  appearance:auto;-webkit-appearance:auto;
+}
 .plang-btn{
   display:flex;align-items:center;gap:2px;
   padding:4px 7px;border-radius:6px;font-size:.6rem;font-weight:800;
@@ -960,7 +969,8 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
   .pnav-home .pnav-logo-tag{display:none}
   .pnav-logo-svg{width:38px;height:38px}
   .pnav-logo-name{font-size:1.15rem;letter-spacing:2.5px}
-  /* LANGUE reste visible en mode flags seulement */
+  .plang-desktop{display:none}
+  .plang-mobile{display:flex;align-items:center}
 }
 
 /* ─── Mobile overlay & menu ─── */
@@ -1084,7 +1094,8 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
         <a href="/login" class="pnav-svc" data-navsvc="account">🔑 ${(NAV_T[l]||NAV_T.en).login||'Sign in'}</a>
       </span>
       <!-- LANGUE — TOUJOURS VISIBLE -->
-      <div class="plang-switcher">${langBtns}</div>
+      <div class="plang-switcher plang-desktop">${langBtns}</div>
+      <div class="plang-mobile">${langSelect}</div>
       <!-- THEME -->
       <button class="ptheme-btn" onclick="toggleTheme()" title="Dark/Light"><span class="ptheme-icon">${_dark?'☀️':'🌙'}</span></button>
       <!-- HAMBURGER -->
@@ -1104,7 +1115,9 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
   </div>
   <div class="pmob-section">
     <div class="pmob-section-title">🌐 ${nt('lang')}</div>
-    <div class="pmob-lang">${SUPPORTED.map(ll=>`<button class="plang-btn${ll===l?' active':''}" data-navlang="${ll}" onclick="saveLang('${ll}');closeMobileMenu()">${LANG_FLAGS[ll]} ${ll.toUpperCase()}</button>`).join('')}</div>
+    <div class="pmob-lang"><select class="plang-select" style="width:100%;padding:10px 12px;font-size:.82rem" onchange="saveLang(this.value);closeMobileMenu()">
+      ${SUPPORTED.map(ll=>`<option value="${ll}"${ll===l?' selected':''}>${LANG_FLAGS[ll]} ${ll.toUpperCase()}</option>`).join('')}
+    </select></div>
   </div>
   <div id="pmob-user-section" style="display:none;padding:12px 16px;border-bottom:1px solid #1a1a45"></div>
   <div class="pmob-section">
