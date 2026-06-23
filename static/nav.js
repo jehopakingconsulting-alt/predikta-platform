@@ -816,7 +816,7 @@ function buildNav(){
   // Prédictions / Archives / Parrainage retirés du header (manque de place) —
   // déplacés en gros boutons sur la page d'accueil. Restent accessibles via
   // le menu mobile et le footer (SERVICES complet).
-  const HEADER_HIDDEN = ['results','predictions','archives','referral','worldmap','predicktatv','community','trackrecord','trackrecord4','accuracy','pick4','cash5','pick5','memory'];
+  const HEADER_HIDDEN = ['results','predictions','archives','referral','worldmap','predicktatv','community','trackrecord','trackrecord4','accuracy','pick4','cash5','pick5','memory','account'];
   const svcLinks = SERVICES.filter(s=>!HEADER_HIDDEN.includes(s.key)).map(s=>{
     const active = s.href==='/' ? path==='/' : path.startsWith(s.href) && s.href !== '/';
     const label  = (NAV_T[l]||NAV_T.en)[s.key] || s.key;
@@ -1079,6 +1079,22 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
     <div class="pnav-services">${svcLinks}</div>
 
     <div class="pnav-right">
+      <!-- MON COMPTE DROPDOWN — outside pnav-services to avoid overflow clip -->
+      <span id="pnav-acct-wrap">
+        <div class="pnav-user" id="pnav-user-dd-static">
+          <button class="pnav-user-btn" id="pnav-acct-btn">${(NAV_T[l]||NAV_T.en).myAccount||'Account'} ▾</button>
+          <div class="pnav-user-menu" role="menu">
+            <a href="/account" role="menuitem">👤 ${(NAV_T[l]||NAV_T.en).myAccount}</a>
+            <a href="/dashboard" role="menuitem">📊 ${(NAV_T[l]||NAV_T.en).dashboard||'Dashboard'}</a>
+            <a href="/analyze" role="menuitem">⚡ ${(NAV_T[l]||NAV_T.en).analyze||'Analyze'}</a>
+            <a href="/memory" role="menuitem">🧠 Memory Center</a>
+            <a href="/studio" role="menuitem">🎨 Studio</a>
+            <a href="/pro" role="menuitem">👑 PRO</a>
+            <div class="pnav-user-menu-sep"></div>
+            <button class="pnav-logout" role="menuitem">🚪 ${(NAV_T[l]||NAV_T.en).logout||'Logout'}</button>
+          </div>
+        </div>
+      </span>
       <!-- LANGUE — TOUJOURS VISIBLE -->
       <div class="plang-switcher">${langBtns}</div>
       <!-- THEME -->
