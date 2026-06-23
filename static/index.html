@@ -473,6 +473,13 @@ header{
   color:#22e87a;border:1px solid rgba(34,232,122,.4);transition:background .2s;
 }
 .btn-results:hover{background:rgba(34,232,122,.25)}
+.btn-archives{
+  text-decoration:none;background:linear-gradient(135deg,rgba(255,170,50,.12),rgba(255,170,50,.06));
+  color:#ffaa33;border:1px solid rgba(255,170,50,.4);border-radius:8px;
+  padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .2s;
+  display:inline-block;text-align:center;
+}
+.btn-archives:hover{background:rgba(255,170,50,.22)}
 #status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
 /* ── Comparaison Mid/Soir ─────────────────────────────── */
 .cmp-header{text-align:center;margin-bottom:18px}
@@ -1143,6 +1150,7 @@ footer{
     <button class="btn-compare" onclick="toggleComparePairs()" id="btn-compare">⚖ <span id="btn-compare-label">Comparer</span></button>
     <div class="compare-pairs-panel" id="compare-pairs-panel" style="display:none"></div>
   </div>
+  <a href="/archives" class="btn-archives" id="btn-archives">📂 <span id="btn-archives-label">Archives</span></a>
   <div class="filters-wrap">
     <button class="btn-filters" id="btn-filters" onclick="toggleFiltersPanel()">
       📅 <span id="btn-filters-label">Filtres</span><span class="filters-badge" id="filters-badge" style="display:none">0</span>
@@ -1365,7 +1373,7 @@ const T = {
   fr:{
     heroTitle:"Prédictions par Analyse Prédictive",
     heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analyser",btnScrape:"🔄 Scraper",
+    btnAnalyze:"⚡ Analyser",btnScrape:"🔄 Scraper",btnArchives:"📂 Archives",
     welcome:"Sélectionnez un État et cliquez sur ⚡ Analyser",
     analyzing:"⚙️ Analyse multi-modèles en cours...",
     scraping:"⏳ Scraping en cours...",
@@ -1410,7 +1418,7 @@ const T = {
   en:{
     heroTitle:"Advanced Algorithm Predictions",
     heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analyze",btnScrape:"🔄 Scrape Data",
+    btnAnalyze:"⚡ Analyze",btnScrape:"🔄 Scrape Data",btnArchives:"📂 Archives",
     welcome:"Select a State and click ⚡ Analyze",
     analyzing:"⚙️ Running multi-model analysis...",
     scraping:"⏳ Scraping in progress...",
@@ -1455,7 +1463,7 @@ const T = {
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
     heroSub:"Cash3 · Pick3 · Nueva York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analizar",btnScrape:"🔄 Scrapear",
+    btnAnalyze:"⚡ Analizar",btnScrape:"🔄 Scrapear",btnArchives:"📂 Archivos",
     welcome:"Seleccione un Estado y haga clic en ⚡ Analizar",
     analyzing:"⚙️ Análisis multi-modelo en progreso...",
     scraping:"⏳ Scrapeando datos...",
@@ -1500,7 +1508,7 @@ const T = {
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
     heroSub:"Cash3 · Pick3 · Nova York · Geórgia · Texas · Flórida",
-    btnAnalyze:"⚡ Analisar",btnScrape:"🔄 Raspar Dados",
+    btnAnalyze:"⚡ Analisar",btnScrape:"🔄 Raspar Dados",btnArchives:"📂 Arquivos",
     welcome:"Selecione um Estado e clique em ⚡ Analisar",
     analyzing:"⚙️ Análise multi-modelo em andamento...",
     scraping:"⏳ Raspando dados...",
@@ -1545,7 +1553,7 @@ const T = {
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
     heroSub:"Cash3 · Pick3 · New York · Jòji · Teksas · Florid",
-    btnAnalyze:"⚡ Analize",btnScrape:"🔄 Chache Done",
+    btnAnalyze:"⚡ Analize",btnScrape:"🔄 Chache Done",btnArchives:"📂 Achiv",
     welcome:"Chwazi yon Eta epi klike sou ⚡ Analize",
     analyzing:"⚙️ Analiz ap mache...",
     scraping:"⏳ Chache done...",
@@ -1613,6 +1621,8 @@ function setLang(lang){
   if(heroSub)   heroSub.textContent   = t('heroSub');
   if(btnAn)     btnAn.textContent     = t('btnAnalyze');
   if(btnSc)     btnSc.textContent     = t('btnScrape');
+  const btnAr = document.getElementById('btn-archives-label');
+  if(btnAr)     btnAr.textContent     = t('btnArchives').replace('📂 ','');
   if(vidTitle)  vidTitle.textContent  = t('videoTitle');
   const tvPromo = document.getElementById('tvPromoText');
   if(tvPromo)   tvPromo.textContent   = t('tvPromoText');
