@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 
 DRAW_SCHEDULE = {
     "AR": [{"tod":"Midday","time":"12:59 PM CT"}, {"tod":"Evening","time":"6:59 PM CT"}],
-    "AZ": [{"tod":"Evening","time":"7:00 PM MST"}],
+    "AZ": [{"tod":"Midday","time":"12:00 PM MST"},{"tod":"Evening","time":"7:00 PM MST"}],
     "CA": [{"tod":"Midday","time":"1:00 PM PT"},  {"tod":"Evening","time":"6:30 PM PT"}],
     "CO": [{"tod":"Midday","time":"1:30 PM MT"}, {"tod":"Evening","time":"7:30 PM MT"}],
     "CT": [{"tod":"Midday","time":"1:57 PM ET"},  {"tod":"Night","time":"10:29 PM ET"}],

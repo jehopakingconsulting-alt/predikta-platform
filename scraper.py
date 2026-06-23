@@ -41,7 +41,7 @@ HEADERS = {
 # Format: state_code: {"slug": "...", "name": "...", "draws_per_day": N}
 STATES = {
     "AR": {"slug": "cash3",          "name": "Arkansas Cash 3",         "dpd": 2},
-    "AZ": {"slug": "pick3",          "name": "Arizona Pick 3",          "dpd": 1},
+    "AZ": {"slug": "pick3",          "name": "Arizona Pick 3",          "dpd": 2},
     "CA": {"slug": "daily3",         "name": "California Daily 3",      "dpd": 2},
     "CO": {"slug": "pick3",          "name": "Colorado Pick 3",         "dpd": 2},
     "CT": {"slug": "play3",          "name": "Connecticut Play 3",      "dpd": 2},
