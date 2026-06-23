@@ -21,11 +21,15 @@
   "AZ": {
     "state_slug": "arizona",
     "base_slug": "pick-3",
-    "base_title": "ArizonaPick 3",
+    "base_title": "ArizonaPick 3 Evening",
     "variants": {
       "base": {
         "slug": "pick-3",
-        "title": "ArizonaPick 3"
+        "title": "ArizonaPick 3 Evening"
+      },
+      "midday": {
+        "slug": "pick-3-midday",
+        "title": "ArizonaPick 3 Midday"
       }
     }
   },
