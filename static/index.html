@@ -1123,6 +1123,9 @@ footer{
   </select>
 </div>
 <div class="controls-row controls-actions">
+  <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
+  <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
+  <button class="btn-compare" onclick="compareDraws()" id="btn-compare" title="Comparer Midday vs Evening">⚖ Mid/Soir</button>
   <div class="filters-wrap">
     <button class="btn-filters" id="btn-filters" onclick="toggleFiltersPanel()">
       📅 <span id="btn-filters-label">Filtres</span><span class="filters-badge" id="filters-badge" style="display:none">0</span>
@@ -1141,9 +1144,6 @@ footer{
       </div>
     </div>
   </div>
-  <button class="btn-analyze" onclick="loadReport()" id="btn-analyze">⚡ Analyser</button>
-  <button class="btn-compare" onclick="compareDraws()" id="btn-compare" title="Comparer Midday vs Evening">⚖ Mid/Soir</button>
-  <button class="btn-scrape" onclick="runScrape()" id="btn-scrape">🔄 Scraper</button>
   <a href="/results" class="btn-results">🟢 Résultats du Jour</a>
 </div>
 <span id="status"></span>
