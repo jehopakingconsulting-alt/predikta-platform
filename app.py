@@ -2269,7 +2269,9 @@ def api_states():
         draws = load_csv(code)
         # Tirages réellement disponibles pour cet État (Matin/Midi/Soir/Nuit
         # selon les données réelles — optimisé et à jour par État)
-        tods = sorted({d.get("tod","") for d in draws if d.get("tod")},
+        tods_from_data = {d.get("tod","") for d in draws if d.get("tod")}
+        tods_from_sched = {s["tod"] for s in DRAW_SCHEDULE.get(code, [])}
+        tods = sorted(tods_from_data | tods_from_sched,
                       key=lambda t: TOD_ORDER.get(t, 99))
         result[code] = {
             "name":       cfg["name"],
