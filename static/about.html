@@ -23,8 +23,10 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .subtitle{font-size:.88rem;color:var(--muted2);margin-bottom:40px}
 h2{font-size:1rem;font-weight:700;color:var(--text);margin:32px 0 12px}
 p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
-.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px;position:relative;overflow:hidden}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px;position:relative;z-index:1}
+.card>*{position:relative;z-index:1}
+.card-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.04;pointer-events:none;z-index:0}
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center}
 .stat-num{font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -63,22 +65,24 @@ p{font-size:.85rem;color:var(--muted2);line-height:1.8;margin-bottom:12px}
   </div>
 
   <div class="card">
+    <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=900&h=400&fit=crop&q=60')"></div>
     <h2 data-i18n="missionTitle">Notre Mission</h2>
     <p data-i18n="missionP1">ZYNORIQ est née d'une conviction simple : les joueurs de loterie méritent les mêmes outils analytiques que ceux utilisés par les professionnels de la data science. Nous combinons les technologies les plus avancées — apprentissage automatique, analyse de Fourier, simulations Monte Carlo — dans une interface accessible à tous.</p>
     <p data-i18n="missionP2">Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.</p>
   </div>
 
   <div class="card">
+    <div class="card-bg" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=900&h=400&fit=crop&q=60')"></div>
     <h2 data-i18n="algoTitle">Les Algorithmes Derrière ZYNORIQ</h2>
     <p data-i18n="algoIntro">Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :</p>
     <div class="tech-list">
-      <span class="tech-chip">⚙️ XGBoost</span>
-      <span class="tech-chip">🌲 Random Forest</span>
-      <span class="tech-chip">📈 Gradient Boosting</span>
-      <span class="tech-chip" data-i18n="markovChip">🔗 Markov Ordre 1/2/3</span>
-      <span class="tech-chip">🎲 Monte Carlo 50K</span>
-      <span class="tech-chip" data-i18n="fourierChip">〰 Analyse de Fourier</span>
-      <span class="tech-chip">⏱ Gap Analysis</span>
+      <span class="tech-chip">XGBoost</span>
+      <span class="tech-chip">Random Forest</span>
+      <span class="tech-chip">Gradient Boosting</span>
+      <span class="tech-chip" data-i18n="markovChip">Markov Ordre 1/2/3</span>
+      <span class="tech-chip">Monte Carlo 50K</span>
+      <span class="tech-chip" data-i18n="fourierChip">Analyse de Fourier</span>
+      <span class="tech-chip">Gap Analysis</span>
     </div>
     <p style="margin-top:14px" data-i18n="algoOutro">Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.</p>
   </div>
@@ -117,7 +121,7 @@ const T = {
     missionP2:"Notre plateforme analyse des décennies de tirages historiques pour identifier des patterns statistiques, calculer des probabilités et générer des suggestions éclairées. Tout cela en temps réel, mis à jour quotidiennement, disponible en 5 langues.",
     algoTitle:"Les Algorithmes Derrière ZYNORIQ",
     algoIntro:"Chaque prédiction est le résultat d'un consensus entre 7 algorithmes indépendants :",
-    markovChip:"🔗 Markov Ordre 1/2/3",fourierChip:"〰 Analyse de Fourier",
+    markovChip:"Markov Ordre 1/2/3",fourierChip:"Analyse de Fourier",
     algoOutro:"Le score consensus final pondère chaque modèle selon sa performance historique sur l'état analysé, offrant une prédiction plus robuste qu'un modèle unique.",
     stackTitle:"Stack Technique",publicApiChip:"API Résultats Publics",
     coverageTitle:"Couverture Géographique",
@@ -135,7 +139,7 @@ const T = {
     missionP2:"Our platform analyzes decades of historical draws to identify statistical patterns, calculate probabilities and generate informed suggestions. All in real time, updated daily, available in 5 languages.",
     algoTitle:"The Algorithms Behind ZYNORIQ",
     algoIntro:"Every prediction is the result of a consensus between 7 independent algorithms:",
-    markovChip:"🔗 Markov Order 1/2/3",fourierChip:"〰 Fourier Analysis",
+    markovChip:"Markov Order 1/2/3",fourierChip:"Fourier Analysis",
     algoOutro:"The final consensus score weighs each model according to its historical performance on the analyzed state, offering a more robust prediction than a single model.",
     stackTitle:"Tech Stack",publicApiChip:"Public Results API",
     coverageTitle:"Geographic Coverage",
@@ -153,7 +157,7 @@ const T = {
     missionP2:"Nuestra plataforma analiza décadas de sorteos históricos para identificar patrones estadísticos, calcular probabilidades y generar sugerencias informadas. Todo en tiempo real, actualizado a diario, disponible en 5 idiomas.",
     algoTitle:"Los Algoritmos Detrás de ZYNORIQ",
     algoIntro:"Cada predicción es el resultado de un consenso entre 7 algoritmos independientes:",
-    markovChip:"🔗 Markov Orden 1/2/3",fourierChip:"〰 Análisis de Fourier",
+    markovChip:"Markov Orden 1/2/3",fourierChip:"Análisis de Fourier",
     algoOutro:"La puntuación de consenso final pondera cada modelo según su rendimiento histórico en el estado analizado, ofreciendo una predicción más robusta que un solo modelo.",
     stackTitle:"Stack Técnico",publicApiChip:"API de Resultados Públicos",
     coverageTitle:"Cobertura Geográfica",
@@ -171,7 +175,7 @@ const T = {
     missionP2:"Nossa plataforma analisa décadas de sorteios históricos para identificar padrões estatísticos, calcular probabilidades e gerar sugestões informadas. Tudo em tempo real, atualizado diariamente, disponível em 5 idiomas.",
     algoTitle:"Os Algoritmos Por Trás da ZYNORIQ",
     algoIntro:"Cada previsão é o resultado de um consenso entre 7 algoritmos independentes:",
-    markovChip:"🔗 Markov Ordem 1/2/3",fourierChip:"〰 Análise de Fourier",
+    markovChip:"Markov Ordem 1/2/3",fourierChip:"Análise de Fourier",
     algoOutro:"A pontuação de consenso final pondera cada modelo de acordo com seu desempenho histórico no estado analisado, oferecendo uma previsão mais robusta do que um único modelo.",
     stackTitle:"Stack Técnica",publicApiChip:"API de Resultados Públicos",
     coverageTitle:"Cobertura Geográfica",
@@ -189,7 +193,7 @@ const T = {
     missionP2:"Platfòm nou an analize dè dekad tiraj istorik pou idantifye modèl estatistik, kalkile pwobabilite epi jenere sijesyon enfòme. Tout sa an tan reyèl, mete ajou chak jou, disponib nan 5 lang.",
     algoTitle:"Algoritm Dèyè ZYNORIQ",
     algoIntro:"Chak prediksyon se rezilta yon konsansis ant 7 algoritm endepandan:",
-    markovChip:"🔗 Markov Lòd 1/2/3",fourierChip:"〰 Analiz Fourier",
+    markovChip:"Markov Lòd 1/2/3",fourierChip:"Analiz Fourier",
     algoOutro:"Nòt konsansis final la peze chak modèl selon pèfòmans istorik li sou eta ki analize a, sa ki ofri yon prediksyon pi solid pase yon sèl modèl.",
     stackTitle:"Pil Teknik",publicApiChip:"API Rezilta Piblik",
     coverageTitle:"Kouvèti Jeyografik",
