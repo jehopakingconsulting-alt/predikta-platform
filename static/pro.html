@@ -21,7 +21,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
 .page{max-width:1100px;margin:0 auto;padding:40px 24px 60px;position:relative;z-index:1}
 
 /* Hero */
-.hero{text-align:center;padding:40px 20px 50px}
+.hero{text-align:center;padding:40px 20px 50px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("https://images.unsplash.com/photo-1639322537228-f710d846310a?w=1400&h=600&fit=crop&q=60") center/cover no-repeat;opacity:.06;z-index:0;pointer-events:none}
+.hero>*{position:relative;z-index:1}
 .hero-tag{display:inline-block;padding:4px 16px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:2px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);color:var(--gold);margin-bottom:18px}
 .hero h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#aa66ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px}
 .hero-sub{font-size:.95rem;color:var(--muted2);max-width:580px;margin:0 auto 16px;line-height:1.7}
@@ -78,7 +80,8 @@ tbody tr:last-child td{border-bottom:none}
 
 /* Testimonials */
 .testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:50px}
-.tcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative}
+.tcard-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--border);margin-bottom:8px}
 .tcard-stars{color:var(--gold);font-size:.9rem;margin-bottom:8px}
 .tcard-text{font-size:.8rem;color:var(--muted2);line-height:1.6;margin-bottom:12px;font-style:italic}
 .tcard-author{font-size:.72rem;color:var(--text);font-weight:700}
@@ -96,7 +99,9 @@ tbody tr:last-child td{border-bottom:none}
 .faq-item.open .faq-icon{transform:rotate(45deg)}
 
 /* CTA bottom */
-.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(79,110,255,.08),rgba(136,85,255,.08));border:1px solid rgba(79,110,255,.2);border-radius:20px}
+.bottom-cta{text-align:center;padding:50px 20px;background:linear-gradient(135deg,rgba(79,110,255,.12),rgba(136,85,255,.1));border:1px solid rgba(79,110,255,.2);border-radius:20px;position:relative;overflow:hidden}
+.bottom-cta::before{content:'';position:absolute;inset:0;background:url("https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=400&fit=crop&q=60") center/cover no-repeat;opacity:.07;pointer-events:none}
+.bottom-cta>*{position:relative;z-index:1}
 .bottom-cta h2{font-family:'Orbitron',monospace;font-size:clamp(1.1rem,3vw,1.6rem);font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
 .bottom-cta p{color:var(--muted2);font-size:.85rem;margin-bottom:24px}
 .bottom-cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -430,9 +435,15 @@ function renderCompare(dict){
     `<tr><td>${f}</td><td class="${cls(a)}">${a}</td><td class="${cls(b)}">${b}</td><td class="${cls(c)}">${c}</td><td class="${cls(d)}">${d}</td></tr>`
   ).join('');
 }
+const _TESTI_AVATARS = [
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&q=80",
+];
 function renderTesti(dict){
-  document.getElementById('testiWrap').innerHTML = dict.testimonials.map(([stars,text,author,state])=>`
+  document.getElementById('testiWrap').innerHTML = dict.testimonials.map(([stars,text,author,state],i)=>`
   <div class="tcard">
+    <img class="tcard-avatar" src="${_TESTI_AVATARS[i % _TESTI_AVATARS.length]}" alt="${author}" loading="lazy"/>
     <div class="tcard-stars">${stars}</div>
     <p class="tcard-text">${text}</p>
     <div class="tcard-author">${author}</div>
