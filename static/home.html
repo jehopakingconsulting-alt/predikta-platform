@@ -472,7 +472,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       const el = document.getElementById('memoryDashboard');
       el.style.display = '';
 
-      document.getElementById('mdGreeting').textContent = (document.getElementById('heroGreeting')?.textContent?.split('—')[0]?.trim()||'') + ', ' + d.greeting_name + ' !';
+      const heroTxt = document.getElementById('heroGreeting')?.textContent || '';
+      const greetOnly = heroTxt.split('·')[0]?.trim() || heroTxt.split('—')[0]?.trim() || '';
+      document.getElementById('mdGreeting').textContent = greetOnly + ', ' + d.greeting_name + ' !';
       document.getElementById('mdSubtext').textContent = mt('since');
 
       // Stats
