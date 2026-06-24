@@ -1383,7 +1383,30 @@ function inject(){
     document.head.appendChild(fav);
   }
 
-  // 0b. Inject ZYNORIQ COPILOT™
+  // 0b. Inject Schema.org (Organization + SoftwareApplication)
+  if(!document.getElementById('zynoriq-schema')){
+    const sch = document.createElement('script');
+    sch.id = 'zynoriq-schema';
+    sch.type = 'application/ld+json';
+    sch.textContent = JSON.stringify({
+      "@context":"https://schema.org","@graph":[
+        {"@type":"Organization","name":"ZYNORIQ Intelligence","url":"https://www.zynoriq.com","logo":"https://www.zynoriq.com/favicon.svg","sameAs":[],"contactPoint":{"@type":"ContactPoint","email":"support@zynoriq.com","contactType":"customer support"}},
+        {"@type":"SoftwareApplication","name":"ZYNORIQ","url":"https://www.zynoriq.com","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"AggregateOffer","lowPrice":"19","highPrice":"199","priceCurrency":"USD"},"description":"Lottery prediction platform using 7 ML algorithms — Pick3, Pick4, Lotto, Powerball across 44 US states in 5 languages."}
+      ]
+    });
+    document.head.appendChild(sch);
+  }
+
+  // 0c. Inject unified tracking (GA4 + Meta Pixel + Clarity)
+  if(!document.getElementById('zynoriq-tracking')){
+    const trk = document.createElement('script');
+    trk.id = 'zynoriq-tracking';
+    trk.src = '/tracking.js';
+    trk.defer = true;
+    document.head.appendChild(trk);
+  }
+
+  // 0c. Inject ZYNORIQ COPILOT™
   if(!document.getElementById('copilot-script')){
     const cpScript = document.createElement('script');
     cpScript.id = 'copilot-script';
@@ -1448,7 +1471,33 @@ function inject(){
     }
   });
 
-  // 7. USER MENU — async upgrade with user info if logged in
+  // 7. Auto-inject missing OG/Twitter meta tags
+  (function(){
+    const h = document.head;
+    function ensureMeta(prop,content,attr){
+      attr = attr||'property';
+      if(!h.querySelector(`meta[${attr}="${prop}"]`)){
+        const m=document.createElement('meta');m.setAttribute(attr,prop);m.content=content;h.appendChild(m);
+      }
+    }
+    const title = document.title || 'ZYNORIQ Intelligence';
+    const desc = (h.querySelector('meta[name="description"]')||{}).content || 'Lottery prediction platform — 7 ML algorithms, 44 US states, 5 languages.';
+    const url = location.href;
+    ensureMeta('og:title', title);
+    ensureMeta('og:description', desc);
+    ensureMeta('og:url', url);
+    ensureMeta('og:type', 'website');
+    ensureMeta('og:site_name', 'ZYNORIQ Intelligence');
+    ensureMeta('og:image', 'https://www.zynoriq.com/favicon.svg');
+    ensureMeta('twitter:card', 'summary', 'name');
+    ensureMeta('twitter:title', title, 'name');
+    ensureMeta('twitter:description', desc, 'name');
+    if(!h.querySelector('link[rel="canonical"]')){
+      const c=document.createElement('link');c.rel='canonical';c.href=url.split('?')[0];h.appendChild(c);
+    }
+  })();
+
+  // 8. USER MENU — async upgrade with user info if logged in
   initUserMenu();
 }
 

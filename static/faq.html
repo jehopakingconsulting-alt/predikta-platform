@@ -387,6 +387,17 @@ window.setLang = applyLang;
 window.addEventListener('load', ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
+  // FAQ Schema.org
+  const t = T.en;
+  const items = [];
+  for(let i=1;i<=16;i++){
+    if(t['q'+i] && t['a'+i]) items.push({"@type":"Question","name":t['q'+i],"acceptedAnswer":{"@type":"Answer","text":t['a'+i].replace(/<[^>]+>/g,'')}});
+  }
+  if(items.length){
+    const s=document.createElement('script');s.type='application/ld+json';
+    s.textContent=JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":items});
+    document.head.appendChild(s);
+  }
 });
 </script>
 </body></html>
