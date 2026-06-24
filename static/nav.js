@@ -1399,6 +1399,7 @@ function inject(){
 
   // 0c. Inject tracking IDs
   if(!window.ZYNORIQ_GA_ID)   window.ZYNORIQ_GA_ID   = 'G-92CNHZQC61';
+  if(!window.ZYNORIQ_META_ID) window.ZYNORIQ_META_ID = '1335183885409898';
 
   // 0d. Inject unified tracking (GA4 + Meta Pixel + Clarity)
   if(!document.getElementById('zynoriq-tracking')){
