@@ -2087,6 +2087,31 @@ def api_referral_me():
     })
 
 
+# ── Founders Program (500 places) ─────────────────────────────────────────
+FOUNDERS_MAX = 500
+
+@app.route("/api/founders/status")
+def api_founders_status():
+    _, User = auth_module.db, auth_module.User
+    count = User.query.filter(User.founder_badge == True).count()
+    return jsonify({"total": FOUNDERS_MAX, "claimed": count, "remaining": FOUNDERS_MAX - count})
+
+@app.route("/api/founders/claim", methods=["POST"])
+@auth_module.login_required
+def api_founders_claim():
+    user = auth_module.current_user()
+    if user.founder_badge:
+        return jsonify({"error": "already_founder", "number": user.founder_number})
+    _, User = auth_module.db, auth_module.User
+    count = User.query.filter(User.founder_badge == True).count()
+    if count >= FOUNDERS_MAX:
+        return jsonify({"error": "sold_out"}), 410
+    user.founder_badge = True
+    user.founder_number = count + 1
+    auth_module.db.session.commit()
+    return jsonify({"success": True, "number": user.founder_number, "remaining": FOUNDERS_MAX - count - 1})
+
+
 @app.route("/api/contact", methods=["GET", "POST"])
 def api_contact():
     if request.method == "GET":

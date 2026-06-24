@@ -116,8 +116,10 @@ class User(db.Model):
     referred_by_id   = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     referral_count   = db.Column(db.Integer, default=0, nullable=False, server_default="0")
     ambassador_badge = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
-    referral_rewards = db.Column(db.Text, nullable=True)  # JSON list des paliers déjà accordés
-    referral_balance_usd = db.Column(db.Float, default=0, nullable=False, server_default="0")  # commissions cumulées
+    founder_badge    = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+    founder_number   = db.Column(db.Integer, nullable=True)
+    referral_rewards = db.Column(db.Text, nullable=True)
+    referral_balance_usd = db.Column(db.Float, default=0, nullable=False, server_default="0")
 
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
@@ -145,6 +147,8 @@ class User(db.Model):
             "ref_code": self.ref_code,
             "referral_count": self.referral_count or 0,
             "ambassador_badge": bool(self.ambassador_badge),
+            "founder_badge": bool(self.founder_badge),
+            "founder_number": self.founder_number,
             "referral_balance_usd": round(self.referral_balance_usd or 0, 2),
         }
 
@@ -460,6 +464,8 @@ def init_app(app):
         _ensure_column(db, "users", "referred_by_id", "INTEGER")
         _ensure_column(db, "users", "referral_count", "INTEGER DEFAULT 0")
         _ensure_column(db, "users", "ambassador_badge", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "founder_badge", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "users", "founder_number", "INTEGER")
         _ensure_column(db, "users", "referral_rewards", "TEXT")
         _ensure_column(db, "users", "referral_balance_usd", "FLOAT DEFAULT 0")
         _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")

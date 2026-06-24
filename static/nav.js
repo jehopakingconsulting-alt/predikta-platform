@@ -1495,6 +1495,16 @@ function inject(){
     if(!h.querySelector('link[rel="canonical"]')){
       const c=document.createElement('link');c.rel='canonical';c.href=url.split('?')[0];h.appendChild(c);
     }
+    // hreflang for international SEO
+    if(!h.querySelector('link[hreflang]')){
+      const base = url.split('?')[0];
+      const langs = {fr:'fr',en:'en',es:'es',pt:'pt',ht:'ht'};
+      Object.entries(langs).forEach(function(e){
+        const lnk=document.createElement('link');lnk.rel='alternate';lnk.hreflang=e[0];
+        lnk.href=base+(base.includes('?')?'&':'?')+'lang='+e[1];h.appendChild(lnk);
+      });
+      const xd=document.createElement('link');xd.rel='alternate';xd.hreflang='x-default';xd.href=base;h.appendChild(xd);
+    }
   })();
 
   // 8. USER MENU — async upgrade with user info if logged in
