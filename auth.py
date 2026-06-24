@@ -1281,7 +1281,10 @@ def login():
     password   = data.get("password") or ""
 
     user = User.query.filter(
-        (User.email == identifier) | (User.username == identifier)
+        db.or_(
+            db.func.lower(User.email) == identifier,
+            db.func.lower(User.username) == identifier
+        )
     ).first()
 
     if not user or not user.check_password(password):
