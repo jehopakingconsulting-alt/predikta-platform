@@ -807,7 +807,7 @@ async function loadData(forceScra=false){
       });
     }
   }catch(e){
-    content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">${t.errorPrefix}${e.message}</div><button class="load-data-btn" onclick="loadData(true)">${t.retryBtn}</button></div>`;
+    content.innerHTML = `<div class="no-data-block"><div style="font-size:.82rem;color:#ff5533">${t.errorPrefix}</div><button class="load-data-btn" onclick="loadData(true)">${t.retryBtn}</button></div>`;
   }
 }
 

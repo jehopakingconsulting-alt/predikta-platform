@@ -40,11 +40,11 @@ app.json_provider_class = NumpyJSONProvider
 app.json = NumpyJSONProvider(app)
 
 # ── Secret key (sessions / cookies signés) ────────────────────────────────
-_secret_key = os.environ.get("PREDIKTA_SECRET_KEY")
+_secret_key = os.environ.get("ZYNORIQ_SECRET_KEY") or os.environ.get("PREDIKTA_SECRET_KEY")
 if not _secret_key:
     import secrets as _secrets
     _secret_key = _secrets.token_hex(32)
-    print("[WARNING] PREDIKTA_SECRET_KEY not set — using a random key; sessions will not survive restarts")
+    print("[WARNING] ZYNORIQ_SECRET_KEY not set — using a random key; sessions will not survive restarts")
 app.secret_key = _secret_key
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)

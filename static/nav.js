@@ -1129,8 +1129,8 @@ button:active,a[class*="btn"]:active,a[class*="-cta"]:active{transform:scale(.97
     <button style="flex:1;padding:10px;border-radius:9px;border:1px solid rgba(79,110,255,.3);background:rgba(79,110,255,.1);color:#88aaff;font-size:.74rem;font-weight:600;cursor:pointer" onclick="closeAssistant();window.setTimeout(()=>toggleAssistant(),100);closeMobileMenu()">💬 Assistant</button>
   </div>
   <div class="pmob-footer">
-    <a href="/about">À Propos</a><a href="/faq">FAQ</a>
-    <a href="/contact">Contact</a><a href="/privacy">Confidentialité</a><a href="/terms">CGU</a>
+    <a href="/about">${T.about||'About'}</a><a href="/faq">FAQ</a>
+    <a href="/contact">${T.contact||'Contact'}</a><a href="/privacy">${T.privacy||'Privacy'}</a><a href="/terms">${T.terms||'Terms'}</a>
   </div>
 </div>
 `;
@@ -1185,7 +1185,7 @@ function buildFooter(){
         <a class="pf-link" href="/register?plan=pro" style="color:#6688ff;font-weight:700">PRO — $19.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
         <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $49.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
         <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">PREMIUM — $99.99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
-        <a class="pf-link" href="/api/health" target="_blank" style="color:#22e87a">● API Status</a>
+        <span class="pf-link" style="color:#22e87a;cursor:default">● Online</span>
       </div>
     </div>
     <div class="pf-bottom">
