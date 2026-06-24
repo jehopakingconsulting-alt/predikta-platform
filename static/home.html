@@ -379,6 +379,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 .ql-title{font-size:.7rem;font-weight:800;color:var(--text);line-height:1.3}
 .ql-desc{display:none}
 @media(max-width:700px){ .quick-links-grid{grid-template-columns:repeat(3,1fr)} }
+@media(max-width:400px){ .quick-links-grid{grid-template-columns:repeat(2,1fr)} }
 
 @media(max-width:700px){
   .services-grid{grid-template-columns:1fr}
@@ -411,10 +412,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <!-- ── CTA Principal ── -->
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;margin-top:4px">
     <a href="/register" style="display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:14px;font-size:1rem;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#4f6eff,#7c3aed);box-shadow:0 8px 32px rgba(79,110,255,.4);transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 40px rgba(79,110,255,.55)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 8px 32px rgba(79,110,255,.4)'">
-      🚀 Commencer gratuitement
+      <span data-i18n="ctaFree">🚀 Commencer gratuitement</span>
     </a>
     <a href="/analyze" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:14px;font-size:1rem;font-weight:700;text-decoration:none;color:#a78bfa;background:rgba(124,58,237,.12);border:1.5px solid rgba(124,58,237,.35);transition:all .2s" onmouseover="this.style.borderColor='rgba(124,58,237,.7)';this.style.background='rgba(124,58,237,.2)'" onmouseout="this.style.borderColor='rgba(124,58,237,.35)';this.style.background='rgba(124,58,237,.12)'">
-      ⚡ Analyser maintenant
+      <span data-i18n="ctaAnalyze">⚡ Analyser maintenant</span>
     </a>
   </div>
   <div style="margin-top:12px;font-size:.72rem;color:#475569;position:relative;z-index:2">
@@ -889,6 +890,7 @@ const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 
 const T = {
   fr:{
+    ctaFree:"🚀 Commencer gratuitement",ctaAnalyze:"⚡ Analyser maintenant",
     heroKicker:"🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée",
     heroSub:"Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
@@ -963,6 +965,7 @@ const T = {
     tagline:"Bonne chance pour les tirages d'aujourd'hui !"
   },
   en:{
+    ctaFree:"🚀 Start for free",ctaAnalyze:"⚡ Analyze now",
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Intelligence Beyond Prediction by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
@@ -1037,6 +1040,7 @@ const T = {
     tagline:"Good luck with today's draws!"
   },
   es:{
+    ctaFree:"🚀 Comenzar gratis",ctaAnalyze:"⚡ Analizar ahora",
     heroKicker:"🌍 Plataforma Global · Impulsada por Análisis Avanzado",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
@@ -1111,6 +1115,7 @@ const T = {
     tagline:"¡Buena suerte con los sorteos de hoy!"
   },
   pt:{
+    ctaFree:"🚀 Começar grátis",ctaAnalyze:"⚡ Analisar agora",
     heroKicker:"🌍 Plataforma Global · Impulsionada por Análise Avançada",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
@@ -1185,6 +1190,7 @@ const T = {
     tagline:"Boa sorte nos sorteios de hoje!"
   },
   ht:{
+    ctaFree:"🚀 Kòmanse gratis",ctaAnalyze:"⚡ Analize kounye a",
     heroKicker:"🌍 Platfòm Mondyal · Pwopilse pa Analiz Avanse",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
