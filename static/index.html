@@ -444,25 +444,6 @@ header{
   box-shadow:0 4px 20px rgba(79,110,255,.35);
 }
 .btn-analyze:hover{background:linear-gradient(135deg,#3a4aee,#6688ff);box-shadow:0 6px 28px rgba(79,110,255,.5)}
-.btn-compare{
-  background:linear-gradient(135deg,#2a1060,#5533bb);
-  color:#cc99ff;font-weight:700;border-color:#7755cc;
-}
-.btn-compare:hover{background:linear-gradient(135deg,#3a1880,#7755ee)}
-.compare-wrap{display:inline-block}
-.compare-pairs-panel{
-  position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
-  background:#1a1040;border:1px solid #5533bb;border-radius:10px;
-  padding:6px;min-width:180px;z-index:200;
-  box-shadow:0 8px 30px rgba(0,0,0,.6);
-}
-.compare-pairs-panel button{
-  display:block;width:100%;padding:8px 12px;margin:2px 0;
-  background:transparent;border:none;border-radius:6px;
-  color:#cc99ff;font-size:.82rem;font-weight:600;cursor:pointer;
-  text-align:left;white-space:nowrap;
-}
-.compare-pairs-panel button:hover{background:rgba(85,51,187,.4)}
 .btn-scrape{
   background:linear-gradient(135deg,#0a2218,#1a4a30);
   color:#44ff99;font-weight:600;border-color:#226633;
@@ -481,24 +462,6 @@ header{
 }
 .btn-archives:hover{background:rgba(255,170,50,.22)}
 #status{font-size:.78rem;color:var(--muted2);padding:4px 8px}
-/* ── Comparaison Mid/Soir ─────────────────────────────── */
-.cmp-header{text-align:center;margin-bottom:18px}
-.cmp-title{font-size:1.2rem;font-weight:700;color:var(--accent)}
-.cmp-sub{font-size:.8rem;color:var(--muted2);margin-top:4px}
-.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-@media(max-width:640px){.cmp-grid{grid-template-columns:1fr}}
-.cmp-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
-.cmp-col-title{font-weight:700;font-size:1rem;margin-bottom:4px}
-.cmp-col-meta{font-size:.75rem;color:var(--muted2);margin-bottom:12px}
-.cmp-combos{display:flex;flex-direction:column;gap:6px}
-.cmp-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.03);border:1px solid transparent}
-.cmp-row.cmp-conv{background:rgba(160,100,255,.12);border-color:rgba(160,100,255,.4)}
-.cmp-rank{font-size:.75rem;color:var(--muted2);min-width:24px}
-.cmp-ball{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);font-weight:700;font-size:.85rem}
-.cmp-ball-gold{background:rgba(255,200,50,.2);border-color:rgba(255,200,50,.6);color:#ffdd55}
-.cmp-conv-badge{font-size:.65rem;background:rgba(160,100,255,.3);color:#cc99ff;border-radius:4px;padding:2px 6px;margin-left:4px}
-.cmp-conv-block{background:rgba(160,100,255,.08);border:1px solid rgba(160,100,255,.3);border-radius:12px;padding:16px;margin-bottom:4px}
-.cmp-conv-title{font-weight:700;font-size:.85rem;color:#cc99ff;margin-bottom:10px}
 @media(max-width:700px){
   .controls-actions > *{flex:1 1 100%}
 }
@@ -1048,7 +1011,7 @@ footer{
       <div class="lb-desc">Participez au Powerball, Mega Millions, EuroMillions et +40 loteries mondiales · Sécurisé & officiel</div>
     </div>
     <div class="lb-right">
-      <button class="lb-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank');">Jouer Maintenant →</button>
+      <button class="lb-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
     </div>
   </div>
 </div>
@@ -1323,7 +1286,7 @@ footer{
         </div>
         <div class="sponsor-card-name">TheLotter</div>
         <div class="sponsor-card-desc">Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.</div>
-        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank');">Jouer Maintenant →</button>
+        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
       </div>
     </a>
 
@@ -1336,7 +1299,7 @@ footer{
         </div>
         <div class="sponsor-card-name">LotteryPro Tools</div>
         <div class="sponsor-card-desc">Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.</div>
-        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.lotterypro,'_blank');">Essai Gratuit 14j →</button>
+        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).lotterypro||'#','_blank');">Essai Gratuit 14j →</button>
       </div>
     </a>
 
@@ -1349,7 +1312,7 @@ footer{
         </div>
         <div class="sponsor-card-name">Jackpot.com</div>
         <div class="sponsor-card-desc">Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.</div>
-        <button class="sponsor-card-btn" onclick="window.open(window.PREDIKTA_AFFILIATE.jackpot,'_blank');">Voir les Jackpots →</button>
+        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).jackpot||'#','_blank');">Voir les Jackpots →</button>
       </div>
     </a>
 
@@ -2006,143 +1969,6 @@ function renderAll(d){
   }, 80);
 }
 
-const _TOD_ICONS = {Morning:'🌅',Midday:'☀️',Day:'🌤️',Evening:'🌆',Night:'🌙'};
-function _todShort(tod){ return {Morning:'Matin',Midday:'Midi',Day:'Jour',Evening:'Soir',Night:'Nuit'}[tod]||tod; }
-
-async function toggleComparePairs(){
-  const panel = document.getElementById('compare-pairs-panel');
-  if(panel.style.display !== 'none'){ panel.style.display='none'; return; }
-  const state = document.getElementById('stateSelect').value;
-  const meta = await fetchStatesMeta();
-  const stMeta = meta[state]||{};
-  const schedTods = (stMeta.schedule||[]).map(s=>s.tod);
-  const dataTods = new Set(stMeta.tods || []);
-  const allTods = schedTods.length >= 2 ? schedTods : [...dataTods];
-  if(allTods.length < 2){
-    panel.innerHTML = `<div style="padding:10px;color:#ff9966;font-size:.82rem">Cet état n'a qu'un seul tirage.</div>`;
-    panel.style.display='block'; return;
-  }
-  const pairs = [];
-  for(let i=0;i<allTods.length;i++) for(let j=i+1;j<allTods.length;j++) pairs.push([allTods[i],allTods[j]]);
-  panel.innerHTML = pairs.map(([a,b])=>{
-    const ok = dataTods.has(a) && dataTods.has(b);
-    return ok
-      ? `<button onclick="compareDraws('${a}','${b}')">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)}</button>`
-      : `<button disabled style="opacity:.4;cursor:default">${_TOD_ICONS[a]||''} ${_todShort(a)} vs ${_TOD_ICONS[b]||''} ${_todShort(b)} — scraper d'abord</button>`;
-  }).join('');
-  panel.style.display='block';
-}
-document.addEventListener('click',e=>{
-  const wrap=document.getElementById('compare-wrap');
-  if(wrap && !wrap.contains(e.target)){
-    document.getElementById('compare-pairs-panel').style.display='none';
-  }
-});
-
-async function compareDraws(todA, todB){
-  document.getElementById('compare-pairs-panel').style.display='none';
-  const state = document.getElementById('stateSelect').value;
-  const months = document.getElementById('monthsSelect').value;
-  const mc = document.getElementById('mainContent');
-  const labelA = `${_TOD_ICONS[todA]||''} ${_todShort(todA)}`, labelB = `${_TOD_ICONS[todB]||''} ${_todShort(todB)}`;
-  mc.innerHTML = `<div class="loading-wrap"><div class="loader"></div><div id="cmp-status" style="color:var(--muted2)">⚖ Analyse ${labelA}…</div></div>`;
-
-  async function fetchTOD(tod, label){
-    const statusEl = document.getElementById('cmp-status');
-    if(statusEl) statusEl.textContent = `⚖ Analyse ${label}…`;
-    const controller = new AbortController();
-    const timer = setTimeout(()=>controller.abort(), 60000);
-    try{
-      const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}`, {signal: controller.signal});
-      clearTimeout(timer);
-      if(!r.ok){
-        const txt = await r.text().catch(()=>'');
-        return {error: `HTTP ${r.status} pour ${label}: ${txt.slice(0,120)}`};
-      }
-      return r.json();
-    }catch(err){
-      clearTimeout(timer);
-      throw err;
-    }
-  }
-
-  let dA, dB;
-  try{
-    dA = await fetchTOD(todA, labelA);
-    dB = await fetchTOD(todB, labelB);
-  }catch(e){
-    const msg = e.name==='AbortError' ? 'Timeout — le serveur met trop de temps.' : e.message;
-    mc.innerHTML = `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
-      <div style="margin-bottom:12px">⚠️ ${msg}</div>
-      <button class="btn-scrape" onclick="compareDraws('${todA}','${todB}')" style="padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
-      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Analyse simple</button>
-      <div style="color:var(--muted2);font-size:.8rem;margin-top:12px">Astuce : analysez d'abord chaque tirage individuellement (sélectionnez le TOD puis Analyser), ensuite comparez.</div>
-    </div>`;
-    return;
-  }
-  if(dA.error || dB.error){
-    const missing = dA.error ? labelA : labelB;
-    mc.innerHTML = `<div class="card" style="padding:24px;text-align:center">
-      <div style="font-size:1.1rem;color:#ff9966;margin-bottom:12px">⚠️ Données insuffisantes</div>
-      <div style="color:var(--muted2);font-size:.9rem;margin-bottom:16px">Pas assez de tirages pour <strong>${missing}</strong>. Cliquez d'abord sur <strong>Scraper</strong> pour récupérer les données, puis réessayez.</div>
-      <button class="btn-scrape" onclick="runScrape()" style="padding:8px 18px;border-radius:8px;margin-right:8px">🔄 Scraper</button>
-      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Retour à l'analyse</button>
-    </div>`;
-    return;
-  }
-
-  const topA = (dA.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
-  const topB = (dB.consensus||[]).slice(0,10).map(c=>Array.isArray(c)?c.join('-'):c);
-  const convSet = new Set(topA.filter(c=>topB.includes(c)));
-
-  function comboRow(c, rank){
-    const key = Array.isArray(c)?c.join('-'):c;
-    const inBoth = convSet.has(key);
-    const balls  = key.split('-').map(n=>`<span class="cmp-ball">${n}</span>`).join('');
-    const badge  = inBoth ? `<span class="cmp-conv-badge">✓ Convergence</span>` : '';
-    return `<div class="cmp-row rank${rank} ${inBoth?'cmp-conv':''}">
-      <span class="cmp-rank">#${rank}</span>${balls}${badge}
-    </div>`;
-  }
-
-  function colHTML(data, label, combos){
-    const ld    = data.last_draw;
-    const ldStr = ld ? `${ld.date} · ${ld.numbers?.join('-')||''}` : '—';
-    return `<div class="cmp-col">
-      <div class="cmp-col-title">${label}</div>
-      <div class="cmp-col-meta">Dernier tirage : ${ldStr}</div>
-      <div class="cmp-combos">${combos.map((c,i)=>comboRow(c,i+1)).join('')}</div>
-    </div>`;
-  }
-
-  const convList = [...convSet];
-  const convHTML = convList.length
-    ? convList.map((key,i)=>{
-        const balls = key.split('-').map(n=>`<span class="cmp-ball cmp-ball-gold">${n}</span>`).join('');
-        return `<div class="cmp-row cmp-conv" style="justify-content:center;gap:12px">
-          <span class="cmp-rank">#${i+1}</span>${balls}
-        </div>`;
-      }).join('')
-    : `<div style="color:var(--muted2);font-size:.85rem;padding:12px 0">Aucune convergence dans le Top 10 — les deux tirages divergent aujourd'hui.</div>`;
-
-  mc.innerHTML = `
-    <div class="cmp-header">
-      <div class="cmp-title">⚖ ${labelA} vs ${labelB} — ${dA.state_name||state}</div>
-      <div class="cmp-sub">Consensus Top 10 · ${(dA.total_draws||0) + (dB.total_draws||0)} tirages analysés</div>
-    </div>
-    <div class="cmp-conv-block">
-      <div class="cmp-conv-title">🎯 Convergences (présentes dans les deux tirages)</div>
-      ${convHTML}
-    </div>
-    <div class="cmp-grid">
-      ${colHTML(dA, labelA, (dA.consensus||[]).slice(0,10))}
-      ${colHTML(dB, labelB, (dB.consensus||[]).slice(0,10))}
-    </div>
-    <div style="text-align:center;margin-top:18px">
-      <button class="btn-analyze" onclick="loadReport()" style="font-size:.85rem;padding:8px 18px">⚡ Retour à l'analyse complète</button>
-    </div>
-  `;
-}
 
 function updateSidebar(d){
   const state = d.state_name||d.state;
@@ -2434,7 +2260,7 @@ function renderInlineBanner(){
     border:1px solid rgba(79,110,255,.22);border-radius:12px;
     padding:12px 18px;margin-bottom:18px;cursor:pointer;
     transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(79,110,255,.5)'"
-    onmouseout="this.style.borderColor='rgba(79,110,255,.22)'" onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank')">
+    onmouseout="this.style.borderColor='rgba(79,110,255,.22)'" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank')">
     <span style="font-size:1.6rem;flex-shrink:0">🎰</span>
     <div style="flex:1;min-width:0">
       <div style="font-size:.8rem;font-weight:700;color:var(--text)">TheLotter — Tickets officiels en ligne</div>
@@ -2444,7 +2270,7 @@ function renderInlineBanner(){
       <span style="font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Publicité</span>
       <button style="padding:7px 16px;border-radius:8px;font-size:.72rem;font-weight:700;
         background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer"
-        onclick="window.open(window.PREDIKTA_AFFILIATE.thelotter,'_blank')">Jouer →</button>
+        onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank')">Jouer →</button>
     </div>
   </div>`;
 }

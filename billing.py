@@ -50,7 +50,7 @@ if stripe is not None and STRIPE_SECRET_KEY:
     # interceptent le TLS (antivirus/proxy) et cassent la vérification du
     # certificat de api.stripe.com. Ne JAMAIS activer en production
     # (Render/Linux n'a pas ce problème).
-    if os.environ.get("STRIPE_INSECURE_SSL") == "1":
+    if os.environ.get("STRIPE_INSECURE_SSL") == "1" and os.environ.get("RENDER") is None:
         from stripe._http_client import RequestsClient
         stripe.default_http_client = RequestsClient(verify_ssl_certs=False)
 

@@ -24,4 +24,4 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /admin
 
-Sitemap: https://predikta-tez2.onrender.com/sitemap.xml
+Sitemap: https://www.zynoriq.com/sitemap.xml
