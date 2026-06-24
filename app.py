@@ -659,7 +659,8 @@ def _auto_update_loop():
             try:
                 from weight_calibrator_lotto import calibrate_lotto_if_needed
                 from games_scraper import load_game_results as _lgr
-                for _lstate, _lgames in LOTTO_GAMES.items():
+                _lotto_games = globals().get("LOTTO_GAMES", {})
+                for _lstate, _lgames in _lotto_games.items():
                     for _lgame in _lgames:
                         _ldraws = _lgr(_lstate, _lgame["slug"])
                         if len(_ldraws) >= 50:
@@ -768,9 +769,9 @@ def _draw_watcher_loop():
             from smart_scraper import get_states_due_now, scrape_state
             from draw_schedule import DRAW_SCHEDULE, _parse_schedule_time
             from zoneinfo import ZoneInfo
-            from datetime import timezone as _tz, timedelta as _td
+            from datetime import timezone as _dttz, timedelta as _td
 
-            now_utc = datetime.utcnow().replace(tzinfo=_tz.utc)
+            now_utc = datetime.utcnow().replace(tzinfo=_dttz.utc)
             now_epoch = time.time()
 
             # ── Calcul de la prochaine fenêtre de tirage ────────────────────
@@ -792,7 +793,7 @@ def _draw_watcher_loop():
                             _dl = _nl.replace(hour=_h, minute=_m, second=0, microsecond=0)
                             if _dl <= _nl:
                                 _dl += timedelta(days=1)
-                            _mins_to = (_dl.astimezone(timezone.utc) - now_utc).total_seconds() / 60
+                            _mins_to = (_dl.astimezone(_dttz.utc) - now_utc).total_seconds() / 60
                             _today = now_utc.strftime("%Y-%m-%d")
                             _pkey  = f"{_st}_{_sess['tod']}_{_today}"
                             # Fenêtre pré-tirage : 10 → 2 min avant
