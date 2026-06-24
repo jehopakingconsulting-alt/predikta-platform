@@ -237,6 +237,10 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
   .state-tabs{display:grid;grid-template-columns:repeat(4,1fr)}
   .game-label{min-width:120px}
 }
+@media(max-width:400px){
+  .state-tabs{grid-template-columns:repeat(3,1fr)}
+  .game-label{min-width:90px;font-size:.7rem}
+}
 </style>
 </head>
 <body>

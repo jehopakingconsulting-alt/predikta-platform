@@ -1128,7 +1128,7 @@ footer{
       </div>
     </div>
   </div>
-  <a href="/results" class="btn-results">🟢 Résultats du Jour</a>
+  <a href="/results" class="btn-results" id="btn-results-link"><span id="btn-results-label">🟢 Résultats du Jour</span></a>
 </div>
 <span id="status"></span>
 </div>
@@ -1332,7 +1332,7 @@ const T = {
   fr:{
     heroTitle:"Prédictions par Analyse Prédictive",
     heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analyser",btnScrape:"🔄 Scraper",btnArchives:"📂 Archives",
+    btnAnalyze:"⚡ Analyser",btnScrape:"🔄 Scraper",btnArchives:"📂 Archives",btnResults:"🟢 Résultats du Jour",widgetTitle:"Résultats du Jour",widgetSeeAll:"Voir tous →",widgetFull:"🎱 Page Résultats Complète →",
     welcome:"Sélectionnez un État et cliquez sur ⚡ Analyser",
     analyzing:"⚙️ Analyse multi-modèles en cours...",
     scraping:"⏳ Scraping en cours...",
@@ -1377,7 +1377,7 @@ const T = {
   en:{
     heroTitle:"Advanced Algorithm Predictions",
     heroSub:"Cash3 · Pick3 · New York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analyze",btnScrape:"🔄 Scrape Data",btnArchives:"📂 Archives",
+    btnAnalyze:"⚡ Analyze",btnScrape:"🔄 Scrape Data",btnArchives:"📂 Archives",btnResults:"🟢 Today's Results",widgetTitle:"Today's Results",widgetSeeAll:"See all →",widgetFull:"🎱 Full Results Page →",
     welcome:"Select a State and click ⚡ Analyze",
     analyzing:"⚙️ Running multi-model analysis...",
     scraping:"⏳ Scraping in progress...",
@@ -1422,7 +1422,7 @@ const T = {
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
     heroSub:"Cash3 · Pick3 · Nueva York · Georgia · Texas · Florida",
-    btnAnalyze:"⚡ Analizar",btnScrape:"🔄 Scrapear",btnArchives:"📂 Archivos",
+    btnAnalyze:"⚡ Analizar",btnScrape:"🔄 Scrapear",btnArchives:"📂 Archivos",btnResults:"🟢 Resultados del Día",widgetTitle:"Resultados del Día",widgetSeeAll:"Ver todos →",widgetFull:"🎱 Página de Resultados →",
     welcome:"Seleccione un Estado y haga clic en ⚡ Analizar",
     analyzing:"⚙️ Análisis multi-modelo en progreso...",
     scraping:"⏳ Scrapeando datos...",
@@ -1467,7 +1467,7 @@ const T = {
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
     heroSub:"Cash3 · Pick3 · Nova York · Geórgia · Texas · Flórida",
-    btnAnalyze:"⚡ Analisar",btnScrape:"🔄 Raspar Dados",btnArchives:"📂 Arquivos",
+    btnAnalyze:"⚡ Analisar",btnScrape:"🔄 Raspar Dados",btnArchives:"📂 Arquivos",btnResults:"🟢 Resultados do Dia",widgetTitle:"Resultados do Dia",widgetSeeAll:"Ver todos →",widgetFull:"🎱 Página de Resultados →",
     welcome:"Selecione um Estado e clique em ⚡ Analisar",
     analyzing:"⚙️ Análise multi-modelo em andamento...",
     scraping:"⏳ Raspando dados...",
@@ -1512,7 +1512,7 @@ const T = {
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
     heroSub:"Cash3 · Pick3 · New York · Jòji · Teksas · Florid",
-    btnAnalyze:"⚡ Analize",btnScrape:"🔄 Chache Done",btnArchives:"📂 Achiv",
+    btnAnalyze:"⚡ Analize",btnScrape:"🔄 Chache Done",btnArchives:"📂 Achiv",btnResults:"🟢 Rezilta Jodi a",widgetTitle:"Rezilta Jodi a",widgetSeeAll:"Wè tout →",widgetFull:"🎱 Paj Rezilta Konplè →",
     welcome:"Chwazi yon Eta epi klike sou ⚡ Analize",
     analyzing:"⚙️ Analiz ap mache...",
     scraping:"⏳ Chache done...",
@@ -1582,6 +1582,8 @@ function setLang(lang){
   if(btnSc)     btnSc.textContent     = t('btnScrape');
   const btnAr = document.getElementById('btn-archives-label');
   if(btnAr)     btnAr.textContent     = t('btnArchives').replace('📂 ','');
+  const btnRs = document.getElementById('btn-results-label');
+  if(btnRs)     btnRs.textContent     = t('btnResults');
   if(vidTitle)  vidTitle.textContent  = t('videoTitle');
   const tvPromo = document.getElementById('tvPromoText');
   if(tvPromo)   tvPromo.textContent   = t('tvPromoText');

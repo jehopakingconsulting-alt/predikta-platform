@@ -64,13 +64,13 @@ button.submit:disabled{opacity:.6;cursor:default}
     </div>
 
     <label for="rUsername" data-i18n="lblUsername">Nom d'utilisateur</label>
-    <input type="text" id="rUsername" placeholder="ex: john_doe" autocomplete="username"/>
+    <input type="text" id="rUsername" placeholder="ex: john_doe" autocomplete="username" required minlength="3" maxlength="30"/>
 
     <label for="rEmail" data-i18n="lblEmail">Email</label>
-    <input type="email" id="rEmail" placeholder="ton@email.com" autocomplete="email"/>
+    <input type="email" id="rEmail" placeholder="ton@email.com" autocomplete="email" required/>
 
     <label for="rPassword" data-i18n="lblPassword">Mot de passe</label>
-    <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password"/>
+    <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password" required minlength="8"/>
 
     <label class="disclaimer">
       <input type="checkbox" id="rDisclaimer"/>
