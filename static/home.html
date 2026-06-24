@@ -421,6 +421,16 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   </div>
 </div>
 
+<!-- ══ Social Proof Banner ══ -->
+<div id="socialProof" class="section" style="display:none">
+  <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:24px;padding:16px 0">
+    <div style="text-align:center"><div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#22e87a" id="spUsers">—</div><div style="font-size:.7rem;color:#4d5a8a" data-i18n="spUsersLbl">Utilisateurs actifs</div></div>
+    <div style="text-align:center"><div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#ffd700" id="spAnalyses">—</div><div style="font-size:.7rem;color:#4d5a8a" data-i18n="spAnalysesLbl">Analyses générées</div></div>
+    <div style="text-align:center"><div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#1479FF" id="spStates">—</div><div style="font-size:.7rem;color:#4d5a8a" data-i18n="spStatesLbl">États couverts</div></div>
+    <div style="text-align:center"><div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#aa66ff" id="spLangs">—</div><div style="font-size:.7rem;color:#4d5a8a" data-i18n="spLangsLbl">Langues</div></div>
+  </div>
+</div>
+
 <!-- ══ ZYNORIQ MEMORY™ — Personalized Dashboard ══ -->
 <div id="memoryDashboard" class="section" style="display:none">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
@@ -463,6 +473,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     ht:{since:'Depi dènye vizit ou',visits:'Vizit',convos:'Konvèsasyon',analyses:'Analiz',level:'Nivo',favTitle:'Eta prefere ou yo',new:'Nouvo',active:'Aktif',regular:'Regilye',power_user:'Itilizatè avanse',recsTitle:'Rekòmandasyon pou ou'},
   };
   function mt(k){return (MDT[window.PREDIKTA_LANG]||MDT.en)[k]||k;}
+
+  // Social Proof
+  fetch('/api/social-proof').then(r=>r.json()).then(d=>{
+    document.getElementById('socialProof').style.display='';
+    document.getElementById('spUsers').textContent=d.users||0;
+    document.getElementById('spAnalyses').textContent=(d.analyses||0).toLocaleString();
+    document.getElementById('spStates').textContent=d.states||44;
+    document.getElementById('spLangs').textContent=d.languages||5;
+  }).catch(()=>{});
 
   fetch('/api/memory/dashboard?lang='+(window.PREDIKTA_LANG||'fr'))
     .then(r=>{if(!r.ok) throw 0; return r.json();})
@@ -889,6 +908,7 @@ const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 const T = {
   fr:{
     ctaFree:"🚀 Commencer gratuitement",ctaAnalyze:"⚡ Analyser maintenant",
+    spUsersLbl:"Utilisateurs actifs",spAnalysesLbl:"Analyses générées",spStatesLbl:"États couverts",spLangsLbl:"Langues",
     heroKicker:"🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée",
     heroSub:"Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
@@ -964,6 +984,7 @@ const T = {
   },
   en:{
     ctaFree:"🚀 Start for free",ctaAnalyze:"⚡ Analyze now",
+    spUsersLbl:"Active users",spAnalysesLbl:"Analyses generated",spStatesLbl:"States covered",spLangsLbl:"Languages",
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Intelligence Beyond Prediction by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
@@ -1039,6 +1060,7 @@ const T = {
   },
   es:{
     ctaFree:"🚀 Comenzar gratis",ctaAnalyze:"⚡ Analizar ahora",
+    spUsersLbl:"Usuarios activos",spAnalysesLbl:"Análisis generados",spStatesLbl:"Estados cubiertos",spLangsLbl:"Idiomas",
     heroKicker:"🌍 Plataforma Global · Impulsada por Análisis Avanzado",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
@@ -1114,6 +1136,7 @@ const T = {
   },
   pt:{
     ctaFree:"🚀 Começar grátis",ctaAnalyze:"⚡ Analisar agora",
+    spUsersLbl:"Usuários ativos",spAnalysesLbl:"Análises geradas",spStatesLbl:"Estados cobertos",spLangsLbl:"Idiomas",
     heroKicker:"🌍 Plataforma Global · Impulsionada por Análise Avançada",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
@@ -1189,6 +1212,7 @@ const T = {
   },
   ht:{
     ctaFree:"🚀 Kòmanse gratis",ctaAnalyze:"⚡ Analize kounye a",
+    spUsersLbl:"Itilizatè aktif",spAnalysesLbl:"Analiz jenere",spStatesLbl:"Eta kouvri",spLangsLbl:"Lang",
     heroKicker:"🌍 Platfòm Mondyal · Pwopilse pa Analiz Avanse",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
