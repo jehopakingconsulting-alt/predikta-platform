@@ -47,6 +47,8 @@ if not _secret_key:
     print("[WARNING] ZYNORIQ_SECRET_KEY not set — using a random key; sessions will not survive restarts")
 app.secret_key = _secret_key
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = os.environ.get("RENDER") is not None
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=30)
 
 # ── Comptes utilisateurs / abonnements (SQLAlchemy) ───────────────────────
