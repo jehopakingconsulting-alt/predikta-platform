@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Founding Members — ZYNORIQ Intelligence™</title>
+<meta name="description" content="Rejoignez les 500 premiers membres fondateurs de ZYNORIQ. Prix garanti à vie, badge Founder, accès prioritaire."/>
+<meta property="og:title" content="ZYNORIQ Founding Members Program"/>
+<meta property="og:description" content="500 places only. Lock your Founder price forever."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 30%,rgba(255,215,0,.06) 0%,transparent 60%)}
+.page{max-width:800px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;text-align:center;
+  background:linear-gradient(135deg,#ffd700,#ffaa00,#ff8800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:32px;line-height:1.7}
+.badge-hero{text-align:center;margin-bottom:32px}
+.badge-hero .badge{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:40px;
+  background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,136,0,.1));border:1px solid rgba(255,215,0,.4);
+  font-size:.85rem;font-weight:700;color:var(--gold)}
+.counter-wrap{text-align:center;margin-bottom:40px}
+.counter{display:inline-flex;align-items:baseline;gap:8px;font-family:'Orbitron',monospace}
+.counter .num{font-size:2.5rem;font-weight:900;color:var(--gold)}
+.counter .label{font-size:.85rem;color:var(--muted)}
+.progress-bar{max-width:400px;margin:12px auto 0;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),#ff8800);transition:width .6s}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-bottom:20px}
+.card h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;margin-bottom:14px;color:var(--gold)}
+.perks{list-style:none;display:grid;gap:12px}
+.perks li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;line-height:1.6}
+.perks li::before{content:'✓';color:var(--gold);font-weight:800;flex-shrink:0;margin-top:1px}
+.price-block{text-align:center;padding:32px 20px;margin-bottom:24px}
+.price-block .old{font-size:1rem;color:var(--muted);text-decoration:line-through;margin-bottom:4px}
+.price-block .new{font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:900;color:var(--gold)}
+.price-block .note{font-size:.75rem;color:var(--muted);margin-top:6px}
+.cta-btn{display:block;width:100%;max-width:420px;margin:0 auto 20px;padding:16px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,#ffd700,#ff8800);color:#1a0800;font-weight:800;font-size:1.05rem;
+  cursor:pointer;text-align:center;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,215,0,.4)}
+.cta-btn:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+.cta-sub{text-align:center;font-size:.75rem;color:var(--muted);margin-bottom:32px}
+.testimonials{display:grid;gap:14px;margin-bottom:20px}
+.testimonial{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px}
+.testimonial .name{font-weight:700;font-size:.82rem;color:var(--gold);margin-bottom:4px}
+.testimonial .text{font-size:.82rem;color:var(--muted);line-height:1.6;font-style:italic}
+.faq-item{border-bottom:1px solid var(--border);padding:14px 0}
+.faq-q{font-weight:700;font-size:.88rem;cursor:pointer;color:var(--text)}
+.faq-a{font-size:.82rem;color:var(--muted);line-height:1.7;margin-top:8px;display:none}
+.faq-item.open .faq-a{display:block}
+#founderMsg{text-align:center;margin-top:12px;font-size:.85rem}
+.msg-ok{color:var(--green)}.msg-err{color:#ff5577}
+@media(max-width:600px){h1{font-size:1.5rem}.counter .num{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="badge-hero"><span class="badge">🏅 Founding Members 2026</span></div>
+  <h1 data-i18n="title">Devenez Membre Fondateur</h1>
+  <p class="subtitle" data-i18n="subtitle">Rejoignez les 500 premiers membres de ZYNORIQ Intelligence™. Prix garanti à vie. Badge exclusif. Accès prioritaire à toutes les futures fonctionnalités.</p>
+
+  <div class="counter-wrap">
+    <div class="counter">
+      <span class="num" id="fRemaining">—</span>
+      <span class="label" data-i18n="placesLeft">places restantes sur 500</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="fProgress" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="perksTitle">Avantages Fondateur</h2>
+    <ul class="perks" id="perksList">
+      <li data-i18n="p1">Prix fondateur garanti à vie — jamais d'augmentation</li>
+      <li data-i18n="p2">Badge numérique Founder avec votre numéro unique (#001 à #500)</li>
+      <li data-i18n="p3">Accès prioritaire à toutes les nouvelles fonctionnalités</li>
+      <li data-i18n="p4">Support prioritaire par email</li>
+      <li data-i18n="p5">Accès au canal privé Founders</li>
+      <li data-i18n="p6">Certificat numérique Founding Member personnalisé</li>
+      <li data-i18n="p7">Mention dans le Wall of Founders sur le site</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="price-block">
+      <div class="old" data-i18n="regularPrice">Prix régulier : $49/mois (VIP)</div>
+      <div class="new" data-i18n="founderPrice">$29/mois à vie</div>
+      <div class="note" data-i18n="priceNote">Facturé mensuellement · Annulable à tout moment · Prix verrouillé pour toujours</div>
+    </div>
+  </div>
+
+  <a href="/register?plan=vip&founder=1" class="cta-btn" id="founderCta" data-i18n="ctaBtn">🏅 Devenir Membre Fondateur</a>
+  <div class="cta-sub" data-i18n="ctaSub">Paiement sécurisé par Stripe · Essai gratuit 7 jours · Annulation en 1 clic</div>
+  <div id="founderMsg"></div>
+
+  <div class="card">
+    <h2 data-i18n="testimonialsTitle">Ce que disent nos premiers utilisateurs</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="name">Marco T. — Florida</div>
+        <div class="text" data-i18n="t1">"Les prédictions de ZYNORIQ m'ont permis de mieux comprendre les patterns. L'outil est incroyable."</div>
+      </div>
+      <div class="testimonial">
+        <div class="name">Sarah K. — New York</div>
+        <div class="text" data-i18n="t2">"Le Copilot IA est comme avoir un analyste personnel. J'utilise ZYNORIQ tous les jours."</div>
+      </div>
+      <div class="testimonial">
+        <div class="name">David R. — Texas</div>
+        <div class="text" data-i18n="t3">"7 algorithmes ML pour le prix d'un café. Le programme Fondateur est une évidence."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="faqTitle">Questions fréquentes</h2>
+    <div id="faqList">
+      <div class="faq-item"><div class="faq-q" data-i18n="fq1">Qu'est-ce que le programme Fondateur ?</div><div class="faq-a" data-i18n="fa1">Le programme Fondateur est une offre limitée à 500 places. En tant que membre fondateur, vous verrouillez votre prix VIP à $29/mois à vie, même si les prix augmentent à l'avenir.</div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="fq2">Le prix est-il vraiment garanti à vie ?</div><div class="faq-a" data-i18n="fa2">Oui. Tant que votre abonnement reste actif, vous gardez le prix fondateur de $29/mois. Même si le plan VIP passe à $99/mois dans le futur.</div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="fq3">Puis-je annuler à tout moment ?</div><div class="faq-a" data-i18n="fa3">Absolument. Annulation en 1 clic depuis votre compte. Aucun engagement. Si vous revenez, le prix fondateur est conservé si des places sont encore disponibles.</div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="fq4">Que se passe-t-il quand les 500 places sont prises ?</div><div class="faq-a" data-i18n="fa4">Le programme se ferme définitivement. Les nouveaux utilisateurs devront payer le prix régulier. Les fondateurs gardent leurs avantages.</div></div>
+      <div class="faq-item"><div class="faq-q" data-i18n="fq5">Y a-t-il un essai gratuit ?</div><div class="faq-a" data-i18n="fa5">Oui, 7 jours d'essai gratuit. Vous ne serez facturé qu'après la période d'essai.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const T={
+  fr:{title:"Devenez Membre Fondateur",subtitle:"Rejoignez les 500 premiers membres de ZYNORIQ Intelligence™. Prix garanti à vie. Badge exclusif. Accès prioritaire à toutes les futures fonctionnalités.",
+    placesLeft:"places restantes sur 500",perksTitle:"Avantages Fondateur",
+    p1:"Prix fondateur garanti à vie — jamais d'augmentation",p2:"Badge numérique Founder avec votre numéro unique (#001 à #500)",p3:"Accès prioritaire à toutes les nouvelles fonctionnalités",p4:"Support prioritaire par email",p5:"Accès au canal privé Founders",p6:"Certificat numérique Founding Member personnalisé",p7:"Mention dans le Wall of Founders sur le site",
+    regularPrice:"Prix régulier : $49/mois (VIP)",founderPrice:"$29/mois à vie",priceNote:"Facturé mensuellement · Annulable à tout moment · Prix verrouillé pour toujours",
+    ctaBtn:"🏅 Devenir Membre Fondateur",ctaSub:"Paiement sécurisé par Stripe · Essai gratuit 7 jours · Annulation en 1 clic",
+    testimonialsTitle:"Ce que disent nos premiers utilisateurs",t1:"\"Les prédictions de ZYNORIQ m'ont permis de mieux comprendre les patterns. L'outil est incroyable.\"",t2:"\"Le Copilot IA est comme avoir un analyste personnel. J'utilise ZYNORIQ tous les jours.\"",t3:"\"7 algorithmes ML pour le prix d'un café. Le programme Fondateur est une évidence.\"",
+    faqTitle:"Questions fréquentes",fq1:"Qu'est-ce que le programme Fondateur ?",fa1:"Le programme Fondateur est une offre limitée à 500 places. En tant que membre fondateur, vous verrouillez votre prix VIP à $29/mois à vie, même si les prix augmentent à l'avenir.",fq2:"Le prix est-il vraiment garanti à vie ?",fa2:"Oui. Tant que votre abonnement reste actif, vous gardez le prix fondateur de $29/mois. Même si le plan VIP passe à $99/mois dans le futur.",fq3:"Puis-je annuler à tout moment ?",fa3:"Absolument. Annulation en 1 clic depuis votre compte. Aucun engagement.",fq4:"Que se passe-t-il quand les 500 places sont prises ?",fa4:"Le programme se ferme définitivement. Les nouveaux utilisateurs devront payer le prix régulier.",fq5:"Y a-t-il un essai gratuit ?",fa5:"Oui, 7 jours d'essai gratuit. Vous ne serez facturé qu'après la période d'essai.",
+    soldOut:"Programme complet",alreadyFounder:"Vous êtes déjà Fondateur"},
+  en:{title:"Become a Founding Member",subtitle:"Join the first 500 members of ZYNORIQ Intelligence™. Price locked forever. Exclusive badge. Priority access to all future features.",
+    placesLeft:"spots remaining out of 500",perksTitle:"Founder Benefits",
+    p1:"Founder price guaranteed for life — no increases ever",p2:"Digital Founder badge with your unique number (#001 to #500)",p3:"Priority access to all new features",p4:"Priority email support",p5:"Access to private Founders channel",p6:"Personalized Founding Member digital certificate",p7:"Listed on the Wall of Founders",
+    regularPrice:"Regular price: $49/mo (VIP)",founderPrice:"$29/mo for life",priceNote:"Billed monthly · Cancel anytime · Price locked forever",
+    ctaBtn:"🏅 Become a Founding Member",ctaSub:"Secure payment via Stripe · 7-day free trial · Cancel in 1 click",
+    testimonialsTitle:"What our early users say",t1:"\"ZYNORIQ predictions helped me understand patterns better. The tool is incredible.\"",t2:"\"The AI Copilot is like having a personal analyst. I use ZYNORIQ every day.\"",t3:"\"7 ML algorithms for the price of a coffee. The Founder program is a no-brainer.\"",
+    faqTitle:"Frequently Asked Questions",fq1:"What is the Founder program?",fa1:"The Founder program is limited to 500 spots. As a founding member, you lock in your VIP price at $29/mo for life.",fq2:"Is the price really guaranteed for life?",fa2:"Yes. As long as your subscription stays active, you keep the founder price of $29/mo.",fq3:"Can I cancel anytime?",fa3:"Absolutely. Cancel in 1 click from your account. No commitment.",fq4:"What happens when all 500 spots are taken?",fa4:"The program closes permanently. New users will pay regular price.",fq5:"Is there a free trial?",fa5:"Yes, 7-day free trial. You won't be charged until after the trial period.",
+    soldOut:"Program full",alreadyFounder:"You are already a Founder"},
+  es:{title:"Conviértase en Miembro Fundador",subtitle:"Únase a los primeros 500 miembros de ZYNORIQ Intelligence™. Precio garantizado de por vida. Insignia exclusiva.",placesLeft:"lugares restantes de 500",perksTitle:"Beneficios Fundador",p1:"Precio fundador garantizado de por vida",p2:"Insignia digital Founder con número único (#001 a #500)",p3:"Acceso prioritario a nuevas funcionalidades",p4:"Soporte prioritario por email",p5:"Acceso al canal privado Founders",p6:"Certificado digital personalizado",p7:"Mención en el Wall of Founders",regularPrice:"Precio regular: $49/mes (VIP)",founderPrice:"$29/mes de por vida",priceNote:"Facturado mensualmente · Cancelable en cualquier momento",ctaBtn:"🏅 Ser Miembro Fundador",ctaSub:"Pago seguro por Stripe · 7 días gratis · Cancelación en 1 clic",testimonialsTitle:"Lo que dicen nuestros usuarios",t1:"\"Las predicciones de ZYNORIQ me ayudaron a entender los patrones.\"",t2:"\"El Copilot IA es como tener un analista personal.\"",t3:"\"7 algoritmos ML por el precio de un café. El programa Fundador es obvio.\"",faqTitle:"Preguntas frecuentes",fq1:"¿Qué es el programa Fundador?",fa1:"Una oferta limitada a 500 plazas con precio VIP de $29/mes de por vida.",fq2:"¿El precio está garantizado?",fa2:"Sí, mientras su suscripción esté activa.",fq3:"¿Puedo cancelar?",fa3:"Sí, cancelación en 1 clic.",fq4:"¿Qué pasa cuando se agotan las plazas?",fa4:"El programa se cierra definitivamente.",fq5:"¿Hay prueba gratuita?",fa5:"Sí, 7 días gratis.",soldOut:"Programa completo",alreadyFounder:"Ya es Fundador"},
+  pt:{title:"Torne-se Membro Fundador",subtitle:"Junte-se aos primeiros 500 membros do ZYNORIQ Intelligence™. Preço garantido para sempre. Badge exclusivo.",placesLeft:"vagas restantes de 500",perksTitle:"Benefícios Fundador",p1:"Preço fundador garantido para sempre",p2:"Badge digital Founder com número único (#001 a #500)",p3:"Acesso prioritário a novas funcionalidades",p4:"Suporte prioritário por email",p5:"Acesso ao canal privado Founders",p6:"Certificado digital personalizado",p7:"Menção no Wall of Founders",regularPrice:"Preço regular: $49/mês (VIP)",founderPrice:"$29/mês para sempre",priceNote:"Cobrado mensalmente · Cancele a qualquer momento",ctaBtn:"🏅 Ser Membro Fundador",ctaSub:"Pagamento seguro via Stripe · 7 dias grátis · Cancelamento em 1 clique",testimonialsTitle:"O que dizem nossos usuários",t1:"\"As previsões do ZYNORIQ me ajudaram a entender os padrões.\"",t2:"\"O Copilot IA é como ter um analista pessoal.\"",t3:"\"7 algoritmos ML pelo preço de um café.\"",faqTitle:"Perguntas frequentes",fq1:"O que é o programa Fundador?",fa1:"Uma oferta limitada a 500 vagas com preço VIP de $29/mês para sempre.",fq2:"O preço é garantido?",fa2:"Sim, enquanto sua assinatura estiver ativa.",fq3:"Posso cancelar?",fa3:"Sim, cancelamento em 1 clique.",fq4:"O que acontece quando as vagas acabam?",fa4:"O programa fecha definitivamente.",fq5:"Há teste gratuito?",fa5:"Sim, 7 dias grátis.",soldOut:"Programa completo",alreadyFounder:"Você já é Fundador"},
+  ht:{title:"Vin yon Manm Fondatè",subtitle:"Rejwenn 500 premye manm ZYNORIQ Intelligence™. Pri garanti pou tout lavi. Badge eksklizif.",placesLeft:"plas ki rete sou 500",perksTitle:"Avantaj Fondatè",p1:"Pri fondatè garanti pou tout lavi",p2:"Badge dijital Founder ak nimewo inik ou (#001 a #500)",p3:"Aksè priyorite nan tout nouvo fonksyonalite",p4:"Sipò priyorite pa email",p5:"Aksè nan kanal prive Founders",p6:"Sètifika dijital pèsonalize",p7:"Mansyon nan Wall of Founders",regularPrice:"Pri regilye: $49/mwa (VIP)",founderPrice:"$29/mwa pou tout lavi",priceNote:"Fakti chak mwa · Anile nenpòt ki lè",ctaBtn:"🏅 Vin Manm Fondatè",ctaSub:"Peman sekirize pa Stripe · 7 jou gratis · Anilasyon an 1 klik",testimonialsTitle:"Sa itilizatè nou yo di",t1:"\"Prediksyon ZYNORIQ ede m konprann patwon yo pi byen.\"",t2:"\"Copilot IA a se tankou gen yon analis pèsonèl.\"",t3:"\"7 algoritm ML pou pri yon kafe.\"",faqTitle:"Kesyon yo poze souvan",fq1:"Kisa pwogram Fondatè a ye?",fa1:"Yon òf limite a 500 plas ak pri VIP $29/mwa pou tout lavi.",fq2:"Èske pri a garanti?",fa2:"Wi, toutotan abònman ou aktif.",fq3:"Èske m ka anile?",fa3:"Wi, anilasyon an 1 klik.",fq4:"Ki sa k pase lè plas yo fini?",fa4:"Pwogram nan fèmen definitvman.",fq5:"Èske gen esè gratis?",fa5:"Wi, 7 jou gratis.",soldOut:"Pwogram konplè",alreadyFounder:"Ou deja yon Fondatè"}
+};
+
+const lang = window.PREDIKTA_LANG || 'fr';
+const t = T[lang] || T.fr;
+document.querySelectorAll('[data-i18n]').forEach(el=>{
+  const k = el.dataset.i18n;
+  if(t[k]) el.textContent = t[k];
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+
+// Counter
+fetch('/api/founders/status').then(r=>r.json()).then(d=>{
+  document.getElementById('fRemaining').textContent = d.remaining;
+  const pct = Math.round((d.claimed / d.total) * 100);
+  document.getElementById('fProgress').style.width = pct + '%';
+  if(d.remaining <= 0){
+    document.getElementById('founderCta').textContent = t.soldOut;
+    document.getElementById('founderCta').style.opacity = '.5';
+    document.getElementById('founderCta').style.pointerEvents = 'none';
+  }
+}).catch(()=>{
+  document.getElementById('fRemaining').textContent = '500';
+});
+</script>
+</body></html>

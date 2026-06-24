@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ambassador Program — ZYNORIQ Intelligence™</title>
+<meta name="description" content="Devenez ambassadeur ZYNORIQ. Parrainez, gagnez des commissions récurrentes et montez en grade."/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="/nav.js" defer></script>
+<style>
+:root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--gold:#ffd700;--green:#22e87a;--text:#e8eeff;--muted:#4d5a8a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 30%,rgba(79,110,255,.06) 0%,transparent 60%)}
+.page{max-width:900px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1}
+h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.2rem);font-weight:900;text-align:center;
+  background:linear-gradient(135deg,#6688ff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.subtitle{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:36px;line-height:1.7}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+.card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:20px}
+.card h2{font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;margin-bottom:14px;color:var(--accent)}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.tier{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
+.tier-icon{font-size:2rem;margin-bottom:8px}
+.tier-name{font-family:'Orbitron',monospace;font-weight:700;font-size:.95rem;margin-bottom:6px}
+.tier-req{font-size:.72rem;color:var(--muted);margin-bottom:10px}
+.tier-reward{font-size:.82rem;color:var(--green);font-weight:700}
+.tier.bronze{border-color:#cd7f32}.tier.bronze .tier-name{color:#cd7f32}
+.tier.silver{border-color:#c0c0c0}.tier.silver .tier-name{color:#c0c0c0}
+.tier.gold{border-color:#ffd700}.tier.gold .tier-name{color:#ffd700}
+.tier.platinum{border-color:#e5e4e2}.tier.platinum .tier-name{color:#e5e4e2}
+.steps{display:grid;gap:14px;counter-reset:step}
+.step{display:flex;gap:14px;align-items:flex-start}
+.step::before{counter-increment:step;content:counter(step);display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.4);color:var(--accent);font-weight:800;font-size:.85rem;flex-shrink:0}
+.step-text{font-size:.88rem;line-height:1.6}
+.step-text strong{color:var(--accent)}
+.rewards{list-style:none;display:grid;gap:10px}
+.rewards li{display:flex;align-items:center;gap:10px;font-size:.85rem;padding:10px 14px;background:rgba(34,232,122,.06);border:1px solid rgba(34,232,122,.2);border-radius:10px}
+.rewards li .r-count{font-family:'Orbitron',monospace;font-weight:700;color:var(--green);min-width:90px}
+.rewards li .r-prize{color:var(--text)}
+.cta-btn{display:block;width:100%;max-width:420px;margin:24px auto;padding:16px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--accent),#004DFF);color:#fff;font-weight:800;font-size:1.05rem;
+  cursor:pointer;text-align:center;text-decoration:none;transition:all .2s;font-family:'Inter',sans-serif}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(79,110,255,.4)}
+.cta-sub{text-align:center;font-size:.75rem;color:var(--muted);margin-bottom:32px}
+.dash-preview{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:14px}
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+.dash-stat{text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:10px}
+.dash-stat .num{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:var(--accent)}
+.dash-stat .lbl{font-size:.68rem;color:var(--muted);margin-top:4px}
+@media(max-width:500px){.tiers{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 data-i18n="title">Programme Ambassadeur</h1>
+  <p class="subtitle" data-i18n="subtitle">Partagez ZYNORIQ avec votre réseau. Gagnez des commissions récurrentes sur chaque abonnement. Montez en grade et débloquez des récompenses exclusives.</p>
+
+  <div class="card">
+    <h2 data-i18n="tiersTitle">Niveaux Ambassadeur</h2>
+    <div class="tiers">
+      <div class="tier bronze"><div class="tier-icon">🥉</div><div class="tier-name">Bronze</div><div class="tier-req" data-i18n="bronzeReq">1-4 parrainages</div><div class="tier-reward" data-i18n="bronzeReward">10% commission</div></div>
+      <div class="tier silver"><div class="tier-icon">🥈</div><div class="tier-name">Silver</div><div class="tier-req" data-i18n="silverReq">5-14 parrainages</div><div class="tier-reward" data-i18n="silverReward">15% commission</div></div>
+      <div class="tier gold"><div class="tier-icon">🥇</div><div class="tier-name">Gold</div><div class="tier-req" data-i18n="goldReq">15-49 parrainages</div><div class="tier-reward" data-i18n="goldReward">20% commission</div></div>
+      <div class="tier platinum"><div class="tier-icon">💎</div><div class="tier-name">Platinum</div><div class="tier-req" data-i18n="platReq">50+ parrainages</div><div class="tier-reward" data-i18n="platReward">25% commission</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="howTitle">Comment ça marche</h2>
+    <div class="steps">
+      <div class="step"><div class="step-text" data-i18n="s1"><strong>Créez votre compte</strong> ZYNORIQ gratuitement</div></div>
+      <div class="step"><div class="step-text" data-i18n="s2"><strong>Obtenez votre lien unique</strong> de parrainage dans Mon Compte</div></div>
+      <div class="step"><div class="step-text" data-i18n="s3"><strong>Partagez</strong> sur vos réseaux, groupes, forums, YouTube</div></div>
+      <div class="step"><div class="step-text" data-i18n="s4"><strong>Gagnez des commissions</strong> récurrentes sur chaque abonnement payé</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="rewardsTitle">Récompenses Referral</h2>
+    <ul class="rewards">
+      <li><span class="r-count">3 amis</span><span class="r-prize" data-i18n="r1">+30 jours Pro gratuits</span></li>
+      <li><span class="r-count">10 amis</span><span class="r-prize" data-i18n="r2">Plan VIP gratuit 1 mois</span></li>
+      <li><span class="r-count">25 amis</span><span class="r-prize" data-i18n="r3">Plan Premium gratuit 1 mois</span></li>
+      <li><span class="r-count">50 amis</span><span class="r-prize" data-i18n="r4">Badge Platinum + 25% commission à vie</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="dashTitle">Votre Tableau de Bord</h2>
+    <div class="dash-preview">
+      <div class="dash-stats">
+        <div class="dash-stat"><div class="num" id="aReferrals">—</div><div class="lbl" data-i18n="dReferrals">Parrainages</div></div>
+        <div class="dash-stat"><div class="num" id="aEarnings">—</div><div class="lbl" data-i18n="dEarnings">Gains ($)</div></div>
+        <div class="dash-stat"><div class="num" id="aTier">—</div><div class="lbl" data-i18n="dTier">Niveau</div></div>
+        <div class="dash-stat"><div class="num" id="aRate">—</div><div class="lbl" data-i18n="dRate">Commission</div></div>
+      </div>
+      <div style="text-align:center;font-size:.78rem;color:var(--muted)" data-i18n="dashLogin">Connectez-vous pour voir vos statistiques</div>
+    </div>
+  </div>
+
+  <a href="/register" class="cta-btn" data-i18n="ctaBtn">🚀 Devenir Ambassadeur</a>
+  <div class="cta-sub" data-i18n="ctaSub">Gratuit · Aucun engagement · Commencez à gagner dès aujourd'hui</div>
+</div>
+
+<script>
+fetch('/api/auth/me').then(r=>r.json()).then(d=>{
+  if(!d.user) return;
+  fetch('/api/referral/me?email='+encodeURIComponent(d.user.email)).then(r=>r.json()).then(r=>{
+    const count = r.referral_count || 0;
+    const rate = count >= 50 ? 25 : count >= 15 ? 20 : count >= 5 ? 15 : 10;
+    const tier = count >= 50 ? 'Platinum' : count >= 15 ? 'Gold' : count >= 5 ? 'Silver' : 'Bronze';
+    document.getElementById('aReferrals').textContent = count;
+    document.getElementById('aEarnings').textContent = '$' + ((d.user.referral_balance_usd || 0).toFixed(2));
+    document.getElementById('aTier').textContent = tier;
+    document.getElementById('aRate').textContent = rate + '%';
+  });
+}).catch(()=>{});
+</script>
+</body></html>

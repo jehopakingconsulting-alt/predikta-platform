@@ -1946,6 +1946,12 @@ def zynoriq_tv_page(): return send_from_directory("static", "predikta-tv.html")
 @app.route("/community")
 def community_page(): return send_from_directory("static", "community.html")
 
+@app.route("/founders")
+def founders_page(): return send_from_directory("static", "founders.html")
+
+@app.route("/ambassadors")
+def ambassadors_page(): return send_from_directory("static", "ambassadors.html")
+
 @app.route("/blog")
 def blog_index_page(): return send_from_directory("static", "blog.html")
 
