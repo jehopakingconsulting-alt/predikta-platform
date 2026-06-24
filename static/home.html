@@ -392,7 +392,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 <!-- Hero -->
 <div class="hero">
   <div class="hero-greeting" id="heroGreeting" style="font-size:.85rem;color:var(--muted2);margin-bottom:10px;position:relative;z-index:2"></div>
-  <div class="hero-kicker" data-i18n="heroKicker">🌍 Plateforme Mondiale · Powered by Advanced Analytics</div>
+  <div class="hero-kicker" data-i18n="heroKicker">🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée</div>
   <h1>ZYNORIQ</h1>
   <p class="hero-sub" data-i18n="heroSub">Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues</p>
   <div class="hero-badges">
@@ -418,7 +418,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </a>
   </div>
   <div style="margin-top:12px;font-size:.72rem;color:#475569;position:relative;z-index:2">
-    Gratuit · Sans carte bancaire · Résultats en 30 secondes
+    <span data-i18n="freeTrialNote">Gratuit · Sans carte bancaire · Résultats en 30 secondes</span>
   </div>
 </div>
 
@@ -889,10 +889,10 @@ const PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 
 const T = {
   fr:{
-    heroKicker:"🌍 Plateforme Mondiale · Powered by Advanced Analytics",
+    heroKicker:"🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée",
     heroSub:"Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
-    tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",
+    tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",freeTrialNote:"Gratuit · Sans carte bancaire · Résultats en 30 secondes",
     perfTrackTitle:"Historique des Suggestions",perfTrackSub:"Résultats réels tirage par tirage",
     perfAccTitle:"Accuracy Score",perfAccSub:"Taux de réussite sur 7, 30 & 90 jours",
     snapLabel:"Résultats d'aujourd'hui",snapLoadBtn:"🔄 Charger les résultats du jour",
@@ -966,7 +966,7 @@ const T = {
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Intelligence Beyond Prediction by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
-    tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",
+    tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",freeTrialNote:"Free · No credit card · Results in 30 seconds",
     perfTrackTitle:"Suggestions Track Record",perfTrackSub:"Real results draw by draw",
     perfAccTitle:"Accuracy Score",perfAccSub:"Hit rate over 7, 30 & 90 days",
     snapLabel:"Today's Results",snapLoadBtn:"🔄 Load today's results",
@@ -1037,10 +1037,10 @@ const T = {
     tagline:"Good luck with today's draws!"
   },
   es:{
-    heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
+    heroKicker:"🌍 Plataforma Global · Impulsada por Análisis Avanzado",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
-    tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",
+    tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",freeTrialNote:"Gratis · Sin tarjeta · Resultados en 30 segundos",
     perfTrackTitle:"Historial de Sugerencias",perfTrackSub:"Resultados reales sorteo por sorteo",
     perfAccTitle:"Accuracy Score",perfAccSub:"Tasa de aciertos en 7, 30 y 90 días",
     snapLabel:"Resultados de hoy",snapLoadBtn:"🔄 Cargar resultados de hoy",
@@ -1111,10 +1111,10 @@ const T = {
     tagline:"¡Buena suerte con los sorteos de hoy!"
   },
   pt:{
-    heroKicker:"🌍 Plataforma Global · Powered by Advanced Analytics",
+    heroKicker:"🌍 Plataforma Global · Impulsionada por Análise Avançada",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
-    tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",
+    tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",freeTrialNote:"Grátis · Sem cartão · Resultados em 30 segundos",
     perfTrackTitle:"Histórico de Sugestões",perfTrackSub:"Resultados reais sorteio por sorteio",
     perfAccTitle:"Accuracy Score",perfAccSub:"Taxa de acerto em 7, 30 e 90 dias",
     snapLabel:"Resultados de hoje",snapLoadBtn:"🔄 Carregar resultados de hoje",
@@ -1185,10 +1185,10 @@ const T = {
     tagline:"Boa sorte nos sorteios de hoje!"
   },
   ht:{
-    heroKicker:"🌍 Platfòm Mondyal · Powered by Advanced Analytics",
+    heroKicker:"🌍 Platfòm Mondyal · Pwopilse pa Analiz Avanse",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
-    tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",
+    tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",freeTrialNote:"Gratis · San kat · Rezilta nan 30 segonn",
     perfTrackTitle:"Istorik Sijesyon yo",perfTrackSub:"Rezilta reyèl tiraj pa tiraj",
     perfAccTitle:"Accuracy Score",perfAccSub:"To reyisit sou 7, 30 ak 90 jou",
     snapLabel:"Rezilta jodi a",snapLoadBtn:"🔄 Chaje rezilta jodi a",

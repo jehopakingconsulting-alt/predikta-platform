@@ -622,7 +622,7 @@ def find_or_create_oauth_user(provider: str, oauth_id: str, email: str, name: st
 
     base = (email.split("@")[0] if email else name) or "user"
     username = make_unique_username(base)
-    user = User(username=username, email=email or f"{username}@{provider}.predikta.local",
+    user = User(username=username, email=email or f"{username}@{provider}.zynoriq.local",
                  oauth_provider=provider, oauth_id=oauth_id, avatar_url=avatar_url or None)
     db.session.add(user)
     db.session.flush()
