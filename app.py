@@ -1967,6 +1967,10 @@ def blog_florida_page(): return send_from_directory("static", "blog-florida.html
 @app.route("/blog/loterie-californie-predictions")
 def blog_california_page(): return send_from_directory("static", "blog-california.html")
 
+@app.route("/favicon.svg")
+def favicon_svg():
+    return send_from_directory("static", "favicon.svg", mimetype="image/svg+xml")
+
 @app.route("/nav.js")
 def nav_js():
     resp = make_response(send_from_directory("static", "nav.js"))

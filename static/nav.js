@@ -1374,6 +1374,15 @@ function inject(){
     document.head.appendChild(zLink);
   }
 
+  // 0a. Inject favicon
+  if(!document.querySelector('link[rel="icon"]')){
+    const fav = document.createElement('link');
+    fav.rel = 'icon';
+    fav.type = 'image/svg+xml';
+    fav.href = '/favicon.svg';
+    document.head.appendChild(fav);
+  }
+
   // 0b. Inject ZYNORIQ COPILOT™
   if(!document.getElementById('copilot-script')){
     const cpScript = document.createElement('script');
