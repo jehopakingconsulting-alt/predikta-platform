@@ -372,15 +372,14 @@ def get_recommendations(user_id, lang="fr"):
 
     # 3. Upgrade — check real subscription from DB
     real_plan = None
+    u = None
     try:
         _, User = _get_db()
         u = User.query.get(user_id)
         if u and u.subscription:
             real_plan = u.subscription.plan
-            real_status = u.subscription.status
     except Exception:
         real_plan = plan
-        real_status = "none"
     plan_order = {"pro": 1, "vip": 2, "elite": 3, "business": 4}
     current_level = plan_order.get(real_plan, 0)
 
