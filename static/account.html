@@ -75,6 +75,28 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
       <button class="action" id="btnChoosePlan" data-i18n="btnChoosePlan">Activer ce plan</button>
       <button class="outline" id="btnPortal" style="display:none;margin-left:8px" data-i18n="btnPortal">Gérer mon abonnement (Stripe)</button>
       <div class="msg" id="planMsg"></div>
+      <div style="margin-top:14px;text-align:center">
+        <button class="outline" id="btnAltPay" onclick="document.getElementById('altPayPanel').style.display=document.getElementById('altPayPanel').style.display==='none'?'block':'none'" style="font-size:.78rem" data-i18n="btnAltPay">Autres moyens de paiement</button>
+      </div>
+      <div id="altPayPanel" style="display:none;margin-top:14px;padding:16px;background:#04040f;border:1px solid #1a1a45;border-radius:12px">
+        <div style="font-size:.82rem;font-weight:700;color:#ffd700;margin-bottom:10px" data-i18n="altPayTitle">Paiement alternatif</div>
+        <div style="font-size:.75rem;color:#4d5a8a;margin-bottom:12px;line-height:1.6" data-i18n="altPayDesc">Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px">
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">💳 Interac e-Transfer</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🏦 Virement bancaire</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 MonCash</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 NatCash</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🟠 Orange Money</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🅿️ PayPal</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">₿ Crypto</div>
+          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📧 Zelle</div>
+        </div>
+        <div style="font-size:.75rem;color:#e8eeff;margin-bottom:8px" data-i18n="altPayContact">Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="mailto:support@zynoriq.com?subject=Paiement%20alternatif" style="padding:8px 16px;border-radius:8px;background:rgba(79,110,255,.15);border:1px solid rgba(79,110,255,.3);color:#88aaff;text-decoration:none;font-size:.78rem;font-weight:600">📧 support@zynoriq.com</a>
+          <a href="https://wa.me/15145545112?text=Paiement%20alternatif%20ZYNORIQ" target="_blank" style="padding:8px 16px;border-radius:8px;background:rgba(34,232,122,.1);border:1px solid rgba(34,232,122,.3);color:#22e87a;text-decoration:none;font-size:.78rem;font-weight:600">💬 WhatsApp</a>
+        </div>
+      </div>
     </div>
 
     <div class="card" id="statesCard" style="display:none">
@@ -105,7 +127,8 @@ const T = {
     statesNote:(n)=>`Sélectionne jusqu'à ${n} État(s).`, statesNoteAll:"Tous les États sont accessibles avec ton plan.",
     savedOk:"Enregistré ✓", planActivated:"Plan activé ! Ton essai gratuit commence maintenant.",
     tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",
-    redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",},
+    redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",
+    btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
@@ -118,7 +141,8 @@ const T = {
     statesNote:(n)=>`Select up to ${n} state(s).`, statesNoteAll:"All states are accessible with your plan.",
     savedOk:"Saved ✓", planActivated:"Plan activated! Your free trial starts now.",
     tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",
-    redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",},
+    redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",
+    btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuario",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estado",lblDaysLeft:"Tiempo restante",lblQuota:"Análisis / día",
@@ -131,7 +155,8 @@ const T = {
     statesNote:(n)=>`Selecciona hasta ${n} Estado(s).`, statesNoteAll:"Todos los Estados son accesibles con tu plan.",
     savedOk:"Guardado ✓", planActivated:"¡Plan activado! Tu prueba gratuita comienza ahora.",
     tooMany:(n)=>`Puedes seleccionar como máximo ${n} Estado(s).`, notLoggedIn:"Debes iniciar sesión.",
-    redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",},
+    redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
+    btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuário",lblEmail:"Email",lblPlan:"Plano",lblStatus:"Status",lblDaysLeft:"Tempo restante",lblQuota:"Análises / dia",
@@ -144,7 +169,8 @@ const T = {
     statesNote:(n)=>`Selecione até ${n} Estado(s).`, statesNoteAll:"Todos os Estados estão acessíveis com seu plano.",
     savedOk:"Salvo ✓", planActivated:"Plano ativado! Seu teste gratuito começa agora.",
     tooMany:(n)=>`Você pode selecionar no máximo ${n} Estado(s).`, notLoggedIn:"Você precisa estar conectado.",
-    redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",},
+    redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",
+    btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
     lblUser:"Itilizatè",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estati",lblDaysLeft:"Tan ki rete",lblQuota:"Analiz / jou",
@@ -157,7 +183,8 @@ const T = {
     statesNote:(n)=>`Chwazi jiska ${n} Eta.`, statesNoteAll:"Tout Eta yo aksesib ak plan ou.",
     savedOk:"Anrejistre ✓", planActivated:"Plan aktive! Esè gratis ou kòmanse kounye a.",
     tooMany:(n)=>`Ou ka chwazi pi plis ${n} Eta.`, notLoggedIn:"Ou dwe konekte.",
-    redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",},
+    redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",
+    btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
