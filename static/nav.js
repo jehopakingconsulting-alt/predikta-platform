@@ -210,6 +210,13 @@ function saveLang(l){
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
   if(window._copilotLangRefresh) window._copilotLangRefresh(l);
   if(_cachedUser) initUserMenu();
+  // Rebuild footer in the new language
+  const oldFooter = document.querySelector('footer.zynoriq-footer');
+  if(oldFooter){
+    const tmp = document.createElement('div');
+    tmp.innerHTML = buildFooter();
+    oldFooter.replaceWith(tmp.firstElementChild);
+  }
   // Pages with server-rendered content: reload to refresh translations
   const needsReload = location.pathname === '/' || location.pathname.startsWith('/predictions');
   if(needsReload){
