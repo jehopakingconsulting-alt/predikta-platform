@@ -1545,6 +1545,17 @@ function inject(){
 
   // 8. USER MENU — async upgrade with user info if logged in
   initUserMenu();
+
+  // 9. Smart CTA links: /register → /account for logged-in users
+  fetch('/api/auth/me').then(r=>r.json()).then(d=>{
+    if(!d.user) return;
+    document.querySelectorAll('a[href^="/register"]').forEach(a=>{
+      const href = a.getAttribute('href');
+      if(href === '/register' || href.startsWith('/register?')){
+        a.href = href.replace('/register', '/account');
+      }
+    });
+  }).catch(()=>{});
 }
 
 if(document.readyState==='loading'){
