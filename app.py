@@ -97,11 +97,11 @@ def add_security_headers(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net; "
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.jsdelivr.net https://connect.facebook.net https://www.clarity.ms; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: https:; "
-        "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net; "
+        "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net https://www.facebook.com https://www.clarity.ms; "
         "frame-ancestors 'self';"
     )
     # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
