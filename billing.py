@@ -42,6 +42,7 @@ STRIPE_PRICE_IDS = {
     "vip":      os.environ.get("STRIPE_PRICE_VIP", ""),
     "elite":    os.environ.get("STRIPE_PRICE_ELITE", ""),
     "business": os.environ.get("STRIPE_PRICE_BUSINESS", ""),
+    "founder":  os.environ.get("STRIPE_PRICE_FOUNDER", ""),
 }
 
 if stripe is not None and STRIPE_SECRET_KEY:
@@ -109,7 +110,12 @@ def create_checkout_session():
     if plan not in PLAN_CONFIG:
         return jsonify({"error": "Plan inconnu"}), 400
 
-    price_id = STRIPE_PRICE_IDS.get(plan)
+    is_founder = data.get("founder") in (True, "1", 1)
+    if is_founder and STRIPE_PRICE_IDS.get("founder"):
+        price_id = STRIPE_PRICE_IDS["founder"]
+        plan = "vip"
+    else:
+        price_id = STRIPE_PRICE_IDS.get(plan)
     if not price_id:
         return jsonify({"error": "stripe_price_missing",
                         "message": f"Aucun prix Stripe configuré pour le plan {plan.upper()}."}), 503
