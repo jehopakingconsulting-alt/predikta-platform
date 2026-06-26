@@ -197,8 +197,8 @@ window.claimFounder = function(){
   // Go directly to Stripe checkout at founder price — badge assigned after payment
   fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
     .then(r=>r.json()).then(s=>{
-      if(s.url){
-        window.location.href = s.url;
+      if(s.checkout_url || s.url){
+        window.location.href = s.checkout_url || s.url;
       } else {
         msg.innerHTML = '<span class="msg-err">' + (s.message || s.error || 'Erreur') + '</span>';
         btn.disabled = false;
