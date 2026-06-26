@@ -359,7 +359,7 @@ def get_recommendations(user_id, lang="fr"):
             "score": explore_score,
         })
 
-    # 2. First analysis — very high if no analyses
+    # 2. First analysis — only if truly no analyses
     if not recent_analyses:
         scores["first_analysis"] = 1.0
         recs.append({
@@ -369,28 +369,35 @@ def get_recommendations(user_id, lang="fr"):
             "action": "/analyze",
             "score": 1.0,
         })
-    elif len(recent_analyses) < 5:
-        scores["more_analyses"] = 0.7
-        recs.append({
-            "type": "more_analyses",
-            "title": _rt(lang, "first_analysis"),
-            "description": _rt(lang, "first_analysis_desc"),
-            "action": "/analyze",
-            "score": 0.7,
-        })
 
-    # 3. Upgrade — weighted by engagement level
-    if not plan or plan == "free":
-        upgrade_score = min(0.9, visit_count * 0.03 + len(recent_analyses) * 0.05)
-        if upgrade_score > 0.2:
-            scores["upgrade"] = upgrade_score
-            recs.append({
-                "type": "upgrade",
-                "title": _rt(lang, "upgrade"),
-                "description": _rt(lang, "upgrade_desc"),
-                "action": "/pro",
-                "score": upgrade_score,
-            })
+    # 3. Upgrade — check real subscription from DB
+    real_plan = None
+    try:
+        _, User = _get_db()
+        u = User.query.get(user_id)
+        if u and u.subscription:
+            real_plan = u.subscription.plan
+            real_status = u.subscription.status
+    except Exception:
+        real_plan = plan
+        real_status = "none"
+    plan_order = {"pro": 1, "vip": 2, "elite": 3, "business": 4}
+    current_level = plan_order.get(real_plan, 0)
+
+    if current_level == 0:
+        recs.append({"type": "upgrade", "title": _rt(lang, "upgrade"), "description": _rt(lang, "upgrade_desc"), "action": "/pro", "score": 0.8})
+    elif current_level < 3:
+        next_plan = {1: "VIP", 2: "PREMIUM"}.get(current_level, "PREMIUM")
+        recs.append({"type": "upgrade", "title": _rt(lang, "upgrade_next").format(plan=next_plan), "description": _rt(lang, "upgrade_next_desc"), "action": "/pro", "score": 0.5})
+
+    # 3b. Founders program — if not already a founder
+    is_founder = getattr(u, 'founder_badge', False) if u else False
+    if not is_founder and current_level > 0:
+        recs.append({"type": "founders", "title": _rt(lang, "try_founders"), "description": _rt(lang, "try_founders_desc"), "action": "/founders", "score": 0.6})
+
+    # 3c. Ambassadors — if enough visits
+    if visit_count >= 5:
+        recs.append({"type": "ambassadors", "title": _rt(lang, "try_ambassadors"), "description": _rt(lang, "try_ambassadors_desc"), "action": "/ambassadors", "score": 0.4})
 
     # 4. Business AI — for engaged users who haven't tried it
     biz_used = any("bizai" in (a.get("page") or "") for a in recent_analyses + recent_searches)
@@ -431,8 +438,8 @@ def get_recommendations(user_id, lang="fr"):
     if visit_count >= 5 and not any(s.get("page") == "/memory" for s in recent_searches):
         recs.append({
             "type": "memory_center",
-            "title": "Memory Center",
-            "description": _rt(lang, "try_copilot_desc"),
+            "title": _rt(lang, "try_memory"),
+            "description": _rt(lang, "try_memory_desc"),
             "action": "/memory",
             "score": 0.35,
         })
@@ -506,10 +513,18 @@ _REC_T = {
         'first_analysis_desc': 'Allez sur /analyze, choisissez un État et découvrez les prédictions de nos 7 modèles ML.',
         'upgrade': 'Passez au plan PRO',
         'upgrade_desc': 'Débloquez plus d\'analyses, d\'alertes et de fonctionnalités avancées.',
+        'upgrade_next': 'Passez au plan {plan}',
+        'upgrade_next_desc': 'Débloquez plus d\'États, d\'analyses et de fonctionnalités premium.',
         'try_business': 'Essayez Business AI',
         'try_business_desc': 'Analysez un projet entrepreneurial avec notre moteur d\'intelligence d\'affaires.',
         'try_copilot': 'Utilisez ZYNORIQ Copilot',
         'try_copilot_desc': 'Posez des questions sur vos prédictions, tendances et stratégies à notre assistant IA.',
+        'try_founders': 'Devenez Membre Fondateur',
+        'try_founders_desc': 'Verrouillez votre prix à $29/mois à vie — 500 places seulement.',
+        'try_ambassadors': 'Programme Ambassadeur',
+        'try_ambassadors_desc': 'Parrainez vos amis et gagnez des commissions récurrentes.',
+        'try_memory': 'Découvrez Memory Center',
+        'try_memory_desc': 'Votre profil intelligent — consultez vos statistiques et préférences.',
     },
     'en': {
         'explore_states': 'Explore new States',
@@ -518,10 +533,18 @@ _REC_T = {
         'first_analysis_desc': 'Go to /analyze, pick a state and discover predictions from our 7 ML models.',
         'upgrade': 'Upgrade to PRO',
         'upgrade_desc': 'Unlock more analyses, alerts and advanced features.',
+        'upgrade_next': 'Upgrade to {plan}',
+        'upgrade_next_desc': 'Unlock more states, analyses and premium features.',
         'try_business': 'Try Business AI',
         'try_business_desc': 'Analyze a business project with our intelligence engine.',
         'try_copilot': 'Use ZYNORIQ Copilot',
         'try_copilot_desc': 'Ask questions about your predictions, trends and strategies to our AI assistant.',
+        'try_founders': 'Become a Founding Member',
+        'try_founders_desc': 'Lock your price at $29/mo for life — 500 spots only.',
+        'try_ambassadors': 'Ambassador Program',
+        'try_ambassadors_desc': 'Refer friends and earn recurring commissions.',
+        'try_memory': 'Discover Memory Center',
+        'try_memory_desc': 'Your smart profile — view your stats and preferences.',
     },
     'es': {
         'explore_states': 'Explorar nuevos Estados',
@@ -530,10 +553,18 @@ _REC_T = {
         'first_analysis_desc': 'Ve a /analyze, elige un estado y descubre predicciones de nuestros 7 modelos ML.',
         'upgrade': 'Actualiza a PRO',
         'upgrade_desc': 'Desbloquea más análisis, alertas y funciones avanzadas.',
+        'upgrade_next': 'Actualiza a {plan}',
+        'upgrade_next_desc': 'Desbloquea más estados, análisis y funciones premium.',
         'try_business': 'Prueba Business AI',
         'try_business_desc': 'Analiza un proyecto empresarial con nuestro motor de inteligencia.',
         'try_copilot': 'Usa ZYNORIQ Copilot',
         'try_copilot_desc': 'Pregunta sobre predicciones, tendencias y estrategias a nuestro asistente IA.',
+        'try_founders': 'Conviértase en Miembro Fundador',
+        'try_founders_desc': 'Asegure su precio a $29/mes de por vida — solo 500 plazas.',
+        'try_ambassadors': 'Programa Embajador',
+        'try_ambassadors_desc': 'Recomiende amigos y gane comisiones recurrentes.',
+        'try_memory': 'Descubra Memory Center',
+        'try_memory_desc': 'Su perfil inteligente — consulte sus estadísticas y preferencias.',
     },
     'pt': {
         'explore_states': 'Explorar novos Estados',
@@ -542,10 +573,18 @@ _REC_T = {
         'first_analysis_desc': 'Vá para /analyze, escolha um estado e descubra previsões dos nossos 7 modelos ML.',
         'upgrade': 'Atualize para PRO',
         'upgrade_desc': 'Desbloqueie mais análises, alertas e recursos avançados.',
+        'upgrade_next': 'Atualize para {plan}',
+        'upgrade_next_desc': 'Desbloqueie mais estados, análises e recursos premium.',
         'try_business': 'Experimente Business AI',
         'try_business_desc': 'Analise um projeto empresarial com nosso motor de inteligência.',
         'try_copilot': 'Use ZYNORIQ Copilot',
         'try_copilot_desc': 'Pergunte sobre previsões, tendências e estratégias ao nosso assistente IA.',
+        'try_founders': 'Torne-se Membro Fundador',
+        'try_founders_desc': 'Garanta seu preço a $29/mês para sempre — apenas 500 vagas.',
+        'try_ambassadors': 'Programa Embaixador',
+        'try_ambassadors_desc': 'Indique amigos e ganhe comissões recorrentes.',
+        'try_memory': 'Descubra Memory Center',
+        'try_memory_desc': 'Seu perfil inteligente — veja suas estatísticas e preferências.',
     },
     'ht': {
         'explore_states': 'Eksplore nouvo Eta',
@@ -554,10 +593,18 @@ _REC_T = {
         'first_analysis_desc': 'Ale sou /analyze, chwazi yon eta epi dekouvri prediksyon 7 modèl ML nou yo.',
         'upgrade': 'Pase nan plan PRO',
         'upgrade_desc': 'Debloke plis analiz, alèt ak fonksyon avanse.',
+        'upgrade_next': 'Pase nan plan {plan}',
+        'upgrade_next_desc': 'Debloke plis eta, analiz ak fonksyon premium.',
         'try_business': 'Eseye Business AI',
         'try_business_desc': 'Analize yon pwojè biznis ak motè entèlijans nou an.',
         'try_copilot': 'Itilize ZYNORIQ Copilot',
         'try_copilot_desc': 'Poze kesyon sou prediksyon, tandans ak estrateji bay asistan IA nou an.',
+        'try_founders': 'Vin Manm Fondatè',
+        'try_founders_desc': 'Asire pri ou a $29/mwa pou tout lavi — 500 plas sèlman.',
+        'try_ambassadors': 'Pwogram Anbasadè',
+        'try_ambassadors_desc': 'Envite zanmi ou epi touche komisyon regilye.',
+        'try_memory': 'Dekouvri Memory Center',
+        'try_memory_desc': 'Pwofil entelijan ou — gade estatistik ak preferans ou.',
     },
 }
 
