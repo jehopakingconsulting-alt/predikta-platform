@@ -202,12 +202,11 @@ window.claimFounder = function(){
         _user.founder_badge = true;
         _user.founder_number = d.number;
         document.getElementById('fRemaining').textContent = d.remaining;
-        // Redirect to checkout for founder price
+        // Redirect to checkout for founder price (skip if already subscribed)
         fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
           .then(r=>r.json()).then(s=>{
             if(s.url) window.location.href = s.url;
-            else if(s.error) msg.innerHTML += '<br><span class="msg-err">' + s.message + '</span>';
-          });
+          }).catch(()=>{});
       } else if(d.error === 'already_founder'){
         msg.innerHTML = '<span class="msg-ok">🏅 Fondateur #' + d.number + '</span>';
         btn.textContent = '🏅 Fondateur #' + d.number;
