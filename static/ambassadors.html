@@ -97,18 +97,68 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.2rem);font-weig
     </div>
   </div>
 
-  <button class="cta-btn" id="ambCta" onclick="goAmbassador()">🚀 Devenir Ambassadeur</button>
+  <button class="cta-btn" id="ambCta" onclick="goAmbassador()" data-i18n="ctaBtn">🚀 Devenir Ambassadeur</button>
   <div class="cta-sub" data-i18n="ctaSub">Gratuit · Aucun engagement · Commencez à gagner dès aujourd'hui</div>
 </div>
 
 <script>
+const T={
+  fr:{title:"Programme Ambassadeur",subtitle:"Partagez ZYNORIQ avec votre réseau. Gagnez des commissions récurrentes sur chaque abonnement. Montez en grade et débloquez des récompenses exclusives.",
+    tiersTitle:"Niveaux Ambassadeur",bronzeReq:"1-4 parrainages",bronzeReward:"10% commission",silverReq:"5-14 parrainages",silverReward:"15% commission",goldReq:"15-49 parrainages",goldReward:"20% commission",platReq:"50+ parrainages",platReward:"25% commission",
+    howTitle:"Comment ça marche",s1:"<strong>Créez votre compte</strong> ZYNORIQ gratuitement",s2:"<strong>Obtenez votre lien unique</strong> de parrainage dans Mon Compte",s3:"<strong>Partagez</strong> sur vos réseaux, groupes, forums, YouTube",s4:"<strong>Gagnez des commissions</strong> récurrentes sur chaque abonnement payé",
+    rewardsTitle:"Récompenses Referral",r1:"+30 jours Pro gratuits",r2:"Plan VIP gratuit 1 mois",r3:"Plan Premium gratuit 1 mois",r4:"Badge Platinum + 25% commission à vie",
+    dashTitle:"Votre Tableau de Bord",dReferrals:"Parrainages",dEarnings:"Gains ($)",dTier:"Niveau",dRate:"Commission",dashLogin:"Connectez-vous pour voir vos statistiques",
+    ctaBtn:"🚀 Devenir Ambassadeur",ctaDash:"🚀 Mon Tableau de Bord Ambassadeur",ctaSub:"Gratuit · Aucun engagement · Commencez à gagner dès aujourd'hui"},
+  en:{title:"Ambassador Program",subtitle:"Share ZYNORIQ with your network. Earn recurring commissions on every subscription. Level up and unlock exclusive rewards.",
+    tiersTitle:"Ambassador Tiers",bronzeReq:"1-4 referrals",bronzeReward:"10% commission",silverReq:"5-14 referrals",silverReward:"15% commission",goldReq:"15-49 referrals",goldReward:"20% commission",platReq:"50+ referrals",platReward:"25% commission",
+    howTitle:"How it works",s1:"<strong>Create your account</strong> on ZYNORIQ for free",s2:"<strong>Get your unique referral link</strong> in My Account",s3:"<strong>Share</strong> on your networks, groups, forums, YouTube",s4:"<strong>Earn recurring commissions</strong> on every paid subscription",
+    rewardsTitle:"Referral Rewards",r1:"+30 days of Pro free",r2:"1 month VIP plan free",r3:"1 month Premium plan free",r4:"Platinum badge + 25% commission for life",
+    dashTitle:"Your Dashboard",dReferrals:"Referrals",dEarnings:"Earnings ($)",dTier:"Tier",dRate:"Commission",dashLogin:"Log in to see your stats",
+    ctaBtn:"🚀 Become an Ambassador",ctaDash:"🚀 My Ambassador Dashboard",ctaSub:"Free · No commitment · Start earning today"},
+  es:{title:"Programa de Embajadores",subtitle:"Comparte ZYNORIQ con tu red. Gana comisiones recurrentes en cada suscripción. Sube de nivel y desbloquea recompensas exclusivas.",
+    tiersTitle:"Niveles de Embajador",bronzeReq:"1-4 referidos",bronzeReward:"10% comisión",silverReq:"5-14 referidos",silverReward:"15% comisión",goldReq:"15-49 referidos",goldReward:"20% comisión",platReq:"50+ referidos",platReward:"25% comisión",
+    howTitle:"Cómo funciona",s1:"<strong>Crea tu cuenta</strong> en ZYNORIQ gratis",s2:"<strong>Obtén tu enlace único</strong> de referido en Mi Cuenta",s3:"<strong>Comparte</strong> en tus redes, grupos, foros, YouTube",s4:"<strong>Gana comisiones recurrentes</strong> en cada suscripción pagada",
+    rewardsTitle:"Recompensas por Referidos",r1:"+30 días de Pro gratis",r2:"1 mes de plan VIP gratis",r3:"1 mes de plan Premium gratis",r4:"Insignia Platinum + 25% comisión de por vida",
+    dashTitle:"Tu Panel",dReferrals:"Referidos",dEarnings:"Ganancias ($)",dTier:"Nivel",dRate:"Comisión",dashLogin:"Inicia sesión para ver tus estadísticas",
+    ctaBtn:"🚀 Ser Embajador",ctaDash:"🚀 Mi Panel de Embajador",ctaSub:"Gratis · Sin compromiso · Empieza a ganar hoy"},
+  pt:{title:"Programa de Embaixadores",subtitle:"Compartilhe o ZYNORIQ com sua rede. Ganhe comissões recorrentes em cada assinatura. Suba de nível e desbloqueie recompensas exclusivas.",
+    tiersTitle:"Níveis de Embaixador",bronzeReq:"1-4 indicações",bronzeReward:"10% comissão",silverReq:"5-14 indicações",silverReward:"15% comissão",goldReq:"15-49 indicações",goldReward:"20% comissão",platReq:"50+ indicações",platReward:"25% comissão",
+    howTitle:"Como funciona",s1:"<strong>Crie sua conta</strong> no ZYNORIQ gratuitamente",s2:"<strong>Obtenha seu link único</strong> de indicação em Minha Conta",s3:"<strong>Compartilhe</strong> em suas redes, grupos, fóruns, YouTube",s4:"<strong>Ganhe comissões recorrentes</strong> em cada assinatura paga",
+    rewardsTitle:"Recompensas por Indicação",r1:"+30 dias de Pro grátis",r2:"1 mês de plano VIP grátis",r3:"1 mês de plano Premium grátis",r4:"Badge Platinum + 25% comissão para sempre",
+    dashTitle:"Seu Painel",dReferrals:"Indicações",dEarnings:"Ganhos ($)",dTier:"Nível",dRate:"Comissão",dashLogin:"Faça login para ver suas estatísticas",
+    ctaBtn:"🚀 Ser Embaixador",ctaDash:"🚀 Meu Painel de Embaixador",ctaSub:"Grátis · Sem compromisso · Comece a ganhar hoje"},
+  ht:{title:"Pwogram Anbasadè",subtitle:"Pataje ZYNORIQ ak rezo ou. Touche komisyon chak mwa sou chak abònman. Monte nivo epi debloke rekonpans eksklizif.",
+    tiersTitle:"Nivo Anbasadè",bronzeReq:"1-4 referans",bronzeReward:"10% komisyon",silverReq:"5-14 referans",silverReward:"15% komisyon",goldReq:"15-49 referans",goldReward:"20% komisyon",platReq:"50+ referans",platReward:"25% komisyon",
+    howTitle:"Kijan li mache",s1:"<strong>Kreye kont ou</strong> sou ZYNORIQ gratis",s2:"<strong>Jwenn lyen inik ou</strong> nan Kont Mwen",s3:"<strong>Pataje</strong> sou rezo, gwoup, fowòm, YouTube ou yo",s4:"<strong>Touche komisyon chak mwa</strong> sou chak abònman ki peye",
+    rewardsTitle:"Rekonpans Referans",r1:"+30 jou Pro gratis",r2:"1 mwa plan VIP gratis",r3:"1 mwa plan Premium gratis",r4:"Badge Platinum + 25% komisyon pou tout lavi",
+    dashTitle:"Tablo Ou",dReferrals:"Referans",dEarnings:"Lajan ($)",dTier:"Nivo",dRate:"Komisyon",dashLogin:"Konekte pou wè estatistik ou yo",
+    ctaBtn:"🚀 Vin Anbasadè",ctaDash:"🚀 Tablo Anbasadè Mwen",ctaSub:"Gratis · Okenn angajman · Kòmanse touche jodi a"}
+};
+
+let t = T[window.PREDIKTA_LANG] || T.fr;
+function applyLang(lang){
+  t = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.dataset.i18n;
+    if(t[k] == null) return;
+    if(k==='ctaBtn'){ el.textContent = (_ambUser ? t.ctaDash : t.ctaBtn); return; }
+    if(/<strong>/.test(t[k])) el.innerHTML = t[k];
+    else el.textContent = t[k];
+  });
+  document.documentElement.setAttribute('lang', lang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  applyLang(window.PREDIKTA_LANG && T[window.PREDIKTA_LANG] ? window.PREDIKTA_LANG : 'fr');
+});
+
 let _ambUser = null;
 fetch('/api/auth/me').then(r=>r.json()).then(d=>{
   _ambUser = d.user || null;
   if(!_ambUser) return;
   // Update CTA for logged-in users
   const btn = document.getElementById('ambCta');
-  btn.textContent = '🚀 Mon Tableau de Bord Ambassadeur';
+  btn.textContent = t.ctaDash;
   // Hide login message
   const loginMsg = document.querySelector('[data-i18n="dashLogin"]');
   if(loginMsg) loginMsg.style.display = 'none';
