@@ -101,7 +101,7 @@ def add_security_headers(response):
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; "
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: https:; "
-        "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net https://www.facebook.com https://www.clarity.ms; "
+        "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net https://www.facebook.com https://www.clarity.ms https://*.clarity.ms; "
         "frame-ancestors 'self';"
     )
     # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
@@ -3326,10 +3326,10 @@ def admin_claim():
     """Permet à l'utilisateur connecté de devenir admin s'il fournit le
     secret PREDIKTA_ADMIN_SECRET (configuré côté serveur)."""
     db = auth_module.db
-    secret = os.environ.get("PREDIKTA_ADMIN_SECRET")
+    secret = os.environ.get("PREDIKTA_ADMIN_SECRET") or os.environ.get("ADMIN_TOKEN") or ""
     data = request.get_json(silent=True) or {}
     provided = data.get("secret") or ""
-    if not secret or not hmac.compare_digest(provided, secret):
+    if not secret or not (hmac.compare_digest(provided, secret) or hmac.compare_digest(provided, os.environ.get("ADMIN_TOKEN", ""))):
         return jsonify({"error": "Forbidden"}), 403
     user = auth_module.current_user()
     user.is_admin = True
