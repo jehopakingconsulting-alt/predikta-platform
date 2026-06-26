@@ -2147,6 +2147,50 @@ def api_social_proof():
     return jsonify(data)
 
 
+# ── Analysis Snapshots (frozen archives) ──────────────────────────────────
+@app.route("/api/snapshots", methods=["POST"])
+@auth_module.login_required
+def api_snapshot_save():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    snap_id = data.get("id", "")
+    if not snap_id or not data.get("data"):
+        return jsonify({"error": "missing id or data"}), 400
+    from auth import AnalysisSnapshot
+    existing = auth_module.db.session.get(AnalysisSnapshot, snap_id)
+    if existing:
+        return jsonify({"ok": True, "exists": True})
+    snap = AnalysisSnapshot(
+        id=snap_id, user_id=user.id,
+        state=data.get("state", ""), tod=data.get("tod", ""),
+        label=data.get("label", ""),
+        data=json.dumps(data["data"]) if isinstance(data["data"], dict) else str(data["data"]),
+    )
+    auth_module.db.session.add(snap)
+    auth_module.db.session.commit()
+    return jsonify({"ok": True})
+
+@app.route("/api/snapshots/<snap_id>")
+@auth_module.login_required
+def api_snapshot_get(snap_id):
+    user = auth_module.current_user()
+    from auth import AnalysisSnapshot
+    snap = auth_module.db.session.get(AnalysisSnapshot, snap_id)
+    if not snap or snap.user_id != user.id:
+        return jsonify({"error": "not_found"}), 404
+    return jsonify({"id": snap.id, "state": snap.state, "tod": snap.tod, "label": snap.label,
+                     "data": json.loads(snap.data), "created_at": snap.created_at.isoformat()})
+
+@app.route("/api/snapshots", methods=["GET"])
+@auth_module.login_required
+def api_snapshots_list():
+    user = auth_module.current_user()
+    from auth import AnalysisSnapshot
+    snaps = AnalysisSnapshot.query.filter_by(user_id=user.id).order_by(AnalysisSnapshot.created_at.desc()).limit(100).all()
+    return jsonify([{"id": s.id, "state": s.state, "tod": s.tod, "label": s.label,
+                      "created_at": s.created_at.isoformat()} for s in snaps])
+
+
 @app.route("/api/contact", methods=["GET", "POST"])
 def api_contact():
     if request.method == "GET":

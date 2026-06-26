@@ -1845,12 +1845,16 @@ async function loadReport(){
       const stateLabel = document.getElementById('stateSelect')
         ?.selectedOptions?.[0]?.textContent?.trim() || state;
       const archiveId = Date.now() + '-' + Math.random().toString(36).slice(2,8);
-      // Stocker le data complet séparément (pour renderAll() fidèle)
+      // Stocker le data complet en localStorage (fallback rapide)
       try{
         localStorage.setItem('predikta_fullsnap_' + archiveId, JSON.stringify(data));
       }catch(qe){
-        console.warn('[archive] localStorage quota dépassé — snapshot complet non sauvegardé');
+        console.warn('[archive] localStorage quota — snapshot local non sauvegardé');
       }
+      // Sauvegarder aussi côté serveur (permanent, multi-appareil)
+      fetch('/api/snapshots',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id:archiveId,state,tod,label:stateLabel,data})
+      }).catch(()=>{});
       window.PredArchive.add({
         id: archiveId,
         type: 'analyze',
@@ -2126,7 +2130,7 @@ document.getElementById('stateSelect')?.addEventListener('change', (e)=>{
 // immédiatement, avant que l'utilisateur clique sur Analyser.
 fetch('/api/health').catch(()=>{});
 
-window.addEventListener('load', ()=>{
+window.addEventListener('load', async ()=>{
   loadTodayWidget();
   renderQuickStates();
   const sel = document.getElementById('stateSelect');
@@ -2137,7 +2141,14 @@ window.addEventListener('load', ()=>{
   // ── Restauration Archive complète (?archive=ID) ─────────────────────────
   const archiveId = params.get('archive');
   if(archiveId){
-    const raw = localStorage.getItem('predikta_fullsnap_' + archiveId);
+    let raw = localStorage.getItem('predikta_fullsnap_' + archiveId);
+    // Fallback: fetch from server if not in localStorage
+    if(!raw){
+      try{
+        const sr = await fetch('/api/snapshots/'+encodeURIComponent(archiveId));
+        if(sr.ok){ const sd = await sr.json(); if(sd.data) raw = JSON.stringify(sd.data); }
+      }catch(e){}
+    }
     if(raw){
       try{
         const frozenData = JSON.parse(raw);

@@ -353,6 +353,19 @@ class SavedPrediction(db.Model):
         }
 
 
+class AnalysisSnapshot(db.Model):
+    """Snapshot figé d'une analyse — données exactes au moment de l'exécution."""
+    __tablename__ = "analysis_snapshots"
+
+    id         = db.Column(db.String(32), primary_key=True)
+    user_id    = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    state      = db.Column(db.String(4), nullable=False)
+    tod        = db.Column(db.String(16), nullable=True)
+    label      = db.Column(db.String(120), nullable=True)
+    data       = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Alert(db.Model):
     """Alerte personnalisée (ex: nouveau tirage, numéro chaud/froid) pour un État/jeu."""
     __tablename__ = "alerts"
