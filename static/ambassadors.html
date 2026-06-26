@@ -97,22 +97,39 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.5rem,5vw,2.2rem);font-weig
     </div>
   </div>
 
-  <a href="/register" class="cta-btn" data-i18n="ctaBtn">🚀 Devenir Ambassadeur</a>
+  <button class="cta-btn" id="ambCta" onclick="goAmbassador()">🚀 Devenir Ambassadeur</button>
   <div class="cta-sub" data-i18n="ctaSub">Gratuit · Aucun engagement · Commencez à gagner dès aujourd'hui</div>
 </div>
 
 <script>
+let _ambUser = null;
 fetch('/api/auth/me').then(r=>r.json()).then(d=>{
-  if(!d.user) return;
-  fetch('/api/referral/me?email='+encodeURIComponent(d.user.email)).then(r=>r.json()).then(r=>{
+  _ambUser = d.user || null;
+  if(!_ambUser) return;
+  // Update CTA for logged-in users
+  const btn = document.getElementById('ambCta');
+  btn.textContent = '🚀 Mon Tableau de Bord Ambassadeur';
+  // Hide login message
+  const loginMsg = document.querySelector('[data-i18n="dashLogin"]');
+  if(loginMsg) loginMsg.style.display = 'none';
+  // Show referral link
+  fetch('/api/referral/me?email='+encodeURIComponent(_ambUser.email)).then(r=>r.json()).then(r=>{
     const count = r.referral_count || 0;
     const rate = count >= 50 ? 25 : count >= 15 ? 20 : count >= 5 ? 15 : 10;
     const tier = count >= 50 ? 'Platinum' : count >= 15 ? 'Gold' : count >= 5 ? 'Silver' : 'Bronze';
     document.getElementById('aReferrals').textContent = count;
-    document.getElementById('aEarnings').textContent = '$' + ((d.user.referral_balance_usd || 0).toFixed(2));
+    document.getElementById('aEarnings').textContent = '$' + ((_ambUser.referral_balance_usd || 0).toFixed(2));
     document.getElementById('aTier').textContent = tier;
     document.getElementById('aRate').textContent = rate + '%';
   });
 }).catch(()=>{});
+
+window.goAmbassador = function(){
+  if(_ambUser){
+    window.location.href = '/parrainage';
+  } else {
+    window.location.href = '/register';
+  }
+};
 </script>
 </body></html>

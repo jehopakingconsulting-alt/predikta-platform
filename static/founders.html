@@ -90,7 +90,7 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.6rem,5vw,2.4rem);font-weig
     </div>
   </div>
 
-  <a href="/register?plan=vip&founder=1" class="cta-btn" id="founderCta" data-i18n="ctaBtn">🏅 Devenir Membre Fondateur</a>
+  <button class="cta-btn" id="founderCta" onclick="claimFounder()" data-i18n="ctaBtn">🏅 Devenir Membre Fondateur</button>
   <div class="cta-sub" data-i18n="ctaSub">Paiement sécurisé par Stripe · Essai gratuit 7 jours · Annulation en 1 clic</div>
   <div id="founderMsg"></div>
 
@@ -157,18 +157,70 @@ document.querySelectorAll('[data-i18n]').forEach(el=>{
 // FAQ toggle
 document.querySelectorAll('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
 
-// Counter
+// Counter + smart CTA
+let _user = null;
+fetch('/api/auth/me').then(r=>r.json()).then(d=>{ _user = d.user || null; updateCta(); }).catch(()=>{ updateCta(); });
+
 fetch('/api/founders/status').then(r=>r.json()).then(d=>{
   document.getElementById('fRemaining').textContent = d.remaining;
   const pct = Math.round((d.claimed / d.total) * 100);
   document.getElementById('fProgress').style.width = pct + '%';
   if(d.remaining <= 0){
     document.getElementById('founderCta').textContent = t.soldOut;
-    document.getElementById('founderCta').style.opacity = '.5';
-    document.getElementById('founderCta').style.pointerEvents = 'none';
+    document.getElementById('founderCta').disabled = true;
   }
 }).catch(()=>{
   document.getElementById('fRemaining').textContent = '500';
 });
+
+function updateCta(){
+  const btn = document.getElementById('founderCta');
+  if(_user && _user.founder_badge){
+    btn.textContent = '🏅 ' + (t.alreadyFounder || 'Already a Founder') + ' (#' + (_user.founder_number||'') + ')';
+    btn.disabled = true;
+  }
+}
+
+window.claimFounder = function(){
+  const btn = document.getElementById('founderCta');
+  const msg = document.getElementById('founderMsg');
+  if(!_user){
+    window.location.href = '/register?plan=vip&founder=1';
+    return;
+  }
+  if(_user.founder_badge){
+    msg.innerHTML = '<span class="msg-ok">🏅 ' + (t.alreadyFounder||'Already a Founder') + '</span>';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '⏳...';
+  fetch('/api/founders/claim',{method:'POST',headers:{'Content-Type':'application/json'}})
+    .then(r=>r.json()).then(d=>{
+      if(d.success){
+        msg.innerHTML = '<span class="msg-ok">🏅 Fondateur #' + d.number + ' ! Bienvenue dans le programme.</span>';
+        btn.textContent = '🏅 Fondateur #' + d.number;
+        _user.founder_badge = true;
+        _user.founder_number = d.number;
+        document.getElementById('fRemaining').textContent = d.remaining;
+        // Redirect to checkout for founder price
+        fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
+          .then(r=>r.json()).then(s=>{
+            if(s.url) window.location.href = s.url;
+            else if(s.error) msg.innerHTML += '<br><span class="msg-err">' + s.message + '</span>';
+          });
+      } else if(d.error === 'already_founder'){
+        msg.innerHTML = '<span class="msg-ok">🏅 Fondateur #' + d.number + '</span>';
+        btn.textContent = '🏅 Fondateur #' + d.number;
+        btn.disabled = true;
+      } else if(d.error === 'sold_out'){
+        msg.innerHTML = '<span class="msg-err">' + (t.soldOut||'Sold out') + '</span>';
+        btn.disabled = true;
+      }
+    }).catch(()=>{
+      msg.innerHTML = '<span class="msg-err">Erreur — réessayez</span>';
+      btn.disabled = false;
+      btn.textContent = t.ctaBtn;
+    });
+};
 </script>
 </body></html>
