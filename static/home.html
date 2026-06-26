@@ -580,28 +580,28 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
   <!-- ── Comment ça marche ── -->
   <div style="margin-bottom:40px">
-    <div style="text-align:center;font-size:.68rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:3px;margin-bottom:28px">Comment ça marche</div>
+    <div style="text-align:center;font-size:.68rem;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:3px;margin-bottom:28px" data-i18n="howTitle">Comment ça marche</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
 
       <div style="background:linear-gradient(135deg,rgba(79,110,255,.07),rgba(79,110,255,.03));border:1px solid rgba(79,110,255,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4f6eff,#7c3aed);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">1</div>
         <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=280&h=140&fit=crop&q=80" alt="Choose State" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
-        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Choisissez votre État</div>
-        <div style="font-size:.78rem;color:#64748b;line-height:1.6">Sélectionnez parmi 44 États US · Pick3, Pick4, Cash3, Daily3 · Midi ou Soir</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px" data-i18n="step1">Choisissez votre État</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6" data-i18n="step1d">Sélectionnez parmi 44 États US · Pick3, Pick4, Cash3, Daily3 · Midi ou Soir</div>
       </div>
 
       <div style="background:linear-gradient(135deg,rgba(124,58,237,.07),rgba(124,58,237,.03));border:1px solid rgba(124,58,237,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">2</div>
         <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=280&h=140&fit=crop&q=80" alt="AI Analysis" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
-        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">L'IA analyse en 30s</div>
-        <div style="font-size:.78rem;color:#64748b;line-height:1.6">7 algorithmes · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px" data-i18n="step2">L'IA analyse en 30s</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6" data-i18n="step2d">7 algorithmes · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus</div>
       </div>
 
       <div style="background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(255,153,0,.03));border:1px solid rgba(255,215,0,.2);border-radius:16px;padding:24px;text-align:center;position:relative">
         <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#ffd700);color:#000;font-weight:900;font-size:.8rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">3</div>
         <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=280&h=140&fit=crop&q=80" alt="Play Top 10" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin:10px 0 12px;opacity:.8" loading="lazy"/>
-        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px">Jouez le Top 10</div>
-        <div style="font-size:.78rem;color:#64748b;line-height:1.6">Combos classés par confiance · Notif push dès le tirage · Archivez vos prédictions</div>
+        <div style="font-weight:800;font-size:.95rem;color:#e2e8f0;margin-bottom:8px" data-i18n="step3">Jouez le Top 10</div>
+        <div style="font-size:.78rem;color:#64748b;line-height:1.6" data-i18n="step3d">Combos classés par confiance · Notif push dès le tirage · Archivez vos prédictions</div>
       </div>
 
     </div>
@@ -609,7 +609,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <!-- Connecteur visuel entre les étapes (desktop) -->
     <div style="display:flex;justify-content:center;gap:0;margin-top:14px">
       <a href="/register" style="display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:12px;font-size:.88rem;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,#4f6eff,#7c3aed);box-shadow:0 6px 24px rgba(79,110,255,.35);transition:all .2s" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-        🚀 Démarrer gratuitement — c'est immédiat
+        <span data-i18n="ctaStart">🚀 Démarrer gratuitement — c'est immédiat</span>
       </a>
     </div>
   </div>
@@ -902,6 +902,7 @@ const T = {
   fr:{
     ctaFree:"🚀 Commencer gratuitement",ctaAnalyze:"⚡ Analyser maintenant",
     spUsersLbl:"Utilisateurs actifs",spAnalysesLbl:"Analyses générées",spStatesLbl:"États couverts",spLangsLbl:"Langues",
+    howTitle:"Comment ça marche",step1:"Choisissez votre État",step1d:"Sélectionnez parmi 44 États US · Pick3, Pick4, Cash3, Daily3 · Midi ou Soir",step2:"L'IA analyse en 30s",step2d:"7 algorithmes · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus",step3:"Jouez le Top 10",step3d:"Combos classés par confiance · Notif push dès le tirage · Archivez vos prédictions",ctaStart:"🚀 Démarrer gratuitement — c'est immédiat",
     heroKicker:"🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée",
     heroSub:"Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
@@ -978,6 +979,7 @@ const T = {
   en:{
     ctaFree:"🚀 Start for free",ctaAnalyze:"⚡ Analyze now",
     spUsersLbl:"Active users",spAnalysesLbl:"Analyses generated",spStatesLbl:"States covered",spLangsLbl:"Languages",
+    howTitle:"How it works",step1:"Choose your State",step1d:"Select from 44 US States · Pick3, Pick4, Cash3, Daily3 · Midday or Evening",step2:"AI analyzes in 30s",step2d:"7 algorithms · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consensus",step3:"Play the Top 10",step3d:"Combos ranked by confidence · Push notification at draw time · Archive your predictions",ctaStart:"🚀 Start for free — it's instant",
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Intelligence Beyond Prediction by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
@@ -1054,6 +1056,7 @@ const T = {
   es:{
     ctaFree:"🚀 Comenzar gratis",ctaAnalyze:"⚡ Analizar ahora",
     spUsersLbl:"Usuarios activos",spAnalysesLbl:"Análisis generados",spStatesLbl:"Estados cubiertos",spLangsLbl:"Idiomas",
+    howTitle:"Cómo funciona",step1:"Elija su Estado",step1d:"Seleccione entre 44 Estados de EE.UU. · Pick3, Pick4, Cash3, Daily3 · Mediodía o Noche",step2:"La IA analiza en 30s",step2d:"7 algoritmos · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consenso",step3:"Juegue el Top 10",step3d:"Combos clasificados por confianza · Notificación push en el sorteo · Archive sus predicciones",ctaStart:"🚀 Comenzar gratis — es inmediato",
     heroKicker:"🌍 Plataforma Global · Impulsada por Análisis Avanzado",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
@@ -1130,6 +1133,7 @@ const T = {
   pt:{
     ctaFree:"🚀 Começar grátis",ctaAnalyze:"⚡ Analisar agora",
     spUsersLbl:"Usuários ativos",spAnalysesLbl:"Análises geradas",spStatesLbl:"Estados cobertos",spLangsLbl:"Idiomas",
+    howTitle:"Como funciona",step1:"Escolha seu Estado",step1d:"Selecione entre 44 Estados dos EUA · Pick3, Pick4, Cash3, Daily3 · Meio-dia ou Noite",step2:"A IA analisa em 30s",step2d:"7 algoritmos · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Consenso",step3:"Jogue o Top 10",step3d:"Combos classificados por confiança · Notificação push no sorteio · Arquive suas previsões",ctaStart:"🚀 Começar grátis — é instantâneo",
     heroKicker:"🌍 Plataforma Global · Impulsionada por Análise Avançada",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
@@ -1206,6 +1210,7 @@ const T = {
   ht:{
     ctaFree:"🚀 Kòmanse gratis",ctaAnalyze:"⚡ Analize kounye a",
     spUsersLbl:"Itilizatè aktif",spAnalysesLbl:"Analiz jenere",spStatesLbl:"Eta kouvri",spLangsLbl:"Lang",
+    howTitle:"Kijan li fonksyone",step1:"Chwazi Eta ou",step1d:"Chwazi pami 44 Eta Ozetazini · Pick3, Pick4, Cash3, Daily3 · Midi oswa Aswè",step2:"IA analize nan 30s",step2d:"7 algoritm · Markov · Monte Carlo 50K · XGBoost · Fourier · ML · Konsansis",step3:"Jwe Top 10 la",step3d:"Konbinezon klase pa konfyans · Notifikasyon push nan tiraj · Achive prediksyon ou",ctaStart:"🚀 Kòmanse gratis — li imedya",
     heroKicker:"🌍 Platfòm Mondyal · Pwopilse pa Analiz Avanse",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
