@@ -1376,7 +1376,12 @@ function inject(){
     document.head.appendChild(zLink);
   }
 
-  // 0a. Inject favicon
+  // 0a. Google Search Console verification
+  if(!document.querySelector('meta[name="google-site-verification"]')){
+    const gsv=document.createElement('meta');gsv.name='google-site-verification';gsv.content='ziW-RCFWn1BEGNfpPnCciTo4sSgx4ghP8ZnRkutkVEE';document.head.appendChild(gsv);
+  }
+
+  // 0b. Inject favicon
   if(!document.querySelector('link[rel="icon"]')){
     const fav = document.createElement('link');
     fav.rel = 'icon';
