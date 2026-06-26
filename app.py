@@ -1979,6 +1979,10 @@ def tracking_js():
     resp.headers["Content-Type"] = "application/javascript; charset=utf-8"
     return resp
 
+@app.route("/google9e03aa97e42de9ae.html")
+def google_verification():
+    return send_from_directory("static", "google9e03aa97e42de9ae.html")
+
 @app.route("/favicon.svg")
 def favicon_svg():
     return send_from_directory("static", "favicon.svg", mimetype="image/svg+xml")
