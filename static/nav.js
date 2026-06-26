@@ -1380,7 +1380,7 @@ function inject(){
 
   // Clean old elements
   ['#predikta-nav','#pnav-overlay','#pnav-mobile','#zynoriq-btt',
-   '#pfloat-home','#pfloat-notif','#passt-bubble','#passt-panel'].forEach(sel=>{
+   '#pfloat-back','#pfloat-home','#pfloat-fwd','#pfloat-notif','#passt-bubble','#passt-panel'].forEach(sel=>{
     document.querySelectorAll(sel).forEach(el=>el.remove());
   });
 
