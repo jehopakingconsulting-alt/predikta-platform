@@ -1207,6 +1207,13 @@ function buildFooter(){
         <span class="pf-link" style="color:#22e87a;cursor:default">● Online</span>
       </div>
     </div>
+    <div style="display:flex;justify-content:center;gap:14px;padding:12px 0;border-top:1px solid #0D3A7A;margin-bottom:8px">
+      <a href="https://www.facebook.com/Zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#1479FF'" onmouseout="this.style.color='#4d5a8a'">📘</a>
+      <a href="https://x.com/Zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#e8eeff'" onmouseout="this.style.color='#4d5a8a'">𝕏</a>
+      <a href="https://www.instagram.com/zynoriqofficial/" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#4d5a8a'">📸</a>
+      <a href="https://www.tiktok.com/@zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#00f2ea'" onmouseout="this.style.color='#4d5a8a'">🎵</a>
+      <a href="https://www.linkedin.com/company/zynoriq/" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#0A66C2'" onmouseout="this.style.color='#4d5a8a'">💼</a>
+    </div>
     <div class="pf-bottom">
       <div class="pf-logo">ZYNORIQ</div>
       <div id="pfooter-copy">${(NAV_T[l]||NAV_T.en).footerCopy}</div>
@@ -1414,7 +1421,7 @@ function inject(){
     sch.type = 'application/ld+json';
     sch.textContent = JSON.stringify({
       "@context":"https://schema.org","@graph":[
-        {"@type":"Organization","name":"ZYNORIQ Intelligence","url":"https://www.zynoriq.com","logo":"https://www.zynoriq.com/favicon.svg","sameAs":[],"contactPoint":{"@type":"ContactPoint","email":"support@zynoriq.com","contactType":"customer support"}},
+        {"@type":"Organization","name":"ZYNORIQ Intelligence","url":"https://www.zynoriq.com","logo":"https://www.zynoriq.com/favicon.svg","sameAs":["https://www.facebook.com/Zynoriq","https://x.com/Zynoriq","https://www.instagram.com/zynoriqofficial/","https://www.tiktok.com/@zynoriq","https://www.linkedin.com/company/zynoriq/"],"contactPoint":{"@type":"ContactPoint","email":"support@zynoriq.com","contactType":"customer support"}},
         {"@type":"SoftwareApplication","name":"ZYNORIQ","url":"https://www.zynoriq.com","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","offers":{"@type":"AggregateOffer","lowPrice":"19","highPrice":"199","priceCurrency":"USD"},"description":"Lottery prediction platform using 7 ML algorithms — Pick3, Pick4, Lotto, Powerball across 44 US states in 5 languages."}
       ]
     });
