@@ -332,6 +332,35 @@ function buildEditForm(u){
       <label><input type="checkbox" id="adminChk-${u.id}" ${u.is_admin?'checked':''}> Admin</label>
       <button onclick="saveUser(${u.id})">Enregistrer</button>
       <span class="msg" id="editMsg-${u.id}"></span>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #1a1a45;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+        <span style="font-size:.72rem;color:#ffd700;font-weight:700">Paiement manuel :</span>
+        <select id="payMethod-${u.id}" style="font-size:.75rem;padding:4px 8px">
+          <option value="">— Méthode —</option>
+          <option value="etransfer">Interac e-Transfer</option>
+          <option value="wire">Virement bancaire</option>
+          <option value="moncash">MonCash</option>
+          <option value="natcash">NatCash</option>
+          <option value="orange">Orange Money</option>
+          <option value="paypal">PayPal</option>
+          <option value="crypto">Crypto (BTC/ETH/USDT)</option>
+          <option value="cash">Cash</option>
+          <option value="other">Autre</option>
+        </select>
+        <select id="payPlan-${u.id}" style="font-size:.75rem;padding:4px 8px">
+          <option value="pro">PRO ($19/mo)</option>
+          <option value="vip">VIP ($49/mo)</option>
+          <option value="elite">PREMIUM ($99/mo)</option>
+          <option value="business">BUSINESS ($199/mo)</option>
+          <option value="founder">FOUNDER ($29/mo)</option>
+        </select>
+        <select id="payDuration-${u.id}" style="font-size:.75rem;padding:4px 8px">
+          <option value="30">1 mois</option>
+          <option value="90">3 mois</option>
+          <option value="180">6 mois</option>
+          <option value="365">1 an</option>
+        </select>
+        <button onclick="activateManual(${u.id})" style="background:#22e87a;color:#04040f;border:none;padding:5px 14px;border-radius:6px;font-weight:700;font-size:.75rem;cursor:pointer">✓ Activer</button>
+      </div>
     </div>`;
 }
 
@@ -387,6 +416,33 @@ async function saveUser(id){
     msg.className = 'msg error';
     msg.textContent = 'Erreur réseau';
   }
+}
+
+async function activateManual(id){
+  const method = document.getElementById(`payMethod-${id}`).value;
+  const plan = document.getElementById(`payPlan-${id}`).value;
+  const days = parseInt(document.getElementById(`payDuration-${id}`).value, 10);
+  const msg = document.getElementById(`editMsg-${id}`);
+  if(!method){ msg.className='msg error'; msg.textContent='Sélectionnez une méthode de paiement'; return; }
+  const planKey = plan === 'founder' ? 'vip' : plan;
+  try{
+    const res = await fetch(`/api/admin/users/${id}`, {
+      method:'PATCH', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({plan: planKey, status:'active', extend_days: days}),
+    });
+    const json = await res.json();
+    if(!res.ok){ msg.className='msg error'; msg.textContent=json.error||'Erreur'; return; }
+    if(plan === 'founder'){
+      await fetch(`/api/admin/users/${id}`, {
+        method:'PATCH', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({is_founder: true}),
+      });
+    }
+    msg.className='msg success';
+    msg.textContent=`✓ ${plan.toUpperCase()} activé (${days}j) via ${method}`;
+    await loadStats();
+    await loadUsers();
+  }catch(e){ msg.className='msg error'; msg.textContent='Erreur réseau'; }
 }
 
 async function loadReferrals(){
