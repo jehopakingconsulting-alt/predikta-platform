@@ -1205,14 +1205,14 @@ function buildFooter(){
         <a class="pf-link" href="/register?plan=vip" style="color:#ffd700;font-weight:700">VIP — $49/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
         <a class="pf-link" href="/register?plan=elite" style="color:#ff9900;font-weight:700">PREMIUM — $99/${{fr:'mois',en:'mo',es:'mes',pt:'mês',ht:'mwa'}[l]||'mo'}</a>
         <span class="pf-link" style="color:#22e87a;cursor:default">● Online</span>
+        <div style="display:flex;gap:12px;margin-top:14px;align-items:center">
+          <a href="https://www.facebook.com/Zynoriq" target="_blank" title="Facebook" style="opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="Facebook" style="width:18px;height:18px;filter:invert(1)"></a>
+          <a href="https://x.com/Zynoriq" target="_blank" title="X / Twitter" style="opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/x.svg" alt="X" style="width:18px;height:18px;filter:invert(1)"></a>
+          <a href="https://www.instagram.com/zynoriqofficial/" target="_blank" title="Instagram" style="opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram" style="width:18px;height:18px;filter:invert(1)"></a>
+          <a href="https://www.tiktok.com/@zynoriq" target="_blank" title="TikTok" style="opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tiktok.svg" alt="TikTok" style="width:18px;height:18px;filter:invert(1)"></a>
+          <a href="https://www.linkedin.com/company/zynoriq/" target="_blank" title="LinkedIn" style="opacity:.6;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.6'"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="LinkedIn" style="width:18px;height:18px;filter:invert(1)"></a>
+        </div>
       </div>
-    </div>
-    <div style="display:flex;justify-content:center;gap:14px;padding:12px 0;border-top:1px solid #0D3A7A;margin-bottom:8px">
-      <a href="https://www.facebook.com/Zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#1479FF'" onmouseout="this.style.color='#4d5a8a'">📘</a>
-      <a href="https://x.com/Zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#e8eeff'" onmouseout="this.style.color='#4d5a8a'">𝕏</a>
-      <a href="https://www.instagram.com/zynoriqofficial/" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#4d5a8a'">📸</a>
-      <a href="https://www.tiktok.com/@zynoriq" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#00f2ea'" onmouseout="this.style.color='#4d5a8a'">🎵</a>
-      <a href="https://www.linkedin.com/company/zynoriq/" target="_blank" style="color:#4d5a8a;text-decoration:none;font-size:1rem;transition:color .2s" onmouseover="this.style.color='#0A66C2'" onmouseout="this.style.color='#4d5a8a'">💼</a>
     </div>
     <div class="pf-bottom">
       <div class="pf-logo">ZYNORIQ</div>
