@@ -255,6 +255,19 @@ def stripe_webhook():
             if stripe_sub_id:
                 stripe_sub = stripe.Subscription.retrieve(stripe_sub_id)
                 _sync_subscription_from_stripe(sub, stripe_sub)
+                # Auto-assign Founder badge if paid with founder price
+                founder_price = STRIPE_PRICE_IDS.get("founder", "")
+                if founder_price and user_id:
+                    items = stripe_sub.get("items", {}).get("data", [])
+                    for item in items:
+                        if _get(item, "price", {}).get("id") == founder_price:
+                            from auth import User as _FUser
+                            _fu = db.session.get(_FUser, int(user_id))
+                            if _fu and not _fu.founder_badge:
+                                _fu.founder_badge = True
+                                count = _FUser.query.filter(_FUser.founder_badge == True).count()
+                                _fu.founder_number = count
+                            break
             db.session.commit()
 
     elif etype in ("customer.subscription.updated", "customer.subscription.created"):

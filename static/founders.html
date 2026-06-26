@@ -194,29 +194,18 @@ window.claimFounder = function(){
   }
   btn.disabled = true;
   btn.textContent = '⏳...';
-  fetch('/api/founders/claim',{method:'POST',headers:{'Content-Type':'application/json'}})
-    .then(r=>r.json()).then(d=>{
-      if(d.success){
-        msg.innerHTML = '<span class="msg-ok">🏅 Fondateur #' + d.number + ' ! Bienvenue dans le programme.</span>';
-        btn.textContent = '🏅 Fondateur #' + d.number;
-        _user.founder_badge = true;
-        _user.founder_number = d.number;
-        document.getElementById('fRemaining').textContent = d.remaining;
-        // Redirect to checkout for founder price (skip if already subscribed)
-        fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
-          .then(r=>r.json()).then(s=>{
-            if(s.url) window.location.href = s.url;
-          }).catch(()=>{});
-      } else if(d.error === 'already_founder'){
-        msg.innerHTML = '<span class="msg-ok">🏅 Fondateur #' + d.number + '</span>';
-        btn.textContent = '🏅 Fondateur #' + d.number;
-        btn.disabled = true;
-      } else if(d.error === 'sold_out'){
-        msg.innerHTML = '<span class="msg-err">' + (t.soldOut||'Sold out') + '</span>';
-        btn.disabled = true;
+  // Go directly to Stripe checkout at founder price — badge assigned after payment
+  fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
+    .then(r=>r.json()).then(s=>{
+      if(s.url){
+        window.location.href = s.url;
+      } else {
+        msg.innerHTML = '<span class="msg-err">' + (s.message || s.error || 'Erreur') + '</span>';
+        btn.disabled = false;
+        btn.textContent = t.ctaBtn;
       }
     }).catch(()=>{
-      msg.innerHTML = '<span class="msg-err">Erreur — réessayez</span>';
+      msg.innerHTML = '<span class="msg-err">Erreur réseau — réessayez</span>';
       btn.disabled = false;
       btn.textContent = t.ctaBtn;
     });
