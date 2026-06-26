@@ -427,8 +427,8 @@ def get_recommendations(user_id, lang="fr"):
     if fav_games and "pick3" in str(fav_games).lower() and "pick4" not in str(fav_games).lower():
         recs.append({
             "type": "try_pick4",
-            "title": _rt(lang, "try_pick4") if "try_pick4" in (_REC_T.get(lang) or {}) else "Try Pick 4",
-            "description": _rt(lang, "try_pick4_desc") if "try_pick4_desc" in (_REC_T.get(lang) or {}) else "Expand to Pick 4 predictions and results.",
+            "title": _rt(lang, "try_pick4"),
+            "description": _rt(lang, "try_pick4_desc"),
             "action": "/pick4-predictions",
             "score": 0.5,
         })
@@ -524,6 +524,8 @@ _REC_T = {
         'try_ambassadors_desc': 'Parrainez vos amis et gagnez des commissions récurrentes.',
         'try_memory': 'Découvrez Memory Center',
         'try_memory_desc': 'Votre profil intelligent — consultez vos statistiques et préférences.',
+        'try_pick4': 'Essayez Pick 4',
+        'try_pick4_desc': 'Étendez vos prédictions aux jeux Pick 4 / Cash 4.',
     },
     'en': {
         'explore_states': 'Explore new States',
@@ -544,6 +546,8 @@ _REC_T = {
         'try_ambassadors_desc': 'Refer friends and earn recurring commissions.',
         'try_memory': 'Discover Memory Center',
         'try_memory_desc': 'Your smart profile — view your stats and preferences.',
+        'try_pick4': 'Try Pick 4',
+        'try_pick4_desc': 'Expand your predictions to Pick 4 / Cash 4 games.',
     },
     'es': {
         'explore_states': 'Explorar nuevos Estados',
@@ -564,6 +568,8 @@ _REC_T = {
         'try_ambassadors_desc': 'Recomiende amigos y gane comisiones recurrentes.',
         'try_memory': 'Descubra Memory Center',
         'try_memory_desc': 'Su perfil inteligente — consulte sus estadísticas y preferencias.',
+        'try_pick4': 'Pruebe Pick 4',
+        'try_pick4_desc': 'Amplíe sus predicciones a los juegos Pick 4 / Cash 4.',
     },
     'pt': {
         'explore_states': 'Explorar novos Estados',
@@ -584,6 +590,8 @@ _REC_T = {
         'try_ambassadors_desc': 'Indique amigos e ganhe comissões recorrentes.',
         'try_memory': 'Descubra Memory Center',
         'try_memory_desc': 'Seu perfil inteligente — veja suas estatísticas e preferências.',
+        'try_pick4': 'Experimente Pick 4',
+        'try_pick4_desc': 'Expanda suas previsões para jogos Pick 4 / Cash 4.',
     },
     'ht': {
         'explore_states': 'Eksplore nouvo Eta',
@@ -604,6 +612,8 @@ _REC_T = {
         'try_ambassadors_desc': 'Envite zanmi ou epi touche komisyon regilye.',
         'try_memory': 'Dekouvri Memory Center',
         'try_memory_desc': 'Pwofil entelijan ou — gade estatistik ak preferans ou.',
+        'try_pick4': 'Eseye Pick 4',
+        'try_pick4_desc': 'Elaji prediksyon ou nan jwèt Pick 4 / Cash 4.',
     },
 }
 

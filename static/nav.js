@@ -210,8 +210,9 @@ function saveLang(l){
   if(window._assistantLangRefresh) window._assistantLangRefresh(l);
   if(window._copilotLangRefresh) window._copilotLangRefresh(l);
   if(_cachedUser) initUserMenu();
-  // Server-rendered SEO prediction pages: reload with ?lang= to refresh content
-  if(typeof window.setLang !== 'function' && location.pathname.startsWith('/predictions')){
+  // Pages with server-rendered content: reload to refresh translations
+  const needsReload = location.pathname === '/' || location.pathname.startsWith('/predictions');
+  if(needsReload){
     const url = new URL(location.href);
     if(l === 'fr') url.searchParams.delete('lang');
     else url.searchParams.set('lang', l);
