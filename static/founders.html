@@ -204,23 +204,7 @@ window.claimFounder = function(){
     msg.innerHTML = '<span class="msg-ok">🏅 ' + (t.alreadyFounder||'Already a Founder') + '</span>';
     return;
   }
-  btn.disabled = true;
-  btn.textContent = '⏳...';
-  // Go directly to Stripe checkout at founder price — badge assigned after payment
-  fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:'vip',founder:true})})
-    .then(r=>r.json()).then(s=>{
-      if(s.checkout_url || s.url){
-        window.location.href = s.checkout_url || s.url;
-      } else {
-        msg.innerHTML = '<span class="msg-err">' + (s.message || s.error || t.errGeneric || 'Erreur') + '</span>';
-        btn.disabled = false;
-        btn.textContent = t.ctaBtn;
-      }
-    }).catch(()=>{
-      msg.innerHTML = '<span class="msg-err">' + (t.errNetwork || 'Erreur réseau — réessayez') + '</span>';
-      btn.disabled = false;
-      btn.textContent = t.ctaBtn;
-    });
+  window.location.href = '/account?plan=vip&founder=1';
 };
 </script>
 </body></html>
