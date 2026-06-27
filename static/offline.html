@@ -23,20 +23,51 @@ p{font-size:.84rem;color:var(--muted2);max-width:380px;line-height:1.7;margin-bo
 <body>
 <div class="icon">📡</div>
 <div class="logo">ZYNORIQ</div>
-<h1>Vous êtes hors ligne</h1>
-<p>Vérifiez votre connexion internet. Les données déjà chargées restent disponibles dans le cache.</p>
-<button class="btn" onclick="tryReconnect()">🔄 Réessayer</button>
+<h1 data-i18n="title">Vous êtes hors ligne</h1>
+<p data-i18n="desc">Vérifiez votre connexion internet. Les données déjà chargées restent disponibles dans le cache.</p>
+<button class="btn" onclick="tryReconnect()" data-i18n="btnRetry">Réessayer</button>
 <div class="status" id="netStatus">
-  Vérification de la connexion...
+  <span data-i18n="checking">Vérification de la connexion...</span>
 </div>
 <script>
+const T = {
+  fr:{title:"Vous êtes hors ligne",desc:"Vérifiez votre connexion internet. Les données déjà chargées restent disponibles dans le cache.",
+    btnRetry:"Réessayer",checking:"Vérification de la connexion...",
+    online:"Connexion rétablie",onlineRedirect:"Redirection...",offline:"Toujours hors ligne"},
+  en:{title:"You are offline",desc:"Check your internet connection. Previously loaded data is still available in the cache.",
+    btnRetry:"Retry",checking:"Checking connection...",
+    online:"Connection restored",onlineRedirect:"Redirecting...",offline:"Still offline"},
+  es:{title:"Estás sin conexión",desc:"Verifica tu conexión a internet. Los datos ya cargados siguen disponibles en la caché.",
+    btnRetry:"Reintentar",checking:"Verificando conexión...",
+    online:"Conexión restablecida",onlineRedirect:"Redirigiendo...",offline:"Aún sin conexión"},
+  pt:{title:"Você está offline",desc:"Verifique sua conexão com a internet. Os dados já carregados continuam disponíveis no cache.",
+    btnRetry:"Tentar novamente",checking:"Verificando conexão...",
+    online:"Conexão restabelecida",onlineRedirect:"Redirecionando...",offline:"Ainda offline"},
+  ht:{title:"Ou pa gen entènèt",desc:"Verifye koneksyon entènèt ou. Done ki te deja chaje rete disponib nan kach la.",
+    btnRetry:"Eseye ankò",checking:"Verifikasyon koneksyon...",
+    online:"Koneksyon retabli",onlineRedirect:"N ap redirije...",offline:"Toujou san entènèt"},
+};
+let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
+if(!T[curLang]) curLang='fr';
+function applyLang(lang){
+  curLang = T[lang]?lang:'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(dict[k]) el.textContent = dict[k];
+  });
+}
+window.setLang = applyLang;
+applyLang(curLang);
+
 function updateStatus(){
   const el = document.getElementById('netStatus');
+  const dict = T[curLang];
   if(navigator.onLine){
-    el.innerHTML = '<span class="online">✓ Connexion rétablie</span> — Redirection...';
+    el.innerHTML = '<span class="online">✓ ' + dict.online + '</span> — ' + dict.onlineRedirect;
     setTimeout(()=>{ window.location.href = '/'; }, 1500);
   } else {
-    el.innerHTML = '<span class="offline">✗ Toujours hors ligne</span>';
+    el.innerHTML = '<span class="offline">✗ ' + dict.offline + '</span>';
   }
 }
 function tryReconnect(){

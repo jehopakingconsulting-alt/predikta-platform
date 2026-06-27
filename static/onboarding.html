@@ -82,21 +82,21 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
   <!-- Step 1 : Bienvenue -->
   <div class="card" id="step1">
     <img class="card-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=560&h=240&fit=crop&q=80" alt="Welcome" loading="eager"/>
-    <div class="card-title">Bienvenue sur ZYNORIQ !</div>
-    <div class="card-sub">Votre compte est prêt. En 2 minutes, on configure votre expérience pour que vous ayez les meilleures prédictions dès ce soir.</div>
+    <div class="card-title" data-i18n="s1Title">Bienvenue sur ZYNORIQ !</div>
+    <div class="card-sub" data-i18n="s1Sub">Votre compte est prêt. En 2 minutes, on configure votre expérience pour que vous ayez les meilleures prédictions dès ce soir.</div>
     <div class="welcome-badges">
-      <span class="wb wb1">✅ Compte activé</span>
-      <span class="wb wb2">⚡ 7 algorithmes actifs</span>
-      <span class="wb wb3">🔔 Alertes disponibles</span>
+      <span class="wb wb1" data-i18n="badge1">✅ Compte activé</span>
+      <span class="wb wb2" data-i18n="badge2">⚡ 7 algorithmes actifs</span>
+      <span class="wb wb3" data-i18n="badge3">🔔 Alertes disponibles</span>
     </div>
-    <button class="btn-main" onclick="goStep(2)">Commencer la configuration →</button>
+    <button class="btn-main" onclick="goStep(2)" data-i18n="s1Btn">Commencer la configuration →</button>
   </div>
 
   <!-- Step 2 : Choisir État + TOD -->
   <div class="card" id="step2" style="display:none">
     <img class="card-img" src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=560&h=240&fit=crop&q=80" alt="Choose State" loading="lazy"/>
-    <div class="card-title">Votre État favori</div>
-    <div class="card-sub">Choisissez l'État que vous jouez le plus. On pré-configurera vos analyses pour ce marché.</div>
+    <div class="card-title" data-i18n="s2Title">Votre État favori</div>
+    <div class="card-sub" data-i18n="s2Sub">Choisissez l'État que vous jouez le plus. On pré-configurera vos analyses pour ce marché.</div>
 
     <div class="state-grid" id="stateGrid"></div>
 
@@ -105,50 +105,127 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;
       <button class="tod-btn" id="todEvening" onclick="selectTod('Evening')">🌙 Evening</button>
     </div>
 
-    <button class="btn-main" id="btnStep2" onclick="goStep(3)">Confirmer mon État →</button>
-    <button class="btn-skip" onclick="skipState()">Passer cette étape</button>
+    <button class="btn-main" id="btnStep2" onclick="goStep(3)" data-i18n="s2Btn">Confirmer mon État →</button>
+    <button class="btn-skip" onclick="skipState()" data-i18n="s2Skip">Passer cette étape</button>
   </div>
 
   <!-- Step 3 : Récap + actions -->
   <div class="card" id="step3" style="display:none">
     <img class="card-img" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=560&h=240&fit=crop&q=80" alt="Ready" loading="lazy"/>
-    <div class="card-title">Vous êtes prêt !</div>
-    <div class="card-sub" id="step3Sub">Voici ce que vous pouvez faire maintenant :</div>
+    <div class="card-title" data-i18n="s3Title">Vous êtes prêt !</div>
+    <div class="card-sub" id="step3Sub" data-i18n="s3Sub">Voici ce que vous pouvez faire maintenant :</div>
 
     <div class="check-list">
       <div class="check-item">
         <span class="check-icon">🧠</span>
         <div class="check-body">
-          <strong>Lancer votre première analyse</strong>
-          <span>Résultats en 30 secondes avec le Top 10 des combos</span>
+          <strong data-i18n="c1Title">Lancer votre première analyse</strong>
+          <span data-i18n="c1Desc">Résultats en 30 secondes avec le Top 10 des combos</span>
         </div>
         <span class="check-status">→</span>
       </div>
       <div class="check-item">
         <span class="check-icon">🔔</span>
         <div class="check-body">
-          <strong>Activer les alertes push</strong>
-          <span>Notification instantanée dès que votre tirage tombe</span>
+          <strong data-i18n="c2Title">Activer les alertes push</strong>
+          <span data-i18n="c2Desc">Notification instantanée dès que votre tirage tombe</span>
         </div>
         <span class="check-status" id="pushStatus">→</span>
       </div>
       <div class="check-item">
         <span class="check-icon">📊</span>
         <div class="check-body">
-          <strong>Consulter les résultats live</strong>
-          <span>44 États · Mis à jour en temps réel</span>
+          <strong data-i18n="c3Title">Consulter les résultats live</strong>
+          <span data-i18n="c3Desc">44 États · Mis à jour en temps réel</span>
         </div>
         <span class="check-status">→</span>
       </div>
     </div>
 
-    <button class="btn-main" id="btnAnalyze" onclick="launchAnalysis()">⚡ Lancer ma première analyse</button>
-    <button class="btn-skip" onclick="location.href='/results'">Aller aux résultats d'abord</button>
+    <button class="btn-main" id="btnAnalyze" onclick="launchAnalysis()" data-i18n="s3Btn">⚡ Lancer ma première analyse</button>
+    <button class="btn-skip" onclick="location.href='/results'" data-i18n="s3Skip">Aller aux résultats d'abord</button>
   </div>
 
 </div>
 
 <script>
+const T = {
+  fr:{
+    s1Title:"Bienvenue sur ZYNORIQ !",s1Sub:"Votre compte est prêt. En 2 minutes, on configure votre expérience pour que vous ayez les meilleures prédictions dès ce soir.",
+    badge1:"✅ Compte activé",badge2:"⚡ 7 algorithmes actifs",badge3:"🔔 Alertes disponibles",s1Btn:"Commencer la configuration →",
+    s2Title:"Votre État favori",s2Sub:"Choisissez l'État que vous jouez le plus. On pré-configurera vos analyses pour ce marché.",s2Btn:"Confirmer mon État →",s2Skip:"Passer cette étape",
+    s3Title:"Vous êtes prêt !",s3Sub:"Voici ce que vous pouvez faire maintenant :",
+    c1Title:"Lancer votre première analyse",c1Desc:"Résultats en 30 secondes avec le Top 10 des combos",
+    c2Title:"Activer les alertes push",c2Desc:"Notification instantanée dès que votre tirage tombe",
+    c3Title:"Consulter les résultats live",c3Desc:"44 États · Mis à jour en temps réel",
+    s3Btn:"⚡ Lancer ma première analyse",s3Skip:"Aller aux résultats d'abord",
+    step3Tpl:(name,icon,tod)=>`${name} ${icon} ${tod} · Voici ce que vous pouvez faire maintenant :`,
+    checkoutMsg:"✅ Abonnement activé — bienvenue dans ZYNORIQ PRO !",
+  },
+  en:{
+    s1Title:"Welcome to ZYNORIQ!",s1Sub:"Your account is ready. In 2 minutes, we'll set up your experience so you get the best predictions tonight.",
+    badge1:"✅ Account activated",badge2:"⚡ 7 algorithms active",badge3:"🔔 Alerts available",s1Btn:"Start setup →",
+    s2Title:"Your favorite state",s2Sub:"Choose the state you play the most. We'll pre-configure your analyses for that market.",s2Btn:"Confirm my state →",s2Skip:"Skip this step",
+    s3Title:"You're all set!",s3Sub:"Here's what you can do now:",
+    c1Title:"Run your first analysis",c1Desc:"Results in 30 seconds with the Top 10 combos",
+    c2Title:"Enable push alerts",c2Desc:"Instant notification as soon as your draw drops",
+    c3Title:"View live results",c3Desc:"44 states · Updated in real time",
+    s3Btn:"⚡ Run my first analysis",s3Skip:"Go to results first",
+    step3Tpl:(name,icon,tod)=>`${name} ${icon} ${tod} · Here's what you can do now:`,
+    checkoutMsg:"✅ Subscription activated — welcome to ZYNORIQ PRO!",
+  },
+  es:{
+    s1Title:"¡Bienvenido a ZYNORIQ!",s1Sub:"Su cuenta está lista. En 2 minutos, configuraremos su experiencia para que tenga las mejores predicciones esta noche.",
+    badge1:"✅ Cuenta activada",badge2:"⚡ 7 algoritmos activos",badge3:"🔔 Alertas disponibles",s1Btn:"Iniciar configuración →",
+    s2Title:"Su estado favorito",s2Sub:"Elija el estado en el que más juega. Pre-configuraremos sus análisis para ese mercado.",s2Btn:"Confirmar mi estado →",s2Skip:"Saltar este paso",
+    s3Title:"¡Está listo!",s3Sub:"Esto es lo que puede hacer ahora:",
+    c1Title:"Ejecutar su primer análisis",c1Desc:"Resultados en 30 segundos con el Top 10 de combinaciones",
+    c2Title:"Activar alertas push",c2Desc:"Notificación instantánea en cuanto salga su sorteo",
+    c3Title:"Consultar resultados en vivo",c3Desc:"44 estados · Actualizado en tiempo real",
+    s3Btn:"⚡ Ejecutar mi primer análisis",s3Skip:"Ir a los resultados primero",
+    step3Tpl:(name,icon,tod)=>`${name} ${icon} ${tod} · Esto es lo que puede hacer ahora:`,
+    checkoutMsg:"✅ ¡Suscripción activada — bienvenido a ZYNORIQ PRO!",
+  },
+  pt:{
+    s1Title:"Bem-vindo ao ZYNORIQ!",s1Sub:"Sua conta está pronta. Em 2 minutos, vamos configurar sua experiência para que você tenha as melhores previsões esta noite.",
+    badge1:"✅ Conta ativada",badge2:"⚡ 7 algoritmos ativos",badge3:"🔔 Alertas disponíveis",s1Btn:"Iniciar configuração →",
+    s2Title:"Seu estado favorito",s2Sub:"Escolha o estado em que você mais joga. Vamos pré-configurar suas análises para esse mercado.",s2Btn:"Confirmar meu estado →",s2Skip:"Pular esta etapa",
+    s3Title:"Você está pronto!",s3Sub:"Veja o que você pode fazer agora:",
+    c1Title:"Executar sua primeira análise",c1Desc:"Resultados em 30 segundos com o Top 10 de combinações",
+    c2Title:"Ativar alertas push",c2Desc:"Notificação instantânea assim que seu sorteio sair",
+    c3Title:"Consultar resultados ao vivo",c3Desc:"44 estados · Atualizado em tempo real",
+    s3Btn:"⚡ Executar minha primeira análise",s3Skip:"Ir aos resultados primeiro",
+    step3Tpl:(name,icon,tod)=>`${name} ${icon} ${tod} · Veja o que você pode fazer agora:`,
+    checkoutMsg:"✅ Assinatura ativada — bem-vindo ao ZYNORIQ PRO!",
+  },
+  ht:{
+    s1Title:"Byenveni sou ZYNORIQ!",s1Sub:"Kont ou pare. Nan 2 minit, n ap konfigire eksperyans ou pou ou jwenn pi bon prediksyon yo aswè a.",
+    badge1:"✅ Kont aktive",badge2:"⚡ 7 algoritm aktif",badge3:"🔔 Alèt disponib",s1Btn:"Kòmanse konfigirasyon →",
+    s2Title:"Eta favori ou",s2Sub:"Chwazi eta ou jwe plis la. N ap pre-konfigire analiz ou pou mache sa a.",s2Btn:"Konfime eta mwen →",s2Skip:"Sote etap sa a",
+    s3Title:"Ou pare!",s3Sub:"Men sa ou ka fè kounye a:",
+    c1Title:"Lanse premye analiz ou",c1Desc:"Rezilta nan 30 segonn ak Top 10 konbinezon yo",
+    c2Title:"Aktive alèt push",c2Desc:"Notifikasyon enstantane depi tiraj ou a tonbe",
+    c3Title:"Konsilte rezilta an dirèk",c3Desc:"44 eta · Mete ajou an tan reyèl",
+    s3Btn:"⚡ Lanse premye analiz mwen",s3Skip:"Ale nan rezilta avan",
+    step3Tpl:(name,icon,tod)=>`${name} ${icon} ${tod} · Men sa ou ka fè kounye a:`,
+    checkoutMsg:"✅ Abònman aktive — byenveni nan ZYNORIQ PRO!",
+  },
+};
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] != null) el.textContent = dict[key];
+  });
+  document.documentElement.setAttribute('lang', lang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', ()=>{
+  const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
+  applyLang(T[navLang] ? navLang : 'fr');
+});
+
 const STATES = [
   {code:'NY',name:'New York',flag:'🗽'},{code:'FL',name:'Florida',flag:'🌴'},
   {code:'GA',name:'Georgia',flag:'🍑'},{code:'TX',name:'Texas',flag:'⭐'},
@@ -220,8 +297,9 @@ function goStep(n){
 function _setupStep3(){
   const name = STATES.find(s=>s.code===_state)?.name || _state;
   const todIcon = _tod==='Midday' ? '☀️' : '🌙';
-  document.getElementById('step3Sub').textContent =
-    `${name} ${todIcon} ${_tod} · Voici ce que vous pouvez faire maintenant :`;
+  const curLang = window.PREDIKTA_LANG || 'fr';
+  const dict = T[curLang] || T.fr;
+  document.getElementById('step3Sub').textContent = dict.step3Tpl(name, todIcon, _tod);
   // Check si push déjà actif
   if('PushManager' in window){
     navigator.serviceWorker.ready.then(reg=>reg.pushManager.getSubscription()).then(sub=>{
@@ -243,7 +321,8 @@ if(params.get('checkout')==='success'){
   // Badge "Abonnement activé"
   const badge = document.createElement('div');
   badge.style.cssText = 'text-align:center;margin-bottom:20px;padding:8px 20px;background:rgba(34,232,122,.12);border:1px solid rgba(34,232,122,.3);border-radius:12px;font-size:.78rem;font-weight:700;color:#22e87a';
-  badge.textContent = '✅ Abonnement activé — bienvenue dans ZYNORIQ PRO !';
+  const curLang2 = window.PREDIKTA_LANG || 'fr';
+  badge.textContent = (T[curLang2] || T.fr).checkoutMsg;
   document.querySelector('.wrap').prepend(badge);
 }
 

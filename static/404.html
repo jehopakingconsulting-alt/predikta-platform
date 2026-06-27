@@ -29,17 +29,43 @@ p{font-size:.85rem;color:var(--muted2);max-width:420px;line-height:1.7;margin-bo
 <body>
 <div class="target" style="font-size:0;width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#1479FF,#004DFF);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 30px rgba(20,121,255,.4)"><span style="font-size:2rem;color:#fff;font-weight:900">?</span></div>
 <div class="error-code">404</div>
-<h1>Cette page n'existe pas</h1>
-<p>Le tirage que vous cherchez n'est pas ici. La page a peut-être été déplacée, supprimée ou l'URL est incorrecte.</p>
+<h1 data-i18n="title">Cette page n'existe pas</h1>
+<p data-i18n="desc">Le tirage que vous cherchez n'est pas ici. La page a peut-être été déplacée, supprimée ou l'URL est incorrecte.</p>
 <div class="btn-row">
-  <a href="/" class="btn btn-primary">⚡ Retour à l'Analyseur</a>
-  <a href="/results" class="btn btn-secondary">🎱 Voir les Résultats</a>
+  <a href="/" class="btn btn-primary" data-i18n="btnHome">Retour a l'Analyseur</a>
+  <a href="/results" class="btn btn-secondary" data-i18n="btnResults">Voir les Resultats</a>
 </div>
 <div class="links">
-  <a href="/" class="link">Accueil</a>
-  <a href="/results" class="link">Résultats</a>
+  <a href="/" class="link" data-i18n="linkHome">Accueil</a>
+  <a href="/results" class="link" data-i18n="linkResults">Resultats</a>
   <a href="/pro" class="link">PRO</a>
   <a href="/faq" class="link">FAQ</a>
-  <a href="/contact" class="link">Contact</a>
+  <a href="/contact" class="link" data-i18n="linkContact">Contact</a>
 </div>
+<script>
+const T = {
+  fr:{title:"Cette page n'existe pas",desc:"Le tirage que vous cherchez n'est pas ici. La page a peut-etre ete deplacee, supprimee ou l'URL est incorrecte.",
+    btnHome:"Retour a l'Analyseur",btnResults:"Voir les Resultats",linkHome:"Accueil",linkResults:"Resultats",linkContact:"Contact"},
+  en:{title:"Page not found",desc:"The page you're looking for doesn't exist. It may have been moved, deleted, or the URL is incorrect.",
+    btnHome:"Back to Analyzer",btnResults:"View Results",linkHome:"Home",linkResults:"Results",linkContact:"Contact"},
+  es:{title:"Pagina no encontrada",desc:"La pagina que buscas no existe. Puede haber sido movida, eliminada o la URL es incorrecta.",
+    btnHome:"Volver al Analizador",btnResults:"Ver Resultados",linkHome:"Inicio",linkResults:"Resultados",linkContact:"Contacto"},
+  pt:{title:"Pagina nao encontrada",desc:"A pagina que voce procura nao existe. Ela pode ter sido movida, excluida ou a URL esta incorreta.",
+    btnHome:"Voltar ao Analisador",btnResults:"Ver Resultados",linkHome:"Inicio",linkResults:"Resultados",linkContact:"Contato"},
+  ht:{title:"Paj sa a pa egziste",desc:"Paj ou ap chache a pa la. Li ka te deplase, efase oswa URL la pa kore.",
+    btnHome:"Tounen nan Analize a",btnResults:"We Rezilta yo",linkHome:"Akèy",linkResults:"Rezilta",linkContact:"Kontak"},
+};
+let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
+if(!T[curLang]) curLang='fr';
+function applyLang(lang){
+  curLang = T[lang]?lang:'fr';
+  const dict = T[curLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    if(dict[k]) el.textContent = dict[k];
+  });
+}
+window.setLang = applyLang;
+applyLang(curLang);
+</script>
 </body></html>
