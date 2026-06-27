@@ -2363,6 +2363,7 @@ def api_report():
 
 
 @app.route("/api/scrape")
+@auth_module.login_required
 def api_scrape():
     state  = request.args.get("state", None)
     months = min(int(request.args.get("months", 12)), 60)
@@ -2381,6 +2382,11 @@ def api_scrape():
             return jsonify({"message": f"{len(draws)} draws fetched · {total} total saved for {state}"})
         return jsonify({"message": f"No data found for {state}"})
 
+    # Bulk scrape all states — admin only
+    admin_secret = request.args.get("admin_secret", "")
+    expected = os.environ.get("PREDIKTA_ADMIN_SECRET", os.environ.get("ADMIN_TOKEN", ""))
+    if not expected or admin_secret != expected:
+        return jsonify({"error": "Single state required. Bulk scrape requires admin_secret."}), 403
     scrape_all(n_months=months)
     _REPORT_CACHE.clear()
     _LATEST_CACHE["data"] = None

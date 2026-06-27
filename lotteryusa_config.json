@@ -459,15 +459,15 @@
   "PR": {
     "state_slug": "puerto-rico",
     "base_slug": "pega-3",
-    "base_title": "Puerto RicoPega 3 Noche",
+    "base_title": "Puerto Rico Pega 3 Noche",
     "variants": {
       "base": {
         "slug": "pega-3",
-        "title": "Puerto RicoPega 3 Noche"
+        "title": "Puerto Rico Pega 3 Noche"
       },
       "midday-pega-3": {
         "slug": "midday-pega-3",
-        "title": "Puerto RicoPega 3 Día"
+        "title": "Puerto Rico Pega 3 Día"
       }
     }
   },

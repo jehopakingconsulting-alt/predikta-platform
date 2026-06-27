@@ -71,7 +71,7 @@ def gap_analysis(draws: list[dict]) -> dict:
     result = {}
     for digit in DIGITS:
         avg_gap = round(gap_sums[digit] / gap_counts[digit], 1) if gap_counts[digit] else None
-        current_gap = len(draws) - 1 - last_seen.get(digit, len(draws) - 1)
+        current_gap = len(draws) - 1 - last_seen.get(digit, -1)
         result[digit] = {
             "current_gap": current_gap,
             "avg_gap": avg_gap,

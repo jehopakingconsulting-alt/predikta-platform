@@ -329,9 +329,12 @@ def sum_analysis(draws: list[dict]) -> dict:
     total = len(sums) or 1
     last_sum = sums[0] if sums else None
 
-    # Most overdue sums
+    # Most overdue sums (largest gap since last seen)
     all_sums = list(range(28))
-    overdue = sorted(all_sums, key=lambda s: -sums[::-1].index(s) if s in sums else 9999)
+    last_idx = {}
+    for i, s in enumerate(sums):
+        last_idx.setdefault(s, i)
+    overdue = sorted(all_sums, key=lambda s: last_idx.get(s, len(sums)), reverse=True)
 
     return {
         "distribution": {str(s): {"count": cnt.get(s, 0), "pct": round(cnt.get(s, 0)/total*100, 2)} for s in all_sums},
