@@ -87,7 +87,7 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
           <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 MonCash</div>
           <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 NatCash</div>
           <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🟠 Orange Money</div>
-          <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🅿️ PayPal</div>
+          <a href="https://www.paypal.com/ncp/payment/TY853BRD226G6" target="_blank" id="ppLink" style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff;text-decoration:none;display:block">🅿️ PayPal</a>
           <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">₿ Crypto</div>
           <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📧 Zelle</div>
         </div>
@@ -233,6 +233,15 @@ async function loadAccount(){
       document.querySelectorAll('.plan').forEach(p=>p.classList.toggle('selected', p.dataset.plan===sub.plan));
     }
 
+    // PayPal link based on plan
+    const ppLinks = {pro:'TY853BRD226G6',vip:'YBABLFRWFD7Z2',founder:'TEPK6ZE3LE23A',elite:'BBC4M7NQW4Q3G',business:'8Z7X9BMJ954PJ'};
+    const ppEl = document.getElementById('ppLink');
+    if(ppEl){
+      const selPlan = document.querySelector('.plan.selected');
+      const pk = (selPlan && selPlan.dataset.plan) || sub.plan || 'pro';
+      ppEl.href = 'https://www.paypal.com/ncp/payment/' + (ppLinks[pk] || ppLinks.pro);
+    }
+
     // États
     selectedStates = new Set(sub.allowed_states || []);
     await loadStatesGrid(sub);
@@ -294,6 +303,9 @@ document.querySelectorAll('.plan').forEach(el=>{
   el.addEventListener('click', ()=>{
     document.querySelectorAll('.plan').forEach(p=>p.classList.remove('selected'));
     el.classList.add('selected');
+    const ppLinks = {pro:'TY853BRD226G6',vip:'YBABLFRWFD7Z2',elite:'BBC4M7NQW4Q3G',business:'8Z7X9BMJ954PJ'};
+    const ppEl = document.getElementById('ppLink');
+    if(ppEl) ppEl.href = 'https://www.paypal.com/ncp/payment/' + (ppLinks[el.dataset.plan] || ppLinks.pro);
   });
 });
 
