@@ -947,26 +947,26 @@ footer{
 
 <!-- ══ TICKER ROTATIF (1 annonce à la fois) ══ -->
 <div class="ticker-bar">
-  <div class="ticker-label">📢 PARTENAIRES</div>
+  <div class="ticker-label" data-i18n="tickerLabel">📢 PARTENAIRES</div>
   <div class="ticker-track" id="tickerTrack" onclick="tickerNext()">
     <div class="ticker-slides" id="tickerSlides">
       <div class="ticker-slide">
         <span class="t-icon">🎰</span>
         <span class="t-name">TheLotter</span>
-        <span class="t-desc">— Jouez aux loteries mondiales officiellement depuis chez vous</span>
-        <span class="t-cta">Jouer →</span>
+        <span class="t-desc" data-i18n="tickerDesc1">— Jouez aux loteries mondiales officiellement depuis chez vous</span>
+        <span class="t-cta" data-i18n="tickerCta1">Jouer →</span>
       </div>
       <div class="ticker-slide">
         <span class="t-icon">📊</span>
         <span class="t-name">LotteryPro Tools</span>
-        <span class="t-desc">— Outils premium d'analyse statistique pour maximiser vos gains</span>
-        <span class="t-cta">Essai gratuit →</span>
+        <span class="t-desc" data-i18n="tickerDesc2">— Outils premium d'analyse statistique pour maximiser vos gains</span>
+        <span class="t-cta" data-i18n="tickerCta2">Essai gratuit →</span>
       </div>
       <div class="ticker-slide">
         <span class="t-icon">🏆</span>
         <span class="t-name">Jackpot.com</span>
-        <span class="t-desc">— Powerball · Mega Millions · EuroMillions en temps réel</span>
-        <span class="t-cta">Voir jackpots →</span>
+        <span class="t-desc" data-i18n="tickerDesc3">— Powerball · Mega Millions · EuroMillions en temps réel</span>
+        <span class="t-cta" data-i18n="tickerCta3">Voir jackpots →</span>
       </div>
     </div>
   </div>
@@ -994,14 +994,14 @@ footer{
 <!-- ══ LEADERBOARD BANNER (entre hero et contrôles) ══ -->
 <div class="leaderboard-wrap">
   <div class="leaderboard-inner">
-    <span class="lb-pub-tag">Publicité</span>
+    <span class="lb-pub-tag" data-i18n="adLabel">Publicité</span>
     <div class="lb-left">🎯</div>
     <div class="lb-body">
-      <div class="lb-title">TheLotter — Achetez vos tickets officiels en ligne</div>
-      <div class="lb-desc">Participez au Powerball, Mega Millions, EuroMillions et +40 loteries mondiales · Sécurisé & officiel</div>
+      <div class="lb-title" data-i18n="lbTitle">TheLotter — Achetez vos tickets officiels en ligne</div>
+      <div class="lb-desc" data-i18n="lbDesc">Participez au Powerball, Mega Millions, EuroMillions et +40 loteries mondiales · Sécurisé & officiel</div>
     </div>
     <div class="lb-right">
-      <button class="lb-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
+      <button class="lb-btn" data-i18n="lbCta" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
     </div>
   </div>
 </div>
@@ -1200,30 +1200,30 @@ footer{
     </div>
 
     <!-- ② Newsletter ZYNORIQ PRO -->
-    <div class="sb-section-label">🎁 Offre Exclusive</div>
+    <div class="sb-section-label" data-i18n="sbExclusive">🎁 Offre Exclusive</div>
     <div class="newsletter-block">
       <div class="nl-icon">⚡</div>
-      <div class="nl-title">ZYNORIQ PRO — Gratuit 7 jours</div>
-      <div class="nl-desc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour</div>
-      <input class="nl-input" type="email" placeholder="votre@email.com"/>
-      <button class="nl-btn" onclick="subscribeNewsletter()">S'abonner Gratuitement</button>
-      <div class="nl-note">Sans engagement · Résiliation en 1 clic</div>
+      <div class="nl-title" data-i18n="nlTitle">ZYNORIQ PRO — Gratuit 7 jours</div>
+      <div class="nl-desc" data-i18n="nlDesc">Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour</div>
+      <input class="nl-input" type="email" placeholder="votre@email.com" data-i18n-placeholder="nlPlaceholder"/>
+      <button class="nl-btn" data-i18n="nlBtn" onclick="subscribeNewsletter()">S'abonner Gratuitement</button>
+      <div class="nl-note" data-i18n="nlNote">Sans engagement · Résiliation en 1 clic</div>
     </div>
 
     <!-- ③ Partenaire #1 — compact -->
-    <div class="sb-section-label">💼 Partenaires</div>
+    <div class="sb-section-label" data-i18n="sbPartners">💼 Partenaires</div>
     <a href="https://www.thelotter.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=sidebar" target="_blank" rel="noopener" class="affil-compact">
       <div class="affil-compact-inner">
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0d0d2a,#1a1a44)">🏆</div>
         <div class="affil-compact-body">
           <div class="affil-compact-title">TheLotter Premium</div>
-          <div class="affil-compact-desc">Loteries mondiales officielles</div>
+          <div class="affil-compact-desc" data-i18n="affilDesc1">Loteries mondiales officielles</div>
         </div>
-        <div class="affil-compact-cta">Jouer →</div>
+        <div class="affil-compact-cta" data-i18n="affilCta1">Jouer →</div>
       </div>
       <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
         <span class="ad-badge">AD</span>
-        <span style="font-size:.62rem;color:var(--muted2)">Sécurisé · Officiel · International</span>
+        <span style="font-size:.62rem;color:var(--muted2)" data-i18n="affilNote1">Sécurisé · Officiel · International</span>
       </div>
     </a>
 
@@ -1233,13 +1233,13 @@ footer{
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#0a1a0a,#0a3020)">📊</div>
         <div class="affil-compact-body">
           <div class="affil-compact-title">LotteryPro Tools</div>
-          <div class="affil-compact-desc">Outils d'analyse statistique</div>
+          <div class="affil-compact-desc" data-i18n="affilDesc2">Outils d'analyse statistique</div>
         </div>
-        <div class="affil-compact-cta">Essai →</div>
+        <div class="affil-compact-cta" data-i18n="affilCta2">Essai →</div>
       </div>
       <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
         <span class="ad-badge">AD</span>
-        <span style="font-size:.62rem;color:var(--muted2)">Essai gratuit 14 jours</span>
+        <span style="font-size:.62rem;color:var(--muted2)" data-i18n="affilNote2">Essai gratuit 14 jours</span>
       </div>
     </a>
 
@@ -1249,9 +1249,9 @@ footer{
         <div class="affil-compact-icon" style="background:linear-gradient(135deg,#1a0a0a,#300a0a)">🌍</div>
         <div class="affil-compact-body">
           <div class="affil-compact-title">Jackpot.com</div>
-          <div class="affil-compact-desc">Jackpots en temps réel</div>
+          <div class="affil-compact-desc" data-i18n="affilDesc3">Jackpots en temps réel</div>
         </div>
-        <div class="affil-compact-cta">Voir →</div>
+        <div class="affil-compact-cta" data-i18n="affilCta3">Voir →</div>
       </div>
       <div style="padding:0 14px 12px;display:flex;gap:6px;align-items:center">
         <span class="ad-badge">AD</span>
@@ -1264,7 +1264,7 @@ footer{
 
 <!-- ══ GRILLE SPONSORS PRÉ-FOOTER ══ -->
 <div class="sponsors-section">
-  <div class="sponsors-label">Nos Partenaires · Publicité · Our Partners · Nuestros Socios</div>
+  <div class="sponsors-label" data-i18n="sponsorsLabel">Nos Partenaires · Publicité · Our Partners · Nuestros Socios</div>
   <div class="sponsors-grid">
 
     <a href="https://www.thelotter.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=footer" target="_blank" rel="noopener" class="sponsor-card">
@@ -1272,11 +1272,11 @@ footer{
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <span class="ad-badge">AD</span>
-          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+          <span style="font-size:.6rem;color:var(--muted)" data-i18n="affilLink">Lien Affilié</span>
         </div>
         <div class="sponsor-card-name">TheLotter</div>
-        <div class="sponsor-card-desc">Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.</div>
-        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
+        <div class="sponsor-card-desc" data-i18n="sponsorDesc1">Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.</div>
+        <button class="sponsor-card-btn" data-i18n="sponsorCta1" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank');">Jouer Maintenant →</button>
       </div>
     </a>
 
@@ -1285,11 +1285,11 @@ footer{
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <span class="ad-badge">AD</span>
-          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+          <span style="font-size:.6rem;color:var(--muted)" data-i18n="affilLink">Lien Affilié</span>
         </div>
         <div class="sponsor-card-name">LotteryPro Tools</div>
-        <div class="sponsor-card-desc">Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.</div>
-        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).lotterypro||'#','_blank');">Essai Gratuit 14j →</button>
+        <div class="sponsor-card-desc" data-i18n="sponsorDesc2">Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.</div>
+        <button class="sponsor-card-btn" data-i18n="sponsorCta2" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).lotterypro||'#','_blank');">Essai Gratuit 14j →</button>
       </div>
     </a>
 
@@ -1298,11 +1298,11 @@ footer{
       <div class="sponsor-card-body">
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
           <span class="ad-badge">AD</span>
-          <span style="font-size:.6rem;color:var(--muted)">Lien Affilié</span>
+          <span style="font-size:.6rem;color:var(--muted)" data-i18n="affilLink">Lien Affilié</span>
         </div>
         <div class="sponsor-card-name">Jackpot.com</div>
-        <div class="sponsor-card-desc">Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.</div>
-        <button class="sponsor-card-btn" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).jackpot||'#','_blank');">Voir les Jackpots →</button>
+        <div class="sponsor-card-desc" data-i18n="sponsorDesc3">Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.</div>
+        <button class="sponsor-card-btn" data-i18n="sponsorCta3" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).jackpot||'#','_blank');">Voir les Jackpots →</button>
       </div>
     </a>
 
@@ -1363,6 +1363,11 @@ const T = {
     filtersDomHint:"Numéros de jours (1-31) séparés par des virgules",
     filtersReset:"Réinitialiser",filtersApply:"Appliquer",
     dowShort:["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"],
+    tickerLabel:"📢 PARTENAIRES",tickerDesc1:"— Jouez aux loteries mondiales officiellement depuis chez vous",tickerCta1:"Jouer →",tickerDesc2:"— Outils premium d'analyse statistique pour maximiser vos gains",tickerCta2:"Essai gratuit →",tickerDesc3:"— Powerball · Mega Millions · EuroMillions en temps réel",tickerCta3:"Voir jackpots →",
+    adLabel:"Publicité",lbTitle:"TheLotter — Achetez vos tickets officiels en ligne",lbDesc:"Participez au Powerball, Mega Millions, EuroMillions et +40 loteries mondiales · Sécurisé & officiel",lbCta:"Jouer Maintenant →",
+    sbExclusive:"🎁 Offre Exclusive",nlTitle:"ZYNORIQ PRO — Gratuit 7 jours",nlDesc:"Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour",nlPlaceholder:"votre@email.com",nlBtn:"S'abonner Gratuitement",nlNote:"Sans engagement · Résiliation en 1 clic",
+    sbPartners:"💼 Partenaires",affilDesc1:"Loteries mondiales officielles",affilCta1:"Jouer →",affilNote1:"Sécurisé · Officiel · International",affilDesc2:"Outils d'analyse statistique",affilCta2:"Essai →",affilNote2:"Essai gratuit 14 jours",affilDesc3:"Jackpots en temps réel",affilCta3:"Voir →",
+    sponsorsLabel:"Nos Partenaires · Publicité",affilLink:"Lien Affilié",sponsorDesc1:"Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.",sponsorCta1:"Jouer Maintenant →",sponsorDesc2:"Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.",sponsorCta2:"Essai Gratuit 14j →",sponsorDesc3:"Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.",sponsorCta3:"Voir les Jackpots →",
   },
   en:{
     heroTitle:"Advanced Algorithm Predictions",
@@ -1408,6 +1413,11 @@ const T = {
     filtersDomHint:"Day numbers (1-31) separated by commas",
     filtersReset:"Reset",filtersApply:"Apply",
     dowShort:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+    tickerLabel:"📢 PARTNERS",tickerDesc1:"— Play official world lotteries from the comfort of your home",tickerCta1:"Play →",tickerDesc2:"— Premium statistical analysis tools to maximize your winnings",tickerCta2:"Free trial →",tickerDesc3:"— Powerball · Mega Millions · EuroMillions in real time",tickerCta3:"View jackpots →",
+    adLabel:"Advertisement",lbTitle:"TheLotter — Buy your official tickets online",lbDesc:"Play Powerball, Mega Millions, EuroMillions and 40+ world lotteries · Secure & official",lbCta:"Play Now →",
+    sbExclusive:"🎁 Exclusive Offer",nlTitle:"ZYNORIQ PRO — Free for 7 days",nlDesc:"Daily predictions by email · Unlimited data · Priority access to updates",nlPlaceholder:"your@email.com",nlBtn:"Subscribe Free",nlNote:"No commitment · Cancel in 1 click",
+    sbPartners:"💼 Partners",affilDesc1:"Official world lotteries",affilCta1:"Play →",affilNote1:"Secure · Official · International",affilDesc2:"Statistical analysis tools",affilCta2:"Try →",affilNote2:"Free 14-day trial",affilDesc3:"Jackpots in real time",affilCta3:"View →",
+    sponsorsLabel:"Our Partners · Advertisement",affilLink:"Affiliate Link",sponsorDesc1:"Buy tickets for the world's biggest lotteries. Secure, official and available everywhere.",sponsorCta1:"Play Now →",sponsorDesc2:"Professional statistical analysis suite to optimize your number selections.",sponsorCta2:"Free 14-Day Trial →",sponsorDesc3:"Track Powerball, Mega Millions and EuroMillions jackpots in real time.",sponsorCta3:"View Jackpots →",
   },
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
@@ -1453,6 +1463,11 @@ const T = {
     filtersDomHint:"Números de días (1-31) separados por comas",
     filtersReset:"Restablecer",filtersApply:"Aplicar",
     dowShort:["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"],
+    tickerLabel:"📢 SOCIOS",tickerDesc1:"— Juegue a loterías mundiales oficialmente desde su casa",tickerCta1:"Jugar →",tickerDesc2:"— Herramientas premium de análisis estadístico para maximizar sus ganancias",tickerCta2:"Prueba gratis →",tickerDesc3:"— Powerball · Mega Millions · EuroMillions en tiempo real",tickerCta3:"Ver jackpots →",
+    adLabel:"Publicidad",lbTitle:"TheLotter — Compre sus boletos oficiales en línea",lbDesc:"Participe en Powerball, Mega Millions, EuroMillions y +40 loterías mundiales · Seguro y oficial",lbCta:"Jugar Ahora →",
+    sbExclusive:"🎁 Oferta Exclusiva",nlTitle:"ZYNORIQ PRO — Gratis 7 días",nlDesc:"Predicciones diarias por email · Datos ilimitados · Acceso prioritario a actualizaciones",nlPlaceholder:"su@email.com",nlBtn:"Suscribirse Gratis",nlNote:"Sin compromiso · Cancelación en 1 clic",
+    sbPartners:"💼 Socios",affilDesc1:"Loterías mundiales oficiales",affilCta1:"Jugar →",affilNote1:"Seguro · Oficial · Internacional",affilDesc2:"Herramientas de análisis estadístico",affilCta2:"Probar →",affilNote2:"Prueba gratis 14 días",affilDesc3:"Jackpots en tiempo real",affilCta3:"Ver →",
+    sponsorsLabel:"Nuestros Socios · Publicidad",affilLink:"Enlace Afiliado",sponsorDesc1:"Compre boletos para las loterías más grandes del mundo. Seguro, oficial y disponible en todas partes.",sponsorCta1:"Jugar Ahora →",sponsorDesc2:"Suite profesional de análisis estadístico para optimizar su selección de números.",sponsorCta2:"Prueba Gratis 14d →",sponsorDesc3:"Siga los jackpots de Powerball, Mega Millions y EuroMillions en tiempo real.",sponsorCta3:"Ver los Jackpots →",
   },
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
@@ -1498,6 +1513,11 @@ const T = {
     filtersDomHint:"Números de dias (1-31) separados por vírgulas",
     filtersReset:"Redefinir",filtersApply:"Aplicar",
     dowShort:["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
+    tickerLabel:"📢 PARCEIROS",tickerDesc1:"— Jogue nas loterias mundiais oficialmente de casa",tickerCta1:"Jogar →",tickerDesc2:"— Ferramentas premium de análise estatística para maximizar seus ganhos",tickerCta2:"Teste grátis →",tickerDesc3:"— Powerball · Mega Millions · EuroMillions em tempo real",tickerCta3:"Ver jackpots →",
+    adLabel:"Publicidade",lbTitle:"TheLotter — Compre seus bilhetes oficiais online",lbDesc:"Participe do Powerball, Mega Millions, EuroMillions e +40 loterias mundiais · Seguro e oficial",lbCta:"Jogar Agora →",
+    sbExclusive:"🎁 Oferta Exclusiva",nlTitle:"ZYNORIQ PRO — Grátis por 7 dias",nlDesc:"Previsões diárias por email · Dados ilimitados · Acesso prioritário a atualizações",nlPlaceholder:"seu@email.com",nlBtn:"Assinar Grátis",nlNote:"Sem compromisso · Cancelamento em 1 clique",
+    sbPartners:"💼 Parceiros",affilDesc1:"Loterias mundiais oficiais",affilCta1:"Jogar →",affilNote1:"Seguro · Oficial · Internacional",affilDesc2:"Ferramentas de análise estatística",affilCta2:"Testar →",affilNote2:"Teste grátis 14 dias",affilDesc3:"Jackpots em tempo real",affilCta3:"Ver →",
+    sponsorsLabel:"Nossos Parceiros · Publicidade",affilLink:"Link Afiliado",sponsorDesc1:"Compre bilhetes para as maiores loterias do mundo. Seguro, oficial e disponível em todos os lugares.",sponsorCta1:"Jogar Agora →",sponsorDesc2:"Suite profissional de análise estatística para otimizar suas seleções de números.",sponsorCta2:"Teste Grátis 14d →",sponsorDesc3:"Acompanhe os jackpots do Powerball, Mega Millions e EuroMillions em tempo real.",sponsorCta3:"Ver os Jackpots →",
   },
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
@@ -1543,6 +1563,11 @@ const T = {
     filtersDomHint:"Nimewo jou (1-31) separe ak vigil",
     filtersReset:"Reyajiste",filtersApply:"Aplike",
     dowShort:["Dim","Lin","Mad","Mèk","Jed","Van","Sam"],
+    tickerLabel:"📢 PATNÈ",tickerDesc1:"— Jwe lotri mondyal ofisyèlman depi lakay ou",tickerCta1:"Jwe →",tickerDesc2:"— Zouti premyòm analiz estatistik pou maksimize sa w genyen",tickerCta2:"Esè gratis →",tickerDesc3:"— Powerball · Mega Millions · EuroMillions an tan reyèl",tickerCta3:"Wè jackpots →",
+    adLabel:"Piblisite",lbTitle:"TheLotter — Achte tikè ofisyèl ou sou entènèt",lbDesc:"Patisipe nan Powerball, Mega Millions, EuroMillions ak +40 lotri mondyal · Sekirize & ofisyèl",lbCta:"Jwe Kounye a →",
+    sbExclusive:"🎁 Òf Eksklizif",nlTitle:"ZYNORIQ PRO — Gratis 7 jou",nlDesc:"Prediksyon chak jou pa imèl · Done san limit · Aksè priyoritè nan mizajou",nlPlaceholder:"ou@imèl.com",nlBtn:"Abonen Gratis",nlNote:"San angajman · Anile nan 1 klik",
+    sbPartners:"💼 Patnè",affilDesc1:"Lotri mondyal ofisyèl",affilCta1:"Jwe →",affilNote1:"Sekirize · Ofisyèl · Entènasyonal",affilDesc2:"Zouti analiz estatistik",affilCta2:"Esè →",affilNote2:"Esè gratis 14 jou",affilDesc3:"Jackpots an tan reyèl",affilCta3:"Wè →",
+    sponsorsLabel:"Patnè Nou yo · Piblisite",affilLink:"Lyen Afilye",sponsorDesc1:"Achte tikè pou pi gwo lotri nan mond lan. Sekirize, ofisyèl epi disponib toupatou.",sponsorCta1:"Jwe Kounye a →",sponsorDesc2:"Swit pwofesyonèl analiz estatistik pou optimize seleksyon nimewo ou.",sponsorCta2:"Esè Gratis 14j →",sponsorDesc3:"Swiv jackpot Powerball, Mega Millions ak EuroMillions an tan reyèl.",sponsorCta3:"Wè Jackpots yo →",
   },
 };
 
@@ -1597,6 +1622,17 @@ function setLang(lang){
   if(fDomH)   fDomH.textContent   = t('filtersDomHint');
   if(fReset)  fReset.textContent  = t('filtersReset');
   if(fApply)  fApply.textContent  = t('filtersApply');
+  // Generic data-i18n walker for ads/sponsors/sidebar
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if(val && val !== key) el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    const val = t(key);
+    if(val && val !== key) el.placeholder = val;
+  });
   renderDowCheckboxes();
   // Re-render if data exists
   if(window._lastData) renderAll(window._lastData);
