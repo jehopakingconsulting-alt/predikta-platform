@@ -68,7 +68,8 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
       <div class="subtitle" style="margin-bottom:0" data-i18n="changePlanNote">Démarre une nouvelle période d'essai en changeant de plan (paiement requis ensuite).</div>
       <div class="plans" id="plans">
         <div class="plan" data-plan="pro"><b>PRO</b><span>$19/mo</span><small>4 États · 1/jour</small></div>
-        <div class="plan" data-plan="vip"><b>VIP</b><span>$49/mo</span><small>20 États · 7/jour</small></div>
+        <div class="plan" data-plan="vip" id="planVip"><b>VIP</b><span>$49/mo</span><small>20 États · 7/jour</small></div>
+        <div class="plan" data-plan="vip" data-founder="1" id="planFounder" style="display:none;border-color:#ffd700;background:rgba(255,215,0,.08)"><b style="color:#ffd700">🏅 FOUNDER</b><span style="color:#ffd700">$29/mo</span><small style="color:#ffd700">VIP · à vie</small></div>
         <div class="plan" data-plan="elite"><b>PREMIUM</b><span>$99/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
         <div class="plan" data-plan="business"><b>BUSINESS</b><span>$199/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
       </div>
@@ -250,9 +251,27 @@ async function loadAccount(){
       ? (sub.analyses_per_day < 0 ? dict.quotaUnlimited : sub.analyses_per_day)
       : '—';
 
-    // Pré-sélection du plan actuel
-    if(sub.plan){
-      document.querySelectorAll('.plan').forEach(p=>p.classList.toggle('selected', p.dataset.plan===sub.plan));
+    // Founder card: show if ?founder=1 in URL
+    const urlParams = new URLSearchParams(location.search);
+    const isFounder = urlParams.get('founder') === '1';
+    if(isFounder){
+      const fc = document.getElementById('planFounder');
+      const vc = document.getElementById('planVip');
+      if(fc) fc.style.display = '';
+      if(vc) vc.style.display = 'none';
+    }
+
+    // Pré-sélection du plan actuel ou du plan URL
+    const urlPlan = urlParams.get('plan');
+    if(urlPlan || sub.plan){
+      const target = urlPlan || sub.plan;
+      document.querySelectorAll('.plan').forEach(p=>{
+        const match = p.dataset.plan === target && (isFounder ? p.dataset.founder === '1' : p.dataset.founder !== '1');
+        p.classList.toggle('selected', match);
+      });
+      if(!document.querySelector('.plan.selected') && sub.plan){
+        document.querySelectorAll('.plan').forEach(p=>p.classList.toggle('selected', p.dataset.plan===sub.plan && !p.dataset.founder));
+      }
     }
 
     // PayPal link based on plan
@@ -260,7 +279,8 @@ async function loadAccount(){
     const ppEl = document.getElementById('ppLink');
     if(ppEl){
       const selPlan = document.querySelector('.plan.selected');
-      const pk = (selPlan && selPlan.dataset.plan) || sub.plan || 'pro';
+      const isF = selPlan && selPlan.dataset.founder === '1';
+      const pk = isF ? 'founder' : ((selPlan && selPlan.dataset.plan) || sub.plan || 'pro');
       ppEl.href = 'https://www.paypal.com/ncp/payment/' + (ppLinks[pk] || ppLinks.pro);
     }
 
@@ -325,9 +345,10 @@ document.querySelectorAll('.plan').forEach(el=>{
   el.addEventListener('click', ()=>{
     document.querySelectorAll('.plan').forEach(p=>p.classList.remove('selected'));
     el.classList.add('selected');
-    const ppLinks = {pro:'TY853BRD226G6',vip:'YBABLFRWFD7Z2',elite:'BBC4M7NQW4Q3G',business:'8Z7X9BMJ954PJ'};
+    const ppLinks = {pro:'TY853BRD226G6',vip:'YBABLFRWFD7Z2',founder:'TEPK6ZE3LE23A',elite:'BBC4M7NQW4Q3G',business:'8Z7X9BMJ954PJ'};
     const ppEl = document.getElementById('ppLink');
-    if(ppEl) ppEl.href = 'https://www.paypal.com/ncp/payment/' + (ppLinks[el.dataset.plan] || ppLinks.pro);
+    const isF = el.dataset.founder === '1';
+    if(ppEl) ppEl.href = 'https://www.paypal.com/ncp/payment/' + (ppLinks[isF ? 'founder' : el.dataset.plan] || ppLinks.pro);
   });
 });
 
@@ -335,6 +356,7 @@ document.getElementById('btnChoosePlan').addEventListener('click', async ()=>{
   const dict = T[curLang];
   const sel = document.querySelector('.plan.selected');
   const plan = sel ? sel.dataset.plan : 'vip';
+  const founder = sel && sel.dataset.founder === '1';
   const msgEl = document.getElementById('planMsg');
   try{
     // Si Stripe est configuré : redirige vers Stripe Checkout pour
@@ -342,7 +364,8 @@ document.getElementById('btnChoosePlan').addEventListener('click', async ()=>{
     const cfgR = await fetch('/api/billing/config');
     const cfg = await cfgR.json();
     if(cfg.enabled){
-      const co = await fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
+      const body = founder ? {plan, founder: true} : {plan};
+      const co = await fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       const coData = await co.json();
       if(co.ok && coData.checkout_url){
         msgEl.textContent = dict.redirecting; msgEl.className='msg success';
