@@ -1145,10 +1145,10 @@ footer{
       <!-- Coming soon — affiché quand aucun ID YouTube n'est configuré -->
       <div class="yt-coming" id="ytComing">
         <div class="yt-coming-logo">ZYNORIQ TV</div>
-        <div class="yt-coming-badge">Bientôt disponible</div>
-        <div class="yt-coming-title" id="ytComingTitle">Tutoriels & Analyses en préparation</div>
-        <div class="yt-coming-sub">Abonnez-vous pour être notifié dès la mise en ligne</div>
-        <a class="yt-coming-yt" href="https://www.youtube.com/@zynoriq" target="_blank" rel="noopener">
+        <div class="yt-coming-badge" data-i18n="ytBadge">Bientôt disponible</div>
+        <div class="yt-coming-title" id="ytComingTitle" data-i18n="ytComingTitle">Tutoriels & Analyses en préparation</div>
+        <div class="yt-coming-sub" data-i18n="ytComingSub">Abonnez-vous pour être notifié dès la mise en ligne</div>
+        <a class="yt-coming-yt" href="https://www.youtube.com/@zynoriq" target="_blank" rel="noopener" data-i18n="ytSubscribe">
           ▶ S'abonner à la chaîne ZYNORIQ
         </a>
       </div>
@@ -1176,26 +1176,26 @@ footer{
       <div style="padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(34,232,122,.2)">
         <div style="display:flex;align-items:center;gap:8px">
           <span style="width:8px;height:8px;border-radius:50%;background:#22e87a;display:inline-block;animation:livePulse 1.5s infinite"></span>
-          <span style="font-size:.7rem;font-weight:800;color:#22e87a;text-transform:uppercase;letter-spacing:1.5px">Résultats du Jour</span>
+          <span style="font-size:.7rem;font-weight:800;color:#22e87a;text-transform:uppercase;letter-spacing:1.5px" data-i18n="widgetTitle">Résultats du Jour</span>
         </div>
-        <a href="/results" style="font-size:.65rem;color:var(--accent);text-decoration:none;font-weight:700;padding:3px 10px;border:1px solid rgba(79,110,255,.3);border-radius:6px;transition:all .2s" onmouseover="this.style.background='rgba(79,110,255,.15)'" onmouseout="this.style.background='transparent'">Voir tous →</a>
+        <a href="/results" style="font-size:.65rem;color:var(--accent);text-decoration:none;font-weight:700;padding:3px 10px;border:1px solid rgba(79,110,255,.3);border-radius:6px;transition:all .2s" onmouseover="this.style.background='rgba(79,110,255,.15)'" onmouseout="this.style.background='transparent'" data-i18n="widgetSeeAll">Voir tous →</a>
       </div>
       <div id="todayResultsWidget" style="padding:10px 14px">
-        <div style="font-size:.72rem;color:var(--muted2);text-align:center;padding:8px 0">Chargement...</div>
+        <div style="font-size:.72rem;color:var(--muted2);text-align:center;padding:8px 0" data-i18n="loading">Chargement...</div>
       </div>
       <div style="padding:8px 14px 12px;border-top:1px solid rgba(34,232,122,.15)">
         <a href="/results" style="display:block;text-align:center;padding:9px;border-radius:9px;font-size:.78rem;font-weight:700;background:linear-gradient(135deg,rgba(34,232,122,.2),rgba(79,110,255,.15));border:1px solid rgba(34,232,122,.3);color:#22e87a;text-decoration:none;transition:all .2s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
-          🎱 Page Résultats Complète →
+          <span data-i18n="widgetFull">🎱 Page Résultats Complète →</span>
         </a>
       </div>
     </div>
 
     <!-- ① Statistiques État -->
-    <div class="sb-section-label">📍 Statistiques</div>
+    <div class="sb-section-label" data-i18n="sbStats">📍 Statistiques</div>
     <div class="card" id="stateInfoCard" style="padding:14px;margin-bottom:0">
       <div class="card-title"><span class="ct-icon">📍</span><span id="s-stats-title">Statistiques</span></div>
       <div id="stateStats" style="font-size:.75rem;color:var(--muted2);line-height:1.9">
-        <div id="s-select-state">Sélectionnez un État</div>
+        <div id="s-select-state" data-i18n="selectState">Sélectionnez un État</div>
       </div>
     </div>
 
@@ -1339,7 +1339,7 @@ const T = {
     statsTitle:"Statistiques",selectState:"Sélectionnez un État",
     videoTitle:"📺 ZYNORIQ TV — Tutoriels & Analyses Live",
     tvPromoText:"📺 Le journal ZYNORIQ TV du jour est en ligne — 40 États analysés",
-    today:"Aujourd'hui",totalDraws:"tirages analysés",
+    today:"Aujourd'hui",todayShort:"Auj.",yesterday:"Hier",otherStates:"autres États",seeAllStates:"Voir tout →",loading:"Chargement...",selectState:"Sélectionnez un État",sbStats:"📍 Statistiques",ytBadge:"Bientôt disponible",ytComingTitle:"Tutoriels & Analyses en préparation",ytComingSub:"Abonnez-vous pour être notifié dès la mise en ligne",ytSubscribe:"▶ S'abonner à la chaîne ZYNORIQ",blogGuide:"🎬 Guide Prédictions",blogMarkov:"📊 Analyse Markov",blogExplained:"📊 Analyse Expliquée",blogStrategies:"💰 Stratégies Gagnantes",totalDraws:"tirages analysés",
     updatedAgo:m=>m<1?"Données mises à jour à l'instant":m<60?`Données mises à jour il y a ${m} min`:`Données mises à jour il y a ${Math.floor(m/60)} h`,
     about:"À Propos",privacy:"Confidentialité",terms:"Conditions",
     contact:"Contact",affil:"Affiliations",api:"API",
@@ -1389,7 +1389,7 @@ const T = {
     statsTitle:"Statistics",selectState:"Select a State",
     videoTitle:"📺 ZYNORIQ TV — Tutorials & Live Analysis",
     tvPromoText:"📺 Today's ZYNORIQ TV daily recap is live — 40 states analyzed",
-    today:"Today",totalDraws:"draws analyzed",
+    today:"Today",todayShort:"Today",yesterday:"Yest.",otherStates:"other states",seeAllStates:"See all →",loading:"Loading...",selectState:"Select a state",sbStats:"📍 Statistics",ytBadge:"Coming soon",ytComingTitle:"Tutorials & Analyses in preparation",ytComingSub:"Subscribe to be notified when available",ytSubscribe:"▶ Subscribe to ZYNORIQ channel",blogGuide:"🎬 Predictions Guide",blogMarkov:"📊 Markov Analysis",blogExplained:"📊 Analysis Explained",blogStrategies:"💰 Winning Strategies",totalDraws:"draws analyzed",
     updatedAgo:m=>m<1?"Data updated just now":m<60?`Data updated ${m} min ago`:`Data updated ${Math.floor(m/60)} h ago`,
     about:"About",privacy:"Privacy",terms:"Terms",
     contact:"Contact",affil:"Affiliates",api:"API",
@@ -1439,7 +1439,7 @@ const T = {
     statsTitle:"Estadísticas",selectState:"Seleccione un Estado",
     videoTitle:"📺 ZYNORIQ TV — Tutoriales y Análisis en Vivo",
     tvPromoText:"📺 El boletín diario de ZYNORIQ TV ya está en línea — 40 estados analizados",
-    today:"Hoy",totalDraws:"sorteos analizados",
+    today:"Hoy",todayShort:"Hoy",yesterday:"Ayer",otherStates:"otros estados",seeAllStates:"Ver todo →",loading:"Cargando...",selectState:"Seleccione un estado",sbStats:"📍 Estadísticas",ytBadge:"Próximamente",ytComingTitle:"Tutoriales y análisis en preparación",ytComingSub:"Suscríbase para ser notificado cuando estén disponibles",ytSubscribe:"▶ Suscribirse al canal ZYNORIQ",blogGuide:"🎬 Guía de Predicciones",blogMarkov:"📊 Análisis Markov",blogExplained:"📊 Análisis Explicado",blogStrategies:"💰 Estrategias Ganadoras",totalDraws:"sorteos analizados",
     updatedAgo:m=>m<1?"Datos actualizados ahora":m<60?`Datos actualizados hace ${m} min`:`Datos actualizados hace ${Math.floor(m/60)} h`,
     about:"Acerca de",privacy:"Privacidad",terms:"Términos",
     contact:"Contacto",affil:"Afiliados",api:"API",
@@ -1489,7 +1489,7 @@ const T = {
     statsTitle:"Estatísticas",selectState:"Selecione um Estado",
     videoTitle:"📺 ZYNORIQ TV — Tutoriais e Análises ao Vivo",
     tvPromoText:"📺 O boletim diário do ZYNORIQ TV já está no ar — 40 estados analisados",
-    today:"Hoje",totalDraws:"sorteios analisados",
+    today:"Hoje",todayShort:"Hoje",yesterday:"Ontem",otherStates:"outros estados",seeAllStates:"Ver tudo →",loading:"Carregando...",selectState:"Selecione um estado",sbStats:"📍 Estatísticas",ytBadge:"Em breve",ytComingTitle:"Tutoriais e análises em preparação",ytComingSub:"Inscreva-se para ser notificado quando disponível",ytSubscribe:"▶ Inscrever-se no canal ZYNORIQ",blogGuide:"🎬 Guia de Previsões",blogMarkov:"📊 Análise Markov",blogExplained:"📊 Análise Explicada",blogStrategies:"💰 Estratégias Vencedoras",totalDraws:"sorteios analisados",
     updatedAgo:m=>m<1?"Dados atualizados agora":m<60?`Dados atualizados há ${m} min`:`Dados atualizados há ${Math.floor(m/60)} h`,
     about:"Sobre",privacy:"Privacidade",terms:"Termos",
     contact:"Contato",affil:"Afiliados",api:"API",
@@ -1539,7 +1539,7 @@ const T = {
     statsTitle:"Estatistik",selectState:"Chwazi yon Eta",
     videoTitle:"📺 ZYNORIQ TV — Tutoryo & Analiz Live",
     tvPromoText:"📺 Jounal ZYNORIQ TV jodi a an liy — 40 eta analize",
-    today:"Jodi a",totalDraws:"tiraj analize",
+    today:"Jodi a",todayShort:"Jodi",yesterday:"Yè",otherStates:"lòt eta",seeAllStates:"Wè tout →",loading:"Chajman...",selectState:"Chwazi yon eta",sbStats:"📍 Estatistik",ytBadge:"Byento disponib",ytComingTitle:"Titoryèl ak analiz ap prepare",ytComingSub:"Abòne pou jwenn notifikasyon lè li disponib",ytSubscribe:"▶ Abòne nan chanèl ZYNORIQ",blogGuide:"🎬 Gid Prediksyon",blogMarkov:"📊 Analiz Markov",blogExplained:"📊 Analiz Eksplike",blogStrategies:"💰 Estrateji Gayan",totalDraws:"tiraj analize",
     updatedAgo:m=>m<1?"Done mizajou kounye a":m<60?`Done mizajou sa fè ${m} min`:`Done mizajou sa fè ${Math.floor(m/60)} è`,
     about:"Sou",privacy:"Konfidansyalite",terms:"Tèm",
     contact:"Kontak",affil:"Afilye",api:"API",
@@ -1755,10 +1755,10 @@ setInterval(tickerNext, 4000);
 // Laissez id:"" pour afficher "Bientôt disponible"
 // ═══════════════════════════════════════════════════
 const YT_VIDEOS = [
-  { id: "", label: "🎬 Guide Prédictions",    title: "Comment lire les prédictions ZYNORIQ" },
-  { id: "", label: "📊 Analyse Markov",        title: "Chaînes de Markov — Analyse détaillée" },
-  { id: "", label: "📊 Analyse Expliquée",     title: "Tous les algorithmes expliqués" },
-  { id: "", label: "💰 Stratégies Gagnantes",  title: "Méthodes avancées & backtesting" },
+  { id: "", labelKey: "blogGuide",      label: "🎬 Guide Prédictions",    title: "Comment lire les prédictions ZYNORIQ" },
+  { id: "", labelKey: "blogMarkov",     label: "📊 Analyse Markov",        title: "Chaînes de Markov — Analyse détaillée" },
+  { id: "", labelKey: "blogExplained",  label: "📊 Analyse Expliquée",     title: "Tous les algorithmes expliqués" },
+  { id: "", labelKey: "blogStrategies", label: "💰 Stratégies Gagnantes",  title: "Méthodes avancées & backtesting" },
 ];
 
 (function initYTPlayer(){
@@ -1786,7 +1786,7 @@ const YT_VIDEOS = [
   YT_VIDEOS.forEach((v,i)=>{
     const el = document.createElement('div');
     el.className = 'playlist-item' + (i===0?' active':'');
-    el.textContent = v.label;
+    el.textContent = v.labelKey ? t(v.labelKey) : v.label;
     el.onclick = ()=> loadVideo(i);
     playlist.appendChild(el);
   });
@@ -2085,7 +2085,7 @@ async function loadTodayWidget(){
         <div style="display:flex;gap:3px;flex:1">${balls}</div>
         <span style="font-size:.58rem;padding:1px 6px;border-radius:6px;flex-shrink:0;
           ${isToday?'background:rgba(34,232,122,.15);color:#22e87a;border:1px solid rgba(34,232,122,.3)':'background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.25)'}"
-        >${isToday?'Auj.':'Hier'}</span>
+        >${isToday?t('todayShort'):t('yesterday')}</span>
       </div>`;
     }).join('');
 
@@ -2095,9 +2095,9 @@ async function loadTodayWidget(){
       <div style="display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer"
         onclick="window.location.href='/all-results'" title="Voir tous les autres États — données à jour automatiquement">
         <span style="font-size:1rem;flex-shrink:0">🌎</span>
-        <span style="font-size:.72rem;font-weight:800;color:var(--accent);flex:1">+ ${remaining} autres États</span>
+        <span style="font-size:.72rem;font-weight:800;color:var(--accent);flex:1">+ ${remaining} ${t('otherStates')}</span>
         <span style="font-size:.6rem;padding:2px 8px;border-radius:8px;flex-shrink:0;
-          background:rgba(79,110,255,.12);color:var(--accent);border:1px solid rgba(79,110,255,.3)">Voir tout →</span>
+          background:rgba(79,110,255,.12);color:var(--accent);border:1px solid rgba(79,110,255,.3)">${t('seeAllStates')}</span>
       </div>` : '';
 
     widget.innerHTML = `
