@@ -1555,15 +1555,30 @@ function inject(){
   initUserMenu();
 
   // 9. Smart CTA links: /register → /account for logged-in users
-  fetch('/api/auth/me').then(r=>r.json()).then(d=>{
-    if(!d.user) return;
-    document.querySelectorAll('a[href^="/register"]').forEach(a=>{
+  function rewriteRegisterLinks(){
+    if(!_cachedUser) return;
+    document.querySelectorAll('a[href*="/register"]').forEach(a=>{
       const href = a.getAttribute('href');
       if(href === '/register' || href.startsWith('/register?')){
         a.href = href.replace('/register', '/account');
       }
     });
-  }).catch(()=>{});
+  }
+  // Wait for user check to complete, then rewrite + observe future DOM changes
+  (async()=>{
+    if(!_cachedUser){
+      try{
+        const r = await fetch('/api/auth/me');
+        const d = await r.json();
+        if(d.user) _cachedUser = d.user;
+      }catch(e){}
+    }
+    rewriteRegisterLinks();
+    if(_cachedUser){
+      const _regObs = new MutationObserver(()=>{ rewriteRegisterLinks(); });
+      _regObs.observe(document.body, {childList:true, subtree:true});
+    }
+  })();
 }
 
 if(document.readyState==='loading'){

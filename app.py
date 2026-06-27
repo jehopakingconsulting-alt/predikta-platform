@@ -2,7 +2,7 @@
 ZYNORIQ Intelligence™ — Flask Server  v2.0
 """
 
-from flask import Flask, jsonify, request, send_from_directory, make_response, Response, stream_with_context
+from flask import Flask, jsonify, request, send_from_directory, make_response, Response, stream_with_context, redirect
 from flask.json.provider import DefaultJSONProvider
 try:
     from flask_compress import Compress
@@ -1888,10 +1888,27 @@ def api_admin_system():
 def referral_page(): return send_from_directory("static", "referral.html")
 
 @app.route("/login")
-def login_page(): return send_from_directory("static", "login.html")
+def login_page():
+    try:
+        u = auth_module.current_user()
+        if u:
+            return redirect("/account")
+    except Exception:
+        pass
+    return send_from_directory("static", "login.html")
 
 @app.route("/register")
-def register_page(): return send_from_directory("static", "register.html")
+def register_page():
+    try:
+        u = auth_module.current_user()
+        if u:
+            from urllib.parse import urlencode
+            qs = request.query_string.decode()
+            dest = "/account" + ("?" + qs if qs else "")
+            return redirect(dest)
+    except Exception:
+        pass
+    return send_from_directory("static", "register.html")
 
 @app.route("/forgot-password")
 def forgot_password_page(): return send_from_directory("static", "forgot-password.html")
