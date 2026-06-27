@@ -289,7 +289,7 @@ function renderUsers(data){
     empty.style.display = 'none';
     tbody.innerHTML = data.users.map(u=>{
       const sub = u.subscription || {};
-      const plan = sub.plan || '—';
+      const plan = sub.plan_label || (sub.plan ? sub.plan.toUpperCase() : '—');
       const status = sub.status || 'none';
       const days = sub.days_left != null ? sub.days_left : '—';
       const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
