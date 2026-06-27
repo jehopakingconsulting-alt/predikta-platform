@@ -129,6 +129,12 @@ def create_checkout_session():
 
     # Réutilise (ou crée) le Customer Stripe associé à ce compte
     customer_id = sub.stripe_customer_id
+    if customer_id:
+        try:
+            stripe.Customer.retrieve(customer_id)
+        except stripe.error.InvalidRequestError:
+            customer_id = None
+            sub.stripe_customer_id = None
     if not customer_id:
         customer = stripe.Customer.create(email=user.email, name=user.username,
                                            metadata={"predikta_user_id": str(user.id)})
