@@ -530,11 +530,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 
 <div class="section">
 
-  <!-- Quick links (Prédictions / Archives / Parrainage + Analyser / Scraper / Filtres) -->
+  <!-- Quick links (Scraper / Analyser / Archives / Parrainage / Prédictions / Filtres) -->
   <div class="quick-links-grid">
-    <a href="/predictions" class="quick-link-card">
-      <span class="ql-icon">🎯</span>
-      <div class="ql-title" data-i18n="qlPredictionsTitle">Prédictions</div>
+    <a href="/analyze?go=scrape" class="quick-link-card">
+      <span class="ql-icon">🔄</span>
+      <div class="ql-title" data-i18n="qlScrapeTitle">Scraper</div>
+    </a>
+    <a href="/analyze?go=analyze" class="quick-link-card">
+      <span class="ql-icon">⚡</span>
+      <div class="ql-title" data-i18n="qlAnalyzeTitle">Analyser</div>
     </a>
     <a href="/archives" class="quick-link-card">
       <span class="ql-icon">📁</span>
@@ -544,13 +548,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <span class="ql-icon">🎁</span>
       <div class="ql-title" data-i18n="qlReferralTitle">Parrainage</div>
     </a>
-    <a href="/analyze?go=analyze" class="quick-link-card">
-      <span class="ql-icon">⚡</span>
-      <div class="ql-title" data-i18n="qlAnalyzeTitle">Analyser</div>
-    </a>
-    <a href="/analyze?go=scrape" class="quick-link-card">
-      <span class="ql-icon">🔄</span>
-      <div class="ql-title" data-i18n="qlScrapeTitle">Scraper</div>
+    <a href="/predictions" class="quick-link-card">
+      <span class="ql-icon">🎯</span>
+      <div class="ql-title" data-i18n="qlPredictionsTitle">Prédictions</div>
     </a>
     <a href="/analyze?go=filters" class="quick-link-card">
       <span class="ql-icon">📅</span>
