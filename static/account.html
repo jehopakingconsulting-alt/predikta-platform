@@ -130,6 +130,16 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
       <div class="msg" id="statesMsg"></div>
     </div>
 
+    <!-- Trust badges -->
+    <div style="text-align:center;padding:20px 16px 8px;opacity:.7">
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:.7rem;color:#4d5a8a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22e87a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg> <span data-i18n="trustSecure">Paiement sécurisé SSL 256-bit</span></div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:.7rem;color:#4d5a8a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22e87a" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span data-i18n="trustEncrypted">Données cryptées & protégées</span></div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:.7rem;color:#4d5a8a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22e87a" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg> <span data-i18n="trustCancel">Annulation en 1 clic · Sans engagement</span></div>
+      </div>
+      <div style="font-size:.62rem;color:#2d3055" data-i18n="trustCompliance">Conforme PCI-DSS · Vos informations bancaires ne sont jamais stockées sur nos serveurs</div>
+    </div>
+
     <div class="card">
       <button class="outline" id="btnLogout" data-i18n="btnLogout">Se déconnecter</button>
     </div>
@@ -151,7 +161,7 @@ const T = {
     savedOk:"Enregistré ✓", planActivated:"Plan activé ! Ton essai gratuit commence maintenant.",
     tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",
     redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",
-    payWith:"Payer avec",btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",},
+    payWith:"Payer avec",trustSecure:"Paiement sécurisé SSL 256-bit",trustEncrypted:"Données cryptées & protégées",trustCancel:"Annulation en 1 clic · Sans engagement",trustCompliance:"Conforme PCI-DSS · Vos informations bancaires ne sont jamais stockées sur nos serveurs",btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
@@ -165,7 +175,7 @@ const T = {
     savedOk:"Saved ✓", planActivated:"Plan activated! Your free trial starts now.",
     tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",
     redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",
-    payWith:"Pay with",btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",},
+    payWith:"Pay with",trustSecure:"Secure SSL 256-bit payment",trustEncrypted:"Encrypted & protected data",trustCancel:"Cancel in 1 click · No commitment",trustCompliance:"PCI-DSS compliant · Your banking details are never stored on our servers",btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuario",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estado",lblDaysLeft:"Tiempo restante",lblQuota:"Análisis / día",
@@ -179,7 +189,7 @@ const T = {
     savedOk:"Guardado ✓", planActivated:"¡Plan activado! Tu prueba gratuita comienza ahora.",
     tooMany:(n)=>`Puedes seleccionar como máximo ${n} Estado(s).`, notLoggedIn:"Debes iniciar sesión.",
     redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
-    payWith:"Pagar con",btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",},
+    payWith:"Pagar con",trustSecure:"Pago seguro SSL 256-bit",trustEncrypted:"Datos cifrados y protegidos",trustCancel:"Cancelación en 1 clic · Sin compromiso",trustCompliance:"Conforme PCI-DSS · Sus datos bancarios nunca se almacenan en nuestros servidores",btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuário",lblEmail:"Email",lblPlan:"Plano",lblStatus:"Status",lblDaysLeft:"Tempo restante",lblQuota:"Análises / dia",
@@ -193,7 +203,7 @@ const T = {
     savedOk:"Salvo ✓", planActivated:"Plano ativado! Seu teste gratuito começa agora.",
     tooMany:(n)=>`Você pode selecionar no máximo ${n} Estado(s).`, notLoggedIn:"Você precisa estar conectado.",
     redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",
-    payWith:"Pagar com",btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",},
+    payWith:"Pagar com",trustSecure:"Pagamento seguro SSL 256-bit",trustEncrypted:"Dados criptografados e protegidos",trustCancel:"Cancelamento em 1 clique · Sem compromisso",trustCompliance:"Conforme PCI-DSS · Seus dados bancários nunca são armazenados em nossos servidores",btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
     lblUser:"Itilizatè",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estati",lblDaysLeft:"Tan ki rete",lblQuota:"Analiz / jou",
@@ -207,7 +217,7 @@ const T = {
     savedOk:"Anrejistre ✓", planActivated:"Plan aktive! Esè gratis ou kòmanse kounye a.",
     tooMany:(n)=>`Ou ka chwazi pi plis ${n} Eta.`, notLoggedIn:"Ou dwe konekte.",
     redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",
-    payWith:"Peye ak",btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",},
+    payWith:"Peye ak",trustSecure:"Peman sekirize SSL 256-bit",trustEncrypted:"Done kripte ak pwoteje",trustCancel:"Anilasyon an 1 klik · San angajman",trustCompliance:"Konfòm PCI-DSS · Enfòmasyon bankè ou pa janm estoke sou sèvè nou yo",btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
