@@ -110,12 +110,11 @@ def build_features(draws: list[dict], window: int = 10) -> tuple[np.ndarray, np.
         for pos in range(3):
             last_dig = past[-1][pos]
             trans = Counter(
-                data[j][pos]
+                data[j+1][pos]
                 for j in range(max(0, i-50), i - 1)
                 if data[j][pos] == last_dig
             )
             total = sum(trans.values()) or 1
-            # probability of each next digit given last
             feats.extend([trans.get(d, 0) / total for d in DIGITS])
 
         X.append(feats)
@@ -195,8 +194,12 @@ def fourier_cycles(draws: list[dict], position: str) -> dict:
 
     predicted = None
     if dominant_period and dominant_period < len(seq):
-        cycle_vals = seq[-dominant_period:]
-        predicted = int(round(np.mean(cycle_vals))) % 10
+        fft_vals = np.fft.fft(seq_norm)
+        k = dominant_idx
+        amp = 2 * spectrum[k] / len(seq_norm)
+        phase = np.angle(fft_vals[k])
+        nxt = seq.mean() + amp * np.cos(2 * np.pi * freqs[k] * len(seq) + phase)
+        predicted = int(round(nxt)) % 10
 
     return {
         "cycle_length": dominant_period,
@@ -209,42 +212,42 @@ def fourier_cycles(draws: list[dict], position: str) -> dict:
 
 def monte_carlo(draws: list[dict], n_simulations: int = 0) -> list[dict]:
     """
-    Simulate N future draws using empirical per-position distributions.
-    Returns top combos by frequency.
-
-    n_simulations=0 → adaptive: scales with dataset size for better
-    accuracy on large datasets without wasting CPU on small ones.
+    Compute exact product-distribution probabilities per combo from
+    empirical per-position frequencies. No simulation needed — the
+    closed-form product is faster and noise-free.
     """
-    if n_simulations <= 0:
-        n_simulations = min(max(len(draws) * 200, 20000), 100000)
     if not draws:
         return []
 
-    # Build empirical distribution per position
     dists = {}
     for pos in ["d1", "d2", "d3"]:
         cnt = Counter(int(d[pos]) for d in draws)
         total = sum(cnt.values())
-        dists[pos] = np.array([cnt.get(d, 0) / total for d in DIGITS])
+        dists[pos] = {d: cnt.get(d, 0) / total for d in DIGITS}
 
-    rng = np.random.default_rng(42)
-    samples = {
-        pos: rng.choice(DIGITS, size=n_simulations, p=dists[pos])
-        for pos in ["d1", "d2", "d3"]
-    }
-    results = Counter(zip(
-        samples["d1"].tolist(), samples["d2"].tolist(), samples["d3"].tolist()
-    ))
+    scores = {}
+    for a in DIGITS:
+        pa = dists["d1"][a]
+        if pa == 0:
+            continue
+        for b in DIGITS:
+            pb = dists["d2"][b]
+            if pb == 0:
+                continue
+            for c in DIGITS:
+                pc = dists["d3"][c]
+                if pc == 0:
+                    continue
+                scores[(a, b, c)] = pa * pb * pc
 
-    top = results.most_common(20)
-    total = sum(results.values())
+    top = sorted(scores.items(), key=lambda x: -x[1])[:20]
     return [
         {
             "combo": f"{c[0]}-{c[1]}-{c[2]}",
             "digits": list(c),
-            "mc_probability": round(count / total * 100, 3),
+            "mc_probability": round(p * 100, 3),
         }
-        for c, count in top
+        for c, p in top
     ]
 
 
@@ -254,9 +257,9 @@ class MLPredictor:
     def __init__(self):
         RandomForestClassifier, GradientBoostingClassifier, XGBClassifier = _ensure_sklearn_models()
         self.models = {
-            "rf":  [RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42, n_jobs=1) for _ in range(3)],
-            "gbm": [GradientBoostingClassifier(n_estimators=80, max_depth=5, learning_rate=0.08, random_state=42) for _ in range(3)],
-            "xgb": [XGBClassifier(n_estimators=80, max_depth=5, learning_rate=0.08, verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
+            "rf":  [RandomForestClassifier(n_estimators=300, max_depth=5, min_samples_leaf=5, max_features="sqrt", random_state=42, n_jobs=1) for _ in range(3)],
+            "gbm": [GradientBoostingClassifier(n_estimators=150, max_depth=3, learning_rate=0.05, subsample=0.8, random_state=42) for _ in range(3)],
+            "xgb": [XGBClassifier(n_estimators=200, max_depth=3, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, min_child_weight=3, reg_lambda=2.0, tree_method="hist", verbosity=0, random_state=42, n_jobs=1) for _ in range(3)],
         }
         self.trained = False
         self.feature_count = 0
@@ -329,12 +332,11 @@ def sum_analysis(draws: list[dict]) -> dict:
     total = len(sums) or 1
     last_sum = sums[0] if sums else None
 
-    # Most overdue sums (largest gap since last seen)
-    all_sums = list(range(28))
+    # Most overdue sums (largest gap since last seen, only sums that have appeared)
     last_idx = {}
     for i, s in enumerate(sums):
         last_idx.setdefault(s, i)
-    overdue = sorted(all_sums, key=lambda s: last_idx.get(s, len(sums)), reverse=True)
+    overdue = sorted(last_idx.keys(), key=lambda s: last_idx[s], reverse=True)
 
     return {
         "distribution": {str(s): {"count": cnt.get(s, 0), "pct": round(cnt.get(s, 0)/total*100, 2)} for s in all_sums},
@@ -398,7 +400,7 @@ def digit_gap_analysis(draws: list[dict]) -> dict:
         current_gap = appearances[0]  # draws since last seen
 
         overdue = current_gap > (avg_gap or 0)
-        due_prob = min(0.99, current_gap / (avg_gap or max(current_gap, 1)))
+        due_prob = min(0.99, current_gap / avg_gap) if avg_gap else 0.5
 
         result[str(dig)] = {
             "current_gap": current_gap,
@@ -521,31 +523,53 @@ def ensemble_consensus(
 ) -> list[dict]:
     """
     Combine all models into a final weighted consensus score.
-    Weights: ML=28%, LSTM=10%, Markov(1+2+3)=30%, MonteCarlo=20%, Fourier=7%, Gap=5%
-    (LSTM added; ML reduced from 35% to 28% to accommodate.)
+    Uses probability-based scoring (not rank-based) for better calibration.
+    Markov orders consolidated into one signal to avoid double-counting.
+    Weights: ML=30%, Markov=25%, Product-Dist=20%, LSTM=10%, Fourier=10%, Gap=5%
     """
     gaps = digit_gap_analysis(draws)
     combo_scores = defaultdict(float)
     combo_components = defaultdict(lambda: {
-        "ml": 0.0, "lstm": 0.0, "markov1": 0.0, "markov2": 0.0, "markov3": 0.0,
-        "monte_carlo": 0.0, "fourier": 0.0, "gap": 0.0,
+        "ml": 0.0, "lstm": 0.0, "markov": 0.0,
+        "product_dist": 0.0, "fourier": 0.0, "gap": 0.0,
     })
 
-    # Score from each source
-    def idx_score(pred_list: list[dict], combo: str, weight: float, component: str):
+    def prob_score(pred_list: list[dict], combo: str, weight: float, component: str):
+        """Score by actual probability/confidence, not rank."""
+        for p in pred_list:
+            if p.get("combo") == combo:
+                prob = p.get("mc_probability", 0) or p.get("probability", 0) or p.get("confidence", 0)
+                if prob > 1:
+                    prob = prob / 100.0
+                contrib = weight * prob
+                combo_scores[combo] += contrib
+                combo_components[combo][component] += contrib
+                return
+        # Fallback: rank-based for sources without explicit probabilities
         for i, p in enumerate(pred_list):
             if p.get("combo") == combo:
                 rank_bonus = (len(pred_list) - i) / len(pred_list)
-                contrib = weight * rank_bonus
+                contrib = weight * rank_bonus * 0.1
                 combo_scores[combo] += contrib
                 combo_components[combo][component] += contrib
-                break
+                return
 
     lstm_preds = lstm_preds or []
-    all_combos = set()
 
-    # Collect all candidate combos
-    for p in markov1 + markov2 + markov3 + ml_preds + mc_preds + lstm_preds:
+    # Consolidate Markov: best of orders 1/2/3 per combo (not additive)
+    markov_best = {}
+    for p in markov1 + markov2 + markov3:
+        c = p["combo"]
+        prob = p.get("probability", 0) or p.get("confidence", 0) or 0
+        if prob > 1:
+            prob = prob / 100.0
+        if c not in markov_best or prob > markov_best[c]:
+            markov_best[c] = prob
+    markov_consolidated = [{"combo": c, "probability": p} for c, p in
+                           sorted(markov_best.items(), key=lambda x: -x[1])[:20]]
+
+    all_combos = set()
+    for p in markov_consolidated + ml_preds + mc_preds + lstm_preds:
         all_combos.add(p["combo"])
 
     # Add Fourier hint combos
@@ -560,18 +584,16 @@ def ensemble_consensus(
         all_combos.add(fc)
 
     for combo in all_combos:
-        idx_score(ml_preds,   combo, 0.28, "ml")
-        idx_score(lstm_preds, combo, 0.10, "lstm")
-        idx_score(markov1,    combo, 0.12, "markov1")
-        idx_score(markov2,    combo, 0.10, "markov2")
-        idx_score(markov3,    combo, 0.08, "markov3")
-        idx_score(mc_preds,   combo, 0.20, "monte_carlo")
+        prob_score(ml_preds,            combo, 0.30, "ml")
+        prob_score(lstm_preds,          combo, 0.10, "lstm")
+        prob_score(markov_consolidated, combo, 0.25, "markov")
+        prob_score(mc_preds,            combo, 0.20, "product_dist")
 
         # Fourier bonus
         parts = combo.split("-")
         if len(parts) == 3 and len(f_digits) == 3:
             matches = sum(1 for pos, key in [("d1",0),("d2",1),("d3",2)] if f_digits.get(pos) == int(parts[key]))
-            fourier_contrib = 0.07 * (matches / 3)
+            fourier_contrib = 0.10 * (matches / 3)
             combo_scores[combo] += fourier_contrib
             combo_components[combo]["fourier"] += fourier_contrib
 
