@@ -262,8 +262,9 @@ async function loadStats(){
     <div class="stat-box"><div class="num" style="background:linear-gradient(135deg,#ffd700,#ff9900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${s.total_founders||0}</div><div class="lbl">🏅 Founders</div></div>
     <div class="stat-box"><div class="num" style="background:linear-gradient(135deg,#6688ff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${s.total_ambassadors||0}</div><div class="lbl">💜 Ambassadeurs</div></div>
   `;
-  const planLabels={elite:'PREMIUM',founder:'FOUNDER',pro:'PRO',vip:'VIP',business:'BUSINESS',none:'none'};
-  document.getElementById('byPlan').innerHTML = Object.entries(s.by_plan).map(([k,v])=>`<span><b>${v}</b> ${planLabels[k]||k}</span>`).join('') || '<span>—</span>';
+  const planLabels={pro:'PRO',vip:'VIP',founder:'FOUNDER',elite:'PREMIUM',business:'BUSINESS',none:'none'};
+  const allPlans={pro:0,vip:0,founder:0,elite:0,business:0,none:0,...s.by_plan};
+  document.getElementById('byPlan').innerHTML = Object.entries(allPlans).map(([k,v])=>`<span><b>${v}</b> ${planLabels[k]||k}</span>`).join('');
   document.getElementById('byStatus').innerHTML = Object.entries(s.by_status).map(([k,v])=>`<span><b>${v}</b> ${k}</span>`).join('') || '<span>—</span>';
 }
 
