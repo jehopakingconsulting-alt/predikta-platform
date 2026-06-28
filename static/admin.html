@@ -295,7 +295,7 @@ function renderUsers(data){
       const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
       let rows = `<tr class="userrow" onclick="toggleEdit(${u.id})">
         <td>${u.id}</td>
-        <td>${escapeHtml(u.username)} ${u.is_admin ? '<span class="badge admin">ADMIN</span>' : ''}</td>
+        <td>${escapeHtml(u.username)} ${u.is_admin ? '<span class="badge admin">ADMIN</span>' : ''}${u.founder_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#ffd700,#ff9900);color:#1a0800">🏅 FOUNDER #'+(u.founder_number||'')+'</span>' : ''}${u.ambassador_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#6688ff,#aa66ff);color:#fff">💜 AMBASSADOR</span>' : (u.referral_count > 0 ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:700;background:rgba(79,110,255,.15);color:#88aaff;border:1px solid rgba(79,110,255,.3)">🎁 '+u.referral_count+' ref</span>' : '')}</td>
         <td>${escapeHtml(u.email)}</td>
         <td>${(plan||'—').toUpperCase()}</td>
         <td>${sub.has_stripe_customer ? '<span style="color:#635BFF;font-size:.7rem;font-weight:700">💳 Stripe</span>' : sub.plan ? '<span style="color:#ffd700;font-size:.7rem;font-weight:700">✋ Manuel</span>' : '<span style="color:#4d5a8a;font-size:.7rem">—</span>'}</td>
