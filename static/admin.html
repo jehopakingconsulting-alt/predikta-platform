@@ -259,6 +259,8 @@ async function loadStats(){
     <div class="stat-box"><div class="num">${s.total_saved_predictions}</div><div class="lbl">Favoris sauvegardés</div></div>
     <div class="stat-box"><div class="num">${s.total_alerts}</div><div class="lbl">Alertes</div></div>
     <div class="stat-box"><div class="num">${s.total_business_reports}</div><div class="lbl">Rapports Business AI</div></div>
+    <div class="stat-box"><div class="num" style="background:linear-gradient(135deg,#ffd700,#ff9900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${s.total_founders||0}</div><div class="lbl">🏅 Founders</div></div>
+    <div class="stat-box"><div class="num" style="background:linear-gradient(135deg,#6688ff,#aa66ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${s.total_ambassadors||0}</div><div class="lbl">💜 Ambassadeurs</div></div>
   `;
   const planLabels={elite:'PREMIUM',founder:'FOUNDER',pro:'PRO',vip:'VIP',business:'BUSINESS',none:'none'};
   document.getElementById('byPlan').innerHTML = Object.entries(s.by_plan).map(([k,v])=>`<span><b>${v}</b> ${planLabels[k]||k}</span>`).join('') || '<span>—</span>';

@@ -3460,6 +3460,9 @@ def admin_stats():
         db.func.coalesce(db.func.sum(User.referral_balance_usd), 0)
     ).scalar() or 0
 
+    total_founders = User.query.filter(User.founder_badge == True).count()
+    total_ambassadors = User.query.filter(User.ambassador_badge == True).count()
+
     return jsonify({
         "total_users": total_users,
         "new_users_7d": new_7d,
@@ -3468,6 +3471,8 @@ def admin_stats():
         "mrr_usd": round(mrr_usd, 2),
         "mrr_trial_usd": round(mrr_trial_usd, 2),
         "referral_balance_total_usd": round(referral_balance_total, 2),
+        "total_founders": total_founders,
+        "total_ambassadors": total_ambassadors,
         "by_plan": by_plan,
         "by_status": by_status,
         "total_saved_predictions": SavedPrediction.query.count(),
