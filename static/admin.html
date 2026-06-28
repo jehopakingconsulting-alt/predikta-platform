@@ -177,7 +177,7 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
       </div>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>ID</th><th>Utilisateur</th><th>Email</th><th>Plan</th><th>Statut</th><th>Jours restants</th><th>Inscrit le</th><th></th></tr></thead>
+          <thead><tr><th>ID</th><th>Utilisateur</th><th>Email</th><th>Plan</th><th>Paiement</th><th>Statut</th><th>Jours restants</th><th>Inscrit le</th><th></th></tr></thead>
           <tbody id="usersBody"></tbody>
         </table>
       </div>
@@ -298,13 +298,14 @@ function renderUsers(data){
         <td>${escapeHtml(u.username)} ${u.is_admin ? '<span class="badge admin">ADMIN</span>' : ''}</td>
         <td>${escapeHtml(u.email)}</td>
         <td>${(plan||'—').toUpperCase()}</td>
+        <td>${sub.has_stripe_customer ? '<span style="color:#635BFF;font-size:.7rem;font-weight:700">💳 Stripe</span>' : sub.plan ? '<span style="color:#ffd700;font-size:.7rem;font-weight:700">✋ Manuel</span>' : '<span style="color:#4d5a8a;font-size:.7rem">—</span>'}</td>
         <td><span class="badge ${status}">${status}</span></td>
         <td>${days}</td>
         <td>${created}</td>
         <td>✏️</td>
       </tr>`;
       if(openEditId === u.id){
-        rows += `<tr class="edit-row" id="edit-${u.id}"><td colspan="8">${buildEditForm(u)}</td></tr>`;
+        rows += `<tr class="edit-row" id="edit-${u.id}"><td colspan="9">${buildEditForm(u)}</td></tr>`;
       }
       return rows;
     }).join('');
