@@ -322,7 +322,8 @@ function buildEditForm(u){
       <select id="planSel-${u.id}">
         <option value="" ${!plan?'selected':''}>(aucun plan)</option>
         <option value="pro" ${plan==='pro'?'selected':''}>PRO</option>
-        <option value="vip" ${plan==='vip'?'selected':''}>VIP</option>
+        <option value="vip" ${plan==='vip' && !u.founder_badge?'selected':''}>VIP</option>
+        <option value="founder" ${u.founder_badge?'selected':''}>🏅 FOUNDER</option>
         <option value="elite" ${plan==='elite'?'selected':''}>PREMIUM</option>
         <option value="business" ${plan==='business'?'selected':''}>BUSINESS</option>
       </select>
