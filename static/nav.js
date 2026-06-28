@@ -651,10 +651,10 @@ function buildFloatingButtons(){
   position:fixed;bottom:22px;left:84px;z-index:8000;
   width:46px;height:46px;border-radius:12px;
   background:linear-gradient(135deg,#0e0e2a,#1a1a40);
-  border:1px solid #252560;color:#e8eeff;
+  border:2px solid #3a3a80;color:#e8eeff;
   font-size:1.2rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(0,0,30,.5);
+  box-shadow:0 4px 16px rgba(0,0,30,.7),0 0 8px rgba(79,110,255,.3);
   transition:all .25s;text-decoration:none;
 }
 #pfloat-home:hover{background:linear-gradient(135deg,#1479FF,#004DFF);border-color:#1479FF;transform:translateY(-3px);box-shadow:0 6px 20px rgba(79,110,255,.4)}
@@ -669,13 +669,13 @@ function buildFloatingButtons(){
 
 /* Nav arrows */
 .pfloat-nav{
-  position:fixed;bottom:22px;z-index:8000;
+  position:fixed;bottom:26px;z-index:8000;
   width:38px;height:38px;border-radius:10px;
   background:linear-gradient(135deg,#0e0e2a,#1a1a40);
-  border:1px solid #252560;color:#e8eeff;
+  border:2px solid #3a3a80;color:#e8eeff;
   font-size:.9rem;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(0,0,30,.4);
+  box-shadow:0 4px 12px rgba(0,0,30,.6),0 0 6px rgba(79,110,255,.25);
   transition:all .25s;
 }
 .pfloat-nav:hover{background:linear-gradient(135deg,#1479FF,#004DFF);border-color:#1479FF;transform:translateY(-2px)}
