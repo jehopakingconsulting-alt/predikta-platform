@@ -562,15 +562,20 @@ var T = {
   }
 };
 
-(function applyI18n(){
-  var lang = (localStorage.getItem('zynoriq_lang')||navigator.language||'fr').slice(0,2);
+function applyLang(lang){
   if(!T[lang]) lang='fr';
   var dict = T[lang];
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var k = el.getAttribute('data-i18n');
     if(dict[k]) el.textContent = dict[k];
   });
-})();
+  document.documentElement.setAttribute('lang', lang);
+}
+window.setLang = applyLang;
+window.addEventListener('load', function(){
+  var lang = window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr';
+  applyLang(T[lang] ? lang : 'fr');
+});
 </script>
 </body>
 </html>

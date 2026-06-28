@@ -395,7 +395,7 @@ const T = {
   }
 };
 
-function getLang(){ return localStorage.getItem('zynoriq_lang')||'fr'; }
+function getLang(){ return window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr'; }
 function applyT(){
   const l = getLang(), t = T[l]||T.fr;
   const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.innerHTML=v; };
@@ -449,7 +449,7 @@ function toggleCard(header){
 }
 
 /* ── Listen for language changes ─────────────────────────────── */
-window.addEventListener('storage', e=>{ if(e.key==='zynoriq_lang'){ applyT(); showRecommendation(); }});
-document.addEventListener('langChanged', ()=>{ applyT(); showRecommendation(); });
+window.setLang = function(lang){ applyT(); showRecommendation(); };
+window.addEventListener('load', function(){ applyT(); showRecommendation(); });
 </script>
 </body></html>
