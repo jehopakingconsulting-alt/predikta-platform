@@ -108,19 +108,19 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Box = 6x plus de chances de gagner, mais le paiement est réduit. Straight = paiement maximum, mais vos chances sont de 1/1000.</p>
-          <h4>Quand utiliser Box</h4>
+          <h4 id="t_s1_concept">Concept</h4>
+          <p id="t_s1_conceptText">Box = 6x plus de chances de gagner, mais le paiement est réduit. Straight = paiement maximum, mais vos chances sont de 1/1000.</p>
+          <h4 id="t_s1_h1">Quand utiliser Box</h4>
           <ul>
-            <li>Quand le consensus montre 3 chiffres différents avec une confiance moyenne</li>
-            <li>Idéal pour les débutants qui veulent des gains plus fréquents</li>
+            <li id="t_s1_a1">Quand le consensus montre 3 chiffres différents avec une confiance moyenne</li>
+            <li id="t_s1_a2">Idéal pour les débutants qui veulent des gains plus fréquents</li>
           </ul>
-          <h4>Quand utiliser Straight</h4>
+          <h4 id="t_s1_h2">Quand utiliser Straight</h4>
           <ul>
-            <li>Quand un combo domine le consensus avec &gt;80% de confiance</li>
-            <li>Pour maximiser le paiement sur un signal très fort</li>
+            <li id="t_s1_b1">Quand un combo domine le consensus avec &gt;80% de confiance</li>
+            <li id="t_s1_b2">Pour maximiser le paiement sur un signal très fort</li>
           </ul>
-          <div class="tip">💡 <strong>Astuce ZYNORIQ :</strong> Regardez le champ "bet_recommendation" dans les résultats d'analyse. ZYNORIQ vous dit automatiquement si Box ou Straight est préférable.</div>
+          <div class="tip" id="t_s1_tip">💡 <strong>Astuce ZYNORIQ :</strong> Regardez le champ "bet_recommendation" dans les résultats d'analyse. ZYNORIQ vous dit automatiquement si Box ou Straight est préférable.</div>
         </div></div>
       </div>
 
@@ -135,15 +135,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Les chiffres qui sortent souvent dans les tirages récents sont en "série chaude". Leur momentum peut continuer sur plusieurs jours.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s2_concept">Concept</h4>
+          <p id="t_s2_conceptText">Les chiffres qui sortent souvent dans les tirages récents sont en "série chaude". Leur momentum peut continuer sur plusieurs jours.</p>
+          <h4 id="t_s2_h1">Comment procéder</h4>
           <ul>
-            <li>Utilisez la section Hot/Cold de ZYNORIQ (derniers 30 tirages)</li>
-            <li>Combinez les 3 chiffres les plus chauds — un par position (d1, d2, d3)</li>
-            <li>Vérifiez que le combo est supporté par au moins 2 algorithmes</li>
+            <li id="t_s2_a1">Utilisez la section Hot/Cold de ZYNORIQ (derniers 30 tirages)</li>
+            <li id="t_s2_a2">Combinez les 3 chiffres les plus chauds — un par position (d1, d2, d3)</li>
+            <li id="t_s2_a3">Vérifiez que le combo est supporté par au moins 2 algorithmes</li>
           </ul>
-          <div class="tip">⚠️ <strong>Limite :</strong> Les séries chaudes finissent toujours. Ne misez pas aveuglément sur les mêmes chiffres indéfiniment.</div>
+          <div class="tip" id="t_s2_tip">⚠️ <strong>Limite :</strong> Les séries chaudes finissent toujours. Ne misez pas aveuglément sur les mêmes chiffres indéfiniment.</div>
         </div></div>
       </div>
 
@@ -158,15 +158,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Les chiffres absents depuis longtemps ont un "gap" élevé. Statistiquement, ils sont en retard et leur probabilité de réapparition augmente.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s3_concept">Concept</h4>
+          <p id="t_s3_conceptText">Les chiffres absents depuis longtemps ont un "gap" élevé. Statistiquement, ils sont en retard et leur probabilité de réapparition augmente.</p>
+          <h4 id="t_s3_h1">Comment procéder</h4>
           <ul>
-            <li>Allez dans la section Gap Analysis de ZYNORIQ</li>
-            <li>Cherchez les chiffres avec "overdue: true"</li>
-            <li>Combinez avec le consensus pour éviter les chiffres trop extrêmes</li>
+            <li id="t_s3_a1">Allez dans la section Gap Analysis de ZYNORIQ</li>
+            <li id="t_s3_a2">Cherchez les chiffres avec "overdue: true"</li>
+            <li id="t_s3_a3">Combinez avec le consensus pour éviter les chiffres trop extrêmes</li>
           </ul>
-          <div class="tip">⚠️ <strong>Risque :</strong> Un chiffre froid peut rester froid encore longtemps. Combinez toujours avec d'autres signaux.</div>
+          <div class="tip" id="t_s3_tip">⚠️ <strong>Risque :</strong> Un chiffre froid peut rester froid encore longtemps. Combinez toujours avec d'autres signaux.</div>
         </div></div>
       </div>
 
@@ -181,15 +181,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Au lieu de vous concentrer sur un seul état, analysez 3 à 5 états simultanément pour diversifier vos opportunités.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s4_concept">Concept</h4>
+          <p id="t_s4_conceptText">Au lieu de vous concentrer sur un seul état, analysez 3 à 5 états simultanément pour diversifier vos opportunités.</p>
+          <h4 id="t_s4_h1">Comment procéder</h4>
           <ul>
-            <li>Cherchez les états où le consensus est le plus fort (confiance élevée)</li>
-            <li>Ne jouez que les états avec un Signal "Strong"</li>
-            <li>Répartissez votre budget entre les meilleurs signaux</li>
+            <li id="t_s4_a1">Cherchez les états où le consensus est le plus fort (confiance élevée)</li>
+            <li id="t_s4_a2">Ne jouez que les états avec un Signal "Strong"</li>
+            <li id="t_s4_a3">Répartissez votre budget entre les meilleurs signaux</li>
           </ul>
-          <div class="tip">👑 <strong>Plan VIP+ nécessaire :</strong> Cette stratégie nécessite l'accès à 20 états (plan VIP ou supérieur).</div>
+          <div class="tip" id="t_s4_tip">👑 <strong>Plan VIP+ nécessaire :</strong> Cette stratégie nécessite l'accès à 20 états (plan VIP ou supérieur).</div>
         </div></div>
       </div>
 
@@ -204,15 +204,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Suivez le même état pendant 5 à 7 jours consécutifs et notez les patterns qui émergent.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s5_concept">Concept</h4>
+          <p id="t_s5_conceptText">Suivez le même état pendant 5 à 7 jours consécutifs et notez les patterns qui émergent.</p>
+          <h4 id="t_s5_h1">Comment procéder</h4>
           <ul>
-            <li>Utilisez les Archives pour comparer les prédictions vs les résultats réels</li>
-            <li>Identifiez si Markov ou ML performe mieux pour cet état spécifique</li>
-            <li>Ajustez votre confiance selon le track record récent de chaque algorithme</li>
+            <li id="t_s5_a1">Utilisez les Archives pour comparer les prédictions vs les résultats réels</li>
+            <li id="t_s5_a2">Identifiez si Markov ou ML performe mieux pour cet état spécifique</li>
+            <li id="t_s5_a3">Ajustez votre confiance selon le track record récent de chaque algorithme</li>
           </ul>
-          <div class="tip">💡 <strong>Astuce :</strong> Tenez un journal de vos observations. Les patterns deviennent visibles après 5+ jours de suivi.</div>
+          <div class="tip" id="t_s5_tip">💡 <strong>Astuce :</strong> Tenez un journal de vos observations. Les patterns deviennent visibles après 5+ jours de suivi.</div>
         </div></div>
       </div>
 
@@ -227,15 +227,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Certaines paires de chiffres apparaissent plus souvent ensemble. En exploitant la Matrice de Markov, vous identifiez les transitions les plus fréquentes.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s6_concept">Concept</h4>
+          <p id="t_s6_conceptText">Certaines paires de chiffres apparaissent plus souvent ensemble. En exploitant la Matrice de Markov, vous identifiez les transitions les plus fréquentes.</p>
+          <h4 id="t_s6_h1">Comment procéder</h4>
           <ul>
-            <li>Consultez la Matrice de Markov dans les résultats d'analyse</li>
-            <li>Si 5→3 est une transition forte en d1→d2, et 3→7 en d2→d3, jouez 5-3-7</li>
-            <li>Combinez avec le consensus pour valider votre combo</li>
+            <li id="t_s6_a1">Consultez la Matrice de Markov dans les résultats d'analyse</li>
+            <li id="t_s6_a2">Si 5→3 est une transition forte en d1→d2, et 3→7 en d2→d3, jouez 5-3-7</li>
+            <li id="t_s6_a3">Combinez avec le consensus pour valider votre combo</li>
           </ul>
-          <div class="tip">💡 <strong>Astuce :</strong> Les transitions avec une probabilité &gt;15% sont considérées "fortes". En dessous, le signal est trop faible.</div>
+          <div class="tip" id="t_s6_tip">💡 <strong>Astuce :</strong> Les transitions avec une probabilité &gt;15% sont considérées "fortes". En dessous, le signal est trop faible.</div>
         </div></div>
       </div>
 
@@ -250,15 +250,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>Les tirages Midi et Soir peuvent avoir des patterns statistiques différents. Un chiffre dominant le midi peut être absent le soir.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s7_concept">Concept</h4>
+          <p id="t_s7_conceptText">Les tirages Midi et Soir peuvent avoir des patterns statistiques différents. Un chiffre dominant le midi peut être absent le soir.</p>
+          <h4 id="t_s7_h1">Comment procéder</h4>
           <ul>
-            <li>Analysez séparément avec le filtre TOD (Time of Day)</li>
-            <li>Comparez les fréquences des chiffres entre Midi et Soir</li>
-            <li>Certains chiffres sont statistiquement plus fréquents le soir que le midi</li>
+            <li id="t_s7_a1">Analysez séparément avec le filtre TOD (Time of Day)</li>
+            <li id="t_s7_a2">Comparez les fréquences des chiffres entre Midi et Soir</li>
+            <li id="t_s7_a3">Certains chiffres sont statistiquement plus fréquents le soir que le midi</li>
           </ul>
-          <div class="tip">💡 <strong>Astuce :</strong> ZYNORIQ calibre automatiquement les poids par TOD. Le consensus intègre déjà cette variable.</div>
+          <div class="tip" id="t_s7_tip">💡 <strong>Astuce :</strong> ZYNORIQ calibre automatiquement les poids par TOD. Le consensus intègre déjà cette variable.</div>
         </div></div>
       </div>
 
@@ -273,15 +273,15 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;background:ra
           <span class="strat-chevron">▼</span>
         </div>
         <div class="strat-body"><div class="strat-content">
-          <h4>Concept</h4>
-          <p>La stratégie ultime : ne jouer QUE quand au moins 4 des 7 algorithmes convergent sur le même combo. C'est la patience maximale pour la probabilité maximale.</p>
-          <h4>Comment procéder</h4>
+          <h4 id="t_s8_concept">Concept</h4>
+          <p id="t_s8_conceptText">La stratégie ultime : ne jouer QUE quand au moins 4 des 7 algorithmes convergent sur le même combo. C'est la patience maximale pour la probabilité maximale.</p>
+          <h4 id="t_s8_h1">Comment procéder</h4>
           <ul>
-            <li>Vérifiez les "components" de chaque combo dans le détail des résultats</li>
-            <li>Le combo idéal est supporté par : ML + Markov + Product-Dist + Gap</li>
-            <li>Patience : cette méthode ne déclenche un signal fort que quelques fois par semaine</li>
+            <li id="t_s8_a1">Vérifiez les "components" de chaque combo dans le détail des résultats</li>
+            <li id="t_s8_a2">Le combo idéal est supporté par : ML + Markov + Product-Dist + Gap</li>
+            <li id="t_s8_a3">Patience : cette méthode ne déclenche un signal fort que quelques fois par semaine</li>
           </ul>
-          <div class="tip">🧠 <strong>Note Expert :</strong> Quand cette méthode déclenche un signal, la probabilité est à son maximum statistique. Qualité sur quantité.</div>
+          <div class="tip" id="t_s8_tip">🧠 <strong>Note Expert :</strong> Quand cette méthode déclenche un signal, la probabilité est à son maximum statistique. Qualité sur quantité.</div>
         </div></div>
       </div>
 
@@ -315,6 +315,32 @@ const T = {
     s7:'Le Timing TOD', s8:'La Méthode Consensus +',
     d1:'Débutant', d2:'Débutant', d3:'Intermédiaire', d4:'Intermédiaire',
     d5:'Intermédiaire', d6:'Avancé', d7:'Avancé', d8:'Expert',
+    concept:'Concept', howTitle:'Comment procéder',
+    s1_conceptText:'Box = 6x plus de chances de gagner, mais le paiement est réduit. Straight = paiement maximum, mais vos chances sont de 1/1000.',
+    s1_h1:'Quand utiliser Box', s1_a1:'Quand le consensus montre 3 chiffres différents avec une confiance moyenne', s1_a2:'Idéal pour les débutants qui veulent des gains plus fréquents',
+    s1_h2:'Quand utiliser Straight', s1_b1:'Quand un combo domine le consensus avec &gt;80% de confiance', s1_b2:'Pour maximiser le paiement sur un signal très fort',
+    s1_tip:'💡 <strong>Astuce ZYNORIQ :</strong> Regardez le champ "bet_recommendation" dans les résultats d\'analyse. ZYNORIQ vous dit automatiquement si Box ou Straight est préférable.',
+    s2_conceptText:'Les chiffres qui sortent souvent dans les tirages récents sont en "série chaude". Leur momentum peut continuer sur plusieurs jours.',
+    s2_a1:'Utilisez la section Hot/Cold de ZYNORIQ (derniers 30 tirages)', s2_a2:'Combinez les 3 chiffres les plus chauds — un par position (d1, d2, d3)', s2_a3:'Vérifiez que le combo est supporté par au moins 2 algorithmes',
+    s2_tip:'⚠️ <strong>Limite :</strong> Les séries chaudes finissent toujours. Ne misez pas aveuglément sur les mêmes chiffres indéfiniment.',
+    s3_conceptText:'Les chiffres absents depuis longtemps ont un "gap" élevé. Statistiquement, ils sont en retard et leur probabilité de réapparition augmente.',
+    s3_a1:'Allez dans la section Gap Analysis de ZYNORIQ', s3_a2:'Cherchez les chiffres avec "overdue: true"', s3_a3:'Combinez avec le consensus pour éviter les chiffres trop extrêmes',
+    s3_tip:'⚠️ <strong>Risque :</strong> Un chiffre froid peut rester froid encore longtemps. Combinez toujours avec d\'autres signaux.',
+    s4_conceptText:'Au lieu de vous concentrer sur un seul état, analysez 3 à 5 états simultanément pour diversifier vos opportunités.',
+    s4_a1:'Cherchez les états où le consensus est le plus fort (confiance élevée)', s4_a2:'Ne jouez que les états avec un Signal "Strong"', s4_a3:'Répartissez votre budget entre les meilleurs signaux',
+    s4_tip:'👑 <strong>Plan VIP+ nécessaire :</strong> Cette stratégie nécessite l\'accès à 20 états (plan VIP ou supérieur).',
+    s5_conceptText:'Suivez le même état pendant 5 à 7 jours consécutifs et notez les patterns qui émergent.',
+    s5_a1:'Utilisez les Archives pour comparer les prédictions vs les résultats réels', s5_a2:'Identifiez si Markov ou ML performe mieux pour cet état spécifique', s5_a3:'Ajustez votre confiance selon le track record récent de chaque algorithme',
+    s5_tip:'💡 <strong>Astuce :</strong> Tenez un journal de vos observations. Les patterns deviennent visibles après 5+ jours de suivi.',
+    s6_conceptText:'Certaines paires de chiffres apparaissent plus souvent ensemble. En exploitant la Matrice de Markov, vous identifiez les transitions les plus fréquentes.',
+    s6_a1:'Consultez la Matrice de Markov dans les résultats d\'analyse', s6_a2:'Si 5→3 est une transition forte en d1→d2, et 3→7 en d2→d3, jouez 5-3-7', s6_a3:'Combinez avec le consensus pour valider votre combo',
+    s6_tip:'💡 <strong>Astuce :</strong> Les transitions avec une probabilité &gt;15% sont considérées "fortes". En dessous, le signal est trop faible.',
+    s7_conceptText:'Les tirages Midi et Soir peuvent avoir des patterns statistiques différents. Un chiffre dominant le midi peut être absent le soir.',
+    s7_a1:'Analysez séparément avec le filtre TOD (Time of Day)', s7_a2:'Comparez les fréquences des chiffres entre Midi et Soir', s7_a3:'Certains chiffres sont statistiquement plus fréquents le soir que le midi',
+    s7_tip:'💡 <strong>Astuce :</strong> ZYNORIQ calibre automatiquement les poids par TOD. Le consensus intègre déjà cette variable.',
+    s8_conceptText:'La stratégie ultime : ne jouer QUE quand au moins 4 des 7 algorithmes convergent sur le même combo. C\'est la patience maximale pour la probabilité maximale.',
+    s8_a1:'Vérifiez les "components" de chaque combo dans le détail des résultats', s8_a2:'Le combo idéal est supporté par : ML + Markov + Product-Dist + Gap', s8_a3:'Patience : cette méthode ne déclenche un signal fort que quelques fois par semaine',
+    s8_tip:'🧠 <strong>Note Expert :</strong> Quand cette méthode déclenche un signal, la probabilité est à son maximum statistique. Qualité sur quantité.',
     disclaimer:'⚠️ <strong>Avertissement :</strong> Ces stratégies sont des méthodes d\'analyse statistique à but éducatif. La loterie reste un jeu de hasard. Aucune stratégie ne garantit des gains. Jouez de manière responsable. <a href="/responsible-gaming">Voir notre page Jeu Responsable</a>.'
   },
   en:{
@@ -334,6 +360,32 @@ const T = {
     s7:'TOD Timing', s8:'The Consensus + Method',
     d1:'Beginner', d2:'Beginner', d3:'Intermediate', d4:'Intermediate',
     d5:'Intermediate', d6:'Advanced', d7:'Advanced', d8:'Expert',
+    concept:'Concept', howTitle:'How to proceed',
+    s1_conceptText:'Box = 6x more chances to win, but the payout is reduced. Straight = maximum payout, but your odds are 1/1000.',
+    s1_h1:'When to use Box', s1_a1:'When the consensus shows 3 different digits with medium confidence', s1_a2:'Ideal for beginners who want more frequent wins',
+    s1_h2:'When to use Straight', s1_b1:'When a combo dominates the consensus with &gt;80% confidence', s1_b2:'To maximize the payout on a very strong signal',
+    s1_tip:'💡 <strong>ZYNORIQ Tip:</strong> Check the "bet_recommendation" field in the analysis results. ZYNORIQ automatically tells you whether Box or Straight is preferable.',
+    s2_conceptText:'Numbers that appear often in recent draws are on a "hot streak". Their momentum can continue for several days.',
+    s2_a1:'Use the ZYNORIQ Hot/Cold section (last 30 draws)', s2_a2:'Combine the 3 hottest digits — one per position (d1, d2, d3)', s2_a3:'Verify that the combo is supported by at least 2 algorithms',
+    s2_tip:'⚠️ <strong>Limit:</strong> Hot streaks always end. Do not bet blindly on the same numbers indefinitely.',
+    s3_conceptText:'Numbers absent for a long time have a high "gap". Statistically, they are overdue and their probability of reappearing increases.',
+    s3_a1:'Go to the ZYNORIQ Gap Analysis section', s3_a2:'Look for digits with "overdue: true"', s3_a3:'Combine with the consensus to avoid overly extreme digits',
+    s3_tip:'⚠️ <strong>Risk:</strong> A cold number can stay cold for a long time. Always combine with other signals.',
+    s4_conceptText:'Instead of focusing on a single state, analyze 3 to 5 states simultaneously to diversify your opportunities.',
+    s4_a1:'Look for states where the consensus is strongest (high confidence)', s4_a2:'Only play states with a "Strong" signal', s4_a3:'Spread your budget across the best signals',
+    s4_tip:'👑 <strong>VIP+ Plan required:</strong> This strategy requires access to 20 states (VIP plan or higher).',
+    s5_conceptText:'Follow the same state for 5 to 7 consecutive days and note the patterns that emerge.',
+    s5_a1:'Use the Archives to compare predictions vs actual results', s5_a2:'Identify whether Markov or ML performs better for this specific state', s5_a3:'Adjust your confidence based on each algorithm\'s recent track record',
+    s5_tip:'💡 <strong>Tip:</strong> Keep a journal of your observations. Patterns become visible after 5+ days of tracking.',
+    s6_conceptText:'Certain pairs of digits appear together more often. By leveraging the Markov Matrix, you identify the most frequent transitions.',
+    s6_a1:'Check the Markov Matrix in the analysis results', s6_a2:'If 5→3 is a strong transition in d1→d2, and 3→7 in d2→d3, play 5-3-7', s6_a3:'Combine with the consensus to validate your combo',
+    s6_tip:'💡 <strong>Tip:</strong> Transitions with a probability &gt;15% are considered "strong". Below that, the signal is too weak.',
+    s7_conceptText:'Midday and Evening draws can have different statistical patterns. A digit dominant at midday may be absent in the evening.',
+    s7_a1:'Analyze separately with the TOD (Time of Day) filter', s7_a2:'Compare digit frequencies between Midday and Evening', s7_a3:'Some digits are statistically more frequent in the evening than at midday',
+    s7_tip:'💡 <strong>Tip:</strong> ZYNORIQ automatically calibrates weights by TOD. The consensus already factors in this variable.',
+    s8_conceptText:'The ultimate strategy: play ONLY when at least 4 of the 7 algorithms converge on the same combo. It is maximum patience for maximum probability.',
+    s8_a1:'Check the "components" of each combo in the detailed results', s8_a2:'The ideal combo is supported by: ML + Markov + Product-Dist + Gap', s8_a3:'Patience: this method only triggers a strong signal a few times per week',
+    s8_tip:'🧠 <strong>Expert Note:</strong> When this method triggers a signal, the probability is at its statistical maximum. Quality over quantity.',
     disclaimer:'⚠️ <strong>Disclaimer:</strong> These strategies are statistical analysis methods for educational purposes. Lottery remains a game of chance. No strategy guarantees winnings. Play responsibly. <a href="/responsible-gaming">See our Responsible Gaming page</a>.'
   },
   es:{
@@ -353,6 +405,32 @@ const T = {
     s7:'El Timing TOD', s8:'El Método Consenso +',
     d1:'Principiante', d2:'Principiante', d3:'Intermedio', d4:'Intermedio',
     d5:'Intermedio', d6:'Avanzado', d7:'Avanzado', d8:'Experto',
+    concept:'Concepto', howTitle:'Cómo proceder',
+    s1_conceptText:'Box = 6x más posibilidades de ganar, pero el pago es menor. Straight = pago máximo, pero tus probabilidades son de 1/1000.',
+    s1_h1:'Cuándo usar Box', s1_a1:'Cuando el consenso muestra 3 dígitos diferentes con confianza media', s1_a2:'Ideal para principiantes que quieren ganancias más frecuentes',
+    s1_h2:'Cuándo usar Straight', s1_b1:'Cuando un combo domina el consenso con &gt;80% de confianza', s1_b2:'Para maximizar el pago en una señal muy fuerte',
+    s1_tip:'💡 <strong>Consejo ZYNORIQ:</strong> Mira el campo "bet_recommendation" en los resultados del análisis. ZYNORIQ te dice automáticamente si Box o Straight es preferible.',
+    s2_conceptText:'Los números que salen a menudo en los sorteos recientes están en "racha caliente". Su impulso puede continuar durante varios días.',
+    s2_a1:'Usa la sección Hot/Cold de ZYNORIQ (últimos 30 sorteos)', s2_a2:'Combina los 3 dígitos más calientes — uno por posición (d1, d2, d3)', s2_a3:'Verifica que el combo esté respaldado por al menos 2 algoritmos',
+    s2_tip:'⚠️ <strong>Límite:</strong> Las rachas calientes siempre terminan. No apuestes ciegamente a los mismos números indefinidamente.',
+    s3_conceptText:'Los números ausentes durante mucho tiempo tienen un "gap" alto. Estadísticamente, están atrasados y su probabilidad de reaparecer aumenta.',
+    s3_a1:'Ve a la sección Gap Analysis de ZYNORIQ', s3_a2:'Busca los dígitos con "overdue: true"', s3_a3:'Combina con el consenso para evitar dígitos demasiado extremos',
+    s3_tip:'⚠️ <strong>Riesgo:</strong> Un número frío puede permanecer frío mucho tiempo. Combina siempre con otras señales.',
+    s4_conceptText:'En lugar de concentrarte en un solo estado, analiza de 3 a 5 estados simultáneamente para diversificar tus oportunidades.',
+    s4_a1:'Busca los estados donde el consenso es más fuerte (confianza alta)', s4_a2:'Juega solo los estados con señal "Strong"', s4_a3:'Reparte tu presupuesto entre las mejores señales',
+    s4_tip:'👑 <strong>Plan VIP+ necesario:</strong> Esta estrategia requiere acceso a 20 estados (plan VIP o superior).',
+    s5_conceptText:'Sigue el mismo estado durante 5 a 7 días consecutivos y anota los patrones que emergen.',
+    s5_a1:'Usa los Archivos para comparar las predicciones vs los resultados reales', s5_a2:'Identifica si Markov o ML rinde mejor para este estado específico', s5_a3:'Ajusta tu confianza según el historial reciente de cada algoritmo',
+    s5_tip:'💡 <strong>Consejo:</strong> Lleva un diario de tus observaciones. Los patrones se vuelven visibles después de 5+ días de seguimiento.',
+    s6_conceptText:'Ciertos pares de dígitos aparecen juntos con más frecuencia. Aprovechando la Matriz de Markov, identificas las transiciones más frecuentes.',
+    s6_a1:'Consulta la Matriz de Markov en los resultados del análisis', s6_a2:'Si 5→3 es una transición fuerte en d1→d2, y 3→7 en d2→d3, juega 5-3-7', s6_a3:'Combina con el consenso para validar tu combo',
+    s6_tip:'💡 <strong>Consejo:</strong> Las transiciones con una probabilidad &gt;15% se consideran "fuertes". Por debajo, la señal es demasiado débil.',
+    s7_conceptText:'Los sorteos de Mediodía y Noche pueden tener patrones estadísticos diferentes. Un dígito dominante al mediodía puede estar ausente por la noche.',
+    s7_a1:'Analiza por separado con el filtro TOD (Time of Day)', s7_a2:'Compara las frecuencias de los dígitos entre Mediodía y Noche', s7_a3:'Algunos dígitos son estadísticamente más frecuentes por la noche que al mediodía',
+    s7_tip:'💡 <strong>Consejo:</strong> ZYNORIQ calibra automáticamente los pesos por TOD. El consenso ya integra esta variable.',
+    s8_conceptText:'La estrategia definitiva: jugar SOLO cuando al menos 4 de los 7 algoritmos convergen en el mismo combo. Es la máxima paciencia para la máxima probabilidad.',
+    s8_a1:'Verifica los "components" de cada combo en el detalle de los resultados', s8_a2:'El combo ideal está respaldado por: ML + Markov + Product-Dist + Gap', s8_a3:'Paciencia: este método solo activa una señal fuerte unas pocas veces por semana',
+    s8_tip:'🧠 <strong>Nota Experto:</strong> Cuando este método activa una señal, la probabilidad está en su máximo estadístico. Calidad sobre cantidad.',
     disclaimer:'⚠️ <strong>Advertencia:</strong> Estas estrategias son métodos de análisis estadístico con fines educativos. La lotería sigue siendo un juego de azar. Ninguna estrategia garantiza ganancias. Juega responsablemente. <a href="/responsible-gaming">Ver nuestra página de Juego Responsable</a>.'
   },
   pt:{
@@ -372,6 +450,32 @@ const T = {
     s7:'O Timing TOD', s8:'O Método Consenso +',
     d1:'Iniciante', d2:'Iniciante', d3:'Intermediário', d4:'Intermediário',
     d5:'Intermediário', d6:'Avançado', d7:'Avançado', d8:'Especialista',
+    concept:'Conceito', howTitle:'Como proceder',
+    s1_conceptText:'Box = 6x mais chances de ganhar, mas o pagamento é reduzido. Straight = pagamento máximo, mas suas chances são de 1/1000.',
+    s1_h1:'Quando usar Box', s1_a1:'Quando o consenso mostra 3 dígitos diferentes com confiança média', s1_a2:'Ideal para iniciantes que querem ganhos mais frequentes',
+    s1_h2:'Quando usar Straight', s1_b1:'Quando um combo domina o consenso com &gt;80% de confiança', s1_b2:'Para maximizar o pagamento em um sinal muito forte',
+    s1_tip:'💡 <strong>Dica ZYNORIQ:</strong> Veja o campo "bet_recommendation" nos resultados da análise. O ZYNORIQ diz automaticamente se Box ou Straight é preferível.',
+    s2_conceptText:'Os números que saem com frequência nos sorteios recentes estão em "série quente". Seu momentum pode continuar por vários dias.',
+    s2_a1:'Use a seção Hot/Cold do ZYNORIQ (últimos 30 sorteios)', s2_a2:'Combine os 3 dígitos mais quentes — um por posição (d1, d2, d3)', s2_a3:'Verifique se o combo é suportado por pelo menos 2 algoritmos',
+    s2_tip:'⚠️ <strong>Limite:</strong> As séries quentes sempre terminam. Não aposte cegamente nos mesmos números indefinidamente.',
+    s3_conceptText:'Os números ausentes há muito tempo têm um "gap" elevado. Estatisticamente, estão atrasados e sua probabilidade de reaparecer aumenta.',
+    s3_a1:'Vá para a seção Gap Analysis do ZYNORIQ', s3_a2:'Procure os dígitos com "overdue: true"', s3_a3:'Combine com o consenso para evitar dígitos muito extremos',
+    s3_tip:'⚠️ <strong>Risco:</strong> Um número frio pode permanecer frio por muito tempo. Combine sempre com outros sinais.',
+    s4_conceptText:'Em vez de se concentrar em um único estado, analise de 3 a 5 estados simultaneamente para diversificar suas oportunidades.',
+    s4_a1:'Procure os estados onde o consenso é mais forte (confiança alta)', s4_a2:'Jogue apenas os estados com sinal "Strong"', s4_a3:'Distribua seu orçamento entre os melhores sinais',
+    s4_tip:'👑 <strong>Plano VIP+ necessário:</strong> Esta estratégia requer acesso a 20 estados (plano VIP ou superior).',
+    s5_conceptText:'Acompanhe o mesmo estado por 5 a 7 dias consecutivos e anote os padrões que emergem.',
+    s5_a1:'Use os Arquivos para comparar as previsões vs os resultados reais', s5_a2:'Identifique se Markov ou ML tem melhor desempenho para este estado específico', s5_a3:'Ajuste sua confiança conforme o histórico recente de cada algoritmo',
+    s5_tip:'💡 <strong>Dica:</strong> Mantenha um diário de suas observações. Os padrões ficam visíveis após 5+ dias de acompanhamento.',
+    s6_conceptText:'Certos pares de dígitos aparecem juntos com mais frequência. Aproveitando a Matriz de Markov, você identifica as transições mais frequentes.',
+    s6_a1:'Consulte a Matriz de Markov nos resultados da análise', s6_a2:'Se 5→3 é uma transição forte em d1→d2, e 3→7 em d2→d3, jogue 5-3-7', s6_a3:'Combine com o consenso para validar seu combo',
+    s6_tip:'💡 <strong>Dica:</strong> As transições com probabilidade &gt;15% são consideradas "fortes". Abaixo disso, o sinal é fraco demais.',
+    s7_conceptText:'Os sorteios de Meio-dia e Noite podem ter padrões estatísticos diferentes. Um dígito dominante ao meio-dia pode estar ausente à noite.',
+    s7_a1:'Analise separadamente com o filtro TOD (Time of Day)', s7_a2:'Compare as frequências dos dígitos entre Meio-dia e Noite', s7_a3:'Alguns dígitos são estatisticamente mais frequentes à noite do que ao meio-dia',
+    s7_tip:'💡 <strong>Dica:</strong> O ZYNORIQ calibra automaticamente os pesos por TOD. O consenso já integra essa variável.',
+    s8_conceptText:'A estratégia definitiva: jogar APENAS quando pelo menos 4 dos 7 algoritmos convergem no mesmo combo. É a paciência máxima para a probabilidade máxima.',
+    s8_a1:'Verifique os "components" de cada combo no detalhe dos resultados', s8_a2:'O combo ideal é suportado por: ML + Markov + Product-Dist + Gap', s8_a3:'Paciência: este método só dispara um sinal forte algumas vezes por semana',
+    s8_tip:'🧠 <strong>Nota Especialista:</strong> Quando este método dispara um sinal, a probabilidade está em seu máximo estatístico. Qualidade sobre quantidade.',
     disclaimer:'⚠️ <strong>Aviso:</strong> Estas estratégias são métodos de análise estatística para fins educacionais. A loteria continua sendo um jogo de azar. Nenhuma estratégia garante ganhos. Jogue com responsabilidade. <a href="/responsible-gaming">Veja nossa página de Jogo Responsável</a>.'
   },
   ht:{
@@ -391,6 +495,32 @@ const T = {
     s7:'Timing TOD', s8:'Metòd Konsansis +',
     d1:'Debitan', d2:'Debitan', d3:'Entèmedyè', d4:'Entèmedyè',
     d5:'Entèmedyè', d6:'Avanse', d7:'Avanse', d8:'Ekspè',
+    concept:'Konsèp', howTitle:'Kijan pou pwosede',
+    s1_conceptText:'Box = 6x plis chans pou genyen, men peman an pi piti. Straight = peman maksimòm, men chans ou se 1/1000.',
+    s1_h1:'Kilè pou itilize Box', s1_a1:'Lè konsansis la montre 3 chif diferan ak yon konfyans mwayèn', s1_a2:'Ideyal pou debitan ki vle genyen pi souvan',
+    s1_h2:'Kilè pou itilize Straight', s1_b1:'Lè yon konbo domine konsansis la ak &gt;80% konfyans', s1_b2:'Pou maksimize peman an sou yon siyal trè fò',
+    s1_tip:'💡 <strong>Konsèy ZYNORIQ:</strong> Gade chan "bet_recommendation" nan rezilta analiz yo. ZYNORIQ di ou otomatikman si Box oswa Straight pi bon.',
+    s2_conceptText:'Chif ki soti souvan nan tiraj resan yo nan yon "seri cho". Momentòm yo ka kontinye pandan plizyè jou.',
+    s2_a1:'Itilize seksyon Hot/Cold ZYNORIQ la (30 dènye tiraj yo)', s2_a2:'Konbine 3 chif ki pi cho yo — youn pa pozisyon (d1, d2, d3)', s2_a3:'Verifye ke konbo a sipòte pa omwen 2 algoritm',
+    s2_tip:'⚠️ <strong>Limit:</strong> Seri cho yo toujou fini. Pa mise avèg sou menm chif yo san rete.',
+    s3_conceptText:'Chif ki absan depi lontan gen yon "gap" wo. Estatistikman, yo an reta epi pwobabilite yo reparèt ogmante.',
+    s3_a1:'Ale nan seksyon Gap Analysis ZYNORIQ la', s3_a2:'Chèche chif ki gen "overdue: true"', s3_a3:'Konbine ak konsansis la pou evite chif ki twò ekstrèm',
+    s3_tip:'⚠️ <strong>Risk:</strong> Yon chif frèt ka rete frèt pou lontan toujou. Toujou konbine ak lòt siyal.',
+    s4_conceptText:'Olye pou ou konsantre sou yon sèl eta, analize 3 a 5 eta an menm tan pou divèsifye opòtinite ou yo.',
+    s4_a1:'Chèche eta yo kote konsansis la pi fò (konfyans wo)', s4_a2:'Jwe sèlman eta ak yon Siyal "Strong"', s4_a3:'Separe bidjè ou ant pi bon siyal yo',
+    s4_tip:'👑 <strong>Plan VIP+ nesesè:</strong> Estrateji sa a mande aksè a 20 eta (plan VIP oswa pi wo).',
+    s5_conceptText:'Swiv menm eta a pandan 5 a 7 jou youn dèyè lòt epi note modèl ki parèt yo.',
+    s5_a1:'Itilize Achiv yo pou konpare prediksyon yo vs rezilta reyèl yo', s5_a2:'Idantifye si Markov oswa ML pèfòme pi byen pou eta espesifik sa a', s5_a3:'Ajiste konfyans ou selon istwa resan chak algoritm',
+    s5_tip:'💡 <strong>Konsèy:</strong> Kenbe yon jounal sou obsèvasyon ou yo. Modèl yo vin vizib apre 5+ jou swivi.',
+    s6_conceptText:'Sèten pè chif parèt ansanm pi souvan. Lè w itilize Matris Markov la, ou idantifye tranzisyon ki pi frekan yo.',
+    s6_a1:'Konsilte Matris Markov la nan rezilta analiz yo', s6_a2:'Si 5→3 se yon tranzisyon fò nan d1→d2, epi 3→7 nan d2→d3, jwe 5-3-7', s6_a3:'Konbine ak konsansis la pou valide konbo ou',
+    s6_tip:'💡 <strong>Konsèy:</strong> Tranzisyon ak yon pwobabilite &gt;15% konsidere "fò". Anba sa, siyal la twò fèb.',
+    s7_conceptText:'Tiraj Midi ak Aswè ka gen modèl estatistik diferan. Yon chif ki domine midi ka absan aswè.',
+    s7_a1:'Analize separeman ak filtè TOD (Time of Day)', s7_a2:'Konpare frekans chif yo ant Midi ak Aswè', s7_a3:'Sèten chif estatistikman pi frekan aswè pase midi',
+    s7_tip:'💡 <strong>Konsèy:</strong> ZYNORIQ kalibre pwa yo otomatikman pa TOD. Konsansis la deja entegre varyab sa a.',
+    s8_conceptText:'Estrateji ultim lan: jwe SÈLMAN lè omwen 4 nan 7 algoritm yo konvèje sou menm konbo a. Se pasyans maksimòm pou pwobabilite maksimòm.',
+    s8_a1:'Verifye "components" chak konbo nan detay rezilta yo', s8_a2:'Konbo ideyal la sipòte pa: ML + Markov + Product-Dist + Gap', s8_a3:'Pasyans: metòd sa a deklanche yon siyal fò sèlman kèk fwa pa semèn',
+    s8_tip:'🧠 <strong>Nòt Ekspè:</strong> Lè metòd sa a deklanche yon siyal, pwobabilite a nan maksimòm estatistik li. Kalite sou kantite.',
     disclaimer:'⚠️ <strong>Avètisman:</strong> Estrateji sa yo se metòd analiz estatistik pou edikasyon. Lòtri rete yon jwèt aza. Okenn estrateji pa garanti pwofi. Jwe ak responsablite. <a href="/responsible-gaming">Wè paj Jwe Responsab nou an</a>.'
   }
 };
@@ -401,7 +531,16 @@ function applyT(){
   const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.innerHTML=v; };
   set('t_tag',t.tag); set('t_title',t.title); set('t_sub',t.sub);
   set('t_recoTitle',t.recoTitle); set('t_disclaimer',t.disclaimer);
-  for(let i=1;i<=8;i++){ set('t_s'+i,t['s'+i]); set('t_d'+i,t['d'+i]); }
+  for(let i=1;i<=8;i++){
+    set('t_s'+i,t['s'+i]); set('t_d'+i,t['d'+i]);
+    set('t_s'+i+'_concept',t.concept);
+    set('t_s'+i+'_conceptText',t['s'+i+'_conceptText']);
+    set('t_s'+i+'_h1',t['s'+i+'_h1']||t.howTitle);
+    set('t_s'+i+'_tip',t['s'+i+'_tip']);
+    ['a1','a2','a3','b1','b2','h2'].forEach(k=>{
+      const key='s'+i+'_'+k; if(t[key]!==undefined) set('t_'+key,t[key]);
+    });
+  }
 }
 
 /* ── Access Control ──────────────────────────────────────────── */
