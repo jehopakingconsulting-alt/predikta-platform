@@ -162,6 +162,7 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
           <option value="">Tous les plans</option>
           <option value="pro">PRO</option>
           <option value="vip">VIP</option>
+          <option value="founder">FOUNDER</option>
           <option value="elite">PREMIUM</option>
           <option value="business">BUSINESS</option>
         </select>
@@ -259,7 +260,8 @@ async function loadStats(){
     <div class="stat-box"><div class="num">${s.total_alerts}</div><div class="lbl">Alertes</div></div>
     <div class="stat-box"><div class="num">${s.total_business_reports}</div><div class="lbl">Rapports Business AI</div></div>
   `;
-  document.getElementById('byPlan').innerHTML = Object.entries(s.by_plan).map(([k,v])=>`<span><b>${v}</b> ${k}</span>`).join('') || '<span>—</span>';
+  const planLabels={elite:'PREMIUM',founder:'FOUNDER',pro:'PRO',vip:'VIP',business:'BUSINESS',none:'none'};
+  document.getElementById('byPlan').innerHTML = Object.entries(s.by_plan).map(([k,v])=>`<span><b>${v}</b> ${planLabels[k]||k}</span>`).join('') || '<span>—</span>';
   document.getElementById('byStatus').innerHTML = Object.entries(s.by_status).map(([k,v])=>`<span><b>${v}</b> ${k}</span>`).join('') || '<span>—</span>';
 }
 
