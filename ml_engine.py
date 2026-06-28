@@ -333,6 +333,7 @@ def sum_analysis(draws: list[dict]) -> dict:
     last_sum = sums[0] if sums else None
 
     # Most overdue sums (largest gap since last seen, only sums that have appeared)
+    all_sums = list(range(28))
     last_idx = {}
     for i, s in enumerate(sums):
         last_idx.setdefault(s, i)
@@ -664,12 +665,12 @@ def _consensus_breakdown(combo: str, components: dict, gaps: dict, hot_cold: dic
     return {
         "digits": digits_info,
         "model_contributions": {
-            "ml_pct": round(components["ml"] / total * 100, 1),
-            "lstm_pct": round(components.get("lstm", 0.0) / total * 100, 1),
-            "markov_pct": round((components["markov1"] + components["markov2"] + components["markov3"]) / total * 100, 1),
-            "monte_carlo_pct": round(components["monte_carlo"] / total * 100, 1),
-            "fourier_pct": round(components["fourier"] / total * 100, 1),
-            "gap_pct": round(components["gap"] / total * 100, 1),
+            "ml_pct": round(components.get("ml", 0) / total * 100, 1),
+            "lstm_pct": round(components.get("lstm", 0) / total * 100, 1),
+            "markov_pct": round(components.get("markov", 0) / total * 100, 1),
+            "monte_carlo_pct": round(components.get("product_dist", 0) / total * 100, 1),
+            "fourier_pct": round(components.get("fourier", 0) / total * 100, 1),
+            "gap_pct": round(components.get("gap", 0) / total * 100, 1),
         },
     }
 
