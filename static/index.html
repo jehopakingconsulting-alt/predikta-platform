@@ -1826,13 +1826,14 @@ async function loadReport(){
   Object.values(currentCharts).forEach(c=>{ try{c.destroy()}catch(e){} });
   currentCharts = {};
   try{
+    const months = document.getElementById('monthsSelect').value;
     const dowQS = excludeDow.length ? `&exclude_dow=${excludeDow.join(',')}` : '';
     const domQS = excludeDom.length ? `&exclude_dom=${excludeDom.join(',')}` : '';
     const controller = new AbortController();
     // Timeout progressif : 40s → 55s → 70s (le 3e essai laisse le temps au cold start Render)
     const timeouts = [40000, 60000, 90000];
     const fetchTimer = setTimeout(()=>controller.abort(), timeouts[Math.min(_loadReportRetry, 2)]);
-    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}${dowQS}${domQS}`, {signal:controller.signal});
+    const r = await fetch(`/api/report?state=${state}&tod=${encodeURIComponent(tod)}&months=${months}${dowQS}${domQS}`, {signal:controller.signal});
     clearTimeout(fetchTimer);
     _loadReportRetry = 0;
     let data;

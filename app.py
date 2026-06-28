@@ -2265,13 +2265,23 @@ PRIORITY_STATES = ['NY','FL','GA','TX','NJ','TN','CA','PA','IL','OH','VA']
 # États retenus pour le Top 6 Pick3 "les plus chauds" de la page d'accueil.
 HOT_PICK3_STATES = ['NY','FL','GA','TX','NJ','TN']
 
-def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = (), with_lstm: bool = False):
+def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), exclude_dom: tuple = (), with_lstm: bool = False, months: int = 0):
     """Compute (or raise) the analysis report for a state/tod. Returns dict or None if no data.
+    months=0 means use all available data; otherwise limit to the last N months.
     with_lstm=True uniquement pour le pré-cache background (_warm_popular_reports).
     """
     draws = load_csv(state)
     if not draws:
         return None
+
+    if months > 0:
+        today = datetime.now()
+        y = today.year + (today.month - months - 1) // 12
+        m = (today.month - months - 1) % 12 + 1
+        cutoff = f"{y}-{m:02d}-{today.day:02d}"
+        draws = [d for d in draws if d.get("date", "") >= cutoff]
+        if not draws:
+            return None
 
     if tod_filter != "all":
         draws = [d for d in draws if d.get("tod","").lower() == tod_filter.lower()]
@@ -2292,6 +2302,7 @@ def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), 
     result["state"]       = state
     result["state_name"]  = STATES[state]["name"]
     result["tod_filter"]  = tod_filter
+    result["months_filter"] = months
     result["exclude_dow"] = list(exclude_dow)
     result["exclude_dom"] = list(exclude_dom)
     result["dpd"]         = STATES[state].get("dpd", 2)
@@ -2334,13 +2345,14 @@ def _parse_int_list(raw: str, lo: int, hi: int) -> tuple:
 def api_report():
     state       = request.args.get("state", "NY").upper()
     tod_filter  = request.args.get("tod", "all")
+    months      = min(int(request.args.get("months", 0) or 0), 120)
     exclude_dow = _parse_int_list(request.args.get("exclude_dow", ""), 0, 6)
     exclude_dom = _parse_int_list(request.args.get("exclude_dom", ""), 1, 31)
 
     if state not in STATES:
         return jsonify({"error": f"Unknown state: {state}"}), 400
 
-    cache_key = (state, tod_filter, exclude_dow, exclude_dom)
+    cache_key = (state, tod_filter, months, exclude_dow, exclude_dom)
     cached = _REPORT_CACHE.get(cache_key)
     now = time.time()
     if cached and (now - cached["ts"]) < _REPORT_CACHE_TTL:
@@ -2350,7 +2362,7 @@ def api_report():
     if not load_csv(state):
         return jsonify({"error": f"No data for {state}. Click Scrape first."}), 200
 
-    result = _build_report(state, tod_filter, exclude_dow, exclude_dom)
+    result = _build_report(state, tod_filter, exclude_dow, exclude_dom, months=months)
     if result is None:
         return jsonify({"error": f"No draws left for {state} after applying filters."}), 200
 
