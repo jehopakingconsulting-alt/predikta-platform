@@ -1969,6 +1969,12 @@ def founders_page(): return send_from_directory("static", "founders.html")
 @app.route("/ambassadors")
 def ambassadors_page(): return send_from_directory("static", "ambassadors.html")
 
+@app.route("/guide")
+def guide_page(): return send_from_directory("static", "guide.html")
+
+@app.route("/strategies")
+def strategies_page(): return send_from_directory("static", "strategies.html")
+
 @app.route("/blog")
 def blog_index_page(): return send_from_directory("static", "blog.html")
 
