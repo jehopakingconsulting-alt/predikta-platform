@@ -520,13 +520,23 @@ def ensemble_consensus(
     hot_cold: dict = None,
     top_n: int = 10,
     lstm_preds: list[dict] = None,
+    state_code: str = None,
+    tod: str = None,
 ) -> list[dict]:
     """
     Combine all models into a final weighted consensus score.
     Uses probability-based scoring (not rank-based) for better calibration.
     Markov orders consolidated into one signal to avoid double-counting.
-    Weights: ML=30%, Markov=25%, Product-Dist=20%, LSTM=10%, Fourier=10%, Gap=5%
+    Weights auto-calibrated per state+TOD via ensemble_calibrator.
     """
+    # Load auto-calibrated weights (or defaults if not enough data)
+    try:
+        from ensemble_calibrator import calibrate_if_needed
+        W = calibrate_if_needed(state_code or "XX", tod or "all", draws) if state_code else None
+    except Exception:
+        W = None
+    if not W:
+        W = {"ml": 0.30, "markov": 0.25, "product_dist": 0.20, "fourier": 0.10, "gap": 0.05, "lstm": 0.10}
     gaps = digit_gap_analysis(draws)
     combo_scores = defaultdict(float)
     combo_components = defaultdict(lambda: {
@@ -584,16 +594,16 @@ def ensemble_consensus(
         all_combos.add(fc)
 
     for combo in all_combos:
-        prob_score(ml_preds,            combo, 0.30, "ml")
-        prob_score(lstm_preds,          combo, 0.10, "lstm")
-        prob_score(markov_consolidated, combo, 0.25, "markov")
-        prob_score(mc_preds,            combo, 0.20, "product_dist")
+        prob_score(ml_preds,            combo, W["ml"], "ml")
+        prob_score(lstm_preds,          combo, W["lstm"], "lstm")
+        prob_score(markov_consolidated, combo, W["markov"], "markov")
+        prob_score(mc_preds,            combo, W["product_dist"], "product_dist")
 
         # Fourier bonus
         parts = combo.split("-")
         if len(parts) == 3 and len(f_digits) == 3:
             matches = sum(1 for pos, key in [("d1",0),("d2",1),("d3",2)] if f_digits.get(pos) == int(parts[key]))
-            fourier_contrib = 0.10 * (matches / 3)
+            fourier_contrib = W["fourier"] * (matches / 3)
             combo_scores[combo] += fourier_contrib
             combo_components[combo]["fourier"] += fourier_contrib
 
@@ -601,7 +611,7 @@ def ensemble_consensus(
         gap_contrib = 0.0
         for part in parts:
             g = gaps.get(part, {})
-            gap_contrib += 0.05 * g.get("due_prob", 0)
+            gap_contrib += W["gap"] * g.get("due_prob", 0)
         combo_scores[combo] += gap_contrib
         combo_components[combo]["gap"] += gap_contrib
 
@@ -675,7 +685,7 @@ def _conf_label(ratio: float) -> str:
 
 # ─── Top-level runner ──────────────────────────────────────────────────────
 
-def run_all_models(draws: list[dict], with_lstm: bool = False) -> dict:
+def run_all_models(draws: list[dict], with_lstm: bool = False, state_code: str = None, tod: str = None) -> dict:
     """Run every model and return combined results.
     with_lstm=False (défaut) pour les requêtes directes — le LSTM est lourd
     et s'exécute uniquement en pré-cache background (with_lstm=True).
@@ -730,7 +740,8 @@ def run_all_models(draws: list[dict], with_lstm: bool = False) -> dict:
 
     # Ensemble consensus (LSTM intégré comme source supplémentaire)
     consensus = ensemble_consensus(m1, m2, m3, ml_preds, mc_preds, fourier, draws,
-                                   hot_cold=hc30, lstm_preds=lstm_preds)
+                                   hot_cold=hc30, lstm_preds=lstm_preds,
+                                   state_code=state_code, tod=tod)
 
     return {
         "markov_order1_top": m1[:10],

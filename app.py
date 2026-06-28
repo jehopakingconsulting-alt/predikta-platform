@@ -2282,7 +2282,7 @@ def _build_report(state: str, tod_filter: str = "all", exclude_dow: tuple = (), 
         if not draws:
             return None
 
-    result = run_all_models(draws, with_lstm=with_lstm)
+    result = run_all_models(draws, with_lstm=with_lstm, state_code=state, tod=tod_filter)
     result["state"]       = state
     result["state_name"]  = STATES[state]["name"]
     result["tod_filter"]  = tod_filter
