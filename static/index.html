@@ -1777,6 +1777,7 @@ const YT_VIDEOS = [
   const comingTitle = document.getElementById('ytComingTitle');
   if(!playlist) return;
 
+  let userClicked = false;
   function loadVideo(idx){
     const v = YT_VIDEOS[idx];
     playlist.querySelectorAll('.playlist-item').forEach((el,i)=>
@@ -1784,7 +1785,8 @@ const YT_VIDEOS = [
     if(v.id){
       coming.style.display = 'none';
       frame.style.display  = 'block';
-      frame.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1&color=white`;
+      const auto = userClicked ? '1' : '0';
+      frame.src = `https://www.youtube.com/embed/${v.id}?autoplay=${auto}&rel=0&modestbranding=1&color=white`;
     } else {
       frame.style.display  = 'none';
       coming.style.display = 'flex';
@@ -1796,7 +1798,7 @@ const YT_VIDEOS = [
     const el = document.createElement('div');
     el.className = 'playlist-item' + (i===0?' active':'');
     el.textContent = v.labelKey ? t(v.labelKey) : v.label;
-    el.onclick = ()=> loadVideo(i);
+    el.onclick = ()=>{ userClicked=true; loadVideo(i); };
     playlist.appendChild(el);
   });
 
