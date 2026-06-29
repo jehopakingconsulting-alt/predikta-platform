@@ -102,6 +102,7 @@ def add_security_headers(response):
         "font-src 'self' https://fonts.gstatic.com; "
         "img-src 'self' data: https:; "
         "connect-src 'self' https://www.google-analytics.com https://cdn.jsdelivr.net https://www.facebook.com https://www.clarity.ms https://*.clarity.ms; "
+        "frame-src 'self' https://www.youtube.com https://youtube.com; "
         "frame-ancestors 'self';"
     )
     # Cache statique côté navigateur — fichiers JS/CSS/images versionnés via
