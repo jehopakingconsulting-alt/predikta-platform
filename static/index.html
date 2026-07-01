@@ -2380,6 +2380,7 @@ window.addEventListener('load', async ()=>{
           </button>
         </div>`;
 
+        window._lastData = frozenData;
         renderAll(frozenData);
         updateSidebar(frozenData);
         // Injecter la bannière en haut du contenu rendu
