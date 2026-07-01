@@ -296,7 +296,19 @@ function renderUsers(data){
       const sub = u.subscription || {};
       const plan = sub.plan_label || (sub.plan ? sub.plan.toUpperCase() : '—');
       const status = sub.status || 'none';
-      const days = sub.days_left != null ? sub.days_left : '—';
+      const dl = sub.days_left;
+      let daysHtml = '—';
+      if(status === 'none' || status === 'canceled' || status === 'expired'){
+        daysHtml = '<span style="color:#4d5a8a;font-size:.7rem">—</span>';
+      } else if(dl != null && dl > 0){
+        const col = dl <= 3 ? '#ff5577' : dl <= 7 ? '#ffd700' : '#22e87a';
+        const label = status === 'trial' ? '🧪 ' : '✅ ';
+        daysHtml = `<span style="color:${col};font-weight:700">${label}${dl}j</span>`;
+      } else if(dl === 0 && status === 'active'){
+        daysHtml = '<span style="color:#ff5577;font-weight:700">⚠️ Expire</span>';
+      } else {
+        daysHtml = '<span style="color:#ffd700;font-size:.7rem">∞</span>';
+      }
       const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
       let rows = `<tr class="userrow" onclick="toggleEdit(${u.id})">
         <td>${u.id}</td>
@@ -305,7 +317,7 @@ function renderUsers(data){
         <td>${(plan||'—').toUpperCase()}</td>
         <td>${sub.has_stripe_customer ? '<span style="color:#635BFF;font-size:.7rem;font-weight:700">💳 Stripe</span>' : sub.plan ? '<span style="color:#ffd700;font-size:.7rem;font-weight:700">✋ Manuel</span>' : '<span style="color:#4d5a8a;font-size:.7rem">—</span>'}</td>
         <td><span class="badge ${status}">${status}</span></td>
-        <td>${days}</td>
+        <td>${daysHtml}</td>
         <td>${created}</td>
         <td>✏️</td>
       </tr>`;

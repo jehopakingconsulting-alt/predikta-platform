@@ -307,6 +307,15 @@ def stripe_webhook():
             if sub.status in ("past_due", "expired"):
                 sub.status = "active"
 
+            # Sync current_period_end from the subscription attached to this invoice
+            stripe_sub_id = _get(obj, "subscription")
+            if stripe_sub_id:
+                try:
+                    stripe_sub = stripe.Subscription.retrieve(stripe_sub_id)
+                    _sync_subscription_from_stripe(sub, stripe_sub)
+                except Exception:
+                    pass
+
             amount_paid = (_get(obj, "amount_paid") or 0) / 100.0
             if amount_paid > 0 and sub.plan and sub.user:
                 from auth import record_referral_commission
