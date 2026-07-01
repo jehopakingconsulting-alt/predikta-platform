@@ -486,6 +486,7 @@ def init_app(app):
         _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "email_verified", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "email_verify_token", "VARCHAR(64)")
+        _ensure_column(db, "users", "country", "VARCHAR(4)")
 
 
 def _ensure_column(db, table, column, ddl_type):
