@@ -304,10 +304,8 @@ function renderUsers(data){
         const col = dl <= 3 ? '#ff5577' : dl <= 7 ? '#ffd700' : '#22e87a';
         const label = status === 'trial' ? '🧪 ' : '✅ ';
         daysHtml = `<span style="color:${col};font-weight:700">${label}${dl}j</span>`;
-      } else if(dl === 0 && status === 'active'){
-        daysHtml = '<span style="color:#ff5577;font-weight:700">⚠️ Expire</span>';
       } else {
-        daysHtml = '<span style="color:#ffd700;font-size:.7rem">∞</span>';
+        daysHtml = '<span style="color:#4d5a8a;font-size:.7rem">∞</span>';
       }
       const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
       let rows = `<tr class="userrow" onclick="toggleEdit(${u.id})">
