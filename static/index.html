@@ -1208,14 +1208,12 @@ document.getElementById('welcomeOverlay').addEventListener('click', function(e){
   </select>
   <select id="todSelect" style="min-width:110px">
     <option value="all">Tous tirages</option>
-    <option value="Midday">Midi</option>
-    <option value="Evening">Soir</option>
   </select>
   <select id="monthsSelect" style="min-width:100px">
-    <option value="3">3 mois</option>
-    <option value="6">6 mois</option>
-    <option value="12">12 mois</option>
-    <option value="24" selected>24 mois</option>
+    <option value="3" data-i18n="opt3m">3 mois</option>
+    <option value="6" data-i18n="opt6m">6 mois</option>
+    <option value="12" data-i18n="opt1y">1 an</option>
+    <option value="24" data-i18n="opt2y" selected>2 ans</option>
     <option value="36">3 ans</option>
     <option value="60">5 ans</option>
   </select>
@@ -1495,6 +1493,7 @@ const T = {
     sbExclusive:"🎁 Offre Exclusive",nlTitle:"ZYNORIQ PRO — Gratuit 7 jours",nlDesc:"Prédictions quotidiennes par email · Données illimitées · Accès prioritaire aux mises à jour",nlPlaceholder:"votre@email.com",nlBtn:"S'abonner Gratuitement",nlNote:"Sans engagement · Résiliation en 1 clic",
     sbPartners:"💼 Partenaires",affilDesc1:"Loteries mondiales officielles",affilCta1:"Jouer →",affilNote1:"Sécurisé · Officiel · International",affilDesc2:"Outils d'analyse statistique",affilCta2:"Essai →",affilNote2:"Essai gratuit 14 jours",affilDesc3:"Jackpots en temps réel",affilCta3:"Voir →",
     sponsorsLabel:"Nos Partenaires · Publicité",affilLink:"Lien Affilié",sponsorDesc1:"Achetez des tickets pour les plus grandes loteries mondiales. Sécurisé, officiel et disponible partout.",sponsorCta1:"Jouer Maintenant →",sponsorDesc2:"Suite professionnelle d'analyse statistique pour optimiser vos sélections de numéros.",sponsorCta2:"Essai Gratuit 14j →",sponsorDesc3:"Suivez les jackpots Powerball, Mega Millions et EuroMillions en temps réel.",sponsorCta3:"Voir les Jackpots →",
+    rankBest:"MEILLEUR",copyTop5:"📋 Copier le Top 5",moy:"Moy",lastSum:"Dernière Σ",mostFreqSum:"+ Fréquente",overdueSum:"En retard",parEven:"P=Pair",parOdd:"I=Impair",hiHigh:"H=Haut(5-9)",hiLow:"L=Bas(0-4)",consecutive:"Consécutifs",archiveFrozen:"Archive figée",liveReanalyze:"🔄 Réanalyser live",errServer:"⚠️ Erreur serveur (réponse invalide).",errTimeout:"⏱ Serveur trop lent. Patientez et réessayez.",noResultWidget:"Aucun résultat chargé.",noResultSub:"Charger via la page Résultats →",optAllDraws:"Tous tirages",optMorning:"Matin",optMidday:"Midi",optEvening:"Soir",optNight:"Nuit",opt3m:"3 mois",opt6m:"6 mois",opt1y:"1 an",opt2y:"2 ans",optAllTime:"Tout",
   },
   en:{
     heroTitle:"Advanced Algorithm Predictions",
@@ -1548,6 +1547,7 @@ const T = {
     sbExclusive:"🎁 Exclusive Offer",nlTitle:"ZYNORIQ PRO — Free for 7 days",nlDesc:"Daily predictions by email · Unlimited data · Priority access to updates",nlPlaceholder:"your@email.com",nlBtn:"Subscribe Free",nlNote:"No commitment · Cancel in 1 click",
     sbPartners:"💼 Partners",affilDesc1:"Official world lotteries",affilCta1:"Play →",affilNote1:"Secure · Official · International",affilDesc2:"Statistical analysis tools",affilCta2:"Try →",affilNote2:"Free 14-day trial",affilDesc3:"Jackpots in real time",affilCta3:"View →",
     sponsorsLabel:"Our Partners · Advertisement",affilLink:"Affiliate Link",sponsorDesc1:"Buy tickets for the world's biggest lotteries. Secure, official and available everywhere.",sponsorCta1:"Play Now →",sponsorDesc2:"Professional statistical analysis suite to optimize your number selections.",sponsorCta2:"Free 14-Day Trial →",sponsorDesc3:"Track Powerball, Mega Millions and EuroMillions jackpots in real time.",sponsorCta3:"View Jackpots →",
+    rankBest:"BEST",copyTop5:"📋 Copy Top 5",moy:"Avg",lastSum:"Last Σ",mostFreqSum:"Most Freq",overdueSum:"Overdue",parEven:"E=Even",parOdd:"O=Odd",hiHigh:"H=High(5-9)",hiLow:"L=Low(0-4)",consecutive:"Consecutive",archiveFrozen:"Frozen Archive",liveReanalyze:"🔄 Re-analyze live",errServer:"⚠️ Server error (invalid response).",errTimeout:"⏱ Server too slow. Wait a moment and retry.",noResultWidget:"No results loaded.",noResultSub:"Load via Results page →",optAllDraws:"All draws",optMorning:"Morning",optMidday:"Midday",optEvening:"Evening",optNight:"Night",opt3m:"3 months",opt6m:"6 months",opt1y:"1 year",opt2y:"2 years",optAllTime:"All time",
   },
   es:{
     heroTitle:"Predicciones por Algoritmos Avanzados",
@@ -1601,6 +1601,7 @@ const T = {
     sbExclusive:"🎁 Oferta Exclusiva",nlTitle:"ZYNORIQ PRO — Gratis 7 días",nlDesc:"Predicciones diarias por email · Datos ilimitados · Acceso prioritario a actualizaciones",nlPlaceholder:"su@email.com",nlBtn:"Suscribirse Gratis",nlNote:"Sin compromiso · Cancelación en 1 clic",
     sbPartners:"💼 Socios",affilDesc1:"Loterías mundiales oficiales",affilCta1:"Jugar →",affilNote1:"Seguro · Oficial · Internacional",affilDesc2:"Herramientas de análisis estadístico",affilCta2:"Probar →",affilNote2:"Prueba gratis 14 días",affilDesc3:"Jackpots en tiempo real",affilCta3:"Ver →",
     sponsorsLabel:"Nuestros Socios · Publicidad",affilLink:"Enlace Afiliado",sponsorDesc1:"Compre boletos para las loterías más grandes del mundo. Seguro, oficial y disponible en todas partes.",sponsorCta1:"Jugar Ahora →",sponsorDesc2:"Suite profesional de análisis estadístico para optimizar su selección de números.",sponsorCta2:"Prueba Gratis 14d →",sponsorDesc3:"Siga los jackpots de Powerball, Mega Millions y EuroMillions en tiempo real.",sponsorCta3:"Ver los Jackpots →",
+    rankBest:"MEJOR",copyTop5:"📋 Copiar Top 5",moy:"Prom",lastSum:"Última Σ",mostFreqSum:"Más Frec.",overdueSum:"En retraso",parEven:"P=Par",parOdd:"I=Impar",hiHigh:"H=Alto(5-9)",hiLow:"L=Bajo(0-4)",consecutive:"Consecutivos",archiveFrozen:"Archivo congelado",liveReanalyze:"🔄 Reanálisis en vivo",errServer:"⚠️ Error de servidor (respuesta inválida).",errTimeout:"⏱ Servidor lento. Espere y reintente.",noResultWidget:"Sin resultados cargados.",noResultSub:"Cargar desde la página de Resultados →",optAllDraws:"Todos los sorteos",optMorning:"Mañana",optMidday:"Mediodía",optEvening:"Tarde",optNight:"Noche",opt3m:"3 meses",opt6m:"6 meses",opt1y:"1 año",opt2y:"2 años",optAllTime:"Todo",
   },
   pt:{
     heroTitle:"Previsões por Algoritmos Avançados",
@@ -1654,6 +1655,7 @@ const T = {
     sbExclusive:"🎁 Oferta Exclusiva",nlTitle:"ZYNORIQ PRO — Grátis por 7 dias",nlDesc:"Previsões diárias por email · Dados ilimitados · Acesso prioritário a atualizações",nlPlaceholder:"seu@email.com",nlBtn:"Assinar Grátis",nlNote:"Sem compromisso · Cancelamento em 1 clique",
     sbPartners:"💼 Parceiros",affilDesc1:"Loterias mundiais oficiais",affilCta1:"Jogar →",affilNote1:"Seguro · Oficial · Internacional",affilDesc2:"Ferramentas de análise estatística",affilCta2:"Testar →",affilNote2:"Teste grátis 14 dias",affilDesc3:"Jackpots em tempo real",affilCta3:"Ver →",
     sponsorsLabel:"Nossos Parceiros · Publicidade",affilLink:"Link Afiliado",sponsorDesc1:"Compre bilhetes para as maiores loterias do mundo. Seguro, oficial e disponível em todos os lugares.",sponsorCta1:"Jogar Agora →",sponsorDesc2:"Suite profissional de análise estatística para otimizar suas seleções de números.",sponsorCta2:"Teste Grátis 14d →",sponsorDesc3:"Acompanhe os jackpots do Powerball, Mega Millions e EuroMillions em tempo real.",sponsorCta3:"Ver os Jackpots →",
+    rankBest:"MELHOR",copyTop5:"📋 Copiar Top 5",moy:"Méd",lastSum:"Última Σ",mostFreqSum:"Mais Freq.",overdueSum:"Em atraso",parEven:"P=Par",parOdd:"I=Ímpar",hiHigh:"H=Alto(5-9)",hiLow:"L=Baixo(0-4)",consecutive:"Consecutivos",archiveFrozen:"Arquivo congelado",liveReanalyze:"🔄 Reanalisar ao vivo",errServer:"⚠️ Erro do servidor (resposta inválida).",errTimeout:"⏱ Servidor lento. Aguarde e tente novamente.",noResultWidget:"Nenhum resultado carregado.",noResultSub:"Carregar pela página de Resultados →",optAllDraws:"Todos os sorteios",optMorning:"Manhã",optMidday:"Meio-dia",optEvening:"Tarde",optNight:"Noite",opt3m:"3 meses",opt6m:"6 meses",opt1y:"1 ano",opt2y:"2 anos",optAllTime:"Tudo",
   },
   ht:{
     heroTitle:"Prediksyon pa Algoritm Avanse",
@@ -1707,6 +1709,7 @@ const T = {
     sbExclusive:"🎁 Òf Eksklizif",nlTitle:"ZYNORIQ PRO — Gratis 7 jou",nlDesc:"Prediksyon chak jou pa imèl · Done san limit · Aksè priyoritè nan mizajou",nlPlaceholder:"ou@imèl.com",nlBtn:"Abonen Gratis",nlNote:"San angajman · Anile nan 1 klik",
     sbPartners:"💼 Patnè",affilDesc1:"Lotri mondyal ofisyèl",affilCta1:"Jwe →",affilNote1:"Sekirize · Ofisyèl · Entènasyonal",affilDesc2:"Zouti analiz estatistik",affilCta2:"Esè →",affilNote2:"Esè gratis 14 jou",affilDesc3:"Jackpots an tan reyèl",affilCta3:"Wè →",
     sponsorsLabel:"Patnè Nou yo · Piblisite",affilLink:"Lyen Afilye",sponsorDesc1:"Achte tikè pou pi gwo lotri nan mond lan. Sekirize, ofisyèl epi disponib toupatou.",sponsorCta1:"Jwe Kounye a →",sponsorDesc2:"Swit pwofesyonèl analiz estatistik pou optimize seleksyon nimewo ou.",sponsorCta2:"Esè Gratis 14j →",sponsorDesc3:"Swiv jackpot Powerball, Mega Millions ak EuroMillions an tan reyèl.",sponsorCta3:"Wè Jackpots yo →",
+    rankBest:"MIYÒ",copyTop5:"📋 Kopye Top 5",moy:"Mwayèn",lastSum:"Dènye Σ",mostFreqSum:"Pi Komen",overdueSum:"An reta",parEven:"P=Pè",parOdd:"I=Impè",hiHigh:"H=Wo(5-9)",hiLow:"L=Ba(0-4)",consecutive:"Konsekitif",archiveFrozen:"Achiv Fige",liveReanalyze:"🔄 Analize liv",errServer:"⚠️ Erè sèvè (repons envalid).",errTimeout:"⏱ Sèvè twò dousman. Tann epi eseye ankò.",noResultWidget:"Pa gen rezilta chaje.",noResultSub:"Chaje via paj Rezilta →",optAllDraws:"Tout tiraj",optMorning:"Maten",optMidday:"Midi",optEvening:"Aswè",optNight:"Nuit",opt3m:"3 mwa",opt6m:"6 mwa",opt1y:"1 an",opt2y:"2 an",optAllTime:"Tout tan",
   },
 };
 
@@ -1766,6 +1769,10 @@ function setLang(lang){
     const key = el.getAttribute('data-i18n');
     const val = t(key);
     if(val && val !== key) el.textContent = val;
+  });
+  // Mise à jour rankBest
+  document.querySelectorAll('[data-i18n="rankBest"]').forEach(el=>{
+    el.textContent = '🥇 #1 — '+t('rankBest');
   });
   // Retranscrire les labels de confiance (dépendent du %)
   document.querySelectorAll('[data-conf-pct]').forEach(el=>{
@@ -1997,8 +2004,8 @@ async function loadReport(){
       status.textContent='';
       document.getElementById('mainContent').innerHTML=
         `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
-          ⚠️ Erreur serveur (réponse invalide).<br><br>
-          <button class="btn-scrape" onclick="loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+          ${t('errServer')}<br><br>
+          <button class="btn-scrape" onclick="loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 ${t('btnAnalyze').replace('⚡ ','')}</button>
           <button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">📥 Scraper</button>
         </div>`;
       return;
@@ -2066,12 +2073,12 @@ async function loadReport(){
     }
     _loadReportRetry = 0;
     const msg = e.name==='AbortError'
-      ? '⏱ Serveur trop lent à répondre. Patientez quelques secondes et réessayez.'
+      ? t('errTimeout')
       : `⚠️ ${e.message}`;
     document.getElementById('mainContent').innerHTML=
       `<div class="card" style="color:#ff5533;border-color:#440000;padding:20px">
         ${msg}<br><br>
-        <button class="btn-scrape" onclick="_loadReportRetry=0;loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 Réessayer</button>
+        <button class="btn-scrape" onclick="_loadReportRetry=0;loadReport()" style="cursor:pointer;padding:8px 16px;border-radius:8px;margin-right:8px">🔄 ${t('btnAnalyze').replace('⚡ ','')}</button>
         <button class="btn-scrape" onclick="runScrape()" style="cursor:pointer;padding:8px 16px;border-radius:8px">📥 Scraper</button>
       </div>`;
   }
@@ -2213,8 +2220,8 @@ async function loadTodayWidget(){
 
     if(!entries.length){
       widget.innerHTML = `<div style="text-align:center;font-size:.72rem;color:var(--muted2);padding:8px 0">
-        Aucun résultat chargé.<br>
-        <a href="/results" style="color:var(--accent)">Charger via la page Résultats →</a>
+        ${t('noResultWidget')}<br>
+        <a href="/results" style="color:var(--accent)">${t('noResultSub')}</a>
       </div>`;
       return;
     }
@@ -2364,12 +2371,12 @@ window.addEventListener('load', async ()=>{
           background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.4);margin-bottom:16px;flex-wrap:wrap">
           <span style="font-size:1.1rem">📁</span>
           <div style="flex:1">
-            <div style="font-weight:700;color:#ffcc55;font-size:.85rem">Archive figée${todLabel}</div>
+            <div style="font-weight:700;color:#ffcc55;font-size:.85rem">${t('archiveFrozen')}${todLabel}</div>
             <div style="font-size:.72rem;color:var(--muted2)">Données exactes du ${ts} — non mises à jour</div>
           </div>
           <button onclick="loadReport()" style="padding:6px 14px;border-radius:8px;border:1px solid rgba(255,170,0,.4);
             background:rgba(255,170,0,.1);color:#ffcc55;cursor:pointer;font-size:.75rem;font-weight:700">
-            🔄 Réanalyser live
+            ${t('liveReanalyze')}
           </button>
         </div>`;
 
@@ -2460,14 +2467,14 @@ function renderInlineBanner(){
     onmouseout="this.style.borderColor='rgba(79,110,255,.22)'" onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank')">
     <span style="font-size:1.6rem;flex-shrink:0">🎰</span>
     <div style="flex:1;min-width:0">
-      <div style="font-size:.8rem;font-weight:700;color:var(--text)">TheLotter — Tickets officiels en ligne</div>
-      <div style="font-size:.68rem;color:var(--muted2);margin-top:2px">Powerball · Mega Millions · EuroMillions · +40 loteries mondiales</div>
+      <div style="font-size:.8rem;font-weight:700;color:var(--text)">${t('lbTitle')}</div>
+      <div style="font-size:.68rem;color:var(--muted2);margin-top:2px">${t('lbDesc')}</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">
-      <span style="font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Publicité</span>
+      <span style="font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">${t('adLabel')}</span>
       <button style="padding:7px 16px;border-radius:8px;font-size:.72rem;font-weight:700;
         background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer"
-        onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank')">Jouer →</button>
+        onclick="window.open((window.PREDIKTA_AFFILIATE||{}).thelotter||'#','_blank')">${t('lbCta')}</button>
     </div>
   </div>`;
 }
@@ -2511,7 +2518,7 @@ function renderConsensus(d, today){
     const rankClass = i < 3 ? `rank-${i+1}` : '';
     const isFav     = window.ZYNORIQ?.isFav(s.combo);
     const transId   = `trans-${state}-${i}`;
-    const rankBadge = i === 0 ? `<span class="rank-badge rank-badge-1">🥇 #1 — MEILLEUR</span>`
+    const rankBadge = i === 0 ? `<span class="rank-badge rank-badge-1" data-i18n="rankBest">🥇 #1 — ${t('rankBest')}</span>`
                     : i === 1 ? `<span class="rank-badge rank-badge-2">🥈 #2</span>`
                     : i === 2 ? `<span class="rank-badge rank-badge-3">🥉 #3</span>`
                     : '';
@@ -2541,7 +2548,7 @@ function renderConsensus(d, today){
   const shareRow = `<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
     <button onclick="sharePrediction('${state}','${d.consensus[0]?.combo}',${d.consensus[0]?.confidence_pct})" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:#25d366;cursor:pointer">📱 WhatsApp</button>
     <a href="https://twitter.com/intent/tweet?text=${shareText}" target="_blank" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:rgba(29,161,242,.15);border:1px solid rgba(29,161,242,.3);color:#1da1f2;text-decoration:none">𝕏 Twitter</a>
-    <button onclick="copyCombo('${d.consensus.map(s=>s.combo).slice(0,5).join(' | ')}')" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">📋 Copier le Top 5</button>
+    <button data-i18n="copyTop5" onclick="copyCombo('${d.consensus.map(s=>s.combo).slice(0,5).join(' | ')}')" style="padding:6px 14px;border-radius:8px;font-size:.72rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">${t('copyTop5')}</button>
   </div>`;
 
   // ── EXPRESS + SNIPER CARDS ──────────────────────────────────────────────
@@ -2742,7 +2749,7 @@ function renderHotCold(d){
     <div class="card-title"><span class="ct-icon">🔥</span>${t('hotcold')} — 30 ${t('draw')}s</div>
     <div class="tabs-row">${tabs}</div>${panels}
     <div style="margin-top:10px;font-size:.65rem;color:var(--muted)">
-      🔴 Chaud · 🔵 Froid · ⚫ Neutre
+      🔴 ${t('transHot')} · 🔵 ${t('transCold')} · ⚫ ${t('transNeutral')}
     </div>
     <div class="chart-wrap" style="margin-top:14px;height:170px">
       <canvas id="freqChart"></canvas>
@@ -2790,7 +2797,7 @@ function renderGaps(d){
       <div class="gap-digit">${digit}</div>
       <div class="gap-wrap"><div class="gap-fill ${cls}" style="width:${pct}%"></div></div>
       <div class="gap-info">
-        Écart: <strong>${g.current_gap}</strong> · Moy: ${g.avg_gap??'—'}
+        ${t('transGapModel')}: <strong>${g.current_gap}</strong> · ${t('moy')}: ${g.avg_gap??'—'}
         <span class="gap-prob ${probClass}">${duePct}%</span>
         ${overdueTag}
       </div>
@@ -2873,9 +2880,9 @@ function renderSumSection(d){
     <div class="card-title"><span class="ct-icon">∑</span>${t('sums')}</div>
     <div class="chart-wrap" style="height:160px"><canvas id="sumChart"></canvas></div>
     <div class="chips" style="margin-top:10px">
-      <div class="chip">Dernière Σ: <strong>${sa.last_sum??'—'}</strong></div>
-      <div class="chip">+ Fréquente: <strong>${sa.most_common_sum??'—'}</strong></div>
-      <div class="chip">En retard: <strong>${(sa.overdue_sums||[]).join(', ')||'—'}</strong></div>
+      <div class="chip">${t('lastSum')}: <strong>${sa.last_sum??'—'}</strong></div>
+      <div class="chip">${t('mostFreqSum')}: <strong>${sa.most_common_sum??'—'}</strong></div>
+      <div class="chip">${t('overdueSum')}: <strong>${(sa.overdue_sums||[]).join(', ')||'—'}</strong></div>
     </div>
   </div>`;
 }
@@ -2916,12 +2923,12 @@ function renderParityHiLo(d){
     `<div class="chip">${p}: <strong>${v.pct}%</strong></div>`).join('');
   return`<div class="card" style="margin-bottom:0">
     <div class="card-title"><span class="ct-icon">⚖</span>${t('parity')}</div>
-    <div style="font-size:.68rem;color:var(--muted2);margin-bottom:6px">P=Pair · I=Impair</div>
+    <div style="font-size:.68rem;color:var(--muted2);margin-bottom:6px">${t('parEven')} · ${t('parOdd')}</div>
     <div class="chips">${parChips}</div>
-    <div style="font-size:.68rem;color:var(--muted2);margin:10px 0 6px">H=Haut(5-9) · L=Bas(0-4)</div>
+    <div style="font-size:.68rem;color:var(--muted2);margin:10px 0 6px">${t('hiHigh')} · ${t('hiLow')}</div>
     <div class="chips">${hlChips}</div>
     <div style="margin-top:10px">
-      <div class="chip">Consécutifs: <strong>${cons.consecutive_count??0}</strong> fois (${cons.pct??0}%)</div>
+      <div class="chip">${t('consecutive')}: <strong>${cons.consecutive_count??0}</strong> fois (${cons.pct??0}%)</div>
     </div>
   </div>`;
 }

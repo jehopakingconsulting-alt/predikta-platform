@@ -67,9 +67,9 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
       <div style="font-weight:700;font-size:.9rem;margin-bottom:6px" data-i18n="changePlan">Changer de plan</div>
       <div class="subtitle" style="margin-bottom:0" data-i18n="changePlanNote">Démarre une nouvelle période d'essai en changeant de plan (paiement requis ensuite).</div>
       <div class="plans" id="plans">
-        <div class="plan" data-plan="pro"><b>PRO</b><span>$19/mo</span><small>4 États · 1/jour</small></div>
-        <div class="plan" data-plan="vip" id="planVip"><b>VIP</b><span>$49/mo</span><small>20 États · 7/jour</small></div>
-        <div class="plan" data-plan="vip" data-founder="1" id="planFounder" style="display:none;border-color:#ffd700;background:rgba(255,215,0,.08)"><b style="color:#ffd700">🏅 FOUNDER</b><span style="color:#ffd700">$29/mo</span><small style="color:#ffd700">VIP · à vie</small></div>
+        <div class="plan" data-plan="pro"><b>PRO</b><span>$19/mo</span><small data-i18n="proPlanDesc">4 États · 1/jour</small></div>
+        <div class="plan" data-plan="vip" id="planVip"><b>VIP</b><span>$49/mo</span><small data-i18n="vipPlanDesc">20 États · 7/jour</small></div>
+        <div class="plan" data-plan="vip" data-founder="1" id="planFounder" style="display:none;border-color:#ffd700;background:rgba(255,215,0,.08)"><b style="color:#ffd700">🏅 FOUNDER</b><span style="color:#ffd700">$29/mo</span><small style="color:#ffd700" data-i18n="founderBadge">VIP · à vie</small></div>
         <div class="plan" data-plan="elite"><b>PREMIUM</b><span>$99/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
         <div class="plan" data-plan="business"><b>BUSINESS</b><span>$199/mo</span><small data-i18n="unlimited">Tous États · illimité</small></div>
       </div>
@@ -96,7 +96,7 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
           <a href="https://wise.com/pay/r/zynoriq" target="_blank" id="wiseLink" style="padding:14px 24px;background:#9fe87015;border:2px solid #9fe870;border-radius:12px;display:flex;align-items:center;gap:10px;text-decoration:none;transition:all .2s;opacity:.5;pointer-events:none" title="En attente de vérification">
             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/wise.svg" alt="Wise" style="width:22px;height:22px;filter:brightness(0) saturate(100%) invert(79%) sepia(38%) saturate(555%) hue-rotate(56deg) brightness(101%) contrast(89%)">
             <span style="font-weight:700;font-size:.9rem;color:#9fe870">Wise</span>
-            <span style="font-size:.6rem;color:#9fe870;opacity:.7">bientôt</span>
+            <span style="font-size:.6rem;color:#9fe870;opacity:.7" data-i18n="wiseSoon">bientôt</span>
           </a>
         </div>
 
@@ -107,11 +107,11 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
         <div id="altPayPanel" style="display:none;margin-top:12px;padding:14px;background:rgba(255,255,255,.02);border:1px solid #1a1a45;border-radius:10px">
           <div style="font-size:.75rem;color:#4d5a8a;margin-bottom:10px;line-height:1.6" data-i18n="altPayDesc">Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px">
-            <a href="mailto:zynoriqintelligence@gmail.com?subject=Interac%20e-Transfer%20ZYNORIQ" style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff;text-decoration:none;display:block">💳 Interac e-Transfer<br><span style="font-size:.65rem;color:#4d5a8a">zynoriqintelligence@gmail.com</span></a>
-            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">🏦 Virement bancaire</div>
-            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 MonCash</div>
-            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">📱 NatCash</div>
-            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff">₿ Crypto</div>
+            <a href="mailto:zynoriqintelligence@gmail.com?subject=Interac%20e-Transfer%20ZYNORIQ" style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff;text-decoration:none;display:block"><span data-i18n="payInterac">💳 Interac e-Transfer</span><br><span style="font-size:.65rem;color:#4d5a8a">zynoriqintelligence@gmail.com</span></a>
+            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff" data-i18n="payBank">🏦 Virement bancaire</div>
+            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff" data-i18n="payMoncash">📱 MonCash</div>
+            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff" data-i18n="payNatcash">📱 NatCash</div>
+            <div style="padding:10px;border:1px solid #1a1a45;border-radius:8px;text-align:center;font-size:.75rem;color:#e8eeff" data-i18n="payCrypto">₿ Crypto</div>
           </div>
           <div style="font-size:.75rem;color:#e8eeff;margin-bottom:8px" data-i18n="altPayContact">Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -161,7 +161,8 @@ const T = {
     savedOk:"Enregistré ✓", planActivated:"Plan activé ! Ton essai gratuit commence maintenant.",
     tooMany:(n)=>`Tu peux sélectionner au maximum ${n} État(s).`, notLoggedIn:"Tu dois être connecté.",
     redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",
-    payWith:"Payer avec",trustSecure:"Paiement sécurisé SSL 256-bit",trustEncrypted:"Données cryptées & protégées",trustCancel:"Annulation en 1 clic · Sans engagement",trustCompliance:"Conforme PCI-DSS · Vos informations bancaires ne sont jamais stockées sur nos serveurs",btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",},
+    payWith:"Payer avec",trustSecure:"Paiement sécurisé SSL 256-bit",trustEncrypted:"Données cryptées & protégées",trustCancel:"Annulation en 1 clic · Sans engagement",trustCompliance:"Conforme PCI-DSS · Vos informations bancaires ne sont jamais stockées sur nos serveurs",btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",
+    proPlanDesc:"4 États · 1/jour",vipPlanDesc:"20 États · 7/jour",founderBadge:"VIP · à vie",wiseSoon:"bientôt",wisePending:"En attente de vérification",renewSoon:"⚠️ Renouvellement bientôt",dayWord:"jour",daysWord:"jours",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Virement bancaire",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
@@ -175,7 +176,8 @@ const T = {
     savedOk:"Saved ✓", planActivated:"Plan activated! Your free trial starts now.",
     tooMany:(n)=>`You can select at most ${n} state(s).`, notLoggedIn:"You must be logged in.",
     redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",
-    payWith:"Pay with",trustSecure:"Secure SSL 256-bit payment",trustEncrypted:"Encrypted & protected data",trustCancel:"Cancel in 1 click · No commitment",trustCompliance:"PCI-DSS compliant · Your banking details are never stored on our servers",btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",},
+    payWith:"Pay with",trustSecure:"Secure SSL 256-bit payment",trustEncrypted:"Encrypted & protected data",trustCancel:"Cancel in 1 click · No commitment",trustCompliance:"PCI-DSS compliant · Your banking details are never stored on our servers",btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",
+    proPlanDesc:"4 States · 1/day",vipPlanDesc:"20 States · 7/day",founderBadge:"VIP · lifetime",wiseSoon:"soon",wisePending:"Awaiting verification",renewSoon:"⚠️ Renewal soon",dayWord:"day",daysWord:"days",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Bank transfer",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuario",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estado",lblDaysLeft:"Tiempo restante",lblQuota:"Análisis / día",
@@ -189,7 +191,8 @@ const T = {
     savedOk:"Guardado ✓", planActivated:"¡Plan activado! Tu prueba gratuita comienza ahora.",
     tooMany:(n)=>`Puedes seleccionar como máximo ${n} Estado(s).`, notLoggedIn:"Debes iniciar sesión.",
     redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
-    payWith:"Pagar con",trustSecure:"Pago seguro SSL 256-bit",trustEncrypted:"Datos cifrados y protegidos",trustCancel:"Cancelación en 1 clic · Sin compromiso",trustCompliance:"Conforme PCI-DSS · Sus datos bancarios nunca se almacenan en nuestros servidores",btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",},
+    payWith:"Pagar con",trustSecure:"Pago seguro SSL 256-bit",trustEncrypted:"Datos cifrados y protegidos",trustCancel:"Cancelación en 1 clic · Sin compromiso",trustCompliance:"Conforme PCI-DSS · Sus datos bancarios nunca se almacenan en nuestros servidores",btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",
+    proPlanDesc:"4 Estados · 1/día",vipPlanDesc:"20 Estados · 7/día",founderBadge:"VIP · de por vida",wiseSoon:"pronto",wisePending:"Pendiente de verificación",renewSoon:"⚠️ Renovación pronto",dayWord:"día",daysWord:"días",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Transferencia bancaria",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuário",lblEmail:"Email",lblPlan:"Plano",lblStatus:"Status",lblDaysLeft:"Tempo restante",lblQuota:"Análises / dia",
@@ -203,7 +206,8 @@ const T = {
     savedOk:"Salvo ✓", planActivated:"Plano ativado! Seu teste gratuito começa agora.",
     tooMany:(n)=>`Você pode selecionar no máximo ${n} Estado(s).`, notLoggedIn:"Você precisa estar conectado.",
     redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",
-    payWith:"Pagar com",trustSecure:"Pagamento seguro SSL 256-bit",trustEncrypted:"Dados criptografados e protegidos",trustCancel:"Cancelamento em 1 clique · Sem compromisso",trustCompliance:"Conforme PCI-DSS · Seus dados bancários nunca são armazenados em nossos servidores",btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",},
+    payWith:"Pagar com",trustSecure:"Pagamento seguro SSL 256-bit",trustEncrypted:"Dados criptografados e protegidos",trustCancel:"Cancelamento em 1 clique · Sem compromisso",trustCompliance:"Conforme PCI-DSS · Seus dados bancários nunca são armazenados em nossos servidores",btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",
+    proPlanDesc:"4 Estados · 1/dia",vipPlanDesc:"20 Estados · 7/dia",founderBadge:"VIP · vitalício",wiseSoon:"em breve",wisePending:"Aguardando verificação",renewSoon:"⚠️ Renovação em breve",dayWord:"dia",daysWord:"dias",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Transferência bancária",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
     lblUser:"Itilizatè",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estati",lblDaysLeft:"Tan ki rete",lblQuota:"Analiz / jou",
@@ -217,7 +221,8 @@ const T = {
     savedOk:"Anrejistre ✓", planActivated:"Plan aktive! Esè gratis ou kòmanse kounye a.",
     tooMany:(n)=>`Ou ka chwazi pi plis ${n} Eta.`, notLoggedIn:"Ou dwe konekte.",
     redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",
-    payWith:"Peye ak",trustSecure:"Peman sekirize SSL 256-bit",trustEncrypted:"Done kripte ak pwoteje",trustCancel:"Anilasyon an 1 klik · San angajman",trustCompliance:"Konfòm PCI-DSS · Enfòmasyon bankè ou pa janm estoke sou sèvè nou yo",btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",},
+    payWith:"Peye ak",trustSecure:"Peman sekirize SSL 256-bit",trustEncrypted:"Done kripte ak pwoteje",trustCancel:"Anilasyon an 1 klik · San angajman",trustCompliance:"Konfòm PCI-DSS · Enfòmasyon bankè ou pa janm estoke sou sèvè nou yo",btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",
+    proPlanDesc:"4 Eta · 1/jou",vipPlanDesc:"20 Eta · 7/jou",founderBadge:"VIP · pou tout lavi",wiseSoon:"byento",wisePending:"Ap tann verifikasyon",renewSoon:"⚠️ Renouvèlman byento",dayWord:"jou",daysWord:"jou",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Viman bank",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
@@ -260,8 +265,8 @@ async function loadAccount(){
       const dl = sub.days_left;
       const col = dl <= 3 ? '#ff5577' : dl <= 7 ? '#ffd700' : '#22e87a';
       const icon = sub.status === 'trial' ? '🧪' : '✅';
-      const renewMsg = sub.status === 'active' && dl <= 7 ? ` — <span style="color:#ffd700;font-size:.78rem">⚠️ Renouvellement bientôt</span>` : '';
-      document.getElementById('daysLeft').innerHTML = `<span style="color:${col};font-weight:700">${icon} ${dl} jour${dl>1?'s':''}</span>${renewMsg}`;
+      const renewMsg = sub.status === 'active' && dl <= 7 ? ` — <span style="color:#ffd700;font-size:.78rem">${dict.renewSoon||T.fr.renewSoon}</span>` : '';
+      document.getElementById('daysLeft').innerHTML = `<span style="color:${col};font-weight:700">${icon} ${dl} ${dl>1?(dict.daysWord||T.fr.daysWord):(dict.dayWord||T.fr.dayWord)}</span>${renewMsg}`;
     } else {
       document.getElementById('daysLeft').textContent = sub.plan ? dict.daysLeftVal(sub.days_left||0) : '—';
     }

@@ -142,6 +142,173 @@ table.tr-table td.combo{font-family:'Orbitron',monospace;letter-spacing:1px;colo
   </div>
 </div>
 <script>
+// ── i18n ──────────────────────────────────────────────────────────────
+const T = {
+  fr:{
+    pageTitle:"Analyseur Cash 5 / Fantasy 5 — ZYNORIQ",
+    heroSub:"Analyse statistique : fréquences, numéros chauds/froids, retards et suggestions TOP PICK",
+    selState:"État", selGame:"Jeu",
+    btnAnalyze:"🔍 Analyser",
+    loading:"Sélectionnez un état et un jeu, puis cliquez Analyser.",
+    analyzing:"Analyse en cours…",
+    errLoad:"Erreur chargement",
+    errNetwork:"⚠️ Erreur réseau. Réessayez.",
+    ctaTitle:"Envie d'analyser Pick 3 ou Pick 4 ?",
+    tabSuggestions:"🎯 Suggestions TOP PICK",
+    tabHeatmap:"🌡️ Fréquences",
+    tabPairs:"🔗 Paires fréquentes",
+    tabTrack:"📈 Track Record",
+    noSuggestions:"Pas de suggestions disponibles.",
+    noData:"Pas de données.",
+    noEnough:"Pas assez de données.",
+    lastDraw:"Dernier tirage",
+    draws:"Tirages analysés",
+    perDraw:"Numéros par tirage",
+    pool:"Pool de numéros",
+    topPick:"TOP PICK #1",
+    trDate:"Date", trSugg:"Suggestion TOP PICK", trActual:"Résultat réel", trMatches:"Matches", trResult:"Résultat",
+    jackpot:"★★★ JACKPOT", hit4:"✓✓✓✓ 4/5", hit3:"✓✓✓ 3/5",
+    statHit3:"≥ 3 numéros corrects", statHit4:"≥ 4 numéros corrects", statJackpot:"Jackpot (5/5)",
+    confVH:"★★★★★ Tendance Très Forte", confH:"★★★★ Tendance Forte",
+    confM:"★★★ Tendance Moyenne", confL:"★★ Tendance Faible",
+    tirages:"tirages",
+  },
+  en:{
+    pageTitle:"Cash 5 / Fantasy 5 Analyzer — ZYNORIQ",
+    heroSub:"Statistical analysis: frequencies, hot/cold numbers, gaps and TOP PICK suggestions",
+    selState:"State", selGame:"Game",
+    btnAnalyze:"🔍 Analyze",
+    loading:"Select a state and game, then click Analyze.",
+    analyzing:"Analyzing…",
+    errLoad:"Load error",
+    errNetwork:"⚠️ Network error. Try again.",
+    ctaTitle:"Want to analyze Pick 3 or Pick 4?",
+    tabSuggestions:"🎯 TOP PICK Suggestions",
+    tabHeatmap:"🌡️ Frequencies",
+    tabPairs:"🔗 Frequent Pairs",
+    tabTrack:"📈 Track Record",
+    noSuggestions:"No suggestions available.",
+    noData:"No data.",
+    noEnough:"Not enough data.",
+    lastDraw:"Last draw",
+    draws:"Draws analyzed",
+    perDraw:"Numbers per draw",
+    pool:"Number pool",
+    topPick:"TOP PICK #1",
+    trDate:"Date", trSugg:"TOP PICK Suggestion", trActual:"Actual result", trMatches:"Matches", trResult:"Result",
+    jackpot:"★★★ JACKPOT", hit4:"✓✓✓✓ 4/5", hit3:"✓✓✓ 3/5",
+    statHit3:"≥ 3 correct numbers", statHit4:"≥ 4 correct numbers", statJackpot:"Jackpot (5/5)",
+    confVH:"★★★★★ Very Strong Trend", confH:"★★★★ Strong Trend",
+    confM:"★★★ Medium Trend", confL:"★★ Weak Trend",
+    tirages:"draws",
+  },
+  es:{
+    pageTitle:"Analizador Cash 5 / Fantasy 5 — ZYNORIQ",
+    heroSub:"Análisis estadístico: frecuencias, números calientes/fríos, retrasos y sugerencias TOP PICK",
+    selState:"Estado", selGame:"Juego",
+    btnAnalyze:"🔍 Analizar",
+    loading:"Selecciona un estado y juego, luego haz clic en Analizar.",
+    analyzing:"Analizando…",
+    errLoad:"Error de carga",
+    errNetwork:"⚠️ Error de red. Inténtalo de nuevo.",
+    ctaTitle:"¿Quieres analizar Pick 3 o Pick 4?",
+    tabSuggestions:"🎯 Sugerencias TOP PICK",
+    tabHeatmap:"🌡️ Frecuencias",
+    tabPairs:"🔗 Pares frecuentes",
+    tabTrack:"📈 Track Record",
+    noSuggestions:"No hay sugerencias disponibles.",
+    noData:"Sin datos.",
+    noEnough:"Datos insuficientes.",
+    lastDraw:"Último sorteo",
+    draws:"Sorteos analizados",
+    perDraw:"Números por sorteo",
+    pool:"Pool de números",
+    topPick:"TOP PICK #1",
+    trDate:"Fecha", trSugg:"Sugerencia TOP PICK", trActual:"Resultado real", trMatches:"Matches", trResult:"Resultado",
+    jackpot:"★★★ JACKPOT", hit4:"✓✓✓✓ 4/5", hit3:"✓✓✓ 3/5",
+    statHit3:"≥ 3 números correctos", statHit4:"≥ 4 números correctos", statJackpot:"Jackpot (5/5)",
+    confVH:"★★★★★ Tendencia Muy Fuerte", confH:"★★★★ Tendencia Fuerte",
+    confM:"★★★ Tendencia Media", confL:"★★ Tendencia Débil",
+    tirages:"sorteos",
+  },
+  pt:{
+    pageTitle:"Analisador Cash 5 / Fantasy 5 — ZYNORIQ",
+    heroSub:"Análise estatística: frequências, números quentes/frios, atrasos e sugestões TOP PICK",
+    selState:"Estado", selGame:"Jogo",
+    btnAnalyze:"🔍 Analisar",
+    loading:"Selecione um estado e um jogo, depois clique em Analisar.",
+    analyzing:"Analisando…",
+    errLoad:"Erro de carregamento",
+    errNetwork:"⚠️ Erro de rede. Tente novamente.",
+    ctaTitle:"Quer analisar Pick 3 ou Pick 4?",
+    tabSuggestions:"🎯 Sugestões TOP PICK",
+    tabHeatmap:"🌡️ Frequências",
+    tabPairs:"🔗 Pares frequentes",
+    tabTrack:"📈 Track Record",
+    noSuggestions:"Nenhuma sugestão disponível.",
+    noData:"Sem dados.",
+    noEnough:"Dados insuficientes.",
+    lastDraw:"Último sorteio",
+    draws:"Sorteios analisados",
+    perDraw:"Números por sorteio",
+    pool:"Pool de números",
+    topPick:"TOP PICK #1",
+    trDate:"Data", trSugg:"Sugestão TOP PICK", trActual:"Resultado real", trMatches:"Matches", trResult:"Resultado",
+    jackpot:"★★★ JACKPOT", hit4:"✓✓✓✓ 4/5", hit3:"✓✓✓ 3/5",
+    statHit3:"≥ 3 números corretos", statHit4:"≥ 4 números corretos", statJackpot:"Jackpot (5/5)",
+    confVH:"★★★★★ Tendência Muito Forte", confH:"★★★★ Tendência Forte",
+    confM:"★★★ Tendência Média", confL:"★★ Tendência Fraca",
+    tirages:"sorteios",
+  },
+  ht:{
+    pageTitle:"Analizè Cash 5 / Fantasy 5 — ZYNORIQ",
+    heroSub:"Analiz estatistik: frekans, nimewo cho/frèt, reta ak sijèsyon TOP PICK",
+    selState:"Eta", selGame:"Jwèt",
+    btnAnalyze:"🔍 Analize",
+    loading:"Chwazi yon eta ak yon jwèt, Epi klike Analize.",
+    analyzing:"Analiz ap fèt…",
+    errLoad:"Erè chajman",
+    errNetwork:"⚠️ Erè rezo. Eseye ankò.",
+    ctaTitle:"Ou vle analize Pick 3 oswa Pick 4?",
+    tabSuggestions:"🎯 Sijèsyon TOP PICK",
+    tabHeatmap:"🌡️ Frekans",
+    tabPairs:"🔗 Pè Frekant",
+    tabTrack:"📈 Track Record",
+    noSuggestions:"Pa gen sijèsyon disponib.",
+    noData:"Pa gen done.",
+    noEnough:"Pa ase done.",
+    lastDraw:"Dènye tiraj",
+    draws:"Tiraj analize",
+    perDraw:"Nimewo pa tiraj",
+    pool:"Pool nimewo",
+    topPick:"TOP PICK #1",
+    trDate:"Dat", trSugg:"Sijèsyon TOP PICK", trActual:"Rezilta reyèl", trMatches:"Matches", trResult:"Rezilta",
+    jackpot:"★★★ JACKPOT", hit4:"✓✓✓✓ 4/5", hit3:"✓✓✓ 3/5",
+    statHit3:"≥ 3 nimewo kòrèk", statHit4:"≥ 4 nimewo kòrèk", statJackpot:"Jackpot (5/5)",
+    confVH:"★★★★★ Tandans Trè Fò", confH:"★★★★ Tandans Fò",
+    confM:"★★★ Tandans Mwayen", confL:"★★ Tandans Fèb",
+    tirages:"tiraj",
+  },
+};
+
+function t(key){ return (T[window.PREDIKTA_LANG] || T.fr)[key] || key; }
+
+function applyLang(lang){
+  const dict = T[lang] || T.fr;
+  document.title = dict.pageTitle;
+  document.getElementById('heroSub').textContent = dict.heroSub;
+  document.querySelector('.sel-label').textContent = dict.selState;
+  document.querySelectorAll('.sel-label')[1].textContent = dict.selGame;
+  document.querySelector('.sel-btn').textContent = dict.btnAnalyze;
+  document.querySelector('.cta-box p').textContent = dict.ctaTitle;
+  // If main still shows initial message, update it
+  const mainEl = document.getElementById('main');
+  if(mainEl && mainEl.querySelector('.loading') && !CUR_DATA){
+    mainEl.querySelector('.loading').textContent = dict.loading;
+  }
+}
+window.setLang = function(lang){ applyLang(lang); };
+
 // ── State / game catalogue ─────────────────────────────────────────────
 let CATALOGUE = [];   // [{state,name,slug,label,pool,total_draws}]
 let CUR_DATA  = null;
@@ -185,7 +352,7 @@ async function loadCatalogue(){
     });
     onStateChange();
   }catch(e){
-    document.getElementById('stateSelect').innerHTML='<option value="">Erreur chargement</option>';
+    document.getElementById('stateSelect').innerHTML=`<option value="">${t('errLoad')}</option>`;
   }
 }
 
@@ -194,7 +361,7 @@ async function loadAnalysis(){
   const state = document.getElementById('stateSelect').value;
   const slug  = document.getElementById('gameSelect').value;
   if(!state||!slug) return;
-  document.getElementById('main').innerHTML='<div class="loading">Analyse en cours…</div>';
+  document.getElementById('main').innerHTML=`<div class="loading">${t('analyzing')}</div>`;
   document.getElementById('selInfo').textContent='';
   try{
     const [rep, trk] = await Promise.all([
@@ -207,9 +374,9 @@ async function loadAnalysis(){
     }
     CUR_DATA = {rep, trk};
     renderAll(rep, trk);
-    document.getElementById('selInfo').textContent=`${rep.total_draws} tirages · pool 1-${rep.pool_size} · pick ${rep.pick_n}`;
+    document.getElementById('selInfo').textContent=`${rep.total_draws} ${t('tirages')} · pool 1-${rep.pool_size} · pick ${rep.pick_n}`;
   }catch(e){
-    document.getElementById('main').innerHTML='<div class="error-box">⚠️ Erreur réseau. Réessayez.</div>';
+    document.getElementById('main').innerHTML=`<div class="error-box">${t('errNetwork')}</div>`;
   }
 }
 
@@ -222,10 +389,10 @@ function confCls(c){
 }
 function confLabel(c){
   const map={
-    'Tendance très forte':'★★★★★ Tendance Très Forte',
-    'Tendance forte':     '★★★★ Tendance Forte',
-    'Tendance moyenne':   '★★★ Tendance Moyenne',
-    'Tendance faible':    '★★ Tendance Faible',
+    'Tendance très forte': t('confVH'),
+    'Tendance forte':      t('confH'),
+    'Tendance moyenne':    t('confM'),
+    'Tendance faible':     t('confL'),
   };
   return map[c]||c;
 }
@@ -237,7 +404,7 @@ function ballClass(hc, due){
 }
 
 function renderSuggestions(sugg){
-  if(!sugg||!sugg.length) return '<div class="loading">Pas de suggestions disponibles.</div>';
+  if(!sugg||!sugg.length) return `<div class="loading">${t('noSuggestions')}</div>`;
   const rankLabel = ['🥇','🥈','🥉'];
   return `<div class="sugg-grid">${sugg.map((s,i)=>{
     const hcMap = {};
@@ -283,7 +450,7 @@ function renderHeatmap(freq, gaps, hc30){
 }
 
 function renderPairs(pairs){
-  if(!pairs||!pairs.length) return '<div class="loading">Pas de données.</div>';
+  if(!pairs||!pairs.length) return `<div class="loading">${t('noData')}</div>`;
   return `<div class="pairs-grid">${pairs.map(p=>`
     <div class="pair-chip">
       <span class="pair-nums">${p.pair}</span>
@@ -292,23 +459,23 @@ function renderPairs(pairs){
 }
 
 function renderTrackRecord(trk){
-  if(!trk||!trk.rows||!trk.rows.length) return '<div class="loading">Pas assez de données.</div>';
+  if(!trk||!trk.rows||!trk.rows.length) return `<div class="loading">${t('noEnough')}</div>`;
   const sRate = trk.n?(trk.hit3/trk.n*100).toFixed(1):'0.0';
   const header = `<div class="stats-row" style="margin-bottom:14px">
-    <div class="stat-chip"><div class="num">${trk.n}</div><div class="lbl">Tirages</div></div>
-    <div class="stat-chip"><div class="num" style="color:#88aaff">${trk.hit3} (${sRate}%)</div><div class="lbl">≥ 3 numéros corrects</div></div>
-    <div class="stat-chip"><div class="num" style="color:var(--green)">${trk.hit4}</div><div class="lbl">≥ 4 numéros corrects</div></div>
-    <div class="stat-chip"><div class="num" style="color:var(--gold)">${trk.hit5}</div><div class="lbl">Jackpot (5/5)</div></div>
+    <div class="stat-chip"><div class="num">${trk.n}</div><div class="lbl">${t('draws')}</div></div>
+    <div class="stat-chip"><div class="num" style="color:#88aaff">${trk.hit3} (${sRate}%)</div><div class="lbl">${t('statHit3')}</div></div>
+    <div class="stat-chip"><div class="num" style="color:var(--green)">${trk.hit4}</div><div class="lbl">${t('statHit4')}</div></div>
+    <div class="stat-chip"><div class="num" style="color:var(--gold)">${trk.hit5}</div><div class="lbl">${t('statJackpot')}</div></div>
   </div>`;
   const rows = trk.rows.map(r=>{
     let cls='hit-none', mark='—';
-    if(r.hit_5){ cls='hit5'; mark='★★★ JACKPOT'; }
-    else if(r.hit_4){ cls='hit4'; mark='✓✓✓✓ 4/5'; }
-    else if(r.hit_3){ cls='hit3'; mark='✓✓✓ 3/5'; }
+    if(r.hit_5){ cls='hit5'; mark=t('jackpot'); }
+    else if(r.hit_4){ cls='hit4'; mark=t('hit4'); }
+    else if(r.hit_3){ cls='hit3'; mark=t('hit3'); }
     return `<tr><td>${r.date}</td><td class="combo">${r.predicted}</td><td class="combo">${r.actual}</td><td>${r.matched}/5</td><td class="${cls}">${mark}</td></tr>`;
   }).join('');
   return header + `<table class="tr-table">
-    <thead><tr><th>Date</th><th>Suggestion TOP PICK</th><th>Résultat réel</th><th>Matches</th><th>Résultat</th></tr></thead>
+    <thead><tr><th>${t('trDate')}</th><th>${t('trSugg')}</th><th>${t('trActual')}</th><th>${t('trMatches')}</th><th>${t('trResult')}</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>`;
 }
@@ -317,23 +484,23 @@ function renderAll(rep, trk){
   const ld = rep.last_draw;
   const ldBalls = (ld.nums||[]).map(n=>`<div class="ball ball-neutral" style="width:30px;height:30px;font-size:.65rem">${n}</div>`).join('');
   const ldHtml = `<div class="last-draw-row">
-    <span class="ld-label">Dernier tirage</span>
+    <span class="ld-label">${t('lastDraw')}</span>
     <div style="display:flex;gap:5px">${ldBalls}</div>
     <span class="ld-date">${ld.date}${ld.tod?' · '+ld.tod:''}</span>
   </div>`;
 
   const statsHtml = `<div class="stats-row">
-    <div class="stat-chip"><div class="num">${rep.total_draws}</div><div class="lbl">Tirages analysés</div></div>
-    <div class="stat-chip"><div class="num">${rep.pick_n}</div><div class="lbl">Numéros par tirage</div></div>
-    <div class="stat-chip"><div class="num">1-${rep.pool_size}</div><div class="lbl">Pool de numéros</div></div>
-    <div class="stat-chip"><div class="num">${rep.suggestions?.[0]?.combo||'—'}</div><div class="lbl">TOP PICK #1</div></div>
+    <div class="stat-chip"><div class="num">${rep.total_draws}</div><div class="lbl">${t('draws')}</div></div>
+    <div class="stat-chip"><div class="num">${rep.pick_n}</div><div class="lbl">${t('perDraw')}</div></div>
+    <div class="stat-chip"><div class="num">1-${rep.pool_size}</div><div class="lbl">${t('pool')}</div></div>
+    <div class="stat-chip"><div class="num">${rep.suggestions?.[0]?.combo||'—'}</div><div class="lbl">${t('topPick')}</div></div>
   </div>`;
 
   const tabs = `<div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('suggestions',this)">🎯 Suggestions TOP PICK</button>
-    <button class="tab-btn" onclick="switchTab('heatmap',this)">🌡️ Fréquences</button>
-    <button class="tab-btn" onclick="switchTab('pairs',this)">🔗 Paires fréquentes</button>
-    <button class="tab-btn" onclick="switchTab('track',this)">📈 Track Record</button>
+    <button class="tab-btn active" onclick="switchTab('suggestions',this)">${t('tabSuggestions')}</button>
+    <button class="tab-btn" onclick="switchTab('heatmap',this)">${t('tabHeatmap')}</button>
+    <button class="tab-btn" onclick="switchTab('pairs',this)">${t('tabPairs')}</button>
+    <button class="tab-btn" onclick="switchTab('track',this)">${t('tabTrack')}</button>
   </div>
   <div id="tab-suggestions" class="tab-panel active">${renderSuggestions(rep.suggestions)}</div>
   <div id="tab-heatmap" class="tab-panel">${renderHeatmap(rep.frequencies, rep.gaps, rep.hot_cold_30)}</div>
@@ -350,7 +517,10 @@ function switchTab(id, btn){
   document.getElementById('tab-'+id).classList.add('active');
 }
 
-window.addEventListener('load', loadCatalogue);
+window.addEventListener('load', ()=>{
+  applyLang(window.PREDIKTA_LANG || 'fr');
+  loadCatalogue();
+});
 </script>
 </body></html>
 
