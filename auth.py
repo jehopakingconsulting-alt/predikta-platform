@@ -105,6 +105,7 @@ class User(db.Model):
     oauth_provider = db.Column(db.String(20), nullable=True)   # ex: "google"
     oauth_id       = db.Column(db.String(128), nullable=True)  # ID unique chez le fournisseur
     avatar_url     = db.Column(db.String(512), nullable=True)
+    country        = db.Column(db.String(4), nullable=True)    # code ISO ex: HT, US, FR
 
     is_admin = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
 
@@ -150,6 +151,7 @@ class User(db.Model):
             "founder_badge": bool(self.founder_badge),
             "founder_number": self.founder_number,
             "referral_balance_usd": round(self.referral_balance_usd or 0, 2),
+            "country": self.country or None,
         }
 
 
@@ -1231,6 +1233,15 @@ def register():
     user.ref_code = _gen_user_ref_code()
     if referrer:
         user.referred_by_id = referrer.id
+    # Detect country from IP (free geoip, no API key needed)
+    try:
+        import urllib.request as _ur, json as _j
+        ip = request.headers.get('X-Forwarded-For','').split(',')[0].strip() or request.remote_addr
+        if ip and ip not in ('127.0.0.1','::1'):
+            with _ur.urlopen(f'https://ipapi.co/{ip}/country/', timeout=2) as r:
+                user.country = r.read().decode().strip()[:4]
+    except Exception:
+        pass
     db.session.add(user)
     db.session.flush()
 

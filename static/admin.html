@@ -91,7 +91,8 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
       <h2>📊 Répartition</h2>
       <p class="hint">Abonnements par plan et par statut.</p>
       <div style="margin-bottom:8px"><b style="font-size:.78rem;color:var(--muted2)">Par plan :</b> <span class="breakdown" id="byPlan"></span></div>
-      <div><b style="font-size:.78rem;color:var(--muted2)">Par statut :</b> <span class="breakdown" id="byStatus"></span></div>
+      <div style="margin-bottom:8px"><b style="font-size:.78rem;color:var(--muted2)">Par statut :</b> <span class="breakdown" id="byStatus"></span></div>
+      <div><b style="font-size:.78rem;color:var(--muted2)">🌍 Par pays :</b> <span class="breakdown" id="byCountry"></span></div>
     </div>
 
     <div class="card">
@@ -266,6 +267,8 @@ async function loadStats(){
   const allPlans={pro:0,vip:0,founder:0,elite:0,business:0,none:0,...s.by_plan};
   document.getElementById('byPlan').innerHTML = Object.entries(allPlans).map(([k,v])=>`<span><b>${v}</b> ${planLabels[k]||k}</span>`).join('');
   document.getElementById('byStatus').innerHTML = Object.entries(s.by_status).map(([k,v])=>`<span><b>${v}</b> ${k}</span>`).join('') || '<span>—</span>';
+  const countryFlags={'US':'🇺🇸','HT':'🇭🇹','CA':'🇨🇦','FR':'🇫🇷','DO':'🇩🇴','JM':'🇯🇲','PR':'🇵🇷','BR':'🇧🇷','MX':'🇲🇽','NG':'🇳🇬','GB':'🇬🇧','ES':'🇪🇸','BE':'🇧🇪','CH':'🇨🇭','SN':'🇸🇳','CI':'🇨🇮','??':'🌍'};
+  document.getElementById('byCountry').innerHTML = s.by_country ? Object.entries(s.by_country).map(([k,v])=>`<span>${countryFlags[k]||'🌍'} <b>${v}</b> ${k}</span>`).join('') : '<span>—</span>';
 }
 
 async function loadUsers(){
@@ -296,6 +299,8 @@ function renderUsers(data){
       const sub = u.subscription || {};
       const plan = sub.plan_label || (sub.plan ? sub.plan.toUpperCase() : '—');
       const status = sub.status || 'none';
+      const CF={'US':'🇺🇸','HT':'🇭🇹','CA':'🇨🇦','FR':'🇫🇷','DO':'🇩🇴','JM':'🇯🇲','PR':'🇵🇷','BR':'🇧🇷','MX':'🇲🇽','NG':'🇳🇬','GB':'🇬🇧','ES':'🇪🇸','BE':'🇧🇪','CH':'🇨🇭','SN':'🇸🇳'};
+      const countryFlag = u.country ? (CF[u.country]||'🌍')+' ' : '';
       const dl = sub.days_left;
       let daysHtml = '—';
       if(status === 'none' || status === 'canceled' || status === 'expired'){
@@ -310,7 +315,7 @@ function renderUsers(data){
       const created = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR') : '—';
       let rows = `<tr class="userrow" onclick="toggleEdit(${u.id})">
         <td>${u.id}</td>
-        <td>${escapeHtml(u.username)} ${u.is_admin ? '<span class="badge admin">ADMIN</span>' : ''}${u.founder_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#ffd700,#ff9900);color:#1a0800">🏅 FOUNDER #'+(u.founder_number||'')+'</span>' : ''}${u.ambassador_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#6688ff,#aa66ff);color:#fff">💜 AMBASSADOR</span>' : (u.referral_count > 0 ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:700;background:rgba(79,110,255,.15);color:#88aaff;border:1px solid rgba(79,110,255,.3)">🎁 '+u.referral_count+' ref</span>' : '')}</td>
+        <td>${countryFlag}${escapeHtml(u.username)} ${u.is_admin ? '<span class="badge admin">ADMIN</span>' : ''}${u.founder_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#ffd700,#ff9900);color:#1a0800">🏅 FOUNDER #'+(u.founder_number||'')+'</span>' : ''}${u.ambassador_badge ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:900;background:linear-gradient(90deg,#6688ff,#aa66ff);color:#fff">💜 AMBASSADOR</span>' : (u.referral_count > 0 ? '<span style="display:inline-block;margin-left:4px;padding:1px 6px;border-radius:4px;font-size:.55rem;font-weight:700;background:rgba(79,110,255,.15);color:#88aaff;border:1px solid rgba(79,110,255,.3)">🎁 '+u.referral_count+' ref</span>' : '')}</td>
         <td>${escapeHtml(u.email)}</td>
         <td>${(plan||'—').toUpperCase()}</td>
         <td>${sub.has_stripe_customer ? '<span style="color:#635BFF;font-size:.7rem;font-weight:700">💳 Stripe</span>' : sub.plan ? '<span style="color:#ffd700;font-size:.7rem;font-weight:700">✋ Manuel</span>' : '<span style="color:#4d5a8a;font-size:.7rem">—</span>'}</td>

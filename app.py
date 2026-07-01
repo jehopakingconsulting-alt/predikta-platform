@@ -3476,6 +3476,7 @@ def admin_stats():
         "total_ambassadors": total_ambassadors,
         "by_plan": by_plan,
         "by_status": by_status,
+        "by_country": {r.country or '??': r.cnt for r in db.session.query(User.country, db.func.count(User.id).label('cnt')).group_by(User.country).order_by(db.func.count(User.id).desc()).limit(15).all()},
         "total_saved_predictions": SavedPrediction.query.count(),
         "total_alerts": Alert.query.count(),
         "total_business_reports": BusinessReport.query.count(),
