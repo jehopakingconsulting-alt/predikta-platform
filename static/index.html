@@ -941,6 +941,130 @@ footer{
 </style>
 </head>
 <body>
+
+<!-- ══ WELCOME POPUP ══ -->
+<div id="welcomeOverlay" style="display:none;position:fixed;inset:0;background:rgba(4,4,15,.92);z-index:99999;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px)">
+  <div id="welcomeBox" style="background:linear-gradient(145deg,#0b0b22,#0d0d2e);border:1px solid rgba(255,215,0,.3);border-radius:20px;max-width:560px;width:100%;padding:32px 28px;position:relative;box-shadow:0 0 80px rgba(20,121,255,.2),0 0 30px rgba(255,215,0,.08);animation:popIn .4s ease">
+    <style>
+    @keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+    .wp-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.3rem;cursor:pointer;line-height:1}
+    .wp-close:hover{color:#ffd700}
+    .wp-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+    .wp-logo-text{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,#6688ff,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .wp-flag{font-size:1.6rem}
+    .wp-title{font-family:'Orbitron',monospace;font-size:1.05rem;font-weight:900;color:#ffd700;margin-bottom:8px;line-height:1.4}
+    .wp-msg{font-size:.82rem;color:#c8d4ff;line-height:1.7;margin-bottom:20px}
+    .wp-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .wp-btn{flex:1;min-width:140px;padding:12px 16px;border-radius:12px;border:none;font-weight:700;font-size:.8rem;cursor:pointer;text-align:center;text-decoration:none;display:block;line-height:1.4;transition:transform .15s,box-shadow .15s}
+    .wp-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+    .wp-btn-gold{background:linear-gradient(135deg,#ffd700,#ff9900);color:#1a0800}
+    .wp-btn-blue{background:linear-gradient(135deg,#1479FF,#004DFF);color:#fff}
+    .wp-tip{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.18);border-radius:12px;padding:14px 16px;font-size:.76rem;color:#c8d4ff;line-height:1.7}
+    .wp-tip b{color:#ffd700}
+    .wp-states{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+    .wp-state{padding:4px 10px;border-radius:8px;background:rgba(20,121,255,.15);border:1px solid rgba(20,121,255,.35);color:#88aaff;font-size:.72rem;font-weight:700}
+    .wp-mirrors{color:#ffd700;font-weight:700;letter-spacing:.5px}
+    .wp-psst{margin-top:10px;font-size:.74rem;color:#88aaff;font-style:italic}
+    </style>
+
+    <button class="wp-close" onclick="closeWelcome()">✕</button>
+
+    <div class="wp-logo">
+      <span class="wp-flag" id="wpFlag">🌍</span>
+      <img src="/static/favicon.png" onerror="this.style.display='none'" style="width:28px;height:28px;border-radius:6px">
+      <span class="wp-logo-text">ZYNORIQ Intelligence™</span>
+    </div>
+
+    <div class="wp-title" id="wpTitle">🎯 Bienvenue chez ZYNORIQ !</div>
+    <div class="wp-msg" id="wpMsg">Vous êtes amateur de chiffres ? Vous aimez les défis analytiques ? Vous êtes au bon endroit.</div>
+
+    <div class="wp-btns">
+      <a href="/analyze" class="wp-btn wp-btn-gold" id="wpBtn1">🎯 ZYNORIQ Prédictions</a>
+      <a href="/bizai" class="wp-btn wp-btn-blue" id="wpBtn2">🚀 Bizai — Business Intelligence</a>
+    </div>
+
+    <div class="wp-tip">
+      <div id="wpTipTitle" style="font-weight:700;color:#ffd700;margin-bottom:8px">💡 4 États Prioritaires — Fort Potentiel Prédictif</div>
+      <div class="wp-states">
+        <span class="wp-state">🌴 FLORIDA</span>
+        <span class="wp-state">🗽 NEW JERSEY</span>
+        <span class="wp-state">🎸 TENNESSEE</span>
+        <span class="wp-state">🍑 GEORGIA</span>
+      </div>
+      <div id="wpTipText" style="margin-top:8px">Sélectionnez votre État → Scraper → Analyser → Vérifiez les résultats sous la vidéo.</div>
+      <div class="wp-psst" id="wpPsst">
+        <b style="color:#ffd700">Pssstt 🤫 :</b> N'oubliez pas les <b>miroirs</b> — <span class="wp-mirrors">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>
+        Jouez avec <b>Constance, Patience, Modération et Foi</b>. Considérez aussi les <b>Revers</b> — ils tombent souvent avec précision. 🎯
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Ne montrer qu'une fois toutes les 24h
+  const lastSeen = localStorage.getItem('zynoriq_welcome_ts');
+  if(lastSeen && Date.now() - parseInt(lastSeen) < 86400000) return;
+
+  const lang = (localStorage.getItem('predikta_lang') || navigator.language || 'fr').substring(0,2).toLowerCase();
+
+  const flags = {fr:'🇫🇷',en:'🇺🇸',es:'🇪🇸',pt:'🇧🇷',ht:'🇭🇹'};
+  const T = {
+    fr:{flag:'🇫🇷', title:'🎯 Bienvenue chez ZYNORIQ !',
+      msg:'Vous êtes amateur de chiffres ou de loterie USA ? Vous êtes au bon endroit.',
+      btn1:'🎯 ZYNORIQ Prédictions', btn2:'🚀 Bizai — Business Intelligence',
+      tipTitle:'💡 4 États Prioritaires — Fort Potentiel Prédictif',
+      tipText:'Sélectionnez votre État → Scraper → Analyser → Vérifiez les résultats sous la vidéo.',
+      psst:'<b style="color:#ffd700">Pssstt 🤫 :</b> N\'oubliez pas les <b>miroirs</b> — <span style="color:#ffd700;font-weight:700">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>Jouez avec <b>Constance, Patience, Modération et Foi</b>. Considérez aussi les <b>Revers</b> — ils tombent souvent avec précision. 🎯'},
+    en:{flag:'🇺🇸', title:'🎯 Welcome to ZYNORIQ !',
+      msg:'Are you a numbers lover or a USA lottery enthusiast? You\'re in the right place.',
+      btn1:'🎯 ZYNORIQ Predictions', btn2:'🚀 Bizai — Business Intelligence',
+      tipTitle:'💡 4 Priority States — High Predictive Potential',
+      tipText:'Select your State → Scrape → Analyze → Check results below the video.',
+      psst:'<b style="color:#ffd700">Pssstt 🤫 :</b> Don\'t forget the <b>mirrors</b> — <span style="color:#ffd700;font-weight:700">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>Play with <b>Consistency, Patience, Moderation and Faith</b>. Also consider <b>Reverses</b> — they hit often with precision. 🎯'},
+    es:{flag:'🇪🇸', title:'🎯 ¡Bienvenido a ZYNORIQ !',
+      msg:'¿Eres amante de los números o de la lotería de EE.UU.? Estás en el lugar correcto.',
+      btn1:'🎯 Predicciones ZYNORIQ', btn2:'🚀 Bizai — Inteligencia de Negocio',
+      tipTitle:'💡 4 Estados Prioritarios — Alto Potencial Predictivo',
+      tipText:'Selecciona tu Estado → Scraper → Analizar → Verifica los resultados bajo el video.',
+      psst:'<b style="color:#ffd700">Pssstt 🤫 :</b> No olvides los <b>espejos</b> — <span style="color:#ffd700;font-weight:700">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>Juega con <b>Constancia, Paciencia, Moderación y Fe</b>. Considera también los <b>Reversos</b>. 🎯'},
+    pt:{flag:'🇧🇷', title:'🎯 Bem-vindo ao ZYNORIQ !',
+      msg:'Você é amante dos números ou da loteria dos EUA? Você está no lugar certo.',
+      btn1:'🎯 Previsões ZYNORIQ', btn2:'🚀 Bizai — Inteligência de Negócios',
+      tipTitle:'💡 4 Estados Prioritários — Alto Potencial Preditivo',
+      tipText:'Selecione seu Estado → Raspar → Analisar → Verifique os resultados abaixo do vídeo.',
+      psst:'<b style="color:#ffd700">Pssstt 🤫 :</b> Não esqueça os <b>espelhos</b> — <span style="color:#ffd700;font-weight:700">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>Jogue com <b>Constância, Paciência, Moderação e Fé</b>. Considere também os <b>Reversos</b>. 🎯'},
+    ht:{flag:'🇭🇹', title:'🎯 Byenveni nan ZYNORIQ !',
+      msg:'Ou renmen chif ak lotri Etazini? Ou nan bon kote a.',
+      btn1:'🎯 Prediksyon ZYNORIQ', btn2:'🚀 Bizai — Entelijans Biznis',
+      tipTitle:'💡 4 Eta Priyoritè — Potansyèl Prediksyon Wo',
+      tipText:'Chwazi Eta ou → Scraper → Analize → Verifye rezilta anba videyo a.',
+      psst:'<b style="color:#ffd700">Pssstt 🤫 :</b> Pa bliye <b>miwa</b> yo — <span style="color:#ffd700;font-weight:700">1=6 · 2=7 · 3=8 · 4=9 · 5=0</span><br>Jwe ak <b>Konsistans, Pasyans, Moderasyon ak Lafwa</b>. Konsidere tou <b>Revè</b> yo. 🎯'},
+  };
+
+  const t = T[lang] || T['fr'];
+  document.getElementById('wpFlag').textContent = t.flag;
+  document.getElementById('wpTitle').textContent = t.title;
+  document.getElementById('wpMsg').textContent = t.msg;
+  document.getElementById('wpBtn1').textContent = t.btn1;
+  document.getElementById('wpBtn2').textContent = t.btn2;
+  document.getElementById('wpTipTitle').textContent = t.tipTitle;
+  document.getElementById('wpTipText').textContent = t.tipText;
+  document.getElementById('wpPsst').innerHTML = t.psst;
+
+  const overlay = document.getElementById('welcomeOverlay');
+  overlay.style.display = 'flex';
+})();
+
+function closeWelcome(){
+  document.getElementById('welcomeOverlay').style.display = 'none';
+  localStorage.setItem('zynoriq_welcome_ts', Date.now());
+}
+// Fermer en cliquant sur l'overlay
+document.getElementById('welcomeOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeWelcome();
+});
+</script>
 <!-- nav.js injecte le header, mobile menu, dark/light toggle, back-to-top automatiquement -->
 <script src="/nav.js"></script>
 <script src="/pwa-prompt.js" defer></script>
