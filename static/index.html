@@ -1767,6 +1767,11 @@ function setLang(lang){
     const val = t(key);
     if(val && val !== key) el.textContent = val;
   });
+  // Retranscrire les labels de confiance (dépendent du %)
+  document.querySelectorAll('[data-conf-pct]').forEach(el=>{
+    const pct = parseFloat(el.getAttribute('data-conf-pct'));
+    if(!isNaN(pct)) el.textContent = getConfLabel(pct);
+  });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
     const key = el.getAttribute('data-i18n-placeholder');
     const val = t(key);
@@ -2523,7 +2528,7 @@ function renderConsensus(d, today){
       <div class="pred-balls">${balls}</div>
       <div class="pred-combo" onclick="copyCombo('${s.combo}')" style="cursor:pointer" title="Cliquer pour copier">${s.combo}</div>
       <div class="pred-pct ${cClass}">${s.confidence_pct}%</div>
-      <div class="pred-conf-label ${cClass}">${confLabel}</div>
+      <div class="pred-conf-label ${cClass}" data-conf-pct="${s.confidence_pct}">${confLabel}</div>
       <div class="pred-bar"><div class="pred-bar-fill ${barClass}" data-pct="${s.confidence_pct}"></div></div>
       <div class="pred-score">${t('score')}: ${s.consensus_score}</div>
       ${renderBetBadge(s.bet)}
@@ -2643,9 +2648,9 @@ function renderTransparencyToggle(transId, breakdown){
     </div>`).join('');
 
   return `
-    <button onclick="toggleTransparency('${transId}')" style="margin-top:8px;width:100%;padding:6px 10px;border-radius:8px;font-size:.68rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">${t('transBtn')}</button>
+    <button data-i18n="transBtn" onclick="toggleTransparency('${transId}')" style="margin-top:8px;width:100%;padding:6px 10px;border-radius:8px;font-size:.68rem;font-weight:700;background:var(--glass2);border:1px solid var(--border2);color:var(--muted2);cursor:pointer">${t('transBtn')}</button>
     <div id="${transId}" style="display:none;margin-top:8px;padding:10px;border-radius:8px;background:var(--glass2);border:1px solid var(--border2);font-size:.7rem">
-      <div style="font-weight:700;margin-bottom:6px">${t('transTitle')}</div>
+      <div data-i18n="transTitle" style="font-weight:700;margin-bottom:6px">${t('transTitle')}</div>
       ${digitRows}
       <div style="font-weight:700;margin:8px 0 4px">${t('transModels')}</div>
       ${modelRows}
