@@ -1001,10 +1001,11 @@ def api_track_record_live():
     puis comparées au résultat réel. Différent du backtest /api/track-record.
     """
     state = request.args.get("state") or None
+    tod   = request.args.get("tod") or None
     days  = min(90, max(1, int(request.args.get("days", 30))))
     try:
         from live_track_record import get_stats
-        return jsonify(get_stats(state=state, days=days))
+        return jsonify(get_stats(state=state, days=days, tod=tod))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -2372,6 +2373,13 @@ def api_report():
     _expired_r = [k for k, v in _REPORT_CACHE.items() if now - v["ts"] > _REPORT_CACHE_TTL]
     for k in _expired_r:
         _REPORT_CACHE.pop(k, None)
+    # Auto-save prediction for live track record (only specific tod, not "all")
+    if tod_filter and tod_filter != "all":
+        try:
+            from live_track_record import save_prediction as _sp
+            _sp(state, tod_filter, result)
+        except Exception as _spe:
+            print(f"  [live-TR][auto-save] {state}/{tod_filter}: {_spe}")
     user = auth_module.current_user()
     auth_module.record_usage(user.id)
     try:

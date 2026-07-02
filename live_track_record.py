@@ -213,10 +213,11 @@ def record_result(state: str, tod: str, actual_draw: dict, draw_date: str | None
 
 # ── 3. Stats cumulées ────────────────────────────────────────────────────
 
-def get_stats(state: str | None = None, days: int = 30) -> dict:
+def get_stats(state: str | None = None, days: int = 30, tod: str | None = None) -> dict:
     """
     Retourne les statistiques du track record live sur les N derniers jours.
     state=None → tous les états confondus.
+    tod=None   → tous les horaires confondus.
     """
     log = _read(_LOG)
     if not isinstance(log, list):
@@ -226,6 +227,8 @@ def get_stats(state: str | None = None, days: int = 30) -> dict:
     entries = [r for r in log if r.get("date", "") >= cutoff]
     if state:
         entries = [r for r in entries if r["state"] == state.upper()]
+    if tod:
+        entries = [r for r in entries if r.get("tod", "").lower() == tod.lower()]
 
     n = len(entries)
     if n == 0:
@@ -267,9 +270,56 @@ def get_stats(state: str | None = None, days: int = 30) -> dict:
                 "box_rank":     r.get("consensus_box_rank"),
             })
 
+    # Série temporelle — hit rate par jour (pour Chart.js)
+    daily: dict = {}
+    for r in entries:
+        d = r.get("date", "")[:10]
+        if not d:
+            continue
+        day = daily.setdefault(d, {"n": 0, "straight": 0, "box": 0})
+        day["n"] += 1
+        if r.get("hit_straight"):
+            day["straight"] += 1
+        if r.get("hit_box"):
+            day["box"] += 1
+    time_series = sorted(
+        [{"date": d, **v,
+          "straight_rate": round(v["straight"] / v["n"] * 100, 1) if v["n"] else 0,
+          "box_rate":      round(v["box"] / v["n"] * 100, 1) if v["n"] else 0}
+         for d, v in daily.items()],
+        key=lambda x: x["date"]
+    )
+
+    # Par modèle (consensus vs ML)
+    ml_straight  = sum(1 for r in entries if r.get("ml_straight_rank") == 1)
+    ml_box       = sum(1 for r in entries if r.get("ml_box_rank") is not None)
+    by_model = {
+        "consensus": {"n": n, "straight": straight, "box": box,
+                      "straight_rate": round(straight / n * 100, 1),
+                      "box_rate":      round(box / n * 100, 1)},
+        "ml":        {"n": n, "straight": ml_straight, "box": ml_box,
+                      "straight_rate": round(ml_straight / n * 100, 1),
+                      "box_rate":      round(ml_box / n * 100, 1)},
+    }
+
+    # Par TOD
+    by_tod: dict = {}
+    for r in entries:
+        t_key = r.get("tod", "Unknown")
+        t = by_tod.setdefault(t_key, {"n": 0, "straight": 0, "box": 0})
+        t["n"] += 1
+        if r.get("hit_straight"):
+            t["straight"] += 1
+        if r.get("hit_box"):
+            t["box"] += 1
+    for t in by_tod.values():
+        t["straight_rate"] = round(t["straight"] / t["n"] * 100, 1) if t["n"] else 0
+        t["box_rate"]      = round(t["box"] / t["n"] * 100, 1) if t["n"] else 0
+
     return {
         "days":             days,
         "state_filter":     state,
+        "tod_filter":       tod,
         "n":                n,
         "straight_hits":    straight,
         "box_hits":         box,
@@ -281,18 +331,22 @@ def get_stats(state: str | None = None, days: int = 30) -> dict:
         "top10_box_rate":   round(in_top10_box / n * 100, 1),
         "rank_distribution": rank_dist,
         "by_state":          by_state,
+        "by_tod":            by_tod,
+        "by_model":          by_model,
+        "time_series":       time_series,
         "recent":            entries[:20],
         "updated_at":        datetime.now(timezone.utc).isoformat(),
     }
 
 
-def _empty_stats(state, days):
+def _empty_stats(state, days, tod=None):
     return {
-        "days": days, "state_filter": state, "n": 0,
+        "days": days, "state_filter": state, "tod_filter": tod, "n": 0,
         "straight_hits": 0, "box_hits": 0,
         "straight_rate": 0.0, "box_rate": 0.0,
         "top3_box_rate": 0.0, "top10_box_rate": 0.0,
-        "rank_distribution": {}, "by_state": {}, "recent": [],
+        "rank_distribution": {}, "by_state": {}, "by_tod": {}, "by_model": {},
+        "time_series": [], "recent": [],
         "updated_at": datetime.now(timezone.utc).isoformat(),
     }
 

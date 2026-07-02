@@ -12,6 +12,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://www.zynoriq.com/og-image.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="/nav.js" defer></script>
 <style>
 :root{--bg:#04040f;--card:#0b0b22;--border:#1a1a45;--accent:#1479FF;--gold:#ffd700;--text:#e8eeff;--muted:#4d5a8a;--muted2:#1479FF;--green:#22cc88;--red:#ff5566}
@@ -88,6 +89,29 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
 .live-empty{text-align:center;padding:20px;color:var(--muted2);font-size:.78rem}
 .live-building{text-align:center;padding:16px;color:var(--muted2);font-size:.78rem;font-style:italic}
 
+/* ── Dashboard extras ── */
+.tod-filter-row,.days-filter-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tod-btn,.days-btn{padding:4px 11px;border-radius:20px;font-size:.68rem;font-weight:700;
+  border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;
+  transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap}
+.tod-btn:hover,.days-btn:hover{border-color:var(--accent);color:var(--text)}
+.tod-btn.active,.days-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.chart-wrap{margin:14px 0 16px;background:rgba(0,0,0,.3);border-radius:10px;padding:12px}
+.model-compare,.tod-breakdown{margin-bottom:14px}
+.mc-title{font-size:.63rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.mc-row{display:flex;gap:10px;flex-wrap:wrap}
+.mc-card{flex:1;min-width:120px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+.mc-card .mc-name{font-size:.65rem;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.mc-card .mc-stat{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:3px}
+.mc-card .mc-val{font-family:'Orbitron',monospace;font-weight:900;color:var(--gold)}
+.mc-card .mc-val.green{color:var(--green)}
+.tod-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(26,26,69,.5);font-size:.72rem}
+.tod-row:last-child{border-bottom:none}
+.tod-row .tr-name{min-width:80px;font-weight:700;color:var(--text)}
+.tod-row .tr-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.tod-row .tr-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),#8855ff);transition:width .5s}
+.tod-row .tr-pct{min-width:44px;text-align:right;color:var(--gold);font-family:'Orbitron',monospace;font-size:.65rem}
+.tod-row .tr-n{min-width:50px;text-align:right;color:var(--muted2);font-size:.62rem}
 /* ── Filter bar ── */
 .filter-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   background:var(--card);border:1px solid var(--border);border-radius:12px;
@@ -113,14 +137,51 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
     <p class="subtitle" data-i18n="subtitle">La transparence avant tout : nos suggestions TOP PICK passées comparées aux résultats réels</p>
   </div>
 
-  <!-- ── LIVE TRACK RECORD ── -->
+  <!-- ── PERFORMANCE DASHBOARD ── -->
   <div class="live-tr-block" id="liveTrBlock">
     <div class="live-tr-header">
-      <span class="live-tr-title">📡 Track Record Live</span>
-      <span class="live-badge">TEMPS RÉEL</span>
+      <span class="live-tr-title">📡 Performance Dashboard</span>
+      <span class="live-badge" id="liveBadge">LIVE</span>
       <span class="live-tr-sub" id="liveTrSub">Chargement…</span>
     </div>
+
+    <!-- TOD filter tabs -->
+    <div class="tod-filter-row" id="todFilterRow">
+      <button class="tod-btn active" data-tod="all" onclick="setTodFilter('all')">Tous</button>
+      <button class="tod-btn" data-tod="Morning" onclick="setTodFilter('Morning')">🌅 Matin</button>
+      <button class="tod-btn" data-tod="Midday" onclick="setTodFilter('Midday')">☀️ Midi</button>
+      <button class="tod-btn" data-tod="Evening" onclick="setTodFilter('Evening')">🌆 Soir</button>
+      <button class="tod-btn" data-tod="Night" onclick="setTodFilter('Night')">🌙 Nuit</button>
+    </div>
+
+    <!-- Days period selector -->
+    <div class="days-filter-row" id="daysFilterRow">
+      <span class="filter-label" style="font-size:.6rem">Période :</span>
+      <button class="days-btn active" data-days="7" onclick="setDaysFilter(7)">7j</button>
+      <button class="days-btn" data-days="30" onclick="setDaysFilter(30)">30j</button>
+      <button class="days-btn" data-days="60" onclick="setDaysFilter(60)">60j</button>
+      <button class="days-btn" data-days="90" onclick="setDaysFilter(90)">90j</button>
+    </div>
+
     <div class="live-kpi-row" id="liveTrKpi"></div>
+
+    <!-- Chart.js time series -->
+    <div class="chart-wrap" id="chartWrap" style="display:none">
+      <canvas id="liveChart" height="120"></canvas>
+    </div>
+
+    <!-- Model comparison -->
+    <div class="model-compare" id="modelCompare" style="display:none">
+      <div class="mc-title">Comparaison des modèles</div>
+      <div class="mc-row" id="mcRow"></div>
+    </div>
+
+    <!-- TOD breakdown -->
+    <div class="tod-breakdown" id="todBreakdown" style="display:none">
+      <div class="mc-title">Performance par horaire</div>
+      <div id="todBreakdownRows"></div>
+    </div>
+
     <div class="live-recent" id="liveTrRecent">
       <div class="live-building">⏳ Les données s'accumulent au fil des tirages…<br>Chaque prédiction générée avant un tirage est vérifiée automatiquement.</div>
     </div>
@@ -160,14 +221,34 @@ table.track td.combo{font-family:'Orbitron',monospace;letter-spacing:2px;color:v
   </div>
 </div>
 <script>
-// ── Live Track Record ────────────────────────────────────────────────────
+// ── Performance Dashboard ───────────────────────────────────────────────
+let LIVE_TOD  = 'all';
+let LIVE_DAYS = 7;
+let _liveChart = null;
+
+function setTodFilter(tod){
+  LIVE_TOD = tod;
+  document.querySelectorAll('.tod-btn').forEach(b => b.classList.toggle('active', b.dataset.tod === tod));
+  loadLiveTrackRecord();
+}
+
+function setDaysFilter(days){
+  LIVE_DAYS = days;
+  document.querySelectorAll('.days-btn').forEach(b => b.classList.toggle('active', b.dataset.days == days));
+  loadLiveTrackRecord();
+}
+
 async function loadLiveTrackRecord(){
+  const sub = document.getElementById('liveTrSub');
+  sub.textContent = 'Chargement…';
   try{
-    const r = await fetch('/api/track-record/live?days=30');
+    const params = new URLSearchParams({days: LIVE_DAYS});
+    if(LIVE_TOD !== 'all') params.set('tod', LIVE_TOD);
+    const r = await fetch('/api/track-record/live?' + params);
     const d = await r.json();
     renderLiveTR(d);
   }catch(e){
-    document.getElementById('liveTrSub').textContent = 'Indisponible';
+    document.getElementById('liveTrSub').textContent = (curT().liveUnavail || 'Indisponible');
   }
 }
 
@@ -176,44 +257,124 @@ function renderLiveTR(d){
   const kpi  = document.getElementById('liveTrKpi');
   const rec  = document.getElementById('liveTrRecent');
 
-  sub.textContent = `${d.n} vérifications · 30 derniers jours`;
+  const lv = curT();
+  const todLabel = LIVE_TOD === 'all' ? '' : ` · ${(TOD_T[CUR_LANG]||TOD_T.fr)[LIVE_TOD]||LIVE_TOD}`;
+  sub.textContent = `${d.n} ${lv.liveChecks} · ${LIVE_DAYS}j${todLabel}`;
 
   if(d.n === 0){
     kpi.innerHTML = '';
-    rec.innerHTML = `<div class="live-building">
-      ⏳ Aucune vérification encore — les prédictions sont sauvegardées automatiquement 5-10 min avant chaque tirage, puis comparées au résultat réel.<br><br>
-      Les données s'accumuleront au fil des tirages d'aujourd'hui.
-    </div>`;
+    document.getElementById('chartWrap').style.display = 'none';
+    document.getElementById('modelCompare').style.display = 'none';
+    document.getElementById('todBreakdown').style.display = 'none';
+    rec.innerHTML = `<div class="live-building">${lv.liveBuilding}</div>`;
     return;
   }
 
+  // KPI row
   kpi.innerHTML = `
     <div class="live-kpi">
       <div class="kv">${d.n}</div>
-      <div class="kl">Tirages vérifiés</div>
+      <div class="kl">${lv.kpiVerif}</div>
     </div>
     <div class="live-kpi ${d.straight_rate >= 5 ? 'green' : ''}">
       <div class="kv">${d.straight_rate}%</div>
-      <div class="kl">Exact (ordre)</div>
+      <div class="kl">${lv.kpiExact}</div>
     </div>
     <div class="live-kpi ${d.box_rate >= 15 ? 'green' : ''}">
       <div class="kv">${d.box_rate}%</div>
-      <div class="kl">Box (désordre)</div>
+      <div class="kl">${lv.kpiBox}</div>
     </div>
     <div class="live-kpi green">
       <div class="kv">${d.top10_box_rate}%</div>
-      <div class="kl">Dans le Top 10</div>
+      <div class="kl">${lv.kpiTop10}</div>
     </div>
   `;
 
-  const todT = {Morning:'Matin',Midday:'Midi',Evening:'Soir',Night:'Nuit'};
+  // Chart.js time series
+  const ts = d.time_series || [];
+  const chartWrap = document.getElementById('chartWrap');
+  if(ts.length >= 2){
+    chartWrap.style.display = 'block';
+    const labels = ts.map(x => x.date.slice(5)); // MM-DD
+    const straightData = ts.map(x => x.straight_rate);
+    const boxData = ts.map(x => x.box_rate);
+    if(_liveChart){ _liveChart.destroy(); _liveChart = null; }
+    const ctx = document.getElementById('liveChart').getContext('2d');
+    _liveChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: lv.chartExact, data: straightData, borderColor: '#ffd700', backgroundColor: 'rgba(255,215,0,.08)', tension: .35, pointRadius: 3, borderWidth: 2 },
+          { label: lv.chartBox,   data: boxData,      borderColor: '#22cc88', backgroundColor: 'rgba(34,204,136,.08)', tension: .35, pointRadius: 3, borderWidth: 2 },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        plugins: { legend: { labels: { color: '#4d5a8a', font: { size: 10 } } }, tooltip: { mode: 'index', intersect: false } },
+        scales: {
+          x: { ticks: { color: '#4d5a8a', font: { size: 9 } }, grid: { color: 'rgba(26,26,69,.5)' } },
+          y: { ticks: { color: '#4d5a8a', font: { size: 9 }, callback: v => v+'%' }, grid: { color: 'rgba(26,26,69,.5)' }, min: 0 }
+        }
+      }
+    });
+  } else {
+    chartWrap.style.display = 'none';
+  }
+
+  // Model comparison
+  const bm = d.by_model || {};
+  const modelComp = document.getElementById('modelCompare');
+  if(bm.consensus){
+    modelComp.style.display = 'block';
+    document.querySelector('#modelCompare .mc-title').textContent = lv.mcTitle;
+    const mcRow = document.getElementById('mcRow');
+    const modelDefs = [
+      { key: 'consensus', name: '🎯 Consensus', color: 'gold' },
+      { key: 'ml',        name: '🤖 ML',        color: 'green' },
+    ];
+    mcRow.innerHTML = modelDefs.filter(m => bm[m.key]).map(m => {
+      const mv = bm[m.key];
+      return `<div class="mc-card">
+        <div class="mc-name">${m.name}</div>
+        <div class="mc-stat"><span>${lv.kpiExact}</span><span class="mc-val ${m.color}">${mv.straight_rate}%</span></div>
+        <div class="mc-stat"><span>${lv.kpiBox}</span><span class="mc-val">${mv.box_rate}%</span></div>
+        <div class="mc-stat" style="font-size:.62rem;color:var(--muted2)"><span>${lv.mcDraws}</span><span>${mv.n}</span></div>
+      </div>`;
+    }).join('');
+  } else {
+    modelComp.style.display = 'none';
+  }
+
+  // TOD breakdown (only when showing "all" tod)
+  const bt = d.by_tod || {};
+  const todBreak = document.getElementById('todBreakdown');
+  const todLang = TOD_T[CUR_LANG] || TOD_T.fr;
+  if(LIVE_TOD === 'all' && Object.keys(bt).length > 1){
+    todBreak.style.display = 'block';
+    document.querySelector('#todBreakdown .mc-title').textContent = lv.todTitle;
+    const maxRate = Math.max(1, ...Object.values(bt).map(t => t.box_rate));
+    document.getElementById('todBreakdownRows').innerHTML = Object.entries(bt)
+      .sort((a,b) => b[1].box_rate - a[1].box_rate)
+      .map(([t, v]) => `<div class="tod-row">
+        <span class="tr-name">${todLang[t]||t}</span>
+        <div class="tr-bar-wrap"><div class="tr-bar" style="width:${Math.round(v.box_rate/maxRate*100)}%"></div></div>
+        <span class="tr-pct">${v.box_rate}%</span>
+        <span class="tr-n">${v.n} ${lv.todDraws}</span>
+      </div>`).join('');
+  } else {
+    todBreak.style.display = 'none';
+  }
+
+  // Recent results
+  const todT = TOD_T[CUR_LANG] || TOD_T.fr;
   const rows = (d.recent || []).slice(0,10).map(r=>{
     const pred = (r.consensus_top10 || ['?'])[0];
     const cls  = r.hit_straight ? 'hit-s' : (r.hit_box ? 'hit-b' : '');
     const res  = r.hit_straight
-      ? `<span class="live-result rs">✅ EXACT</span><span class="live-rank">#${r.consensus_straight_rank}</span>`
+      ? `<span class="live-result rs">${lv.resultExact}</span><span class="live-rank">#${r.consensus_straight_rank}</span>`
       : r.hit_box
-        ? `<span class="live-result rb">📦 BOX</span><span class="live-rank">#${r.consensus_box_rank}</span>`
+        ? `<span class="live-result rb">${lv.resultBox}</span><span class="live-rank">#${r.consensus_box_rank}</span>`
         : `<span class="live-result rn">❌</span>`;
     return `<div class="live-row ${cls}">
       <span class="live-state">${r.state}</span>
@@ -226,7 +387,7 @@ function renderLiveTR(d){
     </div>`;
   }).join('');
 
-  rec.innerHTML = rows || `<div class="live-empty">Aucun résultat récent</div>`;
+  rec.innerHTML = rows || `<div class="live-empty">${lv.liveEmpty}</div>`;
 }
 
 const TOD_T = {
@@ -264,6 +425,16 @@ const T = {
     exact:"Exact", box:"Box", none:"—",
     updatedAgo:m=>m<1?"Mis à jour à l'instant":m<60?`Mis à jour il y a ${m} min`:`Mis à jour il y a ${Math.floor(m/60)} h`,
     ctaText:"Envie d'analyser un état en détail avec les 7 algorithmes ?", ctaBtn:"Ouvrir l'Analyseur →",
+    // Dashboard
+    liveChecks:"vérifications",liveUnavail:"Indisponible",liveAll:"Tous",
+    kpiVerif:"Vérifications",kpiExact:"Exact (ordre)",kpiBox:"Box (désordre)",kpiTop10:"Dans le Top 10",
+    chartExact:"Exact %",chartBox:"Box %",
+    mcTitle:"Comparaison des modèles",mcDraws:"Tirages",
+    todTitle:"Performance par horaire",todDraws:"tirages",
+    liveEmpty:"Aucun résultat récent",
+    liveBuilding:"⏳ Aucune vérification encore — les prédictions sont sauvegardées automatiquement lors de chaque analyse, puis comparées au résultat réel.<br><br>Les données s'accumuleront au fil des analyses effectuées.",
+    resultExact:"✅ EXACT",resultBox:"📦 BOX",
+    todBtnAll:"Tous",
   },
   en:{
     title:"Suggestions Track Record", subtitle:"Transparency first: our past TOP PICK suggestions compared to actual results",
@@ -280,6 +451,15 @@ const T = {
     exact:"Straight", box:"Box", none:"—",
     updatedAgo:m=>m<1?"Updated just now":m<60?`Updated ${m} min ago`:`Updated ${Math.floor(m/60)} h ago`,
     ctaText:"Want to analyze a state in depth with all 7 algorithms?", ctaBtn:"Open the Analyzer →",
+    liveChecks:"verifications",liveUnavail:"Unavailable",liveAll:"All",
+    kpiVerif:"Verifications",kpiExact:"Straight (exact)",kpiBox:"Box (any order)",kpiTop10:"In Top 10",
+    chartExact:"Straight %",chartBox:"Box %",
+    mcTitle:"Model comparison",mcDraws:"Draws",
+    todTitle:"Performance by time of day",todDraws:"draws",
+    liveEmpty:"No recent results",
+    liveBuilding:"⏳ No verifications yet — predictions are saved automatically with each analysis, then compared to the actual result.<br><br>Data will accumulate with each analysis performed.",
+    resultExact:"✅ STRAIGHT",resultBox:"📦 BOX",
+    todBtnAll:"All",
   },
   es:{
     title:"Historial de Sugerencias", subtitle:"Transparencia ante todo: nuestras sugerencias TOP PICK pasadas comparadas con los resultados reales",
@@ -296,6 +476,15 @@ const T = {
     exact:"Exacto", box:"Box", none:"—",
     updatedAgo:m=>m<1?"Actualizado ahora mismo":m<60?`Actualizado hace ${m} min`:`Actualizado hace ${Math.floor(m/60)} h`,
     ctaText:"¿Quiere analizar un estado en profundidad con los 7 algoritmos?", ctaBtn:"Abrir el Analizador →",
+    liveChecks:"verificaciones",liveUnavail:"No disponible",liveAll:"Todos",
+    kpiVerif:"Verificaciones",kpiExact:"Exacto (orden)",kpiBox:"Box (cualquier orden)",kpiTop10:"En el Top 10",
+    chartExact:"Exacto %",chartBox:"Box %",
+    mcTitle:"Comparación de modelos",mcDraws:"Sorteos",
+    todTitle:"Rendimiento por horario",todDraws:"sorteos",
+    liveEmpty:"Sin resultados recientes",
+    liveBuilding:"⏳ Aún no hay verificaciones — las predicciones se guardan automáticamente con cada análisis y se comparan con el resultado real.<br><br>Los datos se acumularán con cada análisis realizado.",
+    resultExact:"✅ EXACTO",resultBox:"📦 BOX",
+    todBtnAll:"Todos",
   },
   pt:{
     title:"Histórico de Sugestões", subtitle:"Transparência antes de tudo: nossas sugestões TOP PICK passadas comparadas aos resultados reais",
@@ -312,6 +501,15 @@ const T = {
     exact:"Exato", box:"Box", none:"—",
     updatedAgo:m=>m<1?"Atualizado agora mesmo":m<60?`Atualizado há ${m} min`:`Atualizado há ${Math.floor(m/60)} h`,
     ctaText:"Quer analisar um estado em profundidade com os 7 algoritmos?", ctaBtn:"Abrir o Analisador →",
+    liveChecks:"verificações",liveUnavail:"Indisponível",liveAll:"Todos",
+    kpiVerif:"Verificações",kpiExact:"Exato (ordem)",kpiBox:"Box (qualquer ordem)",kpiTop10:"No Top 10",
+    chartExact:"Exato %",chartBox:"Box %",
+    mcTitle:"Comparação de modelos",mcDraws:"Sorteios",
+    todTitle:"Desempenho por horário",todDraws:"sorteios",
+    liveEmpty:"Sem resultados recentes",
+    liveBuilding:"⏳ Nenhuma verificação ainda — as previsões são salvas automaticamente a cada análise e comparadas ao resultado real.<br><br>Os dados vão se acumular a cada análise realizada.",
+    resultExact:"✅ EXATO",resultBox:"📦 BOX",
+    todBtnAll:"Todos",
   },
   ht:{
     title:"Istorik Sijesyon yo", subtitle:"Transparans anvan tout bagay: sijesyon TOP PICK pase nou yo konpare ak rezilta reyèl yo",
@@ -328,6 +526,15 @@ const T = {
     exact:"Egzak", box:"Box", none:"—",
     updatedAgo:m=>m<1?"Mete ajou kounye a":m<60?`Mete ajou ${m} min pase`:`Mete ajou ${Math.floor(m/60)} è pase`,
     ctaText:"Ou vle analize yon eta an detay ak 7 algoritm yo?", ctaBtn:"Ouvri Analizè a →",
+    liveChecks:"verifikasyon",liveUnavail:"Pa disponib",liveAll:"Tout",
+    kpiVerif:"Verifikasyon",kpiExact:"Egzak (lòd)",kpiBox:"Box (nenpòt lòd)",kpiTop10:"Nan Top 10",
+    chartExact:"Egzak %",chartBox:"Box %",
+    mcTitle:"Konparezon modèl yo",mcDraws:"Tiraj",
+    todTitle:"Pèfòmans pa orè",todDraws:"tiraj",
+    liveEmpty:"Pa gen rezilta resan",
+    liveBuilding:"⏳ Poko gen verifikasyon — prediksyon yo sove otomatikman ak chak analiz, epi konpare ak rezilta reyèl la.<br><br>Done yo pral akimile ak chak analiz ki fèt.",
+    resultExact:"✅ EGZAK",resultBox:"📦 BOX",
+    todBtnAll:"Tout",
   },
 };
 
@@ -509,6 +716,25 @@ window.addEventListener('load', ()=>{
   fetchTrackRecord(CUR_N).then(()=>{ applyLang(CUR_LANG); });
   loadLiveTrackRecord();
 });
+
+// Re-render live section when language switches
+const _origApplyLang = window.setLang;
+window.setLang = function(lang){
+  _origApplyLang(lang);
+  const lv2 = curT();
+  const todLabels = TOD_T[CUR_LANG] || TOD_T.fr;
+  // Update TOD filter button labels
+  document.querySelectorAll('.tod-btn[data-tod]').forEach(b => {
+    const tod = b.dataset.tod;
+    if(tod === 'all') b.textContent = lv2.todBtnAll || 'All';
+    else {
+      const emoji = b.textContent.match(/^[^\w]/)?.[0] || '';
+      b.textContent = emoji + ' ' + (todLabels[tod] || tod);
+    }
+  });
+  // Re-render live section with new language
+  loadLiveTrackRecord();
+};
 </script>
 </body></html>
 

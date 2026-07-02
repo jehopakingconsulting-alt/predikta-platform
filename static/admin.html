@@ -77,7 +77,10 @@ tr.userrow:hover{background:rgba(79,110,255,.06)}
     <h2>Accès restreint</h2>
     <p id="lockedText">Cette page est réservée aux administrateurs.</p>
     <div class="claim-row" id="claimRow" style="display:none">
-      <input type="password" id="claimSecret" placeholder="Clé administrateur">
+      <div class="pwd-wrap" style="position:relative;flex:1">
+        <input type="password" id="claimSecret" placeholder="Clé administrateur" style="width:100%;padding-right:44px">
+        <button type="button" id="toggleClaimPwd" aria-label="Afficher" style="position:absolute;right:6px;top:0;height:100%;width:36px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;font-size:1.05rem">👁️</button>
+      </div>
       <button onclick="claimAdmin()">Devenir admin</button>
     </div>
     <div class="msg" id="claimMsg"></div>
@@ -600,5 +603,12 @@ document.getElementById('planFilter').addEventListener('change', ()=>{ curPage =
 document.getElementById('statusFilter').addEventListener('change', ()=>{ curPage = 1; openEditId = null; loadUsers(); });
 
 init();
+
+document.getElementById('toggleClaimPwd').addEventListener('click', ()=>{
+  const f = document.getElementById('claimSecret');
+  const show = f.type === 'password';
+  f.type = show ? 'text' : 'password';
+  document.getElementById('toggleClaimPwd').textContent = show ? '🙈' : '👁️';
+});
 </script>
 </body></html>

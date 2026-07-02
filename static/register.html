@@ -40,6 +40,10 @@ button.submit:disabled{opacity:.6;cursor:default}
 .disclaimer input{width:auto;margin:2px 0 0;flex-shrink:0;accent-color:var(--accent)}
 .disclaimer a{color:var(--accent);text-decoration:none}
 .disclaimer a:hover{text-decoration:underline}
+.pwd-wrap{position:relative}
+.pwd-wrap input{padding-right:44px}
+.pwd-toggle{position:absolute;right:6px;top:0;height:46px;width:36px;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;font-size:1.05rem;color:var(--muted2)}
+.pwd-toggle:hover{color:var(--text)}
 </style>
 </head>
 <body>
@@ -70,7 +74,10 @@ button.submit:disabled{opacity:.6;cursor:default}
     <input type="email" id="rEmail" placeholder="ton@email.com" autocomplete="email" required/>
 
     <label for="rPassword" data-i18n="lblPassword">Mot de passe</label>
-    <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password" required minlength="8"/>
+    <div class="pwd-wrap">
+      <input type="password" id="rPassword" placeholder="8 caractères minimum" autocomplete="new-password" required minlength="8"/>
+      <button type="button" class="pwd-toggle" id="togglePwd" aria-label="Afficher le mot de passe">👁️</button>
+    </div>
 
     <label class="disclaimer">
       <input type="checkbox" id="rDisclaimer"/>
@@ -185,31 +192,23 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
 
     msgEl.textContent = dict.success; msgEl.className='msg success';
 
-    // Si Stripe est configuré : direction Stripe Checkout (carte requise,
-    // essai gratuit géré par Stripe). Sinon (dev local) : essai gratuit
-    // direct sans paiement.
-    try{
-      const cfgR = await fetch('/api/billing/config');
-      const cfg = await cfgR.json();
-      if(cfg.enabled){
-        const co = await fetch('/api/billing/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
-        const coData = await co.json();
-        if(co.ok && coData.checkout_url){
-          location.href = coData.checkout_url;
-          return;
-        }
-        // Stripe configuré mais checkout échoué — rediriger vers /account
-        setTimeout(()=>{ location.href='/account'; }, 900);
-        return;
-      }
-    }catch(e){}
-
-    // Stripe non configuré (dev local) : essai gratuit direct
-    await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:selectedPlan})});
-    setTimeout(()=>{ location.href='/onboarding'; }, 900);
+    // Toujours rediriger vers la page de sélection de plan (compte)
+    // pour que l'utilisateur choisisse son plan librement (essai gratuit
+    // ou abonnement payant). Même flux que via Google OAuth.
+    setTimeout(()=>{
+      location.href = '/account?plan=' + encodeURIComponent(selectedPlan) + '&welcome=1';
+    }, 900);
   }catch(e){
     msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
   }
+});
+
+// Password show/hide toggle
+document.getElementById('togglePwd').addEventListener('click', ()=>{
+  const pwd = document.getElementById('rPassword');
+  const show = pwd.type === 'password';
+  pwd.type = show ? 'text' : 'password';
+  document.getElementById('togglePwd').textContent = show ? '🙈' : '👁️';
 });
 </script>
 </body></html>

@@ -108,7 +108,7 @@ def google_callback():
     plan = session.pop("oauth_plan", None)
     if not user.subscription or not user.subscription.plan:
         if plan:
-            return redirect(f"/account?choose_plan={plan}")
-        return redirect("/account?choose_plan=1")
+            return redirect(f"/account?plan={plan}&welcome=1")
+        return redirect("/account?welcome=1")
 
     return redirect("/account")
