@@ -59,8 +59,8 @@
       "title": null
     },
     "cash3-midday": {
-      "lu_slug": null,
-      "title": null
+      "lu_slug": "cash-3-midday",
+      "title": "GeorgiaCash 3 Midday"
     },
     "powerball": {
       "lu_slug": "powerball",
@@ -71,8 +71,8 @@
       "title": "GeorgiaFantasy 5"
     },
     "cash4-midday": {
-      "lu_slug": null,
-      "title": null
+      "lu_slug": "cash-4-midday",
+      "title": "GeorgiaCash 4 Midday"
     },
     "cash4": {
       "lu_slug": "cash-4",
@@ -115,6 +115,30 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "TexasMega Millions"
+    },
+    "pick3-morning": {
+      "lu_slug": "pick-3-morning",
+      "title": "TexasPick 3 Morning"
+    },
+    "pick3-day": {
+      "lu_slug": "pick-3-day",
+      "title": "TexasPick 3 Day"
+    },
+    "pick3-evening": {
+      "lu_slug": "pick-3-evening",
+      "title": "TexasPick 3 Evening"
+    },
+    "daily4-morning": {
+      "lu_slug": "daily-4-morning",
+      "title": "TexasDaily 4 Morning"
+    },
+    "daily4-day": {
+      "lu_slug": "daily-4-day",
+      "title": "TexasDaily 4 Day"
+    },
+    "daily4-evening": {
+      "lu_slug": "daily-4-evening",
+      "title": "TexasDaily 4 Evening"
     }
   },
   "FL": {
@@ -199,6 +223,14 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "CaliforniaMega Millions"
+    },
+    "daily3-midday": {
+      "lu_slug": "midday-daily-3",
+      "title": "CaliforniaDaily 3 Midday"
+    },
+    "daily4-midday": {
+      "lu_slug": "midday-daily-4",
+      "title": "CaliforniaDaily 4 Midday"
     }
   },
   "PA": {
@@ -233,6 +265,22 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "PennsylvaniaMega Millions"
+    },
+    "pick2-midday": {
+      "lu_slug": "pick-2-midday",
+      "title": "PennsylvaniaPick 2 Midday"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "PennsylvaniaPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "pick-4-midday",
+      "title": "PennsylvaniaPick 4 Midday"
+    },
+    "pick5-midday": {
+      "lu_slug": "pick-5-midday",
+      "title": "PennsylvaniaPick 5 Midday"
     }
   },
   "NJ": {
@@ -263,6 +311,14 @@
     "cash5": {
       "lu_slug": "cash-5",
       "title": "New JerseyJersey Cash 5"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "New JerseyPick-3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "pick-4-midday",
+      "title": "New JerseyPick-4 Midday"
     }
   },
   "IL": {
@@ -289,6 +345,18 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "IllinoisMega Millions"
+    },
+    "pick3-midday": {
+      "lu_slug": "daily-3-midday",
+      "title": "IllinoisPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "daily-4-midday",
+      "title": "IllinoisPick 4 Midday"
+    },
+    "lucky-day-lotto-midday": {
+      "lu_slug": "lucky-day-lotto-midday",
+      "title": "IllinoisLucky Day Lotto Midday"
     }
   },
   "OH": {
@@ -319,6 +387,18 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "OhioMega Millions"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "OhioPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "pick-4-midday",
+      "title": "OhioPick 4 Midday"
+    },
+    "pick5-midday": {
+      "lu_slug": "pick-5-midday",
+      "title": "OhioPick 5 Midday"
     }
   },
   "NC": {
@@ -345,6 +425,14 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "North CarolinaMega Millions"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "North CarolinaPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "pick-4-midday",
+      "title": "North CarolinaPick 4 Midday"
     }
   },
   "VA": {
@@ -371,6 +459,14 @@
     "cash5": {
       "lu_slug": "cash-5",
       "title": "VirginiaCash 5"
+    },
+    "pick3-day": {
+      "lu_slug": "pick-3-day",
+      "title": "VirginiaPick 3 Day"
+    },
+    "pick4-day": {
+      "lu_slug": "pick-4-day",
+      "title": "VirginiaPick 4 Day"
     }
   },
   "MD": {
@@ -397,6 +493,14 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "MarylandMega Millions"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "MarylandPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "pick-4-midday",
+      "title": "MarylandPick 4 Midday"
     }
   },
   "MI": {
@@ -423,12 +527,24 @@
     "megamillions": {
       "lu_slug": "mega-millions",
       "title": "MichiganMega Millions"
+    },
+    "pick3-midday": {
+      "lu_slug": "daily-3-midday",
+      "title": "MichiganPick 3 Midday"
+    },
+    "pick4-midday": {
+      "lu_slug": "daily-4-midday",
+      "title": "MichiganPick 4 Midday"
     }
   },
   "AR": {
     "cash3": {
       "lu_slug": "cash-3",
       "title": "ArkansasCash 3 Evening"
+    },
+    "cash3-midday": {
+      "lu_slug": "cash-3-midday",
+      "title": "ArkansasCash 3 Midday"
     }
   },
   "AZ": {
@@ -441,30 +557,50 @@
     "pick3": {
       "lu_slug": "pick-3",
       "title": "ColoradoPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "ColoradoPick 3 Midday"
     }
   },
   "CT": {
     "play3": {
       "lu_slug": "play-3",
       "title": "ConnecticutPlay3 Night"
+    },
+    "play3-day": {
+      "lu_slug": "play-3-day",
+      "title": "ConnecticutPlay 3 Day"
     }
   },
   "DC": {
     "pick3": {
       "lu_slug": "dc-lucky-numbers",
       "title": "manual"
+    },
+    "pick3-midday": {
+      "lu_slug": "dc-lucky-numbers-midday",
+      "title": "WashingtonDCLucky Numbers Midday"
     }
   },
   "DE": {
     "play3": {
       "lu_slug": "play-3",
       "title": "DelawarePlay 3 Night"
+    },
+    "play3-day": {
+      "lu_slug": "play-3-day",
+      "title": "DelawarePlay 3 Day"
     }
   },
   "IA": {
     "pick3": {
       "lu_slug": "pick-3",
       "title": "IowaPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "IowaPick 3 Midday"
     }
   },
   "ID": {
@@ -477,18 +613,30 @@
     "daily3": {
       "lu_slug": "daily-3",
       "title": "IndianaDaily 3 Evening"
+    },
+    "daily3-midday": {
+      "lu_slug": "daily-3-midday",
+      "title": "IndianaDaily 3 Midday"
     }
   },
   "KS": {
     "pick3": {
       "lu_slug": "pick-3",
       "title": "KansasPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "KansasPick 3 Midday"
     }
   },
   "KY": {
     "pick3": {
       "lu_slug": "pick-3",
       "title": "KentuckyPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "KentuckyPick 3 Midday"
     }
   },
   "LA": {
@@ -513,12 +661,20 @@
     "pick3": {
       "lu_slug": "pick-3",
       "title": "MissouriPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "MissouriPick 3 Midday"
     }
   },
   "MS": {
     "pick3": {
       "lu_slug": "cash-3",
       "title": "manual"
+    },
+    "pick3-midday": {
+      "lu_slug": "cash-3-midday",
+      "title": "MississippiCash 3 Midday"
     }
   },
   "NE": {
@@ -537,6 +693,10 @@
     "pick3": {
       "lu_slug": "pick-3",
       "title": "New MexicoPick 3 Plus Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-plus-midday",
+      "title": "New MexicoPick 3 Midday"
     }
   },
   "OK": {
@@ -555,12 +715,20 @@
     "pick3": {
       "lu_slug": "pick-3",
       "title": "South CarolinaPick 3 Evening"
+    },
+    "pick3-midday": {
+      "lu_slug": "pick-3-midday",
+      "title": "South CarolinaPick 3 Midday"
     }
   },
   "TN": {
     "cash3": {
       "lu_slug": "cash-3",
       "title": "TennesseeCash 3 Evening"
+    },
+    "cash3-midday": {
+      "lu_slug": "cash-3-midday",
+      "title": "TennesseeCash 3 Midday"
     }
   },
   "VT": {
@@ -579,12 +747,30 @@
     "pick3": {
       "lu_slug": "daily-pick-3",
       "title": "manual"
+    },
+    "pick3-midday": {
+      "lu_slug": "daily-pick-3-midday",
+      "title": "WisconsinPick 3 Midday"
     }
   },
   "WV": {
     "daily3": {
       "lu_slug": "daily-3",
       "title": "West VirginiaDaily 3"
+    },
+    "daily3-midday": {
+      "lu_slug": "daily-3-midday",
+      "title": "West VirginiaDaily 3 Midday"
+    }
+  },
+  "MA": {
+    "numbers-midday": {
+      "lu_slug": "midday-numbers",
+      "title": "MassachusettsNumbers Midday"
+    },
+    "numbers": {
+      "lu_slug": "numbers",
+      "title": "MassachusettsNumbers Evening"
     }
   }
 }
