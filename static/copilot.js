@@ -35,6 +35,7 @@ const T = {
       analyst:['Explique ce score','Compare avec l\'historique','Tendances par position','Distribution des sommes'],
       coach:['Comment améliorer ma stratégie ?','Quelle approche recommandes-tu ?','Explique le Box vs Straight','Guide-moi étape par étape'],
       '/analyze':['Pourquoi ces numéros ?','Montre les tendances','Analyse les 30 derniers jours'],
+      '/all-results':['Quels États ont tiré aujourd\'hui ?','Compare Midi vs Soir','Quels chiffres sortent le plus ?','Analyse les tendances du jour'],
       '/results':['Quels États ont tiré aujourd\'hui ?','Montre les chiffres chauds','Compare Midi vs Soir'],
       '/accuracy':['Explique ce score','Compare avec l\'historique','Que signifie cette performance ?'],
       '/bizai':['Analyse ce projet','Crée un plan 30-60-90 jours','Identifie les risques'],
@@ -68,6 +69,7 @@ const T = {
       analyst:['Explain this score','Compare with history','Trends by position','Sum distribution'],
       coach:['How to improve my strategy?','What approach do you recommend?','Explain Box vs Straight','Guide me step by step'],
       '/analyze':['Why these numbers?','Show trends','Analyze last 30 days'],
+      '/all-results':['Which states drew today?','Compare Midday vs Evening','What numbers come up most?','Analyze today\'s trends'],
       '/results':['Which states drew today?','Show hot digits','Compare Midday vs Evening'],
       '/accuracy':['Explain this score','Compare with history','What does this performance mean?'],
       '/bizai':['Analyze this project','Create 30-60-90 day plan','Identify risks'],
@@ -101,6 +103,7 @@ const T = {
       analyst:['Explica este puntaje','Compara con historial','Tendencias por posición','Distribución de sumas'],
       coach:['¿Cómo mejorar mi estrategia?','¿Qué enfoque recomiendas?','Explica Box vs Straight','Guíame paso a paso'],
       '/analyze':['¿Por qué estos números?','Muestra tendencias','Analiza los últimos 30 días'],
+      '/all-results':['¿Qué estados sortearon hoy?','Compara Mediodía vs Noche','¿Qué números salen más?','Analiza las tendencias del día'],
       '/results':['¿Qué estados sortearon hoy?','Muestra dígitos calientes','Compara Mediodía vs Noche'],
       '/accuracy':['Explica este puntaje','Compara con historial','¿Qué significa este rendimiento?'],
       '/bizai':['Analiza este proyecto','Crea plan 30-60-90 días','Identifica riesgos'],
@@ -124,6 +127,7 @@ const T = {
       analyst:['Explique esta pontuação','Compare com histórico','Tendências por posição','Distribuição de somas'],
       coach:['Como melhorar minha estratégia?','Que abordagem recomenda?','Explique Box vs Straight','Guie-me passo a passo'],
       '/analyze':['Por que esses números?','Mostre tendências','Analise os últimos 30 dias'],
+      '/all-results':['Quais estados sortearam hoje?','Compare Meio-dia vs Noite','Quais números saem mais?','Analise as tendências do dia'],
       '/results':['Quais estados sortearam hoje?','Mostre dígitos quentes','Compare Meio-dia vs Noite'],
       '/accuracy':['Explique esta pontuação','Compare com histórico','O que significa esse desempenho?'],
       '/bizai':['Analise este projeto','Crie plano 30-60-90 dias','Identifique riscos'],
@@ -147,6 +151,7 @@ const T = {
       analyst:['Eksplike nòt sa a','Konpare ak istwa','Tandans pa pozisyon','Distribisyon sòm'],
       coach:['Kijan pou amelyore estrateji mwen?','Ki apwòch ou rekòmande?','Eksplike Box vs Straight','Gide mwen etap pa etap'],
       '/analyze':['Poukisa nimewo sa yo?','Montre tandans','Analize 30 dènye jou yo'],
+      '/all-results':['Ki eta ki tire jodi a?','Konpare Midi vs Swa','Ki chif ki soti plis?','Analize tandans jou a'],
       '/results':['Ki eta ki tire jodi a?','Montre chif cho','Konpare Midi vs Swa'],
       '/accuracy':['Eksplike nòt sa a','Konpare ak istwa','Kisa pèfòmans sa a vle di?'],
       '/bizai':['Analize pwojè sa a','Kreye plan 30-60-90 jou','Idantifye risk'],
@@ -168,6 +173,7 @@ let _thinking = false;
 function getPageContext(){
   const p = location.pathname;
   if(p.startsWith('/analyze') || p === '/') return '/analyze';
+  if(p.startsWith('/all-results') || p.startsWith('/all_results')) return '/all-results';
   if(p.startsWith('/results')) return '/results';
   if(p.startsWith('/accuracy') || p.startsWith('/track-record')) return '/accuracy';
   if(p.startsWith('/bizai') || p.startsWith('/business')) return '/bizai';

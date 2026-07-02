@@ -316,7 +316,7 @@ def call_claude(message, mode, lang, history, page_context_text):
             },
             json={
                 "model": "claude-haiku-4-5-20251001",
-                "max_tokens": 600,
+                "max_tokens": 900,
                 "system": system,
                 "messages": messages,
             },
@@ -349,6 +349,24 @@ FALLBACK = {
         'quota': "You've reached your daily question limit ({limit}/day). Upgrade your plan for more, or try again tomorrow.",
         'error': "Sorry, an error occurred. Please try again shortly.",
         'default': "I'm **ZYNORIQ Copilot™**. Ask me about your predictions, trends, scores or strategies!",
+    },
+    'es': {
+        'no_data': "No tengo suficientes datos en esta página para responder con precisión. Ve a **/analyze** para lanzar un análisis o **/results** para ver los últimos sorteos.",
+        'quota': "Has alcanzado tu límite diario de preguntas ({limit}/día). Mejora tu plan para obtener más preguntas, o inténtalo mañana.",
+        'error': "Lo siento, ocurrió un error. Inténtalo de nuevo en un momento.",
+        'default': "Soy **ZYNORIQ Copilot™**. ¡Pregúntame sobre tus predicciones, tendencias, puntuaciones o estrategias!",
+    },
+    'pt': {
+        'no_data': "Não tenho dados suficientes nesta página para responder com precisão. Vá para **/analyze** para executar uma análise ou **/results** para ver os últimos sorteios.",
+        'quota': "Você atingiu seu limite diário de perguntas ({limit}/dia). Atualize seu plano para mais perguntas, ou tente novamente amanhã.",
+        'error': "Desculpe, ocorreu um erro. Tente novamente em breve.",
+        'default': "Sou o **ZYNORIQ Copilot™**. Pergunte-me sobre suas previsões, tendências, pontuações ou estratégias!",
+    },
+    'ht': {
+        'no_data': "Mwen pa gen ase done sou paj sa a pou reponn ak presizyon. Ale sou **/analyze** pou lance yon analiz oswa **/results** pou wè dènye tiraj yo.",
+        'quota': "Ou rive nan limit kesyon jounalye ou ({limit}/jou). Monte plan ou pou plis kesyon, oswa eseye demen.",
+        'error': "Padon, yon erè rive. Eseye ankò nan yon ti moman.",
+        'default': "Mwen se **ZYNORIQ Copilot™**. Poze mwen kesyon sou prediksyon, tandans, nòt oswa estrateji ou yo!",
     },
 }
 
