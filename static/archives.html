@@ -377,7 +377,7 @@ function renderArchives(list){
 
       // Entrée analyse — ouvre le snapshot complet sur /analyze
       if(e.type==='analyze'){
-        const hasSnap = e.has_fullsnap && !!localStorage.getItem('predikta_fullsnap_'+e.id);
+        const hasSnap = !!e.has_fullsnap;  // server snapshot always available — no localStorage check
         const snapUrl  = hasSnap
           ? `/analyze?archive=${encodeURIComponent(e.id)}&state=${encodeURIComponent(e.state)}&tod=${encodeURIComponent(e.tod||'all')}`
           : e.url;
