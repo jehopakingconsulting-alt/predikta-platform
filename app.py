@@ -1504,6 +1504,7 @@ _CACHE4_TTL = int(os.environ.get("PREDIKTA_TRACK_RECORD_CACHE_SEC", 30 * 60))
 
 
 @app.route("/api/hot-pick4")
+@auth_module.game_required("pick4")
 def hot_pick4():
     """Public endpoint: hottest Pick4 digits/combo per state."""
     import analyzer4
@@ -1585,7 +1586,7 @@ def api_results4(state_code):
 
 
 @app.route("/api/report-4/<state_code>")
-@auth_module.subscription_required
+@auth_module.game_required("pick4")
 def api_report4(state_code):
     """Full Pick4 statistical report — uses ml_engine4 for full ML ensemble."""
     from scraper4 import STATES4, load_csv4
@@ -2901,6 +2902,7 @@ def api_cash5_states():
     return jsonify(sorted(result, key=lambda x: (x["name"], x["label"])))
 
 @app.route("/api/cash5/<state_code>/<slug>")
+@auth_module.game_required("cash5")
 def api_cash5_report(state_code, slug):
     """Full statistical report for a multi-ball Cash5/Fantasy5/Take5 game."""
     import analyzer_lotto
@@ -2919,6 +2921,7 @@ def api_cash5_report(state_code, slug):
     return jsonify(result)
 
 @app.route("/api/cash5/<state_code>/<slug>/track-record")
+@auth_module.game_required("cash5")
 def api_cash5_track(state_code, slug):
     """Backtest track record for a multi-ball game."""
     import analyzer_lotto

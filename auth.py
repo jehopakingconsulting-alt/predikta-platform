@@ -38,16 +38,18 @@ PLAN_CONFIG = {
     "pro": {
         "label": "PRO",
         "price_usd": 19.99,
-        "trial_days": 3,
-        "analyses_per_day": 1,
+        "trial_days": 7,
+        "analyses_per_day": 10,
         "max_states": 4,
+        "allowed_games": ["pick3"],
     },
     "vip": {
         "label": "VIP",
         "price_usd": 49.99,
         "trial_days": 7,
-        "analyses_per_day": 7,
+        "analyses_per_day": 30,
         "max_states": 20,
+        "allowed_games": ["pick3"],
     },
     "elite": {
         "label": "PREMIUM",
@@ -55,7 +57,8 @@ PLAN_CONFIG = {
         "trial_days": 7,
         "analyses_per_day": -1,   # illimité
         "max_states": -1,         # tous (44+)
-        "bizai_unlimited": True,  # Business AI : analyses illimitées
+        "bizai_unlimited": True,
+        "allowed_games": ["pick3", "pick4", "cash4"],
     },
     "business": {
         "label": "BUSINESS",
@@ -63,7 +66,8 @@ PLAN_CONFIG = {
         "trial_days": 7,
         "analyses_per_day": -1,   # illimité
         "max_states": -1,         # tous (44+)
-        "bizai_unlimited": True,  # Business AI : analyses illimitées
+        "bizai_unlimited": True,
+        "allowed_games": ["pick3", "pick4", "cash4", "cash5", "lotto5"],
     },
 }
 
@@ -733,6 +737,41 @@ def subscription_required(f):
         return f(*args, **kwargs)
 
     return wrapper
+
+
+def game_required(game: str):
+    """Decorator factory: requires active subscription AND plan allows `game`.
+    game values: 'pick3', 'pick4', 'cash4', 'cash5', 'lotto5'"""
+    from functools import wraps
+
+    def decorator(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            user = current_user()
+            if not user:
+                return jsonify({"error": "login_required", "message": "Connexion requise"}), 401
+            sub = user.subscription
+            if not sub or not sub.plan:
+                return jsonify({"error": "no_plan", "message": "Choisis un plan pour continuer"}), 402
+            if not sub.is_active():
+                return jsonify({"error": "subscription_expired",
+                                "message": "Ton essai/abonnement est terminé."}), 402
+            allowed = PLAN_CONFIG.get(sub.plan, {}).get("allowed_games", [])
+            if game not in allowed:
+                # Find the minimum plan that unlocks this game
+                min_plan = next(
+                    (k for k in PLAN_ORDER if game in PLAN_CONFIG.get(k, {}).get("allowed_games", [])),
+                    "elite"
+                )
+                min_label = PLAN_CONFIG.get(min_plan, {}).get("label", min_plan.upper())
+                return jsonify({
+                    "error": "plan_upgrade_required",
+                    "message": f"Ce jeu nécessite le plan {min_label} ou supérieur.",
+                    "required_plan": min_plan,
+                }), 403
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator
 
 
 def _send_email(to: str, subject: str, body: str, html_body: str = None):
