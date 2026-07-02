@@ -3328,17 +3328,30 @@ def dashboard_delete_report(report_id):
     return jsonify({"success": True})
 
 
-MAX_ARCHIVE_ENTRIES = 200
+MAX_ARCHIVE_ENTRIES = 200  # fallback global cap (no plan)
+
+def _user_archive_cap(user) -> int:
+    """Return the max archive entries allowed for this user's plan. -1 = unlimited."""
+    sub = getattr(user, "subscription", None)
+    if not sub or not sub.plan:
+        return 30  # no plan → minimal cap
+    cap = auth_module.PLAN_CONFIG.get(sub.plan, {}).get("max_archive_entries", MAX_ARCHIVE_ENTRIES)
+    return cap if cap is not None else MAX_ARCHIVE_ENTRIES
 
 @app.route("/api/dashboard/archives", methods=["GET"])
 @auth_module.login_required
 def dashboard_archives_get():
     user = auth_module.current_user()
-    items = (auth_module.UserArchive.query
-             .filter_by(user_id=user.id)
-             .order_by(auth_module.UserArchive.ts.desc())
-             .limit(MAX_ARCHIVE_ENTRIES).all())
-    return jsonify({"entries": [i.to_dict() for i in items]})
+    cap = _user_archive_cap(user)
+    q = (auth_module.UserArchive.query
+         .filter_by(user_id=user.id)
+         .order_by(auth_module.UserArchive.ts.desc()))
+    items = q.all() if cap < 0 else q.limit(cap).all()
+    return jsonify({
+        "entries": [i.to_dict() for i in items],
+        "cap": cap,
+        "count": len(items),
+    })
 
 
 @app.route("/api/dashboard/archives/sync", methods=["POST"])
@@ -3347,10 +3360,12 @@ def dashboard_archives_sync():
     """Bulk upsert: client sends its localStorage entries; server merges and returns the full list."""
     user = auth_module.current_user()
     db = auth_module.db
+    cap = _user_archive_cap(user)
+    effective_cap = cap if cap >= 0 else 10_000  # illimité → grand nombre pour les boucles
     data = request.get_json(silent=True) or {}
     entries = data.get("entries", [])
 
-    for e in entries[:MAX_ARCHIVE_ENTRIES]:
+    for e in entries[:effective_cap]:
         cid = str(e.get("id", ""))[:64]
         if not cid:
             continue
@@ -3367,24 +3382,33 @@ def dashboard_archives_sync():
             )
             db.session.add(row)
 
-    # Enforce cap: keep only the MAX_ARCHIVE_ENTRIES most recent
-    all_ids = (auth_module.UserArchive.query
-               .filter_by(user_id=user.id)
-               .order_by(auth_module.UserArchive.ts.desc())
-               .with_entities(auth_module.UserArchive.id)
-               .all())
-    if len(all_ids) > MAX_ARCHIVE_ENTRIES:
-        to_delete = [r.id for r in all_ids[MAX_ARCHIVE_ENTRIES:]]
-        auth_module.UserArchive.query.filter(
-            auth_module.UserArchive.id.in_(to_delete)).delete(synchronize_session=False)
+    # Enforce plan cap: keep only the N most recent; warn frontend if truncated
+    if cap >= 0:
+        all_ids = (auth_module.UserArchive.query
+                   .filter_by(user_id=user.id)
+                   .order_by(auth_module.UserArchive.ts.desc())
+                   .with_entities(auth_module.UserArchive.id)
+                   .all())
+        truncated = len(all_ids) > cap
+        if truncated:
+            to_delete = [r.id for r in all_ids[cap:]]
+            auth_module.UserArchive.query.filter(
+                auth_module.UserArchive.id.in_(to_delete)).delete(synchronize_session=False)
+    else:
+        truncated = False
 
     db.session.commit()
 
-    items = (auth_module.UserArchive.query
-             .filter_by(user_id=user.id)
-             .order_by(auth_module.UserArchive.ts.desc())
-             .limit(MAX_ARCHIVE_ENTRIES).all())
-    return jsonify({"entries": [i.to_dict() for i in items]})
+    q = (auth_module.UserArchive.query
+         .filter_by(user_id=user.id)
+         .order_by(auth_module.UserArchive.ts.desc()))
+    items = q.all() if cap < 0 else q.limit(cap).all()
+    return jsonify({
+        "entries": [i.to_dict() for i in items],
+        "cap": cap,
+        "count": len(items),
+        "truncated": truncated,
+    })
 
 
 @app.route("/api/dashboard/archives/<client_id>", methods=["DELETE"])

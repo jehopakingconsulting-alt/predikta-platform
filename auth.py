@@ -41,6 +41,7 @@ PLAN_CONFIG = {
         "trial_days": 7,
         "analyses_per_day": 10,
         "max_states": 4,
+        "max_archive_entries": 50,
         "allowed_games": ["pick3"],
     },
     "vip": {
@@ -49,14 +50,16 @@ PLAN_CONFIG = {
         "trial_days": 7,
         "analyses_per_day": 30,
         "max_states": 20,
+        "max_archive_entries": 150,
         "allowed_games": ["pick3"],
     },
     "elite": {
         "label": "PREMIUM",
         "price_usd": 99.99,
         "trial_days": 7,
-        "analyses_per_day": -1,   # illimité
-        "max_states": -1,         # tous (44+)
+        "analyses_per_day": -1,
+        "max_states": -1,
+        "max_archive_entries": 500,
         "bizai_unlimited": True,
         "allowed_games": ["pick3", "pick4", "cash4"],
     },
@@ -64,8 +67,9 @@ PLAN_CONFIG = {
         "label": "BUSINESS",
         "price_usd": 199.99,
         "trial_days": 7,
-        "analyses_per_day": -1,   # illimité
-        "max_states": -1,         # tous (44+)
+        "analyses_per_day": -1,
+        "max_states": -1,
+        "max_archive_entries": -1,  # illimité
         "bizai_unlimited": True,
         "allowed_games": ["pick3", "pick4", "cash4", "cash5", "lotto5"],
     },

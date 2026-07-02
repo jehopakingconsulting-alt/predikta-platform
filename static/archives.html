@@ -146,6 +146,7 @@ const T = {
     open:"Ouvrir →",
     confirmClear:"Effacer tout l'historique d'analyses ? Cette action est irréversible.",
     today:"Aujourd'hui", yesterday:"Hier",
+    capInfo:"sur", capUnlimited:"Illimité", capWarning:"⚠️ Limite atteinte — les plus anciennes analyses ont été supprimées. Passez à un plan supérieur pour plus d'espace.",
   },
   en:{
     title:"My Archives", subtitle:"Find the history of your recent analyses and searches, saved directly on this device.",
@@ -161,6 +162,7 @@ const T = {
     open:"Open →",
     confirmClear:"Clear all analysis history? This cannot be undone.",
     today:"Today", yesterday:"Yesterday",
+    capInfo:"of", capUnlimited:"Unlimited", capWarning:"⚠️ Limit reached — oldest analyses were removed. Upgrade your plan for more storage.",
   },
   es:{
     title:"Mis Archivos", subtitle:"Encuentra el historial de tus análisis y búsquedas recientes, guardado directamente en este dispositivo.",
@@ -176,6 +178,7 @@ const T = {
     open:"Abrir →",
     confirmClear:"¿Borrar todo el historial de análisis? Esta acción es irreversible.",
     today:"Hoy", yesterday:"Ayer",
+    capInfo:"de", capUnlimited:"Ilimitado", capWarning:"⚠️ Límite alcanzado — los análisis más antiguos fueron eliminados. Actualiza tu plan para más espacio.",
   },
   pt:{
     title:"Meus Arquivos", subtitle:"Encontre o histórico das suas análises e pesquisas recentes, salvo diretamente neste dispositivo.",
@@ -191,6 +194,7 @@ const T = {
     open:"Abrir →",
     confirmClear:"Limpar todo o histórico de análises? Esta ação é irreversível.",
     today:"Hoje", yesterday:"Ontem",
+    capInfo:"de", capUnlimited:"Ilimitado", capWarning:"⚠️ Limite atingido — análises mais antigas foram removidas. Atualize seu plano para mais espaço.",
   },
   ht:{
     title:"Achiv Mwen Yo", subtitle:"Jwenn istorik analiz ak rechèch resan ou yo, sove dirèkteman sou aparèy sa a.",
@@ -206,6 +210,7 @@ const T = {
     open:"Louvri →",
     confirmClear:"Efase tout istorik analiz yo? Aksyon sa a pa ka anile.",
     today:"Jodi a", yesterday:"Yè",
+    capInfo:"sou", capUnlimited:"San limit", capWarning:"⚠️ Limit atenn — pi ansyen analiz yo te efase. Ogmante plan ou pou plis espas.",
   },
 };
 
@@ -292,7 +297,10 @@ async function syncWithServer(){
     });
     if(!res.ok) return;
 
-    const {entries: serverEntries} = await res.json();
+    const serverData = await res.json();
+    const serverEntries = serverData.entries || [];
+    const cap = serverData.cap ?? -1;
+    const truncated = serverData.truncated ?? false;
 
     // Merge server entries into localStorage (server is authoritative for missing ids)
     if(window.PredArchive && serverEntries.length){
@@ -301,9 +309,23 @@ async function syncWithServer(){
     }
 
     _serverSynced = true;
+    window._archiveCap = cap;
+
     // Show sync indicator
     const badge = document.getElementById('syncBadge');
     if(badge){ badge.style.display=''; badge.textContent = '☁️ ' + (me.user.username || me.user.email); }
+
+    // Warn if cap was hit and old entries were silently deleted
+    if(truncated){
+      const t = curT();
+      const warn = document.createElement('div');
+      warn.style.cssText='margin:0 0 14px;padding:12px 16px;border-radius:10px;background:rgba(255,120,0,.1);border:1px solid rgba(255,140,0,.4);color:#ffaa55;font-size:.8rem;font-weight:600';
+      warn.textContent = t.capWarning;
+      const list = document.getElementById('archiveList');
+      if(list) list.insertAdjacentElement('beforebegin', warn);
+    }
+
+    renderArchives(serverEntries);
   }catch(e){}
 }
 
@@ -322,7 +344,9 @@ function renderArchives(list){
   const listEl = document.getElementById('archiveList');
   const clearBtn = document.getElementById('btnClear');
 
-  countEl.innerHTML = `<b>${list.length}</b> ${t.countLabel}`;
+  const cap = window._archiveCap ?? -1;
+  const capStr = cap < 0 ? t.capUnlimited : `${t.capInfo} ${cap}`;
+  countEl.innerHTML = `<b>${list.length}</b> / ${capStr} ${t.countLabel}`;
   clearBtn.style.display = list.length ? '' : 'none';
 
   if(!list.length){
