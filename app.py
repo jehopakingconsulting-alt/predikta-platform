@@ -916,10 +916,47 @@ def _draw_watcher_loop():
         time.sleep(sleep_sec)
 
 
+def _scrape_missing_games_on_startup():
+    """
+    At startup, detect configured game slugs that have no data file and
+    scrape them immediately (in priority order: high-traffic states first).
+    This recovers from ephemeral-storage wipes on Render and populates any
+    newly-added slug entries without waiting for the next 25-min cycle.
+    """
+    time.sleep(30)  # let the server pass the health-check first
+    try:
+        from games_config import STATE_GAMES
+        from games_scraper import fetch_all_games_for_state, load_game_results, DATA_DIR
+        import os as _os
+
+        # States ordered by traffic priority
+        PRIORITY = ["NY","GA","TX","FL","CA","PA","NJ","IL","OH","NC",
+                    "VA","MA","MI","MD","TN","SC","CT","IN","KY","MO",
+                    "AZ","CO","LA","MS","AR","IA","KS","OK","DE","NM",
+                    "WV","DC","WI","MN","NE","NH","VT","ME","WA","ID","PR"]
+
+        for st_code in PRIORITY:
+            if st_code not in STATE_GAMES:
+                continue
+            games = STATE_GAMES[st_code]
+            missing = [g for g in games
+                       if not _os.path.exists(_os.path.join(DATA_DIR, st_code, f"{g['slug']}.json"))]
+            if missing:
+                print(f"  [startup-scrape] {st_code}: {len(missing)} jeux manquants → scrape")
+                try:
+                    fetch_all_games_for_state(st_code, n_months=2)
+                except Exception as e:
+                    print(f"  [startup-scrape] {st_code} erreur: {e}")
+                time.sleep(1)
+    except Exception as e:
+        print(f"  [startup-scrape] erreur: {e}")
+
+
 def start_auto_update():
     if os.environ.get("PREDIKTA_DISABLE_AUTOUPDATE") == "1":
         return
     threading.Thread(target=_initial_warm_loop, daemon=True, name="predikta-warm-cache").start()
+    threading.Thread(target=_scrape_missing_games_on_startup, daemon=True, name="predikta-startup-scrape").start()
     t = threading.Thread(target=_auto_update_loop, daemon=True, name="predikta-auto-update")
     t.start()
     threading.Thread(target=_draw_watcher_loop, daemon=True, name="predikta-draw-watcher").start()

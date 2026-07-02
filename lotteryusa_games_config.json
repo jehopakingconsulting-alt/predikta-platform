@@ -574,13 +574,29 @@
     }
   },
   "DC": {
+    "pick3-day": {
+      "lu_slug": "dc-lucky-numbers-midday",
+      "title": "WashingtonDCDC-3 Day"
+    },
+    "pick3-evening": {
+      "lu_slug": "dc-lucky-numbers",
+      "title": "WashingtonDCDC-3 Evening"
+    },
     "pick3": {
       "lu_slug": "dc-lucky-numbers",
-      "title": "manual"
+      "title": "WashingtonDCDC-3 Night"
     },
-    "pick3-midday": {
-      "lu_slug": "dc-lucky-numbers-midday",
-      "title": "WashingtonDCLucky Numbers Midday"
+    "pick4-day": {
+      "lu_slug": "dc-4-midday",
+      "title": "WashingtonDCDC-4 Day"
+    },
+    "pick4-evening": {
+      "lu_slug": "dc-4",
+      "title": "WashingtonDCDC-4 Evening"
+    },
+    "pick4": {
+      "lu_slug": "dc-4",
+      "title": "WashingtonDCDC-4 Night"
     }
   },
   "DE": {
