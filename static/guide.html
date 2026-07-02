@@ -384,7 +384,8 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.3rem,4vw,2rem);font-weight
     el.style.display='block';
   }).catch(function(){
     ld.style.display='none';
-    el.innerHTML = '<div style="text-align:center;padding:60px 20px"><p style="color:#ff5577">Erreur de chargement. Veuillez vous reconnecter.</p><a href="/login" style="color:#1479FF">Se connecter</a></div>';
+    var d2 = T[window.PREDIKTA_LANG||'fr']||T.fr;
+    el.innerHTML = '<div style="text-align:center;padding:60px 20px"><p style="color:#ff5577">'+(d2.loadError||'Erreur de chargement. Veuillez vous reconnecter.')+'</p><a href="/login" style="color:#1479FF">'+(d2.loginLink||'Se connecter')+'</a></div>';
     el.style.display='block';
   });
 })();
@@ -534,7 +535,9 @@ var T = {
     s9_t2:"<strong>2. Croisez Markov et ML</strong><br/>Quand les chaînes de Markov et les modèles ML (Random Forest, XGBoost) convergent sur les mêmes chiffres, le signal est particulièrement fort. Cherchez cette cohérence.",
     s9_t3:"<strong>3. Utilisez le filtre TOD</strong><br/>Les tirages Midi et Soir ont souvent des distributions différentes. Analysez-les séparément et comparez. Un chiffre chaud le midi peut être froid le soir.",
     s9_t4:"<strong>4. Suivez les chiffres \"overdue\"</strong><br/>Un chiffre qui n'est pas apparu depuis 15+ tirages est statistiquement \"en retard\". Suivez ces chiffres sur plusieurs jours — quand le gap devient extrême, la probabilité de retour augmente.",
-    s9_t5:"<strong>5. Règle d'or : Jouez responsable</strong><br/>Ne misez jamais plus que ce que vous pouvez vous permettre de perdre. ZYNORIQ est un outil d'analyse statistique, pas une garantie de gain. Fixez-vous un budget et respectez-le."
+    s9_t5:"<strong>5. Règle d'or : Jouez responsable</strong><br/>Ne misez jamais plus que ce que vous pouvez vous permettre de perdre. ZYNORIQ est un outil d'analyse statistique, pas une garantie de gain. Fixez-vous un budget et respectez-le.",
+    loadError:"Erreur de chargement. Veuillez vous reconnecter.",
+    loginLink:"Se connecter"
   },
   en:{
     pageTitle:"How to Use ZYNORIQ Like a Pro",
@@ -660,7 +663,9 @@ var T = {
     s9_t2:"<strong>2. Cross-check Markov and ML</strong><br/>When Markov chains and ML models (Random Forest, XGBoost) converge on the same digits, the signal is particularly strong. Look for this consistency.",
     s9_t3:"<strong>3. Use the TOD filter</strong><br/>Midday and Evening draws often have different distributions. Analyze them separately and compare. A digit that's hot at midday can be cold in the evening.",
     s9_t4:"<strong>4. Track \"overdue\" digits</strong><br/>A digit that hasn't appeared in 15+ draws is statistically \"overdue\". Track these digits over several days — when the gap becomes extreme, the probability of a return increases.",
-    s9_t5:"<strong>5. Golden rule: Play responsibly</strong><br/>Never bet more than you can afford to lose. ZYNORIQ is a statistical analysis tool, not a guarantee of winnings. Set yourself a budget and stick to it."
+    s9_t5:"<strong>5. Golden rule: Play responsibly</strong><br/>Never bet more than you can afford to lose. ZYNORIQ is a statistical analysis tool, not a guarantee of winnings. Set yourself a budget and stick to it.",
+    loadError:"Loading error. Please log in again.",
+    loginLink:"Log in"
   },
   es:{
     pageTitle:"Cómo usar ZYNORIQ como un Pro",
@@ -786,7 +791,9 @@ var T = {
     s9_t2:"<strong>2. Cruza Markov y ML</strong><br/>Cuando las cadenas de Markov y los modelos ML (Random Forest, XGBoost) convergen en los mismos dígitos, la señal es particularmente fuerte. Busca esta coherencia.",
     s9_t3:"<strong>3. Usa el filtro TOD</strong><br/>Los sorteos de Mediodía y Noche a menudo tienen distribuciones diferentes. Analízalos por separado y compara. Un dígito caliente al mediodía puede estar frío por la noche.",
     s9_t4:"<strong>4. Sigue los dígitos \"overdue\"</strong><br/>Un dígito que no ha aparecido en 15+ sorteos está estadísticamente \"atrasado\". Sigue estos dígitos durante varios días — cuando el gap se vuelve extremo, la probabilidad de regreso aumenta.",
-    s9_t5:"<strong>5. Regla de oro: Juega responsablemente</strong><br/>Nunca apuestes más de lo que puedes permitirte perder. ZYNORIQ es una herramienta de análisis estadístico, no una garantía de ganancia. Fíjate un presupuesto y respétalo."
+    s9_t5:"<strong>5. Regla de oro: Juega responsablemente</strong><br/>Nunca apuestes más de lo que puedes permitirte perder. ZYNORIQ es una herramienta de análisis estadístico, no una garantía de ganancia. Fíjate un presupuesto y respétalo.",
+    loadError:"Error de carga. Por favor, vuelve a conectarte.",
+    loginLink:"Conectarse"
   },
   pt:{
     pageTitle:"Como usar o ZYNORIQ como um Pro",
@@ -912,7 +919,9 @@ var T = {
     s9_t2:"<strong>2. Cruze Markov e ML</strong><br/>Quando as cadeias de Markov e os modelos ML (Random Forest, XGBoost) convergem nos mesmos dígitos, o sinal é particularmente forte. Procure essa coerência.",
     s9_t3:"<strong>3. Use o filtro TOD</strong><br/>Os sorteios de Meio-dia e Noite muitas vezes têm distribuições diferentes. Analise-os separadamente e compare. Um dígito quente ao meio-dia pode estar frio à noite.",
     s9_t4:"<strong>4. Acompanhe os dígitos \"overdue\"</strong><br/>Um dígito que não apareceu em 15+ sorteios está estatisticamente \"atrasado\". Acompanhe esses dígitos por vários dias — quando o gap fica extremo, a probabilidade de retorno aumenta.",
-    s9_t5:"<strong>5. Regra de ouro: Jogue com responsabilidade</strong><br/>Nunca aposte mais do que pode perder. O ZYNORIQ é uma ferramenta de análise estatística, não uma garantia de ganho. Defina um orçamento e respeite-o."
+    s9_t5:"<strong>5. Regra de ouro: Jogue com responsabilidade</strong><br/>Nunca aposte mais do que pode perder. O ZYNORIQ é uma ferramenta de análise estatística, não uma garantia de ganho. Defina um orçamento e respeite-o.",
+    loadError:"Erro de carregamento. Por favor, conecte-se novamente.",
+    loginLink:"Entrar"
   },
   ht:{
     pageTitle:"Kòman pou itilize ZYNORIQ tankou yon Pro",
@@ -1038,7 +1047,9 @@ var T = {
     s9_t2:"<strong>2. Kwaze Markov ak ML</strong><br/>Lè chèn Markov ak modèl ML (Random Forest, XGBoost) konvèje sou menm chif yo, siyal la patikilyèman fò. Chèche koyerans sa a.",
     s9_t3:"<strong>3. Itilize filt TOD la</strong><br/>Tiraj Midi ak Aswè souvan gen distribisyon diferan. Analize yo separeman epi konpare. Yon chif ki cho midi ka frèt aswè.",
     s9_t4:"<strong>4. Swiv chif \"overdue\" yo</strong><br/>Yon chif ki pa parèt depi 15+ tiraj estatistikman \"an reta\". Swiv chif sa yo pandan plizyè jou — lè gap la vin ekstrèm, pwobabilite retou ogmante.",
-    s9_t5:"<strong>5. Règ annò: Jwe ak responsablite</strong><br/>Pa janm mise plis pase sa ou ka pèdi. ZYNORIQ se yon zouti analiz estatistik, pa yon garanti pwofi. Fikse yon bidjè epi respekte li."
+    s9_t5:"<strong>5. Règ annò: Jwe ak responsablite</strong><br/>Pa janm mise plis pase sa ou ka pèdi. ZYNORIQ se yon zouti analiz estatistik, pa yon garanti pwofi. Fikse yon bidjè epi respekte li.",
+    loadError:"Erè chajman. Tanpri konekte ankò.",
+    loginLink:"Konekte"
   }
 };
 
@@ -1052,6 +1063,10 @@ function applyLang(lang){
   document.querySelectorAll('[data-i18n-html]').forEach(function(el){
     var k = el.getAttribute('data-i18n-html');
     if(dict[k]) el.innerHTML = dict[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var k = el.getAttribute('data-i18n-ph');
+    if(dict[k]) el.setAttribute('placeholder', dict[k]);
   });
   document.documentElement.setAttribute('lang', lang);
 }
