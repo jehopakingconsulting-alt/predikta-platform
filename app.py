@@ -2286,6 +2286,18 @@ def api_snapshot_save():
     auth_module.db.session.commit()
     return jsonify({"ok": True})
 
+@app.route("/api/snapshots/<snap_id>", methods=["DELETE"])
+@auth_module.login_required
+def api_snapshot_delete(snap_id):
+    user = auth_module.current_user()
+    from auth import AnalysisSnapshot
+    snap = auth_module.db.session.get(AnalysisSnapshot, snap_id)
+    if snap and snap.user_id == user.id:
+        auth_module.db.session.delete(snap)
+        auth_module.db.session.commit()
+    return jsonify({"ok": True})
+
+
 @app.route("/api/snapshots/<snap_id>")
 @auth_module.login_required
 def api_snapshot_get(snap_id):
@@ -3428,6 +3440,23 @@ def _user_archive_cap(user) -> int:
     cap = auth_module.PLAN_CONFIG.get(sub.plan, {}).get("max_archive_entries", MAX_ARCHIVE_ENTRIES)
     return cap if cap is not None else MAX_ARCHIVE_ENTRIES
 
+def _enrich_with_snapflag(items, user_id):
+    """Inject has_fullsnap=True for entries that have a server-side AnalysisSnapshot."""
+    from auth import AnalysisSnapshot as _AS
+    snap_ids = set(
+        r[0] for r in _AS.query
+        .filter_by(user_id=user_id)
+        .with_entities(_AS.id)
+        .all()
+    )
+    result = []
+    for item in items:
+        d = item.to_dict()
+        d["has_fullsnap"] = item.client_id in snap_ids
+        result.append(d)
+    return result
+
+
 @app.route("/api/dashboard/archives", methods=["GET"])
 @auth_module.login_required
 def dashboard_archives_get():
@@ -3438,7 +3467,7 @@ def dashboard_archives_get():
          .order_by(auth_module.UserArchive.ts.desc()))
     items = q.all() if cap < 0 else q.limit(cap).all()
     return jsonify({
-        "entries": [i.to_dict() for i in items],
+        "entries": _enrich_with_snapflag(items, user.id),
         "cap": cap,
         "count": len(items),
     })
@@ -3494,7 +3523,7 @@ def dashboard_archives_sync():
          .order_by(auth_module.UserArchive.ts.desc()))
     items = q.all() if cap < 0 else q.limit(cap).all()
     return jsonify({
-        "entries": [i.to_dict() for i in items],
+        "entries": _enrich_with_snapflag(items, user.id),
         "cap": cap,
         "count": len(items),
         "truncated": truncated,
@@ -3509,7 +3538,12 @@ def dashboard_archive_delete(client_id):
     row = auth_module.UserArchive.query.filter_by(user_id=user.id, client_id=client_id).first()
     if row:
         db.session.delete(row)
-        db.session.commit()
+    # Cascade: delete associated snapshot if it exists
+    from auth import AnalysisSnapshot
+    snap = db.session.get(AnalysisSnapshot, client_id)
+    if snap and snap.user_id == user.id:
+        db.session.delete(snap)
+    db.session.commit()
     return jsonify({"success": True})
 
 
@@ -3518,6 +3552,9 @@ def dashboard_archive_delete(client_id):
 def dashboard_archives_clear():
     user = auth_module.current_user()
     db = auth_module.db
+    # Cascade: delete all snapshots for this user first
+    from auth import AnalysisSnapshot
+    AnalysisSnapshot.query.filter_by(user_id=user.id).delete()
     auth_module.UserArchive.query.filter_by(user_id=user.id).delete()
     db.session.commit()
     return jsonify({"success": True})

@@ -133,12 +133,16 @@ function archiveAdd(entry, silent){
     list = archivePurge(list);
     localStorage.setItem(ARCHIVE_KEY, JSON.stringify(list));
   }catch(e){ /* localStorage indisponible (mode privé, etc.) */ }
-  // Non-blocking server post (fire-and-forget; 401 = not logged in, ignored)
+  // Non-blocking server post — si truncated:true le serveur a purgé les plus vieux, on resync localStorage
   if(saved){
     fetch('/api/dashboard/archives/sync', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({entries:[saved]})
+    }).then(r=>r.ok?r.json():null).then(d=>{
+      if(d && d.truncated && Array.isArray(d.kept)){
+        try{ localStorage.setItem(ARCHIVE_KEY, JSON.stringify(d.kept)); }catch(e){}
+      }
     }).catch(()=>{});
   }
 }

@@ -2055,8 +2055,9 @@ async function loadReport(){
         const _sr = await fetch('/api/snapshots',{method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({id:archiveId,state,tod,label:stateLabel,data})
         });
-        if(!_sr.ok && _sr.status===401){
-          // Non connecté : snapshot local seulement — avertir discrètement
+        if(!_sr.ok){
+          // Snapshot non sauvegardé côté serveur (401=non connecté, 500/503=erreur serveur, etc.)
+          console.warn('[archive] snapshot save HTTP', _sr.status);
           const _w = document.createElement('div');
           _w.style.cssText='position:fixed;bottom:70px;right:16px;z-index:9999;padding:10px 14px;border-radius:10px;background:#1a1a35;border:1px solid rgba(255,180,0,.4);color:#ffcc55;font-size:.75rem;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,.5)';
           _w.textContent = t('snapSaveWarn');
