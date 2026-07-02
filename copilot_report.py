@@ -257,7 +257,9 @@ def _safe(text):
 
 
 # ── PDF Generator ─────────────────────────────────────────────────────────
-class ZynoriqPDF(FPDF):
+_FPDFBase = FPDF if FPDF is not None else object
+
+class ZynoriqPDF(_FPDFBase):
     def __init__(self, lang='fr', report_type='prediction'):
         super().__init__()
         self.lang = lang
