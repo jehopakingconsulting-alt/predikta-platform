@@ -960,6 +960,17 @@ def start_auto_update():
     t = threading.Thread(target=_auto_update_loop, daemon=True, name="predikta-auto-update")
     t.start()
     threading.Thread(target=_draw_watcher_loop, daemon=True, name="predikta-draw-watcher").start()
+    try:
+        from sentinel_engine import run_sentinel_loop
+        threading.Thread(
+            target=run_sentinel_loop,
+            args=(app, _REPORT_CACHE),
+            daemon=True,
+            name="predikta-sentinel"
+        ).start()
+        print("[sentinel] Thread ZYNORIQ Sentinel™ lancé")
+    except Exception as _se:
+        print(f"[sentinel] Impossible de démarrer le Sentinel: {_se}")
 
 # Démarre seulement dans le processus principal (évite le double-lancement
 # avec le reloader Flask en mode debug)
@@ -974,6 +985,48 @@ def api_autoupdate_status():
         "interval_sec": _AUTO_UPDATE_INTERVAL,
         **_auto_update_state,
     })
+
+# ── SENTINEL API ──────────────────────────────────────────────────────────
+@app.route("/api/sentinel/status")
+def api_sentinel_status():
+    """Current sentinel snapshot — top3 upcoming draws + scores."""
+    user = auth_module.current_user()
+    if not user:
+        return jsonify({"error": "auth_required"}), 401
+    sub = getattr(user, "subscription", None)
+    plan = getattr(sub, "plan", None) if sub else None
+    if plan not in ("premium", "elite", "business", "enterprise"):
+        return jsonify({"error": "plan_required", "required": "premium"}), 403
+    try:
+        from sentinel_engine import sentinel_status, get_subscription
+        snap = sentinel_status(_REPORT_CACHE)
+        snap["subscribed"] = get_subscription(user.id).get("active", False)
+        snap["plan"] = plan
+        return jsonify(snap)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/sentinel/subscribe", methods=["POST"])
+def api_sentinel_subscribe():
+    """Opt-in / opt-out of Sentinel alerts."""
+    user = auth_module.current_user()
+    if not user:
+        return jsonify({"error": "auth_required"}), 401
+    sub = getattr(user, "subscription", None)
+    plan = getattr(sub, "plan", None) if sub else None
+    if plan not in ("premium", "elite", "business", "enterprise"):
+        return jsonify({"error": "plan_required", "required": "premium"}), 403
+    data = request.get_json(silent=True) or {}
+    active = bool(data.get("active", True))
+    try:
+        from sentinel_engine import subscribe_user, unsubscribe_user
+        if active:
+            subscribe_user(user.id, active=True)
+        else:
+            unsubscribe_user(user.id)
+        return jsonify({"ok": True, "active": active})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ── SSE — Server-Sent Events broadcaster ─────────────────────────────────
 _sse_subscribers: list[queue.Queue] = []
