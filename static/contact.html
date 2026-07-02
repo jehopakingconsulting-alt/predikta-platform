@@ -94,8 +94,8 @@ textarea{resize:vertical;min-height:120px}
     <div class="info-panel">
       <div class="info-card">
         <div class="info-icon">✉️</div>
-        <div class="info-title">Contact Direct</div>
-        <div class="info-text">
+        <div class="info-title" data-i18n="directTitle">Contact Direct</div>
+        <div class="info-text" data-i18n="directText">
           <a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — Questions générales<br>
           <a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Support technique<br>
           <a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Vie privée / RGPD
@@ -141,6 +141,7 @@ textarea{resize:vertical;min-height:120px}
 <script>
 const T = {
   fr:{ title:"Contactez-nous", subtitle:"Une question, un bug, une suggestion ? Nous répondons sous 24h.",
+    directTitle:"Contact Direct", directText:'<a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — Questions générales<br><a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Support technique<br><a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Vie privée / RGPD',
     lblName:"Votre nom", phName:"Jean Dupont", lblEmail:"Adresse email", phEmail:"jean@exemple.com",
     lblSubject:"Sujet", optBug:"🐛 Signaler un bug", optFeature:"💡 Suggestion de fonctionnalité", optData:"📊 Problème de données",
     optBilling:"💳 Question de facturation", optApi:"🔗 Accès API", optOther:"✉️ Autre",
@@ -151,6 +152,7 @@ const T = {
     partnerTitle:"Partenariats & Affiliations", partnerText:'Vous êtes une plateforme de loterie, un opérateur ou un influenceur ? Contactez-nous pour un partenariat d\\'affiliation. <a href="mailto:partners@zynoriq.com">partners@zynoriq.com</a>',
     nlTitle:"📧 Newsletter ZYNORIQ", nlDesc:"Recevez les résultats et prédictions quotidiennes directement dans votre boîte mail.", nlPh:"votre@email.com", nlBtn:"S'abonner", thanks:"Merci !" },
   en:{ title:"Contact us", subtitle:"A question, a bug, a suggestion? We reply within 24h.",
+    directTitle:"Direct Contact", directText:'<a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — General questions<br><a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Technical support<br><a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Privacy / GDPR',
     lblName:"Your name", phName:"John Smith", lblEmail:"Email address", phEmail:"john@example.com",
     lblSubject:"Subject", optBug:"🐛 Report a bug", optFeature:"💡 Feature suggestion", optData:"📊 Data issue",
     optBilling:"💳 Billing question", optApi:"🔗 API access", optOther:"✉️ Other",
@@ -161,6 +163,7 @@ const T = {
     partnerTitle:"Partnerships & Affiliates", partnerText:'Are you a lottery platform, an operator, or an influencer? Contact us for an affiliate partnership. <a href="mailto:partners@zynoriq.com">partners@zynoriq.com</a>',
     nlTitle:"📧 ZYNORIQ Newsletter", nlDesc:"Get daily results and predictions delivered straight to your inbox.", nlPh:"your@email.com", nlBtn:"Subscribe", thanks:"Thanks!" },
   es:{ title:"Contáctenos", subtitle:"¿Una pregunta, un error, una sugerencia? Respondemos en 24h.",
+    directTitle:"Contacto Directo", directText:'<a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — Preguntas generales<br><a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Soporte técnico<br><a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Privacidad / RGPD',
     lblName:"Su nombre", phName:"Juan Pérez", lblEmail:"Correo electrónico", phEmail:"juan@ejemplo.com",
     lblSubject:"Asunto", optBug:"🐛 Reportar un error", optFeature:"💡 Sugerencia de función", optData:"📊 Problema de datos",
     optBilling:"💳 Pregunta de facturación", optApi:"🔗 Acceso a la API", optOther:"✉️ Otro",
@@ -171,6 +174,7 @@ const T = {
     partnerTitle:"Asociaciones y Afiliados", partnerText:'¿Es usted una plataforma de lotería, un operador o un influencer? Contáctenos para una asociación de afiliados. <a href="mailto:partners@zynoriq.com">partners@zynoriq.com</a>',
     nlTitle:"📧 Boletín ZYNORIQ", nlDesc:"Reciba resultados y predicciones diarias directamente en su correo.", nlPh:"su@email.com", nlBtn:"Suscribirse", thanks:"¡Gracias!" },
   pt:{ title:"Fale conosco", subtitle:"Uma pergunta, um bug, uma sugestão? Respondemos em 24h.",
+    directTitle:"Contato Direto", directText:'<a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — Perguntas gerais<br><a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Suporte técnico<br><a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Privacidade / RGPD',
     lblName:"Seu nome", phName:"João Silva", lblEmail:"Endereço de e-mail", phEmail:"joao@exemplo.com",
     lblSubject:"Assunto", optBug:"🐛 Relatar um bug", optFeature:"💡 Sugestão de funcionalidade", optData:"📊 Problema de dados",
     optBilling:"💳 Pergunta sobre faturamento", optApi:"🔗 Acesso à API", optOther:"✉️ Outro",
@@ -181,6 +185,7 @@ const T = {
     partnerTitle:"Parcerias e Afiliados", partnerText:'É uma plataforma de loteria, um operador ou um influenciador? Contate-nos para uma parceria de afiliados. <a href="mailto:partners@zynoriq.com">partners@zynoriq.com</a>',
     nlTitle:"📧 Newsletter ZYNORIQ", nlDesc:"Receba resultados e previsões diárias direto na sua caixa de entrada.", nlPh:"seu@email.com", nlBtn:"Inscrever-se", thanks:"Obrigado!" },
   ht:{ title:"Kontakte nou", subtitle:"Yon kesyon, yon bug, yon sijesyon? Nou reponn nan 24è.",
+    directTitle:"Kontakt Dirèk", directText:'<a href="mailto:contact@zynoriq.com">contact@zynoriq.com</a> — Kesyon jeneral<br><a href="mailto:support@zynoriq.com">support@zynoriq.com</a> — Sipò teknik<br><a href="mailto:privacy@zynoriq.com">privacy@zynoriq.com</a> — Vi prive / RGPD',
     lblName:"Non ou", phName:"Jan Pyè", lblEmail:"Adrès imèl", phEmail:"jan@egzanp.com",
     lblSubject:"Sijè", optBug:"🐛 Rapòte yon bug", optFeature:"💡 Sijesyon fonksyonalite", optData:"📊 Pwoblèm done",
     optBilling:"💳 Kesyon sou fakti", optApi:"🔗 Aksè API", optOther:"✉️ Lòt",
@@ -198,7 +203,7 @@ function applyLang(lang){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n');
     if(dict[key] != null){
-      if(/Text$|^successMsg$|^partnerText$/.test(key)) el.innerHTML = dict[key];
+      if(/Text$|^successMsg$|^partnerText$|^directText$/.test(key)) el.innerHTML = dict[key];
       else el.textContent = dict[key];
     }
   });
