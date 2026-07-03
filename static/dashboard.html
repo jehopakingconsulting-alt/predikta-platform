@@ -530,7 +530,9 @@ async function loadSentinel(plan){
   try {
     const r    = await fetch('/api/sentinel/status');
     if(r.status === 403){ body.innerHTML=`<div class="sentinel-locked-msg">${t.sentinelLocked||''}</div>`; return; }
+    if(!r.ok){ status.textContent = 'Erreur serveur ('+r.status+')'; return; }
     const data = await r.json();
+    if(data.error){ status.textContent = 'Erreur: '+data.error; return; }
 
     // Sync toggle state
     toggle.checked  = !!data.subscribed;
@@ -538,8 +540,8 @@ async function loadSentinel(plan){
 
     // Status row
     const agoMin = data.checked_at ? Math.round((Date.now() - new Date(data.checked_at).getTime())/60000) : 0;
-    status.textContent = (t.sentinelChecked||'').replace('{m', ''+agoMin+'')
-      + ' · ' + data.upcoming_draws + ' tirage(s) analysé(s)';
+    status.textContent = (t.sentinelChecked||'').replace('{m}', agoMin)
+      + ' · ' + (data.upcoming_draws ?? 0) + ' tirage(s) analysé(s)';
 
     const top3 = data.top3 || [];
     if(!top3.length){

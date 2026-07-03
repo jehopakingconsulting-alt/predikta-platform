@@ -380,7 +380,7 @@ def _run_cycle(flask_app, report_cache: dict):
     if not new_picks:
         return
 
-    print(f"  [sentinel] Top3 → {[(s['state'],s['tod'],f\"{s['confidence']}%\") for s in top3]}")
+    print(f"  [sentinel] Top3 → {[(s['state'],s['tod'],str(s['confidence'])+'%') for s in top3]}")
 
     # Load subscriptions
     with _subs_lock:
