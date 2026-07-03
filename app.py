@@ -2213,6 +2213,147 @@ def api_referral_me():
     })
 
 
+# ── Programme ambassadeur — méthode de paiement & retraits ────────────────
+
+@app.route("/api/referral/payout-info", methods=["GET"])
+@auth_module.login_required
+def api_referral_payout_info_get():
+    user = auth_module.current_user()
+    import json as _json
+    details = {}
+    try: details = _json.loads(user.payout_details) if user.payout_details else {}
+    except Exception: pass
+    return jsonify({
+        "payout_method": user.payout_method,
+        "payout_details": details,
+        "referral_balance_usd": round(user.referral_balance_usd or 0, 2),
+        "referral_paid_usd": round(user.referral_paid_usd or 0, 2),
+        "referral_count": user.referral_count or 0,
+        "ambassador_badge": bool(user.ambassador_badge),
+    })
+
+
+@app.route("/api/referral/payout-info", methods=["POST"])
+@auth_module.login_required
+def api_referral_payout_info_save():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    method = (data.get("payout_method") or "").strip().lower()
+    VALID_METHODS = {"paypal", "bank", "stripe", "moncash", "natcash", "wire", "money_transfer"}
+    if method not in VALID_METHODS:
+        return jsonify({"error": "Méthode invalide"}), 400
+    details = data.get("payout_details") or {}
+    if not isinstance(details, dict):
+        return jsonify({"error": "Détails invalides"}), 400
+    import json as _json
+    user.payout_method  = method
+    user.payout_details = _json.dumps(details)
+    auth_module.db.session.commit()
+    return jsonify({"success": True})
+
+
+@app.route("/api/referral/withdraw", methods=["POST"])
+@auth_module.login_required
+def api_referral_withdraw():
+    user = auth_module.current_user()
+    data = request.get_json(silent=True) or {}
+    WITHDRAW_MIN = 50.0
+
+    if not user.payout_method:
+        return jsonify({"error": "Configurez d'abord votre méthode de paiement"}), 400
+
+    balance = round(user.referral_balance_usd or 0, 2)
+    if balance < WITHDRAW_MIN:
+        return jsonify({"error": f"Solde insuffisant. Minimum ${WITHDRAW_MIN:.0f} requis (solde actuel: ${balance:.2f})"}), 400
+
+    amount = float(data.get("amount") or balance)
+    amount = round(min(amount, balance), 2)
+    if amount < WITHDRAW_MIN:
+        return jsonify({"error": f"Montant minimum: ${WITHDRAW_MIN:.0f}"}), 400
+
+    # Vérifier qu'il n'y a pas déjà une demande en attente
+    pending = auth_module.WithdrawalRequest.query.filter_by(user_id=user.id, status="pending").first()
+    if pending:
+        return jsonify({"error": "Une demande est déjà en attente de traitement"}), 400
+
+    import json as _json
+    wr = auth_module.WithdrawalRequest(
+        user_id=user.id,
+        amount_usd=amount,
+        payout_method=user.payout_method,
+        payout_details=user.payout_details,
+        status="pending",
+    )
+    auth_module.db.session.add(wr)
+    auth_module.db.session.commit()
+    return jsonify({"success": True, "request_id": wr.id, "amount_usd": amount})
+
+
+@app.route("/api/referral/withdrawals")
+@auth_module.login_required
+def api_referral_withdrawals():
+    user = auth_module.current_user()
+    wrs = auth_module.WithdrawalRequest.query\
+        .filter_by(user_id=user.id)\
+        .order_by(auth_module.WithdrawalRequest.created_at.desc())\
+        .limit(20).all()
+    return jsonify({"withdrawals": [w.to_dict() for w in wrs]})
+
+
+@app.route("/api/referral/commissions")
+@auth_module.login_required
+def api_referral_commissions():
+    user = auth_module.current_user()
+    comms = auth_module.ReferralCommission.query\
+        .filter_by(referrer_id=user.id)\
+        .order_by(auth_module.ReferralCommission.created_at.desc())\
+        .limit(50).all()
+    return jsonify({"commissions": [c.to_dict() for c in comms]})
+
+
+# ── Admin — withdrawal requests ────────────────────────────────────────────
+
+@app.route("/api/admin/withdrawals")
+@auth_module.admin_required
+def admin_withdrawals_list():
+    status = request.args.get("status", "pending")
+    q = auth_module.WithdrawalRequest.query
+    if status != "all":
+        q = q.filter_by(status=status)
+    wrs = q.order_by(auth_module.WithdrawalRequest.created_at.desc()).limit(100).all()
+    import json as _json
+    result = []
+    for w in wrs:
+        d = w.to_dict()
+        u = auth_module.User.query.get(w.user_id)
+        d["user_email"] = u.email if u else None
+        d["user_name"]  = u.username if u else None
+        result.append(d)
+    return jsonify({"withdrawals": result})
+
+
+@app.route("/api/admin/withdrawals/<int:wr_id>/process", methods=["POST"])
+@auth_module.admin_required
+def admin_withdrawals_process(wr_id):
+    data = request.get_json(silent=True) or {}
+    action = data.get("action")  # "paid" or "rejected"
+    if action not in ("paid", "rejected"):
+        return jsonify({"error": "Action invalide"}), 400
+    wr = auth_module.WithdrawalRequest.query.get_or_404(wr_id)
+    if wr.status != "pending":
+        return jsonify({"error": "Demande déjà traitée"}), 400
+    from datetime import datetime as _dt
+    wr.status       = action
+    wr.admin_note   = data.get("note", "")
+    wr.processed_at = _dt.utcnow()
+    if action == "paid":
+        user = auth_module.User.query.get(wr.user_id)
+        if user:
+            auth_module.record_referral_payout(user, wr.amount_usd, note=f"Withdrawal #{wr.id}")
+    auth_module.db.session.commit()
+    return jsonify({"success": True})
+
+
 # ── Founders Program (500 places) ─────────────────────────────────────────
 FOUNDERS_MAX = 500
 

@@ -129,6 +129,11 @@ class User(db.Model):
     founder_number   = db.Column(db.Integer, nullable=True)
     referral_rewards = db.Column(db.Text, nullable=True)
     referral_balance_usd = db.Column(db.Float, default=0, nullable=False, server_default="0")
+    referral_paid_usd    = db.Column(db.Float, default=0, nullable=False, server_default="0")  # total versé historique
+
+    # Méthode de paiement pour les retraits ambassadeur
+    payout_method  = db.Column(db.String(32), nullable=True)   # paypal|bank|stripe|moncash|natcash|wire|money_transfer
+    payout_details = db.Column(db.Text, nullable=True)          # JSON with method-specific details
 
     subscription = db.relationship("Subscription", uselist=False, back_populates="user",
                                     cascade="all, delete-orphan")
@@ -295,6 +300,39 @@ class ReferralPayout(db.Model):
             "amount_usd": round(self.amount_usd, 2),
             "note": self.note,
             "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class WithdrawalRequest(db.Model):
+    """Demande de retrait de commissions initiée par l'ambassadeur.
+    Traitée manuellement par l'admin via le dashboard admin."""
+    __tablename__ = "withdrawal_requests"
+
+    id             = db.Column(db.Integer, primary_key=True)
+    user_id        = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    amount_usd     = db.Column(db.Float, nullable=False)
+    payout_method  = db.Column(db.String(32), nullable=False)   # snapshot au moment de la demande
+    payout_details = db.Column(db.Text, nullable=True)           # JSON snapshot
+    status         = db.Column(db.String(16), default="pending", nullable=False)  # pending|paid|rejected
+    admin_note     = db.Column(db.String(255), nullable=True)
+    created_at     = db.Column(db.DateTime, default=datetime.utcnow)
+    processed_at   = db.Column(db.DateTime, nullable=True)
+
+    def to_dict(self):
+        import json as _json
+        details = {}
+        try: details = _json.loads(self.payout_details) if self.payout_details else {}
+        except Exception: pass
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "amount_usd": round(self.amount_usd, 2),
+            "payout_method": self.payout_method,
+            "payout_details": details,
+            "status": self.status,
+            "admin_note": self.admin_note,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "processed_at": self.processed_at.isoformat() if self.processed_at else None,
         }
 
 
@@ -500,6 +538,9 @@ def init_app(app):
         _ensure_column(db, "users", "founder_number", "INTEGER")
         _ensure_column(db, "users", "referral_rewards", "TEXT")
         _ensure_column(db, "users", "referral_balance_usd", "FLOAT DEFAULT 0")
+        _ensure_column(db, "users", "referral_paid_usd",    "FLOAT DEFAULT 0")
+        _ensure_column(db, "users", "payout_method",        "VARCHAR(32)")
+        _ensure_column(db, "users", "payout_details",       "TEXT")
         _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "email_verified", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "email_verify_token", "VARCHAR(64)")
@@ -598,6 +639,7 @@ def record_referral_payout(referrer: "User", amount_usd: float, note: str = None
     if amount_usd <= 0:
         return None
     referrer.referral_balance_usd = round((referrer.referral_balance_usd or 0) - amount_usd, 2)
+    referrer.referral_paid_usd    = round((referrer.referral_paid_usd or 0) + amount_usd, 2)
     payout = ReferralPayout(referrer_id=referrer.id, amount_usd=amount_usd, note=note)
     db.session.add(payout)
     return payout
