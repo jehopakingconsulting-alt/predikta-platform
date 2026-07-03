@@ -480,6 +480,7 @@ async function handleCheckoutReturn(){
       await loadAccount();
     }
     msgEl.textContent = T[curLang].checkoutSuccess; msgEl.className = 'msg success';
+    if(window.fbq) fbq('track','Purchase',{currency:'USD',value:0,content_name:'ZYNORIQ Subscription'});
   }
 }
 

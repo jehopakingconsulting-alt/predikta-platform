@@ -191,6 +191,7 @@ document.getElementById('btnRegister').addEventListener('click', async ()=>{
     if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
 
     msgEl.textContent = dict.success; msgEl.className='msg success';
+    if(window.fbq) fbq('track','CompleteRegistration',{content_name:'ZYNORIQ Signup'});
 
     // Toujours rediriger vers la page de sélection de plan (compte)
     // pour que l'utilisateur choisisse son plan librement (essai gratuit
