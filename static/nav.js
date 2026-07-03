@@ -79,7 +79,6 @@ window.PREDIKTA_AFFILIATE = {
   jackpot:     'https://www.jackpot.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
   lottoland:   'https://www.lottoland.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
   wintrilions: 'https://www.wintrillions.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
-  multilotto:  'https://www.multilotto.com/?utm_source=zynoriq&utm_medium=affiliate&utm_campaign=nav',
 };
 
 // ── Archive (historique des analyses & recherches) ─────────────────────────
@@ -1203,7 +1202,7 @@ function buildFooter(){
         <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.jackpot}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#ff9900,#ff6600)">🏆 Jackpot.com</a><br>
         <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.lottoland}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#e63946,#c1121f)">🗺️ LottoLand</a><br>
         <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.wintrilions}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#00b4d8,#0077b6)">💎 WinTrillions</a><br>
-        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.multilotto}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#2dc653,#1a7431)">🎯 Multilotto</a>
+        <a class="pf-affil-btn" href="${window.PREDIKTA_AFFILIATE.wintrilions}" target="_blank" rel="noopener" style="background:linear-gradient(135deg,#00b4d8,#0077b6)">💎 WinTrillions</a>
       </div>
       <div>
         <div class="pf-col-title">🌐 ${T.lang}</div>
