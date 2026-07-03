@@ -20,9 +20,8 @@ TOP_N           = 3      # top states to include per alert email
 MAX_CACHE_AGE_H = 8      # skip cache entries older than this (hours)
 
 _SENT_FILE = os.path.join("data", "sentinel_sent.json")
-_SUBS_FILE = os.path.join("data", "sentinel_subscriptions.json")
 _sent_lock = threading.Lock()
-_subs_lock = threading.Lock()
+# _SUBS_FILE removed — subscriptions now live in PostgreSQL (SentinelSubscription model)
 
 STATE_NAMES = {
     "NY":"New York","GA":"Georgia","TX":"Texas","FL":"Florida",
@@ -40,37 +39,23 @@ STATE_NAMES = {
     "WA":"Washington","ID":"Idaho","PR":"Puerto Rico",
 }
 
-# ── Subscription helpers ───────────────────────────────────────────────────
-def _load_subs():
-    try:
-        if os.path.exists(_SUBS_FILE):
-            with open(_SUBS_FILE, encoding="utf-8") as f:
-                return json.load(f)
-    except Exception:
-        pass
-    return {}
-
-def _save_subs(subs):
-    try:
-        os.makedirs("data", exist_ok=True)
-        with open(_SUBS_FILE, "w", encoding="utf-8") as f:
-            json.dump(subs, f)
-    except Exception:
-        pass
-
+# ── Subscription helpers — DB-backed (PostgreSQL, survit aux redeploys) ────
 def subscribe_user(user_id: int, active: bool = True):
-    with _subs_lock:
-        subs = _load_subs()
-        subs[str(user_id)] = {"active": active, "since": datetime.utcnow().isoformat()}
-        _save_subs(subs)
+    from auth import db, SentinelSubscription
+    row = db.session.get(SentinelSubscription, user_id)
+    if row:
+        row.active = active
+    else:
+        db.session.add(SentinelSubscription(user_id=user_id, active=active))
+    db.session.commit()
 
 def unsubscribe_user(user_id: int):
     subscribe_user(user_id, active=False)
 
 def get_subscription(user_id: int) -> dict:
-    with _subs_lock:
-        subs = _load_subs()
-        return subs.get(str(user_id), {"active": False})
+    from auth import SentinelSubscription
+    row = SentinelSubscription.query.get(user_id)
+    return {"active": bool(row and row.active)}
 
 # ── Sent-alert tracker ────────────────────────────────────────────────────
 def _load_sent():
@@ -382,22 +367,16 @@ def _run_cycle(flask_app, report_cache: dict):
 
     print(f"  [sentinel] Top3 → {[(s['state'],s['tod'],str(s['confidence'])+'%') for s in top3]}")
 
-    # Load subscriptions
-    with _subs_lock:
-        subs = _load_subs()
-    active_ids = [int(uid) for uid, sub in subs.items() if sub.get("active")]
-    if not active_ids:
-        return
-
-    # Query premium/business users from DB
+    # Load active subscribers + verify premium plan — all in one DB query
     with flask_app.app_context():
         try:
-            from auth import User, Subscription as Sub
+            from auth import User, Subscription as Sub, SentinelSubscription
             users = (User.query
                      .join(Sub, User.id == Sub.user_id, isouter=True)
-                     .filter(User.id.in_(active_ids))
+                     .join(SentinelSubscription, User.id == SentinelSubscription.user_id)
+                     .filter(SentinelSubscription.active == True)
                      .filter(Sub.plan.in_(SENTINEL_PLANS))
-                     .filter(Sub.status.in_(["active", "trialing"]))
+                     .filter(Sub.status.in_(["active", "trial"]))
                      .all())
         except Exception as e:
             print(f"  [sentinel] DB error: {e}")

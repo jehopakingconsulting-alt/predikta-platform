@@ -376,6 +376,15 @@ class AnalysisSnapshot(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+class SentinelSubscription(db.Model):
+    """Abonnement Sentinel — persistant en DB (survit aux redeploys Render)."""
+    __tablename__ = "sentinel_subscriptions"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    active  = db.Column(db.Boolean, default=True, nullable=False, server_default="1")
+    since   = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Alert(db.Model):
     """Alerte personnalisée (ex: nouveau tirage, numéro chaud/froid) pour un État/jeu."""
     __tablename__ = "alerts"
