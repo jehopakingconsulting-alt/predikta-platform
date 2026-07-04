@@ -437,8 +437,6 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px" id="mdStats"></div>
   <!-- Favorite states -->
   <div id="mdFavStates" style="margin-bottom:16px"></div>
-  <!-- Recommendations -->
-  <div id="mdRecs"></div>
   <!-- Feature Discovery — always visible, auto-rotating -->
   <div id="mdFeatDisc" style="margin-top:10px"></div>
 </div>
@@ -509,23 +507,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
         `;
       }
 
-      // Recommendations
-      const recs = d.recommendations||[];
-      if(recs.length){
-        document.getElementById('mdRecs').innerHTML = `
-          <div style="font-size:.72rem;font-weight:700;color:#ffd700;margin-bottom:8px">${mt('recsTitle')}</div>
-          ${recs.slice(0,3).map(r=>`
-            <div class="md-rec">
-              <div class="md-rec-icon">💡</div>
-              <div class="md-rec-text">
-                <div class="md-rec-title">${r.title}</div>
-                <div class="md-rec-desc">${r.description}</div>
-              </div>
-              <a href="${r.action}" class="md-rec-action">→</a>
-            </div>
-          `).join('')}
-        `;
-      }
+      // Recommandations personnalisées déplacées vers /dashboard (page stratégique).
+      // La landing page conserve uniquement « Découvrir ZYNORIQ » (rotation ci-dessous).
     }).catch(()=>{});
 })();
 </script>

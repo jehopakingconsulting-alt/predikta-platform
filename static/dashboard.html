@@ -54,6 +54,15 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
 .status-plan-days{font-size:.78rem;color:var(--muted2);margin-top:2px}
 .btn-manage{display:inline-block;padding:9px 18px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.78rem;text-decoration:none;white-space:nowrap}
 
+/* ── Recommandations ── */
+.rec-item{background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.15);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.rec-item:last-child{margin-bottom:0}
+.rec-icon{font-size:1.2rem;flex-shrink:0}
+.rec-text{flex:1;min-width:0}
+.rec-title{font-size:.82rem;font-weight:700;color:var(--text)}
+.rec-desc{font-size:.72rem;color:var(--muted2);margin-top:2px;line-height:1.5}
+.rec-action{font-size:.9rem;font-weight:800;color:var(--accent);text-decoration:none;flex-shrink:0}
+
 /* ── Sentinel ── */
 .sentinel-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px}
 .sentinel-badge{font-size:.6rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;vertical-align:middle}
@@ -105,6 +114,11 @@ h1{font-family:'Orbitron',monospace;font-size:clamp(1.4rem,4vw,2rem);font-weight
         <div class="status-plan-days" id="planDays"></div>
       </div>
       <a href="/account" class="btn-manage" data-i18n="manageBtn">Gérer mon abonnement →</a>
+    </div>
+
+    <div class="card" id="recsCard" style="display:none">
+      <h2 data-i18n="recsTitle">💡 Recommandations pour vous</h2>
+      <div id="recsList"></div>
     </div>
 
     <div class="card">
@@ -172,6 +186,7 @@ const T = {
 fr:{ title:"Mon tableau de bord", subtitle:"Retrouvez vos prédictions favorites, vos alertes et vos rapports Business AI sauvegardés.", loading:"Chargement...",
  lockedTitle:"Abonnement requis", lockedText:"Le tableau de bord est réservé aux membres avec un essai actif ou un abonnement payant.", lockedCta:"Voir les plans",
  planLabel:"Votre plan", manageBtn:"Gérer mon abonnement →", daysLeft:"{n} jour(s) restant(s)", trialBadge:"Essai", planActive:"Actif",
+ recsTitle:"💡 Recommandations pour vous", recsEmpty:"Aucune recommandation pour le moment.",
  favTitle:"⭐ Prédictions favorites", favHint:"Sauvegardez vos combinaisons préférées depuis la page Prédictions, ou ajoutez-les manuellement ici.",
  alertTitle:"🔔 Alertes", alertHint:"Créez une liste de surveillance par État et par jeu. Un email est envoyé automatiquement dès qu'un nouveau résultat est disponible, dès qu'un chiffre devient « chaud » ou « froid » sur les 30 derniers tirages, ou dès qu'un numéro personnalisé que vous surveillez sort.",
  reportTitle:"📊 Rapports Business AI", reportHint:"Vos rapports générés depuis Business AI, sauvegardés pour consultation ultérieure.",
@@ -190,6 +205,7 @@ fr:{ title:"Mon tableau de bord", subtitle:"Retrouvez vos prédictions favorites
 en:{ title:"My dashboard", subtitle:"Find your favorite predictions, alerts and saved Business AI reports.", loading:"Loading...",
  lockedTitle:"Subscription required", lockedText:"The dashboard is reserved for members with an active trial or paid plan.", lockedCta:"View plans",
  planLabel:"Your plan", manageBtn:"Manage subscription →", daysLeft:"{n} day(s) left", trialBadge:"Trial", planActive:"Active",
+ recsTitle:"💡 Recommendations for you", recsEmpty:"No recommendations yet.",
  favTitle:"⭐ Favorite predictions", favHint:"Save your favorite combinations from the Predictions page, or add them manually here.",
  alertTitle:"🔔 Alerts", alertHint:"Build a watchlist by state and game. An email is sent automatically as soon as a new result is available, as soon as a digit becomes \"hot\" or \"cold\" over the last 30 draws, or as soon as a custom number you're watching is drawn.",
  reportTitle:"📊 Business AI reports", reportHint:"Reports generated from Business AI, saved for later review.",
@@ -208,6 +224,7 @@ en:{ title:"My dashboard", subtitle:"Find your favorite predictions, alerts and 
 es:{ title:"Mi panel", subtitle:"Encuentra tus predicciones favoritas, alertas e informes de Business AI guardados.", loading:"Cargando...",
  lockedTitle:"Suscripción requerida", lockedText:"El panel está reservado para miembros con una prueba activa o un plan de pago.", lockedCta:"Ver planes",
  planLabel:"Tu plan", manageBtn:"Gestionar suscripción →", daysLeft:"{n} día(s) restante(s)", trialBadge:"Prueba", planActive:"Activo",
+ recsTitle:"💡 Recomendaciones para usted", recsEmpty:"Aún no hay recomendaciones.",
  favTitle:"⭐ Predicciones favoritas", favHint:"Guarda tus combinaciones favoritas desde la página de Predicciones, o añádelas manualmente aquí.",
  alertTitle:"🔔 Alertas", alertHint:"Crea una lista de seguimiento por Estado y juego. Se envía un email automáticamente en cuanto hay un nuevo resultado, en cuanto un número se vuelve \"caliente\" o \"frío\" en los últimos 30 sorteos, o en cuanto sale un número personalizado que estés vigilando.",
  reportTitle:"📊 Informes de Business AI", reportHint:"Informes generados desde Business AI, guardados para consulta posterior.",
@@ -226,6 +243,7 @@ es:{ title:"Mi panel", subtitle:"Encuentra tus predicciones favoritas, alertas e
 pt:{ title:"Meu painel", subtitle:"Encontre suas previsões favoritas, alertas e relatórios do Business AI salvos.", loading:"Carregando...",
  lockedTitle:"Assinatura necessária", lockedText:"O painel é reservado para membros com teste ativo ou plano pago.", lockedCta:"Ver planos",
  planLabel:"Seu plano", manageBtn:"Gerenciar assinatura →", daysLeft:"{n} dia(s) restante(s)", trialBadge:"Teste", planActive:"Ativo",
+ recsTitle:"💡 Recomendações para você", recsEmpty:"Nenhuma recomendação ainda.",
  favTitle:"⭐ Previsões favoritas", favHint:"Salve suas combinações favoritas a partir da página de Previsões, ou adicione manualmente aqui.",
  alertTitle:"🔔 Alertas", alertHint:"Crie uma lista de monitoramento por Estado e jogo. Um e-mail é enviado automaticamente assim que um novo resultado estiver disponível, assim que um número ficar \"quente\" ou \"frio\" nos últimos 30 sorteios, ou assim que um número personalizado que você monitora for sorteado.",
  reportTitle:"📊 Relatórios do Business AI", reportHint:"Relatórios gerados pelo Business AI, salvos para consulta posterior.",
@@ -244,6 +262,7 @@ pt:{ title:"Meu painel", subtitle:"Encontre suas previsões favoritas, alertas e
 ht:{ title:"Tablodbò mwen", subtitle:"Jwenn prediksyon favorit ou, alèt ou ak rapò Business AI ou anrejistre.", loading:"K ap chaje...",
  lockedTitle:"Abònman obligatwa", lockedText:"Tablodbò a rezève pou manm ki gen yon esè aktif oswa yon plan peye.", lockedCta:"Gade plan yo",
  planLabel:"Plan ou", manageBtn:"Jere abònman ou →", daysLeft:"{n} jou ki rete", trialBadge:"Esè", planActive:"Aktif",
+ recsTitle:"💡 Rekòmandasyon pou ou", recsEmpty:"Pa gen rekòmandasyon pou kounye a.",
  favTitle:"⭐ Prediksyon favorit", favHint:"Anrejistre konbinezon favorit ou nan paj Prediksyon, oswa ajoute yo manyèlman isit la.",
  alertTitle:"🔔 Alèt", alertHint:"Kreye yon lis siveyans pa Eta ak jwèt. Yon imèl ap voye otomatikman kou yon nouvo rezilta disponib, kou yon chif vin \"cho\" oswa \"frèt\" sou 30 dènye tiraj yo, oswa kou yon nimewo pèsonalize w ap siveye soti.",
  reportTitle:"📊 Rapò Business AI", reportHint:"Rapò ki kreye nan Business AI, anrejistre pou konsiltasyon pita.",
@@ -274,11 +293,11 @@ function applyLang(lang){
     const k = el.getAttribute('data-i18n-ph');
     if(typeof dict[k]==='string') el.placeholder = dict[k];
   });
-  renderFavs(); renderAlerts(); renderReports();
+  renderFavs(); renderAlerts(); renderReports(); renderRecs();
 }
 window.setLang = applyLang;
 
-let favs = [], alerts = [], reports = [];
+let favs = [], alerts = [], reports = [], recs = [];
 
 async function init(){
   try{
@@ -300,7 +319,7 @@ async function init(){
     const statusTxt = sub.status === 'trial' ? (t.trialBadge||'') : (t.planActive||'');
     document.getElementById('planDays').textContent = statusTxt ? `${statusTxt} · ${daysTxt}` : daysTxt;
 
-    await Promise.all([loadFavs(), loadAlerts(), loadReports(), loadSentinel(sub.plan)]);
+    await Promise.all([loadFavs(), loadAlerts(), loadReports(), loadSentinel(sub.plan), loadRecs()]);
     document.getElementById('loading').style.display='none';
     document.getElementById('content').style.display='block';
     applyLang(curLang);
@@ -323,6 +342,32 @@ async function loadReports(){
   const r = await fetch('/api/dashboard/reports');
   const data = await r.json();
   reports = data.reports || [];
+}
+async function loadRecs(){
+  // Recommandations personnalisées (issues de la mémoire d'usage) — lecture seule.
+  try{
+    const r = await fetch('/api/memory/dashboard?lang='+encodeURIComponent(curLang));
+    if(!r.ok) return;
+    const d = await r.json();
+    recs = d.recommendations || [];
+  }catch(e){ recs = []; }
+}
+function renderRecs(){
+  const card = document.getElementById('recsCard');
+  const el   = document.getElementById('recsList');
+  if(!card || !el) return;
+  if(!recs.length){ card.style.display='none'; return; }
+  card.style.display='block';
+  el.innerHTML = recs.slice(0,5).map(r=>`
+    <div class="rec-item">
+      <div class="rec-icon">💡</div>
+      <div class="rec-text">
+        <div class="rec-title">${r.title||''}</div>
+        <div class="rec-desc">${r.description||''}</div>
+      </div>
+      ${r.action?`<a href="${r.action}" class="rec-action">→</a>`:''}
+    </div>
+  `).join('');
 }
 
 function renderFavs(){
