@@ -118,10 +118,43 @@ def _upcoming_draws(min_min=ALERT_MIN_MIN, max_min=ALERT_MAX_MIN):
                 pass
     return upcoming
 
+# ── Cache lookup ──────────────────────────────────────────────────────────
+def _is_base_key(key) -> bool:
+    """True for un-filtered reports (no month / day-of-week / day-of-month filters)."""
+    if len(key) == 2:                     # (state, tod)
+        return True
+    if len(key) == 4:                     # (state, 'all', (), ())  — warm-cache shape
+        return not key[2] and not key[3]
+    if len(key) == 5:                     # (state, tod, months, exclude_dow, exclude_dom) — API shape
+        return not key[2] and not key[3] and not key[4]
+    return False
+
+def _find_cache_entry(state: str, tod: str, report_cache: dict):
+    """Locate the freshest cached report for a state.
+
+    app.py keys _REPORT_CACHE by TUPLES ((state, tod_filter, ...)), not strings,
+    so a direct .get() with a string key never matches. We scan instead, prefer
+    an exact time-of-day match, and fall back to the state's 'all' report."""
+    exact = fallback = None
+    tod_l = (tod or "").lower()
+    for key, entry in list(report_cache.items()):
+        if not isinstance(key, tuple) or len(key) < 2:
+            continue
+        if key[0] != state or not _is_base_key(key):
+            continue
+        k_tod = str(key[1]).lower()
+        if k_tod == tod_l:
+            if exact is None or entry.get("ts", 0) > exact.get("ts", 0):
+                exact = entry
+        elif k_tod == "all":
+            if fallback is None or entry.get("ts", 0) > fallback.get("ts", 0):
+                fallback = entry
+    return exact or fallback
+
 # ── Prediction scorer (read-only cache) ──────────────────────────────────
 def _score_draw(state: str, tod: str, report_cache: dict) -> dict | None:
     """Read prediction quality from _REPORT_CACHE. Never calls ML engine."""
-    entry = report_cache.get(f"{state}|{tod}")
+    entry = _find_cache_entry(state, tod, report_cache)
     if not entry:
         return None
 
