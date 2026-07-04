@@ -439,6 +439,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div id="mdFavStates" style="margin-bottom:16px"></div>
   <!-- Recommendations -->
   <div id="mdRecs"></div>
+  <!-- Feature Discovery — always visible, auto-rotating -->
+  <div id="mdFeatDisc" style="margin-top:10px"></div>
 </div>
 
 <style>
@@ -527,6 +529,118 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     }).catch(()=>{});
 })();
 </script>
+
+<script>
+(function(){
+  // Chaque item : title = string (brand name), desc = objet par langue, action = route valide
+  const FEATS = [
+    {icon:'📺',title:'ZYNORIQ TV',
+     desc:{fr:'Vidéos exclusives, analyses et stratégies en direct.',en:'Exclusive videos, live analyses and strategies.',es:'Vídeos exclusivos, análisis y estrategias en vivo.',pt:'Vídeos exclusivos, análises e estratégias ao vivo.',ht:'Videyo eksklizif, analiz ak estrateji an dirèk.'},
+     action:'/predikta-tv'},
+    {icon:'🌟',title:'Ambassadeurs',
+     desc:{fr:'Rejoins le programme Ambassadeur et gagne des commissions.',en:'Join the Ambassador program and earn commissions.',es:'Únete al programa Embajador y gana comisiones.',pt:'Junte-se ao programa Embaixador e ganhe comissões.',ht:'Rejwenn pwogram Ambassadè a epi touche komisyon.'},
+     action:'/ambassadors'},
+    {icon:'👑',title:'Fondateur',
+     desc:{fr:'Accès Fondateur à vie — avantages exclusifs à jamais.',en:'Lifetime Founder access — exclusive benefits forever.',es:'Acceso Fundador de por vida — beneficios exclusivos.',pt:'Acesso Fundador vitalício — benefícios exclusivos para sempre.',ht:'Aksè Fondatè pou tout lavi — avantaj eksklizif pou toujou.'},
+     action:'/founders'},
+    {icon:'🎁',title:'Programme Parrainage',
+     desc:{fr:'Invite tes amis et gagne des récompenses à chaque inscription.',en:'Invite friends and earn rewards for every signup.',es:'Invita amigos y gana recompensas por cada inscripción.',pt:'Convide amigos e ganhe recompensas a cada inscrição.',ht:'Envite zanmi ou epi touche rekonpans pou chak enskripsyon.'},
+     action:'/parrainage'},
+    {icon:'📖',title:'Guide Utilisateur',
+     desc:{fr:'Apprends à maîtriser toutes les fonctionnalités ZYNORIQ.',en:'Learn to master all ZYNORIQ features step by step.',es:'Aprende a dominar todas las funciones de ZYNORIQ.',pt:'Aprenda a dominar todos os recursos do ZYNORIQ.',ht:'Aprann maîtrise tout fonksyon ZYNORIQ yo.'},
+     action:'/guide'},
+    {icon:'🧠',title:'Stratégies du Maître',
+     desc:{fr:'Méthodes avancées pour maximiser tes prédictions.',en:'Advanced methods to maximize your predictions.',es:'Métodos avanzados para maximizar tus predicciones.',pt:'Métodos avançados para maximizar suas previsões.',ht:'Metòd avanse pou maksimize prediksyon ou yo.'},
+     action:'/strategies'},
+    {icon:'💼',title:'Business AI',
+     desc:{fr:'Outils IA pour entrepreneurs et investisseurs lottery.',en:'AI tools for lottery entrepreneurs and investors.',es:'Herramientas IA para emprendedores e inversores.',pt:'Ferramentas IA para empreendedores e investidores.',ht:'Zouti IA pou antreprenè ak envestisè lotri.'},
+     action:'/bizai'},
+    {icon:'📁',title:'Archives',
+     desc:{fr:'Explore l\'historique complet des tirages et résultats.',en:'Explore the complete history of draws and results.',es:'Explora el historial completo de sorteos y resultados.',pt:'Explore o histórico completo de sorteios e resultados.',ht:'Eksplore istwa konplè tiraj ak rezilta yo.'},
+     action:'/archives'},
+    {icon:'🎯',title:'Filtres Avancés',
+     desc:{fr:'Filtre et compare les numéros selon tes critères.',en:'Filter and compare numbers according to your criteria.',es:'Filtra y compara números según tus criterios.',pt:'Filtre e compare números segundo seus critérios.',ht:'Filtre ak konpare nimewo yo selon kritè ou.'},
+     action:'/analyze'},
+    {icon:'🌍',title:'Carte du Monde',
+     desc:{fr:'Visualise les loteries mondiales en temps réel.',en:'Visualize world lotteries in real time.',es:'Visualiza las loterías mundiales en tiempo real.',pt:'Visualize loterias mundiais em tempo real.',ht:'Vizwalize lotri mondyal yo an tan reyèl.'},
+     action:'/world-map'},
+    {icon:'📊',title:'Analyses Pro',
+     desc:{fr:'Rapports détaillés et statistiques professionnelles.',en:'Detailed reports and professional statistics.',es:'Informes detallados y estadísticas profesionales.',pt:'Relatórios detalhados e estatísticas profissionais.',ht:'Rapò detaye ak estatistik pwofesyonèl.'},
+     action:'/pro'},
+    {icon:'🔮',title:'Prédictions Powerball',
+     desc:{fr:'Analyse complète du prochain tirage Powerball.',en:'Complete analysis of the next Powerball draw.',es:'Análisis completo del próximo sorteo Powerball.',pt:'Análise completa do próximo sorteio Powerball.',ht:'Analiz konplè pou pwochen tiraj Powerball la.'},
+     action:'/powerball-analysis'},
+    {icon:'🏆',title:'Track Record',
+     desc:{fr:'Notre historique de performance vérifié et transparent.',en:'Our verified and transparent performance history.',es:'Nuestro historial de rendimiento verificado y transparente.',pt:'Nosso histórico de desempenho verificado e transparente.',ht:'Istwa pèfòmans nou verifye ak transparan.'},
+     action:'/track-record'},
+    {icon:'🎓',title:'Studio ZYNORIQ',
+     desc:{fr:'Centre de formation et tutoriels pas à pas.',en:'Training center and step-by-step tutorials.',es:'Centro de formación y tutoriales paso a paso.',pt:'Centro de formação e tutoriais passo a passo.',ht:'Sant fòmasyon ak titotyèl etap pa etap.'},
+     action:'/studio'},
+    {icon:'💬',title:'Communauté',
+     desc:{fr:'Échange avec d\'autres joueurs et stratèges.',en:'Connect with other players and strategists.',es:'Conéctate con otros jugadores y estrategas.',pt:'Conecte-se com outros jogadores e estrategistas.',ht:'Konekte avèk lòt jwè ak estratejis.'},
+     action:'/community'},
+    {icon:'📅',title:'Memory Center',
+     desc:{fr:'Ton tableau de bord personnalisé et historique.',en:'Your personalized dashboard and history center.',es:'Tu panel personalizado e historial completo.',pt:'Seu painel personalizado e centro de histórico.',ht:'Tablo bò ou pèsonalize ak sant istwa ou.'},
+     action:'/memory'},
+    {icon:'✍️',title:'Blog & Stratégies',
+     desc:{fr:'Articles exclusifs sur la loterie et l\'analyse prédictive.',en:'Exclusive articles on lottery and predictive analysis.',es:'Artículos exclusivos sobre lotería y análisis predictivo.',pt:'Artigos exclusivos sobre loteria e análise preditiva.',ht:'Atik eksklizif sou lotri ak analiz prediksyon.'},
+     action:'/blog'},
+  ];
+
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+    return arr;
+  }
+
+  const el = document.getElementById('mdFeatDisc');
+  if(!el) return;
+
+  const pool = shuffle([...FEATS]);
+  let idx = 0;
+
+  const TITLE = {fr:'Découvrir ZYNORIQ',en:'Discover ZYNORIQ',es:'Descubrir ZYNORIQ',pt:'Descobrir ZYNORIQ',ht:'Dekouvri ZYNORIQ'};
+  const BTN   = {fr:'Explorer →',en:'Explore →',es:'Explorar →',pt:'Explorar →',ht:'Eksplore →'};
+
+  function renderSlice(){
+    // Lire la langue à chaque render pour suivre les changements de langue
+    var L = window.PREDIKTA_LANG || 'fr';
+    var n = pool.length;
+    var slice = [pool[idx%n], pool[(idx+1)%n], pool[(idx+2)%n]];
+    el.innerHTML =
+      '<div style="font-size:.72rem;font-weight:700;color:#ffd700;margin-bottom:8px;display:flex;align-items:center;gap:6px">' +
+        '<span style="animation:spin 4s linear infinite;display:inline-block">✨</span>' +
+        (TITLE[L]||TITLE.fr) +
+      '</div>' +
+      slice.map(function(f){
+        var desc = (typeof f.desc==='object') ? (f.desc[L]||f.desc.fr) : f.desc;
+        return '<div class="md-rec" style="cursor:pointer" onclick="location.href=\''+f.action+'\'">' +
+          '<div class="md-rec-icon">'+f.icon+'</div>' +
+          '<div class="md-rec-text">' +
+            '<div class="md-rec-title">'+f.title+'</div>' +
+            '<div class="md-rec-desc">'+desc+'</div>' +
+          '</div>' +
+          '<a href="'+f.action+'" class="md-rec-action">'+(BTN[L]||BTN.fr)+'</a>' +
+        '</div>';
+      }).join('');
+  }
+
+  renderSlice();
+  setInterval(function(){
+    // Avancer de 3, boucler proprement sans sauter d'items (pool.length=17, premier nombre avec 3 = cycle complet car gcd(3,17)=1)
+    idx = (idx + 3) % pool.length;
+    el.style.opacity = '0';
+    el.style.transition = 'opacity .4s';
+    setTimeout(function(){
+      renderSlice();
+      el.style.opacity = '1';
+    }, 400);
+  }, 5000);
+})();
+</script>
+
+<style>
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 
 <div class="section">
 
