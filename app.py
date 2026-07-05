@@ -699,6 +699,16 @@ def _auto_update_loop():
                     _check_custom_alerts()
             except Exception as ae:
                 print(f"  [alerts] error: {ae}")
+            # Rappels de renouvellement 7/3/1 j (essai + plan actif), idempotents.
+            # Auto-contenu : pas de cron externe requis (service Standard 24/7).
+            try:
+                with app.app_context():
+                    from auth import sweep_renewal_reminders
+                    _rn = sweep_renewal_reminders()
+                    if _rn:
+                        print(f"  [renewal-reminder] {_rn} rappel(s) envoyé(s)")
+            except Exception as ae:
+                print(f"  [renewal-reminder] error: {ae}")
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
             _maybe_send_daily_push()

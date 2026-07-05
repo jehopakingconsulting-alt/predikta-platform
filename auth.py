@@ -206,6 +206,10 @@ class Subscription(db.Model):
     stripe_subscription_id = db.Column(db.String(64), nullable=True)
 
     trial_reminder_sent = db.Column(db.Boolean, default=False, nullable=False, server_default="0")
+    # Rappels de renouvellement 7/3/1 j — masque de bits par période courante :
+    # bit0=1 → 7j envoyé, bit1=2 → 3j envoyé, bit2=4 → 1j envoyé. Remis à 0 dès
+    # que days_left repasse au-dessus de 7 (nouvelle période / renouvellement).
+    reminder_flags = db.Column(db.Integer, default=0, nullable=False, server_default="0")
 
     user = db.relationship("User", back_populates="subscription")
 
@@ -542,6 +546,7 @@ def init_app(app):
         _ensure_column(db, "users", "payout_method",        "VARCHAR(32)")
         _ensure_column(db, "users", "payout_details",       "TEXT")
         _ensure_column(db, "subscriptions", "trial_reminder_sent", "BOOLEAN DEFAULT FALSE")
+        _ensure_column(db, "subscriptions", "reminder_flags", "INTEGER DEFAULT 0")
         _ensure_column(db, "users", "email_verified", "BOOLEAN DEFAULT FALSE")
         _ensure_column(db, "users", "email_verify_token", "VARCHAR(64)")
         _ensure_column(db, "users", "country", "VARCHAR(4)")
@@ -1136,6 +1141,117 @@ def send_payment_failed_email(user):
     )
 
 
+# ── Rappels de renouvellement 7 / 3 / 1 jours (multilingue, auto-contenu) ───
+_COUNTRY_LANG = {
+    "US": "en", "GB": "en", "AU": "en", "NG": "en", "JM": "en", "IE": "en",
+    "FR": "fr", "BE": "fr", "CH": "fr", "SN": "fr", "CA": "fr", "HT": "fr",
+    "ES": "es", "MX": "es", "DO": "es", "PR": "es", "CO": "es", "AR": "es",
+    "BR": "pt", "PT": "pt",
+}
+
+def _lang_for_user(user) -> str:
+    """Langue de l'email d'après le pays de l'utilisateur (fallback: en)."""
+    c = (getattr(user, "country", None) or "").upper()[:2]
+    return _COUNTRY_LANG.get(c, "en")
+
+_RENEWAL_EMAIL = {
+    "fr": {
+        "sub_trial": "ZYNORIQ — Ton essai gratuit se termine dans {d} jour(s)",
+        "sub_renew": "ZYNORIQ — Ton abonnement se renouvelle dans {d} jour(s)",
+        "body_trial": ("Bonjour {name},\n\nTon essai gratuit du plan {plan} se termine dans {d} jour(s).\n"
+                       "Pour continuer sans interruption, gère ton abonnement ici :\n{url}\n\n"
+                       "Tu peux annuler à tout moment avant la fin de l'essai.\n\nÀ très vite,\nL'équipe ZYNORIQ"),
+        "body_renew": ("Bonjour {name},\n\nTon abonnement {plan} se renouvelle dans {d} jour(s).\n"
+                       "Pour gérer ton abonnement ou ton moyen de paiement :\n{url}\n\nÀ très vite,\nL'équipe ZYNORIQ"),
+    },
+    "en": {
+        "sub_trial": "ZYNORIQ — Your free trial ends in {d} day(s)",
+        "sub_renew": "ZYNORIQ — Your subscription renews in {d} day(s)",
+        "body_trial": ("Hi {name},\n\nYour {plan} free trial ends in {d} day(s).\n"
+                       "To keep your access without interruption, manage your subscription here:\n{url}\n\n"
+                       "You can cancel anytime before the trial ends.\n\nSee you soon,\nThe ZYNORIQ Team"),
+        "body_renew": ("Hi {name},\n\nYour {plan} subscription renews in {d} day(s).\n"
+                       "To manage your subscription or payment method:\n{url}\n\nSee you soon,\nThe ZYNORIQ Team"),
+    },
+    "es": {
+        "sub_trial": "ZYNORIQ — Tu prueba gratuita termina en {d} día(s)",
+        "sub_renew": "ZYNORIQ — Tu suscripción se renueva en {d} día(s)",
+        "body_trial": ("Hola {name},\n\nTu prueba gratuita del plan {plan} termina en {d} día(s).\n"
+                       "Para continuar sin interrupción, gestiona tu suscripción aquí:\n{url}\n\n"
+                       "Puedes cancelar en cualquier momento antes de que termine la prueba.\n\nHasta pronto,\nEl equipo ZYNORIQ"),
+        "body_renew": ("Hola {name},\n\nTu suscripción {plan} se renueva en {d} día(s).\n"
+                       "Para gestionar tu suscripción o método de pago:\n{url}\n\nHasta pronto,\nEl equipo ZYNORIQ"),
+    },
+    "pt": {
+        "sub_trial": "ZYNORIQ — Seu teste gratuito termina em {d} dia(s)",
+        "sub_renew": "ZYNORIQ — Sua assinatura renova em {d} dia(s)",
+        "body_trial": ("Olá {name},\n\nSeu teste gratuito do plano {plan} termina em {d} dia(s).\n"
+                       "Para continuar sem interrupção, gerencie sua assinatura aqui:\n{url}\n\n"
+                       "Você pode cancelar a qualquer momento antes do fim do teste.\n\nAté breve,\nEquipe ZYNORIQ"),
+        "body_renew": ("Olá {name},\n\nSua assinatura {plan} renova em {d} dia(s).\n"
+                       "Para gerenciar sua assinatura ou forma de pagamento:\n{url}\n\nAté breve,\nEquipe ZYNORIQ"),
+    },
+    "ht": {
+        "sub_trial": "ZYNORIQ — Esè gratis ou a ap fini nan {d} jou",
+        "sub_renew": "ZYNORIQ — Abònman ou a ap renouvle nan {d} jou",
+        "body_trial": ("Bonjou {name},\n\nEsè gratis plan {plan} ou a ap fini nan {d} jou.\n"
+                       "Pou kontinye san entèripsyon, jere abònman ou isit la:\n{url}\n\n"
+                       "Ou ka anile nenpòt kilè anvan esè a fini.\n\nN ap wè talè,\nEkip ZYNORIQ"),
+        "body_renew": ("Bonjou {name},\n\nAbònman {plan} ou a ap renouvle nan {d} jou.\n"
+                       "Pou jere abònman ou oswa metòd peman ou:\n{url}\n\nN ap wè talè,\nEkip ZYNORIQ"),
+    },
+}
+
+def send_renewal_reminder_email(user, sub, days: int, is_trial: bool):
+    """Email de rappel de renouvellement/fin d'essai, dans la langue de l'utilisateur."""
+    tr = _RENEWAL_EMAIL.get(_lang_for_user(user), _RENEWAL_EMAIL["en"])
+    cfg = PLAN_CONFIG.get(sub.plan, {})
+    plan_label = cfg.get("label", sub.plan or "")
+    base_url = os.environ.get("PREDIKTA_BASE_URL", "https://www.zynoriq.com")
+    subject = (tr["sub_trial"] if is_trial else tr["sub_renew"]).format(d=days)
+    body = (tr["body_trial"] if is_trial else tr["body_renew"]).format(
+        name=user.username or "", plan=plan_label, d=days, url=f"{base_url}/account")
+    _send_email(user.email, subject, body)
+
+def sweep_renewal_reminders() -> int:
+    """Envoie les rappels 7 / 3 / 1 jours avant l'échéance (essai OU plan actif).
+
+    Idempotent via reminder_flags (bit0=7j, bit1=3j, bit2=1j), remis à 0 quand
+    days_left repasse au-dessus de 7 (renouvellement / nouvelle période).
+    Conçu pour être appelé périodiquement par la boucle de fond interne (24/7),
+    donc sans dépendance à un cron externe."""
+    subs = Subscription.query.filter(Subscription.status.in_(["trial", "active"])).all()
+    sent = 0
+    for sub in subs:
+        end = sub.trial_end if sub.status == "trial" else sub.current_period_end
+        if not end:
+            continue
+        dl = sub.days_left()
+        flags = sub.reminder_flags or 0
+        if dl > 7:
+            if flags != 0:
+                sub.reminder_flags = 0
+            continue
+        if dl < 1:
+            continue  # déjà expiré / jour même — pas un rappel « à venir »
+        milestone = None
+        if dl <= 1 and not (flags & 4):
+            milestone, flags = 1, flags | 7        # marque 7+3+1
+        elif dl <= 3 and not (flags & 2):
+            milestone, flags = 3, flags | 3        # marque 7+3
+        elif dl <= 7 and not (flags & 1):
+            milestone, flags = 7, flags | 1
+        if milestone is not None and sub.user:
+            try:
+                send_renewal_reminder_email(sub.user, sub, dl, is_trial=(sub.status == "trial"))
+                sub.reminder_flags = flags
+                sent += 1
+            except Exception as e:
+                print(f"  [renewal-reminder] {getattr(sub.user, 'email', '?')}: {e}")
+    db.session.commit()
+    return sent
+
+
 def send_new_result_alert_email(user, state: str, game_label: str, draw: dict):
     """Email envoyé lorsqu'un nouveau tirage est disponible pour une alerte
     « Nouveau tirage » (alert_type=new_result) créée par l'utilisateur."""
@@ -1571,29 +1687,13 @@ def set_states():
 
 @auth_bp.route("/cron/trial-reminders", methods=["POST", "GET"])
 def trial_reminders():
-    """Envoie un email de rappel aux comptes dont l'essai gratuit se termine
-    dans moins de 24h (une seule fois par essai). Destiné à être appelé
-    périodiquement par un job cron externe, protégé par CRON_SECRET."""
+    """Déclenche les rappels de renouvellement 7 / 3 / 1 jours (essai ET plan
+    actif). La boucle de fond interne appelle déjà sweep_renewal_reminders() en
+    continu (24/7) ; cet endpoint reste disponible pour un éventuel cron externe
+    et exécute EXACTEMENT la même logique idempotente (aucun doublon possible).
+    Protégé par CRON_SECRET."""
     secret = os.environ.get("CRON_SECRET")
     if secret and request.args.get("secret") != secret:
         return jsonify({"error": "unauthorized"}), 401
-
-    now = datetime.utcnow()
-    soon = now + timedelta(hours=24)
-    subs = Subscription.query.filter(
-        Subscription.status == "trial",
-        Subscription.trial_reminder_sent.is_(False),
-        Subscription.trial_end.isnot(None),
-        Subscription.trial_end <= soon,
-        Subscription.trial_end > now,
-    ).all()
-
-    sent = 0
-    for sub in subs:
-        if sub.user:
-            send_trial_ending_email(sub.user, sub)
-            sub.trial_reminder_sent = True
-            sent += 1
-
-    db.session.commit()
+    sent = sweep_renewal_reminders()
     return jsonify({"success": True, "emails_sent": sent})
