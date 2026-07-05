@@ -257,6 +257,20 @@ async function loadVerdicts(){
   }catch(e){}
 }
 
+// Carte code d'état → nom canonique. Sert à auto-guérir l'affichage des
+// analyses dont le libellé stocké est erroné (ancien bug de libellé lu dans
+// le DOM). Le code d'état (e.state) a toujours été fiable ; on l'utilise
+// comme source de vérité pour le nom affiché. Lecture seule, avec fallback.
+let _statesMap = {};
+async function loadStatesMap(){
+  try{
+    const r = await fetch('/api/states');
+    if(!r.ok) return;
+    const d = await r.json();
+    Object.keys(d).forEach(code=>{ if(d[code] && d[code].name) _statesMap[code] = d[code].name; });
+  }catch(e){}
+}
+
 function _verdictKey(entry){
   const d = new Date(entry.ts);
   const date = d.getFullYear() + '-'
@@ -373,7 +387,8 @@ function renderArchives(list){
     const items = groups[lbl].map(e=>{
       const icon = TYPE_ICON[e.type] || '🔍';
       const typeLabel = TYPE_LABEL[e.type] || e.type;
-      const todStr = e.tod ? ' · '+(t['tod_'+e.tod]||e.tod) : '';
+      // 'all' = tous tirages → pas de suffixe (évite un " · all" non traduit)
+      const todStr = (e.tod && e.tod !== 'all') ? ' · '+(t['tod_'+e.tod]||e.tod) : '';
 
       // Entrée analyse — ouvre le snapshot complet sur /analyze
       if(e.type==='analyze'){
@@ -386,10 +401,12 @@ function renderArchives(list){
           : '';
         const vBadge = _verdictBadge(e);
         const vExtra = vBadge ? `<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px">${vBadge}</div>` : '';
+        // Nom canonique dérivé du code d'état (fiable), sinon libellé stocké.
+        const stName = (e.state && _statesMap[e.state]) ? _statesMap[e.state] : (e.label || e.state);
         return `<div class="archive-item" onclick="window.location='${snapUrl}'">
           <div class="archive-icon">${icon}</div>
           <div class="archive-info">
-            <div class="archive-title">${e.label || e.state} ${snapBadge}</div>
+            <div class="archive-title">${stName} ${snapBadge}</div>
             <div class="archive-meta">${typeLabel}${todStr} · ${fmtTime(e.ts)}</div>
             ${vExtra}
           </div>
@@ -455,7 +472,7 @@ window.addEventListener('load', async ()=>{
   if(el) el.classList.add('active');
 
   // Sync server ↔ localStorage for logged-in users, then re-render
-  await Promise.all([syncWithServer(), loadVerdicts()]);
+  await Promise.all([syncWithServer(), loadVerdicts(), loadStatesMap()]);
   renderArchives();
 });
 </script>
