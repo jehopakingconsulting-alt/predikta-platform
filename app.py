@@ -834,8 +834,14 @@ def _draw_watcher_loop():
                               else ["lotteryusa", "usamega", "lotterypost"]
                         res = scrape_state(st, sources=src)
                         if res["added"] > 0:
+                            # Le cache est indexé par TUPLES (state, tod, ...), pas par
+                            # chaînes "state|tod". L'ancien k.startswith() levait une
+                            # AttributeError sur les clés tuple, ce qui faisait sauter
+                            # TOUT le bloc post-tirage (invalidation cache, track record
+                            # live, recalibration ML des poids, SSE, push). On filtre
+                            # désormais sur k[0] == code d'état, comme ailleurs (l.4216).
                             keys_to_del = [k for k in list(_REPORT_CACHE.keys())
-                                           if k.startswith(f"{st.lower()}|")]
+                                           if isinstance(k, tuple) and k and k[0] == st.upper()]
                             for k in keys_to_del:
                                 _REPORT_CACHE.pop(k, None)
                             _LATEST_CACHE["data"] = None
