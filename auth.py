@@ -2,7 +2,7 @@
 ZYNORIQ — Comptes utilisateurs, abonnements & paywall
 ========================================================
 Phase 2a : système de comptes (nom d'utilisateur + email + mot de passe),
-plans payants PRO / VIP / ELITE avec essai gratuit, quotas quotidiens et
+plans payants PRO / VIP / PREMIUM / BUSINESS avec essai gratuit, quotas quotidiens et
 restriction par État. Le paiement réel (Stripe) est branché en Phase 2b —
 en attendant, l'activation d'un plan démarre une période d'essai puis passe
 le compte en statut "expired" (bloqué) tant qu'aucun paiement n'est
@@ -1212,9 +1212,9 @@ FREE_BIZAI_ANALYSES_PER_MONTH = 1
 
 
 def bizai_access_required(f):
-    """Vérifie : connecté + (abonnement ELITE/BUSINESS actif OU quota Free
+    """Vérifie : connecté + (abonnement PREMIUM/BUSINESS actif OU quota Free
     du mois non atteint). Seuls les abonnés avec `bizai_unlimited` actif
-    (ELITE, BUSINESS) ont un accès illimité au module Business Intelligence ;
+    (PREMIUM, BUSINESS) ont un accès illimité au module Business Intelligence ;
     les comptes Free, PRO et VIP sont limités à `FREE_BIZAI_ANALYSES_PER_MONTH`
     analyse(s) par mois civil."""
     from functools import wraps

@@ -80,8 +80,8 @@ window.PREDIKTA_AFFILIATE = {
 
 // ── Archive (historique des analyses & recherches) ─────────────────────────
 // Stockage local (navigateur), aucun compte requis. Rétention par défaut :
-// 30 jours (sera différenciée FREE/VIP/ELITE quand le système de comptes
-// existera — VIP = 7j, ELITE = 30j).
+// 30 jours (sera différenciée FREE/VIP/PREMIUM quand le système de comptes
+// existera — VIP = 7j, PREMIUM = 30j).
 const ARCHIVE_KEY = 'predikta_archive';
 const ARCHIVE_RETENTION_DAYS = parseInt(localStorage.getItem('predikta_archive_days') || '30', 10);
 const ARCHIVE_MAX_ENTRIES = 200;

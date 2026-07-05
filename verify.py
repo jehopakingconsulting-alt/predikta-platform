@@ -186,7 +186,7 @@ todo += [
     "Remplacer G-XXXXXXXXXX par votre vrai ID Google Analytics 4",
     "Remplacer les URLs affilies par vos VRAIS IDs d'affilie (TheLotter, LotteryPro, Jackpot)",
     "Scraper les 39 etats sans donnees (python scraper.py dans terminal)",
-    "Integrer Stripe/PayPal pour les paiements PRO/ELITE",
+    "Integrer Stripe/PayPal pour les paiements PRO/PREMIUM",
     "Configurer SMTP pour l'envoi reel des emails newsletter",
     "Acheter le domaine (predikta.io recommande) et deployer",
     "Mettre les vraies videos dans le lecteur ZYNORIQ TV",
