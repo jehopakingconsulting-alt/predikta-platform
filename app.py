@@ -978,11 +978,11 @@ def start_auto_update():
     except Exception as _se:
         print(f"[sentinel] Impossible de démarrer le Sentinel: {_se}")
 
-# Démarre seulement dans le processus principal (évite le double-lancement
-# avec le reloader Flask en mode debug)
-if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
-    _ensure_vapid_keys()
-    start_auto_update()
+# NB : le démarrage des tâches de fond (start_auto_update, qui lance aussi le
+# thread ZYNORIQ Sentinel™) est invoqué en TOUTE FIN de module — voir plus bas.
+# Le placer ici levait « name '_REPORT_CACHE' is not defined » : _REPORT_CACHE
+# n'est défini que plus loin, or le Sentinel le reçoit en argument évalué
+# immédiatement, ce qui tuait son thread au démarrage.
 
 @app.route("/api/autoupdate/status")
 def api_autoupdate_status():
@@ -4649,6 +4649,15 @@ def api_studio_generate():
 @app.route("/studio")
 def studio_page():
     return send_from_directory("static", "studio.html")
+
+
+# Démarre les tâches de fond uniquement dans le processus principal (évite le
+# double-lancement avec le reloader Flask en mode debug). Placé en fin de module
+# pour que _REPORT_CACHE et tous les globals soient définis AVANT que le thread
+# Sentinel ne les reçoive en argument (sinon NameError → Sentinel jamais lancé).
+if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
+    _ensure_vapid_keys()
+    start_auto_update()
 
 
 if __name__ == "__main__":
