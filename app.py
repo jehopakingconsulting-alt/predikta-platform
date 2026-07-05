@@ -625,12 +625,18 @@ def _auto_update_loop():
             _REPORT_CACHE.clear()    # nouvelles données → on invalide les analyses en cache
             _LATEST_CACHE["data"] = None
 
-            # Recalibrate dynamic weights for HOT states after each scrape
+            # Recalibrate dynamic weights for ALL states after each scrape.
+            # calibrate_if_needed() se throttle lui-même (needs_recalibration :
+            # ne recalcule qu'après RECALIBRATE_EVERY=10 nouveaux tirages), donc
+            # couvrir tous les états est peu coûteux — un état sans données
+            # fraîches se contente de relire ses poids existants. Auparavant
+            # limité à 8 états HOT, ce qui laissait les ~30 autres sur des poids
+            # par défaut/statiques (jamais améliorés).
             try:
                 from weight_calibrator import calibrate_if_needed
-                from scraper import load_csv
-                HOT_STATES = ["NY", "FL", "GA", "TX", "NJ", "PA", "IL", "OH"]
-                for _st in HOT_STATES:
+                from scraper import load_csv, STATES
+                _calib_n = 0
+                for _st in STATES.keys():
                     _draws = load_csv(_st)
                     if not _draws:
                         continue
@@ -639,6 +645,8 @@ def _auto_update_loop():
                         _tod_draws = [d for d in _draws if d.get("tod", "Evening") == _tod]
                         if len(_tod_draws) >= 70:
                             calibrate_if_needed(_st, _tod, _tod_draws)
+                            _calib_n += 1
+                print(f"  [auto-update][weights] {_calib_n} état/tod vérifiés (recalibrés si ≥10 nouveaux tirages)")
             except Exception as _we:
                 print(f"  [auto-update][weights] error: {_we}")
 
