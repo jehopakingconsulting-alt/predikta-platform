@@ -2035,8 +2035,14 @@ async function loadReport(){
 
     // Archive cette analyse avec snapshot COMPLET figé ────────────────────
     if(window.PredArchive){
-      const stateLabel = document.getElementById('stateSelect')
-        ?.selectedOptions?.[0]?.textContent?.trim() || state;
+      // État & libellé dérivés des DONNÉES analysées (data), jamais du DOM :
+      // le menu déroulant peut avoir changé pendant l'await, ce qui produirait
+      // un libellé (ex: "Florida") ne correspondant pas à l'analyse réellement
+      // figée (ex: state=AR / Arkansas). On se base sur ce que le serveur a rendu.
+      const archState  = data.state || state;
+      const stateLabel = data.state_name
+        || document.getElementById('stateSelect')?.selectedOptions?.[0]?.textContent?.trim()
+        || state;
       const archiveId = Date.now() + '-' + Math.random().toString(36).slice(2,8);
       // Stocker le data complet en localStorage (fallback rapide)
       try{
@@ -2047,7 +2053,7 @@ async function loadReport(){
       // Sauvegarder aussi côté serveur (permanent, multi-appareil) — awaited
       try{
         const _sr = await fetch('/api/snapshots',{method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({id:archiveId,state,tod,label:stateLabel,data})
+          body:JSON.stringify({id:archiveId,state:archState,tod,label:stateLabel,data})
         });
         if(!_sr.ok){
           // Snapshot non sauvegardé côté serveur (401=non connecté, 500/503=erreur serveur, etc.)
@@ -2062,9 +2068,9 @@ async function loadReport(){
       window.PredArchive.add({
         id: archiveId,
         type: 'analyze',
-        state, tod,
+        state: archState, tod,
         label: stateLabel,
-        url: `/analyze?state=${encodeURIComponent(state)}&tod=${encodeURIComponent(tod)}`,
+        url: `/analyze?state=${encodeURIComponent(archState)}&tod=${encodeURIComponent(tod)}`,
         has_fullsnap: true,
       });
     }
@@ -2362,7 +2368,9 @@ window.addEventListener('load', async ()=>{
         const entries = window.PredArchive ? window.PredArchive.getAll() : [];
         const entry   = entries.find(e=>e.id===archiveId);
         const ts      = entry ? new Date(entry.ts).toLocaleString() : '';
-        const todLabel= entry && entry.tod ? (' · ' + (entry.tod==='midday'?'Midday':'Evening')) : '';
+        // Réutilise la fonction todLabel() (traduite, gère tous les tod) au lieu
+        // d'un ternary qui affichait "Evening" pour tout sauf 'midday'.
+        const todStr = entry && entry.tod && entry.tod !== 'all' ? (' · ' + todLabel(entry.tod)) : '';
 
         // Sélectionner l'état dans le menu (cosmétique)
         if(frozenData.state && sel){
@@ -2376,7 +2384,7 @@ window.addEventListener('load', async ()=>{
           background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.4);margin-bottom:16px;flex-wrap:wrap">
           <span style="font-size:1.1rem">📁</span>
           <div style="flex:1">
-            <div style="font-weight:700;color:#ffcc55;font-size:.85rem">${t('archiveFrozen')}${todLabel}</div>
+            <div style="font-weight:700;color:#ffcc55;font-size:.85rem">${t('archiveFrozen')}${todStr}</div>
             <div style="font-size:.72rem;color:var(--muted2)">Données exactes du ${ts} — non mises à jour</div>
           </div>
           <button onclick="loadReport()" style="padding:6px 14px;border-radius:8px;border:1px solid rgba(255,170,0,.4);
