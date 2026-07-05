@@ -762,7 +762,7 @@ def subscription_required(f):
 
         sub = user.subscription
         if not sub or not sub.plan:
-            return jsonify({"error": "no_plan", "message": "Choisis un plan PRO, VIP ou ELITE pour continuer"}), 402
+            return jsonify({"error": "no_plan", "message": "Choisis un plan PRO / VIP / PREMIUM / BUSINESS pour continuer"}), 402
 
         if not sub.is_active():
             return jsonify({"error": "subscription_expired",
