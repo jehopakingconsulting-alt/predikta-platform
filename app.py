@@ -799,6 +799,16 @@ def _draw_watcher_loop():
             secs_to_next = _seconds_to_next_draw()
             min_to_next  = secs_to_next / 60
 
+            # ── #3 Warm-cache juste-à-temps : chauffe les états dont un tirage
+            #    approche (≤75 min) pour que le Sentinel score TOUS les états,
+            #    pas seulement les 11 prioritaires. ─────────────────────────────
+            try:
+                _wu = _warm_states_for_upcoming_draws(lead_min=75)
+                if _wu:
+                    print(f"[draw-watcher][warm-jit] {_wu} état(s) réchauffé(s) avant tirage")
+            except Exception as _wue:
+                print(f"[draw-watcher][warm-jit] error: {_wue}")
+
             # ── Sauvegarder les prédictions PRÉ-TIRAGE (fenêtre -10 à -2 min) ─
             try:
                 from draw_schedule import DRAW_SCHEDULE as _DS, _parse_schedule_time as _PST
@@ -2595,6 +2605,47 @@ def _warm_popular_reports():
                 _REPORT_CACHE[cache_key] = {"ts": time.time(), "data": {**result, "cached": True}}
         except Exception as e:
             print(f"  [warm-cache][{state}] error: {e}")
+
+
+def _warm_states_for_upcoming_draws(lead_min: int = 75) -> int:
+    """#3 — Warm-cache « juste-à-temps ». Pré-calcule le rapport tod-spécifique
+    de CHAQUE état dont un tirage a lieu dans les `lead_min` prochaines minutes
+    et le range dans _REPORT_CACHE, afin que le Sentinel puisse scorer n'importe
+    quel état — pas seulement les 11 réchauffés en continu par
+    _warm_popular_reports. Écrit uniquement dans le cache de rapports ; le
+    moteur ML (run_all_models) n'est pas modifié.
+    Appelé par la boucle draw-watcher, qui tourne toutes les ~1-10 min."""
+    from draw_schedule import DRAW_SCHEDULE, _parse_schedule_time
+    from zoneinfo import ZoneInfo
+    from datetime import timezone as _tz, timedelta as _td
+    now_utc = datetime.utcnow().replace(tzinfo=_tz.utc)
+    now = time.time()
+    warmed = 0
+    for state, sessions in DRAW_SCHEDULE.items():
+        for sess in sessions:
+            try:
+                hour, minute, tz_name = _parse_schedule_time(sess["time"])
+                local_now = now_utc.astimezone(ZoneInfo(tz_name))
+                draw_dt = local_now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+                if draw_dt < local_now:
+                    draw_dt += _td(days=1)
+                mins_to = (draw_dt - local_now).total_seconds() / 60
+                if not (0 < mins_to <= lead_min):
+                    continue
+                tod = sess["tod"]
+                # Clé au format API (5-tuple, base) que le Sentinel sait lire via
+                # _find_cache_entry (match tod exact, sinon fallback "all").
+                key = (state, tod, 0, (), ())
+                cached = _REPORT_CACHE.get(key)
+                if cached and (now - cached["ts"]) < 15 * 60:
+                    continue  # déjà frais (< 15 min) → on garde, on ne recalcule pas
+                result = _build_report(state, tod)  # sans LSTM = plus rapide, suffisant pour le score
+                if result:
+                    _REPORT_CACHE[key] = {"ts": time.time(), "data": {**result, "cached": True}}
+                    warmed += 1
+            except Exception:
+                pass
+    return warmed
 
 def _parse_int_list(raw: str, lo: int, hi: int) -> tuple:
     out = set()
