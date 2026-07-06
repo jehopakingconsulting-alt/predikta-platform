@@ -88,7 +88,11 @@ const ARCHIVE_MAX_ENTRIES = 200;
 
 function archivePurge(list){
   const cutoff = Date.now() - ARCHIVE_RETENTION_DAYS * 86400000;
-  return list.filter(e => e.ts >= cutoff).slice(0, ARCHIVE_MAX_ENTRIES);
+  // Trier du plus récent au plus ancien AVANT de couper, sinon slice() pouvait
+  // garder un lot arbitraire et masquer des analyses récentes.
+  return list.filter(e => e.ts >= cutoff)
+             .sort((a, b) => b.ts - a.ts)
+             .slice(0, ARCHIVE_MAX_ENTRIES);
 }
 
 function archiveGetAll(){

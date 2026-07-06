@@ -339,6 +339,9 @@ async function syncWithServer(){
       if(list) list.insertAdjacentElement('beforebegin', warn);
     }
 
+    // Le serveur fait autorité (jusqu'au plafond du plan : PRO 50, VIP 150,
+    // PREMIUM 500, BUSINESS illimité) — on le mémorise pour le rendu final.
+    window._lastServerEntries = serverEntries;
     renderArchives(serverEntries);
   }catch(e){}
 }
@@ -461,6 +464,22 @@ document.addEventListener('click', e=>{
   }
 });
 
+// Union serveur (autoritatif) + local, dédupliquée par id, triée du + récent au
+// + ancien. Évite qu'un rendu « local (max 200) » ne masque des entrées que le
+// serveur possède (PREMIUM 500 / BUSINESS illimité).
+function _mergeArchiveEntries(server, local){
+  const map = new Map();
+  (local || []).forEach(e => { if(e && e.id) map.set(e.id, e); });
+  (server || []).forEach(e => { if(e && e.id) map.set(e.id, e); }); // serveur prioritaire
+  return [...map.values()].sort((a, b) => (b.ts || 0) - (a.ts || 0));
+}
+
+async function refreshArchives(){
+  await Promise.all([syncWithServer(), loadVerdicts(), loadStatesMap()]);
+  const localList = window.PredArchive ? window.PredArchive.getAll() : [];
+  renderArchives(_mergeArchiveEntries(window._lastServerEntries, localList));
+}
+
 window.addEventListener('load', async ()=>{
   const navLang = window.PREDIKTA_LANG || (navigator.language||'fr').slice(0,2);
   applyLang(T[navLang] ? navLang : 'fr');
@@ -471,10 +490,12 @@ window.addEventListener('load', async ()=>{
   const el = document.getElementById(id);
   if(el) el.classList.add('active');
 
-  // Sync server ↔ localStorage for logged-in users, then re-render
-  await Promise.all([syncWithServer(), loadVerdicts(), loadStatesMap()]);
-  renderArchives();
+  await refreshArchives();
 });
+
+// Retour navigateur (bfcache) : la page est restaurée SANS relancer 'load', donc
+// la liste restait figée et il fallait CTRL+F5. On resynchronise à l'affichage.
+window.addEventListener('pageshow', (e)=>{ if(e.persisted) refreshArchives(); });
 </script>
 </body></html>
 
