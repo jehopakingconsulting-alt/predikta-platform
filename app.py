@@ -679,6 +679,15 @@ def _auto_update_loop():
             except Exception as _wel:
                 print(f"  [auto-update][weights_lotto] error: {_wel}")
 
+            # Track Record Live : vérifie les prédictions pré-tirage en attente
+            # contre les tirages désormais scrapés (indépendant de qui a scrapé).
+            try:
+                _rec_n = _reconcile_pending_predictions()
+                if _rec_n:
+                    print(f"  [live-TR][reconcile] {_rec_n} prédiction(s) vérifiée(s)")
+            except Exception as _rce:
+                print(f"  [live-TR][reconcile] error: {_rce}")
+
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             try:
                 _verify_draw_schedule()
@@ -2646,6 +2655,54 @@ def _warm_states_for_upcoming_draws(lead_min: int = 75) -> int:
             except Exception:
                 pass
     return warmed
+
+
+def _reconcile_pending_predictions() -> int:
+    """Vérifie les prédictions pré-tirage restées « en attente ».
+
+    Pourquoi : record_result() n'avait qu'UN appelant — le draw-watcher — et
+    uniquement quand CE dernier avait lui-même ajouté le tirage (res["added"]>0).
+    Or la boucle auto-update scrape tous les états toutes les 30 min et récupère
+    le tirage en premier → le draw-watcher n'ajoute rien → la vérification ne
+    partait jamais. Résultat : les prédictions restaient « verified: false » à
+    vie et le track record live restait vide (n=0).
+
+    Ce balayage découple la vérification de « qui a scrapé » : pour chaque
+    prédiction non vérifiée, si le tirage réel est désormais présent dans les
+    données, on enregistre le verdict. Lecture seule des tirages ; le moteur ML
+    n'est pas modifié. Idempotent : record_result() marque verified=True, donc
+    une prédiction déjà traitée sort de la liste des pending."""
+    try:
+        from live_track_record import get_pending_predictions, record_result
+        from scraper import load_csv as _lc
+    except Exception as e:
+        print(f"  [live-TR][reconcile] import error: {e}")
+        return 0
+
+    pending = get_pending_predictions()
+    if not pending:
+        return 0
+
+    _draws_cache: dict[str, list] = {}   # évite de relire le CSV d'un état N fois
+    verified = 0
+    for p in pending:
+        try:
+            st  = (p.get("state") or "").upper()
+            tod = p.get("tod") or ""
+            dt  = p.get("date") or ""
+            if not (st and tod and dt):
+                continue
+            if st not in _draws_cache:
+                _draws_cache[st] = _lc(st) or []
+            match = next((d for d in _draws_cache[st]
+                          if d.get("date") == dt and d.get("tod") == tod), None)
+            if not match:
+                continue  # tirage pas encore publié/scrapé → on retentera au prochain passage
+            if record_result(st, tod, match):
+                verified += 1
+        except Exception as _re:
+            print(f"  [live-TR][reconcile] {p.get('state')}/{p.get('tod')}: {_re}")
+    return verified
 
 def _parse_int_list(raw: str, lo: int, hi: int) -> tuple:
     out = set()
