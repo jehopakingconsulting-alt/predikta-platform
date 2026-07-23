@@ -403,6 +403,18 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <span class="hbadge hb3" data-i18n="hb3">🌍 44 États US</span>
     <span class="hbadge hb4" data-i18n="hb4">● LIVE</span>
   </div>
+  <!-- PREUVE VÉRIFIÉE (track record live) — ancre de confiance n°1 contre la
+       méfiance du trafic froid. Masquée par défaut, révélée par JS avec de VRAIS
+       chiffres (jamais de flash "—" ni de bande vide si le fetch échoue). -->
+  <a href="/track-record" id="heroProof" style="display:none;align-items:center;gap:9px;justify-content:center;flex-wrap:wrap;margin:14px auto 2px;padding:8px 16px;max-width:660px;border-radius:12px;background:rgba(34,204,136,.08);border:1px solid rgba(34,204,136,.3);text-decoration:none;position:relative;z-index:2">
+    <span style="font-size:.6rem;font-weight:900;letter-spacing:1px;padding:3px 8px;border-radius:20px;background:#22cc88;color:#04040f" data-i18n="proofVerified">✅ VÉRIFIÉ</span>
+    <span style="font-size:.82rem;color:#e8eeff"><b id="hpDraws" style="color:#22cc88">—</b> <span data-i18n="proofDraws">tirages vérifiés</span></span>
+    <span style="color:#334155">·</span>
+    <span style="font-size:.82rem;color:#e8eeff"><b id="hpBox" style="color:#22cc88">—</b> BOX</span>
+    <span style="color:#334155">·</span>
+    <span style="font-size:.82rem;color:#e8eeff"><b id="hpExact" style="color:#facc15">—</b> EXACT</span>
+    <span style="font-size:.74rem;color:#a78bfa;font-weight:700" data-i18n="proofCta">Voir la preuve →</span>
+  </a>
   <div class="trust-strip">
     <a href="/world-map" class="trust-item"><span class="ti-icon">🗺️</span><span data-i18n="tsCoverage">40+ États & territoires</span></a>
     <a href="/accuracy" class="trust-item"><span class="ti-icon">🎯</span><span data-i18n="tsAccuracy">Score de précision</span></a>
@@ -474,6 +486,17 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     document.getElementById('spAnalyses').textContent=(d.analyses||0).toLocaleString();
     document.getElementById('spStates').textContent=d.states||44;
     document.getElementById('spLangs').textContent=d.languages||5;
+  }).catch(()=>{});
+
+  // Preuve VÉRIFIÉE (track record live) dans le hero — ancre de confiance.
+  // Révèle la bande seulement avec de vrais chiffres (n>0) ; sinon elle reste cachée.
+  fetch('/api/track-record/live').then(r=>r.ok?r.json():null).then(d=>{
+    if(!d || !d.n) return;
+    const g=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
+    g('hpDraws',(d.n||0).toLocaleString());
+    g('hpBox', d.box_hits ?? 0);
+    g('hpExact', d.straight_hits ?? 0);
+    const hp=document.getElementById('heroProof'); if(hp) hp.style.display='flex';
   }).catch(()=>{});
 
   fetch('/api/memory/dashboard?lang='+(window.PREDIKTA_LANG||'fr'))
@@ -1003,7 +1026,7 @@ const T = {
     heroKicker:"🌍 Plateforme Mondiale · Propulsée par l'Analyse Avancée",
     heroSub:"Intelligence au-delà de la prédiction par Analyse Prédictive — Pick3, Pick4, Lotto, Powerball · Analyse de projets · 44 États · 5 Langues",
     hb1:"⚙️ 7 Algorithmes",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 États US",hb4:"● LIVE",
-    tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",freeTrialNote:"Gratuit · Sans carte bancaire · Résultats en 30 secondes",
+    tsCoverage:"40+ États & territoires",tsAccuracy:"Score de précision",tsTrack:"Historique vérifiable",tsPlans:"Plans Pro & VIP",freeTrialNote:"Gratuit · Sans carte bancaire · Résultats en 30 secondes",proofVerified:"✅ VÉRIFIÉ",proofDraws:"tirages vérifiés",proofCta:"Voir la preuve →",
     perfTrackTitle:"Historique des Suggestions",perfTrackSub:"Résultats réels tirage par tirage",
     perfAccTitle:"Accuracy Score",perfAccSub:"Taux de réussite sur 7, 30 & 90 jours",
     snapLabel:"Résultats d'aujourd'hui",snapLoadBtn:"🔄 Charger les résultats du jour",
@@ -1080,7 +1103,7 @@ const T = {
     heroKicker:"🌍 Global Platform · Powered by Advanced Analytics",
     heroSub:"Intelligence Beyond Prediction by Predictive Analytics — Pick3, Pick4, Lotto, Powerball · Project Analysis · 44 States · 5 Languages",
     hb1:"⚙️ 7 Algorithms",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 US States",hb4:"● LIVE",
-    tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",freeTrialNote:"Free · No credit card · Results in 30 seconds",
+    tsCoverage:"40+ states & territories",tsAccuracy:"Accuracy score",tsTrack:"Verifiable track record",tsPlans:"Pro & VIP plans",freeTrialNote:"Free · No credit card · Results in 30 seconds",proofVerified:"✅ VERIFIED",proofDraws:"verified draws",proofCta:"See the proof →",
     perfTrackTitle:"Suggestions Track Record",perfTrackSub:"Real results draw by draw",
     perfAccTitle:"Accuracy Score",perfAccSub:"Hit rate over 7, 30 & 90 days",
     snapLabel:"Today's Results",snapLoadBtn:"🔄 Load today's results",
@@ -1157,7 +1180,7 @@ const T = {
     heroKicker:"🌍 Plataforma Global · Impulsada por Análisis Avanzado",
     heroSub:"Lotería y Análisis Predictivo por Análisis Predictivo — Pick3, Pick4, Lotto, Powerball · Análisis de proyectos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados de EE.UU.",hb4:"● EN VIVO",
-    tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",freeTrialNote:"Gratis · Sin tarjeta · Resultados en 30 segundos",
+    tsCoverage:"40+ estados y territorios",tsAccuracy:"Puntaje de precisión",tsTrack:"Historial verificable",tsPlans:"Planes Pro y VIP",freeTrialNote:"Gratis · Sin tarjeta · Resultados en 30 segundos",proofVerified:"✅ VERIFICADO",proofDraws:"sorteos verificados",proofCta:"Ver la prueba →",
     perfTrackTitle:"Historial de Sugerencias",perfTrackSub:"Resultados reales sorteo por sorteo",
     perfAccTitle:"Accuracy Score",perfAccSub:"Tasa de aciertos en 7, 30 y 90 días",
     snapLabel:"Resultados de hoy",snapLoadBtn:"🔄 Cargar resultados de hoy",
@@ -1234,7 +1257,7 @@ const T = {
     heroKicker:"🌍 Plataforma Global · Impulsionada por Análise Avançada",
     heroSub:"Loteria e Análise Preditiva por Análise Preditiva — Pick3, Pick4, Lotto, Powerball · Análise de projetos · 44 Estados · 5 Idiomas",
     hb1:"⚙️ 7 Algoritmos",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Estados dos EUA",hb4:"● AO VIVO",
-    tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",freeTrialNote:"Grátis · Sem cartão · Resultados em 30 segundos",
+    tsCoverage:"40+ estados e territórios",tsAccuracy:"Pontuação de precisão",tsTrack:"Histórico verificável",tsPlans:"Planos Pro e VIP",freeTrialNote:"Grátis · Sem cartão · Resultados em 30 segundos",proofVerified:"✅ VERIFICADO",proofDraws:"sorteios verificados",proofCta:"Ver a prova →",
     perfTrackTitle:"Histórico de Sugestões",perfTrackSub:"Resultados reais sorteio por sorteio",
     perfAccTitle:"Accuracy Score",perfAccSub:"Taxa de acerto em 7, 30 e 90 dias",
     snapLabel:"Resultados de hoje",snapLoadBtn:"🔄 Carregar resultados de hoje",
@@ -1311,7 +1334,7 @@ const T = {
     heroKicker:"🌍 Platfòm Mondyal · Pwopilse pa Analiz Avanse",
     heroSub:"Lotri ak Analiz Predikitf pa Analiz Predikitf — Pick3, Pick4, Lotto, Powerball · Analiz pwojè · 44 Eta · 5 Lang",
     hb1:"⚙️ 7 Algoritm",hb2:"🎲 Monte Carlo 50K",hb3:"🌍 44 Eta Ozetazini",hb4:"● LIVE",
-    tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",freeTrialNote:"Gratis · San kat · Rezilta nan 30 segonn",
+    tsCoverage:"40+ eta & teritwa",tsAccuracy:"Nòt presizyon",tsTrack:"Istorik verifyab",tsPlans:"Plan Pro & VIP",freeTrialNote:"Gratis · San kat · Rezilta nan 30 segonn",proofVerified:"✅ VERIFYE",proofDraws:"tiraj verifye",proofCta:"Wè prèv la →",
     perfTrackTitle:"Istorik Sijesyon yo",perfTrackSub:"Rezilta reyèl tiraj pa tiraj",
     perfAccTitle:"Accuracy Score",perfAccSub:"To reyisit sou 7, 30 ak 90 jou",
     snapLabel:"Rezilta jodi a",snapLoadBtn:"🔄 Chaje rezilta jodi a",
