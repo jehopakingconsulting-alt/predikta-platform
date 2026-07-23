@@ -403,24 +403,26 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <span class="hbadge hb3" data-i18n="hb3">🌍 44 États US</span>
     <span class="hbadge hb4" data-i18n="hb4">● LIVE</span>
   </div>
-  <!-- PREUVE VÉRIFIÉE (track record live) — ancre de confiance n°1 contre la
-       méfiance du trafic froid. Masquée par défaut, révélée par JS avec de VRAIS
-       chiffres (jamais de flash "—" ni de bande vide si le fetch échoue). -->
-  <a href="/track-record" id="heroProof" style="display:none;align-items:center;gap:9px;justify-content:center;flex-wrap:wrap;margin:14px auto 2px;padding:8px 16px;max-width:660px;border-radius:12px;background:rgba(34,204,136,.08);border:1px solid rgba(34,204,136,.3);text-decoration:none;position:relative;z-index:2">
-    <span style="font-size:.6rem;font-weight:900;letter-spacing:1px;padding:3px 8px;border-radius:20px;background:#22cc88;color:#04040f" data-i18n="proofVerified">✅ VÉRIFIÉ</span>
-    <span style="font-size:.82rem;color:#e8eeff"><b id="hpDraws" style="color:#22cc88">—</b> <span data-i18n="proofDraws">tirages vérifiés</span></span>
-    <span style="color:#334155">·</span>
-    <span style="font-size:.82rem;color:#e8eeff"><b id="hpBox" style="color:#22cc88">—</b> BOX</span>
-    <span style="color:#334155">·</span>
-    <span style="font-size:.82rem;color:#e8eeff"><b id="hpExact" style="color:#facc15">—</b> EXACT</span>
-    <span style="font-size:.74rem;color:#a78bfa;font-weight:700" data-i18n="proofCta">Voir la preuve →</span>
-  </a>
   <div class="trust-strip">
     <a href="/world-map" class="trust-item"><span class="ti-icon">🗺️</span><span data-i18n="tsCoverage">40+ États & territoires</span></a>
     <a href="/accuracy" class="trust-item"><span class="ti-icon">🎯</span><span data-i18n="tsAccuracy">Score de précision</span></a>
     <a href="/track-record" class="trust-item"><span class="ti-icon">📊</span><span data-i18n="tsTrack">Historique vérifiable</span></a>
     <a href="/pro" class="trust-item"><span class="ti-icon">⭐</span><span data-i18n="tsPlans">Plans Pro & VIP</span></a>
   </div>
+
+  <!-- PREUVE VÉRIFIÉE (track record live) — placée juste AVANT le CTA :
+       schéma « preuve → action », l'ancre de confiance vue au moment de cliquer.
+       Masquée par défaut, révélée par JS avec de VRAIS chiffres (jamais de flash
+       "—" ni de bande vide si le fetch échoue). -->
+  <a href="/track-record" id="heroProof" style="display:none;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px auto 18px;padding:10px 20px;max-width:680px;border-radius:14px;background:rgba(34,204,136,.09);border:1px solid rgba(34,204,136,.38);text-decoration:none;position:relative;z-index:2">
+    <span style="font-size:.6rem;font-weight:900;letter-spacing:1px;padding:3px 8px;border-radius:20px;background:#22cc88;color:#04040f" data-i18n="proofVerified">✅ VÉRIFIÉ</span>
+    <span style="font-size:.84rem;color:#e8eeff"><b id="hpDraws" style="color:#22cc88">—</b> <span data-i18n="proofDraws">tirages vérifiés</span></span>
+    <span style="color:#334155">·</span>
+    <span style="font-size:.84rem;color:#e8eeff"><b id="hpBox" style="color:#22cc88">—</b> BOX</span>
+    <span style="color:#334155">·</span>
+    <span style="font-size:.84rem;color:#e8eeff"><b id="hpExact" style="color:#facc15">—</b> EXACT</span>
+    <span style="font-size:.76rem;color:#a78bfa;font-weight:700" data-i18n="proofCta">Voir la preuve →</span>
+  </a>
 
   <!-- ── CTA Principal ── -->
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;margin-top:4px">
