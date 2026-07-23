@@ -688,6 +688,19 @@ def _auto_update_loop():
             except Exception as _rce:
                 print(f"  [live-TR][reconcile] error: {_rce}")
 
+            # Rappels de renouvellement 7/3/1 j (essai sans carte + plan actif),
+            # idempotents. Placés AVANT la phase lourde (_warm_popular_reports,
+            # suspecté de pics mémoire) pour GARANTIR leur envoi — c'est le moteur
+            # de conversion des essais sans carte, il ne doit jamais être sauté.
+            try:
+                with app.app_context():
+                    from auth import sweep_renewal_reminders
+                    _rn = sweep_renewal_reminders()
+                    if _rn:
+                        print(f"  [renewal-reminder] {_rn} rappel(s) envoyé(s)")
+            except Exception as ae:
+                print(f"  [renewal-reminder] error: {ae}")
+
             _warm_popular_reports()  # pré-calcule les rapports des États les plus consultés
             try:
                 _verify_draw_schedule()
@@ -708,16 +721,6 @@ def _auto_update_loop():
                     _check_custom_alerts()
             except Exception as ae:
                 print(f"  [alerts] error: {ae}")
-            # Rappels de renouvellement 7/3/1 j (essai + plan actif), idempotents.
-            # Auto-contenu : pas de cron externe requis (service Standard 24/7).
-            try:
-                with app.app_context():
-                    from auth import sweep_renewal_reminders
-                    _rn = sweep_renewal_reminders()
-                    if _rn:
-                        print(f"  [renewal-reminder] {_rn} rappel(s) envoyé(s)")
-            except Exception as ae:
-                print(f"  [renewal-reminder] error: {ae}")
             _auto_update_state["last_run"] = datetime.utcnow().isoformat() + "Z"
             _auto_update_state["last_status"] = "ok"
             _maybe_send_daily_push()

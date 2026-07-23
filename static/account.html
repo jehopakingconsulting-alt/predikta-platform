@@ -46,7 +46,7 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
   <!-- Banner affiché après inscription (welcome=1) -->
   <div id="welcomeBanner" style="display:none;margin-bottom:20px;padding:18px 20px;background:linear-gradient(135deg,rgba(34,204,136,.12),rgba(79,110,255,.1));border:1px solid rgba(34,204,136,.35);border-radius:14px">
     <div style="font-weight:800;font-size:1rem;color:#22cc88;margin-bottom:6px" id="welcomeTitle">🎉 Bienvenue sur ZYNORIQ !</div>
-    <div style="font-size:.82rem;color:#4d5a8a" id="welcomeMsg">Choisissez votre plan ci-dessous — 7 jours d'essai gratuit, annulable à tout moment. Aucun débit avant la fin de l'essai.</div>
+    <div style="font-size:.82rem;color:#4d5a8a" id="welcomeMsg">Commencez GRATUITEMENT, sans carte — découvrez vos prédictions dès maintenant. Vous déciderez de passer à un plan payant plus tard.</div>
   </div>
 
   <div id="loading" class="loading" data-i18n="loading">Chargement...</div>
@@ -79,11 +79,14 @@ button.outline{padding:12px 22px;border-radius:10px;border:1px solid var(--borde
         <div class="plan" data-plan="elite"><b>PREMIUM</b><span>$99/mo</span><small data-i18n="elitePlanDesc">Tous États · illimité · Pick 4</small></div>
         <div class="plan" data-plan="business"><b>BUSINESS</b><span>$199/mo</span><small data-i18n="businessPlanDesc">Tous États · illimité · Cash 5</small></div>
       </div>
-      <!-- Abonnement payant via Stripe : carte requise + essai gratuit de N jours
-           (trial_period_days appliqué côté billing.py), débit auto à l'expiration.
-           L'ancien bouton « essai gratuit sans carte » a été retiré : il donnait un
-           essai sans carte enregistrée → aucune conversion automatique possible. -->
-      <button class="action" id="btnChoosePlan" data-i18n="btnChoosePlan">Activer ce plan</button>
+      <!-- Essai gratuit SANS carte — entrée principale à faible friction pour le
+           trafic froid (les données GA du 07/2026 montraient 34 intentions
+           d'inscription mortes au mur de la carte, 0 conversion). La conversion
+           se fait ensuite via le track record vérifié + les rappels 7/3/1
+           (auth.sweep_renewal_reminders), pas via un débit forcé à l'entrée. -->
+      <button class="action" id="btnFreeTrial" data-i18n="btnFreeTrial" style="width:100%;margin-bottom:10px;background:linear-gradient(135deg,#22cc88,#12a06a)">🎁 Commencer l'essai gratuit — sans carte</button>
+      <!-- Abonnement payant immédiat via Stripe (carte + essai N jours, débit auto). -->
+      <button class="outline" id="btnChoosePlan" data-i18n="btnChoosePlan" style="width:100%;margin-bottom:6px">Activer ce plan (paiement)</button>
       <button class="outline" id="btnPortal" style="display:none;margin-left:8px" data-i18n="btnPortal">Gérer mon abonnement (Stripe)</button>
       <div class="msg" id="planMsg"></div>
 
@@ -172,7 +175,7 @@ const T = {
     redirecting:"Redirection vers le paiement sécurisé Stripe...", checkoutProcessing:"Paiement reçu, mise à jour de ton abonnement en cours...", checkoutSuccess:"Paiement confirmé ! Ton plan est maintenant actif.", checkoutCancel:"Paiement annulé. Tu peux réessayer quand tu veux.",
     payWith:"Payer avec",trustSecure:"Paiement sécurisé SSL 256-bit",trustEncrypted:"Données cryptées & protégées",trustCancel:"Annulation en 1 clic · Sans engagement",trustCompliance:"Conforme PCI-DSS · Vos informations bancaires ne sont jamais stockées sur nos serveurs",btnAltPay:"Autres moyens de paiement",altPayTitle:"Paiement alternatif",altPayDesc:"Vous pouvez payer par l'un des moyens suivants. Après le paiement, votre compte sera activé manuellement sous 24h.",altPayContact:"Envoyez le paiement puis contactez-nous avec votre nom d'utilisateur :",
     proPlanDesc:"4 États · 10/jour · Pick 3",vipPlanDesc:"20 États · 30/jour · Pick 3",elitePlanDesc:"Tous États · illimité · Pick 4",businessPlanDesc:"Tous États · illimité · Cash 5",founderBadge:"VIP · à vie",wiseSoon:"bientôt",wisePending:"En attente de vérification",renewSoon:"⚠️ Renouvellement bientôt",dayWord:"jour",daysWord:"jours",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Virement bancaire",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",
-    btnFreeTrial:"🎁 Commencer l'essai gratuit (sans carte)",trialActivated:"✅ Essai gratuit activé ! Bienvenue sur ZYNORIQ.",welcomeTitle:"🎉 Bienvenue sur ZYNORIQ !",welcomeMsg:"Choisissez votre plan ci-dessous — 7 jours d'essai gratuit, annulable à tout moment. Aucun débit avant la fin de l'essai.",},
+    btnFreeTrial:"🎁 Commencer l'essai gratuit (sans carte)",trialActivated:"✅ Essai gratuit activé ! Bienvenue sur ZYNORIQ.",welcomeTitle:"🎉 Bienvenue sur ZYNORIQ !",welcomeMsg:"Commencez GRATUITEMENT, sans carte — découvrez vos prédictions dès maintenant. Vous déciderez de passer à un plan payant plus tard.",},
   en:{title:"My account",subtitle:"Manage your subscription, free trial and selected states.",loading:"Loading...",
     dashboardCardTitle:"📊 My dashboard",dashboardCardDesc:"Saved predictions, alerts and Business AI reports.",btnDashboard:"Open →",
     lblUser:"Username",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Status",lblDaysLeft:"Time left",lblQuota:"Analyses / day",
@@ -188,7 +191,7 @@ const T = {
     redirecting:"Redirecting to secure Stripe checkout...", checkoutProcessing:"Payment received, updating your subscription...", checkoutSuccess:"Payment confirmed! Your plan is now active.", checkoutCancel:"Payment canceled. You can try again anytime.",
     payWith:"Pay with",trustSecure:"Secure SSL 256-bit payment",trustEncrypted:"Encrypted & protected data",trustCancel:"Cancel in 1 click · No commitment",trustCompliance:"PCI-DSS compliant · Your banking details are never stored on our servers",btnAltPay:"Other payment methods",altPayTitle:"Alternative payment",altPayDesc:"You can pay using any of the following methods. After payment, your account will be manually activated within 24h.",altPayContact:"Send payment then contact us with your username:",
     proPlanDesc:"4 States · 10/day · Pick 3",vipPlanDesc:"20 States · 30/day · Pick 3",elitePlanDesc:"All States · unlimited · Pick 4",businessPlanDesc:"All States · unlimited · Cash 5",founderBadge:"VIP · lifetime",wiseSoon:"soon",wisePending:"Awaiting verification",renewSoon:"⚠️ Renewal soon",dayWord:"day",daysWord:"days",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Bank transfer",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",
-    btnFreeTrial:"🎁 Start free trial (no card)",trialActivated:"✅ Free trial activated! Welcome to ZYNORIQ.",welcomeTitle:"🎉 Welcome to ZYNORIQ!",welcomeMsg:"Choose your plan below — 7-day free trial, cancel anytime. No charge until your trial ends.",},
+    btnFreeTrial:"🎁 Start free trial (no card)",trialActivated:"✅ Free trial activated! Welcome to ZYNORIQ.",welcomeTitle:"🎉 Welcome to ZYNORIQ!",welcomeMsg:"Start FREE, no card required — see your predictions right now. You decide about a paid plan later.",},
   es:{title:"Mi cuenta",subtitle:"Gestiona tu suscripción, tu prueba gratuita y tus Estados seleccionados.",loading:"Cargando...",
     dashboardCardTitle:"📊 Mi panel",dashboardCardDesc:"Predicciones guardadas, alertas e informes de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuario",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estado",lblDaysLeft:"Tiempo restante",lblQuota:"Análisis / día",
@@ -204,7 +207,7 @@ const T = {
     redirecting:"Redirigiendo al pago seguro de Stripe...", checkoutProcessing:"Pago recibido, actualizando tu suscripción...", checkoutSuccess:"¡Pago confirmado! Tu plan ya está activo.", checkoutCancel:"Pago cancelado. Puedes intentarlo de nuevo cuando quieras.",
     payWith:"Pagar con",trustSecure:"Pago seguro SSL 256-bit",trustEncrypted:"Datos cifrados y protegidos",trustCancel:"Cancelación en 1 clic · Sin compromiso",trustCompliance:"Conforme PCI-DSS · Sus datos bancarios nunca se almacenan en nuestros servidores",btnAltPay:"Otros medios de pago",altPayTitle:"Pago alternativo",altPayDesc:"Puede pagar mediante cualquiera de los siguientes métodos. Después del pago, su cuenta será activada manualmente en 24h.",altPayContact:"Envíe el pago y contáctenos con su nombre de usuario:",
     proPlanDesc:"4 Estados · 10/día · Pick 3",vipPlanDesc:"20 Estados · 30/día · Pick 3",elitePlanDesc:"Todos los Estados · ilimitado · Pick 4",businessPlanDesc:"Todos los Estados · ilimitado · Cash 5",founderBadge:"VIP · de por vida",wiseSoon:"pronto",wisePending:"Pendiente de verificación",renewSoon:"⚠️ Renovación pronto",dayWord:"día",daysWord:"días",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Transferencia bancaria",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",
-    btnFreeTrial:"🎁 Comenzar prueba gratuita (sin tarjeta)",trialActivated:"✅ ¡Prueba gratuita activada! Bienvenido a ZYNORIQ.",welcomeTitle:"🎉 ¡Bienvenido a ZYNORIQ!",welcomeMsg:"Elige tu plan abajo — 7 días de prueba gratis, cancela cuando quieras. Ningún cargo hasta que termine la prueba.",},
+    btnFreeTrial:"🎁 Comenzar prueba gratuita (sin tarjeta)",trialActivated:"✅ ¡Prueba gratuita activada! Bienvenido a ZYNORIQ.",welcomeTitle:"🎉 ¡Bienvenido a ZYNORIQ!",welcomeMsg:"Empieza GRATIS, sin tarjeta — ve tus predicciones ahora mismo. Decides sobre un plan de pago más tarde.",},
   pt:{title:"Minha conta",subtitle:"Gerencie sua assinatura, seu teste gratuito e seus Estados selecionados.",loading:"Carregando...",
     dashboardCardTitle:"📊 Meu painel",dashboardCardDesc:"Previsões salvas, alertas e relatórios de Business AI.",btnDashboard:"Abrir →",
     lblUser:"Usuário",lblEmail:"Email",lblPlan:"Plano",lblStatus:"Status",lblDaysLeft:"Tempo restante",lblQuota:"Análises / dia",
@@ -220,7 +223,7 @@ const T = {
     redirecting:"Redirecionando para o checkout seguro do Stripe...", checkoutProcessing:"Pagamento recebido, atualizando sua assinatura...", checkoutSuccess:"Pagamento confirmado! Seu plano já está ativo.", checkoutCancel:"Pagamento cancelado. Você pode tentar novamente quando quiser.",
     payWith:"Pagar com",trustSecure:"Pagamento seguro SSL 256-bit",trustEncrypted:"Dados criptografados e protegidos",trustCancel:"Cancelamento em 1 clique · Sem compromisso",trustCompliance:"Conforme PCI-DSS · Seus dados bancários nunca são armazenados em nossos servidores",btnAltPay:"Outros meios de pagamento",altPayTitle:"Pagamento alternativo",altPayDesc:"Você pode pagar por qualquer um dos seguintes métodos. Após o pagamento, sua conta será ativada manualmente em 24h.",altPayContact:"Envie o pagamento e entre em contato conosco com seu nome de usuário:",
     proPlanDesc:"4 Estados · 10/dia · Pick 3",vipPlanDesc:"20 Estados · 30/dia · Pick 3",elitePlanDesc:"Todos os Estados · ilimitado · Pick 4",businessPlanDesc:"Todos os Estados · ilimitado · Cash 5",founderBadge:"VIP · vitalício",wiseSoon:"em breve",wisePending:"Aguardando verificação",renewSoon:"⚠️ Renovação em breve",dayWord:"dia",daysWord:"dias",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Transferência bancária",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",
-    btnFreeTrial:"🎁 Iniciar teste gratuito (sem cartão)",trialActivated:"✅ Teste gratuito ativado! Bem-vindo ao ZYNORIQ.",welcomeTitle:"🎉 Bem-vindo ao ZYNORIQ!",welcomeMsg:"Escolha seu plano abaixo — 7 dias de teste grátis, cancele quando quiser. Nenhuma cobrança até o fim do teste.",},
+    btnFreeTrial:"🎁 Iniciar teste gratuito (sem cartão)",trialActivated:"✅ Teste gratuito ativado! Bem-vindo ao ZYNORIQ.",welcomeTitle:"🎉 Bem-vindo ao ZYNORIQ!",welcomeMsg:"Comece GRÁTIS, sem cartão — veja suas previsões agora mesmo. Você decide sobre um plano pago depois.",},
   ht:{title:"Kont mwen",subtitle:"Jere abònman ou, esè gratis ou ak Eta ou chwazi yo.",loading:"K ap chaje...",
     dashboardCardTitle:"📊 Tablo bò mwen",dashboardCardDesc:"Prediksyon anrejistre, alèt ak rapò Business AI.",btnDashboard:"Ouvri →",
     lblUser:"Itilizatè",lblEmail:"Email",lblPlan:"Plan",lblStatus:"Estati",lblDaysLeft:"Tan ki rete",lblQuota:"Analiz / jou",
@@ -236,7 +239,7 @@ const T = {
     redirecting:"K ap redirije w nan peman an sekirite Stripe...", checkoutProcessing:"Peman resevwa, n ap mete abònman ou ajou...", checkoutSuccess:"Peman konfime! Plan ou aktif kounye a.", checkoutCancel:"Peman anile. Ou ka eseye ankò nenpòt lè.",
     payWith:"Peye ak",trustSecure:"Peman sekirize SSL 256-bit",trustEncrypted:"Done kripte ak pwoteje",trustCancel:"Anilasyon an 1 klik · San angajman",trustCompliance:"Konfòm PCI-DSS · Enfòmasyon bankè ou pa janm estoke sou sèvè nou yo",btnAltPay:"Lòt mwayen peman",altPayTitle:"Peman altènatif",altPayDesc:"Ou ka peye ak nenpòt nan metòd sa yo. Apre peman an, kont ou ap aktive manyèlman nan 24è.",altPayContact:"Voye peman an epi kontakte nou ak non itilizatè ou:",
     proPlanDesc:"4 Eta · 10/jou · Pick 3",vipPlanDesc:"20 Eta · 30/jou · Pick 3",elitePlanDesc:"Tout Eta · san limit · Pick 4",businessPlanDesc:"Tout Eta · san limit · Cash 5",founderBadge:"VIP · pou tout lavi",wiseSoon:"byento",wisePending:"Ap tann verifikasyon",renewSoon:"⚠️ Renouvèlman byento",dayWord:"jou",daysWord:"jou",payInterac:"💳 Interac e-Transfer",payBank:"🏦 Viman bank",payMoncash:"📱 MonCash",payNatcash:"📱 NatCash",payCrypto:"₿ Crypto",
-    btnFreeTrial:"🎁 Kòmanse esè gratis (san kat)",trialActivated:"✅ Esè gratis aktive! Byenveni sou ZYNORIQ.",welcomeTitle:"🎉 Byenveni sou ZYNORIQ!",welcomeMsg:"Chwazi plan ou anba a — 7 jou esè gratis, ou ka anile nenpòt kilè. Pa gen okenn debi anvan esè a fini.",},
+    btnFreeTrial:"🎁 Kòmanse esè gratis (san kat)",trialActivated:"✅ Esè gratis aktive! Byenveni sou ZYNORIQ.",welcomeTitle:"🎉 Byenveni sou ZYNORIQ!",welcomeMsg:"Kòmanse GRATIS, san kat — gade prediksyon ou kounye a menm. Ou va deside sou yon plan peye pita.",},
 };
 let curLang = (window.PREDIKTA_LANG || localStorage.getItem('predikta_lang') || 'fr');
 if(!T[curLang]) curLang='en';
@@ -490,6 +493,27 @@ function handleWelcomeBanner(){
   // Scroll vers la section plan
   setTimeout(()=>{ const pc = document.getElementById('planCard'); if(pc) pc.scrollIntoView({behavior:'smooth',block:'start'}); }, 400);
 }
+
+// ── Bouton essai gratuit (sans carte) — entrée à faible friction ─────────
+document.getElementById('btnFreeTrial').addEventListener('click', async ()=>{
+  const dict = T[curLang];
+  const sel  = document.querySelector('.plan.selected');
+  const plan = sel ? sel.dataset.plan : 'vip';
+  const msgEl = document.getElementById('planMsg');
+  const btn   = document.getElementById('btnFreeTrial');
+  btn.disabled = true;
+  try{
+    const r    = await fetch('/api/auth/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan})});
+    const data = await r.json();
+    if(!r.ok){ msgEl.textContent = data.error || 'Error'; msgEl.className='msg error'; btn.disabled=false; return; }
+    msgEl.textContent = dict.trialActivated; msgEl.className='msg success';
+    document.getElementById('welcomeBanner').style.display = 'none';
+    history.replaceState(null,'','/account');
+    setTimeout(()=>{ location.href='/onboarding'; }, 1000);
+  }catch(e){
+    msgEl.textContent = 'Error: '+e.message; msgEl.className='msg error'; btn.disabled=false;
+  }
+});
 
 loadAccount().then(()=>{ handleCheckoutReturn(); handleWelcomeBanner(); });
 </script>
